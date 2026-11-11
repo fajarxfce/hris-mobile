@@ -55,5 +55,75 @@
   "starterChanged": false,
   "liveDeploymentChanged": false,
   "all54PrdGroupsRemainOpen": true,
-  "preservedFailedRuns": []
+  "preservedFailedRuns": [],
+  "hostedRun": {
+    "workflow": "collaboration-control.yml",
+    "ref": "validation/space-key-history-20261111",
+    "dispatched": true,
+    "expectedPortable": {
+      "desktopTest": 5152,
+      "testAndroidHostTest": 835,
+      "wasmJsBrowserTest": 4839
+    },
+    "expectedApple": {
+      "iosSimulatorArm64Test": 4352
+    },
+    "expectedTotal": 15178,
+    "previousRun": 43073411916,
+    "requiredPhysicalWorkerCases": 13,
+    "expectedDomainClasses": {
+      "ReadCollaborationSpaceOriginalIncomingReferencesTest": 24,
+      "CompleteCollaborationSpaceOriginalIncomingReferencesTest": 20,
+      "CompleteCollaborationSpaceOriginalIncomingRoomTest": 24,
+      "CollaborationSpaceIncomingAliasPolicyTest": 18,
+      "ResolveCollaborationSpaceIncomingAliasTest": 25,
+      "CollaborationSpaceInventoryProgressPolicyTest": 12,
+      "CollaborationSpaceInventoryRetentionPolicyTest": 18,
+      "RetainCollaborationSpaceRoomInventoryTest": 27,
+      "CollaborationSpaceInventoryRetryPolicyTest": 11,
+      "CollaborationSpaceInventorySelectionTest": 6,
+      "DeferCollaborationSpaceInventoryTest": 21,
+      "CollaborationSpaceInventoryRequestPolicyTest": 12,
+      "CollaborationSpaceInventoryRequestOwnerTest": 8,
+      "CollaborationSpaceIncomingBatchPolicyTest": 22,
+      "RetainCollaborationSpaceSyncBatchesTest": 15,
+      "CollaborationSpaceIncomingSchedulingTest": 19,
+      "CollaborationSpaceIncomingRetryTest": 15,
+      "AdvanceCollaborationSpaceOriginalIncomingProviderTest": 24,
+      "LoadCollaborationSpaceOriginalIncomingRoomTest": 24,
+      "LoadCollaborationSpaceOriginalKeyHistoryTest": 24,
+      "LoadCollaborationSpaceIncomingRoomTest": 14,
+      "LoadCollaborationSpaceKeyHistoryTest": 26
+    },
+    "originalMetadataStorageCases": 18,
+    "companyTraversalStorageCases": 18,
+    "companyIncomingWaveCases": 12,
+    "incomingDemandStorageCases": 53,
+    "sourceScope": "Typed Space key-history binding resolution preserves Space traversal and historical device across Original aliases; native content admission and durable keys passes remain separate",
+    "dispatchOnlyAfterLocalAcceptanceAndCommit": true,
+    "expectedApplicationClasses": {
+      "CollaborationSpaceOriginalIncomingTurnTest": 22,
+      "CollaborationSpaceOriginalIncomingWorkerTest": 8,
+      "CollaborationSpaceIncomingWorkerTest": 21,
+      "CollaborationSpaceIncomingPhysicalWorkerTest": 13,
+      "CollaborationSpaceIncomingAliasWorkerTest": 8,
+      "CollaborationSpaceInventoryWorkerTest": 16,
+      "CollaborationSpaceIncomingFairnessTest": 8
+    },
+    "requiredAndroidInventoryCases": 24,
+    "portableTimeoutMinutes": 60,
+    "requiredAndroidInventoryReadCases": 14,
+    "requiredAndroidAdoptionCases": 16,
+    "expectedCommonDataClasses": {
+      "CollaborationRoomInventoryMapperTest": 12,
+      "CollaborationEventAvailabilityTest": 6,
+      "SpaceSyncBatchMapperTest": 8,
+      "CollaborationIncomingHistoryLocatorPageMapperTest": 12
+    },
+    "incomingHistoryLocatorCases": 15,
+    "sourceCommit": "878805dcd85f0cb8969678278f80095a070697b3",
+    "dispatchedAt": "2026-11-11T18:25:32.651286+00:00",
+    "runId": 43077651832,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43077651832"
+  }
 }

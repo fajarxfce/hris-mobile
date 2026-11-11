@@ -1,5 +1,54 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 18:32 UTC. This opening owns current work; earlier sections are historical.
+
+## Space coordinates pushed; recovery checkpoint ready to apply
+
+Accepted source878805dcd85f0cb8969678278f80095a070697b3 and Group docs59dd529d PUSHED;
+61431/68798 REAPED. Local12,848/248 focused accepted, full50424/audit72665 reaped.
+Hosted43077651832 dispatched ONCE18:25:32UTC on validation/space-key-history-20261111;
+50865 REAPED; expected15,178=10,826 portable+4,352 Apple. Attached state recorded.
+Inventory43066807577 now FULL15,020: Apple61749 REAPED4,302; prior portable10,718.
+Public inventory evidence updated. Fairness43069542685 portable10,726 accepted/Apple pending;
+Original43073411916 attached, expected15,100. Keep attached runs; no unchanged-source redispatch.
+
+Next16-file recovery draft in .work/space-key-history-2026-11-11/next-history-recovery-draft:
+11 new+5 guarded existing Kotlin; UNAPPLIED/UNTESTED. Explicit active/requested recovery position
+in the existing encrypted checkpoint. Company schemas1/2 and Space3 remain readable; new4
+requires recovery. No new reference catalog. Primary stage explicitly preserves recovery;
+conditional recovery update preserves primary fields/reference appends and rejects competing
+recovery. Exact replay rechecks the still-owned raw checkpoint. Missing partition creates no
+keys/provider position. Opaque domain cursor remains separate from validated storage encoding
+and finite sequence bound. No semantic pass/page owner, global ledger, demotion or SDK consumer.
+
+10 domain structural cases,8 common real-cipher codec cases,20 actual DB contract cases each
+exercising Company and Space. Reopen, reauthentication, isolation, concurrent appends/primary
+seek/resolution, CAS loss, cancellation before/after commit, lost replies, replay scope change,
+empty histories, old-header tamper and maximum provider positions are covered by the draft.
+Tests are not yet run. Final draft includes reviewed refinements after its initial generator;
+do not rerun draft generators over the final files. The earlier private binding-guard failure
+and its untouched-source provenance remain recorded below.
+
+prepare-next-history-recovery.py and configure-next-history-recovery.py PREPARED NOT EXECUTED.
+Require clean pushed current HEAD plus prior accepted frozen manifests. New workspace will be
+.work/history-recovery-position-2026-11-11; expected5,031 inputs/12,932 local,
+114 focused+112 browser=226; hosted15,300=10,910 portable+4,390 Apple. Apply, format, freeze,
+focused/browser/full exact acceptance, then publish/commit/push/dispatch once. Do not mutate
+source during validation. Tests remain evidence only for this local storage boundary.
+
+Next semantic owners must preserve active progress while coalescing later generations, advance
+finite pages with exact evidence, and keep malformed/unsupported/missing/redacted outcomes
+unresolved according to their own triggers. Read next-history-recovery-frontier-review.md and
+next-keys-pass-ledger-review.md. Global stable lane bounds/retirement/wakes, full64-room blocked
+queue liveness, native key subscription lifecycle and combined Company/Group proof remain.
+Raw collector/Original producer OFF. All54 PRD groups OPEN. No Starter/live change.
+
+Phone69750 REAPED timeout18:29:20UTC/20.021s, no install attempted. Evidence phone-connect-1830.json;
+retry no earlier19:00UTC. Release89 SDK6 awaits install. Notify first, explicit serial/install-only,
+never drive UI. No compiler/emulator now. Preserve originals, Draft66, stores/keys/SDK assets,
+inspector gradlew.bat and live90163c3/schema116.4 Group OFF. Continue long run; push every commit.
+
+
 Updated 11 November 2026, 18:24 UTC. This opening owns current work; older sections are historical.
 
 ## Space key-history accepted; independent recovery checkpoint next
