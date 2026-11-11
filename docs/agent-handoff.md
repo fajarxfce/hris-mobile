@@ -1,5 +1,69 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 20:04 UTC. This opening owns current work; earlier sections are historical.
+
+## Constant recovery state applied; focused validation running
+
+Account locator source4b0cbf28af8020aab79854aa0e21d3fd2f3f0d25 and Group04843fe8 PUSHED;
+12416/86455 REAPED.13,068 local accepted =11,030 fresh+2,038 unchanged controls;
+full95959/audit25360 REAPED,296 focused. Its missing ReplicaScope import failure remains recorded.
+Publisher/accepted writer/next prepare/configure HAVE EXECUTED. Hosted43092246512 dispatched ONCE
+19:59:18UTC/ref validation/account-history-locators-20261111;73126 REAPED, expected15,497.
+Prior turn43087494327 portable10,980 ACCEPTED (52855 REAPED), Apple pending; public evidence
+updated. Position43083225746 portable10,910 accepted, Apple pending. Space43077651832 FULL15,178;
+Fairness43069542685 FULL15,028; Original43073411916 FULL15,100. Preserve all prior run provenance.
+
+Current9 Kotlin files APPLIED, NOT ACCEPTED;3 new+6 existing. Workspace
+.work/account-history-recovery-2026-11-11, baseline4b0cbf28 /13,068 /5,036. Applied20:00:02UTC.
+format1/19635 REAPED PASS36.571s. Frozen5,039-input manifest
+be173a5d5f55e2dc36b4738f9a2ce10aba9c17e645338a45bff9ee6d3f0c3e02.
+focused1/97615 RUNNING expected207. Browser205/full13,148 NOT RUN; no failure recorded so far.
+Keep source frozen. Hosted scripts PREPARED NOT DISPATCHED: validation/account-history-recovery-20261111,
+15,617=11,126 portable+4,491 Apple. Contract/publisher/accepted writer NOT prepared yet.
+No next source draft exists; next-owner/receipt/listener reviews below are only analysis.
+
+One optional account/root-owned recovery record shares the existing incoming-demand header.
+Active/requested generations coalesce without rewinding. An incrementing turn revision prevents
+old captures matching after another metadata round returns to the same cursor. A round repeats
+only for histories with another finite reference page; unresolved content alone completes and
+waits for a new relevant trigger. Operational deferral keeps progress/later requests. No provider
+position is invented. Schema7 only with this record, prior1..6 retained; strict marker/field and
+canonical decimal checks. Same AAD,65,536 plaintext bytes/part,131,072 encoded chars,129 parts/
+130 sentinel,4MiB bounds. Finish keeps active recovery wakes but allows completed-unresolved work
+to sleep. Primary/source/demand copies preserve the record.24 new policy cases,4 wake cases
+(19 total),12 DB cases (65 total) cover rounds/replays, max capacity, cipher corruption, old-header
+smuggling, Original/inventory preservation, CAS loss, cancellation, response loss and restart.
+
+Next: reap focused97615, browser, exact412 focused, full13,148 and source/identity/closure audit;
+prepare publication/handoff, commit/push and dispatch once. Review next-account-history-recovery-review.md.
+Do not attach a producer before bounded worker service exists: wake retention alone is not a
+consumer and could pin idle work. Native historical content owners, reference/global readback,
+primary provider-EOF demotion plus recovery demand/wake in one CAS and scheduling fairness remain.
+
+Read next-room-key-listener-ownership-review.md: SDK8 method is on Encryption, not Client;
+nullable registration means no local encryption machine. Fence callbacks, cancel and wait for
+TaskHandle.isFinished before releasing Encryption/client/store; late acquisition remains owned.
+Readiness registration's cancel/close alone is not this drain proof. Generic child capacity is8;
+a permanent listener must not silently consume capacity. No lifecycle choice is implemented.
+Do not copy sync distinctUntilChanged into equal-payload key occurrences; bounded loss/re-attach
+needs reconciliation. No callback I/O, remote secret-storage probe, new client or transport restart.
+
+Read next-key-request-receipt-review.md: global active/requested IDs are NOT a stable producer
+receipt after worker advancement/another producer's coalescing. Sync's exact nextPosition proof
+cannot be copied. Candidate: independent constant native-store/registration-epoch/occurrence
+receipt in the same header, untouched by primary/worker mutations, with explicit source admission
+and startup/gap reconciliation. This is undecided and unimplemented; raw handoff and atomic
+request+wake/readback need joint tests. Never fabricate a sync position or a device-history list.
+
+Raw collector/Original producer OFF; all54 PRD groups OPEN. No Starter/live change. Full64-room
+blocked-queue liveness, native SDK8 Apple and combined Company/Group execution remain open.
+Phone36615 REAPED timeout20:02:36UTC/20.017s; no install attempted. Evidence current workspace
+phone-connect-2002.json. Retry no earlier20:34UTC. Release89 SDK6 awaits install; notify first,
+explicit serial/install-only, never drive UI. One compiler97615, no emulator. Preserve original
+intents/Draft66/keys/stores/SDK assets/inspector gradlew.bat/live90163c3/schema116.4 Group OFF.
+Continue long run and push every commit. Host checks are not native SDK8 Apple proof.
+
+
 Updated 11 November 2026, 19:58 UTC. This opening owns current work; earlier sections are historical.
 
 ## Account history discovery accepted; constant recovery state next
