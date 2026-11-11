@@ -1,6 +1,56 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 14:28 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 14:39 UTC. This opening owns current work; older sections are historical.
+
+## Raw inventory accepted — continue owned runtime binding
+
+Five-file raw inventory ACCEPTED: four NEW Kotlin files and portable CI timeout35->60. Required
+tasks/filters unchanged; GitHub confirms prior job130558503933 exceeded35 minutes during app compile.
+format1/86033 REAPED PASS35.644s. focused1/14088 REAPED PASS292.021s/51, audit accepted.
+full1/20790 REAPED PASS546.374s; audit5788 REAPED accepted12,346=4,100 fresh+8,246 exact
+unchanged controls. Prior case IDs, dependency closures and source/library hashes verified.
+No failed runs. Required formatting/architecture/detekt, Android host/release compilation/lint,
+shared Wasm/browser, iOS metadata and proof APK/unit checks pass.4,982-input manifest
+33c33b20ce1ad04e37069c9f4834e889cddb383341d2f473c72d62d7a0b44601. Proof APK151740955 bytes/SHA9c469ef72ecc526eea0ac5839a5e968385588c6203129714c24cebee2eab636e.
+
+Raw datasource enumerates the supplied existing Client locally, retains finite sorted metadata with
+an exclusive room-ID cursor and preserves all five memberships. It attempts every returned native
+Room close on success/failure/cancellation; one disposal failure cannot skip other handles. No Client
+close/store open/join/sync/transport. SDK8 Client.rooms still allocates ALL native handles: finite
+candidate/output storage is not a native allocation bound or whole-inventory continuity proof.
+24 new NoHandle Android tests plus15 raw-event/10 room-source/2 binding controls. No native SDK proof.
+
+Private .work/space-raw-room-inventory-2026-11-11 owns exact sources/reports/scripts. Publisher and this
+writer HAVE EXECUTED. Commit/push, dispatch-hosted.py ONCE on validation/raw-room-inventory-20261111,
+then prepare-next-owned-room-inventory.py and configure-next-owned-room-inventory.py. Neither next
+script has executed. Expected raw hosted14,458=10,324 portable+4,134 Apple. No raw hosted dispatch yet.
+Alias43037578170 on sourceb944e928 already dispatched, expected14,434; do not redispatch.
+
+Next owned-room draft has15 Kotlin files:6 NEW and9 guarded existing. UNAPPLIED/UNTESTED.
+Domain page/capability, validated mapper, existing-parent child-resource reader, exact runtime/source
+repository check, unavailable fallback/data DI, SDK diagnostic enum, common mapping/fallback and
+Android reader/adoption tests, app binding controls.14 Android reader+3 adoption cases;12 mapper+
+1 unavailable case on desktop/Android/browser.56 new local cases: expected12,402/4,988 inputs.
+Focused97 (26 desktop data+69 Android+2 bindings), browser26. Hosted14,527=10,380 portable+4,147 Apple.
+Read next-owned-room-inventory-draft-status.md and review notes. Actual registry tests use native/store
+fakes, not SQLite/native execution. Use existing classified SDK wrapper so denials retain their kind.
+No new client/sync/job or repository-to-repository dependency; current source/retirement fences around
+I/O and existing child owner protect late/cancelled reads. Validate fully before activation.
+
+Canonical43028172483 FULL14,258 accepted:10,170 portable+4,088 Apple; audit51424 REAPED,
+16 Swift/unsigned host. Queue43022213294 FULL14,161, reference43018627791 FULL14,089,
+content43011629455 FULL13,912 and reconciliation43015359541 FULL14,002 accepted.
+Application43031231253 portable cancelled and incomplete10,170, omitting30 required application
+cases. Original expectations unchanged; incomplete artifact recorded. Its Apple job remains pending
+at14:35. No full acceptance/redispatch. Hosted controls are not native SDK8 Apple execution.
+
+Raw collector/Original producer OFF. Durable inventory generation/cursor/queue retention and worker
+turns, keys-only wake and combined old-Company storage/new-Group native proof remain. All54 PRD groups
+OPEN. No generic Starter delta or live deployment change. Phone34046 timeout124 at14:22:24UTC;
+next retry no earlier14:53UTC. Release89 SDK6 awaits install, no attempt/result. Notify first, explicit
+serial/install-only, never drive UI. No emulator. Preserve originals, Draft66, keys/stores/SDK assets,
+inspector gradlew.bat and live90163c3/schema116.4 Group OFF. Continue long run and push every commit.
+
 
 ## Current: raw room inventory passes focused gate, full validation running
 

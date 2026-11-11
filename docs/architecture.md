@@ -1,5 +1,8 @@
 # Architecture
 
+[Local SDK room enumeration](collaboration-space-raw-room-inventory.md) returns finite ordered metadata and disposes native room
+handles. Runtime binding and durable inventory coverage remain separate from this raw adapter.
+
 [Canonical alias handoff](collaboration-space-logical-alias-routing.md) converts retained LEGACY demand into fresh Original work
 through the existing resolver and worker, preserving source progress and independent producer demand.
 
