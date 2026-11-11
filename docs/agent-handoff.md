@@ -1,6 +1,71 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 16:50 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 16:54 UTC. This opening owns current work; older sections are historical.
+
+## Active/requested inventory protocol applied; focused validation running
+
+Locator source e0a00be5834979536c06a70f5d72a093c0b27d15 and Group docs84e7124f PUSHED;
+99797/81253 reaped. Local12,688 accepted (full90643/audit72512 reaped),324 focused.
+Hosted43062334365 dispatched ONCE at16:50:52UTC on validation/incoming-history-locators-20261111;
+81539 reaped, expected14,942=10,666 portable+4,276 Apple. Scheduling43057055642 portable10,600
+accepted (44556 reaped), Apple pending; retention43053179213 portable10,508 accepted/Apple
+pending. Progress43049052938 FULL14,584, owned43044913726 FULL14,527, raw43040652714 FULL14,458,
+alias43037578170 FULL14,434. Apple totals include16 Swift/unsigned-host cases, not native SDK8.
+Prior application43031231253 remains historically incomplete. Keep runs attached, no redispatch.
+
+Current12-file active/requested inventory change APPLIED, NOT ACCEPTED:10 existing+2 new Kotlin.
+Previous prepare/configure scripts HAVE EXECUTED at16:51:15UTC. Workspace
+.work/space-inventory-active-request-2026-11-11 owns baseline, frozen candidate and reports.
+format1/42984 REAPED PASS36.279s; focused1/29218 RUNNING, expected281; browser263/full12,740 follow.
+Frozen5,013-input manifestbc136dd5dbd1a25a0c48ac801d3bc7c751c6817e8b5d456aeaf01ff9b2abefc7.
+Do not edit source while tests run. Hosted scripts PREPARED NOT DISPATCHED; expected15,020:
+10,718 portable (5,094 desktop/835 Android/4,789 browser)+4,302 Apple. Publication scripts
+and subsequent implementation are not prepared yet. Current source/test files are uncommitted.
+
+New loss preserves the active inventory generation, cursor and retry while retaining one
+coalesced later generation. EOF promotes it with cleared cursor/retry and returns Advanced;
+only no remaining request returns Complete. Continuous real source position and unrelated
+work stay intact. Requested UUIDs are validated and reserved by queue/allocation policies.
+Explicit schema6/marker incoming-demand/v6 encodes the new field; v1/v3/v4/v5 remain readable.
+Older authenticated headers cannot hide it. Existing limits remain129 parts/131072 per part/
+4MiB. No new usecase, collector, worker or native I/O for this protocol change.
+
+12 new pure policy+8 owner cases and6 actual encrypted storage cases per desktop/browser;
+old47 storage cases are retained. Three existing progress-case identities now cover loss,
+active completion and later promotion instead of immediate cursor reset. A prior batch-case
+identity retains its scan/work assertions while checking active+requested generations.
+New tests cover repeated loss during four16-room pages, preserved backoff, full capacity,
+new requests during native read/CAS/readback, cancellation after commit, encrypted reopen,
+old-marker rejection and maximum snapshots. The finite-pass case proves cursor progress
+while room capacity exists; it does not establish full key-blocked queue drainage.
+
+Next: reap focused29218, inspect failures without weakening expectations; browser, exact544
+focused audit, full12,740 and source/case/dependency acceptance. Prepare contract/publisher/
+handoff against real results, commit/push, dispatch once. Then implement fair dispatch and
+keys-only recovery. Read next-incoming-turn-claim-review.md: Original turns reload persisted
+captures and return success while provider/pending pages remain, keeping their old FIFO place.
+Published turns copy phase and may defer on successful progress. Rotating only ProviderAcquired
+misses pending-page fairness. A domain-owned pre-dispatch rotation with returned retained
+capture may resolve this; do not infer exclusive ownership from deterministic position readback.
+Only a definite successful CAS may authorize that invocation, or use a unique durable attempt.
+Uncertain replies retain work/rotation for a later selection. This is a proposed design, not
+implemented. Four40-second primary tasks can still exhaust the90-second worker before appended
+inventory/keys. Reserve service with a coherent bounded policy and connected liveness tests.
+
+Existing SDK8 exports subscribeToRoomKeyChanges/RoomKeyChangesListener/RoomKeyChangeBatch;
+registration/lag emits reconciliation, normal hints contain bounded room IDs without key material.
+Consumer still absent: bind once to installed runtime, never each worker adoption. Typed metadata
+resolution, active/requested keys passes and atomic primary demotion remain. Never drop unresolved
+refs to free slots. Native allocation/performance, authoritative absence and combined Company-
+storage/Group-native proof remain. Raw observation/Original producer OFF; all54 PRD groups OPEN.
+No Starter/live change. Next implementation drafts have not been applied.
+
+Phone10092 REAPED timeout at16:26:16UTC/20.016s, no install attempted. Evidence in previous
+locator workspace/phone-connect-1626.json, next retry no earlier16:57UTC. Release89 SDK6 awaits
+install. Notify first, explicit serial/install-only, never drive UI. No emulator. Preserve original
+intents, Draft66, keys/stores/SDK assets, inspector gradlew.bat and live90163c3/schema116.4 Group OFF.
+Continue long run and push every commit.
+
 
 ## Local incoming history locators accepted — continue active/requested inventory
 
