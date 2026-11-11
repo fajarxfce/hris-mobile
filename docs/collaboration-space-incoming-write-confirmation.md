@@ -36,3 +36,9 @@ Remote metadata, original typed routing, complete inventory, keys-only recovery 
 remain required before raw collection is enabled. All 54 PRD groups remain open.
 
 [Exact validation evidence](measurements/collaboration-space-incoming-write-confirmation-2026-11-11.json).
+
+Hosted control at source `840d1152` verified 9,379 portable cases and all prior case identities.
+The exact app-test filter omitted 12 new physical-worker cases, so complete hosted acceptance
+remains open despite the successful job. The metadata candidate adds the missing class; corrected
+execution remains pending. Apple control is still running. Local full acceptance above includes
+those worker tests. See the measurement for the artifact digest and explicit coverage gap.

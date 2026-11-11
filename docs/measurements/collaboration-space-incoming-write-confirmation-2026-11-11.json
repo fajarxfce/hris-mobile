@@ -51,5 +51,45 @@
   "phoneInstalled": false,
   "liveDeploymentChanged": false,
   "all54PrdGroupsRemainOpen": true,
-  "preservedFailedRun": "focused1: one old Defer supersession expectation; unchanged generation/wake assertions remain"
+  "preservedFailedRun": "focused1: one old Defer supersession expectation; unchanged generation/wake assertions remain",
+  "hostedControl": {
+    "sourceCommit": "840d115247b2da417014636529040b80cca38144",
+    "runId": 42972222388,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42972222388",
+    "portable": {
+      "sourceCommit": "840d115247b2da417014636529040b80cca38144",
+      "runId": 42972222388,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42972222388",
+      "jobId": 130363099581,
+      "artifactId": 13834834234,
+      "bytes": 3706521,
+      "sha256": "897341d8a992a514feb35335863d1b9cff2112f92dfcd9d70ef76355a0a605da",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreserved": true,
+      "counts": {
+        "desktopTest": 4430,
+        "testAndroidHostTest": 757,
+        "wasmJsBrowserTest": 4192
+      },
+      "reportManifestSha256": "f46667a382e33d52f36962851654fd16babe01e637fca9e75a69477197473967",
+      "jobLogSha256": "56b2fc5ef8d033ab2dbcc60b03843d64df40c54e74e5ee4f7e211a0d14d45d08",
+      "completeAcceptance": false,
+      "coverageGap": {
+        "class": "CollaborationSpaceIncomingPhysicalWorkerTest",
+        "missingDesktopCases": 12,
+        "cause": "exact workflow filter omitted the new physical worker class"
+      },
+      "expectedFullCounts": {
+        "desktopTest": 4442,
+        "testAndroidHostTest": 757,
+        "wasmJsBrowserTest": 4192
+      }
+    },
+    "apple": {
+      "status": "in_progress",
+      "expectedCases": 3675
+    },
+    "completeAcceptance": false,
+    "workflowSelectionCorrection": "Current physical metadata candidate adds the omitted 12-case physical worker class; corrected hosted execution remains pending."
+  }
 }

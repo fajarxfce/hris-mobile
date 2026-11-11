@@ -1,49 +1,58 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 06:53 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 07:05 UTC. This opening section owns current work; older checkpoints below are historical.
 
-## Active physical metadata consumer — continue validation
+## Active physical metadata consumer — full validation running
 
-Mobile focused4/session19643 is RUNNING and owns the only local heavy slot. Nineteen source/test
-files are FROZEN; do not edit until reaped. Format4/session15789 REAPED PASS35.333s. The4,912-input
-manifest is0fb9a38fb6962ce28ad391978c42092774ee42157fe1741d54437c65ecf22444.
+Mobile full1/session61670 owns the only local heavy slot. Twenty source/test/workflow files are
+FROZEN and uncommitted; do not edit until the run is reaped. The 4,912-input manifest is
+5efd5641392034856f337d1a0fa161dd056c8db7ec129d449635f1ed18aa7a97.
+Focused6/session10115 REAPED PASS61.469s/562; browser1/session43852 REAPED PASS98.45s/495.
+Focused audit ACCEPTED 1,057 cases with every prior selected case ID, source and library fingerprint
+verified. Expected full: 11,499 cases. New coverage: 25 domain +12 common transport cases.
+
 Private Mobile .work/space-physical-metadata-consumer-2026-11-11 owns accepted source baseline
-840d115247b2da417014636529040b80cca38144,1,287 baseline XMLs/11,413 cases, candidate1/2/3 archives,
-runners/audits and expected.json. Expected focused562 (495 domain+32 data+35 app),browser495,
-full11,499. New cases:25 domain+12 common transport. No acceptance or live/native activation yet.
+840d115247b2da417014636529040b80cca38144, 1,287 baseline XMLs/11,413 cases, candidate1–5 archives,
+runners, audits and expected.json. Full acceptance is NOT complete. After full passes, run
+accept-full.py full1, review exact evidence, then execute the prepared publish.py once. It is
+NOT executed yet. Commit/push implementation, contracts and measurement; continue required consumers.
 
-Focused1/session59353 REAPED FAIL60.208s at LongMethod118/100. Focused2/session88588 REAPED
-FAIL60.604s at108/100. A shared pure physical-snapshot policy now selects exact current source and
-captured generation before/after remote work; bounded capture failure stays distinct from absence.
-The owning use case's inner MetadataAcquisition explicitly owns one deadline and remembered denial.
-No generic helper, suppression or narrowed check was added. Focused3/session50516 REAPED FAIL77.535s:
-format/architecture74/detekt passed; compiler rejected nonexistent FailureKind.NotFound. HTTP404
-uses the existing Unexpected classification plus exact API code; a real transport regression checks
-that mapping. New regressions cover remote denial despite failed/timed-out cleanup and unreadable
-admission, plus true/false write replies without exact durable metadata/binding witnesses.
+The Resolve use case keeps a five-second local path and a separate fifteen-second live operation
+only for missing bindings. Its invocation owns the deadline and remembered denial; the existing
+pure physical policy selects exact current source/captured generation before and after metadata.
+Domain owns admission, real conversation and published LEGACY original checks, exact immutable
+retention/readback, then conversion from fresh demand. No fake metadata, per-batch transport/device
+status read or scheduling loop. Known missing publication retains physical work. The raw original
+physical API remains prepared without a fetch-and-discard fallback. Raw collection stays OFF.
 
-The existing Resolve use case keeps a5s local path and a separate15s live path only for missing
-bindings. Domain owns native/directory/source/registration admission, physical lookup then real
-conversation metadata, published LEGACY original checks, exact immutable retention/readback and
-conversion from a freshly loaded demand snapshot. No fake conversation, per-batch transport/device
-status lookup, or scheduling loop. Raw original physical API is prepared but not called merely to
-discard its result. Known missing publication retains physical work. Raw collection stays OFF.
+Earlier failures are preserved: focused1/2 stopped at LongMethod; ownership was clarified without
+suppression or reduced checks. Focused3 then found nonexistent FailureKind.NotFound; shared HTTP404
+classification is Unexpected plus the exact API code, with a transport regression. Focused4 passed
+495 domain cases then found a test-only cross-module nullable smart cast; the same assertions now
+use assertNotNull. Focused5 REAPED PASS203.364s/562. Candidate6 adds only the CI coverage correction
+below and reran the final focused set. Failed/timed-out denial cleanup and true/false replies without
+durable witnesses are explicitly tested. All original test IDs remain.
 
-Continue focused/browser audits, full checks and acceptance without narrowing controls. Then commit
-and push implementation plus evidence. Next original routing uses an explicit Published/Original
-(Company+conversation) target: never feed a bare original ID to Space storage. Existing Company
-history frames already preserve original content/cursors; registration supplies Company provenance.
-Private next-original-target-review.md records actual codec/worker evidence, compatibility and
-remaining consumers. Original metadata/traversal/content/completion, complete provider inventory,
-keys-only recovery and actual native proof remain required. All54 PRD groups remain OPEN.
+Hosted incoming-write control42972222388 uses immutable840d115247b2da417014636529040b80cca38144,
+ref validation/incoming-write-confirmation-20261111; do NOT redispatch. Portable job is green but
+full audit83724 REAPED FAIL: 4,430 desktop rather than4,442, because the workflow omitted all12
+CollaborationSpaceIncomingPhysicalWorkerTest cases. Partial audit94770 REAPED verifies9,379 actual
+cases (4,430 desktop+757 Android host+4,192 browser), exact head/artifact digest/CRC and every prior
+case identity. Complete hosted acceptance remains OPEN. Current candidate explicitly adds that
+worker class to the workflow. Apple is still running, expected3,675 cases+16 Swift and unsigned host.
+Private parent .work/space-incoming-write-confirmation-2026-11-11 owns hosted-audit.py and separate
+hosted-partial-audit.py; hosted-42972222388 owns coverage-gap.md and portable-partial-audit.json.
+Tracked measurement/contracts record partial coverage honestly. No Apple native SDK8 claim.
 
-Hosted incoming-write control42972222388 remains RUNNING on immutable840d115247b2da417014636529040b80cca38144,
-ref validation/incoming-write-confirmation-20261111. Query77261 REAPED at06:52: portable is building
-app bindings/platforms; Apple is testing its setup adapter. Expected9,391 portable+3,675 Apple=
-13,066 cases,16 Swift,unsigned host. Do NOT redispatch. Parent .work/space-incoming-write-confirmation-2026-11-11
-owns hosted-audit.py; hosted-42972222388 owns state/latest-run. No Apple native SDK8 claim.
-Latest phone connect3815 at06:36 REAPED timeout124; existing question remains pending. Next bounded
-retry no earlier than07:06. Validated release89 is install-only; no phone UI interaction or emulator.
+NEXT: typed Published/Original (Company+conversation) incoming targets and immutable original room
+metadata; use original Company history frames rather than relabeling cursors. Registration supplies
+Company provenance. Private next-original-target-review.md records actual codec/worker evidence,
+byte compatibility and original/published alias risks. Original provider/pending/content/completion,
+complete native inventory, keys-only recovery and actual native proof remain required before raw
+activation. All 54 PRD groups remain OPEN. This is an implementation checkpoint, not task completion.
+
+Phone connect3815 at06:36 REAPED timeout124; the existing question remains pending. Retry no earlier
+than07:06. Validated release89 is install-only; no phone UI interaction or active emulator.
 
 ## Physical worker accepted — continue original metadata and concurrent writes
 
