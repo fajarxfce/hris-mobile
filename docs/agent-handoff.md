@@ -1,24 +1,23 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 17:39 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 17:48 UTC. This opening owns current work; older sections are historical.
 
-## Original key-history applied; focused validation running
+## Original key-history applied; full validation running
 
 Fair worker turns source cc12b936562eac068dbcc2e0ad5cbecf0209ab84 and Group docs4bd38882
 PUSHED;89574/59693 REAPED. Local12,748 accepted (10,392 fresh+2,356 controls),320 focused.
 Hosted43069542685 dispatched ONCE17:34:52UTC on validation/incoming-fairness-20261111;
 7275 REAPED, expected15,028=10,726 portable+4,302 Apple. Attached current workspace in prior
 fairness stage; never redispatch unchanged source. Inventory43066807577 still attached,
-expected15,020; locator43062334365 portable10,666 accepted/Apple pending. Scheduling43057055642
+portable10,718 ACCEPTED (65869 REAPED), Apple pending; locator43062334365 portable10,666 accepted/Apple pending. Scheduling43057055642
 FULL14,849 (Apple4219 REAPED4,249) public. Earlier accepted hosted evidence remains below;
 application43031231253 remains historically incomplete. Apple common/host != native SDK8.
 
 Current5-file Original key-history change APPLIED, NOT ACCEPTED.3 new+2 existing Kotlin.
 Previous prepare/configure scripts HAVE EXECUTED17:35:15UTC. Workspace
 .work/space-original-key-history-2026-11-11 owns baseline, source captures and reports.
-format1/84739 REAPED PASS36.698s. focused1/98953 RUNNING, expected101; new24 domain cases have
-reported zero failures, but focus compilation/checks are not yet complete. Browser99/full12,796
-NOT RUN.5,017-input manifest6d73098b1ec7177d7bc2b00815eff82bee448b06d56f365745593397386b9519.
+format1/84739 REAPED PASS36.698s. focused1/98953 REAPED PASS414.909s/101; browser1/41469 REAPED PASS150.765s/99.
+Exact200 focused accepted. Full1/88620 RUNNING, expected12,796.5,017-input manifest6d73098b1ec7177d7bc2b00815eff82bee448b06d56f365745593397386b9519.
 No source edits during checks. Initial freeze command failed because formatSessionReaped had
 not been recorded; no source changed. State corrected and freeze succeeded. Focus runner had
 already captured its own complete source manifest; it exactly matches the candidate. Preserve
@@ -33,16 +32,21 @@ never empty/completed. Company list metadata has no room/server identity, so no 
 24 new common domain cases reuse existing source/metadata fixtures; existing incoming-loader24,
 real Original-metadata18/traversal18/locator15 storage cases and appBindings2 are controls.
 
-Next: reap98953, inspect failures without weakening assertions; browser, exact200 focused
-acceptance, full12,796 and source/case/dependency audit. Hosted scripts PREPARED NOT DISPATCHED:
-validation/original-key-history-20261111,15,100=10,774 portable+4,326 Apple. Publisher/contract/
-accepted-handoff not prepared. No next implementation draft yet. Continue after acceptance/push.
+Next: reap88620, inspect failures without weakening assertions; exact12,796 acceptance with
+source/case/dependency audit. Hosted scripts PREPARED NOT DISPATCHED:
+validation/original-key-history-20261111,15,100=10,774 portable+4,326 Apple. Publisher/contract PREPARED NOT EXECUTED; accepted-handoff not yet prepared. Next Space key-history
+draft5 files/25 common cases is PREPARED UNAPPLIED/UNTESTED; read next-space-key-history-review.md.
+It preserves Space traversal/device and complete Original alias provenance, without Company
+fallback or namespace redirection. prepare/configure-next-space-key-history.py are PREPARED
+NOT EXECUTED. Expected12,846 local/5,020 inputs;124 focused+122 browser;15,175 hosted.
+Continue directly through current acceptance/push/one dispatch, then apply the next draft.
 
 Keys ledger design uncovered a startup constraint: key signals can arrive offline BEFORE a real
 sync position exists. IncomingSourceProgress requires a nonempty real position; do not invent one
-or reset that protocol. Read next-keys-pass-ledger-review.md. A separate source-bound Company/Space
-pass record inside the same incoming transaction may be needed, independent of primary room
-capacity; this is not another room queue. Its source lifetime/retirement, schema/part bounds,
+or reset that protocol. Read next-keys-pass-ledger-review.md. Do not settle the provisional source-bound ledger yet. A stable account-owned Company/Space
+pass with current native source captured per operation may avoid stranded old-store passes
+after reinstall. That ownership/retirement and unavailable-lane wake behavior need resolution.
+Either layout stays independent of primary room capacity; this is not another room queue. Its source lifetime/retirement, schema/part bounds,
 active/requested cursor+retry, exact demotion readback and sole reference-seek ownership still
 need review/tests. Missing metadata must advance with unresolved-seen retry. Startup reconcile
 cannot reset retry; new refs behind the cursor need a later pass. Existing SDK8 stored-key
