@@ -1,5 +1,55 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 19:10 UTC. This opening owns current work; earlier sections are historical.
+
+## Finite recovery turns applied; focused validation running
+
+Prior recovery position sourcefa6ca76b17e2fcabcefc7e00982259e605b9678b and Group8cdf48fb PUSHED;
+5876/8022 REAPED. Local12,932 accepted (full70802/audit6065 reaped),226 focused. The earlier
+codec compile failure remains preserved. Its publisher/writer/next prepare/configure HAVE EXECUTED.
+Hosted43083225746 dispatched ONCE19:01:09UTC on validation/history-recovery-position-20261111;
+9809 REAPED, expected15,300=10,910 portable+4,390 Apple. Space43077651832 attached15,178.
+Fairness43069542685 now FULL15,028 (Apple8138 REAPED4,302; prior portable10,726).
+Original43073411916 now FULL15,100 (Apple37169 REAPED4,326; prior portable10,774).
+Public evidence updated for both. Inventory43066807577 FULL15,020 and other accepted runs below.
+
+Current7 Kotlin files APPLIED, NOT ACCEPTED;2 new+5 existing. Workspace
+.work/history-recovery-turn-2026-11-11, baselinefa6ca76b /12,932 /5,031. Applied19:02:18UTC.
+format1/50535 REAPED PASS36.528s. Frozen5,033-input manifest
+c09d036903751fac97eb5ee5e0d6475f1499fc12b3b30d88768a6c90e0f2ae57.
+focused1/34548 RUNNING expected149. New domain20 and actual storage35 report zero failures;
+full focused process not yet accepted. Browser147/full13,002 NOT RUN. No failure so far.
+Keep source frozen. Contract/publisher/accepted-handoff not prepared; next source draft absent.
+Hosted scripts PREPARED NOT DISPATCHED: validation/history-recovery-turn-20261111,
+15,405=10,980 portable+4,425 Apple. Previous current-stage preparation already executed.
+
+Request/bounded-page/advance policies retain active progress under repeated later requests and
+promote the latest at finite EOF. Raw advance verifies exact source rows and <=17 current pending
+indexed rows at the same checkpoint, protecting against omitted middle rows and forged/partial
+EOF. Pending rows within the crossed interval must be attempted; concurrent resolution and
+primary appends stay safe. New requested generations survive; a disappearing known request is
+rejected. CAS loss or already-advanced old page requires owner readback/fresh selection. No content
+acknowledgement, hidden retry, provider/key request or new reference catalog.20 new domain and15
+added DB cases (35 total each platform, each case both namespaces); original primary/codec/graph
+controls retained. No admitted native consumer, global ledger, demotion or key listener activated.
+
+Next: reap34548, browser, exact296 focused, full13,002 and identity/source/closure audit. Prepare
+contract/publisher/handoff, commit/push and dispatch once, then settle global recovery discovery
+and scheduling. Read next-account-recovery-discovery-review.md: a constant account/root-owned
+pass in incoming-demand header plus whole-account metadata discovery is a candidate, NOT a
+final decision. Root migration is explicit; account prefix also includes internal scheduling
+records. Enumerate families and define owned/unsupported/malformed cursor behavior before code.
+Do not invent sync positions, make another64-room queue or extend codec bounds blindly. Native
+admission and trigger-specific retry remain separate from cached history and unresolved flags.
+Raw collector/Original producer OFF. All54 PRD groups OPEN. No Starter/live change.
+
+Phone63933 REAPED timeout19:00:14UTC/20.015s; no install attempted. Evidence previous workspace
+phone-connect-1900.json. Retry no earlier19:31UTC. Release89 SDK6 awaits install; notify first,
+explicit serial/install-only, never drive UI. One compiler34548, no emulator. Preserve original
+intents/Draft66/keys/stores/SDK assets/inspector gradlew.bat and live90163c3/schema116.4 Group OFF.
+Continue long run and push every commit. Kotlin/Swift host checks are not native SDK8 Apple proof.
+
+
 Updated 11 November 2026, 18:59 UTC. This opening owns current work; earlier sections are historical.
 
 ## Independent recovery position accepted; finite request/page advancement next

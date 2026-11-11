@@ -7530,5 +7530,2893 @@
         "conclusion": "success"
       }
     ]
+  },
+  "hostedApple": {
+    "sourceCommit": "560010f1d03bd4cbcbe70d293cf2020514f135a0",
+    "runId": 43073411916,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43073411916",
+    "jobId": 130706975506,
+    "artifactId": 13883773731,
+    "bytes": 727510,
+    "sha256": "70b098f4baa14a6c6ea9faab6ba4a7378c8a22ccaf1e3cce6b4f3c2c59049c2e",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreserved": true,
+    "counts": {
+      "iosSimulatorArm64Test": 4326
+    },
+    "selected": [
+      {
+        "class": "ReadCollaborationSpaceOriginalIncomingReferencesTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 24
+      },
+      {
+        "class": "CompleteCollaborationSpaceOriginalIncomingReferencesTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 20
+      },
+      {
+        "class": "CompleteCollaborationSpaceOriginalIncomingRoomTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 24
+      },
+      {
+        "class": "CollaborationSpaceIncomingAliasPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 18
+      },
+      {
+        "class": "ResolveCollaborationSpaceIncomingAliasTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 25
+      },
+      {
+        "class": "CollaborationSpaceInventoryProgressPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 12
+      },
+      {
+        "class": "CollaborationSpaceInventoryRetentionPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 18
+      },
+      {
+        "class": "RetainCollaborationSpaceRoomInventoryTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 27
+      },
+      {
+        "class": "CollaborationSpaceInventoryRetryPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 11
+      },
+      {
+        "class": "CollaborationSpaceInventorySelectionTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 6
+      },
+      {
+        "class": "DeferCollaborationSpaceInventoryTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 21
+      },
+      {
+        "class": "CollaborationSpaceInventoryRequestPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 12
+      },
+      {
+        "class": "CollaborationSpaceInventoryRequestOwnerTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 8
+      },
+      {
+        "class": "CollaborationSpaceIncomingBatchPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 22
+      },
+      {
+        "class": "RetainCollaborationSpaceSyncBatchesTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 15
+      },
+      {
+        "class": "CollaborationSpaceIncomingSchedulingTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 19
+      },
+      {
+        "class": "CollaborationSpaceIncomingRetryTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 15
+      },
+      {
+        "class": "AdvanceCollaborationSpaceOriginalIncomingProviderTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 24
+      },
+      {
+        "class": "LoadCollaborationSpaceOriginalIncomingRoomTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 24
+      },
+      {
+        "class": "LoadCollaborationSpaceOriginalKeyHistoryTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 24
+      }
+    ],
+    "reportManifestSha256": "9a361245a0813df7cddc88cd908f13f2a17c42deaa165de6f8bc290e44778aab",
+    "jobLogSha256": "b05b435255250d6ce73d6fe8c958065f72f646e5336f0d736b0f345a600cb96d",
+    "reports": {
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-ios-8OB5JUA072NB0.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceRoomBindingPreparationStorageTest.xml": {
+        "sha256": "4f81302e6fff62ea50244234a5f4d99138bd53864faeabe8d44e1d277c6a84af",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSi-JM64E6G8PQE16.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceOriginalRoomMetadataStorageTest.xml": {
+        "sha256": "39260aa204f477337919e01cf5a89cc503f76076a8c3b673ba897190c41390b9",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSi-U42JTPTONJM7S.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceConversationMetadataStorageTest.xml": {
+        "sha256": "31f410ef86f5c493180487409590196f16512e27a6a221ca7eab8b071a619376",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSim-Q82PA53T4V2E4.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceConversationCommandStorageTest.xml": {
+        "sha256": "afbc493bb7dc6d22b7fd18d46f3b30383619a361f67d517201ebf8f537e4e302",
+        "tests": 30,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimul-8UOHN2PVEQ94S.dev.fajar.starter.collaboration.data.CollaborationSpaceOriginalConversationTransportTest.xml": {
+        "sha256": "06524436c3785e4ce5f718ae9bd78f6399a0123e30db44b9acb537e2b4e2bfc5",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimul-MMS1DD8J02E80.dev.fajar.starter.collaboration.data.AppleCollaborationIncomingHistoryLocatorStorageTest.xml": {
+        "sha256": "a00bcde414d1cf8f075909ca033e0d4ae00c708749c9a26419795bacf5294a52",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimula-0B8DRQ60TC5SI.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceReadinessReceiptStorageTest.xml": {
+        "sha256": "d3d50c5eb97880649e0dbac6383fdbcd7a295278d84fc023d8dbc9e877740a64",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimula-MCF9UQIRMVRF0.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceRecoveryProgressStorageTest.xml": {
+        "sha256": "d48dc006f68b82f22d930962779e99e685a298c69b22c60a03fea0508db4e81d",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulat-EADKL7ACIEKAG.dev.fajar.starter.collaboration.data.CollaborationSpaceOriginalHistoryAvailabilityTest.xml": {
+        "sha256": "440812b20b2f41170c53bbfa842849452b85628056c63ff4e5e08d2d3f5d0b37",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulat-RLPBKONLHT160.dev.fajar.starter.collaboration.data.CollaborationIncomingHistoryLocatorPageMapperTest.xml": {
+        "sha256": "7b218ef65a5984b6731831d884a9d9f46932a04953252879a3dde51e2fe0a544",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimula-E2S8BK7P93E6K.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceHistoryTraversalStorageTest.xml": {
+        "sha256": "b3c9a3306c248ee69be30b97c6c8f51f5a5d91f7f8a219087e4d397a1f19eb73",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulato-34D7DT0LIPD7Q.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceIncomingDemandStorageTest.xml": {
+        "sha256": "60eba97b9ba6ca0a21e730c79cd6ad6133fec6c730f89f96e9e2e07b90b9eec7",
+        "tests": 53,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulato-6TFQFTIG388BI.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceRoomResolutionStorageTest.xml": {
+        "sha256": "cd59eb50a42ba13c3aaf1fe10ed48daf3362cf6341c32c4a3abccfb3b0fec057",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulato-K3H7UOQMQVUCU.dev.fajar.starter.collaboration.data.AppleCollaborationIncomingHistoryWaveStorageTest.xml": {
+        "sha256": "b3eb75b2cc055876d358044419d5530e2593bebe2ed28fe36493e3bd5c70ca61",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulator-F5LCB6E14A5L2.dev.fajar.starter.collaboration.data.CollaborationSpaceRoomRequestFenceTransportTest.xml": {
+        "sha256": "cf5a43e92d3f1f8182b6f322f32c02895e17b05e71def8fd66759c53cdedf66d",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorA-75VRRK7CAKRJM.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceSetupCommandStorageTest.xml": {
+        "sha256": "a390f1f208fc770a717e33eb62cd0cb05d3414a939df33ab6c89ffeefe9bb56c",
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorA-S215D3NTLC3GI.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceRecoveryWakeStorageTest.xml": {
+        "sha256": "f51cbe34b301017736b55c740bd764edead9dd4a8c78b7e39253c13a2c879223",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorA-AVGCT54HRCCMM.dev.fajar.starter.collaboration.data.CollaborationSpaceMessageQueueAvailabilityTest.xml": {
+        "sha256": "89371443902376d222c78af02c886c81ae87e65ad34c422acec7455125af22d1",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorA-URLEI4G73AV34.dev.fajar.starter.collaboration.data.CollaborationSpaceRuntimeTransferTransportTest.xml": {
+        "sha256": "6f457c827024182adcc5ab04d3bdc7681aa7d4f8c8ff0d806282a078f2678c2e",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorAr-4FFLA9RPSL3VA.dev.fajar.starter.collaboration.data.AppleCollaborationHistoryTraversalStorageTest.xml": {
+        "sha256": "ba312d58ebb68d08f7da8cdf596d7ed0a88e37fe3f59a9920a9a1178aa09f422",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorAr-IBELJ417F23GE.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceRoomBindingStorageTest.xml": {
+        "sha256": "4a6de27152f0c7b72c6935ced07799d9a6b895c7e3be1314c5ba98342fe3619b",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorAr-Q892OG0VP8OEM.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceMessageEditStorageTest.xml": {
+        "sha256": "b1e8087cce8e39b4e456328149a0df00d9ec532515d810c3cf1b43fab0cfb5d5",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm-505G51U6TAKFM.dev.fajar.starter.collaboration.data.AppleCollaborationIncomingHistoryStorageTest.xml": {
+        "sha256": "476e7f66ad7df989fc857364ae13b3d441f9d3b9bcc9b8810b29c32dcf9dbfb0",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm-ESG95JVP82OF0.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceOpenReplayStorageTest.xml": {
+        "sha256": "c5d432e14d6a03f54020892902ea0d9815127ed5b591360848b336f36289d559",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-QE53CFGG2RCKE.dev.fajar.starter.collaboration.data.CollaborationSpacePhysicalRoomTransportTest.xml": {
+        "sha256": "c2a56d07dad943163934f8c79425af804652adcb9ba6b3d74d483813f13e8e0e",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-1QC6PH35HDI58.dev.fajar.starter.collaboration.data.CollaborationSpaceConversationTransportTest.xml": {
+        "sha256": "6457dfc26b98110ce44598879d576257ab9addd822015c37ec154491d0e04ec2",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-S21RK6756VAKI.dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityReadTransportTest.xml": {
+        "sha256": "60fc5bb3d8712c314e1cdebfd4f1d338f9ee4b25b1ae7e0541e254428451fdb5",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-T0OGGPIOE14JA.dev.fajar.starter.collaboration.data.CollaborationSpaceRegistrationTransportTest.xml": {
+        "sha256": "ca3c5299dfcf63c569dd7c4e2c537677261631062f3c9e0e6635609fc1719343",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64-E00VUG0BMAJ3Q.dev.fajar.starter.collaboration.data.CollaborationSpaceRoomReceiptTransportTest.xml": {
+        "sha256": "f346807721731ba5728d18d6da2dc903ca97009a7809b3bc43e68e0ff168d255",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-231I8L99IH3FK.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceReceiptStorageTest.xml": {
+        "sha256": "5c3313f6ca7094da6cb3cb55964617cf678f18677941fe953f77d5d5872596f1",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-26C3DEE7BEMUI.dev.fajar.starter.collaboration.data.CollaborationSpaceRoomIntentTransportTest.xml": {
+        "sha256": "613474b66f908d8f8a7896dd42092c1b93b8a2acbffcd70c55796e95449f79ef",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-IU1Q32QOMD3H0.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceHistoryStorageTest.xml": {
+        "sha256": "f1fad6a377fb8c5e39d89d756a5e4829840e4acb49bff9e6629a34ef84eca109",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-KSN70U8NMHQCM.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceMessageStorageTest.xml": {
+        "sha256": "8e516cd5fc06944293d1da8793af0db79a6a6ac58e5eecb121e4184692deb9c5",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-HVDC3HJ9TOHKA.dev.fajar.starter.collaboration.data.CollaborationConversationCommandCodecTest.xml": {
+        "sha256": "c53d542e9747e7d2f23c94ad9b7a041e53f6ab110e57dbe527ab651d1dcad0b7",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Te-3NGOHUHO5GJJS.dev.fajar.starter.collaboration.data.CollaborationSpacePusherAvailabilityTest.xml": {
+        "sha256": "e1634f03d8a20a1494b2952930a2f522c8f87b24922dd631441e5884de67322d",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-54NPU07VCTOF0.dev.fajar.starter.collaboration.data.CollaborationRecoveryWakeRepositoryTest.xml": {
+        "sha256": "00f6cb663e7402c5d5a9003b091b864a96094751fa4a3af950d671ebd8c1d006",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-KTSP3VO1SRD4S.dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityTransportTest.xml": {
+        "sha256": "133beb153e276279ad252c62aa5dc5f1505b7d8a6d3a09c5e12deb969b8b62bf",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-U8HOVD9OU7TRU.dev.fajar.starter.collaboration.data.CollaborationConversationValidationTest.xml": {
+        "sha256": "3896f5c53b1c9aaa339e9050d7870aff3e9db3a2e67e123934fb43e8f394b6e6",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationConversationTransportTest.xml": {
+        "sha256": "ef8725669250f8a361106810928c42be975a290c4ab49913477779a64192dcae",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml": {
+        "sha256": "53ccefa766fc25dcacb4173aad69e7ed7ddb5aef55ff44a13ecf661e79386d33",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationEventAvailabilityTest.xml": {
+        "sha256": "aa05cbde997a6126a8fad80947f7d6231ab34d244811e75e5419a7f620af5e9d",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationOutgoingEditContentTest.xml": {
+        "sha256": "19b6de297c5627e4d4e7eb7043957060bd8e359b39e04b704f64575a99a2c2c9",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationGatewayConfigurationTest.xml": {
+        "sha256": "1f61485f56710b25a7010c02f3d169cb5e6ba0d0126916045d551fe15d4c1748",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationHistoryHeadTest.xml": {
+        "sha256": "ccc5fc2e173cec9cc7d8228dea32f2ad0bc06272c5b439c530316cf47680746c",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationProviderPageTest.xml": {
+        "sha256": "d5ede45c6c0a6ff6fb5d499f1799aa209ae95f20e617d687e26a637d0c4cffcf",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationQueuedOriginalMapperTest.xml": {
+        "sha256": "0de59d1dfd7e3e9eacb2df7716000f866bc3f49d33e26c43d0ca87cc21adddf7",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationRawEventMapperTest.xml": {
+        "sha256": "5067cfd1a67b7b1ebc4cab7b92d5fdf235a11eb8351c085fc683cf47bae706f5",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationRecoveryTransportTest.xml": {
+        "sha256": "e5c655491385e12c350b17393524177f70e0215671aac6194f6db53a18013b44",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationRoomInventoryMapperTest.xml": {
+        "sha256": "08f2e9bb09edb7907a8724398d36ecfdfa214118a8e6613ff2fcfee571df4146",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationRoomLookupTransportTest.xml": {
+        "sha256": "4d705bbd51711b253a0b2148d6476a56d22ba237c3842858368cb6a38a4607c9",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSdkAdoptionTest.xml": {
+        "sha256": "b399ec929308e83c90b133de789e08fb26c9d7836c5fa2d46b14a8438838b03c",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSdkEditMapperTest.xml": {
+        "sha256": "923d59aa64239f635c90ffd80dba8057b901e7cdcb77a65f04b1954522b687b0",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSdkFailureMapperTest.xml": {
+        "sha256": "9a0d2719770e7882614df41f205616f9b55c5f2ad36be11e0795e43766e04835",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSdkHistoryMapperTest.xml": {
+        "sha256": "d17e6810f075cf0658e411fdb2ea6bdb2644e30ec09dff75aac7021a705a3295",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSdkIdentityMapperTest.xml": {
+        "sha256": "b25f91045b8f1218cbcdf8d2d46de546161265378d879daff5992dbc517fd92c",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSdkLogicalIdTest.xml": {
+        "sha256": "637e3e743276cb2c92369c3fb8a3e7492324a2bd8788658bdefa4e3313d704e0",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSdkRecordTest.xml": {
+        "sha256": "e96c929d1b42b833d3c7d3a407496576a5b745e06e39c2398854a3306cb60dbf",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSetupTransportTest.xml": {
+        "sha256": "1d827a9ac189cfc917cea2a2d5b68d7ef4efabdb7a5c0d56d2b677caf174351b",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSetupValidationTest.xml": {
+        "sha256": "4f43d89221f92fc2f07fdf0558a945eb6f84baba8382e3b075c41ff860b65999",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSpaceDeviceTransportTest.xml": {
+        "sha256": "51ebb4c9eb9cfd4d8d225467341a85829b88984396746e504cbbdbb9c7c432a9",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSpaceSetupTransportTest.xml": {
+        "sha256": "b292036f017761ff33f1a2fa1118854e6650aef7527b465f142cfafb8b78e1e3",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSpaceDirectTransportTest.xml": {
+        "sha256": "dcc86e88e92c7add793fa15a3e069cc807df257af6988a212aaeb00fc84723d9",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSpaceTransportTest.xml": {
+        "sha256": "5cfd7f2a901b90f52e86446b5fc87436d294df4cc9d4f4108539228faca4ba24",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSpaceRoomTransportTest.xml": {
+        "sha256": "041f6a4058ed46dbd2fa657a9b455f3152fe65cc7493b405acfb331506b59bfa",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSummarySyncTransportTest.xml": {
+        "sha256": "73ffbc7823369e36c1ed9c122b521eaf0007bdabaf49c31a4fc378d776699f2b",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationTextContentTest.xml": {
+        "sha256": "99fb568831de547cbbbbfa574917838af9f5c05775015925c969ab45a16e029f",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSummaryTransportTest.xml": {
+        "sha256": "dd366135152a1a98b8a507022f47804ef4b5324860ed3c0b2f5653c6b5695544",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkAdoptedSessionPersistenceTest.xml": {
+        "sha256": "3daa228801ec5f5f6a5e3f52c313572c0fb9c7d4461e8eb0779a1f0a02f93703",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkChildResourcesTest.xml": {
+        "sha256": "8b23591a15a4a69fc5e509aab0ef14a83635c2c67b722b11a0276f3992691979",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkFirstSyncTest.xml": {
+        "sha256": "3ca621100b66bef1e6256da5b1a2c1df1858e95d104e15dd7f3117c810de3647",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkHistoryFocusesTest.xml": {
+        "sha256": "6b14b51ba684e18613091165466dc1e8ea617b31d5c2eaefb178dcc9e171d1e5",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkQueueDeliveryTest.xml": {
+        "sha256": "1d878a58cfc3eb1183951ca8ed97b4e60943e30a51d35a95efdb6df6e21dfcc6",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkQueueOperationsTest.xml": {
+        "sha256": "9969b93ccfa719c3c769d84ec5eef4ab0800a2a89c3d2fa7ff4dff6bab115508",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkSessionPersistenceTest.xml": {
+        "sha256": "720dba3a2dffc4a1b8ce91823b0dae8f43704b2be4feb1afed590ff5bb4aeaaa",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkStoreShutdownTest.xml": {
+        "sha256": "f79b56c78d966ab0d83da9301dffc197380eb15c2188252ff76ed43f48db75e4",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkSyncBatchObservationTest.xml": {
+        "sha256": "899c615c06fdcc6da3de119366a9f2f0d7e42161549491b1160cc88134eda9df",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkSyncLifecycleBatchTest.xml": {
+        "sha256": "8bd0b39f5d69964b9540f7c7828bc382696cf45cd65a9d5c89a03175f0234ede",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkSyncPumpTest.xml": {
+        "sha256": "c5983202fb85e0871bffc1523221482852ed5b9b54ab5c75346ac1978310e091",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkSyncLifecycleTest.xml": {
+        "sha256": "824772db4c2c2bf3b01d39165570c1f39f77c5056f4d2d3ef30721105bb0836e",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkTimelineDeltaTest.xml": {
+        "sha256": "0d518d9285268b73152076e3aaacfcf4212d7f929aee5c68033a6da76b60dbfe",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SpaceSyncBatchMapperTest.xml": {
+        "sha256": "379ca97bb9a92ba74d8ef079529694f8ba2b6d5c78897558072032a69f640a86",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.StoredCollaborationSdkInventoryTest.xml": {
+        "sha256": "d264879afb7237e857f69c6dfa92550117580be83151bb41de6c8e6f7068c1bb",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.StoredCollaborationSdkPossessionTest.xml": {
+        "sha256": "da7548c181454ad93b48608e0f8bab28c5b67a076d225c37885a5d1b18ac5ab4",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-i-A8NS6RMLVIDCI.dev.fajar.starter.collaboration.domain.CompleteCollaborationSpaceOriginalIncomingReferencesTest.xml": {
+        "sha256": "86510e747d852dd7410a453ce237a15d5beb85ceabac8ab5f89fb61b24d90e3c",
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-i-DO43MG1V2C1TM.dev.fajar.starter.collaboration.domain.ReconcileCollaborationSpaceOriginalHistoryReferencesTest.xml": {
+        "sha256": "80c321386c8f1e3b33d0d21f6a52201a91aceea84cd4d593750b104a36fd8fa8",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-i-L77JDNJDN2E4A.dev.fajar.starter.collaboration.domain.CollaborationSpaceOriginalIncomingRegistrationPolicyTest.xml": {
+        "sha256": "33512721409fb2c9872c7945170cda5b47252620814ef9811b6f55a8d92365d8",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosS-5URJTQIPALOU6.dev.fajar.starter.collaboration.domain.CollaborationSpaceOriginalIncomingReferencePolicyTest.xml": {
+        "sha256": "ceacb15e32b04daa67129209828ec68fae90b397e035140e5fbb5c973cc758ea",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosS-C8T5B06OU9V8O.dev.fajar.starter.collaboration.domain.RecoverCollaborationSpaceOriginalIncomingProviderTest.xml": {
+        "sha256": "49ec5396e2cf7360fa10f1144a2d4adbccd52f9811b34427b346ac50965d62cb",
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosS-ECU7OQDDDJAF4.dev.fajar.starter.collaboration.domain.AdvanceCollaborationSpaceOriginalIncomingProviderTest.xml": {
+        "sha256": "44477227a4a62ca46cbfd7ac6edde79a35bcba8197f6ef311de34273ebd77f54",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSi-5L9UKFVHE889A.dev.fajar.starter.collaboration.domain.ReadCollaborationSpaceOriginalIncomingReferencesTest.xml": {
+        "sha256": "50f4a7ee60359ded49d8be1edc3ed426e57e0aa3dbac4eb95f92288a3bee0c28",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSi-8LBPU5UT4E7RA.dev.fajar.starter.collaboration.domain.AcquireCollaborationSpaceOriginalProviderHistoryTest.xml": {
+        "sha256": "d14aff07b0cef57f7cc6435420688c1f5c7b00e7e10638dbadb19de3a1ff199d",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSi-R33B6KH63AEQG.dev.fajar.starter.collaboration.domain.ResolveCollaborationSpaceOriginalPhysicalBindingTest.xml": {
+        "sha256": "cf067cf9c3824dae3391905bd63269e5d5a7bd7ebe7c51d6b1754a8f2d70a52b",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSim-1F95EV4J8KQIM.dev.fajar.starter.collaboration.domain.CollaborationSpaceOriginalProviderHistoryPolicyTest.xml": {
+        "sha256": "d96837bd8a8a3d290928ea377c1289c0fd5bd0b8aa112fbc83ffeafe81436ab4",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimu-V84UBKIGNVONA.dev.fajar.starter.collaboration.domain.CompleteCollaborationSpaceOriginalIncomingRoomTest.xml": {
+        "sha256": "1e8b887e3607f8a0fc43ac77cb0c66652c4792e4afa498b07ff89fb69acbecf9",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimul-EUS0HF59P282S.dev.fajar.starter.collaboration.domain.AdvanceCollaborationNotificationReplyRecoveryTest.xml": {
+        "sha256": "4250d237949b96932173fbe3c30e6253ca46ef5b96fe227a3beee6148c30b700",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimula-TD5VBSN9GPCUU.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingPhysicalResolutionTest.xml": {
+        "sha256": "bba0cba4e2d63791a536c8798d2af76fec47adb2f6b51fa23d520e46e5bcca7a",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimul-Q4S8G0IM54C4S.dev.fajar.starter.collaboration.domain.CollaborationNotificationPublicationLifecycleTest.xml": {
+        "sha256": "6b416004ca35d97d5ece8259886f49e82b08baf38707af34294b7885553719cf",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimula-P4ORH1SLHO7TI.dev.fajar.starter.collaboration.domain.ConditionalCollaborationNotificationIssuanceTest.xml": {
+        "sha256": "6dd371e027c651348d71d30fefb8524ee7ed195e5f85b87359de522b630565d4",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulat-9PI2QN33K62EI.dev.fajar.starter.collaboration.domain.ReconcileCollaborationReplacementReferencesTest.xml": {
+        "sha256": "d64204018f58015d7e5b38cc785da10edb466f33dd7f920c6eb8ceefcff6c97d",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulat-ATI2FLRH94TGM.dev.fajar.starter.collaboration.domain.DeferCollaborationSpaceIncomingPhysicalRoomTest.xml": {
+        "sha256": "377f3a8df4c57d1433d297f824e57dc91cdace844fb43d3052ed207f63ae0d0e",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulat-KIRM9T29P8DV2.dev.fajar.starter.collaboration.domain.CollaborationNotificationReplyRecoveryCycleTest.xml": {
+        "sha256": "d77c224ee80d6d9721648ab598e0659c5b377fcac2fd3e076932f98ca54e9ae7",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulat-T3FNL8T62D4I6.dev.fajar.starter.collaboration.domain.CollaborationSpaceConversationCommandPolicyTest.xml": {
+        "sha256": "9f770d1d580e18eb18272d488183d5c53b3ce61abe132a6f6fee991a9f69146f",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulat-T3SGUP4CRJSBO.dev.fajar.starter.collaboration.domain.CollaborationRetainedHistoryReferencePolicyTest.xml": {
+        "sha256": "04ac33a974ebf727e5eb785c36b7c8dc09c11e1543bac36bace121bbadb4578e",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulato-J1TLDB2B7CHCA.dev.fajar.starter.collaboration.domain.LoadCollaborationSpaceOriginalIncomingRoomTest.xml": {
+        "sha256": "53dcb1a27f6a5031b4836be5eb981e0a5c04ba626bd70013f412700bf9908eaf",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulato-LL4MCD1GT9SFO.dev.fajar.starter.collaboration.domain.ReadCollaborationNotificationReplyRecoveryTest.xml": {
+        "sha256": "dc7bdba9005375afe20fe6aa2d57d891bb64476fc25d00d5479747260928841a",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulato-VV9BE937ATJC4.dev.fajar.starter.collaboration.domain.CollaborationSpaceInventoryRetentionPolicyTest.xml": {
+        "sha256": "5c550872a2e17e7a3468ba773a7d65efd33c07d85aff0e03f0cfdef4220d161b",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulator-6S9FOHNUKI5R2.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingScanWritePolicyTest.xml": {
+        "sha256": "2f29d0ba72322f790a0f5cfc675e36cb21aacb5cd9ebda5d35c1589814dce744",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulator-8F9IP674UV7R6.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingReferencePolicyTest.xml": {
+        "sha256": "350eac799cbcdd5f97e97f1d3fbac3bbc76efec832093a7d9d0e752be5bd73a3",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulator-BB1SNG5HJD2DC.dev.fajar.starter.collaboration.domain.ReadCollaborationSpaceIncomingRuntimeWorkTest.xml": {
+        "sha256": "e4eb80a3581703aa52198297a45d62f8fc6da07ef1564e85993de251b5e04742",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulator-BC59MDON53RJA.dev.fajar.starter.collaboration.domain.RecoverCollaborationSpaceIncomingProviderTest.xml": {
+        "sha256": "ac86c7ab80db868cce7b2701ad9195a7aa376c623a3b3d1fbbc5980560ec9740",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulator-D90URMVFNBVP8.dev.fajar.starter.collaboration.domain.CollaborationSpaceInventoryProgressPolicyTest.xml": {
+        "sha256": "6a6755fc89cfedcd4db68aa9fdd85bce4f94c43447d6138664e8488c9df55a20",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulator-H63QLHPKMDNT2.dev.fajar.starter.collaboration.domain.AdvanceCollaborationSpaceIncomingProviderTest.xml": {
+        "sha256": "7dea1e64bcd484f3bf3851f2d9b49e60ae0c3968c12fe62e6f7bbe33c47c5e63",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulator-UCEK1D1449QJ6.dev.fajar.starter.collaboration.domain.ResolveCollaborationSpacePhysicalMetadataTest.xml": {
+        "sha256": "3db7783f42c23107569ff22683b82c3d4b8076732685ba837bcbf36ea99a94c3",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorA-0TM7UKNLBMK80.dev.fajar.starter.collaboration.domain.ResolveCollaborationSpaceIncomingBindingTest.xml": {
+        "sha256": "3410e74cab0ff16ba76b20687bb18558e0eebd41d02f9b10727332302e25552f",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorA-5VP4K2UUKAU3G.dev.fajar.starter.collaboration.domain.AdvanceCollaborationSpaceRuntimeTransferTest.xml": {
+        "sha256": "37e1d6ef868b1d3ca50fca6412b3f3f063d310c8ec5f2f9c8dead032422b5c58",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorA-AG1VR9MSFV2TC.dev.fajar.starter.collaboration.domain.CollaborationNotificationDismissalIntentTest.xml": {
+        "sha256": "871dfb3cd12871fc638f88fa94ee1b341134ed0b90b037638d23e4365189011d",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorA-C5J4BCK3N6E98.dev.fajar.starter.collaboration.domain.RequestCollaborationSpaceIncomingStartupTest.xml": {
+        "sha256": "0141253c6400b23b98c1eb343d3f9826186da3567039546490ea323173bd3ccd",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorA-CRN2607PC2B34.dev.fajar.starter.collaboration.domain.CollaborationSpaceInventoryRequestPolicyTest.xml": {
+        "sha256": "903f2690e15be248e20900b063d7a6b3a95ddb881840481217a5ee12d19ca978",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorA-G1KMG5TP9QD24.dev.fajar.starter.collaboration.domain.AcquireCollaborationSpaceProviderHistoryTest.xml": {
+        "sha256": "3ca759f6a1a2a9664c098d9f7e915b50c71eb552ca577c43e654ba1326839121",
+        "tests": 29,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorA-IETUBV7BGK2IC.dev.fajar.starter.collaboration.domain.ObserveCollaborationSpaceIncomingStartupTest.xml": {
+        "sha256": "36129c01cef8aad15d9097a3fd361bf07113e954eec92d70962c00c2cd796af4",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorA-U1E2HTJ18EKF4.dev.fajar.starter.collaboration.domain.LoadCollaborationSpaceOriginalKeyHistoryTest.xml": {
+        "sha256": "a19ae1be7ace682266f67fb45c7f3b9021b35a5cce88975c66ce42efff7a86d0",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorA-UIHFJV7NEGVQS.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingWakeCompletionTest.xml": {
+        "sha256": "ed625ea0cc3671711a7f94989527a563d1a437e73ece602d9c66a1532fd4b486",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorA-TF1JHN3TKOSJE.dev.fajar.starter.collaboration.domain.CollaborationSpaceReadinessControlPolicyTest.xml": {
+        "sha256": "7ad4cafdc91158bbd83ff1cf2b718ffe4ce20c7ad43e9d39fb87f1e79678de2b",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorAr-5QE9FE6QSG5U4.dev.fajar.starter.collaboration.domain.CollaborationOriginalConversationPolicyTest.xml": {
+        "sha256": "acbbb0d9939d6840b98c8ef6f40126850fb79cefb59587d7d0c0018c992e2927",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorAr-C0F7QGSO8OSFG.dev.fajar.starter.collaboration.domain.DiscoverCollaborationSpaceIncomingRoomsTest.xml": {
+        "sha256": "5ad0222fe3e9e54fb80be77dead92d5f874ebbf0742722dd6a71ef2604d169bb",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorAr-FN2JNIRB44L56.dev.fajar.starter.collaboration.domain.ReconcileCollaborationHistoryReferencesTest.xml": {
+        "sha256": "c4aba9d9d4f7d28879eee747104a9941705bf480e63400f6edbc5d2f4d866704",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorAr-0M2V7FTJU4GE2.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingPhysicalRetryTest.xml": {
+        "sha256": "e9d72f184e88f7e239840bc59aa817f61000f5e0d229ec480859739d5fe5303f",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorAr-H3S33OR74HCJ0.dev.fajar.starter.collaboration.domain.CollaborationSpaceInventoryRequestOwnerTest.xml": {
+        "sha256": "7cfba1e9c7e69fc7c6eab0e2cecb48a986c44dc09d0a5b89c4f7be9ef33dfc21",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorAr-IUS6I8TRRP90Q.dev.fajar.starter.collaboration.domain.AcquireCollaborationSpaceOriginalEventsTest.xml": {
+        "sha256": "cc6efddaf24dfaccae2d7483a3e4bbe1ab3fabc43a2830f9f0ccc0eb1f9ed356",
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorAr-MNV6JAM2AJEI0.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingStartupPolicyTest.xml": {
+        "sha256": "3cf4c25ed1d76e605abf8bf237564d99f045ffdbe1b884ac442dd451f74bc2bc",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm-27U2H4Q9DGTM8.dev.fajar.starter.collaboration.domain.ObserveCollaborationSpaceRegistrationsTest.xml": {
+        "sha256": "28de811eb3d6fc9e1d253ea3fd661817e82e71d57dec63da39cc874126bf9fa1",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm-291LTU5C2BJ58.dev.fajar.starter.collaboration.domain.CollaborationNotificationInputRecoveryTest.xml": {
+        "sha256": "717b6ff261070d4bac747f2b301599531198f0f465ba24b02d670c4698b5ce96",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm-082PRH22JILFQ.dev.fajar.starter.collaboration.domain.TransferCollaborationNotificationInputTest.xml": {
+        "sha256": "02651bc57922a3aafd84413109494c8a32150be760c1d3099faa330c0f72e3ef",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm-557R33RNOKO6G.dev.fajar.starter.collaboration.domain.CollaborationSpaceInventoryRetryPolicyTest.xml": {
+        "sha256": "d506886f70d971f65197c6302610e712459d91be1fed0d7b4f0f722ff4a53abc",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm-5OUAD1LFKRTHS.dev.fajar.starter.collaboration.domain.CompleteCollaborationNotificationReplyTest.xml": {
+        "sha256": "93ff19f103df499e4e191fd015c2cb61da339a3268469428de98b9f757fbc321",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm-C693OK6JEL2BM.dev.fajar.starter.collaboration.domain.QueueCollaborationSpaceReadinessSignalTest.xml": {
+        "sha256": "19f6d1f59f38bfb68f60ed249f1c995741e760bcf942354daf3df17b29123c3c",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm-FAGUN117M61HG.dev.fajar.starter.collaboration.domain.ObserveCollaborationCredentialRecoveryTest.xml": {
+        "sha256": "2dca094bb1654c3f9ef6529012383e2c09473a2ede95b5f007185e0d2e5fb82a",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm-LTJNVKMLIVPAU.dev.fajar.starter.collaboration.domain.ResolveCollaborationSpaceIncomingAliasTest.xml": {
+        "sha256": "6d5a68c2e05c44445e772ece670c5f5853c96a9e743720d04e2ca2dc93406f34",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm-IBAUTTNPRMNF0.dev.fajar.starter.collaboration.domain.AdvanceCollaborationIncomingReferencesTest.xml": {
+        "sha256": "db05f621186d0e3986d1fbce22a42206105ff4d18895bfa3552bf5090a546bb8",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm-MKMV6S0VJ0NCS.dev.fajar.starter.collaboration.domain.CollaborationSpaceBootstrapReplacementTest.xml": {
+        "sha256": "61cf065771afa674722582b3ee672053ec9296972d47969c7e7951ff8a7c6881",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm-NDGSG6BMTIPKE.dev.fajar.starter.collaboration.domain.CollaborationCapturedHistoryReferencesTest.xml": {
+        "sha256": "a5960c122e31a089b62fc95c22b7dd4bbfced837e5d38f73083398fa747e08c6",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-0AMQEC3SPLRLS.dev.fajar.starter.collaboration.domain.PrepareCollaborationSpaceRegistrationTest.xml": {
+        "sha256": "e5211b39543d8e725ccbcd7ad96916f0b5760da35401ea959ed9baf54433e4ff",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-16Q983A7MEK5K.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingAliasPolicyTest.xml": {
+        "sha256": "96a4b5a6cd58e13356eff86922aba0bb33d69990a89d3e6f675466a507be59ea",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm-U5PK5T7MNRIIQ.dev.fajar.starter.collaboration.domain.CompleteCollaborationSpaceIncomingRoomTest.xml": {
+        "sha256": "f373e24849a5c8934fe55729c63b14da6a7b0f6bf74fb5b30be80d4d3ac39f52",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-9S70K34RILE8C.dev.fajar.starter.collaboration.domain.RetainCollaborationSpaceRoomInventoryTest.xml": {
+        "sha256": "f1cdd723ed51191cf6998e3607d4914e752a2f74f37ffdfb60160e6ff2de483a",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-DIJD5GMOIN8L2.dev.fajar.starter.collaboration.domain.LoadCollaborationSpaceRecoveryMessageTest.xml": {
+        "sha256": "8d2dc3a8b431f80566c3fa631d1974cd6f98595d4119d7e8cd7f306cae22ea3a",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-F508ND4PUBLD0.dev.fajar.starter.collaboration.domain.ProtectCollaborationNotificationReplyTest.xml": {
+        "sha256": "f715c0b8a01a94e4182738c4df850d8fafc3ab0112f909f65e9f86486e5fb049",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-J25LPTI8EMQN2.dev.fajar.starter.collaboration.domain.DiscardCollaborationNotificationReplyTest.xml": {
+        "sha256": "dfb70c4ae175ae948308a20f3df7cec846ab361d311e52f958ca09f9ddc0d2b4",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-MO4ARKR23M09Q.dev.fajar.starter.collaboration.domain.ReadCollaborationSpacePendingMessagesTest.xml": {
+        "sha256": "e4c7aca479c4d7cbc6043fbee97c934d864bc11abbd01b39e5e1df3f98e42b9c",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-OQMF2LFM22LDC.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingBatchPolicyTest.xml": {
+        "sha256": "5108f8bce497aa4d11018c91f44e976a20437c4d598c8aee7ac0a7839da0f1e3",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-P8RJHFKEGKS92.dev.fajar.starter.collaboration.domain.RequestCollaborationSpaceIncomingScanTest.xml": {
+        "sha256": "e680184e4d8ea165a140e4a3e2284564b2e9b30e7c60ce0cbe9a648cf420a59a",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-SL74CB9QV1RJS.dev.fajar.starter.collaboration.domain.CollaborationOriginalConversationReadTest.xml": {
+        "sha256": "b5afeb48bfee925a003b0c595ad0902e6c55d5a8dbdec3212e3229b581782a37",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-T052KUADKT69M.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingWritePolicyTest.xml": {
+        "sha256": "e52bc9dd1609c267c6baed94527b3f6c7dd9aeb8551773627fafb1ef7eff53b9",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64-0G6Q5B11AN4G6.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingReferencesTest.xml": {
+        "sha256": "f5413696dde5b49f979dbdad27f231867b81733170d2eec4b535b1c5c61baf2d",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64-0USEM8BGITAGU.dev.fajar.starter.collaboration.domain.CollaborationListObservationBoundaryTest.xml": {
+        "sha256": "6d4677e9e3fad9b955ae42011894cd51092b3f9c1db75576a7035f0cf8d6be91",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64-3GTA5LHGQGS6G.dev.fajar.starter.collaboration.domain.CollaborationMixedOriginalQueueMatchTest.xml": {
+        "sha256": "413ebae09a1db1166a81850a21be141bf3d4052244d9ef53a13254d2c9cd6bd4",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64-6M8054H8GFQQ0.dev.fajar.starter.collaboration.domain.ReplayCollaborationSpaceRegistrationTest.xml": {
+        "sha256": "95652db289904dcd3f9d3378186af154b329fd3870913680aa55d1256933ef69",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64-GDGB6RP8RGPSA.dev.fajar.starter.collaboration.domain.ReviewCollaborationNotificationReplyTest.xml": {
+        "sha256": "eb6201ede4783c433148130f2b7d3f541b20c8bc28b98fe3d4f1501a9f53bec1",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64-GKPH5CJN0DONU.dev.fajar.starter.collaboration.domain.RetainCollaborationNotificationReplyTest.xml": {
+        "sha256": "ba58cab446dd27c9924f23be8227c31641cb2f48712af58fdb1ff207199909c7",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64-9QQ94FO2OMCUM.dev.fajar.starter.collaboration.domain.ObserveCollaborationComposerProgressTest.xml": {
+        "sha256": "4009b440a3937c393d0e251b4a075d62b95ad369912c0786c0d49d3d46d2f388",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64-H8PB9HEBRECQG.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingScanPolicyTest.xml": {
+        "sha256": "ba9b095069b8c994cee4d76db65da07aa4bbcc6e21a920b1ca726322142eaf02",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64-N7K5OG11QO4IA.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingSyncPolicyTest.xml": {
+        "sha256": "6a4c06b4ea0fd77ec004d148c9bbe9ba57b8ed747a9cc2496647c8f12d367e4b",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64-NCO1O533AC3KU.dev.fajar.starter.collaboration.domain.CollaborationSpaceInventorySelectionTest.xml": {
+        "sha256": "383c86ce5a58d6baa4bd51094c21bd4fa270c63269f1d9eb6c194d4ced7daa20",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64-LS7EQ20AHSEQI.dev.fajar.starter.collaboration.domain.CollaborationOriginalAcknowledgementTest.xml": {
+        "sha256": "92a2da382e5e302032194b90352224b0511393706b0ae2a9346fc2181f5285f4",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64-PKLLH3RGF13TG.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingSchedulingTest.xml": {
+        "sha256": "2864c8c4f689f6831e216e5bda3e10e1dba68b0aab5f4bf78032fddf6633abb2",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-1FENMJAIES8V8.dev.fajar.starter.collaboration.domain.ReconcileCollaborationSpaceMessagesTest.xml": {
+        "sha256": "68a30dda2dbfff2a83a60e65554c0169941dac9faf871a92fb9309fc840c49e5",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-4Q827VO29BFM4.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingRetentionTest.xml": {
+        "sha256": "dbdf664a7a3804c6954cdc819ba94483e371bacae6253a5625e579d91a14d9e1",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-62I1LR5GRIBL0.dev.fajar.starter.collaboration.domain.CollaborationSpaceReceiptProjectionTest.xml": {
+        "sha256": "5477fd432b88a095551d2ac7840b1fdad1f660cdc7f4bd5314016f46ee76b042",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-6RMJFAH7HI1FK.dev.fajar.starter.collaboration.domain.AcquireCollaborationProviderHistoryTest.xml": {
+        "sha256": "38a11ce6717c8adf8dde0e10aeb815cac6890e318ffac3414c0f81ca40e32be6",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-74BVPOQNS9G1M.dev.fajar.starter.collaboration.domain.RecoverCollaborationMessageReceiptsTest.xml": {
+        "sha256": "319f48f0dc119d63496061391ff805997b3ba71abbfacc0d1118fa8d5845a7ea",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-76AR9L3S9BFSK.dev.fajar.starter.collaboration.domain.SynchronizeCollaborationSpaceDeviceTest.xml": {
+        "sha256": "7b0ef65c9829bf2960d3e0318671d8697211eb90bae24052db986f80c1160f10",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-9UAQND7V9QJB4.dev.fajar.starter.collaboration.domain.CollaborationSpaceRecoverySelectionTest.xml": {
+        "sha256": "b5989a1a80e71b7842fc10c71edc12fa8783704f635ce8d5fc10cdd348c4363c",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-AT28GMSQOB89E.dev.fajar.starter.collaboration.domain.ReadCollaborationMixedOriginalQueueTest.xml": {
+        "sha256": "a36c8965639e23aaedfa77f13c4130335efbb23917a5820babea0669c18b4992",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-D1DMA8KR376S4.dev.fajar.starter.collaboration.domain.CollaborationNotificationInvocationTest.xml": {
+        "sha256": "5a0e2d0f3f403ed4ba66d3538f17943b17a3769940574f6f00dafe6c0da6337b",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-G4960SEUHC2M6.dev.fajar.starter.collaboration.domain.QueueCollaborationSpaceIncomingRoomTest.xml": {
+        "sha256": "5b4d30b69b9043c06b8e8e8a0e0f2ae61841ed7d23bc01d1c90bcdd6668c674b",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-GJRMKAT39C8CS.dev.fajar.starter.collaboration.domain.CollaborationBackgroundHistoryScopeTest.xml": {
+        "sha256": "84910e8dcac3213a02c187cc59882f7fd30e5867f30221ab2d95a1e570e99cec",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-HAUBBK4B08O6M.dev.fajar.starter.collaboration.domain.CollaborationReadinessControlPolicyTest.xml": {
+        "sha256": "194e29120a2ffb3fb9eeb89bc7db1c1e8e3b308739e58f3e5905f45a8153d0ef",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-HGI8TGFPGKFTA.dev.fajar.starter.collaboration.domain.RestartCollaborationProviderHistoryTest.xml": {
+        "sha256": "10a2c4c564907a4d3592277c00ecc0ef278a5f06dd6aeeacf17e153479352985",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-I41FJO5KD9UO6.dev.fajar.starter.collaboration.domain.CollaborationNotificationRetirementTest.xml": {
+        "sha256": "d2e0756881b39f4fa59588e507c8c8dd60ce8739de63240f5b4db0c68ba912f4",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-LDGGO8SFDUIRK.dev.fajar.starter.collaboration.domain.CollaborationIncomingHistoryPurposeTest.xml": {
+        "sha256": "c965cb7e636aeded3c7f51f0cfada711411ebe163744dc0750cb595fbefe29d5",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-N6ILOJTREVFEA.dev.fajar.starter.collaboration.domain.CollaborationNotificationProjectionTest.xml": {
+        "sha256": "e6da6aff36f8d119a36960fff766a58f4f6596d78e031ec149bfc01961c45dbb",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-OEULGCQUNDO5Q.dev.fajar.starter.collaboration.domain.ReadCollaborationSpaceSdkPossessionTest.xml": {
+        "sha256": "190e6602089f21a0295b76f5f4bee5ff692f2b28e1bd7530357159117626fe41",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-QU3UCFMBSMH7C.dev.fajar.starter.collaboration.domain.SpaceConversationCommandObservationTest.xml": {
+        "sha256": "2e43a65b55ceac634706be2fb69222db9501141b3e5f1956ea3d5eb8bba1e381",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-TJGT3INNDTIF4.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingSelectionTest.xml": {
+        "sha256": "53ff4f8e930b56dd9fe5552b9628f3663ae10efc3caf7456ee703865f4996f0f",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-UKSQ8BQ4HOIMK.dev.fajar.starter.collaboration.domain.RetainCollaborationSpaceSyncBatchesTest.xml": {
+        "sha256": "50f9de044538b1220a9def9174315cd53c6b8abffa97cf8dbf8c2df73ca23308",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Te-2SQ1TFLL83B06.dev.fajar.starter.collaboration.domain.CollaborationSpaceRecoveryProgressTest.xml": {
+        "sha256": "e1cb1fd9fec84982c41927483f5e60ad65e11666884165cec5f63f00edbca4ec",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Te-2LGGLEKBF6IG6.dev.fajar.starter.collaboration.domain.ReadCollaborationSpaceSdkInventoryTest.xml": {
+        "sha256": "8cdf624cf51bb73cd28ff6eba289a3ae387a0968f426a65456e88c610a5a2344",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Te-89MA5CQ7B1JFG.dev.fajar.starter.collaboration.domain.LoadCollaborationSpaceIncomingRoomTest.xml": {
+        "sha256": "2efdb3b3a521ceb60515db3dc4b6f6c5c1374362a4ab92a1b9cab11277f2675b",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Te-GLFI3JS3Q7NJA.dev.fajar.starter.collaboration.domain.CollaborationActivationStorePolicyTest.xml": {
+        "sha256": "817d8d04b588a86b60f1a620bb379e4178bfb8194d3a6ed285bb8a8c67bc3195",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Te-9HUK0OPE28JV4.dev.fajar.starter.collaboration.domain.CollaborationNotificationPointReadTest.xml": {
+        "sha256": "cee671dda397be8843da8422e0f0238404ba356f0be721782a21c4b810991000",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Te-IC5R42UMB4FCM.dev.fajar.starter.collaboration.domain.ReadCollaborationHistoryReferencesTest.xml": {
+        "sha256": "5ce3fdd7bf02679e217b39a149e3ae78ab3594a6a3ef2cf59854cae234a9fff2",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Te-K9B7DQFF36LV6.dev.fajar.starter.collaboration.domain.CollaborationBackgroundOutboxScopeTest.xml": {
+        "sha256": "6ddbec0ae76a634758e6801ea8ed4cda05662c250e3935739ad5d38c0c4028c5",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Te-M7J3460UK2OIU.dev.fajar.starter.collaboration.domain.CollaborationIncomingHistoryPolicyTest.xml": {
+        "sha256": "41b9a7737ffdf4c8e55cf3cae18f5736b05d092969224de6395e31e3d439a019",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Te-PM5SVRDV3J222.dev.fajar.starter.collaboration.domain.ReadCollaborationNotificationReplyTest.xml": {
+        "sha256": "0674808f9a0b0195c0889cd446772357bc6c14750a121e8166fea58d044c05a6",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-1SIVRH0B1KQ8U.dev.fajar.starter.collaboration.domain.CollaborationNotificationSettingsTest.xml": {
+        "sha256": "ad9c541f1565b99108dbe521c8c193308e406b2bd278f1c5962335b851aff9b5",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-64V6CF78RRFB0.dev.fajar.starter.collaboration.domain.QueueCollaborationSpacePushSignalTest.xml": {
+        "sha256": "7a798f5597196ef519eaf86e3d3062a186eb1530e07ab747033cf6df0bac6ae8",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-8UCU7NM8HUC62.dev.fajar.starter.collaboration.domain.CollaborationNotificationReadMarkTest.xml": {
+        "sha256": "ab352a9491b6b74483b440336511b0abb48d5fce1ebdbbe3d7670067685befac",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-9T21A9CSUL8QA.dev.fajar.starter.collaboration.domain.CollaborationSpaceStagingRecoveryTest.xml": {
+        "sha256": "7050e57c02ae18123ac3c75c5d1cd98f056f455e7e84a722b9eb311f723c16c6",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-CM7T0THPPQECQ.dev.fajar.starter.collaboration.domain.CollaborationSpaceReadinessSourceTest.xml": {
+        "sha256": "6fce3bed23ff0b2b33ffb3ff3565b1d75a30a79de6f9ca0a1f224758ad7d4b9e",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-E6D73MS87203E.dev.fajar.starter.collaboration.domain.CollaborationSpaceIdentityCommandTest.xml": {
+        "sha256": "4f1fc23baef19ba59b718efdb30c98e78f77d03f4de4df2f849f3337234095d7",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-KCDEMS8DRMM5M.dev.fajar.starter.collaboration.domain.QueueCollaborationReadinessSignalTest.xml": {
+        "sha256": "670744b0130d4264fc9092cba43c67f0d9a8f41ec8614f0795c06d53167fd0bb",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-MHLH8M91TH5MK.dev.fajar.starter.collaboration.domain.CollaborationNotificationIssuanceTest.xml": {
+        "sha256": "2cf5b4bb1e0a191d6376e6d69297e09fdf49e8e8d883481a4deba848c5bb71b9",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-M5G4E4MB235HC.dev.fajar.starter.collaboration.domain.SettleCollaborationCompletedQueueTest.xml": {
+        "sha256": "d497d36c38aee1f745858a40e37eb8dcc6f38b9e3d024fcb275ebe35d0b2d860",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-IOTML0J4CSC3O.dev.fajar.starter.collaboration.domain.CollaborationOriginalWindowAnchorTest.xml": {
+        "sha256": "778ab5fba027948de9f79c7ae65bb90eb7cb1449fead3261cb0f0ecd5e272b27",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-PLAGEGVACKK98.dev.fajar.starter.collaboration.domain.CollaborationMixedDeliveryReceiptTest.xml": {
+        "sha256": "a54405af56f2731a5d0c47c6440ee07add421699860679b3dbeac34595081b40",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-O2L19AP4BEB5K.dev.fajar.starter.collaboration.domain.ObserveCollaborationSpaceMessagesTest.xml": {
+        "sha256": "ed2e6dffb87c636ea2778dd7108137dc7819565a01a5642f27c3a793ab89a9e9",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.AcquireCollaborationHistoryTest.xml": {
+        "sha256": "fd11345568479cb3d509a092c349e8a94c03ec3de7385a3ecc7d4151957f932c",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.AcquireCollaborationEditsTest.xml": {
+        "sha256": "795e8e6510fe05315fb133b59be39057bb5b50b5b4e37960bfa14a62bd13aa3b",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.AcquireCollaborationSpaceEventsTest.xml": {
+        "sha256": "ab4d148c116ef0824b439d4f5fdd6993fca0275adb5d557b790394b77ff5d941",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ActivateCollaborationPusherTest.xml": {
+        "sha256": "2e3757bd553bcc792aee309fc3ffe8482b63f51b7292c5b7faec77f8754ce45c",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ActivateCollaborationSpacePusherTest.xml": {
+        "sha256": "db0d34099681dccd7b945c2d899f3d73de58861692cf13bae1d55d97a19facf9",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ActivateCollaborationDeviceTest.xml": {
+        "sha256": "7748b71d5c58ecf35d16e18ff2a366e73ff167378c3b9d7ab4c852114b301770",
+        "tests": 28,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.AdoptCollaborationSpaceRuntimeTest.xml": {
+        "sha256": "2f30dc9dfa1cf7385ef589f809e1affb3b96f6c1fd4d14c0cf6812e1dbb022d1",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CancelCollaborationComposerTest.xml": {
+        "sha256": "2ddd75ea4737c020023b1765a207a45f3e9226e5761c80ee8a25a2f0c265cd32",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CancelCollaborationTextTest.xml": {
+        "sha256": "c717f829ddae71ad825f58fc78f61cea5a9687a3ab033f0379b4345a77d47d2d",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationBackgroundControlTest.xml": {
+        "sha256": "3521b2ad46b1ad4f2fc38ef98f7f9ea6e353ed5fcdf19f36cd3d4b9f7cfbc591",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationBackgroundIdentityTest.xml": {
+        "sha256": "d3845745e1e3fcb9a30edd1854c17ac96774eaf49abccce00f7170bf146cf7d2",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationBackgroundReadTest.xml": {
+        "sha256": "b0ab2d5610c2e38ec01633eb4fe216c6afc1ac61ee76870956e795fb06bd64d7",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationBackgroundRuntimeTest.xml": {
+        "sha256": "4488acf4dc130a0f964927a35ee1076cfc469550b1427b2bd2b86d784092ec79",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationCapturedLocalScopeTest.xml": {
+        "sha256": "4474451bd8e4eecb4650896ac6758a08408f4fd7a0e73b370ef116a17a9f89cc",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationCapturedRecoveryTest.xml": {
+        "sha256": "32d682b6ea10fcd991ac28ae86019959f8038bbe9ef4a3fbe7ffec474cb93bbc",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationCompletedReceiptsTest.xml": {
+        "sha256": "3193186e4a87965fd4deb170c2e19d07430bac4ff99953e789a5d978102d5953",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationConversationReadTest.xml": {
+        "sha256": "d427652cffddca812cfe14537716fe44b60c3b8b49054eb9198ad86c5ec84c5e",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationConversationCommandTest.xml": {
+        "sha256": "909376c0a12740046bb9d79fb86d1b1f6a0b693fae93299f681897fbeeac56bd",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationDeliverySchedulingTest.xml": {
+        "sha256": "441c35ed0298e2e6c4eea0fb6a4db654ee3b31c8751f5554fe5a5268bd26eb64",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationDraftRecoveryTest.xml": {
+        "sha256": "cd3d73a158ab65e6f5f3dca5f106db525ac9231db5262e2d03fac25a72fd402f",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationDraftUseCasesTest.xml": {
+        "sha256": "01fd2326fe8157832ce3d83cd82eb66651180d2e0429c1ddfb3a917f6221af4f",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationForwardTest.xml": {
+        "sha256": "77ba90a3fff01539e67c80156fabb7220a74fb66a6dace666a2488f5eea65ca3",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationEditReceiptFlowTest.xml": {
+        "sha256": "bf34a8590a89fbb34da74e17aaa83bd7055bacec7f86ade90d4acae48baddb48",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationHistorySignalTest.xml": {
+        "sha256": "4171fc7bed87d8cfe0b5038b1944aa191ce1e7acb2ca48141e6c955fe0335281",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationInboxPolicyTest.xml": {
+        "sha256": "e17c9b13a17f18a391141d74b6a6a7063b9d2b1cf9d27e037ca2689dc25e9908",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationIncomingHistoryWaveTest.xml": {
+        "sha256": "ac67052f0ec72b76c9948c57e50c1ae2c8b66465df9149ede5cc2ae34015661a",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationListSyncPolicyTest.xml": {
+        "sha256": "c94578b7007f5c80f9dec5d0728211b6df49284af4981dbdc554486ced736b72",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationLocalListTest.xml": {
+        "sha256": "637590993817fab5476103e7622084e3cc1b2738b3e0bf6bf088defd4ccad901",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationMessageEditPolicyTest.xml": {
+        "sha256": "77499f60472e7ed9b710e5853f43e09a9fa93b4f586595c6727edeacbc877f78",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationMessageIntentTest.xml": {
+        "sha256": "e04a041fece19a72874a80595cb0932342affc89169228ff0ede91aa47654d53",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationLocalVisibilityTest.xml": {
+        "sha256": "36b2148115fb38604512798da9be6620d2e16cc080dbf64045a2987e68c150b7",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationMixedRecoveryDemandTest.xml": {
+        "sha256": "f1ea2b98debda674126a256bd476567b9781cef00c8c3a0d3e6233962ac3f7d9",
+        "tests": 30,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationMutedNotificationTest.xml": {
+        "sha256": "1783b9d73717e44fd1870020bd3f132baa1a252f550f2c3e5cc2b033604dbe07",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationNativeActionScopeTest.xml": {
+        "sha256": "7374cb2bf690182958b1d190378ab268ad6a5e7377b5a62c3af62563b1eb4c8c",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationNotificationChangesTest.xml": {
+        "sha256": "67d41a070b3ab237fb4be1e2cf16fb12adec12c51c7ddba9618b261ea64cb972",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationOriginalQueueMatchTest.xml": {
+        "sha256": "b3ea47da01ba8cfaa08150210eda297a773a051e857a7c23ac5f19c1e309f233",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationOriginalQueueReadTest.xml": {
+        "sha256": "778b74e0b086e23d344df9fb8038d20d8f08863b2a4f2aee316a4b9fa093fc0f",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationOriginalSenderMatchTest.xml": {
+        "sha256": "a17b1665da62213ae6578c26c231ed1a451e913f9b508bc85f6150151ce9c812",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationOriginalTransportTest.xml": {
+        "sha256": "09d6030e76e4af8916a49c005c417566724149895c5619e5389d19fc3c344e53",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationPointPublicationTest.xml": {
+        "sha256": "c9d55333228638ea9051f680bbae040c148da819da6c37298e5507bc67358264",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationPreparedDeliveryTest.xml": {
+        "sha256": "532e7cc5b828645cedd1f56cb92ada6015370f73cb2e510149872550d8012e03",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationPushPriorityAccessTest.xml": {
+        "sha256": "0500cd84488ef639fbb6263a6b11cba73e28cf9852331f6bff7b14385821c7a6",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationPushPriorityPolicyTest.xml": {
+        "sha256": "212b27ee780efc25a139763d78338cde08e5dad23a399ec12d40c85185748e93",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationPushSignalPolicyTest.xml": {
+        "sha256": "ec7123aa2756993f1d7af00f1ac62cc697e8ca26d61a4b889ba39dc74517e633",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationQueueNamespaceTest.xml": {
+        "sha256": "9cd365d4c7ccb9506885596bfd6e03d1b715ea26aecc9b789f5552d2004a5c8e",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationQueueRecoveryTest.xml": {
+        "sha256": "4c97998b60c6a3aa209c981b98c37a62b4c6f76b2e7211b6221db2a5f8ce9c32",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationQuotedDraftTest.xml": {
+        "sha256": "1bcf79acccbfe80029a4344b4ea87e9e03fcede354f0ce144dabeb932c28cb75",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationQuotedHistoryTest.xml": {
+        "sha256": "9fe10a23687b45efb5cdece69104cf3f161e9ee7d5198dc7bdb643ef21f40500",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationReadStateUseCasesTest.xml": {
+        "sha256": "a5ffe315bfe71720efc19e1e16b4a500630f5eb4853f421f86a70f69c1a45c61",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationRecoveryProgressTest.xml": {
+        "sha256": "b3ebaa8d9a53a215823b00052478aa51621559ba396c25c143f3bd87e4af57fd",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationRecoveryTest.xml": {
+        "sha256": "9b7b9c87ccc106e65f9a5d1132aad5d6ca935b3e74ce6142e69e0d9671c5ee42",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationRecoveryWakeTest.xml": {
+        "sha256": "b11f80299cb02c6cfe03c8947a71faf8240ce4d3143276bdc225036d34683efa",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationReviewedReplyTest.xml": {
+        "sha256": "430ddc53a62428a8baf0c527feaf8ab75c8f277c2557b0f802907391a6f5cbb1",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationRoomLookupTest.xml": {
+        "sha256": "99f333268a03cbef7d3f46b4131309c7b14a5098037d82665649942344777039",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationRoomRecoveryTest.xml": {
+        "sha256": "476938eb8d589b189e8e9ad08c1870c9176b8d42f32330f66a9499ba1f75d659",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationRuntimeOwnershipTest.xml": {
+        "sha256": "8be5da5de58fcf048891f447df72d46b1b6bafcdd1ea163becf4aa1f8187e907",
+        "tests": 28,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationRuntimeRestorationTest.xml": {
+        "sha256": "6a69e0719a9d645995a3b2276f7e896f1c3d31c044bbd0172eec0f032981fe8a",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationRuntimeInstallationTest.xml": {
+        "sha256": "d09f78dc39d9be38c32a2e819ee3abec57bd2920d0f8f41d73251904e0f9a0e9",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml": {
+        "sha256": "39505ba8bf7578bf72e2f746cb66bb92c119efcb03b910cd2d028cf07175dcf9",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSpaceIdentityReadTest.xml": {
+        "sha256": "1fb7c4c55e157ffef66d52858e9ecc0e5053e3ed3a0e544eb12d4dd69d9d9752",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingDemandTest.xml": {
+        "sha256": "aade9c0775e8804fe27551665a6a1eb99ebfd3b23a0ce6d2f5f56e37da4ce85b",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSpaceDeviceStatusTest.xml": {
+        "sha256": "71084f1ae80cacbb11fe9d6ceabc262ae41da120b27b7990ac2f11fc70d05b39",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingRetryTest.xml": {
+        "sha256": "f5d58f24d2a4cd71db71597194b77c7e64ea422fd06a813ecb1c162806e86a29",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSpaceIncomingTargetTest.xml": {
+        "sha256": "33d3e69230ea2fde00d809b8c6b5b417dd7dd79dd5c1a6880e4b49cc80e5698b",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSpaceMessagePolicyTest.xml": {
+        "sha256": "b28996ec8db7b15f4746d18f6daced7c03d8208a4232921cc3a0f7eaeed0cb91",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSpaceNewRoomQueueTest.xml": {
+        "sha256": "492d849ef846034805713ce8602c64e1bbf3f53779c29687dbbd761e3ab37d42",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSpaceObservationTest.xml": {
+        "sha256": "ffc238c8dd7a0c92d0f664d80bd6596206eb932a36143fc35dc24cfd4063df81",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSpacePushSignalTest.xml": {
+        "sha256": "34b1c954db1cf333a0bded2aba1df9235705b6b9f2f17b8d3738319cc6993818",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSpaceReadTest.xml": {
+        "sha256": "db7fef1877ba2cab8538236fce12c344f011cbcddce81cbdaf640440766bd329",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSpaceReceiptPolicyTest.xml": {
+        "sha256": "13fa4aa7f137999d5e1f6ca553b99fe01fccb62b4231c14382e91f5a92f0369b",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSpaceRecoveryDemandTest.xml": {
+        "sha256": "55699a025fe3365339151434ee049c7414fd9916fa00fb1fe03307437b1030b1",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSpaceRecoveryWakeTest.xml": {
+        "sha256": "ca4dabbefc57d9578a79d926ca85ebdba30fb4b139ee81cf76a8f76ffe17463f",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+        "sha256": "aaf2863fe40b7a1d20541f32fb2fca2f0fe411b61fd604cca0c61384c5cf2d86",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationTransportRoomTest.xml": {
+        "sha256": "39572195737a6e8a9925814e6256f9c4d92758d195addf98518fc6c587593513",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.DeferCollaborationSpaceInventoryTest.xml": {
+        "sha256": "aa5c5db60d6b8f45e6a16827150965501e79af13b6a9be87ff22f1898ac572d5",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.DeliverCollaborationMessagesTest.xml": {
+        "sha256": "01f097c27a7c9bc3feaa43728501be391a0025239a480c896fa6c3b1add4948e",
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.DeliverCollaborationReadReceiptsTest.xml": {
+        "sha256": "524d4efc8756c581f499c5be8118081d2f3f0361483f757970fffb47b42b933e",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.EnsureCollaborationRuntimeTest.xml": {
+        "sha256": "92bde51ee3046fe7e465cc7906289f35c1f44a74bdb1034220ec4a83cd9eb495",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.EnterCollaborationConversationTest.xml": {
+        "sha256": "d0d2fb88e696d7a9d90c50ab5d79651e236651a1da20697ddfd896f3fbc96a86",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.FinishCollaborationSpaceRecoveryTest.xml": {
+        "sha256": "911aea57f7d53fe58172ef4fc4a4c3514f98ddb7b49eb3f78f44fead38e9d86f",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.LoadCollaborationSetupTest.xml": {
+        "sha256": "f9aa812e51834700ce0ed3727d3a8a9472a82e88132112df18ec505c705e8bf6",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.MixedSpaceOriginalDeliveryTest.xml": {
+        "sha256": "4a6e0c1f36f3b38bdb492061dd782d60bc2720051099c11bc06a6caaa25a69ac",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ObserveCollaborationHistoryTest.xml": {
+        "sha256": "bf26e2146537172d5f3d89ef7c4a452815e20b20cc76d73535552af7ef63cdda",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ObserveCollaborationInboxTest.xml": {
+        "sha256": "382f60fc716eb692dd11df1a1fa96cac578f05bb9f66033024e11fd51a1a3765",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ObserveCollaborationQuotesTest.xml": {
+        "sha256": "1b4e69e0456341a7f2d4a14cd0413b08ee02bd9ed08f049bef28b2e0b4a079e6",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ObserveCollaborationSavedRepliesTest.xml": {
+        "sha256": "99301e55f3c3662d80b404934b5025369d780322afc43a6e4edacbff61679552",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ObserveCollaborationSpaceHistoryTest.xml": {
+        "sha256": "f23d2706c59b7d8635ebbbc1d2bde8d83f8b76a903b188c091158120e9b1d05c",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ObserveCollaborationSpaceSetupTest.xml": {
+        "sha256": "317f4b299736e2bdd6756fd80eb3e016f9b275c86127943e94c54513df59e3eb",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ObserveCollaborationThreadTest.xml": {
+        "sha256": "72fcf03971aab4622d17f3430c6096880f58bfc45ce9f4bdd454668871d328ef",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.PrepareCollaborationRoomTest.xml": {
+        "sha256": "68b625c60aca8e4f488b59659b05900894791ccd30ec42c08e8aeabc255eb993",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.PrepareCollaborationSpaceSetupTest.xml": {
+        "sha256": "a4444378e3a023baa7b68367f0373f6a2c4e4654172098ef774544b6505177ae",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.QueueCollaborationEditTest.xml": {
+        "sha256": "25f9b7ad6a752d5e8ac5d0b8d599367e0b5d2198b08b9556654a5abed999175b",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.QueueCollaborationPushPriorityTest.xml": {
+        "sha256": "33fce98f73c6973e4284e1502e55d2a72d4c6231675e7d06742107d4fa54029b",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.QueueCollaborationPushSignalTest.xml": {
+        "sha256": "b011db3efadccd7cdc8f6d7a4813d8ec279ee2cf648e0622e2f23c73f8988299",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.QueueCollaborationSpaceTextTest.xml": {
+        "sha256": "0322dfdb28821be49332e15452eca945e9af2fc976382e941f754493b353aaa2",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ReadCollaborationControlTest.xml": {
+        "sha256": "f57778bdaf1d1c6c704e63229247fe8c1dc25d6d6ed15933a2301bd0cf5a596c",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ReadCollaborationDeliveryWorkTest.xml": {
+        "sha256": "0ab574f1b947124990aaf6a8efe89b9f40be0137385b1c713c66cf17b814c64f",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ReadCollaborationEditCandidateTest.xml": {
+        "sha256": "74ddf854c6131bce3db9d022a53516be2dfb2197550d3188aaf0a3035d036204",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ReadCollaborationHistoryEndTest.xml": {
+        "sha256": "203fa061f2038a82891fe7ca1c1c5eb288eca7b2fa03bad45e28e4f9be1da31f",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ReadCollaborationHistoryEventTest.xml": {
+        "sha256": "918c9165a25cba3e5579cb57191cbabad00c0bebb084d729c0c4ac187142b96f",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ReadCollaborationIdentityTest.xml": {
+        "sha256": "272c9003c8c1975ecc21f2c85371ffd1a96ed2927664ac6a3a6729f400910596",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ReadCollaborationThreadContextTest.xml": {
+        "sha256": "e1a80b8e4e836fe90a6d93b3eccbdc2944e2e7ab7a2ebd8cdfa8fdeeca16e7ba",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ReconcileCollaborationMessagesTest.xml": {
+        "sha256": "a3e5196d368ffda68b12325a1816b93ae7c83ee96aaf6907bba92ed95702fcff",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ReconcileCollaborationSpaceRetryTest.xml": {
+        "sha256": "66d9032a2c0787b697d57a6d96318874ce91952291495d8c23ac7a89bcdc3f0f",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.RecoverCollaborationComposerTest.xml": {
+        "sha256": "793f9e3cf97f2557a746f0a73b5368a75b440d1a645c751965102890d368212c",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ReopenCollaborationHistoryTest.xml": {
+        "sha256": "6b7a0c20dbabc37d9c5c775b0fc5d452ee9586dacb08e598bcb3d048fe570089",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.ReplayCollaborationSpaceSetupTest.xml": {
+        "sha256": "073fae25c58867e78bbf5b061533c17485f81e3c9be904f1549d65e2e5c1ab15",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.RequestCollaborationDeliveryTest.xml": {
+        "sha256": "73a44b7fc5964a3c156a9724fbe9773eb03608af548d9e7789d22257e71841c4",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.RetireCollaborationMessagesTest.xml": {
+        "sha256": "1c15360cf8e0b10cb986f166c84a6921a7a0eac5969fc0295ad28651e7bb29e7",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SpaceConversationOpenReplayTest.xml": {
+        "sha256": "1211acb3dd973dd5dda4a1346680f2cdbd3a09d6e37bad0c3e5bd2f7564013bc",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SpaceConversationPreparationTest.xml": {
+        "sha256": "bec63c083296235dc33b418091eebf7aa96240487833a08a364743199ec3eb1e",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SpaceDirectoryObservationTest.xml": {
+        "sha256": "5803132b98a6864544789b081220f86e3e475fb4c294db7eec428eec2800dfc8",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SpaceDirectoryRefreshLifetimeTest.xml": {
+        "sha256": "c1dde383bfd22ffaae1b41be4ec7fc5e50af2e715905f865a3703a63ead90dd7",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SpaceDirectoryRefreshTest.xml": {
+        "sha256": "4f8e677884fccd47ee3e45a20e8af6964e15672e34252f1bb7f42a31baaa932c",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SpaceOriginalDeliveryTest.xml": {
+        "sha256": "0627f1f64a4295fdff1919c7113984ada634a44e53496301bab8ace61d2cb7e8",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SpaceOriginalReceiptRecoveryTest.xml": {
+        "sha256": "ef43a25ae9584cf732353d393b3a8766f65a2c6d82db0af329d2eb1a2a5b7332",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SpaceRoomBindingPreparationTest.xml": {
+        "sha256": "5a0fc084ce0937069b0b8fe798d4b12124e02976d88b7647766ca30c6624ddaf",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SpaceRoomPreparationTest.xml": {
+        "sha256": "a6c650daa492667ae1f85887313ce8b27d2fcf0a6c6be2c9f9927089f14f6de5",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SpaceRoomRequestReplayTest.xml": {
+        "sha256": "e7527014de0ea4186c0d2fda4617719bbcfc6a96cf390fb46b2ad2ad0c0714ce",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SpaceRoomRequestResolutionTest.xml": {
+        "sha256": "2116f7c49c457bcb6ff9af61a27a4e2a407f48a6915f6553fbb324d6c47842b6",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.StageCollaborationTextTest.xml": {
+        "sha256": "8fe0ebfef65161994d18e5ca4f68c90bc64c1b8b36cb6cb332bbeb17527491ab",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.StageCollaborationSpaceTextTest.xml": {
+        "sha256": "b2da92b5e59ede8325eab1bbda4859ab36039e18c14d40acbd94d1771606564f",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SubmitCollaborationComposerTest.xml": {
+        "sha256": "509fd259aca5eaf108c8d37d8bdb89e1bfa48be73036673f93f84f65a26cec09",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SyncCollaborationListTest.xml": {
+        "sha256": "ac0ae6fa933736a6afea5223e50d436507bc0c6f4d68137c58a855e5a80401d5",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SynchronizeCollaborationDeviceTest.xml": {
+        "sha256": "ed59158945a845ff869ebaff31d14e49e292c2241288e1f496f29fc468c2a1f0",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimula-OSUE1EGQ0VBMU.dev.fajar.starter.collaboration.presentation.participants.ChatParticipantsViewModelTest.xml": {
+        "sha256": "770de8d7e813edd1fff500cad7f618377326d5f0f9844ed48a8bd26af128e9fa",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulato-DCG5CEB6D1C34.dev.fajar.starter.collaboration.presentation.navigation.ChatThreadViewModelStoresTest.xml": {
+        "sha256": "99da18440c216953a051a373f68a69684981d714377e45e37f09be431f25dc20",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorAr-SUUJDLQQE1N02.dev.fajar.starter.collaboration.presentation.thread.ChatComposerEditingSessionTest.xml": {
+        "sha256": "b93b16823ecd367c591316b6b269da1e747ff6c9c74284029bb38f3fd7857dc7",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm6-IGVEBJDCRJHJE.dev.fajar.starter.collaboration.presentation.thread.ChatThreadHistoryRestoreTest.xml": {
+        "sha256": "643e08d1c65d68da75b2c94f0265a0973e6b6635eebcb77bf12f2c447616018d",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64-F3G8P4L7KDS8O.dev.fajar.starter.collaboration.presentation.thread.ChatThreadRetainedStateTest.xml": {
+        "sha256": "eaba8efafb1fb7b5a36ffca4756e0643acec5115422ba000f368566f43181bc9",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64-MAKJG5S585940.dev.fajar.starter.collaboration.presentation.thread.OlderHistoryAcquisitionTest.xml": {
+        "sha256": "e2007869d4b54dd8a3770e697e21f08e63f79bd865e0f6dd2c65fab8380ccd59",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-1Q9IPEVIL790I.dev.fajar.starter.collaboration.presentation.thread.ChatThreadCancellationTest.xml": {
+        "sha256": "3a61553a5253e4a828b50215dbabc9db3e0cb311325db25f01671a7c45ab1266",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64T-A6ILDFPEDMK5G.dev.fajar.starter.collaboration.presentation.replies.SavedRepliesViewModelTest.xml": {
+        "sha256": "70d74cbb3a9bcd471e8730c6e44e83ddfb96b03a6a380baca22d561037bf9856",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Te-DEUJNO44LT2TM.dev.fajar.starter.collaboration.presentation.thread.ChatThreadQuotedReplyTest.xml": {
+        "sha256": "694f934dc4c062bd772fb96b2e1adbdc35adae97d46a3999e6544f167aee58cb",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-VMVTVFIG3KIMI.dev.fajar.starter.collaboration.presentation.thread.ChatThreadProjectionTest.xml": {
+        "sha256": "3d7916b2268addc17b33727c566c83b27a25175cb70d1965d1d01568f3e7f137",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.inbox.ChatInboxProjectionTest.xml": {
+        "sha256": "9c790dfd28b80779826fdaa4e9dc353150b6bf3b160eec6991d883d359ed259f",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.inbox.ChatInboxViewModelTest.xml": {
+        "sha256": "d9da044838834099bf73e6bbfa34c58eb93c46c8d895f9ad778eb61e4b0ea0a3",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.setup.ChatSetupViewModelTest.xml": {
+        "sha256": "722c27b1723ccc2c0788df6370f90e7ea503c85ed8893f875d17a231db8c4db0",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.thread.ChatEditProjectionTest.xml": {
+        "sha256": "c46d9be7b4d03d139d955383f2072ff1090c2761d65d8564fe2b02e8ca144323",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.thread.ChatLocalEntryTest.xml": {
+        "sha256": "16e723b49fb87d0d783ad4aa2cb5bd3a7feee380bcab7d0a8c26a7724bf60288",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.thread.ChatMessageTimeTest.xml": {
+        "sha256": "c1c7d9f1bab61dc49f82af6757612a908f83aaaa2f1ce44e57ee1a5792e5aa76",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.thread.ChatThreadDraftTest.xml": {
+        "sha256": "a5df173298fb784e85379e32fe7828ee0d3e33ec10925f52483a45c1f8e941cd",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.thread.ChatThreadEditorTest.xml": {
+        "sha256": "5d678cd3ea75df1ea82e480d6014449c79f170ba4c9e995738a894c98e272b8c",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.thread.ChatThreadForwardTest.xml": {
+        "sha256": "827171871afd917c3e353d2cd4e3441267250ffa1373c6531d46df17e2f88e6c",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.thread.ChatThreadReadTest.xml": {
+        "sha256": "ebdab32b1cee6c43011fe504acdd8044540a7a10b34b93be65c0ed7a1fb18181",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.thread.ChatThreadSelectionTest.xml": {
+        "sha256": "bdce9d667b6ec454ba1dc627895e87bf0b29c4268c2c17057bb0b4b269e72a76",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModelTest.xml": {
+        "sha256": "b3e84b1142e4473fdf7aed2808392b03a25d2dbc9a93a93985917c3021c228fc",
+        "tests": 44,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.thread.ChatThreadWindowTest.xml": {
+        "sha256": "1c8591acb1b51de446f9706d39f044d06de23d2ae134e85360e7e00dd49fed56",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/workspace/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.workspace.domain.CompanyAvailabilityTest.xml": {
+        "sha256": "1e5b230650d067f7a766f4c54426348929692c04c2b53f311fb612631fff0c79",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/workspace/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.workspace.domain.WorkspaceAdmissionTest.xml": {
+        "sha256": "0e285d22844a3457c12d4288a1b50e18fb533bf2307617b3ee458b8f70cabe3a",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/workspace/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.workspace.domain.WorkspaceRefreshTargetTest.xml": {
+        "sha256": "b946a93a8bccf940580d300372482faff9bad769110f2bca7340b9d33990653e",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/workspace/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.workspace.domain.WorkspaceSelectionTest.xml": {
+        "sha256": "4763b3f9ea21a59b4fe2852c1be23edec7962f7e20de48cfbbfe02f87809e84e",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/worker/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.worker.CollapsedWorkGateTest.xml": {
+        "sha256": "4ce4be408b863c7cd31d43302ae80e7f1c25a43f56d5582cfac43fc33b217923",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/worker/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.worker.ForegroundSyncWorkerTest.xml": {
+        "sha256": "d00298c013dc0f631995ddaee271205ae4a0e397c29a6436d5915ee3fb3c0235",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/worker/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.worker.RequestedSyncWorkerTest.xml": {
+        "sha256": "6fa1af35f7b7c9a4fd72ade25769040d5e8f92993802627cf98018acca34b5e8",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/worker/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.worker.SyncTriggerTest.xml": {
+        "sha256": "74a20b25aaaf1412245fa8ea3d378c47c18e69030490a4dc30535d4fdc055d8c",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/network/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.network.ApiProblemTest.xml": {
+        "sha256": "18ae2751d0c0b5c92b56b92ff1c2459871f7f9674531e43a0f701c7d3145dd07",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/network/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.network.ApiResponseBodyTest.xml": {
+        "sha256": "8d0920e3464963f776ac87042ab4851a34d371faa4c7b1a43e68ab6bb04a9d52",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/network/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.network.ApiValidationTest.xml": {
+        "sha256": "36ff8a72eaf3c3b6b8758a71e79da2bfb39c4421a2407c96dacb5705e0af681b",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/network/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.network.ApplicationAvailabilityTest.xml": {
+        "sha256": "2f64e670059150b8128d69bb80ac8afe9791e0fc275aa76a0dbab6d065f89ff4",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/network/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.network.BinaryRangeRequestTest.xml": {
+        "sha256": "9074ebac4cbfd21dc28f5752f5a7a6fa706fe77dec34bf70a9d80e0d6a4e86d6",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/network/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.network.HttpClientOwnershipTest.xml": {
+        "sha256": "38c13bbd0d175495119b0fe066555be76a48996e59444e6b4d0932a8ac1e0056",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/network/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.network.HttpDiagnosticsTest.xml": {
+        "sha256": "c250b6818f9675dfd873f7dc6eee52c26c786fc4af7a9cdec79718052541a452",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/network/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.network.JsonRequestTest.xml": {
+        "sha256": "dc3a5b02ff8d02b5936e601b2813ec5a96fef1a1ed7bda04c0a849e957654692",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/network/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.network.ReadOnlyPostAuthenticationTest.xml": {
+        "sha256": "981855dee5ab93c5bb369fb3347f1d67918da62af3f300d1f37d446dd23e3420",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/network/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.network.SafeApiCallTest.xml": {
+        "sha256": "527b5a0bd6e5403a447dfed7a6bdc30a001b2bf5abd5ed5771fad1f8500fe5a3",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/network/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.network.SessionAuthenticationTest.xml": {
+        "sha256": "47b61c371fefa93ed64ca67e6551f44c02b4f02106ff76eabdc9a4060cc27055",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/observability/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.observability.DiagnosticsTest.xml": {
+        "sha256": "5888906cc37154ff4070ab177970e0ed88007ad131e28b7c887adc5596cff34e",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/observability/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.observability.MeasureAppResultTest.xml": {
+        "sha256": "8f1a05b22ed049cef5a34ef45a92ae159774cfbd2e31f6cbd2eef7b7f1223ee3",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/observability/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.observability.PerformanceTest.xml": {
+        "sha256": "b94abf66052e17370b3e362c0daf21d967cbf580fd63ca27755b969facb25c28",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleCommandBatchTest.xml": {
+        "sha256": "49fa1e496419f15819ee761813109c501adf6429c5b11d6ed1b9cff568326447",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleCommandHandoffTest.xml": {
+        "sha256": "b2b785a98d48de6a1ceb087b6e4ed6e8be9e0beeb31e0774f5daa90da675613e",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleCommandLookupTest.xml": {
+        "sha256": "2fb371d75d5c357f5595e54288952b984fc146915b4939c64475b20add7f54f8",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleCommandPreventionTest.xml": {
+        "sha256": "72b1ee85d45a7027c8ef186f57a1f0810d7eec7e3d4c3b063d0528c4e21f4386",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleCommandWakeTest.xml": {
+        "sha256": "a200ca4cc29fa2b54fe94672e323bcb85b7df5a4b52f5ea215a2abd3431d8989",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleDeviceRecordStoreTest.xml": {
+        "sha256": "23eceafbca9e049fa18f074d89d54d51e97168e50d4bd9bb434815a813d3ff45",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleReplicaStagingTest.xml": {
+        "sha256": "41e266390ad3b0dc07b9f44b7d55daddbfefe85e50ae64b3c88d1268edc2a532",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleReplicaStoreTest.xml": {
+        "sha256": "f53d47cfee793b3f2fb49d4548fd1d15cf3b4a77abb9b522f55e88ab52ac8826",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleWorkWakeStoreTest.xml": {
+        "sha256": "73c6fe64ef61774290951d9f57bf9a051216fddaa9b7fe7390afc5aaf00d17db",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleReplicaWakeTest.xml": {
+        "sha256": "adf668b23c95138d1de4c51a4a802bca717388c73434e59f9ff0d32d7e18507e",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check out verified network inspector",
+        "conclusion": "success"
+      },
+      {
+        "name": "Select Xcode 26.3",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-java@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run gradle/actions/setup-gradle@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Prepare public app-link test registrations",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check Apple push envelope routing",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check Apple setup adapter",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build iOS application host",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/upload-artifact@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run gradle/actions/setup-gradle@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/setup-java@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Check out verified network inspector",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "conclusion": "success"
+      }
+    ]
   }
 }
