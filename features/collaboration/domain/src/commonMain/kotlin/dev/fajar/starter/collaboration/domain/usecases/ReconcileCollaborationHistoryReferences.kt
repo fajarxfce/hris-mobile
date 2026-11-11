@@ -91,23 +91,12 @@ class ReconcileCollaborationHistoryReferences(
                     }
                     if (replacement is AppResult.Failed) return@withLock replacement
                     val retained = (replacement as AppResult.Success).value ?: continue
-                    if (
-                        retained.eventId != event.eventId ||
-                            retained.sender != event.sender ||
-                            retained.timestamp != event.timestamp
-                    )
+                    if (!matchesCollaborationRetainedReplacement(event, retained))
                         return@withLock failed()
                     resolved += reference
                     continue
                 }
-                val timestamp = fact.timestamp
-                if (
-                    fact.eventId != event.eventId ||
-                        fact.sender != event.sender ||
-                        (timestamp == null && !fact.redacted) ||
-                        (timestamp != null && timestamp != event.timestamp)
-                )
-                    return@withLock failed()
+                if (!matchesCollaborationRetainedOriginal(event, fact)) return@withLock failed()
                 resolved += reference
             }
             if (resolved.isNotEmpty()) {

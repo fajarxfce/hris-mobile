@@ -1,5 +1,8 @@
 # Architecture
 
+[Original retained-fact reconciliation](collaboration-space-original-reconciliation.md) confirms Company event identities locally.
+Missing content stays pending; finite seek and queue completion remain separate owners.
+
 [Original content retention](collaboration-space-original-content.md) reads through the installed Group runtime and
 keeps physical Company/device identity. Content writes precede later reference and queue completion.
 

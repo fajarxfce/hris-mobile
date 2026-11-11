@@ -1,50 +1,61 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 11:43 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 11:50 UTC. This opening owns current work; older sections are historical.
 
-## Original retained-fact reconciliation — full validation running
+## Original retained-fact reconciliation accepted — continue finite batch completion
 
-Accepted content cb5c12dde31caca50545724d876fa3ff7ab1c444 and Group docs5145e45f are PUSHED.
-Current eight-file reconciliation increment is APPLIED/FROZEN, NOT accepted or committed.
-Private .work/space-original-reconciliation-2026-11-11 has baseline11,961,4,958 current inputs,
-manifest bdd71aa123e3018ac890f3e532a6297a1074dfa44629cc6d488092a45c220f33.
-Format1/session85225 REAPED PASS35.005s; focused1/52944 REAPED PASS304.939s/139;
-browser1/92177 REAPED PASS186.901s/137. Focused audit276 accepted, no failures.
-Full1/session40307 RUNNING; expected12,021. Reap then accept-full.py full1 before publishing.
-Source reads matching retained Company original/replacement identities, including original tombstones;
-no provider, content write, seek, queue or wake completion. Current local ownership/denial stays gated.
+The eight-file reconciliation increment is ACCEPTED. Full1/session40307 REAPED
+PASS634.377s; audit accepted12,021=9,983 fresh+
+2,038 exact unchanged controls. Prior case IDs, dependency closures and
+source/library hashes verified. Format1/85225 REAPED PASS35.005s; focused1/52944 REAPED
+PASS304.939s/139; browser1/92177 REAPED PASS186.901s/137; focused audit276 accepted.
+All required format/architecture/detekt, Android host/release compilation/lint, browser/Wasm,
+iOS metadata and proof assembly/unit checks pass. No failed runs in this increment.
+Frozen4,958-input manifest bdd71aa123e3018ac890f3e532a6297a1074dfa44629cc6d488092a45c220f33.
+Proof APK151,710,030 bytes/SHAedf29ec683576ac54892b882a3fb50a39ac58d5ef2c78bde7278bf0731fef50a.
 
-publish.py, contract.md, hosted-plan.json, hosted-audit.py and dispatch-hosted.py are PREPARED.
-No publisher or reconciliation hosted dispatch yet. Prepare accepted handoff after full audit, commit
-and push; dispatch once on validation/original-reconciliation-20261111, expected14,002. Hosted baseline
-is content43011629455; its Apple run needs the capacity cancellation handled without rewriting history.
+One local five-second owner checks exact Company original/replacement retained facts for a detached
+finite16-reference page. Same task/source/registration/metadata/account/native family and denial remain
+checked around suspensions. Original tombstones may lack their original timestamp; replacements keep
+exact timestamp identity. Missing facts remain unresolved; mismatches reject the attempt. False/lost
+resolve replies cannot publish success. Ordinary credential age does not hide owned facts. Shared pure
+predicates preserve existing Company reconciliation; no usecase calls another usecase. No provider,
+SDK client, content write, pending seek advancement, queue or wake completion.30 new common cases.
+Fixture records commits, not real database/native behavior; actual storage controls remain required.
 
-Next PRIVATE UNAPPLIED draft now has9 files/6 new inputs: Original completion owner, Original policy,
-shared source/outcome policy and Published wrapper, scoped fixture,20 owner+9 policy cases, DI and a
-separate app assertion. Base hashes guard all3 modified files. This draft is NOT formatted/compiled or
-accepted. It resolves acquired retained/unsupported outcomes before one finite16-row Company seek;
-keys/redaction/targets retain retry. No queue retirement, provider work, SDK client or activation.
-Fixture records operations, not database persistence; preserve actual Company wave storage controls.
-Review next-original-reference-completion-review.md; create guarded prepare/configure scripts after
-reconciliation is accepted. No usecase calls another usecase. Source stays frozen while tests run.
+Private .work/space-original-reconciliation-2026-11-11 preserves snapshots/reports and scripts.
+publish.py HAS EXECUTED; do not overwrite. Commit/push source and docs, then dispatch-hosted.py ONCE
+on validation/original-reconciliation-20261111, expected14,002=9,999 portable+4,003 Apple,
+16 Swift/unsigned host. Hosted baseline is43011629455; inspect its cancelled Apple attempt separately.
+No reconciliation hosted dispatch yet. No new native SDK8 Apple execution or phone/live change claim.
 
-Reader43003600252 FULLY ACCEPTED13,793=9,865 portable+3,928 Apple (audit98370 REAPED).
-Company43008238149 portable accepted9,873 (audit16363 REAPED); Apple3,940 still running.
-Content43011629455 portable running; Applejob130492406895 CANCELLED before any step/runner assignment.
-GitHub annotations explicitly report macOS arm64 capacity and no runner acquisition. Preserved in
-hosted-43011629455/apple-cancelled-attempt1.json. Do not count as tests or redispatch the workflow;
-when the run completes, a targeted retry needs a distinct attempt archive. Existing run already dispatched.
-Transition42999833068 accepted13,721; provider42996808183 accepted13,589; loader42991947262 accepted13,466;
-storage42988568153 accepted13,394; target42983683780 accepted13,276; metadata42978769594 accepted13,189.
-Simulator/domain/unsigned-host evidence does not prove native SDK8 Apple execution.
+Next draft has9 files/6 new inputs: Original finite completion owner, Original policy, shared source/
+outcome policy with Published wrapper, fixture,20 owner+9 policy cases, DI and separate app assertion.
+Guard hashes cover3 modified sources. prepare-next-original-reference-completion.py and
+configure-next-original-reference-completion.py are PREPARED NOT EXECUTED. Expected4,964 inputs,
+171 focused/169 browser/12,079 full. Apply only after clean pushed accepted reconciliation. Draft NOT
+formatted/compiled/tested. It resolves acquired retained/unsupported outcomes before one finite16-row
+Company seek, preserving keys/redaction/targets as retry. No queue/wake retirement/provider work.
+Read next-original-reference-completion-review.md; keep real Company wave/reopen tests in validation.
+A separate private queue-completion owner draft exists with no tests/DI/application/acceptance yet;
+read next-original-queue-completion-review.md. Guarded preparation copies it into the next workspace.
 
 After completion: exact Original queue completion, canonical Published LEGACY aliases, bounded native
-Client.rooms inventory, keys-only recovery and native proof precede raw collector/Original producer
-activation. Both remain OFF; all54 PRD groups OPEN. No generic Starter delta. Continue long run/push commits.
-Phone29977 REAPED timeout124 at11:15:38 UTC; next bounded retry no earlier11:46. Release89 validated SDK6
-APK awaits install; no install attempt/result or emulator. Notify before explicit-serial install-only;
-never launch/drive the phone. Protected originals/Draft66/keys/stores/SDK assets/live90163c3/schema116.4
-Group-OFF remain unchanged.
+Client.rooms inventory, keys-only recovery and actual native proof precede raw collector/Original
+producer activation. Both OFF; all54 PRD groups OPEN. No generic Starter delta. Continue long run.
+
+Reader43003600252 accepted13,793=9,865 portable+3,928 Apple. Company43008238149 portable9,873 accepted;
+Apple3,940 pending unless its immutable audit has since completed. Content43011629455 portable pending;
+Applejob130492406895 cancelled with zero steps/runner assignment due to hosted macOS capacity.
+Cancellation evidence is preserved; targeted rerun requires its own attempt archive. Do not redispatch
+an existing workflow. Transition42999833068 accepted13,721; provider42996808183 accepted13,589;
+loader42991947262 accepted13,466; storage42988568153 accepted13,394; target42983683780 accepted13,276;
+metadata42978769594 accepted13,189. Inspect latest exact run/audit files before updating these statuses.
+
+Phone connect76683 REAPED timeout124 at11:46:14 UTC; next retry no earlier12:17.
+No installation was attempted; inspect phone-connect-1146.json before retrying. Release89 SDK6 validated APK awaits install; no emulator.
+Notify before explicit-serial install-only; never launch/drive the phone. Preserve eight originals,
+Draft66, keys/stores, SDK assets and live90163c3/schema116.4 Group-OFF.
 
 ## Original content accepted — continue retained-fact reconciliation
 

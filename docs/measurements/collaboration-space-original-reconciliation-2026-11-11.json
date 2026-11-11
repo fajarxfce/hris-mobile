@@ -1,0 +1,63 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "cb5c12dde31caca50545724d876fa3ff7ab1c444",
+  "sourceFiles": 4958,
+  "changedSourceFiles": 8,
+  "sourceManifestSha256": "bdd71aa123e3018ac890f3e532a6297a1074dfa44629cc6d488092a45c220f33",
+  "focused": {
+    "tests": 276,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused1",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 12021,
+    "fresh": {
+      "tests": 9983,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 634.377,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151710030,
+    "sha256": "edf29ec683576ac54892b882a3fb50a39ac58d5ef2c78bde7278bf0731fef50a"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "originalLocalReferenceReconciliationAccepted": true,
+  "sharedExactRetainedIdentityPolicy": true,
+  "originalTombstoneWithoutTimestampSupported": true,
+  "replacementTimestampRemainsExact": true,
+  "missingFactsStayPending": true,
+  "detachedFiniteReferenceLimit": 16,
+  "localDeadlineMillis": 5000,
+  "originalCompanyAndPhysicalDevicePreserved": true,
+  "regressingCheckpointRejected": true,
+  "sourceTaskRegistrationMetadataAccountAndNativeRechecked": true,
+  "ordinaryCredentialAgeDoesNotHideOwnedFacts": true,
+  "confirmedDenialWinsAfterCommit": true,
+  "falseOrLostReplyDoesNotInferCompletion": true,
+  "fixtureIsNotDatabaseOrNativeProof": true,
+  "newDomainCases": 30,
+  "preservedFailedRuns": [],
+  "applicationBindingVerified": true,
+  "readsSdkOrProvider": false,
+  "createsSdkClient": false,
+  "writesMessageContent": false,
+  "advancesPendingSeek": false,
+  "retiresIncomingTaskOrWake": false,
+  "sendsMessage": false,
+  "originalIncomingConsumerEnabled": false,
+  "rawCollectorEnabled": false,
+  "newNativeSdkExecution": false,
+  "newAppleExecutionAccepted": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true
+}

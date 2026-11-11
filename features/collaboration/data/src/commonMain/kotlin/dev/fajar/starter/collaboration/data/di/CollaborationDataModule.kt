@@ -943,6 +943,34 @@ class CollaborationDataModule {
     ) = CompleteCollaborationSpaceIncomingReferences(history, directory, sessions, server)
 
     @Factory
+    fun reconcileSpaceOriginalHistoryReferences(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        metadata: CollaborationSpaceOriginalRoomMetadataRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        traversal: CollaborationHistoryTraversalRepository,
+        history: CollaborationHistoryRepository,
+        edits: CollaborationMessageEditRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        sync: CollaborationSpaceSyncRepository,
+    ) =
+        ReconcileCollaborationSpaceOriginalHistoryReferences(
+            demands,
+            metadata,
+            registrations,
+            traversal,
+            history,
+            edits,
+            directory,
+            sessions,
+            server,
+            build,
+            sync,
+        )
+
+    @Factory
     fun readSpaceOriginalIncomingReferences(
         demands: CollaborationSpaceIncomingDemandRepository,
         metadata: CollaborationSpaceOriginalRoomMetadataRepository,
