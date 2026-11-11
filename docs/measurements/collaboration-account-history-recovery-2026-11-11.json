@@ -118,5 +118,24 @@
     "startedAt": "2026-11-11T20:56:20.357550+00:00",
     "reason": "Startup failure before jobs, exact workflow unchanged from an accepted full run; one bounded retry",
     "exitCode": 0
+  },
+  "hostedStartupRetryOutcome": {
+    "recordedAt": "2026-11-11T21:07:07.430023+00:00",
+    "runId": 43096361337,
+    "observedRunAttempt": 1,
+    "status": "completed",
+    "conclusion": "startup_failure",
+    "updatedAt": "2026-11-11T20:59:14Z",
+    "rerunRequestedAt": "2026-11-11T20:56:20.357550+00:00",
+    "furtherRetryDispatched": false,
+    "preciseCauseUnavailable": true
+  },
+  "hostedStartupPublicAnnotation": {
+    "observedAt": "2026-11-11T21:21:59.235886+00:00",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43096361337",
+    "publicAnnotation": "An unexpected error has occurred and we've been automatically notified. Errors are sometimes temporary, so please try again.\n\nIf the problem persists, please check whether the Actions service is operating normally at https://githubstatus.com . If not, please try again once the outage has been resolved.\n\nShould you need to contact Support, please visit https://support.github.com/contact and include request ID: B106:154543:EF8CD3:1815533:6AF4D674",
+    "htmlSha256": "a8e084aea7a101791bdb98f30e483f425af32eff17e5f83465d9bcdc3c04b8b4",
+    "workflowErrorNotReportedByAnnotation": true,
+    "furtherRetryDispatched": false
   }
 }

@@ -109,5 +109,21 @@
     "oldExpression": "fun primaryQueueAndRecoveryStateChangesDoNotBecomeContentAuthority() = runTest {\n        val f = fixture()",
     "newExpression": "fun primaryQueueAndRecoveryStateChangesDoNotBecomeContentAuthority() = runTest {\n        val f = SpaceOriginalIncomingContentFixture()\n        assertTrue(assertNotNull(f.local.snapshot).demand.rooms.isNotEmpty())",
     "failedManifestSha256": "41e4b21f444fc3d0bed87b0633be138c2543ed964cad400c4fbe881fdbe7830d"
+  },
+  "hostedDispatch": {
+    "runId": 43099618359,
+    "sourceCommit": "f0ba9847bf323eaf4b9999683474686c2f5608ef",
+    "ref": "validation/original-key-content-20261111",
+    "dispatchedAt": "2026-11-11T21:02:08.004486+00:00",
+    "expectedPortable": {
+      "desktopTest": 5317,
+      "testAndroidHostTest": 857,
+      "wasmJsBrowserTest": 5004
+    },
+    "expectedApple": {
+      "iosSimulatorArm64Test": 4517
+    },
+    "expectedTotal": 15695,
+    "artifactAuditCompleted": false
   }
 }

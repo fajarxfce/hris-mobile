@@ -1,5 +1,68 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 21:28 UTC. This opening owns current work; earlier sections are historical.
+
+## Original local reference reading focused accepted; full validation running
+
+Prior Original content sourcef0ba9847bf323eaf4b9999683474686c2f5608ef and Groupbf6f3433 PUSHED;
+95622/6613 REAPED.13,200 local accepted,571.668s full5600/audit69539,422 focused; both new-test
+failures preserved. Hosted43099618359 dispatched ONCE21:02:08UTC,29999 REAPED,expected15,695;
+latest observed in_progress21:26UTC. No artifact audit yet. Dispatch now public in measurements.
+Account recovery43096361337 and its ONE requested rerun22546 ended startup_failure before jobs.
+Public annotation confirms unexpected internal GitHub error; full HTML/hash/request ID saved in
+startup-public-annotation.json and measurement. CLI's workflow-error suggestion was heuristic;
+workflow matches previously accepted Position. No further retry. Turn43087494327 Apple and
+locator43092246512 portable artifact-upload failures remain recorded without missing-artifact
+acceptance. Inspect finalized status/reason before targeted retries. Keep earlier accepted runs
+and incomplete application43031231253 provenance; no new native SDK8 Apple proof.
+
+Current6 Kotlin files APPLIED, NOT FULLY ACCEPTED;4 new+2 existing. Workspace
+original-key-reference-read-2026-11-11, baselinef0ba9847/13,200/5,042. Explicit Company/history
+source admission, one recovery request/CAS at most with exact readback, and16 local references
+per5s invocation. Historical device retained; active/requested progress never rewound. Completed
+same generation stays idle; captured through excludes primary appends; events copied. Absent
+history creates nothing; empty Flow fails. No primary queue, content/key/provider request,
+reference/global acknowledgement or worker/listener activation. Old credentials/selection do
+not hide local reference facts.29 new common cases; both application graph checks retained.
+
+Frozen5,046 inputs/manifest056b531e1db696ae369dad66ceeb7e2c23106870f69e97fdb9110d3e288d57fc.
+focused2/22747 REAPED PASS391.398s/202; browser1/85047 REAPED PASS152.352s/200; exact402 accepted.
+Full1/7421 RUNNING, expected13,258. Keep source frozen. Failed focused1/37231 REAPED121.887s,
+zero tests: three nullable cursor/limit Pair equality assertions needed explicit element types.
+Only new test declarations changed; production/old assertions unchanged. failed-candidate-1
+preserves candidate/review. Formats8423/15855 REAPED38.476/36.254s. Publisher/contract/accepted
+writer PREPARED NOT EXECUTED. Reap full, audit accept-full.py full-1, record audit session, then
+publish/accepted writer/commit/push/ONE hosted dispatch. Plan validation/original-key-reference-
+read-20261111 expects15,782=11,236 portable+4,546 Apple; NOT DISPATCHED. Attach run/source.
+
+Next6 EXISTING-file next-atomic-recovery-completion-draft STATICALLY REVIEWED, UNAPPLIED/UNTESTED.
+Typed Company/Space complete APIs resolve only an explicit admitted subset and advance recovery
+in one existing checkpoint CAS. Advance shares the same raw update, strict primary resolve stays
+unchanged. Immutable sources,16-row bound/17-row indexed coverage, primary fields, provider/order/
+count, already-resolved matching sources and later requests preserved. Replay after advancement
+returns false, not a fabricated acknowledgement. No new queue, Boolean mode, native/key/provider
+work or global authority. Existing35 DB cases plus21 new (56 per target) cover all/partial/no
+resolution, next-page bounds, primary races, request promotion, replay/reopen, no-history/no-keys,
+malformed subsets, forged sources, omitted coverage, query/commit races, cancellation before/after
+commit, response loss, namespaces, changed pass/request, mutable inputs and failed/cancelled
+reference encryption. ensureActive must stay AFTER encoding and immediately before commit.
+
+Generators executed and STALE; read next-atomic-recovery-completion-review.md and draft-notes.
+Prepare/configure-next-atomic-recovery-completion.py PREPARED NOT EXECUTED, gated on accepted clean
+pushed current source and its one dispatch. Next workspace history-recovery-completion-2026-11-11:
+5,046 inputs/no new files,13,300 local,143 focused+141 browser;15,845 hosted=11,278 portable+
+4,567 Apple (5367 desktop/857 Android/5054 browser). Continue directly through apply/checks/audit/
+publication/push after current acceptance. No draft behavior is validated yet.
+
+Still open: admitted historical local-fact reconciliation/completion owner; Space/Original alias
+projection routing; bounded whole-account service; primary EOF demotion with request/wake;
+precise source/content triggers; full64-room blocked-queue liveness; native key callback retention,
+producer receipts and cancel/isFinished drain. Read inherited reviews; do not activate before
+bounded consumer service. All54 PRD groups OPEN. No Starter/live change. Phone26130 REAPED timeout
+21:06:49UTC/20.021s, no install; retry no earlier21:38UTC. Release89 SDK6 waits. Notify before
+explicit serial/install-only; never drive UI. Preserve original intents/Draft66/keys/stores/SDK
+assets/inspector gradlew.bat/live90163c3/schema116.4 Group OFF. One compiler OR emulator; long run.
+
 Updated 11 November 2026, 21:00 UTC. This opening owns current work; earlier sections are historical.
 
 ## Original historical content accepted; bounded local recovery reference reading next
