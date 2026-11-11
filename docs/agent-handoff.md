@@ -1,6 +1,44 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 13:39 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 13:42 UTC. This opening owns current work; older sections are historical.
+
+## Logical alias routing applied — focused validation is running
+
+Original application integration source3d9fb9217a6cf25ab7835fa85ecd62701782905d and Group docs
+c44e6fdb are PUSHED. Local acceptance12,222/4,974 inputs. Hosted43031231253 dispatched ONCE at
+13:40:18UTC on validation/original-application-turn-20261111; dispatch75967 REAPED. Expected14,288=
+10,200 portable+4,088 Apple,16 Swift/unsigned host. Existing run attached; DO NOT redispatch.
+
+Eleven-file logical alias routing is APPLIED, UNACCEPTED. Preparation/configuration scripts executed.
+Private .work/space-logical-alias-routing-2026-11-11 owns exact baseline/reports/candidate/runners.
+format1/80805 REAPED PASS36.763s; focused1/3501 RUNNING. Expected423 focused/349 browser/12,322
+full. Frozen4,978-input manifestd4aa7bb4b03d6c3f4171e7770d593400cdb5fe4a510a45bd0142850131281ad1.
+Do not edit candidate during the run. No browser/full acceptance for this increment yet.
+
+The existing binding resolver has a local logical overload. Its registration/source/alias checks
+and immutable Original indexes precede a new-generation Original Latest task in one queue CAS.
+The existing worker invokes routing inside its40s room deadline before Published acquisition.
+True SPACE continues; Original targets use the accepted Original turn. No provider/content/client
+is created by alias resolution. Missing genuine source progress waits; no cursor is invented.
+Existing Original work preserves both requirements. Lost replies require exact new task readback,
+removal of the old alias generation and preserved later producer work/source loss/rescan/wake.
+
+Tests added:18 pure policy+25 owner+8 worker+3 shared actual database cases (queue37->40). Existing
+canonical physical resolution, binding, Original metadata/reference/worker controls remain selected.
+App and domain fixtures do not constitute native proof. Raw collector and Original producer OFF;
+all54 PRD groups OPEN. Keys-only wake, bounded Client.rooms inventory and combined old-Company storage/
+new-Group native proof remain before activation. Existing registry already drains original borrowers.
+
+Canonical43028172483 jobs pending at13:38. Queue43022213294 portable10,105 accepted; Apple4,056
+pending at13:38. Reference43018627791 FULL14,089, content43011629455 FULL13,912 and reconciliation
+43015359541 FULL14,002 accepted. Preserve all historical failures and content Apple cancellation/
+targeted retry; no redispatch. Hosted control checks do not prove native SDK8 Apple execution.
+
+Phone10187 REAPED timeout124 at13:20:31UTC/20.020s, original-application-turn workspace's
+phone-connect-1320.json. Next retry no earlier13:51UTC. Validated release89 SDK6 awaits install;
+no attempt/result. Notify first, explicit serial/install-only, never launch/drive phone UI.
+No emulator. Preserve eight original intents, Draft66, keys/stores/SDK assets, protected inspector
+gradlew.bat and live90163c3/schema116.4 Group OFF. No generic Starter delta. Continue and push every commit.
 
 ## Original application turn accepted — continue logical alias routing
 
