@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 12:05 UTC. Continue the PRD and push every commit. All 54 groups OPEN.
+Updated 12 November 2026, 12:23 UTC. Continue the PRD and push every commit. All 54 groups OPEN.
 No subagents. One compiler OR emulator. Phone install-only: announce, explicit serial, never launch
 or drive the phone UI, reset app data or uninstall. Continue working beyond checkpoints.
 
@@ -28,14 +28,33 @@ address that boundary. Format3/3938 REAPED35.286s; two subsequent one-line revie
 local admission and the worker fixture's owner type. Focused3/61734 REAPED184/0 in278.051s; strict audit
 accepted all180 predecessor IDs plus4. Format/architecture/detekt passed; all5133 sources unchanged.
 
-Proof1/session5179 ACTIVE, building the normal x86 SDK8 proof APK and21 proof unit tests. ONE compiler
-only; no emulator or phone interaction. Reap it, verify source/library hashes and archive accepted APK.
-Then Group native-config must select mobileWorkspace=.work/space-incoming-discovery-coalescing-2026-11-12,
-mobilePhase=proof-1,groupPhase=source-1 before native.py worker-5. Its private runner now accepts that
-workspace field; current config still selects old proof4. Do not run with stale APK or during compilation.
-Keep the existing four-turn/content/empty-repeat/covered-hint checks unchanged. Native worker acceptance
-and full :check/platform gates remain OPEN; after the actual native result resolve any next root cause,
-then finish full checks and commit/push production. No phone release is built from this candidate yet.
+Proof1/5179 REAPED PASSED21 in162.767s, strict audit exit0. APK149091784B/
+4cecd02ab50c90fd5a340ac3def74d55a9ba055f081cb8a2183c424cbb8b5bb0; immutable proof-1/accepted-proof.apk.
+Native worker5/72209 REAPED FAILED1 in137.255s. Both duplicate queues are now drained:zero logical,
+physical,scan or inventory work/retries. Company EOF/15 refs/zero pending/one message, first-page
+content passed. Remaining global key-history recovery is ready with afterPartition, no more pages
+or unresolved keys. Same-boot read-only inspection passed; source/APK unchanged, no compile overlap,
+emulator stopped, phone untouched. Native18/reg1/bootstrap1, Matrix27/send4/sync5/secret2/provider2;
+zero active HTTP/storage failures. Preserve fixture1ae42615-77a1-480f-8278-703253da957b and worker5 images.
+Failure remains consumeScheduled:102 (four-turn wake); covered-hint assertion has NOT been reached.
+
+Full1/session26048 ACTIVE, required :check/platform/build gates. Do not edit source until it exits.
+CRITICAL REVIEW BEFORE PRODUCTION COMMIT: admission currently checks native-family mismatch before
+local ownership and returns Conflict, changing session replacement classification. After full1 exits,
+archive its candidate, move family check after local ownership validation, return Unauthorized, and
+strengthen/add classification regressions. See admission-review.md in active workspace. Expected final
+185 focused/14538 full cases after one added regression; current full1 candidate has184/14536. Its
+passing result must NOT be called final acceptance. Update full audit conservatively for changed
+source and rerun required checks. No production or phone release commit yet.
+
+Next root review: service asks account history locators for limit1, but the data mapper limits raw
+rows BEFORE filtering internal metadata. Existing tests describe22 internal families; each can cost
+a whole worker turn. The exact remaining native cursor sequence is not exposed. Proposed bounded
+filtered scan (max16 raw+1 lookahead, still one real history visit) is DESIGN ONLY under
+.work/space-history-locator-scan-2026-11-12/design-review.md. Finish the coalescing correction/gates and
+commit/push before applying it. Optional read-only diagnostic can compare remaining locator counts
+for limit1/16 without IDs. Do not raise worker bounds or invent complete native acceptance.
+
 Two reviewed InventoryRetention test method renames are in test-case-id-replacements.json; do not lose
 other predecessor IDs. Current focused evidence: measurements/collaboration-space-incoming-discovery-focus-2026-11-12.json.
 
@@ -77,7 +96,7 @@ actual final trace review; do not fit request assertions to a total.
 
 Read prior detailed evidence in [archived handoff](agent-handoff-history-through-original-worker-diagnostics-2026-11-12.md).
 Cold clone attempts failed to recover fixture input; immediate same-boot inspection is now the diagnostic
-route. Original failed images are preserved. Proof compiler5179 is active; no emulator at this checkpoint.
+route. Original failed images are preserved. Full compiler26048 is active; no emulator at this checkpoint.
 
 ## Accepted native receipt/source proof
 
