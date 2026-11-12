@@ -150,5 +150,24 @@
     ],
     "auditSession": 87772,
     "auditSessionReaped": true
-  }
+  },
+  "hostedApple": {
+    "sourceCommit": "a65151c0d26583c31b647fddb276318f5cfc8969",
+    "runId": 43161963820,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43161963820",
+    "jobId": 130995033729,
+    "artifactId": 13921017947,
+    "bytes": 787015,
+    "sha256": "25098b385029c05fd42e05832cc10afa4b1859f5fffc22a24bb2a973ace07415",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreserved": true,
+    "counts": {
+      "iosSimulatorArm64Test": 4930
+    },
+    "reportManifestSha256": "f71600f37392b5673e8b55cec9d515004d79c2704b4952b024d2907e1c19cfd6",
+    "jobLogSha256": "41064ebb96418c44fc23d95c2b47a9410af3f2efc36f64f613e31bb07d2db152"
+  },
+  "hostedValidatedTotal": 17004,
+  "hostedAppleAuditSession": 27794,
+  "hostedAppleAuditSessionReaped": true
 }

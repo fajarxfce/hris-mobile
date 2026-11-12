@@ -1,5 +1,40 @@
 # Agent continuation — communications long run
 
+Updated 12 November 2026, 06:36 UTC. Continue PRD and push every commit.
+No subagents. One compiler OR emulator. All 54 PRD groups OPEN. Phone install-only; never drive UI.
+
+## Active targeted-history gate
+
+Workspace .work/targeted-history-recovery-2026-11-12, baseline b95d3632d64ab9f2a2224fb2787ef6aa47ab9329.
+16 files APPLIED; 5,117 inputs /801663b8042cfba1f9d80e3eb7f248af1e149527ceb316dd5c084b7619964d1a.
+Format1/56271 REAPED PASS35.401s. Focused1/66010 RUNNING, expected326; then275 browser and14,325local.
+39 new domain cases/target,7 encrypted-storage cases/target,6 app-service cases. No test acceptance yet.
+Draft preparer HAS EXECUTED; do not reapply. Publisher/handoff/hosted scripts PREPARED, NOT EXECUTED.
+Next hosted expected17,314. Scope predicates, schema8, independently confirmed excluded history and
+pre-reference service filtering; no durable key receipt, producer registration or activation yet.
+Per-predicate24,000-byte UTF-8/escaping budget; overflow becomes account-wide. Preserve old1–7frames.
+
+Binding b95d3632 /Group ba20a50b pushed,24325/22076 REAPED. Local14,227 =12,189fresh+2,038unchanged;
+full37794 REAPED525.126s,audit13738 REAPED. Hosted43168158361 dispatchedONCE06:26:29.194729UTC,
+6866 REAPED; state exists, expected17,170. No artifacts accepted yet.
+Mailbox43161963820 FULL17,004=12,074portable+4,930Apple accepted; Apple27794 REAPED,
+artifact13921017947/787015B/25098b385029c05fd42e05832cc10afa4b1859f5fffc22a24bb2a973ace07415.
+Lifecycle43165090113 portable succeeded (audit running); Apple pending. Do not redispatch.
+Worker43158504066 FULL16,936 and global43155076441 FULL16,862 already audited.
+
+Next durable collector must enforce one application owner, exact receipt persistence with intent/wake,
+ACK only after confirmation and bounded retries. Read prior next-key-intent-design.md; no consumer
+draft yet. Classify rooms through existing local indexes; preserve unknown/overflow account fallback,
+metadata-before-demand, and worker90s inventory/history/primary fairness. SDK restore creates
+OlmMachine before asynchronous E2EE setup; do not add a broad network/backup initialization barrier.
+MainSDK8; validated phone release89 remainsSDK6. Phone56346 REAPED06:08:10.989862UTC20.015288s timeout;
+next retry>=06:41:31.005228UTC. Announce actual install, explicit10.77.77.3:5555/--install-only.
+Preserve protected SDK/Inspector trees and live deployment. No Starter HRIS-policy port.
+
+## Earlier accepted work and protected constraints
+
+# Agent continuation — communications long run
+
 Updated 12 November 2026, 06:26 UTC.
 Continue authorized PRD work and per-commit pushes. All54PRD groups OPEN. No subagents.
 One compiler OR emulator. Follow AGENTS.md and clean layer boundaries. Phone install-only.
