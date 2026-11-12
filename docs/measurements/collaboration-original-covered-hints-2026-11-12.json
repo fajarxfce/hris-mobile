@@ -1,0 +1,151 @@
+{
+  "date": "2026-11-12",
+  "scope": "Original covered-head admission from exact registered Company/device history",
+  "baseCommit": "6d9f745a0334c6daccbefa068f79d55b3f400ff2",
+  "sourceManifestSha256": "6dc8053f533b4c818afe39d2a17ddeb3db75481aa3fb27ef7f1004a19124879a",
+  "sourceInputs": 5136,
+  "changedFiles": 8,
+  "productionFiles": 3,
+  "newOriginalDomainCases": 13,
+  "retainedPublishedDomainCases": 21,
+  "acceptedLocal": true,
+  "nativeWorkerAccepted": true,
+  "phoneRelease": false,
+  "liveDeployment": false,
+  "fullPrdAccepted": false,
+  "focused": {
+    "cases": 210,
+    "domainDesktop": 104,
+    "domainBrowser": 104,
+    "sharedDi": 2,
+    "runs": [
+      {
+        "phase": "focused-3",
+        "tests": 140,
+        "elapsedSeconds": 186.468
+      },
+      {
+        "phase": "browser-routing-1",
+        "tests": 70,
+        "elapsedSeconds": 28.953
+      }
+    ],
+    "reportManifestSha256": "1a60517c76e4e350d4bcdde191a99714df736be65f3332dbaa572a2d87fbff57",
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "full": {
+    "validatedCases": 14581,
+    "freshCases": 12543,
+    "sourceMatchedPriorCases": 0,
+    "unchangedDependencyVerifiedCases": 2038,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "startedAt": "2026-11-12T14:06:53.856196+00:00",
+    "elapsedSeconds": 594.429,
+    "reportManifestSha256": "8c1c4b5ff90a3c70ae10d38f48f4ee98340e841604fbb40d92990aeb4d210b57"
+  },
+  "reviewedTargetCaseReplacements": 0,
+  "proofApk": {
+    "bytes": 152433182,
+    "sha256": "b780610908ed1edd8f33c8242b76a9f72f98c9364439ebccc93ffb54524b9200"
+  },
+  "sdkVersion": "26.10.23-hris.8",
+  "sdkX86NativeSha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+  "native": {
+    "tests": 7,
+    "elapsedSeconds": 296.282,
+    "bootSeconds": 29.399,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "phoneTouched": false,
+    "noCompilationDuringEmulator": true,
+    "emulatorStopped": true,
+    "sourceManifestSha256": "0c3be4a8ce87881e81680f3935a6564f6b59c1aa42a100753d3479262c415018",
+    "groupSourceManifestSha256": "56d3997415f214dbfe86d5462d198c0132a3451f5ea34da198e4c2b0be98a3de",
+    "worker": {
+      "turns": 4,
+      "firstTurnMessages": 1,
+      "contentBeforeProviderEof": true,
+      "registeredTask": true,
+      "emptyRepeatUnchanged": true,
+      "coveredHintUnchanged": true,
+      "automaticStartup": true,
+      "actualSourceRetained": true
+    },
+    "nativeRequests": {
+      "requests": 18,
+      "registration": 1,
+      "bootstrapReplay": 1
+    },
+    "matrixRequests": {
+      "requests": 30,
+      "encryptedSend": 4,
+      "sync": 5,
+      "secretStorage": 2,
+      "providerPage": 2
+    },
+    "matrixRequestsAfterPhysicalStaging": 9,
+    "sourceDelta": {
+      "nativeProductionInputsUnchanged": true,
+      "onlyChangedInputs": [
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/QueueCollaborationSpaceIncomingRoomTest.kt",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceIncomingRequestFixture.kt"
+      ],
+      "oldSourceManifestSha256": "0c3be4a8ce87881e81680f3935a6564f6b59c1aa42a100753d3479262c415018",
+      "currentSourceManifestSha256": "6dc8053f533b4c818afe39d2a17ddeb3db75481aa3fb27ef7f1004a19124879a",
+      "nativeApkSha256": "b780610908ed1edd8f33c8242b76a9f72f98c9364439ebccc93ffb54524b9200",
+      "nativeTests": 7,
+      "nativeRerunRequired": false,
+      "reason": "Only commonTest fixture selection changed; it is not packaged in the accepted native APK. Full2 must still verify its APK hash and fresh domain/shared/data/proof tests."
+    },
+    "measurement": "collaboration-original-covered-hints-native-2026-11-12.json"
+  },
+  "correctedValidationFailures": [
+    {
+      "phase": "focused-1",
+      "kind": "test compilation only",
+      "reason": "Integer used for opaque String pending cursor; no test ran"
+    },
+    {
+      "phase": "full-1",
+      "cases": 7061,
+      "failures": 35,
+      "reason": "Shared legacy fixture accidentally defaulted to SPACE; restored the legacy default and explicitly selected SPACE only in Published coverage tests",
+      "affectedClasses": {
+        "ResolveCollaborationSpaceIncomingAliasTest": 21,
+        "ResolveCollaborationSpaceIncomingBindingTest": 4,
+        "ResolveCollaborationSpaceOriginalPhysicalBindingTest": 10
+      },
+      "productionChangedByCorrection": false,
+      "assertionsChanged": false
+    }
+  ],
+  "checks": [
+    "full check",
+    "Android host tests",
+    "Android release compilation/lint",
+    "Wasm browser tests",
+    "iOS source-set metadata",
+    "proof APK/unit tests",
+    "format",
+    "architecture",
+    "detekt"
+  ],
+  "hostedExpected": {
+    "desktop": 6006,
+    "android": 952,
+    "browser": 5601,
+    "portable": 12559,
+    "apple": 5114,
+    "total": 17673
+  },
+  "hostedDispatched": false,
+  "next": [
+    "Real late key during held receipt reply",
+    "Finite quiet-period request observation",
+    "Native Apple SDK8 acceptance"
+  ]
+}

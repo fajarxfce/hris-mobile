@@ -1,0 +1,172 @@
+{
+  "accepted": true,
+  "tests": 7,
+  "counts": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "startedAt": "2026-11-12T13:45:31.002238+00:00",
+  "elapsedSeconds": 296.282,
+  "bootSeconds": 29.399,
+  "memoryMiB": 2560,
+  "cores": 2,
+  "phoneTouched": false,
+  "emulatorStopped": true,
+  "noCompilationDuringEmulator": true,
+  "sdk": "26.10.23-hris.8",
+  "apkSha256": "b780610908ed1edd8f33c8242b76a9f72f98c9364439ebccc93ffb54524b9200",
+  "nativeLibrarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+  "mobileSourceManifestSha256": "0c3be4a8ce87881e81680f3935a6564f6b59c1aa42a100753d3479262c415018",
+  "groupSourceManifestSha256": "56d3997415f214dbfe86d5462d198c0132a3451f5ea34da198e4c2b0be98a3de",
+  "resultSha256": "335186941e6ef5dcd214ffabe4bfeb3227d51a8d72937d6544ba767c6ad71cfd",
+  "reportHashes": {
+    "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": "5db892523df7c4cdc4206a8154e764110b6454c100c711645d553d2c1957580f",
+    "TEST-dev.fajar.hris.NativeEventReadsTest.xml": "4b80a2b349349277b28c3937367ad56e526dfd8e7e1adb396d648a483926577d"
+  },
+  "cases": [
+    "dev.fajar.hris.NativeEventReadsTest.completedIncomingReferencesRemainExhaustedAcrossOfflineReopen()",
+    "dev.fajar.hris.NativeEventReadsTest.exactEncryptedEventsSurviveOriginalRuntimeAdoptionWithoutPresentationRelabeling()",
+    "dev.fajar.hris.NativeEventReadsTest.nativeIncomingHintsPreserveExactSyncPositionsAndObserveStoredKeys()",
+    "dev.fajar.hris.NativeEventReadsTest.nativeIncomingReceiptSurvivesLostReplyForegroundAndOfflineReopen()",
+    "dev.fajar.hris.NativeEventReadsTest.registeredIncomingWorkerRetainsContentBeforeEofAndStopsAcrossOfflineReopen()",
+    "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.newSpaceOriginalSharesTheQueueWithoutChangingCompanyOwnershipAfterProcessDeath()",
+    "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.originalQueueSurvivesLostProjectionAndOfflineRecipientWithoutReplacement()"
+  ],
+  "date": "2026-11-12",
+  "scope": "Seven native Original delivery and registered incoming-worker scenarios",
+  "fullPrdAccepted": false,
+  "liveDeployment": false,
+  "phoneRelease": false,
+  "worker": {
+    "kind": "worker",
+    "native": {
+      "requests": 18,
+      "registration": 1,
+      "bootstrapReplay": 1
+    },
+    "matrix": {
+      "requests": 30,
+      "encryptedSend": 4,
+      "sync": 5,
+      "secretStorage": 2,
+      "providerPage": 2
+    },
+    "worker": {
+      "turns": 4,
+      "firstTurnMessages": 1,
+      "contentBeforeProviderEof": true,
+      "registeredTask": true,
+      "emptyRepeatUnchanged": true,
+      "coveredHintUnchanged": true,
+      "automaticStartup": true,
+      "actualSourceRetained": true
+    },
+    "requestPhases": {
+      "armed": {
+        "native": {},
+        "nativeKinds": {},
+        "matrix": {},
+        "matrixKinds": {}
+      },
+      "physicalSeedComplete": {
+        "native": {},
+        "nativeKinds": {},
+        "matrix": {
+          "requests": 21,
+          "encryptedSend": 4,
+          "sync": 3
+        },
+        "matrixKinds": {
+          "otherGet": 3,
+          "keysClaim": 1,
+          "otherPut": 2,
+          "encryptedSend": 4,
+          "eventRead": 4,
+          "sync": 3,
+          "keysQuery": 1,
+          "keysUpload": 1,
+          "history": 2
+        }
+      },
+      "offlineReopenComplete": {
+        "native": {
+          "requests": 18,
+          "registration": 1,
+          "bootstrapReplay": 1
+        },
+        "nativeKinds": {
+          "otherGet": 4,
+          "identityRead": 1,
+          "registration": 1,
+          "bootstrap": 1,
+          "deviceRead": 11
+        },
+        "matrix": {
+          "requests": 30,
+          "encryptedSend": 4,
+          "sync": 5,
+          "secretStorage": 2,
+          "providerPage": 2
+        },
+        "matrixKinds": {
+          "otherGet": 4,
+          "keysClaim": 1,
+          "otherPut": 2,
+          "encryptedSend": 4,
+          "eventRead": 4,
+          "sync": 5,
+          "keysQuery": 1,
+          "keysUpload": 1,
+          "history": 6,
+          "accountDataRead": 2
+        }
+      },
+      "finished": {
+        "native": {
+          "requests": 18,
+          "registration": 1,
+          "bootstrapReplay": 1
+        },
+        "nativeKinds": {
+          "otherGet": 4,
+          "identityRead": 1,
+          "registration": 1,
+          "bootstrap": 1,
+          "deviceRead": 11
+        },
+        "matrix": {
+          "requests": 30,
+          "encryptedSend": 4,
+          "sync": 5,
+          "secretStorage": 2,
+          "providerPage": 2
+        },
+        "matrixKinds": {
+          "otherGet": 4,
+          "keysClaim": 1,
+          "otherPut": 2,
+          "encryptedSend": 4,
+          "eventRead": 4,
+          "sync": 5,
+          "keysQuery": 1,
+          "keysUpload": 1,
+          "history": 6,
+          "accountDataRead": 2
+        }
+      }
+    }
+  },
+  "otherScenarioCounts": {
+    "history": 3,
+    "receipt": 1,
+    "originalDelivery": 2
+  },
+  "preservedControls": 6,
+  "remaining": [
+    "Real late key during held local receipt write",
+    "Long quiet-period request observation",
+    "Native Apple SDK8 execution"
+  ]
+}

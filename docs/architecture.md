@@ -1,5 +1,7 @@
 # Architecture
 
+[Original covered hints](collaboration-original-covered-hints.md) use exact registered Company/device history to suppress completed work without copying it into Space storage.
+
 [Bounded account metadata discovery](collaboration-account-history-metadata-scan.md) skips internal projections within one finite read while preserving unreturned history and exact cursor scope.
 
 [Registered-source discovery](collaboration-space-incoming-discovery.md) shares existing incoming work and atomically strengthens unresolved Joined inventory without changing worker bounds.

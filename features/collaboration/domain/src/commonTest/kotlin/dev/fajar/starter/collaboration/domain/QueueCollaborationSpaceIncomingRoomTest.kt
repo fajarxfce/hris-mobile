@@ -10,7 +10,7 @@ import kotlinx.coroutines.test.runTest
 class QueueCollaborationSpaceIncomingRoomTest {
     @Test
     fun newHintRetainsDemandAndIndependentWakeBeforeOneSchedule() = runTest {
-        val f = SpaceIncomingRequestFixture()
+        val f = SpaceIncomingRequestFixture(originalRoom = false)
         assertEquals(AppResult.Success(true), f.queue())
         val task = f.snapshot!!.demand.rooms.single()
         assertEquals(f.request.generation, task.generation)
@@ -27,7 +27,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
 
     @Test
     fun repeatedKnownHintDoesNotWriteRescheduleOrReadProviderHistory() = runTest {
-        val f = SpaceIncomingRequestFixture()
+        val f = SpaceIncomingRequestFixture(originalRoom = false)
         f.queued()
         val before = f.snapshot
         assertEquals(
@@ -42,7 +42,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
 
     @Test
     fun acquiredIdleSourceDoesNotCreateDemandOrWakeEvenWhenPaginationTokenDiffers() = runTest {
-        val f = SpaceIncomingRequestFixture()
+        val f = SpaceIncomingRequestFixture(originalRoom = false)
         f.covered()
         assertNotEquals(f.request.headEventId, f.source.progress!!.incoming!!.head)
         assertEquals(AppResult.Success(false), f.queue())
@@ -53,7 +53,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
 
     @Test
     fun opaquePaginationTokenMatchingTheHintIsNotCoverageWithoutAnExactSource() = runTest {
-        val f = SpaceIncomingRequestFixture()
+        val f = SpaceIncomingRequestFixture(originalRoom = false)
         val progress = f.provider.checkpoint(null)
         f.source =
             CollaborationHistorySource(
@@ -70,7 +70,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
 
     @Test
     fun acquiredSourceWithUnresolvedContentQueuesPendingWithoutAnotherMetadataWave() = runTest {
-        val f = SpaceIncomingRequestFixture()
+        val f = SpaceIncomingRequestFixture(originalRoom = false)
         f.covered(unresolved = true)
         assertEquals(AppResult.Success(true), f.queue())
         assertEquals(
@@ -82,7 +82,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
 
     @Test
     fun acquiredSourceInAnUnfinishedWaveContinuesItsSavedProviderPosition() = runTest {
-        val f = SpaceIncomingRequestFixture()
+        val f = SpaceIncomingRequestFixture(originalRoom = false)
         f.covered(exhausted = false)
         assertEquals(AppResult.Success(true), f.queue())
         assertEquals(
@@ -94,7 +94,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
 
     @Test
     fun lateAcquiredSourceDoesNotReplaceNewerQueuedHeadOrGeneration() = runTest {
-        val f = SpaceIncomingRequestFixture()
+        val f = SpaceIncomingRequestFixture(originalRoom = false)
         f.queued("\$newer")
         f.covered(unresolved = true)
         val before = f.snapshot
@@ -109,7 +109,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
 
     @Test
     fun uncertainWriteReplyIsConfirmedExactlyWithoutReissuingTheWrite() = runTest {
-        val f = SpaceIncomingRequestFixture()
+        val f = SpaceIncomingRequestFixture(originalRoom = false)
         f.responseLoss = true
         assertEquals(AppResult.Success(true), f.queue())
         assertEquals(1, f.writes)
@@ -120,7 +120,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
     @Test
     fun lostOrConflictingWriteWithoutExactReadbackNeverSchedules() = runTest {
         for (stage in listOf("write", "readback", "conflict")) {
-            val f = SpaceIncomingRequestFixture()
+            val f = SpaceIncomingRequestFixture(originalRoom = false)
             if (stage == "conflict") f.commit = false
             else f.base.failures[stage] = Failure(FailureKind.Storage, "Fictional failure")
             assertIs<AppResult.Failed>(f.queue())
@@ -131,7 +131,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
 
     @Test
     fun changedReadbackCannotConfirmOrOverwriteAConcurrentNewerDemand() = runTest {
-        val f = SpaceIncomingRequestFixture()
+        val f = SpaceIncomingRequestFixture(originalRoom = false)
         f.base.hooks["readback"] = { f.queued("\$concurrent") }
         assertIs<AppResult.Failed>(f.queue())
         assertEquals("\$concurrent", f.snapshot!!.demand.rooms.single().headEventId)
@@ -140,7 +140,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
 
     @Test
     fun ordinaryCredentialAgeDoesNotPreventLocalQueueing() = runTest {
-        val f = SpaceIncomingRequestFixture()
+        val f = SpaceIncomingRequestFixture(originalRoom = false)
         f.base.native.setup.now += 365.days
         assertEquals(AppResult.Success(true), f.queue())
         assertFalse(f.base.calls.any { it in listOf("transport", "page", "resume", "acquire") })
@@ -148,7 +148,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
 
     @Test
     fun confirmedDenialPreventsEveryReadWriteAndSchedule() = runTest {
-        val f = SpaceIncomingRequestFixture()
+        val f = SpaceIncomingRequestFixture(originalRoom = false)
         f.base.directory.deny()
         assertEquals(f.base.directory.denied, assertIs<AppResult.Failed>(f.queue()).failure)
         assertTrue(f.base.calls.isEmpty())
@@ -167,7 +167,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
                 "readback",
                 "schedule",
             )) {
-            val f = SpaceIncomingRequestFixture()
+            val f = SpaceIncomingRequestFixture(originalRoom = false)
             if (stage == "pending") f.covered(unresolved = true)
             f.base.hooks[stage] = { f.base.native.setup.session = null }
             assertIs<AppResult.Failed>(f.queue())
@@ -179,14 +179,14 @@ class QueueCollaborationSpaceIncomingRoomTest {
     @Test
     fun invalidOrUnboundHintsCannotCreateWork() = runTest {
         for (mode in 0..4) {
-            val f = SpaceIncomingRequestFixture()
+            val f = SpaceIncomingRequestFixture(originalRoom = false)
             val result =
                 when (mode) {
                     0 -> f.queue(f.request.copy(generation = "invalid"))
                     1 -> f.queue(f.request.copy(headEventId = "invalid"))
                     2 ->
                         f.useCase(
-                            f.access,
+                            f.owner,
                             f.key.copy(purpose = CollaborationHistoryPurpose.Browse),
                             f.request,
                         )
@@ -211,7 +211,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
     @Test
     fun mismatchedProviderCheckpointOrMalformedSourceCannotDischargeWork() = runTest {
         for (mode in 0..5) {
-            val f = SpaceIncomingRequestFixture()
+            val f = SpaceIncomingRequestFixture(originalRoom = false)
             f.covered()
             when (mode) {
                 0 -> f.source = f.source.copy(progress = null)
@@ -244,7 +244,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
     @Test
     fun schedulerFailureOrTimeoutPreservesTheConfirmedDurableWake() = runTest {
         for (timeout in listOf(false, true)) {
-            val f = SpaceIncomingRequestFixture()
+            val f = SpaceIncomingRequestFixture(originalRoom = false)
             f.schedule = {
                 if (timeout) awaitCancellation()
                 else
@@ -261,7 +261,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
 
     @Test
     fun stalledLocalReadHasAFiniteBudgetAndNeverRetriesOrWrites() = runTest {
-        val f = SpaceIncomingRequestFixture()
+        val f = SpaceIncomingRequestFixture(originalRoom = false)
         f.base.hooks["source"] = { awaitCancellation() }
         assertEquals(FailureKind.Timeout, assertIs<AppResult.Failed>(f.queue()).failure.kind)
         assertEquals(1, f.base.calls.count { it == "source" })
@@ -270,7 +270,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
 
     @Test
     fun cancellationAfterTheAtomicWriteRetainsTheOriginalDemandAndWake() = runTest {
-        val f = SpaceIncomingRequestFixture()
+        val f = SpaceIncomingRequestFixture(originalRoom = false)
         val committed = CompletableDeferred<Unit>()
         f.base.hooks["committed"] = {
             committed.complete(Unit)
@@ -288,7 +288,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
 
     @Test
     fun mutableRepositoryRoomListCannotChangeTheAlreadyCapturedExpectedWrite() = runTest {
-        val f = SpaceIncomingRequestFixture()
+        val f = SpaceIncomingRequestFixture(originalRoom = false)
         f.queued("\$older")
         val rooms = f.snapshot!!.demand.rooms.toMutableList()
         val original = f.snapshot!!.copy(demand = f.snapshot!!.demand.copy(rooms = rooms.toList()))
@@ -308,7 +308,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
     @Test
     fun fullQueueRetainsOverflowRescanButAnAcquiredIdleHintAddsNoWork() = runTest {
         for (knownIdle in listOf(false, true)) {
-            val f = SpaceIncomingRequestFixture()
+            val f = SpaceIncomingRequestFixture(originalRoom = false)
             val rooms =
                 (0 until 64).map { n ->
                     CollaborationSpaceIncomingRoomDemand(
@@ -338,7 +338,7 @@ class QueueCollaborationSpaceIncomingRoomTest {
 
     @Test
     fun newUnknownStartupAttemptRequestsLatestWithoutPretendingToHaveAHead() = runTest {
-        val f = SpaceIncomingRequestFixture()
+        val f = SpaceIncomingRequestFixture(originalRoom = false)
         f.queued(null)
         val request = f.request.copy(headEventId = null, generation = f.provider.queue.id(704))
         assertEquals(AppResult.Success(true), f.queue(request))

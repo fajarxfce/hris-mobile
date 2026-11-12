@@ -1233,6 +1233,8 @@ class CollaborationDataModule {
         sessions: SessionRepository,
         server: IdentityServer,
         schedules: SyncScheduleRepository,
+        originals: CollaborationHistoryTraversalRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
     ) =
         QueueCollaborationSpaceIncomingRoom(
             demands,
@@ -1242,6 +1244,8 @@ class CollaborationDataModule {
             sessions,
             server,
             schedules,
+            originals,
+            registrations,
         )
 
     @Factory

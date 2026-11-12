@@ -134,7 +134,7 @@ internal class HrisSpaceIncomingWorkerProofHost(
         check(
             !expect(
                 request(
-                    local,
+                    runtime.owner,
                     published,
                     CollaborationSpaceIncomingDemandChange.Request(
                         conversation.id,

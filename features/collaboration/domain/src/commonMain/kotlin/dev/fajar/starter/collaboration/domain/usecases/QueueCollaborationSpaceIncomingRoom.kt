@@ -19,18 +19,22 @@ class QueueCollaborationSpaceIncomingRoom(
     private val sessions: SessionRepository,
     private val server: IdentityServer,
     private val schedules: SyncScheduleRepository,
+    private val originals: CollaborationHistoryTraversalRepository,
+    private val registrations: CollaborationSpaceRegistrationCommandRepository,
 ) {
     /**
      * True means durable work already covers this hint; false means the source is fully retained.
      */
     suspend operator fun invoke(
-        access: CollaborationSpaceLocalAccess,
+        owner: CollaborationSpaceOwner,
         key: CollaborationHistoryTraversal,
         request: CollaborationSpaceIncomingDemandChange.Request,
     ): AppResult<Boolean> {
         currentCoroutineContext().ensureActive()
+        val access = owner.localDirectoryAccess()
         if (
-            key.purpose != CollaborationHistoryPurpose.Incoming ||
+            !validCollaborationOriginalConversationOwner(owner) ||
+                key.purpose != CollaborationHistoryPurpose.Incoming ||
                 !validCollaborationHistoryTraversal(key) ||
                 key.conversationId != request.conversationId ||
                 !validCollaborationMessageId(request.generation) ||
@@ -39,9 +43,9 @@ class QueueCollaborationSpaceIncomingRoom(
             return changed(FailureKind.Validation)
         val target = CollaborationSpaceIncomingTarget.Published(request.conversationId)
         return withTimeoutOrNull(5_000) {
-            admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            admission(owner).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             val bound = bindings.getByConversation(access, key.conversationId)
-            admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            admission(owner).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             if (bound is AppResult.Failed) return@withTimeoutOrNull bound
             val binding = (bound as AppResult.Success).value
             if (
@@ -54,7 +58,7 @@ class QueueCollaborationSpaceIncomingRoom(
             val loaded = demands.current(access)
             val observed = (loaded as? AppResult.Success)?.value
             val previous = observed?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
-            admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            admission(owner).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             if (loaded is AppResult.Failed) return@withTimeoutOrNull loaded
             if (
                 (observed != null && previous == null) ||
@@ -67,8 +71,11 @@ class QueueCollaborationSpaceIncomingRoom(
             var next = (planned as AppResult.Success).value
             if (next == current) return@withTimeoutOrNull AppResult.Success(true)
             val coverage =
-                request.headEventId?.let { coveredSource(access, key, it) }
-                    ?: AppResult.Success(Coverage.Unknown)
+                request.headEventId?.let { head ->
+                    val original = binding.original
+                    if (original == null) coveredPublishedSource(owner, key, head)
+                    else coveredOriginalSource(owner, key, original, head)
+                } ?: AppResult.Success(Coverage.Unknown)
             if (coverage is AppResult.Failed) return@withTimeoutOrNull coverage
             val covered = (coverage as AppResult.Success).value
             if (covered != Coverage.Unknown) {
@@ -90,17 +97,18 @@ class QueueCollaborationSpaceIncomingRoom(
                     next = (advanced as AppResult.Success).value
                 }
             }
-            retainRequest(access, previous, next, request.generation)
+            retainRequest(owner, previous, next, request.generation)
         } ?: changed(FailureKind.Timeout)
     }
 
-    private suspend fun coveredSource(
-        access: CollaborationSpaceLocalAccess,
+    private suspend fun coveredPublishedSource(
+        owner: CollaborationSpaceOwner,
         key: CollaborationHistoryTraversal,
         eventId: String,
     ): AppResult<Coverage> {
+        val access = owner.localDirectoryAccess()
         val loaded = history.source(access, key, eventId)
-        admission(access).let { if (it is AppResult.Failed) return it }
+        admission(owner).let { if (it is AppResult.Failed) return it }
         if (loaded is AppResult.Failed) return loaded
         val source = (loaded as AppResult.Success).value
         val progress = source.progress
@@ -126,7 +134,7 @@ class QueueCollaborationSpaceIncomingRoom(
                 ?.value
                 ?.takeIf { it.events.size <= 1 }
                 ?.let { it.copy(events = it.events.toList()) }
-        admission(access).let { if (it is AppResult.Failed) return it }
+        admission(owner).let { if (it is AppResult.Failed) return it }
         if (read is AppResult.Failed) return read
         if (
             pending == null ||
@@ -138,23 +146,131 @@ class QueueCollaborationSpaceIncomingRoom(
         return AppResult.Success(if (pending.events.isEmpty()) Coverage.Clean else Coverage.Pending)
     }
 
+    /** Confirm Company facts through the exact registered original device, without native I/O. */
+    private suspend fun coveredOriginalSource(
+        owner: CollaborationSpaceOwner,
+        published: CollaborationHistoryTraversal,
+        original: CollaborationSpaceOriginalRoomMetadata,
+        eventId: String,
+    ): AppResult<Coverage> {
+        val loadedRegistration = originalRegistration(owner)
+        if (loadedRegistration is AppResult.Failed) return loadedRegistration
+        val registration =
+            (loadedRegistration as AppResult.Success).value
+                ?: return AppResult.Success(Coverage.Unknown)
+        val command = registration.command
+        val legacy = command.legacy ?: return AppResult.Success(Coverage.Unknown)
+        val receipt =
+            (registration.outcome as CollaborationSpaceRegistrationOutcome.Registered).receipt
+        if (
+            receipt.id != published.deviceId ||
+                legacy.binding.companyId != original.conversation.position.companyId ||
+                legacy.binding.nativeSessionId != owner.parent.nativeSessionId ||
+                command.provider.serverName != original.room.serverName
+        )
+            return AppResult.Success(Coverage.Unknown)
+        val access = owner.localDirectoryAccess()
+        val company =
+            CollaborationLocalAccess(
+                access.sessionId,
+                access.audience,
+                access.accountId,
+                original.conversation.position.companyId,
+            )
+        val key =
+            CollaborationHistoryTraversal(
+                original.conversation.position.conversationId,
+                original.room.roomId,
+                legacy.deviceId,
+                CollaborationHistoryPurpose.Incoming,
+            )
+        val loaded = originals.source(company, key, eventId)
+        confirmOriginalRegistration(owner, registration).let {
+            if (it is AppResult.Failed) return it
+        }
+        if (loaded is AppResult.Failed) return loaded
+        val source = (loaded as AppResult.Success).value
+        val candidate = canConfirmCollaborationOriginalIncomingCoverage(source, eventId)
+        if (candidate is AppResult.Failed) return candidate
+        if (!(candidate as AppResult.Success).value) return AppResult.Success(Coverage.Unknown)
+        val read = originals.observeReferences(company, key, null, 1).firstOrNull()
+        val pending =
+            (read as? AppResult.Success)
+                ?.value
+                ?.takeIf { it.events.size <= 1 }
+                ?.let { it.copy(events = it.events.toList()) }
+        confirmOriginalRegistration(owner, registration).let {
+            if (it is AppResult.Failed) return it
+        }
+        if (read is AppResult.Failed) return read
+        if (pending == null) return changed()
+        val confirmed = originals.progress(company, key)
+        confirmOriginalRegistration(owner, registration).let {
+            if (it is AppResult.Failed) return it
+        }
+        if (confirmed is AppResult.Failed) return confirmed
+        return when (
+            val clean =
+                confirmCollaborationOriginalIncomingCoverage(
+                    source,
+                    eventId,
+                    pending,
+                    (confirmed as AppResult.Success).value,
+                )
+        ) {
+            is AppResult.Failed -> clean
+            is AppResult.Success ->
+                AppResult.Success(if (clean.value) Coverage.Clean else Coverage.Unknown)
+        }
+    }
+
+    private suspend fun originalRegistration(
+        owner: CollaborationSpaceOwner
+    ): AppResult<CollaborationSpaceRegistrationRecord?> {
+        admission(owner).let { if (it is AppResult.Failed) return it }
+        val access = owner.localDirectoryAccess()
+        val loaded = registrations.current(access, owner.parent.nativeSessionId)
+        admission(owner).let { if (it is AppResult.Failed) return it }
+        if (loaded is AppResult.Failed) return loaded
+        val record = (loaded as AppResult.Success).value ?: return AppResult.Success(null)
+        if (
+            !validCollaborationSpaceRegistrationRecord(access, record) ||
+                record.command.binding.nativeSessionId != owner.parent.nativeSessionId
+        )
+            return changed()
+        return AppResult.Success(
+            record.takeIf { it.outcome is CollaborationSpaceRegistrationOutcome.Registered }
+        )
+    }
+
+    private suspend fun confirmOriginalRegistration(
+        owner: CollaborationSpaceOwner,
+        expected: CollaborationSpaceRegistrationRecord,
+    ): AppResult<Unit> {
+        val loaded = originalRegistration(owner)
+        if (loaded is AppResult.Failed) return loaded
+        return if ((loaded as AppResult.Success).value == expected) AppResult.Success(Unit)
+        else changed()
+    }
+
     private suspend fun retainRequest(
-        access: CollaborationSpaceLocalAccess,
+        owner: CollaborationSpaceOwner,
         previous: CollaborationSpaceIncomingDemandSnapshot?,
         next: CollaborationSpaceIncomingDemand,
         generation: String,
     ): AppResult<Boolean> {
-        admission(access).let { if (it is AppResult.Failed) return it }
+        val access = owner.localDirectoryAccess()
+        admission(owner).let { if (it is AppResult.Failed) return it }
         val saved =
             demands.replace(access, previous, next, CollaborationSpaceIncomingWake(generation))
-        admission(access).let { if (it is AppResult.Failed) return it }
+        admission(owner).let { if (it is AppResult.Failed) return it }
         // A committed transaction can lose its response. Exact readback never reissues the write.
         val loaded = demands.current(access)
         val retained =
             (loaded as? AppResult.Success)
                 ?.value
                 ?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
-        admission(access).let { if (it is AppResult.Failed) return it }
+        admission(owner).let { if (it is AppResult.Failed) return it }
         if (loaded is AppResult.Failed) return loaded
         if (
             retained == null ||
@@ -164,11 +280,12 @@ class QueueCollaborationSpaceIncomingRoom(
             return if (saved is AppResult.Failed) saved else changed()
         // The durable wake survives a failed scheduler; startup and the owning worker recover it.
         withTimeoutOrNull(1_500) { schedules.request(CollaborationSpaceIncomingWake.WORK_KEY) }
-        admission(access).let { if (it is AppResult.Failed) return it }
+        admission(owner).let { if (it is AppResult.Failed) return it }
         return AppResult.Success(true)
     }
 
-    private suspend fun admission(access: CollaborationSpaceLocalAccess): AppResult<Unit> {
+    private suspend fun admission(owner: CollaborationSpaceOwner): AppResult<Unit> {
+        val access = owner.localDirectoryAccess()
         currentCoroutineContext().ensureActive()
         val gate = directory.admission(access)
         val current = sessions.current()
@@ -180,13 +297,11 @@ class QueueCollaborationSpaceIncomingRoom(
             }
         }
         if (current is AppResult.Failed) return current
-        val owned =
-            localCollaborationSpaceAccess(
-                access,
-                (current as AppResult.Success).value,
-                server.audience,
-            )
+        val session = (current as AppResult.Success).value
+        val owned = localCollaborationSpaceAccess(access, session, server.audience)
         if (owned is AppResult.Failed) return owned
+        if (session?.binding?.serverId != owner.parent.nativeSessionId)
+            return changed(FailureKind.Unauthorized)
         if (gate is AppResult.Failed) return gate
         return AppResult.Success(Unit)
     }

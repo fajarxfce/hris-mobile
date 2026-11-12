@@ -1,90 +1,98 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 13:24 UTC. Continue the PRD and push every commit. All 54 acceptance groups OPEN.
-No subagents. One compiler OR emulator. Phone install-only: announce and select serial; never
-launch/drive UI, reset data or uninstall. Continue beyond checkpoints.
+Updated 12 November 2026, 14:18 UTC. Continue implementation beyond checkpoints and push every commit.
+All54 PRD acceptance groups remain OPEN. No subagents. One compiler OR emulator. Phone install-only:
+announce and select serial; never launch/drive UI, reset data or uninstall. No question is pending.
 
-## Accepted: bounded account metadata discovery
+## Accepted: canonical Original covered hints
 
-Mobile workspace `.work/space-history-locator-scan-2026-11-12` accepts four source/test files
-(two data), baseline f11eea10. Manifest0741f7720eca8ca6b2ae6ff1fd9303bc1501b848f06eea95401b47ed50c406b5,
-5,133 inputs. Account reader observes max17 raw checkpoints, consumes max16, skips internal/root/
-browse metadata and returns at most requested meaningful locators. Cursor preserves unreturned
-rows. Other readers, one-history-per-turn service, schema and worker bound are unchanged.
+Mobile branch feat/chat-send-timing-20261107, workspace .work/space-original-covered-hint-2026-11-12.
+Eight source/test files (3 production), baseline6d9f745a. Current5,136-input manifest
+6dc8053f533b4c818afe39d2a17ddeb3db75481aa3fb27ef7f1004a19124879a.
+The queue use case receives the explicit owner, resolves current registered LEGACY Company/device
+coordinates, validates exact source/EOF/clean pending work and unchanged progress, and fences local
+admission/registration. A covered hint makes no write/wake/schedule. Unknown or unfinished history
+keeps normal Latest alias routing. Newer/independent demand remains. No Company facts are copied into
+Space, and no native opening, request, schema, worker bound or retry timer is added by coverage.
 
-Tests-only red1/15312 REAPED47/8 in66.543s, all8 intended failures audited; format1/80540 and
-format2/83510 REAPED35.774/35.821s. Focused1/53587 REAPED113/0 in263.917s, strict audit exit0:
-47 desktop +19 Android +47 browser, exact prior IDs except one mapper rename across3 targets.
-Proof1/37780 REAPED21/0 in133.208s and strict audit pass. Immutable proof APK152,426,868B/
-d0b076feecf5b29543eb36ae218bd26de1c3320ac6e3faf60b07f8ba5244d7c9, SDK8 x86 library6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95.
-Full1/49554 REAPED PASSED482.295s; audit62848 REAPED exit0:
-14,555 =4,784 fresh +21 source-exact proof +9,750 unchanged dependency-verified. Zero failures/errors/
-skips. Report manifest48441b26346a4b9de21e3042e09ba295bcb89c6bd37217a2ee79981420fb5296.
-Full check, Android host/release/lint, Wasm, iOS metadata, proof, format/architecture/detekt pass.
-[Compact evidence](measurements/collaboration-account-history-metadata-scan-2026-11-12.json). No compiler/emulator remains active.
+Thirteen new Original tests complement21 Published tests. The shared fixture retains its original
+LEGACY default; Published tests explicitly select SPACE. Full1/69373 exposed35 regressions when the
+shared default was changed globally:21 alias,4 binding,10 original physical cases. Exact failed source
+is retained as failed-full-candidate-1. Only two commonTest files corrected fixture selection; no
+assertion or production/native input changed. Focused1's earlier failure was compile-only (Int used
+for opaque String cursor), not a behavioral red. Native worker6 is the actual preserved covered-hint
+failure. See the archived handoff for each earlier run and source hash.
 
-## Next root: native covered-head hint requeues
+Focused3/44681 REAPED PASSED140/0 in186.468s; browser-routing1/40854 REAPED PASSED70/0 in28.953s.
+Combined strict audit accepts210 unique cases/11 reports, no renamed/dropped prior IDs, source/library
+unchanged. Report manifest1a60517c76e4e350d4bcdde191a99714df736be65f3332dbaa572a2d87fbff57.
+Full2/34926 REAPED PASSED594.429s; audit/evidence97646 REAPED exit0:
+14,581 =12,543 fresh +2,038 unchanged dependency-verified; zero failure/error/skip, zero case renames.
+No failed-full1 reports are reused. Report manifest
+8c1c4b5ff90a3c70ae10d38f48f4ee98340e841604fbb40d92990aeb4d210b57.
+Full check, Android host/release compilation/lint, Wasm, iOS metadata, proof, format/architecture/detekt
+passed. [Compact full evidence](measurements/collaboration-original-covered-hints-2026-11-12.json).
+No compiler/emulator is active.
 
-Native worker6/36993 REAPED FAILED1 in125.280s, boot28.420s. It now reaches consumeScheduled:134
-(the !request(covered head) assertion). Before that, first-page content, bounded completion within
-unchanged4 turns, empty demand and Company EOF all pass. Same-boot read-only inspection: history
-recovery complete; no physical/inventory work; Company15 refs/zero pending/one message; final hint
-creates one Published Latest task with head and zero retry. Preserve fixture
-96d6a8f7-4513-4aa7-9274-d046840c3f87 and original worker6 images. No active HTTP/storage errors,
-source/APK changes, compiler overlap or phone interaction. Two pre-arm startup errors are not the
-demonstrated cause. Final repeat equality and offline worker reopen remain UNREACHED.
-Native18/reg1/bootstrap1, Matrix27/send4/sync5/secret2/provider2.
+## Accepted native suite and exact scope
 
-The queue use case checks Published Space history even for LEGACY bindings, but canonical facts
-are correctly retained in Company/original-device history. Fix local coverage in the owning use
-case; don't copy facts into Space, suppress unknown work or weaken the final no-op assertion.
-Company coverage requires provider=null; Published Space uses non-null provider identity.
+Group source3:8,745 inputs, manifest56d3997415f214dbfe86d5462d198c0132a3451f5ea34da198e4c2b0be98a3de.
+Source/test commit e6a3bc36 pushed (19367 REAPED); docs165c8d45/38273c8c pushed (20047/33258 REAPED).
+Seven-case suite1/42409 REAPED PASSED296.282s, boot29.399s; strict audit exit0. All six previous
+case IDs preserved. Fresh2560MiB/two-core emulator stopped; no compiler overlap or phone interaction.
 
-The eight-file coverage change is now APPLIED and uncommitted in Mobile. Workspace
-`.work/space-original-covered-hint-2026-11-12`, baseline accepted metadata6d9f745a/14,555 cases.
-Current5,136-input manifest0c3be4a8ce87881e81680f3935a6564f6b59c1aa42a100753d3479262c415018.
-It adds named pure Original coverage policies; the owning queue use case receives an explicit
-parent, resolves registered legacy Company/device provenance, reads one source/pending page,
-confirms unchanged progress, and fences registration/admission. Unknown/unclean history stays
-on normal Latest alias routing. DI and the native caller pass the existing dependencies/owner.
-No content duplication, native opening, schema, worker limit or retry changes.
+Proof1/45999 PASSED21; immutable .work/space-original-covered-hint-2026-11-12/proof-1/accepted-proof.apk
+152,433,182B/b780610908ed1edd8f33c8242b76a9f72f98c9364439ebccc93ffb54524b9200, SDK26.10.23-hris.8,
+x86 library6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95.
+Native whole-tree Mobile manifest was0c3be4a8ce87881e81680f3935a6564f6b59c1aa42a100753d3479262c415018;
+the later difference is ONLY the two commonTest fixture files. Full2 verified the byte-identical APK
+and unchanged production/native inputs; do not claim native reran on the later whole-tree manifest.
 
-The existing Published fixture now explicitly uses SPACE origin with no Original references;
-its original borrowed LEGACY binding obscured the bug. A separate Original fixture uses distinct
-Company/conversation/device identities. Thirteen new Original regressions cover exact clean facts,
-unknown/unfinished/active pending history, different registration, session/denial/replacement,
-storage/cancellation and preserved independent work. Existing21 Published tests keep their IDs.
+Worker finishes within the unchanged4-turn bound, exposes one Company message before provider EOF,
+preserves Original journal, makes empty-repeat/covered-hint no-ops and reopens in a new offline
+process with identical revision, no runtime opening and released database. Phase trace: physical
+staging21 Matrix/no native; subsequent9 Matrix (2 sync,4 history,2 account-data,1 SDK GET). Final totals
+Matrix30/send4/sync5/secret2/provider2, native18 (11 device GET,1 identity GET,4 other GET,1 registration,
+1 bootstrap), no transport acquisition or active HTTP failures. Old Group turns2/constants were
+updated only after preserved worker7/8 phase traces; no Mobile assertion or bound was removed.
+[Native evidence](measurements/collaboration-original-covered-hints-native-2026-11-12.json).
 
-Format1/96904 REAPED35.586s. Focused1/26911 REAPED FAILED117.278s before tests: the active-pending fixture used Int0 for an opaque String cursor. Production compiled; zero tests ran. Exact8-file source is archived as failed-focused-candidate-1. Only the fixture changed to valid cursor "seek".
-Focused2/54233 REAPED PASSED70/0 in332.067s (34 domain desktop +34 browser +2 shared DI).
-Strict audit inline exit0; all prior case IDs preserved. Report manifest
-06099ea61e29a97c35e4957e811b67780aa7b41789293bd6371fd26f36a74d02.
-Proof1/session45999 ACTIVE; no source edits/emulator during build. After completion run
-accept-proof.py proof-1, set Group native config from planned-native-config.json, then native
-worker7 with unchanged assertions. Full baseline gate expected14,581 local. All audits are
-prepared; accept-full.py uses focused2/proof1, never the failed run.
-Native worker6 remains the behavioral regression; constructor/compiler failures are not red proof.
-Group exact turns2/Matrix31/native14 assertions remain unreached and need actual final trace review.
+## Immediate continuation
 
-## CI, prior commit and phone
+Commit/push the accepted Mobile source/docs and Group full evidence, then dispatch the prepared
+hosted control once: dispatch-hosted.py requires clean tree, accepted full gate and pushed HEAD.
+Plan: ci/space-original-covered-hints-20261112,17,673 cases =12,559 portable(6,006 desktop/952 Android/
+5,601 browser)+5,114 Apple. Auditor compares exact IDs with metadata43224352728, zero renames. Record
+actual dispatch/run metadata; do not inherit stale state.json IDs, URLs, refs or totals. Continue work
+while CI runs. Update this paragraph after dispatch.
 
-Coalescing source f11eea10 / Group b620663c is committed/pushed and accepted14,538 locally.
-Documentation4257dfac /18cdb196 pushes51703/31022 REAPED. Hosted control43220169006 on exactf11eea10
-has portable accepted12,516 and Apple pending. Portable audit14182 REAPED, artifact13946618859/4,041,558B; ZIP0b5ddb30ca10349d0510b23b41bdbad3dd11b5ca15a4eb9667d9a4a972f7c99a. See compact collaboration-space-incoming-discovery-ci-2026-11-12.json; source/case/archive/log hashes verified. State/auditor live in
-`.work/space-incoming-discovery-coalescing-2026-11-12/hosted-43220169006`. Expected17,611=12,516
-portable (5,987/947/5,582) +5,095 Apple. Audit against fully accepted progressive43200304791.
-Metadata6d9f745a / Groupa867612a pushed;26418/15641 REAPED. Hosted metadata43224352728 is active on exact6d9f745a; dispatch81388 REAPED, single attempt. Expected17,634=12,533 portable(5,993/952/5,588)+5,101 Apple. State/auditor live under metadata workspace hosted-43224352728 and use coalescing43220169006 as predecessor. Coalescing12762 REAPED last status: portable application-bindings/compilation and Apple setup-adapter steps still running.
+Next implementation is [real key arrival during a held receipt reply](collaboration-native-late-key-plan.md). Keep the seven
+accepted cases; use a separate typed receipt proof because the additional real encrypted event
+changes the physical head. Prepare the peer's fresh session during staging, then receive it with one
+source sync while the first committed receipt's reply is held/lost. Verify distinct durable receipts,
+recovery obligation before ACK, no repeated first write, offline reopen and finite quiet requests.
+Keep existing deadlines, real SDK callbacks and owned resource cleanup. No SDK fork rebuild is needed.
 
-Release89 is INSTALLED on10.77.77.3:5555, verified09:10UTC (65584 REAPED). Do not reinstall.
-SDK6, install-only upgrade, identity preserved and no UI interaction. Current SDK8 x86 proof APKs
-are not phone releases. No availability or Firebase IAM question pending.
+## Other CI and phone
+
+Coalescingf11eea10 CI43220169006 fully accepted17,611 (12,516 portable+5,095 Apple); audits14182/87382
+REAPED. Do not poll/repeat. Compact collaboration-space-incoming-discovery-ci-2026-11-12.json contains
+artifact/ZIP/report/log hashes and reviewed4 portable/2 Apple replacements.
+Metadata6d9f745a CI43224352728 fully accepted17,634 (12,533 portable+5,101 Apple), audits83236/31245
+REAPED. Compact account-history-metadata-scan-ci evidence includes all artifact/case/report hashes.
+Do not poll or repeat either accepted CI run. Apple job90min,
+host step30; portable60. Apple host/contract success does not prove native Matrix SDK8 execution.
+
+Release89 was installed on10.77.77.3:5555 at09:10UTC,65584 REAPED. SDK6 install-only upgrade, identity
+preserved and no UI interaction. Do not reinstall. Current SDK8 x86 proof is not a phone release.
+Firebase IAM is verified; no availability/credential question is pending.
 
 ## Protected environment
 
-Starter badfc0d is clean/accepted906; these HRIS policies are not template ports. Preserve Inspector
-gradlew.bat and protected SDK source/wrapper/consumer worktrees. Do not rebuild/push forks or
-dispatch legacy SDK4 workflow. Live90163c32500ff2fa005013eaf83b026d4bdcf5ff/schema116.4, readiness ON/
-Group OFF, migrations117–140 undeployed. Do not replace live services from Group worktree or print
-Firebase credentials. Never resend recorded native messages; preserve Bima keys and all failed images.
-[Prior detailed handoff](agent-handoff-history-through-history-metadata-scan-2026-11-12.md) preserves
-all source/artifact/native evidence and earlier accepted CI, including exact protected paths.
+Starter badfc0d remains clean/accepted906; these HRIS policies are not template ports. Preserve
+Inspector gradlew.bat, protected SDK source/wrapper/consumer trees, Bima keys and every failed native
+image. Do not rebuild/push SDK forks or dispatch legacy SDK4 workflow. Live90163c32500ff2fa005013eaf83b026d4bdcf5ff,
+schema116.4, readiness ON/Group OFF; migrations117–140 undeployed. Do not replace live services from
+this Group worktree, replay recorded native messages or print Firebase credentials.
+[Detailed prior state](agent-handoff-history-through-original-covered-hints-2026-11-12.md) retains
+failure evidence and links to exact protected paths, historical source and native/CI artifacts.

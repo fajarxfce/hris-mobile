@@ -8,11 +8,29 @@ import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.*
 
-internal class SpaceIncomingRequestFixture {
+internal class SpaceIncomingRequestFixture(originalRoom: Boolean = true) {
     val provider = SpaceProviderHistoryFixture()
     val base = provider.base
     val access = provider.access
     val key = provider.traversal
+    val owner = provider.runtime.owner
+    val original = OriginalIncomingCoverageFixture(provider)
+
+    init {
+        if (!originalRoom)
+            base.retained =
+                requireNotNull(base.retained).let {
+                    it.copy(
+                        room =
+                            it.room.copy(
+                                origin = CollaborationSpaceRoomOrigin.SPACE,
+                                original = null,
+                            ),
+                        original = null,
+                    )
+                }
+    }
+
     val request =
         CollaborationSpaceIncomingDemandChange.Request(
             key.conversationId,
@@ -102,10 +120,12 @@ internal class SpaceIncomingRequestFixture {
                     return if (entered is AppResult.Failed) entered else schedule()
                 }
             },
+            original.history,
+            original.registrations,
         )
 
     suspend fun queue(value: CollaborationSpaceIncomingDemandChange.Request = request) =
-        useCase(access, key, value)
+        useCase(owner, key, value)
 
     fun retainIndependentProducerWork() {
         val current = snapshot!!.demand
