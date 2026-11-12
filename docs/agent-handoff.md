@@ -38,7 +38,8 @@ Expected focused415 JVM +364 browser; full14,429 local and17,470 hosted, none ac
 Focused1/93516 REAPED failed Detekt LongMethod encode103>100 before tests. Archived complete
 failed-focused-candidate-1 before correction: physical-room DTO mapping now has its own toDto.
 No schema/policy/test/threshold change. Format2/28976 REAPED passed37.304s. Focused2/9583 ACTIVE.
-Only this compiler; no emulator. Read actual result before browser/full/audit. Preserve any failure
+Focused2/9583 REAPED PASS415/423.224s; browser1/78649 REAPED PASS364/154.547s.
+Focused779 audited; full1/34352 ACTIVE. Only this compiler; no emulator. Preserve any failure
 before correction/refreeze. publish.py and write-accepted-handoff.py PREPARED, NOT executed.
 Durable hosted plan UNDISPATCHED, previous43172811544, validation/durable-room-key-consumer-20261112.
 
@@ -53,7 +54,7 @@ Read the Git room-key retention plan. Keep metadata before demand and90s worker 
 Targeted source f969fd73 and Group88f66458 were pushed; hosted43172811544 dispatched ONCE
 07:06:21.309506UTC, session78248 REAPED. Both jobs pending at07:17; expected17,314.
 Lifecycle43165090113 FULL17,085 =portable12,142 +Apple4,943 audited; Apple18114 REAPED.
-Binding43168158361 portable12,205 already audited, Apple pending. Mailbox43161963820 FULL17,004
+Binding43168158361 FULL17,170 =portable12,205 +Apple4,965 audited; Apple49999 REAPED. Mailbox43161963820 FULL17,004
 already audited. Never infer acceptance from status or redispatch these runs.
 
 Phone26630 REAPED:07:16:44.346845UTC,20.020912s timeout. No install;
