@@ -1,5 +1,34 @@
 # Agent continuation — communications long run
 
+Updated 12 November 2026, 05:38 UTC. Continue authorized PRD work and push every commit.
+No subagents. One compiler OR emulator. All54PRD groups OPEN. Phone install-only, never drive UI.
+
+## Active owned room-key listener gate
+
+Workspace .work/sdk-room-key-lifecycle-2026-11-12; source baselinea65151c0d26583c31b647fddb276318f5cfc8969.
+Nine source files APPLIED,5,109inputs/aa8933a876b0b1e1a188c9fd559d24ea467ac96c0c1d58b64569fb3a9aeb86cf.
+Format1/6140 REAPED PASS35.582s. Android1/30938 RUNNING,expected58. Then focused75JVM,69browser and
+full14,164 local required. No test acceptance yet. Preparation EXECUTED. Publisher/accepted-handoff/
+hosted scripts PREPARED, NOT EXECUTED. Native-source-only four-file draft has been superseded;
+do not apply it again. Actual stage includes13common lifecycle,19raw source,10Android parent cases.
+Shared lifecycle owns acquisition independently of caller, raw source retains late handle and drains
+isFinished, actual parent blocks client/store release on failure. Production registration still OFF.
+No durable consumer/native execution/Apple adapter proof. Do not introduce policy into raw datasource.
+
+Mailbox sourcea65151c0/Groupa04eb7c5 pushed;49428/80052 REAPED. Local14,096=11,740fresh+2,356verified
+unchanged; full87129/audit87581 REAPED. Hosted43161963820 dispatchedONCE05:31:37.530000UTC,
+54426 REAPED; expected17,004. Matching hosted state exists. No artifact acceptance yet.
+Worker43158504066 portable60917 REAPED accepted12,022, exact hashes in measurement. Apple pending.
+Global43155076441 portable accepted11,956/Apple pending. Do not redispatch these runs.
+
+Phone73146 REAPED05:34:18.237540UTC/20.017224s timeout. Next retry>=06:07:38.254781UTC.
+Release89 ready, SDK6; mainSDK8. Announce installation; explicit10.77.77.3:5555/--install-only.
+Never launch/reset/uninstall/drive the phone. Preserve protected SDK/Inspector trees and live deployment.
+
+## Earlier accepted work and constraints
+
+# Agent continuation — communications long run
+
 Updated 12 November 2026, 05:30 UTC.
 Continue authorized PRD work, per-commit pushes and validated phone installs. All54PRD groups OPEN.
 No subagents. One compiler OR emulator; follow AGENTS.md and clean layer boundaries.
