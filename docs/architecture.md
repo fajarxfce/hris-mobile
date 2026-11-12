@@ -1,5 +1,7 @@
 # Architecture
 
+[Original historical page completion](collaboration-original-key-reference-completion.md) admits one exact captured page around atomic local recovery completion; primary and global progress retain separate owners.
+
 [Historical content from local facts](collaboration-original-local-key-page-content.md) reuses exact retained originals and edits before acquiring unknown historical sources. Finite reference and whole-account completion remain separate.
 
 [Atomic recovery completion](collaboration-history-recovery-completion.md) commits reference outcomes and finite recovery progress together while preserving primary work. Admitted content and whole-account completion remain separate.

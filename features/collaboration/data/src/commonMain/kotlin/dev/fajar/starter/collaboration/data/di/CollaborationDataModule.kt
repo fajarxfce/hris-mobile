@@ -950,6 +950,28 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun completeSpaceOriginalKeyReferences(
+        metadata: CollaborationSpaceOriginalRoomMetadataRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        recovery: CollaborationHistoryRecoveryRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        sync: CollaborationSpaceSyncRepository,
+    ) =
+        CompleteCollaborationSpaceOriginalKeyReferences(
+            metadata,
+            registrations,
+            recovery,
+            directory,
+            sessions,
+            server,
+            build,
+            sync,
+        )
+
+    @Factory
     fun readSpaceOriginalKeyReferences(
         metadata: CollaborationSpaceOriginalRoomMetadataRepository,
         registrations: CollaborationSpaceRegistrationCommandRepository,

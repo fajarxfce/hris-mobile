@@ -1,132 +1,74 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 00:51 UTC.
-The full PRD, per-commit pushes and validated phone updates are authorized. All54 groups remain
-OPEN; keep working beyond this gate. No subagents. Read AGENTS.md/architecture. Usecases coordinate
-repositories/policies, never other usecases; repositories map datasource results; ViewModels own UI.
+Updated 12 November 2026, 01:20 UTC.
+The user authorized the complete PRD, per-commit pushes and validated install-only phone updates.
+All 54 groups remain OPEN. Keep working beyond this gate. No subagents. Read AGENTS.md and architecture.
+Usecases own repository orchestration/policy; repositories map their datasources; ViewModels own UI.
 
-## Active Original historical completion implementation
+## Original historical page completion accepted
 
-The next reviewed11-file draft was APPLIED by21398REAPED at00:25:47UTC12Nov. It is UNCOMMITTED
-and under validation. Format65268 REAPED PASS36.488s. focused1/98754 REAPED FAILED117.099s before tests:
-three new AwaitDecryption fixtures omitted their required reason. Explicit UnableToDecrypt fixed it.
-Format3950 REAPED PASS34.919s; focused2/65032 REAPED FAILED115.461s/119cases/1failure:
-a new concurrent-request fixture set pendingRetryRequired without its required cursor/boundary.
-The existing policy correctly rejected it. Fixture now supplies both and asserts structural validity.
-Production/assertions and all case IDs preserved; both failed candidates/reviews archived.
-Format30635 REAPED PASS35.360s; focused3/39306 REAPED PASS398.448s/195cases,
-including Wasm and iOS metadata compilation. Browser1/45575 REAPED PASS153.773s/193cases. Focused acceptance verifies388 cases,
-exact selected old IDs and unchanged sources/library. Full1/85112 is RUNNING; expected13,422. Workspace
-.work/original-key-reference-completion-2026-11-11; source baseline6c40ccef1361564c706e10243dc183f18088bf5e,
-13,358 cases/5,050 inputs. prepare-next-original-key-completion.py and configure-next-original-key-completion.py
-HAVE EXECUTED; do not rerun old configure over the focused-coverage refinement.
+Workspace .work/original-key-reference-completion-2026-11-11; baseline 6c40ccef1361564c706e10243dc183f18088bf5e,
+13,358 cases and 5,050 inputs. Eleven changed files (five existing, six new), 32 new common cases.
+Final 5,056 inputs / e89a643ad7cd2611c512ee18f2e2dedc1545ca82d44394a20544e9a73f7f68fd.
+Full full-1 / 85112 REAPED PASS 586.307 seconds;
+audit 97369 REAPED. 13,422 = 11384 fresh + 2038 verified unchanged.
+Focused focused-3 / browser-1 pass 195 JVM + 193 browser = 388 cases.
+The initial 330 prediction was extended by the changed 29-case page-acquisition contract on both targets;
+full/hosted counts did not change. All prior case identities and dependency closures remain verified.
+Proof APK 152145329 bytes / a19d962181aa7769b63102af9455d05993b3f225bae57119c77936f49713e525; no phone or native runtime claim.
+Failed attempt reviews retained: focused-1, focused-2. Exact details remain in the measurement.
 
-One completion owner checks current Company/source/registration around one existing atomic
-recovery.complete. A separate OriginalKeyPageBatch binds results to the captured references;
-primary and explicit-ID APIs preserve their contracts.32 new common cases;5,056 expected inputs.
-Focused coverage now explicitly includes the changed29 page-acquisition cases alongside29 reader,
-20 primary completion,9 policy,56 storage,18 metadata and2 graph controls:195 JVM+193 browser=388.
-Old330 prediction is superseded only for focused selection; full13,422 and hosted16,028 unchanged.
-Expected/run/freeze/accept/dispatch/publisher scripts are prepared in the new workspace. Publication
-requires reviews for any future failed attempts. No native/primary/global activation. Early source architecture check48154 REAPED PASS; this is not compilation or final acceptance.
-Frozen candidate5,056inputs/e89a643ad7cd2611c512ee18f2e2dedc1545ca82d44394a20544e9a73f7f68fd.
-Starter68417 is reaped and accepted;85112 is the only compiler. Keep working through the PRD.
+CompleteCollaborationSpaceOriginalKeyReferences admits current account/session/source, Company metadata
+and registration around ONE existing recovery.complete operation. A dedicated OriginalKeyPageBatch
+binds acquired results to the exact captured references. Primary/explicit-ID APIs keep their contracts.
+Shared resolution policy preserves old primary semantics. False, uncertain, cancelled or stale replies
+cannot acknowledge the page. A successful receipt names only the attempted generation/counts/cursor;
+it cannot complete a whole-account pass or a newer request. Local lifetime is five seconds; ordinary
+credential expiry does not hide owned local work. No new SDK/primary/global I/O, timer or collector.
 
-## Local recovery content and browser reporting accepted
+prepare/configure HAVE EXECUTED; never rerun old configure over the focused-coverage refinement.
+Publish and this accepted writer HAVE EXECUTED. Commit/push source and both handoffs, then dispatch
+ONCE using this workspace's guarded dispatch-hosted.py. Expected 16,028 = 11,400 portable + 4,628 Apple.
+If a dispatch-attempt file already exists, inspect it and hosted-plan.json instead of repeating it.
 
-Nine source files accepted:4 Kotlin acquisition/policy/test files,4 generic Karma/tool files and
-one existing document AppFlow readiness correction.
-Original historical-page acquisition reuses exact scoped local original/edit facts before SDK
-reads. Unknown sources use the existing bounded content pipeline; sender/timestamp must match
-captured references, including shared targets. Results retain source order. Current/historical
-devices stay distinct. Primary and explicit-ID APIs preserve behavior; empty active pages still
-admit ownership. No reference/global receipt, key probe, listener or consumer activation.
+## Next Space implementation
 
-Workspace .work/original-local-key-page-content-2026-11-11; baselineadf06b0e/13,300/5,046.
-Nine changed source files;5,050 frozen inputs/cf23e510352c001c8d6c008550576f2e7a00fc0920ba22b50d0648f30084cc8a;29 new common cases.
-full-4/21474 REAPED PASS1583.919s; audit94897 REAPED.
-13,358=13,358 fresh+0 verified unchanged cases.
-Exact selected-class evidence254(128desktop+126browser) is derived from the SAME unfiltered full
-run, not claimed as another execution. Prior IDs/source/library/dependency closures preserved.
-Proof APK148895176B/1fc567eba49f0187d5632b33621aee5c079f63127b03f20ffdeaf0f647fc6606; not phone/native SDK execution.
+The 15-file draft remains at .work/original-local-key-page-content-2026-11-11/next-space-key-page-draft.
+It is UNAPPLIED and UNCOMPILED; static reviewComplete is true. Read next-space-key-page-state.json and
+next-space-key-page-projection-review.md in that workspace. It contains 19 reader, 34 acquisition and
+35 completion cases; four existing files and eleven new files. Existing-file hash guards are prepared;
+verify they still match this final Original baseline. Expected: 5,067 inputs, 13,598 local cases,
+484 focused (243 JVM/241 browser), 16,292 hosted (11,576 portable + 4,716 Apple).
+prepare-space-key-projection.py and publish-space-key-projection.py are PREPARED, NOT EXECUTED.
+Both known Original fixture defects are also corrected in the Space draft. Apply only after this
+Original change is accepted, committed, pushed and dispatched.
 
-Preserve earlier passing focused1/90850/423.375s/128 (manifest690b5657). Two NEW identity fixtures
-were strengthened to independently valid raw content; all IDs/production remained. focused2/91051
-129.248s/128 and browser1/94835 141.254s/126 passed (26eba43c). full1/14104 FAILED460.42s after
-6,674 fresh cases: upstream Kotlin2.3.21/Karma3.0.0 omitted LF between TeamCity messages.3,252 domain
-cases crossed Gradle's1MiB buffer. Upstream3.0–3.5.4/source investigation retained. A shared reporter
-frames every upstream write;8 Node regressions include6,000 messages exceeding1MiB.
+Preserve logical Space and Original-alias storage scope, historical traversal/provider identity and
+actual current registered physical provenance. Acquisition reuses scoped local facts before native
+reads; primary transport admission stays intact. The primary fixture throws if the new historical
+dependencies are used. Completion uses only the Space recovery.complete overload. DI/graph drafts
+include the now-accepted Original completion graph; do not replace it with an earlier version.
+Then finish bounded global recovery service, unavailable-source outcomes, atomic primary EOF demotion
+with request/wake, loss-aware key receipts and listener ownership/drain, and 64-room liveness before
+activating producers. Existing global policy separates more pages from unresolved content and sleeps
+after a finite waiting pass; missing keys must never restart a secret-storage/transport polling loop.
 
-First integration manifest74adf28e passed focused3/128 and browser2/99609/153.261s/126. A server
-restart disconnected67474 and killed its Python runner while Gradle/Xvfb survived. Observer3250
-REAPED captured actual exit0; recovery58998 REAPED reconstructed unchanged reports. Its1182.802s
-uses source-manifest time; retain restart recovery evidence. full2/77316 FAILED713.378s/13,237,
-2 failures: root useConfigDirectory replaced the tracked module timeout fragment, returning both
-603-record storage tests to Mocha's2-second default. This was OUR integration regression.
+## Previous validation and generic port
 
-Final convention uses Sync to merge module fragments then the shared reporter into generated
-config, retaining original settings. wiring1/46792 REAPED PASS55.866s; generated files match source
-bytes, existing10-second module timeout unchanged. No test body/buffer/timeout weakening or cache
-patch. All JVM tests and3 affected browser modules rerun for changed build conventions. Formats
-2095/77775/41168/26815 REAPED36.736/36.338/69.422/89.16s. Retain all three failed candidates and logs.
-full3/87890 FAILED861.499s/850 cases with one unrelated AppFlow readiness race. Test clicked Refresh
-after HTTP completion but before the owning acquisition enabled it. Screenshot remained on the
-old document; denial branch had not appeared. Both Refresh clicks now wait for enabled semantics,
-using the same15s bound as the adjacent test. No production UI or assertions changed.
-Final format76253 REAPED; targeted UI28849 REAPED PASS2.
-The final unfiltered run above also preserves every old AppFlow case.
+Mobile e4650f882e71708100feebaf900834353bb5a128 accepted all 13,358 fresh cases on
+cf23e510352c001c8d6c008550576f2e7a00fc0920ba22b50d0648f30084cc8a. Preserve three failed full attempts:
+upstream missing reporter LF, introduced module-config omission, and the existing AppFlow readiness race.
+All were investigated; assertions/timeouts were not weakened. The Node evidence publisher's Spec/TAP
+format mismatch was separately corrected without rerunning or changing successful results.
+Hosted 43126523314 status at this checkpoint: in_progress;
+artifactsAudited=False. Use its audit workspace and actual evidence.
+Starter badfc0d (push21019 REAPED) ports four generic reporter files and passed 906 fresh cases, preserving all
+358 prior IDs and all 44 browser task selections. Its measurement owns source/commit/build details.
+No HRIS policy or document UI case was ported. No repeat Starter gate without another generic delta.
 
-Publisher and accepted writer HAVE EXECUTED. Source changes were committed/pushed separately:
-AppFlow941224bb/60814REAPED; generic0c99908e/39997REAPED; featuree4650f88/20636REAPED.
-Group documentationa5d0d9d3/11341REAPED. That accepted source is retained; the next uncommitted implementation is described above.
-Hosted43126523314 was dispatched ONCE by39160REAPED at00:20:07UTC12Nov on e4650f882e71708100feebaf900834353bb5a128.
-Ref validation/original-local-key-page-content-20261111, expected15,932=11,336portable+4,596Apple.
-Portable completed and audit64714 REAPED accepted11,336 (5,396desktop/857Android/5,083browser).
-Artifact13904961843/3,915,289bytes/eae54b2e1d7748367ef16c44106ace046ddfdbcf156609a50fc714bce278b387;
-prior IDs preserved. Apple remains IN PROGRESS. hosted-plan.json has the run ID; never redispatch.
-
-## Next implementation and generic port
-
-Required Starter reporter port is ACCEPTED and pushed as badfc0d (push21019 REAPED).
-check-full1/68417 REAPED PASS1,689.783s:906 fresh cases (475desktop/425browser/6buildlogic),
-all358 prior IDs preserved,1,064 unchanged inputs/2fa04acd2476407455a24f69a56aa98b51c2e154cd7e753fd524e8cbb95992e3.
-All44 KMP browser targets selected; Android three builds/lint, production web, iOS metadata,
-quality and Node8 regressions pass. accept.py and publish.py HAVE EXECUTED. Four generic source
-files match Mobilee4650f88. No HRIS policy/test copied. Mobile compilation can now proceed.
-
-Next11-file next-original-key-completion-draft is REVIEWED and now APPLIED/UNTESTED(5existing/6new); see the active section.
-Dedicated CompleteCollaborationSpaceOriginalKeyReferences admits current local Company/source/
-registration and ONE existing recovery.complete under5s. Distinct OriginalKeyPageBatch binds
-outcomes to the exact captured page; old explicit-ID batches cannot authorize completion. Existing
-29 page tests keep IDs plus captured-page assertion. Shared resolution preserves primary contracts.
-Only confirmed true yields attempted generation/counts/cursor; false/lost/cancelled/stale replies
-are not receipts. No primary/SDK/global I/O or hidden retry.32 new common cases plus reader29,
-primary completion20/policy9, recovery storage56, metadata18 and graph2 controls.
-
-Read next-original-key-completion-review.md/contract. Guarded prepare/configure HAVE EXECUTED; publisher copied/prepared, not executed.
-Original generators/snippets and old configure are STALE after the focused-coverage refinement. Nextworkspace original-key-reference-completion-2026-11-11:
-5,056 inputs,13,422local,195+193focused,16,028hosted=11,400portable+4,628Apple. Preserve Karma inputs
-and conditional full report refresh. Then Space/Original-alias projection:15 statically reviewed/
-uncompiled draft files (19 reader+34 acquisition+35 completion cases, fixtures/policies/page batch,
-three owners, DI/both-order graph). No source applied. Guarded prepare-space-key-projection.py/publish-space-key-projection.py are
-PREPARED, NOT EXECUTED. Planned next workspace space-key-page-projection-2026-11-12,
-5,067inputs/13,598local,484focused,16,292hosted. Both known Original fixture defects are corrected
-in the Space draft. Four existing-file hashes guard application. Draft primary fixture rejects new historical
-dependency calls to preserve existing transport/native-alias controls. Read next-space-key-page-state.json
-and next-space-key-page-projection-review.md before review/application. Actual registered physical
-provenance remains distinct from logical/history/provider coordinates. Global policy already separates moreHistoryPages
-from unresolved content: one bounded page per history, same-generation rounds, sleep after waiting.
-Finish global service/unavailable-source outcomes, primary EOF demotion/request/wake, loss-aware
-key receipts/listener ownership and64-room liveness before activating producers.
-
-## Hosted evidence
-
-Turn43087494327 FULL15,405 and Locator43092246512 FULL15,497 accepted after each ONE targeted
-failed-job retry; keep original upload failures. OriginalContent43099618359 FULL15,695 uses its
-recorded Position-ancestor bridge, without accepting Account43096361337's two startup failures/no
-jobs. No blind retry. Reader43104067759 FULL15,782,94501/30723REAPED. Atomic43108578825 FULL15,845,
-37893/29986REAPED. Checked-in measurements own exact artifact/log/report hashes. Shared Apple
-execution does not prove native SDK8 Apple capabilities. Physical iPhone testing alone is waived.
+[Prior full ledger](https://github.com/fajarxfce/hris-mobile/blob/0eeefa7b/docs/agent-handoff.md) retains
+older source, hosted and failed-attempt evidence. The account startup failure remains unaccepted;
+shared Apple tests do not establish native Matrix SDK8 Apple behavior. Current measurements are authoritative.
 
 ## Device and protected state
 

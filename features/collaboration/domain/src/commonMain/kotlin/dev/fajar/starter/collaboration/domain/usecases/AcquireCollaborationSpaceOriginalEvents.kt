@@ -62,7 +62,7 @@ class AcquireCollaborationSpaceOriginalEvents(
         runtime: CollaborationSpaceRuntimeReady,
         history: CollaborationSpaceOriginalKeyHistory,
         references: CollaborationHistoryReferences,
-    ): AppResult<CollaborationSpaceOriginalKeyHistoryBatch> {
+    ): AppResult<CollaborationSpaceOriginalKeyPageBatch> {
         currentCoroutineContext().ensureActive()
         if (references.events.size > 16)
             return originalIncomingFailure("invalid_request", FailureKind.Validation)
@@ -80,7 +80,7 @@ class AcquireCollaborationSpaceOriginalEvents(
             is AppResult.Failed -> result
             is AppResult.Success ->
                 AppResult.Success(
-                    CollaborationSpaceOriginalKeyHistoryBatch(runtime, history, result.value)
+                    CollaborationSpaceOriginalKeyPageBatch(runtime, history, captured, result.value)
                 )
         }
     }

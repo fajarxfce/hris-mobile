@@ -29,24 +29,44 @@ internal fun planCollaborationIncomingReferenceOutcomes(
             )
         )
     }
+    if (items == null) return invalidIncomingReferences()
+    val planned = planCollaborationHistoryReferenceResolutions(source.events, items)
+    if (planned is AppResult.Failed) return planned
+    val resolved = (planned as AppResult.Success).value
+    val unresolved = source.events.size - resolved.size
+    return AppResult.Success(
+        CollaborationSpaceIncomingReferencePlan(
+            resolved.toList(),
+            unresolved,
+            source.after != null,
+            position.pendingRetryRequired || unresolved > 0,
+        )
+    )
+}
+
+/** Per-event outcomes only; each caller validates its own position and admission separately. */
+internal fun planCollaborationHistoryReferenceResolutions(
+    references: List<CollaborationHistoryReference>,
+    items: List<CollaborationIncomingHistoryResult>,
+): AppResult<List<CollaborationHistoryReference>> {
     if (
-        items == null ||
-            items.size != source.events.size ||
-            items.map { it.sourceEventId } != source.events.map { it.event.eventId }
+        references.size > 16 ||
+            items.size != references.size ||
+            items.map { it.sourceEventId } != references.map { it.event.eventId }
     )
         return invalidIncomingReferences()
     val resolved = mutableListOf<CollaborationHistoryReference>()
-    for ((reference, result) in source.events.zip(items)) {
+    for ((reference, result) in references.zip(items)) {
         when (val outcome = result.outcome) {
             is CollaborationIncomingHistoryOutcome.Retained -> {
+                if (outcome.originalEventIds.size > 16 || outcome.replacementEventIds.size > 16)
+                    return invalidIncomingReferences()
                 val ids = outcome.originalEventIds + outcome.replacementEventIds
                 if (
                     ids.isEmpty() ||
                         ids.size > 32 ||
                         ids.any { !validCollaborationEventId(it) } ||
-                        ids.distinct().size != ids.size ||
-                        outcome.originalEventIds.size > 16 ||
-                        outcome.replacementEventIds.size > 16
+                        ids.distinct().size != ids.size
                 )
                     return invalidIncomingReferences()
                 resolved += reference
@@ -60,15 +80,7 @@ internal fun planCollaborationIncomingReferenceOutcomes(
                 if (!validCollaborationEventId(outcome.eventId)) return invalidIncomingReferences()
         }
     }
-    val unresolved = source.events.size - resolved.size
-    return AppResult.Success(
-        CollaborationSpaceIncomingReferencePlan(
-            resolved.toList(),
-            unresolved,
-            source.after != null,
-            position.pendingRetryRequired || unresolved > 0,
-        )
-    )
+    return AppResult.Success(resolved.toList())
 }
 
 private fun invalidIncomingReferences() =

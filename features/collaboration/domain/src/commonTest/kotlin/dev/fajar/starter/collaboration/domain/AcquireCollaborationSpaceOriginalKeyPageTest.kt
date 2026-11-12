@@ -53,7 +53,7 @@ class AcquireCollaborationSpaceOriginalKeyPageTest {
         f: SpaceOriginalIncomingContentFixture,
         references: CollaborationHistoryReferences = page(f),
     ) =
-        assertIs<AppResult.Success<CollaborationSpaceOriginalKeyHistoryBatch>>(
+        assertIs<AppResult.Success<CollaborationSpaceOriginalKeyPageBatch>>(
                 f.acquire(f.runtime, history(f), references)
             )
             .value
@@ -387,6 +387,7 @@ class AcquireCollaborationSpaceOriginalKeyPageTest {
         }
         val result = success(f, captured.copy(events = rows))
         assertEquals(listOf("\$original"), result.items.map { it.sourceEventId })
+        assertEquals(captured, result.references)
         assertNoContentIo(f)
     }
 

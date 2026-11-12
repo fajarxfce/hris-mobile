@@ -1,0 +1,106 @@
+{
+  "recordedAt": "2026-11-12T01:20:33.159550+00:00",
+  "sourceBaseline": "6c40ccef1361564c706e10243dc183f18088bf5e",
+  "sourceFiles": 5056,
+  "changedSourceFiles": 11,
+  "sourceManifestSha256": "e89a643ad7cd2611c512ee18f2e2dedc1545ca82d44394a20544e9a73f7f68fd",
+  "focused": {
+    "tests": 388,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused-3",
+  "focusedBrowserRun": "browser-1",
+  "full": {
+    "validated": 13422,
+    "fresh": {
+      "tests": 11384,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 586.307,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152145329,
+    "sha256": "a19d962181aa7769b63102af9455d05993b3f225bae57119c77936f49713e525"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "originalKeyReferenceCompletionAccepted": true,
+  "newCommonCasesPerTarget": 32,
+  "exactCapturedPageBatchRequired": true,
+  "oldExplicitIdBatchCannotAuthorizeCompletion": true,
+  "oldPrimaryAndExplicitIdAcquisitionPreserved": true,
+  "boundedListsCopiedBeforeSuspension": true,
+  "maximumSourceEvents": 16,
+  "localCompletionLifetimeSeconds": 5,
+  "oneAtomicRecoveryComplete": true,
+  "currentAdmissionBeforeAndAfterWrite": true,
+  "confirmedDenialWins": true,
+  "unknownFalseCancelledOrStaleRepliesAreNotReceipts": true,
+  "completionIdentifiesAttemptedGenerationAndCursorOnly": true,
+  "sharedPrimaryResolutionPolicyPreserved": true,
+  "noExtraProgressRead": true,
+  "primaryAcknowledgement": false,
+  "globalAcknowledgement": false,
+  "hiddenRetry": false,
+  "keyProbe": false,
+  "newListener": false,
+  "nativeSdkExecution": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "starterPortRequired": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [
+    {
+      "run": "focused-1",
+      "exitCode": 1,
+      "elapsedSeconds": 117.099,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "run": "focused-2",
+      "exitCode": 1,
+      "elapsedSeconds": 115.461,
+      "freshCounts": {
+        "tests": 119,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "failureReviews": {
+    "focused-1": {
+      "session": 98754,
+      "reaped": true,
+      "sourceManifestSha256": "d7847851b4ec12648c4f2061c509ea63b14fc09aad17f8418620c02d082f8b90",
+      "classification": "new test fixture compilation error",
+      "cause": "Three AwaitDecryption examples omitted required CollaborationEventDecryptionFailure reason. Production compiled; no test ran.",
+      "fix": "Pass existing UnableToDecrypt classification; preserve all test IDs, assertions and production code.",
+      "casesExecuted": 0,
+      "assertionFailures": 0
+    },
+    "focused-2": {
+      "session": 65032,
+      "reaped": true,
+      "sourceManifestSha256": "b0e435888ae43b5df9c41027404a1a1994ab919da4a7466494dfd2bca74344e0",
+      "classification": "incoherent new concurrency fixture",
+      "cause": "aLaterRequestedGenerationDoesNotBecomeThisPagesReceipt set pendingRetryRequired without pendingAfter/pendingThrough. Existing structural policy correctly rejected the impossible primary state before completion.",
+      "fix": "Provide a coherent primary cursor/boundary with retryRequired and assert structural validity before invoking completion. Preserve requested-generation and primary retry assertions; do not relax production policy.",
+      "casesExecuted": 119,
+      "assertionFailures": 1
+    }
+  }
+}
