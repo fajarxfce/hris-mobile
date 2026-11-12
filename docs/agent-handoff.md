@@ -33,6 +33,24 @@ are pushed (sessions29327/65021 REAPED). Hosted43136996756 dispatched ONCE by129
 Expected16,292=11,576portable+4,716Apple. hosted-plan.json and hosted-43136996756/state.json
 retain exact source/run; never redispatch.
 
+## Source availability implementation in progress
+
+Workspace .work/key-history-source-availability-2026-11-12. Preparation HAS EXECUTED;
+source baseline85cb61b62b00ebec44566f16388aa5e4446ba76f. Six existing source files
+are applied and uncommitted. Format1/78418 REAPED PASS37.654s. Candidate5,067inputs/
+221c1dbac2fe1638749dd5c027225ac37168dae77a3c1a4b19b816160b23f57d.
+Focused1/57767 RUNNING; expected158JVM+156browser=314, local13,626, hosted16,334.
+No global producer activation. Source availability does not convert operational
+failure, cancellation, changed ownership or denial into waiting.
+
+Next account-turn draft in this workspace is statically reviewed, UNAPPLIED and
+UNCOMPILED: next-account-turn-draft/state/expected/contract/review. Seven files
+(five new/two DI/graph),23 common cases; expectedfuture5,072inputs/13,672local/
+312focused/16,403hosted. One admitted account metadata row, stable recovery revision,
+current registered source and root; no creation/acknowledgement or worker activation.
+The old SourceAvailability draft/preparer in the Space workspace HAS EXECUTED;
+do not reapply it despite the older planning description below.
+
 ## Next: serve bounded account recovery before enabling key producers
 
 Account metadata reads, schema7 recovery state, both admitted history readers/content/completion
