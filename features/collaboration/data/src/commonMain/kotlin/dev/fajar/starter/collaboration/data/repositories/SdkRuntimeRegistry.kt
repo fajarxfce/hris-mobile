@@ -14,7 +14,7 @@ internal class SdkRuntimeRegistry<T : Any>(
     private val available: (T) -> Boolean,
     private val requestStop: (T) -> Unit,
 ) {
-    private val monitor = Any()
+    private val monitor = SdkRuntimeMonitor()
     private val entries = mutableMapOf<String, SdkRuntimeReservation<T>>()
     private val borrowers = mutableSetOf<SdkRuntimeBorrow<T>>()
     private val handovers = mutableMapOf<String, SdkRuntimeHandoverGate>()
@@ -28,11 +28,11 @@ internal class SdkRuntimeRegistry<T : Any>(
         owner: CollaborationOwner,
         deviceId: String,
     ): AppResult<SdkRuntimeReservation<T>?> =
-        synchronized(monitor) {
-            if (storeId in handovers) return@synchronized handoverPending()
+        monitor.locked {
+            if (storeId in handovers) return@locked handoverPending()
             val decision = retention
             if (decision != null && (!retainsParent(owner) || decision.foreground != owner))
-                return@synchronized stopped()
+                return@locked stopped()
             val existing = entries[storeId]
             if (existing != null) {
                 if (
@@ -43,9 +43,9 @@ internal class SdkRuntimeRegistry<T : Any>(
                         existing.historyReopening ||
                         existing.resource?.let(available) != true
                 )
-                    return@synchronized busy()
+                    return@locked busy()
                 existing.foreground = true
-                return@synchronized AppResult.Success(null)
+                return@locked AppResult.Success(null)
             }
             reserveForeground(storeId, owner, deviceId)
         }
@@ -55,13 +55,13 @@ internal class SdkRuntimeRegistry<T : Any>(
         owner: CollaborationOwner,
         deviceId: String,
     ): AppResult<SdkRuntimeReservation<T>> =
-        synchronized(monitor) {
-            if (storeId in handovers) return@synchronized handoverPending()
+        monitor.locked {
+            if (storeId in handovers) return@locked handoverPending()
             val decision = retention
             if (decision != null && (!retainsParent(owner) || decision.foreground != owner))
-                return@synchronized stopped()
-            if (storeId in entries) return@synchronized busy()
-            if (entries.size >= CLIENT_LIMIT) return@synchronized capacity()
+                return@locked stopped()
+            if (storeId in entries) return@locked busy()
+            if (entries.size >= CLIENT_LIMIT) return@locked capacity()
             AppResult.Success(
                 SdkRuntimeReservation<T>(storeId, owner, deviceId, foreground = true).also {
                     entries[storeId] = it
@@ -75,10 +75,10 @@ internal class SdkRuntimeRegistry<T : Any>(
         owner: CollaborationOwner,
         deviceId: String,
     ): AppResult<SdkRuntimeBorrow<T>> =
-        synchronized(monitor) {
-            if (storeId in handovers) return@synchronized handoverPending()
-            if (retention == null || !retainsParent(owner)) return@synchronized stopped()
-            if (borrowers.size >= BORROW_LIMIT) return@synchronized capacity()
+        monitor.locked {
+            if (storeId in handovers) return@locked handoverPending()
+            if (retention == null || !retainsParent(owner)) return@locked stopped()
+            if (borrowers.size >= BORROW_LIMIT) return@locked capacity()
             val existing = entries[storeId]
             if (
                 existing != null &&
@@ -89,10 +89,10 @@ internal class SdkRuntimeRegistry<T : Any>(
                         existing.historyReopening ||
                         existing.resource?.let(available) != true)
             )
-                return@synchronized busy()
+                return@locked busy()
             // Publication fences construction. Admitted lanes may then share this one client;
             // each finite reference still counts toward BORROW_LIMIT and owns its own release.
-            if (existing == null && entries.size >= CLIENT_LIMIT) return@synchronized capacity()
+            if (existing == null && entries.size >= CLIENT_LIMIT) return@locked capacity()
             val entry =
                 existing
                     ?: SdkRuntimeReservation<T>(storeId, owner, deviceId, foreground = false).also {
@@ -105,7 +105,7 @@ internal class SdkRuntimeRegistry<T : Any>(
 
     /** A late native client is still attached to its reservation so its full drain stays owned. */
     fun attach(reservation: SdkRuntimeReservation<T>, resource: T): Boolean =
-        synchronized(monitor) {
+        monitor.locked {
             check(entries[reservation.storeId] === reservation && reservation.resource == null)
             reservation.resource = resource
             if (reservation.retired) requestStop(resource)
@@ -114,9 +114,9 @@ internal class SdkRuntimeRegistry<T : Any>(
         }
 
     fun publish(borrow: SdkRuntimeBorrow<T>, publish: (T) -> AppResult<Unit>): AppResult<Unit> =
-        synchronized(monitor) {
+        monitor.locked {
             borrow.failure.value?.let {
-                return@synchronized AppResult.Failed(it)
+                return@locked AppResult.Failed(it)
             }
             val entry = borrow.reservation
             if (
@@ -126,8 +126,8 @@ internal class SdkRuntimeRegistry<T : Any>(
                     entry.space != null ||
                     !retainsParent(entry.owner)
             )
-                return@synchronized stopped()
-            val resource = entry.resource ?: return@synchronized busy()
+                return@locked stopped()
+            val resource = entry.resource ?: return@locked busy()
             val published =
                 if (!borrow.creating || borrow.published) {
                     if (available(resource)) AppResult.Success(Unit) else stopped()
@@ -146,36 +146,32 @@ internal class SdkRuntimeRegistry<T : Any>(
 
     /** Successful foreground entry promotes an already published background-created client. */
     fun retainForeground(owner: CollaborationOwner, deviceId: String): T? =
-        synchronized(monitor) {
-            val entry = findEntry(owner, deviceId) ?: return@synchronized null
-            val resource = entry.resource ?: return@synchronized null
-            if (!available(resource)) return@synchronized null
+        monitor.locked {
+            val entry = findEntry(owner, deviceId) ?: return@locked null
+            val resource = entry.resource ?: return@locked null
+            if (!available(resource)) return@locked null
             val decision = retention
             if (decision != null && (!retainsParent(owner) || decision.foreground != owner))
-                return@synchronized null
+                return@locked null
             entry.foreground = true
             resource
         }
 
     fun find(owner: CollaborationOwner, deviceId: String): T? =
-        synchronized(monitor) { findEntry(owner, deviceId)?.resource }
+        monitor.locked { findEntry(owner, deviceId)?.resource }
 
-    fun resources(): List<T> = synchronized(monitor) { entries.values.mapNotNull { it.resource } }
+    fun resources(): List<T> = monitor.locked { entries.values.mapNotNull { it.resource } }
 
     /** Legacy operations cannot reach logical Space resources through a bulk lookup. */
     fun legacyResources(): List<T> =
-        synchronized(monitor) {
-            entries.values.filter { it.space == null }.mapNotNull { it.resource }
-        }
+        monitor.locked { entries.values.filter { it.space == null }.mapNotNull { it.resource } }
 
     fun accepts(reservation: SdkRuntimeReservation<T>): Boolean =
-        synchronized(monitor) {
-            entries[reservation.storeId] === reservation && !reservation.retired
-        }
+        monitor.locked { entries[reservation.storeId] === reservation && !reservation.retired }
 
     /** Nonblocking event publication is fenced to this exact active reservation. */
     fun publishSignal(reservation: SdkRuntimeReservation<T>, publish: () -> Unit): Boolean =
-        synchronized(monitor) {
+        monitor.locked {
             if (entries[reservation.storeId] !== reservation || reservation.retired) false
             else {
                 publish()
@@ -188,25 +184,23 @@ internal class SdkRuntimeRegistry<T : Any>(
         owner: CollaborationOwner,
         deviceId: String,
     ): AppResult<SdkRuntimeReservation<T>?> =
-        synchronized(monitor) {
+        monitor.locked {
             val entry =
                 entries.values.singleOrNull {
                     it.space == null && it.owner == owner && it.deviceId == deviceId
-                } ?: return@synchronized AppResult.Success(null)
-            if (entry.resource == null) return@synchronized busy()
+                } ?: return@locked AppResult.Success(null)
+            if (entry.resource == null) return@locked busy()
             if (entry.historyReopening || borrowers.any { it.reservation === entry })
-                return@synchronized registryFailure("client.collaboration_runtime_busy")
+                return@locked registryFailure("client.collaboration_runtime_busy")
             entry.historyReopening = true
             AppResult.Success(entry)
         }
 
     fun endHistoryReopen(entry: SdkRuntimeReservation<T>) =
-        synchronized(monitor) {
-            if (entries[entry.storeId] === entry) entry.historyReopening = false
-        }
+        monitor.locked { if (entries[entry.storeId] === entry) entry.historyReopening = false }
 
     fun update(next: CollaborationRuntimeRetention): List<T> =
-        synchronized(monitor) {
+        monitor.locked {
             val foreground = next.foreground
             require(foreground == null || next.parent?.owner(foreground.companyId) == foreground)
             val retained = next.retainedForeground
@@ -239,7 +233,7 @@ internal class SdkRuntimeRegistry<T : Any>(
 
     /** Explicit legacy drain invalidates current reservations, not future standalone entries. */
     fun closeOtherOwners(retained: CollaborationOwner?): List<T> =
-        synchronized(monitor) {
+        monitor.locked {
             entries.values.filter { it.space == null && it.owner != retained }.forEach(::retire)
             closingResources()
         }
@@ -254,31 +248,31 @@ internal class SdkRuntimeRegistry<T : Any>(
         originalDeviceId: String,
         space: SdkSpaceRuntimeIdentity,
     ): AppResult<SdkRuntimeHandoverGate> =
-        synchronized(monitor) {
+        monitor.locked {
             val parent = space.owner.parent
             if (
                 retention?.parent != parent ||
                     originalOwner.setupBinding() !=
                         parent.owner(originalOwner.companyId).setupBinding()
             )
-                return@synchronized stopped()
-            if (storeId in handovers) return@synchronized handoverPending()
-            if (handovers.size >= CLIENT_LIMIT) return@synchronized capacity()
+                return@locked stopped()
+            if (storeId in handovers) return@locked handoverPending()
+            if (handovers.size >= CLIENT_LIMIT) return@locked capacity()
             if (
                 entries.values.any { it.storeId != storeId && it.space?.owner == space.owner } ||
                     handovers.values.any { it.storeId != storeId && it.space?.owner == space.owner }
             )
-                return@synchronized busy()
+                return@locked busy()
             val entry = entries[storeId]
             // A duplicate opener cannot restart a live or still-constructing exact bootstrap.
-            if (entry?.space == space && !entry.retired) return@synchronized busy()
+            if (entry?.space == space && !entry.retired) return@locked busy()
             if (
                 entry != null &&
                     (entry.owner.setupBinding() != originalOwner.setupBinding() ||
                         entry.deviceId != originalDeviceId ||
                         entry.space?.let { !it.canBeReplacedBy(space) } == true)
             )
-                return@synchronized busy()
+                return@locked busy()
             val gate =
                 SdkRuntimeHandoverGate(
                     storeId,
@@ -295,7 +289,7 @@ internal class SdkRuntimeRegistry<T : Any>(
 
     /** Invalidation is permanent for this attempt; cleanup still belongs to the original gate. */
     fun spaceHandoverCurrent(gate: SdkRuntimeHandoverGate): Boolean =
-        synchronized(monitor) {
+        monitor.locked {
             val space = gate.space
             space != null &&
                 handovers[gate.storeId] === gate &&
@@ -305,16 +299,16 @@ internal class SdkRuntimeRegistry<T : Any>(
 
     /** Gate-to-reservation transfer is atomic, so no legacy opener can slip into the store. */
     fun reserveSpaceAdoption(gate: SdkRuntimeHandoverGate): AppResult<SdkRuntimeReservation<T>> =
-        synchronized(monitor) {
-            val space = gate.space ?: return@synchronized handoverPending()
+        monitor.locked {
+            val space = gate.space ?: return@locked handoverPending()
             if (
                 handovers[gate.storeId] !== gate ||
                     gate.invalidated ||
                     retention?.parent != space.owner.parent
             )
-                return@synchronized stopped()
-            if (gate.storeId in entries) return@synchronized busy()
-            if (entries.size >= CLIENT_LIMIT) return@synchronized capacity()
+                return@locked stopped()
+            if (gate.storeId in entries) return@locked busy()
+            if (entries.size >= CLIENT_LIMIT) return@locked capacity()
             val next =
                 SdkRuntimeReservation<T>(
                     gate.storeId,
@@ -331,8 +325,8 @@ internal class SdkRuntimeRegistry<T : Any>(
 
     /** Exact logical identity only; physical legacy owner lookups never expose these resources. */
     fun findSpace(space: SdkSpaceRuntimeIdentity): T? =
-        synchronized(monitor) {
-            if (retention?.parent != space.owner.parent) return@synchronized null
+        monitor.locked {
+            if (retention?.parent != space.owner.parent) return@locked null
             entries.values
                 .singleOrNull { it.space == space && !it.retired }
                 ?.resource
@@ -341,9 +335,7 @@ internal class SdkRuntimeRegistry<T : Any>(
 
     /** Public readiness lookup still requires the exact immutable bootstrap operation. */
     fun findSpace(owner: CollaborationSpaceOwner, deviceId: String, operationId: String): T? =
-        synchronized(monitor) {
-            findSpaceCandidate(owner, deviceId, operationId)?.takeIf(available)
-        }
+        monitor.locked { findSpaceCandidate(owner, deviceId, operationId)?.takeIf(available) }
 
     /** Observe publication/retirement of this resource without granting access before publish. */
     fun findSpaceCandidate(
@@ -351,8 +343,8 @@ internal class SdkRuntimeRegistry<T : Any>(
         deviceId: String,
         operationId: String,
     ): T? =
-        synchronized(monitor) {
-            if (retention?.parent != owner.parent) return@synchronized null
+        monitor.locked {
+            if (retention?.parent != owner.parent) return@locked null
             entries.values
                 .singleOrNull {
                     it.space?.owner == owner &&
@@ -365,7 +357,7 @@ internal class SdkRuntimeRegistry<T : Any>(
 
     /** Current-space denial/removal stops its resources without changing original stored facts. */
     fun closeSpace(owner: CollaborationSpaceOwner): List<T> =
-        synchronized(monitor) {
+        monitor.locked {
             handovers.values.filter { it.space?.owner == owner }.forEach { it.invalidated = true }
             entries.values.filter { it.space?.owner == owner }.forEach(::retire)
             closingResources()
@@ -393,15 +385,15 @@ internal class SdkRuntimeRegistry<T : Any>(
         deviceId: String,
         currentParent: CollaborationNativeParent,
     ): AppResult<SdkRuntimeHandoverGate> =
-        synchronized(monitor) {
+        monitor.locked {
             if (
                 retention?.parent != currentParent ||
                     originalOwner.audience != currentParent.audience ||
                     originalOwner.accountId != currentParent.accountId
             )
-                return@synchronized stopped()
-            if (storeId in handovers) return@synchronized handoverPending()
-            if (handovers.size >= CLIENT_LIMIT) return@synchronized capacity()
+                return@locked stopped()
+            if (storeId in handovers) return@locked handoverPending()
+            if (handovers.size >= CLIENT_LIMIT) return@locked capacity()
             val entry = entries[storeId]
             if (
                 entry != null &&
@@ -409,7 +401,7 @@ internal class SdkRuntimeRegistry<T : Any>(
                         entry.owner.setupBinding() != originalOwner.setupBinding() ||
                         entry.deviceId != deviceId)
             )
-                return@synchronized busy()
+                return@locked busy()
             val gate =
                 SdkRuntimeHandoverGate(
                     storeId,
@@ -429,7 +421,7 @@ internal class SdkRuntimeRegistry<T : Any>(
         gate: SdkRuntimeHandoverGate,
         currentParent: CollaborationNativeParent,
     ): Boolean =
-        synchronized(monitor) {
+        monitor.locked {
             handovers[gate.storeId] === gate &&
                 !gate.invalidated &&
                 gate.space == null &&
@@ -459,25 +451,25 @@ internal class SdkRuntimeRegistry<T : Any>(
         expectedResource: T?,
         replacingCredentials: Boolean,
     ): AppResult<SdkRuntimeHandoverGate> =
-        synchronized(monitor) {
-            if (storeId in handovers) return@synchronized handoverPending()
-            if (handovers.size >= CLIENT_LIMIT) return@synchronized capacity()
-            if (retention != null && !retainsParent(owner)) return@synchronized stopped()
+        monitor.locked {
+            if (storeId in handovers) return@locked handoverPending()
+            if (handovers.size >= CLIENT_LIMIT) return@locked capacity()
+            if (retention != null && !retainsParent(owner)) return@locked stopped()
             if (replacingCredentials && retention != null && retention?.foreground != owner)
-                return@synchronized stopped()
+                return@locked stopped()
             val entry = entries[storeId]
             if (
                 entry != null &&
                     (entry.space != null || entry.owner != owner || entry.deviceId != deviceId)
             )
-                return@synchronized busy()
-            if (entry?.resource !== expectedResource) return@synchronized busy()
+                return@locked busy()
+            if (entry?.resource !== expectedResource) return@locked busy()
             if (
                 expectedResource != null &&
                     (entry?.retired != false ||
                         (!replacingCredentials && !available(expectedResource)))
             )
-                return@synchronized busy()
+                return@locked busy()
             val gate = SdkRuntimeHandoverGate(storeId, owner, deviceId, replacingCredentials)
             handovers[storeId] = gate
             entry?.let(::retire)
@@ -489,17 +481,17 @@ internal class SdkRuntimeRegistry<T : Any>(
     fun reserveCredentialReplacement(
         gate: SdkRuntimeHandoverGate
     ): AppResult<SdkRuntimeReservation<T>> =
-        synchronized(monitor) {
+        monitor.locked {
             if (handovers[gate.storeId] !== gate || gate.invalidated || !gate.replacingCredentials)
-                return@synchronized handoverPending()
+                return@locked handoverPending()
             val decision = retention
             if (
                 decision != null &&
                     (!retainsParent(gate.owner) || decision.foreground != gate.owner)
             )
-                return@synchronized stopped()
-            if (gate.storeId in entries) return@synchronized busy()
-            if (entries.size >= CLIENT_LIMIT) return@synchronized capacity()
+                return@locked stopped()
+            if (gate.storeId in entries) return@locked busy()
+            if (entries.size >= CLIENT_LIMIT) return@locked capacity()
             val next =
                 SdkRuntimeReservation<T>(gate.storeId, gate.owner, gate.deviceId, foreground = true)
             entries[gate.storeId] = next
@@ -509,19 +501,19 @@ internal class SdkRuntimeRegistry<T : Any>(
         }
 
     fun handoverResource(gate: SdkRuntimeHandoverGate): T? =
-        synchronized(monitor) {
+        monitor.locked {
             check(handovers[gate.storeId] === gate)
             entries[gate.storeId]?.resource
         }
 
     fun handoverDrained(gate: SdkRuntimeHandoverGate): Boolean =
-        synchronized(monitor) {
+        monitor.locked {
             check(handovers[gate.storeId] === gate)
             gate.storeId !in entries
         }
 
     fun endHandover(gate: SdkRuntimeHandoverGate) =
-        synchronized(monitor) {
+        monitor.locked {
             if (handovers[gate.storeId] === gate) {
                 handovers.remove(gate.storeId)
                 changed()
@@ -530,19 +522,19 @@ internal class SdkRuntimeRegistry<T : Any>(
 
     /** Expiry/caller cancellation releases only this reference; foreground ownership survives. */
     fun releaseBorrow(borrow: SdkRuntimeBorrow<T>, failure: Failure): T? =
-        synchronized(monitor) {
+        monitor.locked {
             borrow.failure.compareAndSet(null, failure)
             borrowers.remove(borrow)
             val entry = borrow.reservation
-            if (entries[entry.storeId] !== entry) return@synchronized null
+            if (entries[entry.storeId] !== entry) return@locked null
             retireIfIdle(entry)
             entry.resource.takeIf { entry.retired }
         }
 
     /** Only the acquisition cleanup or fully drained native owner may release its reservation. */
     fun released(reservation: SdkRuntimeReservation<T>) =
-        synchronized(monitor) {
-            if (entries[reservation.storeId] !== reservation) return@synchronized
+        monitor.locked {
+            if (entries[reservation.storeId] !== reservation) return@locked
             entries.remove(reservation.storeId)
             borrowers
                 .filter { it.reservation === reservation }

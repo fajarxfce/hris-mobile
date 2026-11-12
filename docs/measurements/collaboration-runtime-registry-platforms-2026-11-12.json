@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-12",
+  "scope": "Shared SDK runtime registry",
+  "validationState": "native-and-focused-passed; full check running",
+  "sourceFiles": 5143,
+  "sourceManifestSha256": "d42bae7604ca4b3d37fad253ab660c806bf2dc4e51e31d03089b9dfa6edba7c4",
+  "focusedDesktopCases": 21,
+  "focusedBrowserCases": 21,
+  "androidHostCases": 955,
+  "all952PriorAndroidIdentitiesRetained": true,
+  "movedTestFilesByteIdentical": 2,
+  "registryLogicOtherwiseUnchanged": true,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152433161,
+    "sha256": "dd2568e9aa6a55b7da571383ef31c1f1d055bd63b30c77f849e5e8e5152e16a0"
+  },
+  "proofCases": 21,
+  "native": {
+    "tests": 9,
+    "counts": {
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "elapsedSeconds": 426.365,
+    "bootSeconds": 28.417,
+    "cases": [
+      "dev.fajar.hris.NativeEventReadsTest.completedIncomingReferencesRemainExhaustedAcrossOfflineReopen()",
+      "dev.fajar.hris.NativeEventReadsTest.exactEncryptedEventsSurviveOriginalRuntimeAdoptionWithoutPresentationRelabeling()",
+      "dev.fajar.hris.NativeEventReadsTest.nativeIncomingHintsPreserveExactSyncPositionsAndObserveStoredKeys()",
+      "dev.fajar.hris.NativeEventReadsTest.nativeIncomingReceiptSurvivesLostReplyForegroundAndOfflineReopen()",
+      "dev.fajar.hris.NativeEventReadsTest.registeredIncomingWorkerRetainsContentBeforeEofAndStopsAcrossOfflineReopen()",
+      "dev.fajar.hris.NativeSpaceLateKeysTest.realKeyDuringLostReceiptReplySurvivesQuietObservationAndOfflineReopen()",
+      "dev.fajar.hris.NativeSpaceLateKeysTest.retainedLateKeyRecoveryDrainsThroughRegisteredWorkerAfterProcessLoss()",
+      "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.newSpaceOriginalSharesTheQueueWithoutChangingCompanyOwnershipAfterProcessDeath()",
+      "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.originalQueueSurvivesLostProjectionAndOfflineRecipientWithoutReplacement()"
+    ],
+    "resultSha256": "ccc0749be8e8def11771c771aaba3d1ff07cc8c4be0de72f27065965b81f0a8e",
+    "reportHashes": {
+      "TEST-dev.fajar.hris.NativeSpaceLateKeysTest.xml": "1015f4600b615a9353317ea45c6345219b65b038b7dc563494111b303d1a6465",
+      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": "375036415d60e5ba769d0c89459f336a29381c9f803b8e30971833d78e95d262",
+      "TEST-dev.fajar.hris.NativeEventReadsTest.xml": "34a28ab524be745061192773e70ef551da58a0b76dc016d6ee828b6c250bd6c0"
+    },
+    "groupSourceManifestSha256": "9b8904cafd1425e9c7e7d146e36a49d30c47b7fdff9a9384de8d28cae1552d38"
+  },
+  "nativeLibrarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+  "fullCheckSession": 2779,
+  "fullAccepted": false,
+  "appleMonitorNativeAcceptance": false,
+  "phoneTouched": false,
+  "emulatorStopped": true,
+  "compilerOverlap": false,
+  "all54PrdGroupsOpen": true
+}

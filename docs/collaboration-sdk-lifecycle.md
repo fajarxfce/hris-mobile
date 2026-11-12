@@ -1,5 +1,8 @@
 # Product SDK session ownership
 
+The [shared runtime registry](collaboration-runtime-registry-platforms.md) retains the existing
+ownership decisions while using reentrant JVM/Apple monitors and the browser's event loop.
+
 This is the implementation continuation for the pinned Android Rust SDK. Native
 runtime composition now has protected store reopening, application admission/DI,
 lease-owned synchronization and [owned room/timeline observers](collaboration-timeline.md).
