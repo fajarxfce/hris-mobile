@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 01:20 UTC.
+Updated 12 November 2026, 01:23 UTC.
 The user authorized the complete PRD, per-commit pushes and validated install-only phone updates.
 All 54 groups remain OPEN. Keep working beyond this gate. No subagents. Read AGENTS.md and architecture.
 Usecases own repository orchestration/policy; repositories map their datasources; ViewModels own UI.
@@ -35,15 +35,16 @@ hosted-43133923106/state.json have exact source/run; never redispatch.
 
 ## Next Space implementation
 
-The 15-file draft remains at .work/original-local-key-page-content-2026-11-11/next-space-key-page-draft.
-It is UNAPPLIED and UNCOMPILED; static reviewComplete is true. Read next-space-key-page-state.json and
-next-space-key-page-projection-review.md in that workspace. It contains 19 reader, 34 acquisition and
-35 completion cases; four existing files and eleven new files. Existing-file hash guards are prepared;
-verify they still match this final Original baseline. Expected: 5,067 inputs, 13,598 local cases,
-484 focused (243 JVM/241 browser), 16,292 hosted (11,576 portable + 4,716 Apple).
-prepare-space-key-projection.py and publish-space-key-projection.py are PREPARED, NOT EXECUTED.
-Both known Original fixture defects are also corrected in the Space draft. Apply only after this
-Original change is accepted, committed, pushed and dispatched.
+The reviewed15-file Space draft was APPLIED successfully after all Original gates/push/dispatch.
+Workspace .work/space-key-page-projection-2026-11-12; baselinee4bfc84c981e7321b8fdaad36443ca7d25578c60,
+13,422cases/5,056inputs. prepare-space-key-projection.py HAS EXECUTED; do not rerun it.
+Fifteen source files (four existing/eleven new) remain UNCOMMITTED/UNTESTED. Format1/26869 is
+RUNNING, the only compiler. Read state/result before starting another operation.
+Expected5,067inputs,13,598local,484focused(243JVM/241browser),16,292hosted(11,576portable/4,716Apple).
+Reader19/acquisition34/completion35 new common cases preserve primary25, loader26, reference12,
+policy8, storage56/26 and both graph controls. Both known Original fixture defects are corrected.
+Guarded run/freeze/accept/publish/hosted/accepted-handoff scripts are prepared in the new workspace.
+No global service/producer activation. All54groups remainOPEN.
 
 Preserve logical Space and Original-alias storage scope, historical traversal/provider identity and
 actual current registered physical provenance. Acquisition reuses scoped local facts before native
