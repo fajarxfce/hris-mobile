@@ -15,7 +15,8 @@ a new concurrent-request fixture set pendingRetryRequired without its required c
 The existing policy correctly rejected it. Fixture now supplies both and asserts structural validity.
 Production/assertions and all case IDs preserved; both failed candidates/reviews archived.
 Format30635 REAPED PASS35.360s; focused3/39306 REAPED PASS398.448s/195cases,
-including Wasm and iOS metadata compilation. Browser1/45575 is RUNNING (193 expected). Workspace
+including Wasm and iOS metadata compilation. Browser1/45575 REAPED PASS153.773s/193cases. Focused acceptance verifies388 cases,
+exact selected old IDs and unchanged sources/library. Full1/85112 is RUNNING; expected13,422. Workspace
 .work/original-key-reference-completion-2026-11-11; source baseline6c40ccef1361564c706e10243dc183f18088bf5e,
 13,358 cases/5,050 inputs. prepare-next-original-key-completion.py and configure-next-original-key-completion.py
 HAVE EXECUTED; do not rerun old configure over the focused-coverage refinement.
@@ -29,7 +30,7 @@ Old330 prediction is superseded only for focused selection; full13,422 and hoste
 Expected/run/freeze/accept/dispatch/publisher scripts are prepared in the new workspace. Publication
 requires reviews for any future failed attempts. No native/primary/global activation. Early source architecture check48154 REAPED PASS; this is not compilation or final acceptance.
 Frozen candidate5,056inputs/e89a643ad7cd2611c512ee18f2e2dedc1545ca82d44394a20544e9a73f7f68fd.
-Starter68417 is reaped and accepted;45575 is the only compiler. Keep working through the PRD.
+Starter68417 is reaped and accepted;85112 is the only compiler. Keep working through the PRD.
 
 ## Local recovery content and browser reporting accepted
 
