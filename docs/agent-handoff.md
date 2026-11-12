@@ -20,8 +20,8 @@ Focused coverage now explicitly includes the changed29 page-acquisition cases al
 20 primary completion,9 policy,56 storage,18 metadata and2 graph controls:195 JVM+193 browser=388.
 Old330 prediction is superseded only for focused selection; full13,422 and hosted16,028 unchanged.
 Expected/run/freeze/accept/dispatch/publisher scripts are prepared in the new workspace. Publication
-requires reviews for any future failed attempts. No native/primary/global activation. Format/test
-only after Starter68417 is reaped; do not start a second compiler. Keep working through the PRD.
+requires reviews for any future failed attempts. No native/primary/global activation. Early source architecture check48154 REAPED PASS; this is not compilation or final acceptance.
+Format/compiled tests only after Starter68417 is reaped; do not start a second compiler. Keep working through the PRD.
 
 ## Local recovery content and browser reporting accepted
 
@@ -118,7 +118,7 @@ execution does not prove native SDK8 Apple capabilities. Physical iPhone testing
 
 ## Device and protected state
 
-Phone10.77.77.3:5555 timeout81622REAPED23:57:12UTC/20.021s; no install. Retry no earlier00:30UTC12Nov.
+Phone10.77.77.3:5555 timeout40792REAPED00:30:49UTC12Nov/20.021s; no install. Retry no earlier01:03UTC12Nov.
 Release89 SDK6 ready: `.work/release-phone-2026-11-10-build89/install.py --install-only`. Announce
 before installing. Explicit serial/signature/hash guards; **never launch, drive, reset or uninstall
 on the employee's phone**. APK123809167B/4c790d2314f53c37bfdc3108ac4b801ab33aa9fc177904001fd16793fd0ef52d.
