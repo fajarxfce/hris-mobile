@@ -4,6 +4,8 @@ import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationMessageId
 import dev.fajar.starter.database.*
 
+internal const val COLLABORATION_ACCOUNT_HISTORY_RAW_PAGE_LIMIT = 16
+
 /** Only UUID Company paths and explicit space/v1 paths describe history under this prefix. */
 internal class CollaborationAccountIncomingHistoryLocatorPageMapper(
     private val scope: ReplicaScope,
@@ -12,13 +14,18 @@ internal class CollaborationAccountIncomingHistoryLocatorPageMapper(
 ) {
     init {
         require(limit in 1..16)
-        validateReplicaPartitionPage(scope, COLLABORATION_HISTORY_PREFIX, after, limit + 1)
+        validateReplicaPartitionPage(
+            scope,
+            COLLABORATION_HISTORY_PREFIX,
+            after,
+            COLLABORATION_ACCOUNT_HISTORY_RAW_PAGE_LIMIT + 1,
+        )
         if (after != null) location(after)
     }
 
     fun map(observed: List<ReplicaCheckpoint>): CollaborationAccountIncomingHistoryLocatorPage {
         val rows = observed.toList()
-        require(rows.size <= limit + 1)
+        require(rows.size <= COLLABORATION_ACCOUNT_HISTORY_RAW_PAGE_LIMIT + 1)
         require(rows.zipWithNext().all { (a, b) -> a.handle.partition < b.handle.partition })
         val mapped =
             rows.map { row ->
@@ -27,9 +34,18 @@ internal class CollaborationAccountIncomingHistoryLocatorPageMapper(
                 require(after == null || row.handle.partition > after)
                 location(row.handle.partition)
             }
+        val selected = mutableListOf<CollaborationAccountIncomingHistoryLocator>()
+        var consumed = 0
+        val rawLimit = minOf(rows.size, COLLABORATION_ACCOUNT_HISTORY_RAW_PAGE_LIMIT)
+        while (consumed < rawLimit) {
+            val locator = mapped[consumed]
+            if (locator != null && selected.size == limit) break
+            if (locator != null) selected += locator
+            consumed++
+        }
         return CollaborationAccountIncomingHistoryLocatorPage(
-            mapped.take(limit).filterNotNull(),
-            if (rows.size > limit) rows[limit - 1].handle.partition else null,
+            selected.toList(),
+            if (consumed < rows.size) rows[consumed - 1].handle.partition else null,
         )
     }
 

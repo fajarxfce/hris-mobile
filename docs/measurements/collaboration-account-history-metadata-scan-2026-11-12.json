@@ -1,0 +1,135 @@
+{
+  "date": "2026-11-12",
+  "scope": "Bounded account history metadata discovery",
+  "baseCommit": "f11eea101a9f273a5845668b4bd37e4bdcb792e9",
+  "sourceManifestSha256": "0741f7720eca8ca6b2ae6ff1fd9303bc1501b848f06eea95401b47ed50c406b5",
+  "sourceInputs": 5133,
+  "changedFiles": 4,
+  "productionFiles": 2,
+  "newCommonMapperCases": 5,
+  "newSharedDatabaseCases": 1,
+  "acceptedLocal": true,
+  "nativeWorkerAccepted": false,
+  "phoneRelease": false,
+  "liveDeployment": false,
+  "red": {
+    "expectedFailureReproduced": true,
+    "freshCounts": {
+      "tests": 47,
+      "failures": 8,
+      "errors": 0,
+      "skipped": 0
+    },
+    "elapsedSeconds": 66.543,
+    "sourceManifestSha256": "66e73f7413cfb8d53e646059746e6ab597e22750aef1e883548fd8018d048666",
+    "failingCases": [
+      "aFullRawPageDoesNotConsumeItsLookaheadEvenWithNoHistory",
+      "aSecondHistoryRemainsAfterInterveningInternalMetadata",
+      "accountDiscoveryRequestsOnlyOneBoundedMetadataPageAndClosesObservation",
+      "accountPageOfInternalRecordsAdvancesBeforeLaterSpaceHistory",
+      "rootsAndBrowseHistoryDoNotConsumeTheIncomingLocatorBudget",
+      "smallAccountPageSkipsProjectionMetadataAndKeepsUnreturnedHistoryAcrossReopen",
+      "smallLogicalLimitSkipsInternalMetadataBeforeTheFirstHistory",
+      "trailingInternalMetadataDoesNotCreateAnotherEmptySeek"
+    ]
+  },
+  "focused": {
+    "cases": 113,
+    "desktop": 47,
+    "android": 19,
+    "browser": 47,
+    "elapsedSeconds": 263.917,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "reportManifestSha256": "0f2d5ae08a8cec769ff57a86bccccee12742c87302410169d36888586cdd30c1"
+  },
+  "full": {
+    "validatedCases": 14555,
+    "freshCases": 4784,
+    "sourceMatchedProofCases": 21,
+    "unchangedDependencyVerifiedCases": 9750,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "startedAt": "2026-11-12T12:56:49.709202+00:00",
+    "elapsedSeconds": 482.295,
+    "reportManifestSha256": "48441b26346a4b9de21e3042e09ba295bcb89c6bd37217a2ee79981420fb5296"
+  },
+  "reviewedMethodRename": {
+    "class": "CollaborationAccountIncomingHistoryLocatorPageMapperTest",
+    "old": "rootsAndBrowseHistoryAdvanceWithoutBeingIncomingWork",
+    "new": "rootsAndBrowseHistoryDoNotConsumeTheIncomingLocatorBudget"
+  },
+  "reviewedTargetCaseReplacements": 3,
+  "proofApk": {
+    "bytes": 152426868,
+    "sha256": "d0b076feecf5b29543eb36ae218bd26de1c3320ac6e3faf60b07f8ba5244d7c9"
+  },
+  "sdkVersion": "26.10.23-hris.8",
+  "sdkX86NativeSha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+  "native": {
+    "fixture": "96d6a8f7-4513-4aa7-9274-d046840c3f87",
+    "startedAt": "2026-11-12T12:53:40.965423+00:00",
+    "elapsedSeconds": 125.28,
+    "bootSeconds": 28.42,
+    "counts": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "noCompilationDuringEmulator": true,
+    "emulatorStopped": true,
+    "phoneTouched": false,
+    "readOnlyInspectionPassed": true,
+    "failureCategory": "IllegalStateException",
+    "failureFrames": [
+      "dev.fajar.hris.collaboration.proof.HrisSpaceIncomingWorkerProofHost.consumeScheduled:134",
+      "dev.fajar.hris.collaboration.proof.HrisSpaceIncomingWorkerProofHost.access$consumeScheduled:17",
+      "dev.fajar.hris.collaboration.proof.HrisSpaceIncomingWorkerProofHost$consumeScheduled$1.invokeSuspend:18"
+    ],
+    "native": {
+      "requests": 18,
+      "registration": 1,
+      "bootstrapReplay": 1
+    },
+    "matrix": {
+      "requests": 27,
+      "encryptedSend": 4,
+      "sync": 5,
+      "secretStorage": 2,
+      "providerPage": 2
+    },
+    "activeHttpFailures": 0,
+    "storageFailures": 0,
+    "startupFailures": 2,
+    "boundedCompletionBeforeCoveredHint": true,
+    "firstPageContentVisible": true,
+    "coveredHintPassed": false,
+    "finalRepeatEqualityReached": false,
+    "offlineWorkerReopenReached": false
+  },
+  "checks": [
+    "full check",
+    "Android host tests",
+    "Android release compilation/lint",
+    "Wasm browser tests",
+    "iOS source-set metadata",
+    "proof APK/unit tests",
+    "format",
+    "architecture",
+    "detekt"
+  ],
+  "hostedExpected": {
+    "desktop": 5993,
+    "android": 952,
+    "browser": 5588,
+    "portable": 12533,
+    "apple": 5101,
+    "total": 17634
+  },
+  "hostedDispatched": false
+}

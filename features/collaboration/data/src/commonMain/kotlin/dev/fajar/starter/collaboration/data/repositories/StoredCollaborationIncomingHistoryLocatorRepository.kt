@@ -47,7 +47,7 @@ class StoredCollaborationIncomingHistoryLocatorRepository(private val replicas: 
                         scope,
                         COLLABORATION_HISTORY_PREFIX,
                         after,
-                        limit + 1,
+                        COLLABORATION_ACCOUNT_HISTORY_RAW_PAGE_LIMIT + 1,
                     )
                     .first()
             )

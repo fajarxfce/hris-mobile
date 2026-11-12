@@ -388,21 +388,57 @@ abstract class CollaborationIncomingHistoryLocatorStorageContract {
             COLLABORATION_HISTORY_PREFIX + "recipient-observation/" + historyId(index)
         )
         f.publish(f.partition(20, space = true))
-        val first = f.readAccount()
-        assertTrue(first.locators.isEmpty())
-        assertNotNull(first.next)
-        val last = f.readAccount(first.next)
-        assertEquals(
-            listOf(
-                CollaborationAccountIncomingHistoryLocator.Space(
-                    f.space.spaceId,
-                    CollaborationIncomingHistoryLocator(historyId(20), historyId(99)),
-                )
-            ),
-            last.locators,
-        )
-        assertNull(last.next)
+        for (limit in listOf(1, 16)) {
+            val first = f.readAccount(limit = limit)
+            assertTrue(first.locators.isEmpty())
+            assertNotNull(first.next)
+            val last = f.readAccount(first.next, limit = limit)
+            assertEquals(
+                listOf(
+                    CollaborationAccountIncomingHistoryLocator.Space(
+                        f.space.spaceId,
+                        CollaborationIncomingHistoryLocator(historyId(20), historyId(99)),
+                    )
+                ),
+                last.locators,
+            )
+            assertNull(last.next)
+        }
     }
+
+    @Test
+    fun smallAccountPageSkipsProjectionMetadataAndKeepsUnreturnedHistoryAcrossReopen() =
+        withDatabase { f ->
+            f.publish(f.partition(10))
+            val skipped =
+                (1..6).map { COLLABORATION_HISTORY_PREFIX + "notifications/" + historyId(it) }
+            skipped.forEach { f.publish(it) }
+            f.publish(f.partition(20, space = true))
+            val first = f.readAccount(limit = 1)
+            assertEquals(
+                listOf(
+                    CollaborationAccountIncomingHistoryLocator.Company(
+                        f.access.companyId,
+                        CollaborationIncomingHistoryLocator(historyId(10), historyId(99)),
+                    )
+                ),
+                first.locators,
+            )
+            assertEquals(skipped.last(), first.next)
+            f.local.reopen()
+            val last = f.readAccount(assertNotNull(first.next), limit = 1)
+            assertEquals(
+                listOf(
+                    CollaborationAccountIncomingHistoryLocator.Space(
+                        f.space.spaceId,
+                        CollaborationIncomingHistoryLocator(historyId(20), historyId(99)),
+                    )
+                ),
+                last.locators,
+            )
+            assertNull(last.next)
+            assertNull(f.local.keys.read())
+        }
 
     @Test
     fun accountDiscoveryExcludesStagingGenerationsAcrossReopen() = withDatabase { f ->
@@ -549,9 +585,13 @@ abstract class CollaborationIncomingHistoryLocatorStorageContract {
                 }
             assertIs<AppResult.Failed>(f.repository(measured).read(f.account, limit = 17))
             assertEquals(0, requested)
-            assertEquals(1, f.readAccount(store = measured).locators.size)
-            assertEquals(17, requested)
-            assertTrue(released)
+            for (limit in listOf(1, 16)) {
+                requested = 0
+                released = false
+                assertEquals(1, f.readAccount(limit = limit, store = measured).locators.size)
+                assertEquals(17, requested)
+                assertTrue(released)
+            }
             assertNull(f.local.keys.read())
         }
 

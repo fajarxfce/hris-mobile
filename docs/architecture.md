@@ -1,5 +1,7 @@
 # Architecture
 
+[Bounded account metadata discovery](collaboration-account-history-metadata-scan.md) skips internal projections within one finite read while preserving unreturned history and exact cursor scope.
+
 [Registered-source discovery](collaboration-space-incoming-discovery.md) shares existing incoming work and atomically strengthens unresolved Joined inventory without changing worker bounds.
 
 [Process-owned incoming sources](collaboration-space-application-sources.md) bind exact native publication to serial key/sync retention, with cancellation/join and finite foreground resume.

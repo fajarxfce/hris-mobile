@@ -80,17 +80,19 @@ class CollaborationAccountIncomingHistoryLocatorPageMapperTest {
     }
 
     @Test
-    fun rootsAndBrowseHistoryAdvanceWithoutBeingIncomingWork() {
+    fun rootsAndBrowseHistoryDoNotConsumeTheIncomingLocatorBudget() {
         val rows =
             listOf(
                 row(partition(lane = null)),
                 row(partition(lane = "pages")),
                 row(partition(space = true)),
             )
-        val first = mapper(limit = 2).map(rows)
-        assertTrue(first.locators.isEmpty())
-        assertEquals(rows[1].handle.partition, first.next)
-        assertEquals(1, mapper(first.next).map(rows.takeLast(1)).locators.size)
+        val page = mapper(limit = 2).map(rows)
+        assertEquals(
+            listOf(CollaborationAccountIncomingHistoryLocator.Space(historyId(1), history())),
+            page.locators,
+        )
+        assertNull(page.next)
     }
 
     @Test
@@ -257,5 +259,76 @@ class CollaborationAccountIncomingHistoryLocatorPageMapperTest {
         )
         assertFalse(page.toString().contains(historyId(1)))
         assertFalse(page.locators.single().toString().contains(historyId(1)))
+    }
+
+    @Test
+    fun smallLogicalLimitSkipsInternalMetadataBeforeTheFirstHistory() {
+        val rows =
+            listOf(
+                row(partition(lane = null)),
+                row(partition(lane = "pages")),
+                row(COLLABORATION_HISTORY_PREFIX + "delivery/owner"),
+                row(COLLABORATION_HISTORY_PREFIX + "space-incoming-demand/v1/" + historyId(1)),
+                row(partition(space = true)),
+            )
+        val page = mapper(limit = 1).map(rows)
+        assertEquals(
+            listOf(CollaborationAccountIncomingHistoryLocator.Space(historyId(1), history())),
+            page.locators,
+        )
+        assertNull(page.next)
+    }
+
+    @Test
+    fun aFullRawPageDoesNotConsumeItsLookaheadEvenWithNoHistory() {
+        val skipped =
+            (1..16).map { row(COLLABORATION_HISTORY_PREFIX + "delivery/" + historyId(it)) }
+        val history = row(partition(space = true))
+        val first = mapper(limit = 1).map(skipped + history)
+        assertTrue(first.locators.isEmpty())
+        assertEquals(skipped.last().handle.partition, first.next)
+        val last = mapper(first.next, 1).map(listOf(history))
+        assertEquals(1, last.locators.size)
+        assertNull(last.next)
+    }
+
+    @Test
+    fun aSecondHistoryRemainsAfterInterveningInternalMetadata() {
+        val first = row(partition())
+        val skipped = (1..4).map { row(COLLABORATION_HISTORY_PREFIX + "delivery/" + historyId(it)) }
+        val last = row(partition(space = true))
+        val page = mapper(limit = 1).map(listOf(first) + skipped + last)
+        assertEquals(
+            listOf(CollaborationAccountIncomingHistoryLocator.Company(historyId(1), history())),
+            page.locators,
+        )
+        assertEquals(skipped.last().handle.partition, page.next)
+        val remaining = mapper(page.next, 1).map(listOf(last))
+        assertEquals(
+            listOf(CollaborationAccountIncomingHistoryLocator.Space(historyId(1), history())),
+            remaining.locators,
+        )
+        assertNull(remaining.next)
+    }
+
+    @Test
+    fun trailingInternalMetadataDoesNotCreateAnotherEmptySeek() {
+        val rows =
+            listOf(row(partition())) +
+                (1..4).map { row(COLLABORATION_HISTORY_PREFIX + "delivery/" + historyId(it)) }
+        val page = mapper(limit = 1).map(rows)
+        assertEquals(1, page.locators.size)
+        assertNull(page.next)
+    }
+
+    @Test
+    fun foreignLookaheadAfterSkippedMetadataStillFailsClosed() {
+        val skipped =
+            (1..16).map { row(COLLABORATION_HISTORY_PREFIX + "delivery/" + historyId(it)) }
+        val other =
+            row(partition(space = true)).let {
+                it.copy(handle = it.handle.copy(scope = scope.copy(accountKey = "b".repeat(64))))
+            }
+        assertFailsWith<IllegalArgumentException> { mapper(limit = 1).map(skipped + other) }
     }
 }
