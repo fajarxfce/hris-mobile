@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 23:21 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 23:29 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -125,13 +125,24 @@ The complete caller search found native proof usage absent from the initial five
 Both proof call sites now capture an explicit intent before submission and assert exact
 retention; the adapter receives that intent unchanged. Six new domain methods cover delayed
 reads/mutex, timestamp-only conflict, wrong readback, committed cancellation and invalid input.
-All old assertions remain. Format1/16872 REAPED PASS36.025s. Focused1 is running, expected59;
-full expects14,828 with all14,816 prior IDs and12 new JVM/browser cases. Native execution of
-the affected Original/Space delivery scenarios is required after compilation. Keep sources
-frozen, one local compiler OR emulator. This increment has no acceptance or phone claim yet.
+All old assertions remain. Format1/16872 REAPED PASS36.025s. Focused1/54370 REAPED
+PASS59/370.927s and strict audit passes. Frozen5177inputs/
+8a3baeef51fc73ca923b7cc270d69b68f49f796c179a399b52a6582e88a4ca58.
+Full1/99965 is ACTIVE from23:28UTC, expected14,828 with all14,816 prior IDs and12 new
+JVM/browser cases. Group.work/space-composer-submission-2026-11-12 prepares two exact existing
+NativeSpaceOriginalDeliveryTest scenarios against precompiled Group source-2, without changing
+assertions or touching the phone. Run after full acceptance and immutable proof copy, with all
+compiler sessions reaped. The other eight prior native scenarios remain historical evidence;
+this scoped run will not claim ten new executions. This increment is not fully accepted yet.
 
 After focused/full/native checks, record and push before continuing Group drafts and UI.
 Review ownership and first-frame measurement requirements in docs/collaboration-organization-ui-plan.md.
+Next storage design is in Mobile.work/space-composer-storage-2026-11-12: seven isolated
+DRAFT source paths only, not applied or tested. Reuse existing draft/outbox repositories and
+codecs through typed ComposerCoordinates, preserving exact Company frame bytes and a separate
+Group partition. Add atomic Group recovery wake without a new polling loop. Required remaining
+work: actual Company frame-compatibility and Group encrypted-storage race/isolation tests,
+real app DI, and domain/finite-worker consumers before product activation. Review plan.json.
 All54 acceptance groups remain OPEN; continue beyond this checkpoint.
 
 Hosted follow-up43312753298 on exact1f47eeddb833054ae2b3d52c20439e6d11518a02:
