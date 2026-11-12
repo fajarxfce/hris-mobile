@@ -37,5 +37,31 @@
     "status": "pending",
     "expectedPortable": 12604,
     "expectedApple": 5148
-  }
+  },
+  "hostedPortable": {
+    "sourceCommit": "dd405660a3ea920a4f27781f006d83b7b7fd636a",
+    "runId": 43273697021,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43273697021",
+    "jobId": 131394617779,
+    "artifactId": 13974525507,
+    "bytes": 4037017,
+    "sha256": "fa9f1356a26f09378e48f872649196a1b67b4292b6816e32a670c67fab8a7b8f",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreservedExceptReviewedReplacements": true,
+    "reviewedReplacements": 0,
+    "browserRuntimeCaseSuffixChanges": 5601,
+    "browserRuntimeChange": {
+      "fromSuffix": "[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+      "toSuffix": "[wasmJs, browser, ChromeHeadless157.0.0.0, Linux0.0.0]",
+      "priorCases": 5601
+    },
+    "counts": {
+      "desktopTest": 6027,
+      "testAndroidHostTest": 955,
+      "wasmJsBrowserTest": 5622
+    },
+    "reportManifestSha256": "ad113ab26dbac82f1d3acb2fc55f468343af799ef0fcbce652169ac06270839d",
+    "jobLogSha256": "dd74cf072c7939ae0038749081b7a54ece3798d6e8d9bab29778d51715fdc19c"
+  },
+  "browserAuditCorrection": "Exact Chrome156\u2192157 runtime suffix across5,601 prior cases; stable class/method/platform identities unchanged; failed auditor retained."
 }

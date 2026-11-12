@@ -1,10 +1,19 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 18:46 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 18:54 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
 is waived; native Apple/call/push behavior is not accepted merely by compilation.
+
+## Current next implementation
+
+Mobile .work/space-thread-history-routing-2026-11-12 is prepared from accepted312f294d.
+Read Mobile docs/collaboration-space-thread-history-plan.md. Review found no Space-aware presentation;
+existing Company and Space history observers remain separate. Implement typed local canonical-history
+selection with actual Original coordinates and separate Company/Space admission before wiring UI.
+No production code edited yet; no compiler/emulator active. Accepted native account proof is pushed:
+Mobile312f294d, Groupfdbb8efd (60283/99233 REAPED). Continue work beyond this checkpoint.
 
 ## Current completed increment
 
@@ -42,7 +51,9 @@ Both artifact digests/CRC/reports/logs audited. Apple5135 does not include the f
 See measurements/collaboration-runtime-registry-platforms-2026-11-12.json. Do not poll/rerun it.
 
 Inventory43273697021 on dd405660a3ea920a4f27781f006d83b7b7fd636a is IN_PROGRESS.
-Jobs: portable131394617779; Apple131394617992. Expect12,604portable and5,148Apple including
+Portable131394617779 is accepted12,604 (auditor13912 REAPED). Chrome156→157 changed only the
+launcher suffix on5,601 prior browser cases; exact methods/classes/platforms preserved. Failed auditor
+and audit-correction.json retained. Do not repeat portable. Apple131394617992 still runs; expect5,148 including
 exact13 inventory methods. After each successful job run Mobile
 `.work/apple-sdk-inventory-2026-11-12/hosted-audit.py portable|apple hosted-43273697021`.
 
