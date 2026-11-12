@@ -39,7 +39,9 @@ The reviewed15-file Space draft was APPLIED successfully after all Original gate
 Workspace .work/space-key-page-projection-2026-11-12; baselinee4bfc84c981e7321b8fdaad36443ca7d25578c60,
 13,422cases/5,056inputs. prepare-space-key-projection.py HAS EXECUTED; do not rerun it.
 Fifteen source files (four existing/eleven new) remain UNCOMMITTED/UNTESTED. Format1/26869 is
-RUNNING, the only compiler. Read state/result before starting another operation.
+REAPED PASS37.580s. Candidate5,067inputs/2dd3b692d1bb649fe572317bd69dd1f4de4aff0fe98ff004843e094d055e0b91.
+Focused1/42704 RUNNING, the only compiler. All159 selected domain cases have passed;
+wait for complete result and reap before browser/full. Read state/result before another operation.
 Expected5,067inputs,13,598local,484focused(243JVM/241browser),16,292hosted(11,576portable/4,716Apple).
 Reader19/acquisition34/completion35 new common cases preserve primary25, loader26, reference12,
 policy8, storage56/26 and both graph controls. Both known Original fixture defects are corrected.
@@ -51,6 +53,13 @@ actual current registered physical provenance. Acquisition reuses scoped local f
 reads; primary transport admission stays intact. The primary fixture throws if the new historical
 dependencies are used. Completion uses only the Space recovery.complete overload. DI/graph drafts
 include the now-accepted Original completion graph; do not replace it with an earlier version.
+Four production files are drafted (UNAPPLIED/UNREVIEWED, NO tests yet) in the active Space
+workspace's next-source-availability-draft. Read next-source-availability-state.json. They add
+SourceUnavailable for a valid current registration serving another Company and a typed account
+Space locator overload preserving its actual spaceId, both with a final registration fence.
+Preserve generic failure/denial semantics and add explicit unavailable-path tests before review.
+The global-design notes also require confirming local status after completing an older generation;
+a null receipt cursor may have promoted the requested generation and cannot mean global EOF.
 Then finish bounded global recovery service, unavailable-source outcomes, atomic primary EOF demotion
 with request/wake, loss-aware key receipts and listener ownership/drain, and 64-room liveness before
 activating producers. Existing global policy separates more pages from unresolved content and sleeps
@@ -63,8 +72,9 @@ cf23e510352c001c8d6c008550576f2e7a00fc0920ba22b50d0648f30084cc8a. Preserve three
 upstream missing reporter LF, introduced module-config omission, and the existing AppFlow readiness race.
 All were investigated; assertions/timeouts were not weakened. The Node evidence publisher's Spec/TAP
 format mismatch was separately corrected without rerunning or changing successful results.
-Hosted 43126523314 status at this checkpoint: in_progress;
-artifactsAudited=False. Use its audit workspace and actual evidence.
+Hosted43126523314 COMPLETE/audited15,932=11,336portable+4,596Apple. Audits64714/52644 REAPED.
+All prior IDs/digests preserved; measurement owns exact hashes. Apple shared tests/unsigned host
+pass, without a native Matrix Apple claim. Do not redispatch.
 Starter badfc0d (push21019 REAPED) ports four generic reporter files and passed 906 fresh cases, preserving all
 358 prior IDs and all 44 browser task selections. Its measurement owns source/commit/build details.
 No HRIS policy or document UI case was ported. No repeat Starter gate without another generic delta.
