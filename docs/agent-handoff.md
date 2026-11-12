@@ -29,9 +29,9 @@ receive Clock.System at the data composition boundary; domain clocks remain inje
 explicitly resolves both, retaining the discovered missing-clock failure and its correction.
 No work creation, global/history acknowledgement or activation.
 
-Preparation, publisher and this writer HAVE EXECUTED. Commit/push source and evidence, then dispatch
-ONCE with guarded dispatch-hosted.py. Expected16,406=11,652portable+4,754Apple. Inspect any existing
-dispatch-attempt file/hosted-plan rather than repeating a dispatch.
+Reader source 0505c5363982179f592305bea4589eafbd884476 and Group0b153f10 pushed. Hosted43143623927 dispatched ONCE
+with session45668 REAPED at2026-11-12T02:45:45.945409+00:00. Expected16,406=11,652portable+4,754Apple;
+not accepted until artifacts are audited. Workspace hosted-43143623927; do not redispatch.
 
 ## Next: confirmed global advancement and application service
 
