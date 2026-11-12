@@ -39,18 +39,26 @@ Workspace .work/key-history-source-availability-2026-11-12. Preparation HAS EXEC
 source baseline85cb61b62b00ebec44566f16388aa5e4446ba76f. Six existing source files
 are applied and uncommitted. Format1/78418 REAPED PASS37.654s. Candidate5,067inputs/
 221c1dbac2fe1638749dd5c027225ac37168dae77a3c1a4b19b816160b23f57d.
-Focused1/57767 REAPED PASS419.308s/158JVM; browser1/83119 RUNNING, expected156.
-Expected314focused,13,626local,16,334hosted.
+Focused1/57767 REAPED PASS419.308s/158JVM; browser1/83119 REAPED PASS141.033s/156.
+Focused audit accepts314 and old IDs; full1/76183 RUNNING, expected13,626.
+Hosted16,334 remains undispatched pending acceptance/push.
 No global producer activation. Source availability does not convert operational
 failure, cancellation, changed ownership or denial into waiting.
 
 Next account-turn draft in this workspace is statically reviewed, UNAPPLIED and
 UNCOMPILED: next-account-turn-draft/state/expected/contract/review. Eight files
-(five new/three existing DI/graph/shared turn-identity policy),23 common cases; expectedfuture5,072inputs/13,672local/
-312focused/16,403hosted. One admitted account metadata row, stable recovery revision,
+(five new/three existing DI/graph/shared turn-identity policy),24 common cases; expectedfuture5,072inputs/13,674local/
+314focused/16,406hosted. One admitted account metadata row, stable recovery revision,
 current registered source and root; no creation/acknowledgement or worker activation.
 The old SourceAvailability draft/preparer in the Space workspace HAS EXECUTED;
 do not reapply it despite the older planning description below.
+
+The next account reader preparer/publisher/accepted writer are PREPARED NOT EXECUTED.
+Read next-global-completion-review.md in the active workspace: key-reference reads also
+request/coalesce generations, so they must not be blindly used as completion inspectors.
+Global completion needs nonmutating local progress, exact metadata coverage and the original
+bounded read/receipt. A receipt for the captured global generation can prove that pass despite
+promotion; another generation's EOF cannot. This remains design, with no worker activation.
 
 ## Next: serve bounded account recovery before enabling key producers
 
