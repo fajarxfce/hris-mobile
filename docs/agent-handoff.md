@@ -4,6 +4,18 @@ Updated 12 November 2026, 17:18 UTC. Continue implementation beyond checkpoints 
 All54 PRD acceptance groups remain OPEN. No subagents. One compiler OR emulator. Phone install-only:
 announce and select serial; never launch/drive UI, reset data or uninstall. ADB availability question is pending after a fresh connection timeout.
 
+## Release91 prepared from accepted shared-runtime source
+
+Mobile .work/release-phone-2026-11-12-build91 contains build/verification/startup/acceptance runners
+and exact accepted14,626-case/9-native input manifests. No build or installation has run yet.
+Use the next pushed Mobile HEAD in state.sourceCommit and keep Mobile HEAD/source inputs frozen
+through packaging acceptance. Build x86_64, verify it, cold/reopen the actual release on fresh owned
+2560MiB/2core emulator, inspect the screenshot, then build/verify ARM64 and accept-release.py.
+One compiler OR emulator. Same existing app ID, dev signer, SDK8 and server endpoint; version91 only.
+Release90 remains accepted but uninstalled,89 already installed earlier; never reinstall89. After91
+is accepted, it supersedes90 for a future announced install-only transfer. Phone remains unreachable;
+never launch/drive/reset/uninstall its UI. Shared CI43266580439 and Intel SDK8 CI43267867675 continue.
+
 ## Native late-key worker recovery fully validated
 
 Workspace .work/space-late-key-recovery-native-2026-11-12 in Mobile and Group.
