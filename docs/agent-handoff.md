@@ -14,7 +14,8 @@ Format3950 REAPED PASS34.919s; focused2/65032 REAPED FAILED115.461s/119cases/1fa
 a new concurrent-request fixture set pendingRetryRequired without its required cursor/boundary.
 The existing policy correctly rejected it. Fixture now supplies both and asserts structural validity.
 Production/assertions and all case IDs preserved; both failed candidates/reviews archived.
-Format30635 REAPED PASS35.360s; focused3/39306 is RUNNING. Workspace
+Format30635 REAPED PASS35.360s; focused3/39306 REAPED PASS398.448s/195cases,
+including Wasm and iOS metadata compilation. Browser1/45575 is RUNNING (193 expected). Workspace
 .work/original-key-reference-completion-2026-11-11; source baseline6c40ccef1361564c706e10243dc183f18088bf5e,
 13,358 cases/5,050 inputs. prepare-next-original-key-completion.py and configure-next-original-key-completion.py
 HAVE EXECUTED; do not rerun old configure over the focused-coverage refinement.
@@ -28,7 +29,7 @@ Old330 prediction is superseded only for focused selection; full13,422 and hoste
 Expected/run/freeze/accept/dispatch/publisher scripts are prepared in the new workspace. Publication
 requires reviews for any future failed attempts. No native/primary/global activation. Early source architecture check48154 REAPED PASS; this is not compilation or final acceptance.
 Frozen candidate5,056inputs/e89a643ad7cd2611c512ee18f2e2dedc1545ca82d44394a20544e9a73f7f68fd.
-Starter68417 is reaped and accepted;39306 is the only compiler. Keep working through the PRD.
+Starter68417 is reaped and accepted;45575 is the only compiler. Keep working through the PRD.
 
 ## Local recovery content and browser reporting accepted
 
@@ -128,7 +129,7 @@ execution does not prove native SDK8 Apple capabilities. Physical iPhone testing
 
 ## Device and protected state
 
-Phone10.77.77.3:5555 timeout40792REAPED00:30:49UTC12Nov/20.021s; no install. Retry no earlier01:03UTC12Nov.
+Phone10.77.77.3:5555 timeout35681REAPED01:03:37UTC12Nov/20.021s; no install. Retry no earlier01:36UTC12Nov.
 Release89 SDK6 ready: `.work/release-phone-2026-11-10-build89/install.py --install-only`. Announce
 before installing. Explicit serial/signature/hash guards; **never launch, drive, reset or uninstall
 on the employee's phone**. APK123809167B/4c790d2314f53c37bfdc3108ac4b801ab33aa9fc177904001fd16793fd0ef52d.
