@@ -11,6 +11,122 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 
 class CollaborationSpaceHistoryRecoveryServiceTest {
+
+    @Test
+    fun targetedVisitSkipsUnrelatedOriginalAndPublishedContentBeforeStartingAPass() = runTest {
+        for (space in listOf(false, true)) {
+            val f = SpaceHistoryRecoveryServiceFixture(testScheduler)
+            if (space) f.useSpace()
+            f.turn =
+                f.turn.copy(recovery = f.turn.recovery.copy(roomIds = listOf("!unrelated:test")))
+            f.selection = CollaborationSpaceHistoryRecoverySelection.Ready(f.turn)
+            assertEquals(
+                AppResult.Success(CollaborationSpaceHistoryRecoveryOutcome.Advanced),
+                f.run(),
+            )
+            assertEquals(
+                listOf("select", if (space) "load-space" else "load-original", "complete"),
+                f.calls,
+            )
+            val attempt = f.attempts.single()
+            if (space)
+                assertEquals(
+                    CollaborationSpaceHistoryRecoveryAttempt.PublishedOutsideTarget(f.spaceHistory),
+                    attempt,
+                )
+            else
+                assertEquals(
+                    CollaborationSpaceHistoryRecoveryAttempt.OriginalOutsideTarget(
+                        f.originalHistory
+                    ),
+                    attempt,
+                )
+            assertTrue(f.acquiredPages.isEmpty())
+            assertTrue(f.completedPages.isEmpty())
+        }
+    }
+
+    @Test
+    fun targetedMatchingRoomStillRetainsContentBeforeGlobalCompletion() = runTest {
+        for (space in listOf(false, true)) {
+            val f = SpaceHistoryRecoveryServiceFixture(testScheduler)
+            if (space) f.useSpace()
+            val room =
+                if (space) f.spaceHistory.traversal.roomId else f.originalHistory.traversal.roomId
+            f.turn = f.turn.copy(recovery = f.turn.recovery.copy(roomIds = listOf(room)))
+            f.selection = CollaborationSpaceHistoryRecoverySelection.Ready(f.turn)
+            assertEquals(
+                AppResult.Success(CollaborationSpaceHistoryRecoveryOutcome.Advanced),
+                f.run(),
+            )
+            assertEquals(1, f.acquiredPages.size)
+            assertEquals(1, f.completedPages.size)
+            assertEquals("complete", f.calls.last())
+        }
+    }
+
+    @Test
+    fun pendingTargetsDoNotChangeTheCurrentlySelectedRoomVisit() = runTest {
+        val f = SpaceHistoryRecoveryServiceFixture(testScheduler)
+        f.turn =
+            f.turn.copy(
+                recovery =
+                    f.turn.recovery.copy(
+                        roomIds = listOf("!unrelated:test"),
+                        requestedGeneration = "00000000-0000-4000-8000-000000000999",
+                        requestedRoomIds = listOf(f.originalHistory.traversal.roomId),
+                    )
+            )
+        f.selection = CollaborationSpaceHistoryRecoverySelection.Ready(f.turn)
+        assertEquals(AppResult.Success(CollaborationSpaceHistoryRecoveryOutcome.Advanced), f.run())
+        assertIs<CollaborationSpaceHistoryRecoveryAttempt.OriginalOutsideTarget>(
+            f.attempts.single()
+        )
+        assertTrue(f.acquiredPages.isEmpty())
+    }
+
+    @Test
+    fun targetCollectionsAreCapturedBeforeHistoryLoadingSuspends() = runTest {
+        val f = SpaceHistoryRecoveryServiceFixture(testScheduler)
+        val rooms = mutableListOf("!unrelated:test")
+        f.turn = f.turn.copy(recovery = f.turn.recovery.copy(roomIds = rooms))
+        f.selection = CollaborationSpaceHistoryRecoverySelection.Ready(f.turn)
+        f.before = { step ->
+            if (step == "load-original") {
+                rooms.clear()
+                rooms += f.originalHistory.traversal.roomId
+            }
+        }
+        assertEquals(AppResult.Success(CollaborationSpaceHistoryRecoveryOutcome.Advanced), f.run())
+        assertIs<CollaborationSpaceHistoryRecoveryAttempt.OriginalOutsideTarget>(
+            f.attempts.single()
+        )
+        assertEquals(listOf("!unrelated:test"), f.completedTurns.single().recovery.roomIds)
+        assertTrue(f.acquiredPages.isEmpty())
+    }
+
+    @Test
+    fun invalidTargetSelectionCannotBeMisreportedAsExcluded() = runTest {
+        val f = SpaceHistoryRecoveryServiceFixture(testScheduler)
+        f.turn = f.turn.copy(recovery = f.turn.recovery.copy(roomIds = emptyList()))
+        f.selection = CollaborationSpaceHistoryRecoverySelection.Ready(f.turn)
+        assertIs<AppResult.Failed>(f.run())
+        assertEquals(listOf("select"), f.calls)
+        assertTrue(f.deferrals.isEmpty())
+    }
+
+    @Test
+    fun failedLocalMetadataReadStaysAFailureForATargetedVisit() = runTest {
+        val f = SpaceHistoryRecoveryServiceFixture(testScheduler)
+        f.turn = f.turn.copy(recovery = f.turn.recovery.copy(roomIds = listOf("!unrelated:test")))
+        f.selection = CollaborationSpaceHistoryRecoverySelection.Ready(f.turn)
+        f.failures["load-original"] = f.failure
+        assertEquals(AppResult.Success(CollaborationSpaceHistoryRecoveryOutcome.Deferred), f.run())
+        assertTrue(f.attempts.isEmpty())
+        assertTrue(f.acquiredPages.isEmpty())
+        assertEquals(1, f.deferrals.size)
+    }
+
     @Test
     fun idleAndDeferredSelectionDoNotAcquireContentOrInventCompletion() = runTest {
         val retry = CollaborationSpaceIncomingRetry(0, 30_000, 1)

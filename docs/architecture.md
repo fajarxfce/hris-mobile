@@ -1,5 +1,7 @@
 # Architecture
 
+[Targeted history recovery](collaboration-targeted-history-recovery.md) retains bounded active/requested room predicates and independently proves exclusions before the existing worker advances.
+
 [Source-bound room-key observation](collaboration-space-room-key-binding.md) maps retained callbacks and exact ACK under the installed runtime; durable intent and production activation remain separate.
 
 [Owned room-key registration](collaboration-sdk-room-key-lifecycle.md) keeps late SDK handles and blocks parent/store release after failed listener cleanup; production key triggering remains disabled.

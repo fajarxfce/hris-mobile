@@ -20,12 +20,15 @@ fun captureCollaborationSpaceIncomingDemandSnapshot(
             demand.sources.size > 64
     )
         return null
+    val recovery = demand.historyRecovery?.let(::captureCollaborationSpaceHistoryRecovery)
+    if (demand.historyRecovery != null && recovery == null) return null
     return value.copy(
         demand =
             demand.copy(
                 rooms = demand.rooms.toList(),
                 sources = demand.sources.toList(),
                 physicalRooms = demand.physicalRooms.toList(),
+                historyRecovery = recovery,
             )
     )
 }

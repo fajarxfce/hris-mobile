@@ -9,6 +9,40 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runTest
 
 class DeferCollaborationSpaceHistoryRecoveryTurnTest {
+
+    @Test
+    fun deferralCapturesActiveAndRequestedPredicatesBeforeAdmissionSuspends() = runTest {
+        val f = SpaceHistoryRecoveryCompletionFixture()
+        val rooms = mutableListOf("!active:test")
+        val requested = mutableListOf("!later:test")
+        val active =
+            f.recovery.copy(
+                roomIds = rooms,
+                requestedGeneration = f.base.id(999),
+                requestedRoomIds = requested,
+            )
+        f.turn = f.turn.copy(recovery = active)
+        f.history(active.copy(roomIds = rooms.toList(), requestedRoomIds = requested.toList()))
+        f.hooks["root1"] = {
+            rooms.clear()
+            requested.clear()
+        }
+        assertEquals(AppResult.Success(true), f.defer(f.turn, f.base.directory.storageFailure))
+        assertEquals(listOf("!active:test"), f.retained().roomIds)
+        assertEquals(listOf("!later:test"), f.retained().requestedRoomIds)
+        assertNotNull(f.retained().retry)
+    }
+
+    @Test
+    fun aNarrowedPendingPredicateCannotReceiveAnOlderFailure() = runTest {
+        val f = SpaceHistoryRecoveryCompletionFixture()
+        val active = f.recovery.copy(requestedGeneration = f.base.id(999))
+        f.turn = f.turn.copy(recovery = active)
+        f.history(active.copy(requestedRoomIds = listOf("!narrow:test")))
+        assertIs<AppResult.Failed>(f.defer(f.turn, f.base.directory.storageFailure))
+        assertEquals(0, f.writes)
+    }
+
     @Test
     fun operationalFailureRetainsDelayWithoutAdvancingCursorOrOtherLanes() = runTest {
         val f = SpaceHistoryRecoveryCompletionFixture()

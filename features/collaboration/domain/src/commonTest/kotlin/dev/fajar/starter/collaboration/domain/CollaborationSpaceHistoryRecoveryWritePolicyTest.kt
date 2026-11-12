@@ -6,6 +6,73 @@ import dev.fajar.starter.common.result.*
 import kotlin.test.*
 
 class CollaborationSpaceHistoryRecoveryWritePolicyTest {
+
+    @Test
+    fun activePredicateChangeCannotConfirmAnUncertainWrite() {
+        val f = Fixture()
+        val next =
+            f.next.copy(complete = false, afterPartition = "partition", roomIds = listOf("!a:test"))
+        val saved = f.saved.copy(demand = f.saved.demand.copy(historyRecovery = next))
+        val retained =
+            saved.copy(
+                demand = saved.demand.copy(historyRecovery = next.copy(roomIds = listOf("!b:test")))
+            )
+        assertEquals(f.storage, f.confirm(f.storage, retained, next))
+    }
+
+    @Test
+    fun pendingScopeMayWidenAfterAWriteButCannotDropRequestedRooms() {
+        val f = Fixture()
+        val next =
+            f.next.copy(
+                complete = false,
+                afterPartition = "partition",
+                requestedGeneration = f.source.base.id(984),
+                requestedRoomIds = listOf("!a:test"),
+            )
+        val saved = f.saved.copy(demand = f.saved.demand.copy(historyRecovery = next))
+        val widened =
+            saved.copy(
+                demand =
+                    saved.demand.copy(
+                        historyRecovery =
+                            next.copy(
+                                requestedGeneration = f.source.base.id(985),
+                                requestedRoomIds = listOf("!a:test", "!b:test"),
+                            )
+                    )
+            )
+        assertEquals(AppResult.Success(true), f.confirm(f.storage, widened, next))
+        val narrowed =
+            widened.copy(
+                demand =
+                    widened.demand.copy(
+                        historyRecovery = next.copy(requestedRoomIds = listOf("!b:test"))
+                    )
+            )
+        assertEquals(f.storage, f.confirm(f.storage, narrowed, next))
+    }
+
+    @Test
+    fun accountWidePendingScopeCannotBeConfirmedByANarrowReadback() {
+        val f = Fixture()
+        val next =
+            f.next.copy(
+                complete = false,
+                afterPartition = "partition",
+                requestedGeneration = f.source.base.id(984),
+            )
+        val saved = f.saved.copy(demand = f.saved.demand.copy(historyRecovery = next))
+        val narrowed =
+            saved.copy(
+                demand =
+                    saved.demand.copy(
+                        historyRecovery = next.copy(requestedRoomIds = listOf("!a:test"))
+                    )
+            )
+        assertEquals(f.storage, f.confirm(f.storage, narrowed, next))
+    }
+
     private class Fixture {
         val source = SpaceHistoryRecoveryCompletionFixture()
         val before = assertNotNull(source.snapshot)

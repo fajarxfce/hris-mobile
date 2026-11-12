@@ -44,7 +44,8 @@ fun confirmCollaborationSpaceIncomingKeyDemotion(
     if (
         task?.generation == captured.generation ||
             recovery == null ||
-            (recovery.generation != generation && recovery.requestedGeneration != generation)
+            !((recovery.generation == generation && recovery.roomIds == null) ||
+                (recovery.requestedGeneration == generation && recovery.requestedRoomIds == null))
     )
         return if (written is AppResult.Failed) written else keyDemotionChanged()
     return AppResult.Success(true)

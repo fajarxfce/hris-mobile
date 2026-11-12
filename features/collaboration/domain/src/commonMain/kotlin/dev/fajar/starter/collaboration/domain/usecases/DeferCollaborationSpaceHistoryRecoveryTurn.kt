@@ -27,14 +27,17 @@ class DeferCollaborationSpaceHistoryRecoveryTurn(
         failure: Failure,
     ): AppResult<Boolean> {
         currentCoroutineContext().ensureActive()
+        val recovery =
+            captureCollaborationSpaceHistoryRecovery(turn.recovery)
+                ?: return changed(FailureKind.Validation)
         val runtime = turn.runtime
         if (
             !validCollaborationOriginalConversationOwner(runtime.owner) ||
                 !validCollaborationSpaceConversationId(runtime.deviceId) ||
                 !validCollaborationSpaceConversationId(runtime.operationId) ||
                 !validCollaborationSpaceIncomingSource(turn.source) ||
-                !validCollaborationSpaceHistoryRecovery(turn.recovery) ||
-                turn.recovery.complete
+                !validCollaborationSpaceHistoryRecovery(recovery) ||
+                recovery.complete
         )
             return changed(FailureKind.Validation)
         if (
@@ -48,7 +51,8 @@ class DeferCollaborationSpaceHistoryRecoveryTurn(
                     )
         )
             return AppResult.Failed(failure)
-        return withTimeoutOrNull(5_000) { Deferral(turn).run() } ?: changed(FailureKind.Timeout)
+        return withTimeoutOrNull(5_000) { Deferral(turn.copy(recovery = recovery)).run() }
+            ?: changed(FailureKind.Timeout)
     }
 
     private inner class Deferral(val turn: CollaborationSpaceHistoryRecoveryTurn) {

@@ -1,8 +1,11 @@
 package dev.fajar.starter.app.work
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.captureCollaborationSpaceHistoryRecovery
 import dev.fajar.starter.collaboration.domain.policies.isCollaborationSpaceIncomingQueueContention
+import dev.fajar.starter.collaboration.domain.policies.matchesCollaborationSpaceHistoryRecoveryRoom
 import dev.fajar.starter.collaboration.domain.policies.sameCollaborationSpaceHistoryRecoveryTurn
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationSpaceHistoryRecovery
 import dev.fajar.starter.common.result.*
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.*
@@ -90,7 +93,19 @@ class CollaborationSpaceHistoryRecoveryService(
                     }
                 if (turn.runtime != runtime || turn.page.locators.size > 1)
                     return@withTimeoutOrNull pending("invalid_selection", FailureKind.Validation)
-                captured = turn.copy(page = turn.page.copy(locators = turn.page.locators.toList()))
+                val recovery =
+                    captureCollaborationSpaceHistoryRecovery(turn.recovery)
+                        ?: return@withTimeoutOrNull pending(
+                            "invalid_selection",
+                            FailureKind.Validation,
+                        )
+                if (!validCollaborationSpaceHistoryRecovery(recovery))
+                    return@withTimeoutOrNull pending("invalid_selection", FailureKind.Validation)
+                captured =
+                    turn.copy(
+                        recovery = recovery,
+                        page = turn.page.copy(locators = turn.page.locators.toList()),
+                    )
                 val stable = requireNotNull(captured)
                 val attempted =
                     when (val row = stable.page.locators.singleOrNull()) {
@@ -149,6 +164,10 @@ class CollaborationSpaceHistoryRecoveryService(
                 CollaborationSpaceOriginalKeyHistoryResolution.MetadataUnavailable ->
                     return AppResult.Success(CollaborationSpaceHistoryRecoveryAttempt.Unavailable)
             }
+        if (!matchesCollaborationSpaceHistoryRecoveryRoom(turn.recovery, history.traversal.roomId))
+            return AppResult.Success(
+                CollaborationSpaceHistoryRecoveryAttempt.OriginalOutsideTarget(history)
+            )
         val loadedRead = readOriginal(turn.runtime, history, turn.recovery.generation)
         if (loadedRead is AppResult.Failed) return loadedRead
         val read = (loadedRead as AppResult.Success).value
@@ -191,6 +210,10 @@ class CollaborationSpaceHistoryRecoveryService(
                 CollaborationSpaceKeyHistoryResolution.MetadataUnavailable ->
                     return AppResult.Success(CollaborationSpaceHistoryRecoveryAttempt.Unavailable)
             }
+        if (!matchesCollaborationSpaceHistoryRecoveryRoom(turn.recovery, history.traversal.roomId))
+            return AppResult.Success(
+                CollaborationSpaceHistoryRecoveryAttempt.PublishedOutsideTarget(history)
+            )
         val loadedRead = readPublished(turn.runtime, history, turn.recovery.generation)
         if (loadedRead is AppResult.Failed) return loadedRead
         val read = (loadedRead as AppResult.Success).value

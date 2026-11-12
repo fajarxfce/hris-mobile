@@ -1,0 +1,104 @@
+{
+  "recordedAt": "2026-11-12T07:05:52.178449+00:00",
+  "sourceBaseline": "b95d3632d64ab9f2a2224fb2787ef6aa47ab9329",
+  "sourceFiles": 5117,
+  "changedSourceFiles": 16,
+  "sourceManifestSha256": "af0efe6b32ce7224ff58f90904dbf07d720b4df362076f1f7704a4fbf17dae70",
+  "focused": {
+    "tests": 601,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "full": {
+    "validated": 14325,
+    "fresh": {
+      "tests": 12287,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 588.922,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152210183,
+    "sha256": "2b09354dad5658f47f162fa2fcba65ab622d6c146f3d3d9e216ccc561ba5a52c"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "targetedHistoryRecoveryAccepted": true,
+  "newDomainCasesPerTarget": 39,
+  "newStorageCasesPerTarget": 7,
+  "newApplicationCases": 6,
+  "predicateMaximumRooms": 64,
+  "predicateMaximumEncodedBytes": 24000,
+  "activeAndRequestedScopesSeparate": true,
+  "requestedUnionOverflowBecomesAccountWide": true,
+  "nestedPredicatesCapturedBeforeSuspension": true,
+  "encryptedSchema": 8,
+  "oldSchemasPreserved": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "independentlyConfirmedExcludedOriginalAndPublishedHistories": true,
+  "filterBeforeReferenceReadAndProviderAcquisition": true,
+  "accountWidePrimaryTransferNeedsAccountWideReceipt": true,
+  "durableKeyReceiptImplemented": false,
+  "productionRegistrationEnabled": false,
+  "nativeSdkExecution": false,
+  "appleNativeAdapterImplemented": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "starterPortRequired": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [
+    {
+      "run": "focused-1",
+      "exitCode": 1,
+      "elapsedSeconds": 62.878,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "run": "focused-2",
+      "exitCode": 1,
+      "elapsedSeconds": 144.756,
+      "freshCounts": {
+        "tests": 203,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "failureReviews": {
+    "focused-1": {
+      "reason": "detekt LongMethod: codec decode106 and global completion current125 exceed100 after new predicate cases",
+      "productionChange": "Separate versioned multipart decoding and original/published metadata verification by existing operation responsibility",
+      "noRuleWeakening": true,
+      "testCountAtFailure": 0,
+      "archivedBeforeFix": ".work/targeted-history-recovery-2026-11-12/failed-focused-candidate-1",
+      "recordedAt": "2026-11-12T06:37:35.923066+00:00"
+    },
+    "focused-2": {
+      "reason": "Copy-isolation test supplied a100ms retry while existing retry policy requires30000ms",
+      "failingCase": "CollaborationSpaceHistoryTargetPolicyTest.completingAndDeferringNeverReturnCallerOwnedPredicateLists",
+      "correction": "Use attemptedAt100 and eligibleAt30100; assertions and production policy unchanged",
+      "testsAtFailure": 203,
+      "failures": 1,
+      "archivedBeforeFix": ".work/targeted-history-recovery-2026-11-12/failed-focused-candidate-2",
+      "recordedAt": "2026-11-12T06:42:16.667225+00:00"
+    }
+  }
+}

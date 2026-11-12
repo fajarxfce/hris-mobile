@@ -6,6 +6,27 @@ import dev.fajar.starter.common.result.*
 import kotlin.test.*
 
 class CollaborationSpaceIncomingKeyDemotionConfirmationTest {
+    @Test
+    fun aNarrowRecoveryCannotWitnessAnAccountWidePrimaryTransfer() {
+        val recovery = assertNotNull(next.historyRecovery).copy(roomIds = listOf("!narrow:test"))
+        val retained = committed.copy(demand = next.copy(historyRecovery = recovery))
+        val lost = AppResult.Failed(base.directory.storageFailure)
+        assertEquals(lost, confirm(lost, retained))
+        assertIs<AppResult.Failed>(confirm(retained = retained))
+    }
+
+    @Test
+    fun aNarrowPendingRequestCannotWitnessTheTransferBehindAnActivePass() {
+        val recovery =
+            CollaborationSpaceHistoryRecovery(
+                base.id(997),
+                requestedGeneration = generation,
+                requestedRoomIds = listOf("!narrow:test"),
+            )
+        val retained = committed.copy(demand = next.copy(historyRecovery = recovery))
+        assertIs<AppResult.Failed>(confirm(retained = retained))
+    }
+
     private val base = SpaceOriginalIncomingLoadFixture()
     private val previous = assertNotNull(base.snapshot)
     private val generation = base.id(991)

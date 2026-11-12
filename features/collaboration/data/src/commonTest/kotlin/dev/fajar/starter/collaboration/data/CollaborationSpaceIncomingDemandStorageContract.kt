@@ -18,6 +18,215 @@ abstract class CollaborationSpaceIncomingDemandStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
 
     @Test
+    fun maximumTargetPredicatesFitTheEncryptedHeaderWithAllExistingParts() = withDatabase { f ->
+        val active = List(64) { "!a${it.toString().padStart(2, '0')}" + "漢".repeat(100) }
+        val requested = List(64) { "!b${it.toString().padStart(2, '0')}" + "\"\\".repeat(90) }
+        val recovery =
+            retainedHistoryRecovery().copy(roomIds = active, requestedRoomIds = requested)
+        val before = physicalDemand(64).copy(historyRecovery = recovery)
+        val wake = CollaborationSpaceIncomingWake(historyId(9390))
+        val initial = saved(f.demands().replace(f.local(), null, before, wake))
+        val page =
+            f.database.replicas
+                .observe(
+                    incomingDemandScope(f.local()),
+                    incomingDemandPartition(f.local()),
+                    limit = INCOMING_DEMAND_READ_LIMIT,
+                )
+                .first()
+        assertEquals(INCOMING_DEMAND_TARGETED_HISTORY_CHECKPOINT, page.checkpoint?.payload)
+        assertEquals(129, page.documents.size)
+        assertTrue(page.documents.all { assertNotNull(it.payload).length <= 131072 })
+        assertTrue(page.documents.sumOf { assertNotNull(it.payload).length.toLong() } <= 4_194_304L)
+        f.reopen()
+        assertEquals(AppResult.Success(initial), f.demands().current(f.local()))
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+    }
+
+    @Test
+    fun requestedTargetsReopenWithoutNarrowingAnActiveAccountPass() = withDatabase { f ->
+        val recovery = retainedHistoryRecovery().copy(requestedRoomIds = listOf("!later:test"))
+        val initial =
+            saved(
+                f.demands().replace(f.local(), null, typedDemand().copy(historyRecovery = recovery))
+            )
+        f.reopen()
+        assertEquals(AppResult.Success(initial), f.demands().current(f.local()))
+        val retained = assertNotNull(initial.demand.historyRecovery)
+        assertNull(retained.roomIds)
+        assertEquals(listOf("!later:test"), retained.requestedRoomIds)
+    }
+
+    @Test
+    fun laterAccountRequestPromotesWithoutRetainingTheOldRoomRestriction() = withDatabase { f ->
+        val recovery =
+            CollaborationSpaceHistoryRecovery(
+                historyId(9200),
+                revision = 1,
+                requestedGeneration = historyId(9201),
+                roomIds = listOf("!active:test"),
+            )
+        val before = CollaborationSpaceIncomingDemand(historyRecovery = recovery)
+        val wake = CollaborationSpaceIncomingWake(historyId(9390))
+        val initial = saved(f.demands().replace(f.local(), null, before, wake))
+        val next =
+            assertIs<AppResult.Success<CollaborationSpaceHistoryRecovery>>(
+                    planCollaborationSpaceHistoryRecoveryAdvance(
+                        recovery,
+                        recovery,
+                        null,
+                        false,
+                        false,
+                    )
+                )
+                .value
+        val result =
+            saved(f.demands().replace(f.local(), initial, before.copy(historyRecovery = next)))
+        val page =
+            f.database.replicas
+                .observe(
+                    incomingDemandScope(f.local()),
+                    incomingDemandPartition(f.local()),
+                    limit = INCOMING_DEMAND_READ_LIMIT,
+                )
+                .first()
+        assertEquals(INCOMING_DEMAND_HISTORY_RECOVERY_CHECKPOINT, page.checkpoint?.payload)
+        f.reopen()
+        assertEquals(AppResult.Success(result), f.demands().current(f.local()))
+        assertNull(next.roomIds)
+        assertNull(next.requestedRoomIds)
+        assertEquals(historyId(9201), next.generation)
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+    }
+
+    @Test
+    fun olderAuthenticatedRecoveryHeaderCannotSmuggleRoomPredicates() = withDatabase { f ->
+        saved(
+            f.demands()
+                .replace(
+                    f.local(),
+                    null,
+                    CollaborationSpaceIncomingDemand(historyRecovery = retainedHistoryRecovery()),
+                )
+        )
+        for (name in listOf("roomIds", "requestedRoomIds")) {
+            assertHistoryRecoveryHeaderRejected(f, INCOMING_DEMAND_HISTORY_RECOVERY_CHECKPOINT) {
+                fields ->
+                JsonObject(
+                    fields +
+                        ("historyRecovery" to
+                            JsonObject(
+                                fields.getValue("historyRecovery").jsonObject +
+                                    (name to JsonArray(listOf(JsonPrimitive("!target:test"))))
+                            ))
+                )
+            }
+        }
+    }
+
+    @Test
+    fun targetedHeaderRequiresBothItsVersionAndAnActualPredicate() = withDatabase { f ->
+        saved(
+            f.demands()
+                .replace(
+                    f.local(),
+                    null,
+                    CollaborationSpaceIncomingDemand(
+                        historyRecovery =
+                            retainedHistoryRecovery().copy(roomIds = listOf("!a:test"))
+                    ),
+                )
+        )
+        for (change in 0..3) {
+            assertHistoryRecoveryHeaderRejected(f, INCOMING_DEMAND_TARGETED_HISTORY_CHECKPOINT) {
+                fields ->
+                when (change) {
+                    0 -> JsonObject(fields + ("schema" to JsonPrimitive(7)))
+                    1 -> JsonObject(fields - "historyRecovery")
+                    2 -> JsonObject(fields + ("historyRecovery" to JsonNull))
+                    else ->
+                        JsonObject(
+                            fields +
+                                ("historyRecovery" to
+                                    JsonObject(
+                                        fields.getValue("historyRecovery").jsonObject -
+                                            "roomIds" -
+                                            "requestedRoomIds"
+                                    ))
+                        )
+                }
+            }
+        }
+    }
+
+    @Test
+    fun authenticatedTargetListsRejectMalformedUnboundedOrNonCanonicalValues() = withDatabase { f ->
+        saved(
+            f.demands()
+                .replace(
+                    f.local(),
+                    null,
+                    CollaborationSpaceIncomingDemand(
+                        historyRecovery =
+                            retainedHistoryRecovery().copy(roomIds = listOf("!a:test"))
+                    ),
+                )
+        )
+        val invalid =
+            listOf(
+                emptyList(),
+                listOf("bad"),
+                listOf("!a:test", "!a:test"),
+                listOf("!b:test", "!a:test"),
+                List(65) { "!${it.toString().padStart(2, '0')}:test" },
+                List(64) { "!${it.toString().padStart(2, '0')}" + "漢".repeat(150) },
+            )
+        for (name in listOf("roomIds", "requestedRoomIds")) for (rooms in invalid) {
+            assertHistoryRecoveryHeaderRejected(f, INCOMING_DEMAND_TARGETED_HISTORY_CHECKPOINT) {
+                fields ->
+                JsonObject(
+                    fields +
+                        ("historyRecovery" to
+                            JsonObject(
+                                fields.getValue("historyRecovery").jsonObject +
+                                    (name to JsonArray(rooms.map(::JsonPrimitive)))
+                            ))
+                )
+            }
+        }
+    }
+
+    @Test
+    fun requestedPredicateWithoutARequestedGenerationCannotReopen() = withDatabase { f ->
+        saved(
+            f.demands()
+                .replace(
+                    f.local(),
+                    null,
+                    CollaborationSpaceIncomingDemand(
+                        historyRecovery =
+                            retainedHistoryRecovery()
+                                .copy(
+                                    roomIds = listOf("!a:test"),
+                                    requestedRoomIds = listOf("!later:test"),
+                                )
+                    ),
+                )
+        )
+        assertHistoryRecoveryHeaderRejected(f, INCOMING_DEMAND_TARGETED_HISTORY_CHECKPOINT) { fields
+            ->
+            JsonObject(
+                fields +
+                    ("historyRecovery" to
+                        JsonObject(
+                            fields.getValue("historyRecovery").jsonObject +
+                                ("requestedGeneration" to JsonNull)
+                        ))
+            )
+        }
+    }
+
+    @Test
     fun historyRecoveryAndWakeCommitBeforeAnySourceSyncPositionExists() = withDatabase { f ->
         val before =
             CollaborationSpaceIncomingDemand(

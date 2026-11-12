@@ -8,6 +8,193 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runTest
 
 class CompleteCollaborationSpaceHistoryRecoveryTurnTest {
+
+    @Test
+    fun excludedOriginalAndPublishedHistoriesAdvanceWithoutReadingReferences() = runTest {
+        for (space in listOf(false, true)) for (alias in listOf(false, true)) {
+            val f = SpaceHistoryRecoveryCompletionFixture()
+            if (space) f.published(alias)
+            val recovery = f.recovery.copy(roomIds = listOf("!unrelated:test"))
+            f.history(recovery)
+            f.turn = f.turn.copy(recovery = recovery)
+            f.attempt =
+                when (val a = f.attempt) {
+                    is CollaborationSpaceHistoryRecoveryAttempt.Original ->
+                        CollaborationSpaceHistoryRecoveryAttempt.OriginalOutsideTarget(a.history)
+                    is CollaborationSpaceHistoryRecoveryAttempt.Published ->
+                        CollaborationSpaceHistoryRecoveryAttempt.PublishedOutsideTarget(a.history)
+                    else -> error("Expected history")
+                }
+            assertEquals(AppResult.Success(true), f.run())
+            assertTrue(f.retained().complete)
+            assertFalse(f.retained().unresolved)
+            assertNull(f.reads["progress"])
+            assertEquals(recovery.roomIds, f.retained().roomIds)
+        }
+    }
+
+    @Test
+    fun selectedPhysicalRoomCannotBePresentedAsExcluded() = runTest {
+        for (space in listOf(false, true)) for (all in listOf(false, true)) {
+            val f = SpaceHistoryRecoveryCompletionFixture()
+            if (space) f.published()
+            val room =
+                when (val a = f.attempt) {
+                    is CollaborationSpaceHistoryRecoveryAttempt.Original -> {
+                        f.attempt =
+                            CollaborationSpaceHistoryRecoveryAttempt.OriginalOutsideTarget(
+                                a.history
+                            )
+                        a.history.traversal.roomId
+                    }
+                    is CollaborationSpaceHistoryRecoveryAttempt.Published -> {
+                        f.attempt =
+                            CollaborationSpaceHistoryRecoveryAttempt.PublishedOutsideTarget(
+                                a.history
+                            )
+                        a.history.traversal.roomId
+                    }
+                    else -> error("Expected history")
+                }
+            val recovery = f.recovery.copy(roomIds = if (all) null else listOf(room))
+            f.history(recovery)
+            f.turn = f.turn.copy(recovery = recovery)
+            assertIs<AppResult.Failed>(f.run())
+            assertEquals(0, f.writes)
+        }
+    }
+
+    @Test
+    fun unrelatedRoomCannotSupplyNormalContentCompletion() = runTest {
+        for (space in listOf(false, true)) {
+            val f = SpaceHistoryRecoveryCompletionFixture()
+            if (space) f.published()
+            val recovery = f.recovery.copy(roomIds = listOf("!unrelated:test"))
+            f.history(recovery)
+            f.turn = f.turn.copy(recovery = recovery)
+            assertIs<AppResult.Failed>(f.run())
+            assertEquals(0, f.writes)
+            assertNull(f.reads["progress"])
+        }
+    }
+
+    @Test
+    fun exclusionDoesNotHideMissingMetadataOrAChangedHistoricalDevice() = runTest {
+        for (missing in listOf(false, true)) {
+            val f = SpaceHistoryRecoveryCompletionFixture()
+            val original = assertIs<CollaborationSpaceHistoryRecoveryAttempt.Original>(f.attempt)
+            val recovery = f.recovery.copy(roomIds = listOf("!unrelated:test"))
+            f.history(recovery)
+            f.turn = f.turn.copy(recovery = recovery)
+            val history =
+                if (missing) original.history
+                else
+                    original.history.copy(
+                        traversal = original.history.traversal.copy(deviceId = f.base.id(999))
+                    )
+            f.attempt = CollaborationSpaceHistoryRecoveryAttempt.OriginalOutsideTarget(history)
+            if (missing) f.base.retained = null
+            assertIs<AppResult.Failed>(f.run())
+            assertEquals(0, f.writes)
+        }
+    }
+
+    @Test
+    fun sourceRetirementDuringExcludedVisitPreventsAdvancement() = runTest {
+        val f = SpaceHistoryRecoveryCompletionFixture()
+        val original = assertIs<CollaborationSpaceHistoryRecoveryAttempt.Original>(f.attempt)
+        val recovery = f.recovery.copy(roomIds = listOf("!unrelated:test"))
+        f.history(recovery)
+        f.turn = f.turn.copy(recovery = recovery)
+        f.attempt = CollaborationSpaceHistoryRecoveryAttempt.OriginalOutsideTarget(original.history)
+        f.hooks["locators1"] = { f.base.installed = null }
+        assertIs<AppResult.Failed>(f.run())
+        assertEquals(0, f.writes)
+    }
+
+    @Test
+    fun changedActivePredicateCannotCompleteTheCapturedTurn() = runTest {
+        val f = SpaceHistoryRecoveryCompletionFixture()
+        f.hooks["demand1"] = { f.history(f.recovery.copy(roomIds = listOf("!different:test"))) }
+        assertIs<AppResult.Failed>(f.run())
+        assertEquals(0, f.writes)
+    }
+
+    @Test
+    fun laterTargetRequestIsPromotedAfterTheCapturedVisit() = runTest {
+        val f = SpaceHistoryRecoveryCompletionFixture()
+        val room =
+            assertIs<CollaborationSpaceHistoryRecoveryAttempt.Original>(f.attempt)
+                .history
+                .traversal
+                .roomId
+        val active = f.recovery.copy(roomIds = listOf(room))
+        f.history(active)
+        f.turn = f.turn.copy(recovery = active)
+        f.hooks["demand1"] = {
+            f.history(
+                active.copy(
+                    requestedGeneration = f.base.id(999),
+                    requestedRoomIds = listOf("!later:test"),
+                )
+            )
+        }
+        assertEquals(AppResult.Success(true), f.run())
+        assertEquals(f.base.id(999), f.retained().generation)
+        assertEquals(listOf("!later:test"), f.retained().roomIds)
+        assertFalse(f.retained().complete)
+    }
+
+    @Test
+    fun callerMutationDuringAdmissionCannotChangeCapturedRoomTargets() = runTest {
+        val f = SpaceHistoryRecoveryCompletionFixture()
+        val room =
+            assertIs<CollaborationSpaceHistoryRecoveryAttempt.Original>(f.attempt)
+                .history
+                .traversal
+                .roomId
+        val rooms = mutableListOf(room)
+        f.history(f.recovery.copy(roomIds = listOf(room)))
+        f.turn = f.turn.copy(recovery = f.recovery.copy(roomIds = rooms))
+        f.hooks["root1"] = { rooms.clear() }
+        assertEquals(AppResult.Success(true), f.run())
+        assertEquals(listOf(room), f.retained().roomIds)
+    }
+
+    @Test
+    fun excludedVisitWithLostStorageReplyStillNeedsExactDurableScope() = runTest {
+        val f = SpaceHistoryRecoveryCompletionFixture()
+        val original = assertIs<CollaborationSpaceHistoryRecoveryAttempt.Original>(f.attempt)
+        val recovery = f.recovery.copy(roomIds = listOf("!unrelated:test"))
+        f.history(recovery)
+        f.turn = f.turn.copy(recovery = recovery)
+        f.attempt = CollaborationSpaceHistoryRecoveryAttempt.OriginalOutsideTarget(original.history)
+        f.lostReply = true
+        assertEquals(AppResult.Success(true), f.run())
+        assertEquals(recovery.roomIds, f.retained().roomIds)
+        assertEquals(1, f.writes)
+    }
+
+    @Test
+    fun cancellationDuringExcludedVisitKeepsItsDurableTurn() = runTest {
+        val f = SpaceHistoryRecoveryCompletionFixture()
+        val original = assertIs<CollaborationSpaceHistoryRecoveryAttempt.Original>(f.attempt)
+        val recovery = f.recovery.copy(roomIds = listOf("!unrelated:test"))
+        f.history(recovery)
+        f.turn = f.turn.copy(recovery = recovery)
+        f.attempt = CollaborationSpaceHistoryRecoveryAttempt.OriginalOutsideTarget(original.history)
+        val entered = CompletableDeferred<Unit>()
+        f.hooks["locators1"] = {
+            entered.complete(Unit)
+            awaitCancellation()
+        }
+        val job = launch { f.run() }
+        entered.await()
+        job.cancelAndJoin()
+        assertEquals(recovery, f.retained())
+        assertEquals(0, f.writes)
+    }
+
     @Test
     fun originalCompletedPassPreservesPrimaryWork() = runTest {
         val f = SpaceHistoryRecoveryCompletionFixture()

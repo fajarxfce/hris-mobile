@@ -30,19 +30,19 @@ class CompleteCollaborationSpaceHistoryRecoveryTurn(
         attempt: CollaborationSpaceHistoryRecoveryAttempt?,
     ): AppResult<Boolean> {
         currentCoroutineContext().ensureActive()
+        val recovery =
+            captureCollaborationSpaceHistoryRecovery(selected.recovery)
+                ?: return changed(FailureKind.Validation)
         val runtime = selected.runtime
         val page =
-            captureCollaborationSpaceHistoryRecoveryPage(
-                selected.page,
-                selected.recovery.afterPartition,
-            )
+            captureCollaborationSpaceHistoryRecoveryPage(selected.page, recovery.afterPartition)
         if (
             !validCollaborationOriginalConversationOwner(runtime.owner) ||
                 !validCollaborationSpaceConversationId(runtime.deviceId) ||
                 !validCollaborationSpaceConversationId(runtime.operationId) ||
                 !validCollaborationSpaceIncomingSource(selected.source) ||
-                !validCollaborationSpaceHistoryRecovery(selected.recovery) ||
-                selected.recovery.complete ||
+                !validCollaborationSpaceHistoryRecovery(recovery) ||
+                recovery.complete ||
                 page == null ||
                 (page.locators.isEmpty() != (attempt == null))
         )
@@ -59,8 +59,9 @@ class CompleteCollaborationSpaceHistoryRecoveryTurn(
                 }
                 else -> attempt
             }
-        return withTimeoutOrNull(5_000) { Completion(selected.copy(page = page), captured).run() }
-            ?: changed(FailureKind.Timeout)
+        return withTimeoutOrNull(5_000) {
+            Completion(selected.copy(recovery = recovery, page = page), captured).run()
+        } ?: changed(FailureKind.Timeout)
     }
 
     private inner class Completion(
@@ -160,6 +161,11 @@ class CompleteCollaborationSpaceHistoryRecoveryTurn(
                 return AppResult.Success(CollaborationHistoryRecoveryVisit(false, false))
             if (attempt == CollaborationSpaceHistoryRecoveryAttempt.Unavailable)
                 return AppResult.Success(CollaborationHistoryRecoveryVisit(false, true))
+            if (
+                attempt is CollaborationSpaceHistoryRecoveryAttempt.OriginalOutsideTarget ||
+                    attempt is CollaborationSpaceHistoryRecoveryAttempt.PublishedOutsideTarget
+            )
+                return AppResult.Success(CollaborationHistoryRecoveryVisit(false, false))
             val read: CollaborationHistoryRecoveryRead
             val receipt: CollaborationHistoryRecoveryPageCompletion?
             val loaded: AppResult<CollaborationHistoryProgress?>
@@ -221,81 +227,119 @@ class CompleteCollaborationSpaceHistoryRecoveryTurn(
                     turn.registration,
                     platform,
                 ) ?: return changed()
-            when (val row = locator) {
-                null -> if (attempt != null) return changed()
-                is CollaborationAccountIncomingHistoryLocator.Company -> {
-                    if (physical.binding.companyId != row.companyId) {
-                        if (attempt != CollaborationSpaceHistoryRecoveryAttempt.Unavailable)
-                            return changed()
-                    } else {
-                        val position =
-                            CollaborationOriginalConversationPosition(
-                                row.companyId,
-                                row.history.conversationId,
-                            )
-                        val found = originals.getByConversation(access, position)
-                        admission().let { if (it is AppResult.Failed) return it }
-                        if (found is AppResult.Failed) return found
-                        val value = (found as AppResult.Success).value
-                        if (attempt == CollaborationSpaceHistoryRecoveryAttempt.Unavailable) {
-                            if (value != null) return changed()
-                        } else {
-                            val original =
-                                attempt as? CollaborationSpaceHistoryRecoveryAttempt.Original
-                                    ?: return changed()
-                            val history = original.history
-                            if (
-                                !validCollaborationSpaceOriginalKeyHistory(runtime, history) ||
-                                    history.source != turn.source ||
-                                    history.conversation.conversation.position != position ||
-                                    history.traversal.deviceId != row.history.deviceId ||
-                                    value == null ||
-                                    !validCollaborationSpaceOriginalRoomMetadata(access, value) ||
-                                    value.conversation != history.conversation.conversation ||
-                                    value.room != history.conversation.room ||
-                                    value.room.serverName !=
-                                        turn.registration.command.provider.serverName
-                            )
-                                return changed()
-                        }
-                    }
+            val metadata =
+                when (val row = locator) {
+                    null -> if (attempt == null) AppResult.Success(Unit) else changed()
+                    is CollaborationAccountIncomingHistoryLocator.Company ->
+                        currentOriginalHistory(row, physical.binding.companyId)
+                    is CollaborationAccountIncomingHistoryLocator.Space ->
+                        currentPublishedHistory(row)
                 }
-                is CollaborationAccountIncomingHistoryLocator.Space -> {
-                    if (row.spaceId != access.spaceId) {
-                        if (attempt != CollaborationSpaceHistoryRecoveryAttempt.Unavailable)
-                            return changed()
-                    } else {
-                        val found = bindings.getByConversation(access, row.history.conversationId)
-                        admission().let { if (it is AppResult.Failed) return it }
-                        if (found is AppResult.Failed) return found
-                        val value = (found as AppResult.Success).value
-                        if (attempt == CollaborationSpaceHistoryRecoveryAttempt.Unavailable) {
-                            if (value != null) return changed()
-                        } else {
-                            val published =
-                                attempt as? CollaborationSpaceHistoryRecoveryAttempt.Published
-                                    ?: return changed()
-                            val history = published.history
-                            if (
-                                !validCollaborationSpaceKeyHistory(runtime, history) ||
-                                    history.source != turn.source ||
-                                    history.traversal.conversationId !=
-                                        row.history.conversationId ||
-                                    history.traversal.deviceId != row.history.deviceId ||
-                                    value == null ||
-                                    value != history.binding ||
-                                    value.room.serverName !=
-                                        turn.registration.command.provider.serverName
-                            )
-                                return changed()
-                        }
-                    }
-                }
-            }
+            if (metadata is AppResult.Failed) return metadata
             val confirmed = registrations.current(access, runtime.owner.parent.nativeSessionId)
             admission().let { if (it is AppResult.Failed) return it }
             if (confirmed is AppResult.Failed) return confirmed
             if ((confirmed as AppResult.Success).value != turn.registration) return changed()
+            return AppResult.Success(Unit)
+        }
+
+        suspend fun currentOriginalHistory(
+            row: CollaborationAccountIncomingHistoryLocator.Company,
+            legacyCompanyId: String,
+        ): AppResult<Unit> {
+            if (legacyCompanyId != row.companyId) {
+                if (attempt != CollaborationSpaceHistoryRecoveryAttempt.Unavailable)
+                    return changed()
+            } else {
+                val position =
+                    CollaborationOriginalConversationPosition(
+                        row.companyId,
+                        row.history.conversationId,
+                    )
+                val found = originals.getByConversation(access, position)
+                admission().let { if (it is AppResult.Failed) return it }
+                if (found is AppResult.Failed) return found
+                val value = (found as AppResult.Success).value
+                if (attempt == CollaborationSpaceHistoryRecoveryAttempt.Unavailable) {
+                    if (value != null) return changed()
+                } else {
+                    val history =
+                        when (attempt) {
+                            is CollaborationSpaceHistoryRecoveryAttempt.Original -> attempt.history
+                            is CollaborationSpaceHistoryRecoveryAttempt.OriginalOutsideTarget ->
+                                attempt.history
+                            else -> return changed()
+                        }
+                    val excluded =
+                        attempt is CollaborationSpaceHistoryRecoveryAttempt.OriginalOutsideTarget
+                    if (
+                        excluded ==
+                            matchesCollaborationSpaceHistoryRecoveryRoom(
+                                turn.recovery,
+                                history.traversal.roomId,
+                            )
+                    )
+                        return changed()
+                    if (
+                        !validCollaborationSpaceOriginalKeyHistory(runtime, history) ||
+                            history.source != turn.source ||
+                            history.conversation.conversation.position != position ||
+                            history.traversal.deviceId != row.history.deviceId ||
+                            value == null ||
+                            !validCollaborationSpaceOriginalRoomMetadata(access, value) ||
+                            value.conversation != history.conversation.conversation ||
+                            value.room != history.conversation.room ||
+                            value.room.serverName != turn.registration.command.provider.serverName
+                    )
+                        return changed()
+                }
+            }
+            return AppResult.Success(Unit)
+        }
+
+        suspend fun currentPublishedHistory(
+            row: CollaborationAccountIncomingHistoryLocator.Space
+        ): AppResult<Unit> {
+            if (row.spaceId != access.spaceId) {
+                if (attempt != CollaborationSpaceHistoryRecoveryAttempt.Unavailable)
+                    return changed()
+            } else {
+                val found = bindings.getByConversation(access, row.history.conversationId)
+                admission().let { if (it is AppResult.Failed) return it }
+                if (found is AppResult.Failed) return found
+                val value = (found as AppResult.Success).value
+                if (attempt == CollaborationSpaceHistoryRecoveryAttempt.Unavailable) {
+                    if (value != null) return changed()
+                } else {
+                    val history =
+                        when (attempt) {
+                            is CollaborationSpaceHistoryRecoveryAttempt.Published -> attempt.history
+                            is CollaborationSpaceHistoryRecoveryAttempt.PublishedOutsideTarget ->
+                                attempt.history
+                            else -> return changed()
+                        }
+                    val excluded =
+                        attempt is CollaborationSpaceHistoryRecoveryAttempt.PublishedOutsideTarget
+                    if (
+                        excluded ==
+                            matchesCollaborationSpaceHistoryRecoveryRoom(
+                                turn.recovery,
+                                history.traversal.roomId,
+                            )
+                    )
+                        return changed()
+                    if (
+                        !validCollaborationSpaceKeyHistory(runtime, history) ||
+                            history.source != turn.source ||
+                            history.traversal.conversationId != row.history.conversationId ||
+                            history.traversal.deviceId != row.history.deviceId ||
+                            value == null ||
+                            value != history.binding ||
+                            value.room.serverName != turn.registration.command.provider.serverName
+                    )
+                        return changed()
+                }
+            }
             return AppResult.Success(Unit)
         }
 
