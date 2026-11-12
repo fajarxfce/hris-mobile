@@ -1328,8 +1328,15 @@ class AppFlowTest {
             openDocumentDetails()
             waitFor("PASSPORT-21")
             compose.waitUntil { server.documents.metadata.active.get() == 0 }
+            // HTTP completion can precede publication and the end of the owning acquisition.
+            compose.waitUntil(15_000) {
+                compose
+                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .size == 1
+            }
             server.documents.metadata.denial = "document_access_denied"
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            compose.onNodeWithContentDescription("Refresh").assertIsEnabled().performClick()
             waitForAction("Try again")
             compose.onAllNodesWithText("PASSPORT-21").assertCountEquals(0)
             val gate = CompletableDeferred<Unit>()
@@ -1347,9 +1354,15 @@ class AppFlowTest {
             compose.onNode(hasText("Try again") and hasClickAction()).performClick()
             waitFor("PASSPORT-21")
             capture("document-metadata-admission-restored")
+            compose.waitUntil(15_000) {
+                compose
+                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .size == 1
+            }
             val pending = CompletableDeferred<Unit>()
             server.documents.metadata.gate = pending
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            compose.onNodeWithContentDescription("Refresh").assertIsEnabled().performClick()
             compose.waitUntil { server.documents.metadata.active.get() == 1 }
             compose.onNodeWithContentDescription("Back").performClick()
             waitFor("Medical certificate")
