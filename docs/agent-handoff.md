@@ -31,6 +31,20 @@ Preparation, publisher and this writer HAVE EXECUTED. Mobile20957650/Group98e936
 Expected16,334=11,604portable+4,730Apple. hosted-plan.json and hosted-43139532066/state.json
 retain the exact source/run; never redispatch.
 
+## Admitted account turn reader applied and validating
+
+The reviewed eight-file draft HAS BEEN APPLIED successfully. Workspace
+.work/account-history-recovery-turn-read-2026-11-12; baselinef026b80dec655eb3896129126b2b9d93d0222654,
+13,626cases/5,067inputs. prepare-account-turn.py HAS EXECUTED; never reapply it.
+Format1/84741 REAPED PASS37.088s; new5,072inputs with frozen manifest
+1219a29b225220134ab9f760191d2dc65aacc7dd76844a7dcc8930d2f119c766.
+Focused1/92831 RUNNING; expected158JVM+156browser=314, local13,674, hosted16,406.
+Eight uncommitted source files (five new/three existing),24 common tests. Existing advance/defer
+shares the identity predicate while preserving its original mutation revision ceiling.
+No global advance, worker or key producer enabled. The scripts in the new workspace are prepared;
+publisher/accepted writer/dispatch remain NOT EXECUTED. The older planning paragraph below
+predates application; current state/result files and this applied checkpoint take precedence.
+
 ## Next admitted account metadata turn
 
 The eight-file next-account-turn-draft is statically reviewed, UNAPPLIED and UNCOMPILED.
