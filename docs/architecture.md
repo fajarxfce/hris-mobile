@@ -1,5 +1,7 @@
 # Architecture
 
+[Existing Apple SDK inventory](collaboration-apple-sdk-inventory.md) reads original file facts under an exclusive native directory lock and reuses the shared repository and admission policy. Native execution and product binding remain separate gates.
+
 [Original covered hints](collaboration-original-covered-hints.md) use exact registered Company/device history to suppress completed work without copying it into Space storage.
 
 [Bounded account metadata discovery](collaboration-account-history-metadata-scan.md) skips internal projections within one finite read while preserving unreturned history and exact cursor scope.

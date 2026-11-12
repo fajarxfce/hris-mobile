@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-12",
+  "scope": "Existing-only Apple SDK inventory under original native directory ownership",
+  "sourceFiles": 5147,
+  "sourceManifestSha256": "128f41be62ae5117f475ef24980859fd254c12cbe99ab45a7cb1190186010d21",
+  "onlyAppleSourceAndTestsChanged": true,
+  "changedPaths": [
+    "features/collaboration/data/src/iosMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AppleCollaborationSdkInventorySource.kt",
+    "features/collaboration/data/src/iosMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AppleSdkDirectoryLock.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSdkInventoryTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleSdkDirectoryFixture.kt"
+  ],
+  "mainIosArm64AndMetadataCompiled": true,
+  "iosSimulatorArm64TestsCompiled": 13,
+  "nativeAppleTestsExecutedLocally": false,
+  "fullCheck": {
+    "passed": true,
+    "elapsedSeconds": 119.539,
+    "freshTests": 0,
+    "unchangedPlatformTestsFromAcceptedBaseline": 14626,
+    "baselineReportManifestSha256": "45a43d45b883b1a85916bf72ac21c677aa01ab4fc52effc38093ecacf8826d54",
+    "exactReportDigestsRetained": true
+  },
+  "staticChecksPassed": true,
+  "proofApkUnchangedSha256": "dd2568e9aa6a55b7da571383ef31c1f1d055bd63b30c77f849e5e8e5152e16a0",
+  "phoneTouched": false,
+  "productionAppleRuntimeEnabled": false,
+  "hostedNativeAcceptance": "pending",
+  "limits": [
+    "The 13 new Apple tests are compiled but not executed on Linux. Hosted Apple execution remains required.",
+    "Unchanged Android/JVM/browser/proof reports retain their exact previously accepted hashes; no claim that they reran.",
+    "No credential enrollment, store creation, native SDK client, app binding or live Group activation."
+  ]
+}

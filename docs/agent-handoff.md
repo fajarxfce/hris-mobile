@@ -1,8 +1,39 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 17:38 UTC. Continue implementation beyond checkpoints and push every commit.
+Updated 12 November 2026, 17:50 UTC. Continue implementation beyond checkpoints and push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One compiler OR emulator. Phone install-only:
 announce and select serial; never launch/drive UI, reset data or uninstall. ADB availability question is pending after a fresh connection timeout.
+
+## Apple existing inventory locally compiled; native acceptance is next
+
+Mobile .work/apple-sdk-inventory-2026-11-12 adds four Apple-only source/test files:
+AppleCollaborationSdkInventorySource, its explicit AppleSdkDirectoryLock resource,13 native
+inventory cases and their filesystem fixture. Existing-only descriptor-anchored acquisition,
+no-follow descendants, nonblocking flock, idempotent cleanup and protected-read cancellation.
+Shared repository/use-case policy is reused; no product binding or SDK client is enabled.
+Contract: Mobile docs/collaboration-apple-sdk-inventory.md. Source5,147 inputs/
+128f41be62ae5117f475ef24980859fd254c12cbe99ab45a7cb1190186010d21. Only these four Apple files
+differ from accepted registry inputs; other platforms and proof APK are byte-identical.
+Format1/16591 REAPED PASS36.253s. Metadata1/3320 REAPED FAILED76.262s solely because native
+Dispatchers.IO requires importing kotlinx.coroutines.IO. Exact candidate archived; added that
+import without changing ownership or assertions. Metadata2/53930 REAPED PASS79.794s, actual
+iOS ARM64 and iOS metadata compile, format/architecture/detekt pass. Test-compile1/30110 REAPED
+PASS73.142s, actual compileTestKotlinIosSimulatorArm64 including all13 new test methods.
+Local-check1/64494 REAPED PASS119.539s; full :check executes0 new tests, reusing14,626 exact
+accepted unchanged-platform report digests. Strict local audit confirms the four Apple-only
+changes, identical source during all gates and identical Inspector inputs/proof APK. No compiler
+or emulator remains active. Compact evidence is in both repositories' measurements directory.
+
+Push this implementation, dispatch collaboration-control.yml for its exact pushed Mobile SHA,
+then audit expected12,604 portable and5,148 Apple cases (prior5,135 plus13 new inventory methods),
+retaining all prior case identities. Native Apple execution is NOT yet claimed. Shared registry
+CI43266580439 Apple job131351645845 remains in progress; its portable audit is already accepted.
+The new workflow must queue behind it without cancellation. Intel native SDK8 CI43267867675 is
+still building; on success use Mobile .work/sdk8-apple-planning-2026-11-12/audit-hosted.py to verify
+its exact four Swift contracts, package/proof digests, source manifest and five native slices.
+That read-only auditor is syntax checked but has NOT run. No SDK publication/product activation.
+Release91 remains accepted and uninstalled after connect59791 timeout. The availability question
+is pending; announce and use --install-only after connection. Never drive the phone UI.
 
 ## Release91 accepted; installation waits for phone connection
 
