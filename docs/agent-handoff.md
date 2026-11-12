@@ -1,14 +1,14 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 10:29 UTC. Continue the PRD and push every commit. All54 groups OPEN.
+Updated 12 November 2026, 10:37 UTC. Continue the PRD and push every commit. All54 groups OPEN.
 No subagents. One compiler OR emulator. Phone install-only: announce, explicit serial, never launch
 or drive the phone UI, reset app data or uninstall. No final checkpoint response; continue the work.
 
 ## Current: progressive Company incoming content
 
-The 16-file Mobile progressive-content change is locally accepted and being committed with this
-handoff and measurement. Base native fixture commits: Mobile7c3fca00 / Group1c36fb8b. Group receives
-documentation only for this change. Native worker acceptance remains the next task.
+Progressive content is committed and pushed: Mobile197b55d9 / Groupc192ddcc.
+Push sessions96985/4493 REAPED. Mobile now has five uncommitted native fixture files; Group has
+three corresponding native protocol/test files. No production change after197b55d9.
 
 Workspace `.work/space-original-progressive-content-2026-11-12` (Mobile). Exact baseline is the
 accepted native receipt fixture source now committed as7c3fca00;5,131 source inputs. Current16-file
@@ -41,29 +41,44 @@ remain archived. The only full1-to-full2 source delta is the unrelated app worke
 ProofAPK149059016B/6080a8fe4f8c7c338f1a155c7b13797aedf23ea293ab0a74d91b1e7a6c87d2a7;
 SDK8x86 native hash6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95.
 See [measurement](measurements/collaboration-space-original-progressive-content-2026-11-12.json).
-Hosted plan/dispatch/audit scripts prepared in workspace; NOT dispatched yet. Expected17,572 =
-12,490 portable (5974/947/5569) +5082 Apple; baseline accepted runtime43182776077, explicit reviewed
-case replacements. Commit/push accepted source, then dispatch once while clean. No native claim.
+Hosted CI43200304791 dispatched once from197b55d98c30e19347e15e7012fc5737014e639c at10:25:52.726669UTC;
+session77811 REAPED. Expected17,572 =12,490 portable (5974/947/5569) +5082 Apple. Source-specific
+plan/state/audit files are in hosted-43200304791. Baseline accepted runtime43182776077; explicit
+reviewed case replacements are required. Not audited yet; do not dispatch again.
 
 ## Next: actual canonical worker native acceptance
 
-Current workspace also has native-draft (5 Mobile files) and native-group-draft (3 Group files),
-UNAPPLIED, Kotlin UNCOMPILED and review INCOMPLETE. Python strict protocol29 cases passed0.004s
-(2 new). native-draft-state.json and base hashes describe them. prepare-native-readers.py,
-prepare-native-worker.py and prepare-native-protocol.py ALREADY EXECUTED; do not rerun them.
-The draft uses an explicit process incoming collector callback, actual retained registration and
-SynchronizeCollaborationSpaceDevice, waits for actual durable source progress, and reads Company
-history through local canonical metadata/registration. It checks progress.provider is null and no
-duplicate Published content. Worker and separate offline branch use that Company reader. New strict
-flags are companyStorage and actualSourceRetained. Unrelated six controls keep their existing shape.
+Active workspace `.work/space-original-worker-native-2026-11-12` in Mobile and Group. Drafts were
+reviewed and applied: five Mobile fixture files, three Group protocol/test files. All production
+inputs match accepted197b55d9. Actual process collector, retained registration-based adoption,
+SynchronizeCollaborationSpaceDevice and durable-source observation replace the old incomplete
+fixture setup. Worker and separate offline reopen read Company history with explicit physical
+coordinates, both metadata indexes and no duplicate Published content. Strict flags companyStorage
+and actualSourceRetained are required. Existing four-turn bound, first-page content, empty-repeat,
+covered-hint and old exact backend request assertions remain; native acceptance is NOT complete.
 
-Review before applying: actual first-page content projection includes edits; current registration
-identity versus device receipt; source lifetime; finite4-turn drain; covered hint suppression;
-canonical alias/physical inventory overlap. Existing Group exact worker turns2/Matrix31/native14
-assertions are intentionally unchanged in the draft until real stage evidence explains changes.
-Do not raise thresholds, drop pending work or remove content-before-EOF/empty-repeat assertions.
-Read `.work/space-incoming-sources-native-2026-11-12/worker-repair-design.md` for detailed constraints.
-No new native runner workspace/source compilation prepared yet. Preserve failed stores.
+Mobile format1/1860 REAPED36.924s. Proof1/55870 REAPED FAILED54.665s, zero tests: Detekt found
+reopened scenario109 lines. Failed candidate archived before correction. Receipt comparison moved
+to existing pure evidence assertions; repeated offline runtime coordinates captured once, with both
+before/after checks preserved. No production change. Format2/21982 REAPED35.044s; proof2/88058
+REAPED PASSED124.739s/21fresh tests. Audit73555 REAPED accepted14,512 (21fresh+14,491 unchanged).
+Current5-file/5131-input manifest910a7e78dd0559680aff42a6cd516a79625d7964d353d493dbff9c3c00bc0d1a.
+ProofAPK149932375B/61c634866f194e0bbb24cb62bfc8ca507a4bd59dcd7df6f83db832a61994fb0a,
+immutable copy proof-2/accepted-proof.apk. Not a phone release.
+Group Python29cases passed0.006s. Format1/36796 REAPED21.202s with no edits. Group3-file/8745-input
+manifest674bcfed931027c2ed49d35e338fe66071b03ae00cf98220ee2142085b424fe9.
+Group source1/46483 ACTIVE: compile.py source-1 compiles server tests and checks format/architecture.
+Do not edit Group source until reaped. Then accept-source.py source-1 and native.py worker-1 for
+one isolated registered-worker diagnostic. Native config points Mobile proof-2 / Group source-1.
+One compiler OR emulator; emulator2560MiB/2cores, explicit emulator-5562, preserve failed userdata.
+Initial prep assertion rejected private Python bytecode before Group writes; corrected by selecting
+only actual draft source files. Preparation did not drop any source or test.
+
+Potential follow-up, source inspection ONLY: QueueCollaborationSpaceIncomingRoom currently checks
+coverage through Space history; canonical worker stores Company history. Final covered-hint check
+may expose this mismatch. Observe the actual failed native stage first; never insert duplicate Space
+facts or relax the no-work assertion. See covered-hint-review.md in the active Mobile workspace.
+Prior detailed design remains in .work/space-incoming-sources-native-2026-11-12/worker-repair-design.md.
 
 ## Accepted native receipt/source proof
 
