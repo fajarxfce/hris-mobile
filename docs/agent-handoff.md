@@ -25,9 +25,11 @@ and perform no metadata read. Missing/malformed registration, source change, den
 timeout and cancellation keep their failure semantics. Existing scoped Space API and Original aliases
 remain. This outcome is not history EOF, key absence or a global completion receipt.
 
-Preparation, publisher and this writer HAVE EXECUTED. Commit/push source and evidence, then dispatch
-ONCE with the guarded dispatch-hosted.py. Expected16,334=11,604portable+4,730Apple. Inspect any
-existing dispatch-attempt file/hosted-plan rather than repeating a dispatch.
+Preparation, publisher and this writer HAVE EXECUTED. Mobile20957650/Group98e936d2 are pushed
+(sessions81902/99819 REAPED). Hosted43139532066 dispatched ONCE by64617 REAPED at
+2026-11-12T02:10:20.823607+00:00. Ref validation/key-history-source-availability-20261112; IN PROGRESS, not audited.
+Expected16,334=11,604portable+4,730Apple. hosted-plan.json and hosted-43139532066/state.json
+retain the exact source/run; never redispatch.
 
 ## Next admitted account metadata turn
 
