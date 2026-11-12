@@ -4,31 +4,41 @@ Updated 12 November 2026, 03:27 UTC.
 Complete PRD, per-commit pushes and validated phone updates remain authorized. All54 groups OPEN.
 Continue working. No subagents. One compiler OR emulator. Follow AGENTS.md and clean layers.
 
-## Active Published Space transfer — local validation
+## Active Published Space transfer — full validation
 
-Workspace .work/space-primary-key-wait-transfer-2026-11-12, baselined78fd99b (accepted source15a418f7).
-Five source files APPLIED: Space operation, fixture/26common cases, existing DI and graph changes.
-5,085 inputs/5425aedbfd109580a97c1ae78959909d757c9b72ef4770ecaefb6be1a6bd660c.
-Expected13,862local/191JVM+189browser focused. Focused1/81975 REAPED FAILED98tests/26fixture failures
-(all stopped before the operation: reader fixture deliberately clears primary demand). The archived
-failed-focused-candidate-1 remains intact. Corrected the demotion fixture to own a valid Pending
-demand with retained source provenance; production constraints unchanged. Format2/63646 REAPED
-PASS36.260s. Focused2/39990 RUNNING; only compiler active, no emulator.
-Preparation HAS EXECUTED; publisher and accepted handoff writer have NOT. Do not run preparation twice.
+Workspace .work/space-primary-key-wait-transfer-2026-11-12; baselined78fd99b (accepted15a418f7).
+Five source files APPLIED, 5,085inputs/feffb13055f3d60271f51501d56ba4dbdb29d77c2bb1558ad8d71d6e6305d79a.
+Focused3/24163 REAPED PASS191cases/399.504s; browser1/77451 REAPED PASS189cases/155.913s.
+Focused acceptance380cases confirms exact manifests and oldcaseIDs. Full1/93405 RUNNING,
+expected13,862; only compiler active. Preparation HAS EXECUTED, accepted publisher/writer have NOT.
+Failed candidates1/2 archived before fixes: 26construction failures from a reader-cleared primary
+snapshot, then one alias-test duplicate task generation. Corrected fixture ownership and unique
+alias generation; production constraints unchanged. Format3/17851 REAPED35.394s.
 
-It keeps Published logical Space and current Group traversal coordinates, pins immutable binding
-including Original aliases, and checks the checkpoint's current Original physical company/device.
-Unresolved provider EOF transfers exact primary work+fresh recovery+wake atomically with shared
-confirmation. Original tasks cannot use this owner. No worker/producer activation is included.
+Published logical Space coordinates and current Group traversal device remain separate from the
+Original physical provider company/device. Metadata/source/registration, finite provider EOF,
+pending seek, unresolved source and exact write/readback precede atomic primary removal+fresh
+recovery+wake. Both demotion owners remain UNINVOKED; no worker/producer activation.
 
-Current workspace next-global-turn-draft contains ONLY an unreviewed/uncompiled/unapplied typed
-attempt entity, with no tests, completion/deferral operation or worker changes yet. Read the prior
-workspace next-global-completion-operation-review.md and next-application-history-service-review.md.
-Complete/confirm a selected global page without a mutating reader, then integrate ready/deferred
-history into adoption and continuation. Existing worker ignores it and Finish refuses active work;
-producer activation now would cause empty-work resume loops. Reserve history service before long
-primary work; completed waiting passes sleep until real new demand. Keep source/restore publication
-coverage and loss-aware native listener ownership as explicit remaining work.
+Next private draft next-global-turn-draft now contains10reviewed UNAPPLIED/UNCOMPILED files:
+Complete/DeferCollaborationSpaceHistoryRecoveryTurn, typed attempt, exact write confirmation,
+shared fixture/58new cases (33completion,13deferral,12confirmation), existing DI/graph changes.
+It rechecks metadata/actual historical coordinates, source/root/registration, bounded one-row
+coverage and existing progress without generation-requesting readers. Complete/waiting/older passes
+remain distinct; operational deferral uses the existing bounded retry policy. One CAS and exact
+readback preserve primary/new requests. No automatic write retry or new global pass. Draft/source
+hashes and guards are in next-global-turn-state.json. prepare-global-turn.py and its publisher/
+handoff scripts are PREPARED, NOT EXECUTED. Baseline next scope only after current full acceptance,
+source/evidence push and ONE hosted dispatch. Expectednext13,978local/16,862hosted.
+
+Continue worker integration after global operations: eligible/deferred selection must cause adoption
+and scheduled continuation. Current worker ignores history and Finish refusal can cause immediate
+resume loops. Reserve history service before long primary work, keep completed waiting asleep and
+preserve post-publication producer/restore causality. Native key callback receipt/lifetime and64-room
+fairness remain outstanding. No producer activation until the complete path is serviced.
+
+Phone connect59195 REAPED at2026-11-12T03:51:12.853750+00:00,20.020311s timeout. No install;
+next attempt no earlier04:24:13UTC. Release89 remains validated and install-only. No phone UI.
 
 ## Original primary transfer and finite visit policies accepted
 
