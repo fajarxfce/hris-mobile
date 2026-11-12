@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 21:45 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 21:51 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -52,17 +52,21 @@ known failure without waiting for another first result. Existing assertion ident
 the successful result type now explicitly selects Bound when reading its history fields.
 
 The candidate adds11 domain and2 actual encrypted transition/reopen cases, plus test adapters.
-Format1/18221 REAPED PASS35.148s. Frozen5169inputs/af23dad3d41224f9db11792cd14094f337c9a51839e2da993eb9c97cfa544d79.
-Focused1/99930 ACTIVE from21:44, expected100 (domain54/data44/application DI2). Full expected
+Focused1/99930 REAPED FAILED145.168s:54 domain cases, one existing invalid-request test
+caught a directory read after upstream access validation had already failed. Preserve
+failed-invalid-access-forwarding-1. The final selector now forwards failures directly;
+only successful binding selection enters its guarded content reader. No assertions changed.
+Format2/68039 REAPED PASS34.459s. Frozen5169inputs/6408e5f86ede8d4ff8753c33c4c0d85380fd96db907ba572632014594c2a263a.
+Focused2/28094 ACTIVE from21:50, expected100 (domain54/data44/application DI2). Full expected
 14,764 with all14,738 prior IDs. Auditors prepared; neither gate accepted yet. Do not edit
-source or start another local compiler/emulator until reaped. Preserve failures and fix actual
-causes; never weaken cancellation, prior assertions or owned-content checks. After acceptance,
-commit/push, continue composer context and organization UI. All54 PRD groups remain OPEN.
+source or start another local compiler/emulator until reaped. After acceptance, commit/push,
+continue composer context and organization UI. All54 PRD groups remain OPEN.
 
-Hosted follow-up43312753298 is PENDING behind43297910558 on exact1f47eeddb833054ae2b3d52c20439e6d11518a02.
-Dispatch78537 REAPED. Expected12,716portable (6083desktop/955Android/5678browser) +5,212Apple
+Hosted follow-up43312753298 is RUNNING on exact1f47eeddb833054ae2b3d52c20439e6d11518a02.
+Dispatch78537 REAPED. Apple131515464968 and portable131515465558 started after the preceding
+control completed. Expected12,716portable (6083desktop/955Android/5678browser) +5,212Apple
 =17,928. Mobile.work/room-binding-observation-2026-11-12/hosted-control and hosted-audit.py
-are prepared; no jobs/audits yet. Keep this pending run, do not dispatch another while pending.
+are prepared; no completed job/audit yet. Do not replace a pending run with another dispatch.
 Audit auxiliary inventories missing from the earlier copied Company auditor were restored from
 accepted Apple store evidence BEFORE its first Apple audit: identical13 inventory/8 store IDs.
 See company-thread-publication-2026-11-12/hosted-control/auditor-input-correction.json. New
@@ -145,9 +149,13 @@ Portable131478498528 is ACCEPTED: auditor70237 REAPED,12,666 cases, zero prior-I
 replacements/browser normalization. Artifact13984756078/4054447B/ad79fb987c703e4235b3823f92b184c8013df4f4c07c89c20f271281728ed056;
 report701f6640e829f93997f1f048a87c40bb8eccd8d9bd05f6217cd4e3c29f1fc816;
 logf2bd2d8d0e6a4866b3a53fc9c08b1f82dc58afe20310cbcb66ae5a656b0d1fb8.
-Apple131478499227 completed its test step and is building the host at21:33; expect5,187, total17,853 only after its
-own audit. Mobile.work/company-thread-publication-2026-11-12/hosted-control keeps artifacts
-and full portable manifest. Run hosted-audit.py apple hosted-control after success.
+Apple131478499227 is ACCEPTED: auditor82338 REAPED,5,187 native iOS shared cases,
+zero prior-ID replacements; host and push fields pass. Both jobs total17,853 cases.
+Artifact13986567933/819797B/9ed38b8e481a24059a98cb4d907312de9d7ac354e22a0313ba4af3172d25b0ee;
+reportd5ac8549d7e8251bc3f3afb5f59721e3e8178b60f7d56e1f204daf8ae3eab82e;
+log2509f4744483cd50828e2e43e837707b2cef2a466181d79e646c77a391cf72eb.
+Mobile.work/company-thread-publication-2026-11-12/hosted-control keeps both complete audits.
+Do not rerun either accepted job. Shared iOS acceptance is separate from the four Swift SDK tests.
 Do not rerun accepted portable or dispatch multiple pending controls.
 Inventory and store local main ARM64/metadata, all21 native-test method compilation and full
 `:check` pass. Linux executed0 Apple cases. Both adapters require a pre-provisioned private,
@@ -177,7 +185,7 @@ fresh2560MiB/two cores, cold2908ms/reopen2145ms, stable10s/process. Both screens
 were inspected and show complete onboarding. ARM39435 REAPED42.972s, verify38284 REAPED.
 All gates are finished; do not rebuild. No authenticated release/phone latency claim.
 
-Latest ADB3122 REAPED timeout15s at21:30UTC; no installation attempted. At20:12UTC the
+Latest ADB57949 REAPED timeout15s at21:48UTC; no installation attempted. At20:12UTC the
 WireGuard handshake was34837s old; route is correct viawg0. Do not repeat availability questions.
 When10.77.77.3:5555 connects, announce EACH actual installation, then run Mobile
 .work/release-phone-2026-11-12-build92/install.py --install-only. Inspect any existing
