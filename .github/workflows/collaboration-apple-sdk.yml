@@ -1,0 +1,64 @@
+name: SDK8 Apple native candidate
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, feat/chat-send-timing-20261107]
+    paths:
+      - .github/workflows/collaboration-apple-sdk.yml
+      - tool/build_collaboration_apple_sdk.py
+      - tool/test_build_collaboration_apple_sdk.py
+      - tool/collaboration-apple-sdk-proof/**
+      - tool/collaboration-apple-proof/**
+      - tool/collaboration-sdk-patches/apple-incoming-hints-build.json
+      - tool/collaboration-sdk-patches/swift-pinned-build.patch
+      - tool/collaboration-sdk-patches/android-incoming-hints-build.json
+
+permissions:
+  contents: read
+
+concurrency:
+  group: collaboration-apple-sdk-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  native:
+    runs-on: macos-15
+    timeout-minutes: 210
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: mobile
+      - uses: actions/checkout@v4
+        with:
+          repository: matrix-org/matrix-rust-sdk
+          ref: 8de215a0aa0026afa5754ae5f05a6d168d1a1d60
+          path: sdk
+          persist-credentials: false
+      - name: Record Apple toolchain
+        run: |
+          xcodebuild -version
+          swift --version
+          uname -m
+      - name: Verify builder guards
+        run: python3 -m unittest discover -s mobile/tool -p test_build_collaboration_apple_sdk.py
+      - name: Build pinned SDK8 and run actual Swift crypto and ownership contracts
+        run: |
+          python3 mobile/tool/build_collaboration_apple_sdk.py \
+            --sdk "$GITHUB_WORKSPACE/sdk" \
+            --output "$GITHUB_WORKSPACE/artifact" --bootstrap
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sdk8-apple-native-candidate
+          path: |
+            artifact/result.json
+            artifact/build.log
+            artifact/swift-tests.xml
+            artifact/Cargo.lock
+            artifact/sdk/
+            artifact/proof/Package.swift
+            artifact/proof/Sources/
+            artifact/proof/Tests/
+          if-no-files-found: error
+          retention-days: 7

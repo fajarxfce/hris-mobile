@@ -1,0 +1,29 @@
+--- a/xtask/src/swift.rs
++++ b/xtask/src/swift.rs
+@@ -255,7 +255,7 @@
+     create_dir_all(ffi_directory.as_path())?;
+ 
+     let sh = sh();
+-    cmd!(sh, "rustup run stable cargo build -p matrix-sdk-ffi --features {FFI_FEATURES}").run()?;
++    cmd!(sh, "cargo build --locked -p matrix-sdk-ffi --features {FFI_FEATURES}").run()?;
+ 
+     rename(lib_output_dir.join(FFI_LIBRARY_NAME), ffi_directory.join(FFI_LIBRARY_NAME))?;
+     let swift_directory = root_directory.join("bindings/apple/generated/swift");
+@@ -424,7 +424,7 @@
+ 
+             println!("-- Building for {}", target.description);
+             if target.status == TargetStatus::TopTier {
+-                cmd!(sh, "rustup run stable cargo build -p matrix-sdk-ffi --target {triple} --profile {profile} --features {FFI_FEATURES}")
++                cmd!(sh, "cargo build --locked -p matrix-sdk-ffi --target {triple} --profile {profile} --features {FFI_FEATURES}")
+                     .run()?;
+             } else {
+                 cmd!(sh, "rustup run nightly cargo build -p matrix-sdk-ffi -Zbuild-std --target {triple} --profile {profile} --features {FFI_FEATURES}")
+@@ -437,7 +437,7 @@
+ 
+         if !stable_targets.is_empty() {
+             let triples = stable_targets.iter().map(|target| target.triple).collect::<Vec<_>>();
+-            let mut cmd = cmd!(sh, "rustup run stable cargo build -p matrix-sdk-ffi");
++            let mut cmd = cmd!(sh, "cargo build --locked -p matrix-sdk-ffi");
+             for triple in &triples {
+                 cmd = cmd.arg("--target").arg(triple);
+             }

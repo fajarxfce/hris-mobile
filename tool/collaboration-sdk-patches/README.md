@@ -1,5 +1,11 @@
 # Patched Matrix Android SDK
 
+The [SDK8 Apple candidate](../../docs/collaboration-sdk8-apple-candidate.md) reuses the immutable
+Android SDK8 source manifest and all nine patches. Its separate `swift-pinned-build.patch`
+only makes the upstream Apple builder honor the pinned Rust toolchain and Cargo lockfile.
+The Apple manifest/build driver verifies five native architectures and real Swift contracts;
+candidate validation is separate from application integration and publication.
+
 ## SDK8 incoming hints — 11 November 2026
 
 `sync-incoming-hints.patch` and `stored-key-hints.patch` apply after the seven SDK6 patches.

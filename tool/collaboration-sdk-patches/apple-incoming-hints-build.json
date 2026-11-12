@@ -1,0 +1,22 @@
+{
+  "baseManifest": "android-incoming-hints-build.json",
+  "baseManifestSha256": "5f93684eac1c1e26f95f250d87ec34b91bdd22ad34a2a8af5659f8a210623b3f",
+  "builderPatch": "swift-pinned-build.patch",
+  "builderPatchSha256": "9f05d91ba44e45fe0f51ac9fdba7f09d7b3a865ae648c0f577fd2578bd45a45e",
+  "builderSource": "xtask/src/swift.rs",
+  "originalBuilderSha256": "d1d011e603ea327fce873f8eaeb9b9ae242b2d305a9a61af77b528ff04608ec8",
+  "patchedBuilderSha256": "c988b469128edc4bc7ea47488bc965ead215b633fe2116dc389c9b0516c58114",
+  "profile": "small-release",
+  "iosDeploymentTarget": "16.0",
+  "macosDeploymentTarget": "12.0",
+  "targets": [
+    "aarch64-apple-ios",
+    "aarch64-apple-ios-sim",
+    "x86_64-apple-ios",
+    "aarch64-apple-darwin",
+    "x86_64-apple-darwin"
+  ],
+  "swiftPackageSource": "bindings/apple/Debug-Package.swift",
+  "swiftPackageSourceSha256": "66ede2c1d0bd9f112473469ad198626d2f153476623efeaf6919a8a2569f234a",
+  "version": "26.10.23-hris.8"
+}

@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 16:37 UTC. Continue implementation beyond checkpoints and push every commit.
+Updated 12 November 2026, 16:43 UTC. Continue implementation beyond checkpoints and push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One compiler OR emulator. Phone install-only:
 announce and select serial; never launch/drive UI, reset data or uninstall. ADB availability question is pending after a fresh connection timeout.
 
@@ -45,14 +45,29 @@ Nine-case native/proof/source gates remain accepted; do not rerun absent new cha
 Phone90 remains accepted but uninstalled: connect13358 REAPED timeout12s, pending availability
 question. Never reinstall89, launch/drive/reset/uninstall the user's phone.
 
-Next: exact SDK8 Apple framework and native proof. Read-only local draft is at
-.work/sdk8-apple-planning-2026-11-12; not yet tracked/built/dispatched. The current Swift proof pins
-upstream26.10.27 and the app selects unavailable Apple Matrix runtime. Prepare a separate owned
-checkout, same immutable nine SDK8 Rust patches plus narrowly hashed Swift build-tool patch:
-replace explicit rustup stable calls with cargo build --locked under pinned RUSTUP_TOOLCHAIN1.96.0.
-Build real macOS/iOS/device/simulator slices and verify exported methods, encrypted-store continuity
-and listener disposal before production bridge adoption. Common-host CI is not native chat support.
-Do not mutate/rebuild protected SDK forks or published Android assets. All54 PRD groups stay OPEN.
+## SDK8 Apple native candidate prepared; hosted result pending
+
+Mobile adds tool/build_collaboration_apple_sdk.py, ten negative/positive artifact guard tests,
+a separate SDK8 proof manifest and three Swift tests, a hashed Apple manifest/build-tool patch,
+and .github/workflows/collaboration-apple-sdk.yml. Original upstream Swift proof is unchanged;
+the driver stages its raw-key source/test plus the three SDK8 tests into one four-case package.
+Same immutable nine Rust patches and Android SDK8 manifest5f93684eac1c1e26f95f250d87ec34b91bdd22ad34a2a8af5659f8a210623b3f.
+Additional Swift builder patch9f05d91ba44e45fe0f51ac9fdba7f09d7b3a865ae648c0f577fd2578bd45a45e
+changes explicit stable cargo calls to cargo build --locked under pinned Rust1.96.0.
+Five native architectures, sequential builds/two jobs, iOS16/macOS12. Verifies each slice's actual
+architectures and exact SDK8/recovery symbols. Original raw-key continuity plus SDK8 passphrase
+identity/wrong-key refusal, absent-store no-create, cursor and listener/observer ownership tests
+must all pass before unsigned iOS device AND simulator linking. No production runtime binding.
+
+Local10 tests pass; YAML/Python syntax valid; dry-run Apple patch applies and every protected SDK8
+source digest remains unchanged. Native Swift/Mach-O execution is NOT claimed. Candidate inputs
+and local evidence are in Mobile .work/sdk8-apple-planning-2026-11-12; see its Git contract at
+docs/collaboration-sdk8-apple-candidate.md. Push triggers the new macOS candidate workflow; obtain
+and record its exact commit/run before claiming acceptance. No package publication. Preserve
+failed diagnostics if it fails; change only demonstrated causes. No local compiler/emulator active.
+The actual Apple app still selects an unavailable Matrix runtime; bridge implementation follows
+accepted native SDK8. Do not rebuild/mutate protected SDK forks or Android release assets.
+Phone90 remains accepted and pending connection; all54 PRD groups stay OPEN and live Group stays OFF.
 
 ## Accepted: canonical Original covered hints
 
