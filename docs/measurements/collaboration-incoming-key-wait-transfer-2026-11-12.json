@@ -1,0 +1,87 @@
+{
+  "recordedAt": "2026-11-12T03:27:55.517353+00:00",
+  "sourceBaseline": "7a47d456bc642aebbd937f46c2caf128f339aa6a",
+  "sourceFiles": 5082,
+  "changedSourceFiles": 12,
+  "sourceManifestSha256": "6381702b3d1e979b12d360ade21cbdc46b13bc6f05547c6f442ab994a8cf855f",
+  "focused": {
+    "tests": 610,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused-1",
+  "focusedBrowserRun": "browser-1",
+  "full": {
+    "validated": 13810,
+    "fresh": {
+      "tests": 11772,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 575.233,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152180224,
+    "sha256": "0a50dbf30b530e9da59183661443865b92a463dd766189fbcdadfbafc78a9fe3"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "historyRecoveryVisitPoliciesAccepted": true,
+  "originalPrimaryKeyWaitTransferAccepted": true,
+  "newCommonCasesPerTarget": 68,
+  "admittedOriginalOperationCases": 27,
+  "writeConfirmationCases": 12,
+  "companyPhysicalOwnerAndHistoricalDevicePreserved": true,
+  "currentAccountSourceMetadataAndRegistrationRequired": true,
+  "providerEofAndFinitePendingSeekRequired": true,
+  "actualUnresolvedReferenceRequired": true,
+  "exactRequestedHeadCoverageRequired": true,
+  "metadataPublishedBeforePrimaryRetirement": true,
+  "primaryRemovalRecoveryAndFreshWakeInOneCas": true,
+  "uniqueGenerationAllocatedAfterAdmission": true,
+  "successfulReplyCopiedBeforeSuspension": true,
+  "lostStorageReplyRequiresUniqueRetainedRequest": true,
+  "unknownOrFalseOrFabricatedWriteIsNotReceipt": true,
+  "absentOrReplacedTaskCreatesNoExtraRequest": true,
+  "concurrentPrimaryAndRequestedGenerationPreserved": true,
+  "originalDiFactoryExplicitlyResolved": true,
+  "localLifetimeSeconds": 5,
+  "internalWriteRetries": false,
+  "spaceOperationImplemented": false,
+  "globalCoverageProof": false,
+  "workerActivation": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "nativeSdkExecution": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "starterPortRequired": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [
+    {
+      "run": "policy-focused-1",
+      "exitCode": 1,
+      "elapsedSeconds": 146.38,
+      "freshCounts": {
+        "tests": 102,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "failureReviews": {
+    "policy-focused-1": {
+      "stage": "domain tests",
+      "tests": 102,
+      "failures": 2,
+      "review": "Two invalid new test fixtures. Existing validCollaborationMessageId accepts the all-zero opaque UUID; the test now rejects malformed/overlong IDs and explicitly verifies the established zero-ID behavior. The Original-alias case omitted mandatory sourceId and retained source progress; it now includes both and retains the original validity/identity assertions. Production policies unchanged; no filters, skips or timeout changes.",
+      "archive": "failed-policy-candidate-1",
+      "scope": "Earlier five-file policy candidate, before the admitted operation was added"
+    }
+  }
+}

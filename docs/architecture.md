@@ -1,5 +1,7 @@
 # Architecture
 
+[Original key-wait transfer](collaboration-incoming-key-wait-transfer.md) verifies published unresolved history before atomic primary removal and a fresh recovery request with its wake.
+
 [Bounded account recovery selection](collaboration-account-history-recovery-turn-read.md) captures one admitted metadata row under the current registered source and an unchanged recovery turn.
 
 [Historical source availability](collaboration-key-history-source-availability.md) retains actual historical ownership and separates an unavailable source from operational or authorization failure.
