@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import platform
 import plistlib
+import re
 import shutil
 import subprocess
 import time
@@ -62,7 +63,54 @@ def contained_file(root, relative):
     return path
 
 
-def verify_framework(framework, base):
+def resolve_symbol_reader(env, expected_rust):
+    """Use the pinned compiler's reader: Apple's nm cannot parse newer Rust LLVM bitcode."""
+    verbose = subprocess.check_output(["rustc", "-vV"], env=env, text=True, timeout=15)
+    fields = dict(line.split(": ", 1) for line in verbose.splitlines() if ": " in line)
+    host = fields.get("host")
+    llvm = fields.get("LLVM version")
+    if (fields.get("release") != expected_rust or
+            host not in {"aarch64-apple-darwin", "x86_64-apple-darwin"} or
+            not llvm or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", llvm)):
+        raise ValueError("Unexpected Rust compiler provenance for symbol inspection")
+    root = Path(subprocess.check_output(
+        ["rustc", "--print", "sysroot"], env=env, text=True, timeout=15).strip()).resolve(strict=True)
+    reader = root / "lib" / "rustlib" / host / "bin" / "llvm-nm"
+    if not reader.is_file():
+        raise ValueError("Install llvm-tools-preview for the pinned Rust toolchain")
+    reader = reader.resolve(strict=True)
+    if root not in reader.parents:
+        raise ValueError("Symbol reader escapes the pinned Rust sysroot")
+    version = subprocess.check_output([str(reader), "--version"], env=env, text=True, timeout=15)
+    reported = re.search(r"\bLLVM version ([0-9]+\.[0-9]+\.[0-9]+)(?:[-\w.]*)", version)
+    if reported is None or reported.group(1) != llvm:
+        raise ValueError("Symbol reader LLVM version differs from the pinned compiler")
+    return reader, {"rust": expected_rust, "host": host, "llvmVersion": llvm,
+                    "version": version.strip(), "sha256": sha(reader)}
+
+
+def probe_symbol_reader(symbol_reader, provenance, output, env, log):
+    """Read a real host staticlib, including Rust's bundled LLVM bitcode, before the long build."""
+    probe = output / "symbol-reader-probe"
+    probe.mkdir()
+    source = probe / "probe.rs"
+    source.write_text('#[unsafe(no_mangle)]\npub extern "C" fn sdk8_symbol_reader_probe() -> u32 { 8 }\n')
+    archive = probe / "libprobe.a"
+    run(["rustc", "--edition=2024", "--crate-type=staticlib", "--crate-name=sdk8_reader_probe",
+         "--target", provenance["host"], "-O", str(source), "-o", str(archive)],
+        cwd=probe, env=env, log=log, timeout=120)
+    architecture = "arm64" if provenance["host"] == "aarch64-apple-darwin" else "x86_64"
+    symbols = subprocess.check_output(
+        [str(symbol_reader), "--defined-only", "--extern-only", "--format=just-symbols",
+         "--arch=" + architecture, str(archive)], env=env, text=True, timeout=120)
+    names = {line.strip().removeprefix("_") for line in symbols.splitlines()}
+    if "sdk8_symbol_reader_probe" not in names:
+        raise ValueError("Pinned symbol reader could not inspect a real Rust archive")
+    return {"passed": True, "architecture": architecture, "sourceSha256": sha(source),
+            "archiveSha256": sha(archive)}
+
+
+def verify_framework(framework, base, symbol_reader):
     info = plistlib.loads((framework / "Info.plist").read_bytes())
     required = {"uniffi_matrix_sdk_ffi_fn_method_room_" + name for name in (
         "load_or_fetch_raw_event", "queued_message_events", "settle_confirmed_queue_event")}
@@ -84,7 +132,8 @@ def verify_framework(framework, base):
             raise ValueError("Native architectures differ from the slice declaration")
         for architecture in sorted(architectures):
             symbols = subprocess.check_output(
-                ["xcrun", "nm", "-gU", "-arch", architecture, str(native)], text=True, timeout=120)
+                [str(symbol_reader), "--defined-only", "--extern-only", "--format=just-symbols",
+                 "--arch=" + architecture, str(native)], text=True, timeout=120)
             names = {line.split()[-1].removeprefix("_") for line in symbols.splitlines() if line.split()}
             if not required.issubset(names):
                 raise ValueError("Native SDK8 entry point missing from an Apple architecture")
@@ -130,11 +179,17 @@ def build(args):
         with (out / "build.log").open("w") as log:
             if args.bootstrap:
                 run(["rustup", "toolchain", "install", base["rust"], "--profile", "minimal",
-                     "--target", ",".join(manifest["targets"])], cwd=sdk, env=env, log=log, timeout=900)
+                     "--component", "llvm-tools-preview", "--target", ",".join(manifest["targets"])],
+                    cwd=sdk, env=env, log=log, timeout=900)
             rust = subprocess.check_output(["rustc", "--version"], env=env, text=True, timeout=15)
             if not rust.startswith("rustc " + base["rust"] + " "):
                 raise ValueError("Unexpected Rust toolchain")
             record["rustVersion"] = rust.strip()
+            symbol_reader, record["symbolReader"] = resolve_symbol_reader(env, base["rust"])
+            log.write("Pinned symbol reader: " + json.dumps(record["symbolReader"]) + "\n")
+            log.flush()
+            record["symbolReaderProbe"] = probe_symbol_reader(
+                symbol_reader, record["symbolReader"], out, env, log)
             for name in base["patches"]:
                 run(["git", "apply", "--check", str(patches / name)], cwd=sdk, env=env, log=log, timeout=15)
                 run(["git", "apply", str(patches / name)], cwd=sdk, env=env, log=log, timeout=15)
@@ -161,7 +216,7 @@ def build(args):
             if {name: sha(sdk / name) for name in expected} != before:
                 raise ValueError("SDK source changed during compilation")
             generated = sdk / "bindings/apple/generated"
-            record["slices"] = verify_framework(generated / "MatrixSDKFFI.xcframework", base)
+            record["slices"] = verify_framework(generated / "MatrixSDKFFI.xcframework", base, symbol_reader)
             package = out / "sdk"
             destination = package / "bindings/apple/generated"
             destination.mkdir(parents=True)

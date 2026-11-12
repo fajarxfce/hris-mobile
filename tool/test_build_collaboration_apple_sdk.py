@@ -1,9 +1,11 @@
 """Reject incomplete or substituted native evidence before accepting an Apple SDK package."""
 import copy
+import io
 import json
 import os
 from pathlib import Path
 import plistlib
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -11,7 +13,8 @@ from types import SimpleNamespace
 import xml.etree.ElementTree as ET
 
 from build_collaboration_apple_sdk import (
-    SLICE_ARCHITECTURES, SWIFT_TESTS, build, contained_file, load_manifest, verify_framework, verify_swift_tests,
+    SLICE_ARCHITECTURES, SWIFT_TESTS, build, contained_file, load_manifest,
+    probe_symbol_reader, resolve_symbol_reader, verify_framework, verify_swift_tests,
 )
 
 
@@ -94,11 +97,14 @@ class AppleNativeEvidenceTest(unittest.TestCase):
             item = next(item for item in self.entries if item["LibraryIdentifier"] == name)
             if command[1] == "lipo":
                 return "armv7" if wrong_architecture else " ".join(item["SupportedArchitectures"])
+            self.assertEqual("/pinned-rust/bin/llvm-nm", command[0])
+            self.assertEqual(["--defined-only", "--extern-only", "--format=just-symbols"], command[1:4])
+            self.assertIn(command[4], {"--arch=" + arch for arch in item["SupportedArchitectures"]})
             symbols = self.symbols if not missing_symbol else self.symbols[:-1] + [self.symbols[-1] + "_checksum"]
-            return "\n".join("000000 T _" + symbol for symbol in symbols)
+            return "\n".join("_" + symbol for symbol in symbols)
 
         with patch("build_collaboration_apple_sdk.subprocess.check_output", side_effect=output):
-            return verify_framework(self.root, self.base)
+            return verify_framework(self.root, self.base, Path("/pinned-rust/bin/llvm-nm"))
 
     def test_all_five_architectures_require_exact_entry_points(self):
         self.assertEqual(5, sum(len(item["architectures"]) for item in self.inspect()))
@@ -127,6 +133,114 @@ class AppleNativeEvidenceTest(unittest.TestCase):
         for relative in ("../external.a", "link.a"):
             with self.subTest(relative=relative), self.assertRaisesRegex(ValueError, "escapes"):
                 contained_file(self.root, relative)
+
+
+class AppleSymbolReaderTest(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporary.cleanup)
+        self.root = Path(self.temporary.name) / "rust"
+        self.reader = self.root / "lib/rustlib/x86_64-apple-darwin/bin/llvm-nm"
+        self.reader.parent.mkdir(parents=True)
+        self.reader.write_bytes(b"pinned-reader")
+        self.compiler = "rustc 1.96.0 (fixture)\nrelease: 1.96.0\nhost: x86_64-apple-darwin\nLLVM version: 22.1.2\n"
+        self.version = "llvm-nm, compatible with GNU nm\nLLVM version 22.1.2-rust-1.96.0-stable\n"
+        self.env = {"RUSTUP_TOOLCHAIN": "1.96.0"}
+        self.commands = []
+
+    def output(self, command, **kwargs):
+        self.commands.append(command)
+        self.assertEqual(self.env, kwargs["env"])
+        if command == ["rustc", "-vV"]:
+            return self.compiler
+        if command == ["rustc", "--print", "sysroot"]:
+            return str(self.root)
+        self.assertEqual([str(self.reader.resolve()), "--version"], command)
+        return self.version
+
+    def inspect(self):
+        with patch("build_collaboration_apple_sdk.subprocess.check_output", side_effect=self.output):
+            return resolve_symbol_reader(self.env, "1.96.0")
+
+    def test_reader_comes_from_exact_rust_host_and_records_matching_llvm(self):
+        reader, evidence = self.inspect()
+        self.assertEqual(self.reader.resolve(), reader)
+        self.assertEqual("22.1.2", evidence["llvmVersion"])
+        self.assertEqual("x86_64-apple-darwin", evidence["host"])
+        self.assertEqual("1.96.0", evidence["rust"])
+        self.assertEqual(64, len(evidence["sha256"]))
+
+    def test_missing_reader_is_rejected_before_any_framework_build(self):
+        self.reader.unlink()
+        with self.assertRaisesRegex(ValueError, "Install llvm-tools-preview"):
+            self.inspect()
+        self.assertEqual([["rustc", "-vV"], ["rustc", "--print", "sysroot"]], self.commands)
+
+    def test_old_or_unidentified_llvm_reader_is_rejected(self):
+        for version in ("Apple LLVM version 17.0.0", "llvm-nm", "LLVM version 22.1.1"):
+            self.version = version
+            with self.subTest(version=version), self.assertRaisesRegex(ValueError, "LLVM version differs"):
+                self.inspect()
+
+    def test_foreign_compiler_host_release_or_version_is_rejected(self):
+        original = self.compiler
+        for compiler in (original.replace("1.96.0", "1.95.0"),
+                         original.replace("x86_64-apple-darwin", "x86_64-unknown-linux-gnu"),
+                         original.replace("LLVM version: 22.1.2", "LLVM version: unknown")):
+            self.compiler = compiler
+            self.commands.clear()
+            with self.subTest(compiler=compiler), self.assertRaisesRegex(ValueError, "compiler provenance"):
+                self.inspect()
+            self.assertEqual([["rustc", "-vV"]], self.commands)
+
+    def test_reader_symlink_cannot_escape_the_compiler_sysroot(self):
+        outside = self.root.parent / "unrelated-nm"
+        outside.write_bytes(b"unrelated")
+        self.reader.unlink()
+        self.reader.symlink_to(outside)
+        with self.assertRaisesRegex(ValueError, "escapes the pinned Rust sysroot"):
+            self.inspect()
+
+
+class AppleSymbolReaderProbeTest(unittest.TestCase):
+    def test_real_archive_probe_requires_exact_defined_symbol_from_both_host_architectures(self):
+        for host, architecture in (("aarch64-apple-darwin", "arm64"), ("x86_64-apple-darwin", "x86_64")):
+            with self.subTest(host=host), tempfile.TemporaryDirectory() as directory:
+                output = Path(directory)
+                reader = Path("/pinned-rust/bin/llvm-nm")
+                env = {"RUSTUP_TOOLCHAIN": "1.96.0"}
+                def compile_probe(command, **kwargs):
+                    self.assertEqual("rustc", command[0])
+                    self.assertEqual(host, command[command.index("--target") + 1])
+                    self.assertIn("--crate-type=staticlib", command)
+                    self.assertEqual(env, kwargs["env"])
+                    Path(command[-1]).write_bytes(b"compiled-host-archive")
+                def read(command, **kwargs):
+                    self.assertEqual(str(reader), command[0])
+                    self.assertEqual(["--defined-only", "--extern-only", "--format=just-symbols"], command[1:4])
+                    self.assertEqual("--arch=" + architecture, command[4])
+                    self.assertEqual(env, kwargs["env"])
+                    return "_sdk8_symbol_reader_probe\n"
+                with patch("build_collaboration_apple_sdk.run", side_effect=compile_probe), patch(
+                    "build_collaboration_apple_sdk.subprocess.check_output", side_effect=read
+                ):
+                    result = probe_symbol_reader(reader, {"host": host}, output, env, io.StringIO())
+                self.assertTrue(result["passed"])
+                self.assertEqual(architecture, result["architecture"])
+                self.assertEqual(64, len(result["archiveSha256"]))
+
+    def test_missing_or_unreadable_probe_symbol_never_falls_back_to_apple_nm(self):
+        for response in ("_sdk8_symbol_reader_probe_checksum\n", subprocess.CalledProcessError(1, ["llvm-nm"])):
+            with self.subTest(response=response), tempfile.TemporaryDirectory() as directory:
+                def compile_probe(command, **_):
+                    Path(command[-1]).write_bytes(b"compiled-host-archive")
+                effect = response if isinstance(response, Exception) else lambda *_args, **_kwargs: response
+                with patch("build_collaboration_apple_sdk.run", side_effect=compile_probe), patch(
+                    "build_collaboration_apple_sdk.subprocess.check_output", side_effect=effect
+                ) as reader, self.assertRaises((ValueError, subprocess.CalledProcessError)):
+                    probe_symbol_reader(Path("/pinned-rust/bin/llvm-nm"), {"host": "x86_64-apple-darwin"},
+                                        Path(directory), {}, io.StringIO())
+                self.assertEqual(1, reader.call_count)
 
 
 class AppleSwiftEvidenceTest(unittest.TestCase):

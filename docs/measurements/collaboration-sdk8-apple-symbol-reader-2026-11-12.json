@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-12",
+  "failedRun": 43296438399,
+  "failedHead": "3c9c41a9f45f0533e4591a632d1df862668a06d0",
+  "failedJob": 131455907436,
+  "elapsedSeconds": 10471.129,
+  "artifactId": 13992067219,
+  "artifactBytes": 18757,
+  "artifactSha256": "d48c496130814b7a083d3483ccf9e37f523d6fb33cd4ca7916d3f308aaf831db",
+  "jobLogSha256": "7042ba65af48e9eb6e4112845ddc564ce96dda87e15dc8042da89ef4fb480884",
+  "failure": "Apple LLVM17 nm rejects LLVM22.1.2 Rust compiler_builtins bitcode after all five targets and XCFramework build. Unknown attributes102/105.",
+  "swiftCasesExecuted": 0,
+  "localGuardTests": 17,
+  "localGuards": {
+    "checkedAt": "2026-11-12T23:17:13.995804+00:00",
+    "exitCode": 0,
+    "elapsedSeconds": 0.107,
+    "sources": {
+      "tool/build_collaboration_apple_sdk.py": "fe5ed8ffb588f14dd757042e39a3d5982a626bffcbb1422b0b44737f826ab892",
+      "tool/test_build_collaboration_apple_sdk.py": "4021ffd0fa2fe1c6af62bf217a7e11b20e285408640cfc6789371c716e47a216",
+      ".github/workflows/collaboration-apple-sdk.yml": "6587fcc383be6111ee0af9fdb82a669ccfb79cba341503e08d8eb682bd885fb8"
+    },
+    "logSha256": "9dc643229373b931825a3a7c9965099f844e48cce8c5fa034d23c590b44f2e4a"
+  },
+  "hostedAccepted": false,
+  "published": false,
+  "remaining": "Exact-head Darwin staticlib probe, all five export checks, all four actual Swift contracts, device and simulator builds."
+}
