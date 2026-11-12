@@ -1,0 +1,169 @@
+{
+  "accepted": true,
+  "at": "2026-11-12T20:26:25.029675+00:00",
+  "versionCode": 92,
+  "sourceCommit": "151438b4ba85f599fb2eefc080a6ac15423ac6e1",
+  "apkSha256": "d8001bd137fdd08d3d3b112519eef226ee38ba78c35c6b29cba51b019fc3700c",
+  "bytes": 124333455,
+  "sdk": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.8",
+  "sourceManifestSha256": "52aa82e138e376350b6f43a2e09fa33c757359c41f59b23bd619ac05f0609663",
+  "fullSourceTests": 14688,
+  "nativeProofCases": 10,
+  "releaseStartupAccepted": true,
+  "sameExecutableDexAcrossAbis": true,
+  "nonDebuggable": true,
+  "samePreviouslyInstalledSigner": true,
+  "lintIssues": 0,
+  "phoneInstalled": false,
+  "phoneUiTouched": false,
+  "liveGroupChanged": false,
+  "limitations": [
+    "Native encrypted-chat scenarios use the dedicated x86 proof; release startup uses the actual x86 product without an employee account.",
+    "ARM64 product runtime, retained employee-account upgrade and chat latency are not claimed by the emulator startup.",
+    "Live Group remains disabled on schema116.4. Native Apple SDK8 execution and all54 PRD acceptance groups remain separate."
+  ],
+  "x86": {
+    "acceptedArtifact": true,
+    "sourceCommit": "151438b4ba85f599fb2eefc080a6ac15423ac6e1",
+    "artifact": ".work/release-phone-2026-11-12-build92/hris-mobile-dev-release-1.0.0-92-x86_64.apk",
+    "bytes": 138079688,
+    "sha256": "0742652c7382f37155bd7880aa1c2cd162ffaf88af7d9c089e750dcef6c42810",
+    "dexSha256": "722a63ed79391df34e89a36b072bc9ca712c2fe1902cbf36f5b8f31bb3a1a927",
+    "abi": "x86_64",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 92,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "signatureVerified": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "samePreviouslyInstalledSigner": true,
+    "zipAligned16KiB": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "inspectorAndIncomingSourcesPresent": true,
+    "lintIssues": 0,
+    "sdk": {
+      "nativeSha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+      "nativeBytes": 111331328,
+      "elfClass": "ELF64",
+      "requiredElfAlignment": 16384,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "requiredSymbolsPresent": true,
+      "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.8",
+      "publicationReleaseId": 441121763,
+      "aarSha256": "6eebe8dab124541783d2b1d746cf30ea4b8dd2a599980cccb823927780678717",
+      "strippedNativeMatchesVerifiedSdk": true
+    }
+  },
+  "arm64": {
+    "acceptedArtifact": true,
+    "sourceCommit": "151438b4ba85f599fb2eefc080a6ac15423ac6e1",
+    "artifact": ".work/release-phone-2026-11-12-build92/hris-mobile-dev-release-1.0.0-92-arm64-v8a.apk",
+    "bytes": 124333455,
+    "sha256": "d8001bd137fdd08d3d3b112519eef226ee38ba78c35c6b29cba51b019fc3700c",
+    "dexSha256": "722a63ed79391df34e89a36b072bc9ca712c2fe1902cbf36f5b8f31bb3a1a927",
+    "abi": "arm64-v8a",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 92,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "signatureVerified": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "samePreviouslyInstalledSigner": true,
+    "zipAligned16KiB": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "inspectorAndIncomingSourcesPresent": true,
+    "lintIssues": 0,
+    "sdk": {
+      "nativeSha256": "27ad4f7c31fcca109aa0d7635b2e20e0e76a2a81bdbbfe0bf158f389ef274869",
+      "nativeBytes": 97549328,
+      "elfClass": "ELF64",
+      "requiredElfAlignment": 16384,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "requiredSymbolsPresent": true,
+      "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.8",
+      "publicationReleaseId": 441121763,
+      "aarSha256": "6eebe8dab124541783d2b1d746cf30ea4b8dd2a599980cccb823927780678717",
+      "strippedNativeMatchesVerifiedSdk": true
+    }
+  },
+  "startup": {
+    "startedAt": "2026-11-12T20:21:44.566484+00:00",
+    "passed": true,
+    "sourceCommit": "151438b4ba85f599fb2eefc080a6ac15423ac6e1",
+    "apkSha256": "0742652c7382f37155bd7880aa1c2cd162ffaf88af7d9c089e750dcef6c42810",
+    "versionCode": 92,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "freshIsolatedUserdata": true,
+    "phoneTouched": false,
+    "authenticatedAccountUsed": false,
+    "chatSendAttempted": false,
+    "bootSeconds": 32.563,
+    "launches": [
+      {
+        "phase": "cold",
+        "pid": "2653",
+        "processStayedAlive": true,
+        "activityPresent": true,
+        "launchTimingMillis": {
+          "TotalTime": 2908,
+          "WaitTime": 2959
+        },
+        "screenshotSha256": "64b189a58f9a4cdbd1e2f80afb4ef152f4e0ddd683696932fd57d95491068a41"
+      },
+      {
+        "phase": "reopened",
+        "pid": "3573",
+        "processStayedAlive": true,
+        "activityPresent": true,
+        "launchTimingMillis": {
+          "TotalTime": 2145,
+          "WaitTime": 2167
+        },
+        "screenshotSha256": "e42c73ac2addc71c4fd57c3b4be176451925538863e84d093d04e371a0f5c1ac"
+      }
+    ],
+    "installedBytesMatch": true,
+    "noFatalExceptionObserved": true,
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "emulatorStopped": true,
+    "elapsedSeconds": 78.255
+  },
+  "visual": {
+    "accepted": true,
+    "at": "2026-11-12T20:23:52.726087+00:00",
+    "screenshotSha256": "64b189a58f9a4cdbd1e2f80afb4ef152f4e0ddd683696932fd57d95491068a41",
+    "reopenedScreenshotSha256": "e42c73ac2addc71c4fd57c3b4be176451925538863e84d093d04e371a0f5c1ac",
+    "observations": "Both cold and reopened actual release screenshots show the rendered HRIS onboarding page, title, description, pager, Skip and Continue controls without crash dialog or blank content.",
+    "authenticatedFlowClaim": false
+  },
+  "buildSeconds": {
+    "x86_64": 657.652,
+    "arm64-v8a": 42.972
+  },
+  "latestPhoneConnection": {
+    "at": "2026-11-12T20:26:04.048049+00:00",
+    "serial": "10.77.77.3:5555",
+    "installed": false,
+    "result": "timeout"
+  }
+}

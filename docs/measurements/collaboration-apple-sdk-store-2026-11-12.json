@@ -28,13 +28,115 @@
   "phoneTouched": false,
   "productionAppleRuntimeEnabled": false,
   "hostedNativeAcceptance": {
-    "status": "pending",
+    "status": "portable accepted; Apple in progress",
     "runId": 43279731370,
     "sourceCommit": "836ac52575daf1747aac1cf94a6768a80998023f",
     "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43279731370",
     "expectedPortable": 12604,
     "expectedApple": 5156,
-    "priorInventoryRun": 43273697021
+    "priorInventoryRun": 43273697021,
+    "portable": {
+      "sourceCommit": "836ac52575daf1747aac1cf94a6768a80998023f",
+      "runId": 43279731370,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43279731370",
+      "jobId": 131439574875,
+      "artifactId": 13979103864,
+      "bytes": 4047761,
+      "sha256": "46d6243020390461076118757d53c002d4ea33966db6a10908b48964b5493bd7",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreservedExceptReviewedReplacements": true,
+      "reviewedReplacements": 0,
+      "browserRuntimeCaseSuffixChanges": 0,
+      "browserRuntimeChange": null,
+      "counts": {
+        "desktopTest": 6027,
+        "testAndroidHostTest": 955,
+        "wasmJsBrowserTest": 5622
+      },
+      "reportManifestSha256": "865d8fb4dfd65dc9b2dab91ed7ac356b2d3d38c9e01c434e9192ef725a47f18e",
+      "jobLogSha256": "6ea31e8b1fecaeb4d96afaa35fb03af4791999c871fb0ae111a6c2a1c197411c",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check out verified network inspector",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-java@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run gradle/actions/setup-gradle@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run android-actions/setup-android@v3",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check setup transport and ownership",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check application bindings and platform compilation",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run gradle/actions/setup-gradle@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-java@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Check out verified network inspector",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    "auditCorrection": {
+      "failedAuditorSession": "22498 REAPED",
+      "reason": "The prepared config copied a prior run Chrome156-to157 suffix replacement. All466 current browser reports/5622 cases actually use Chrome156, equal to the accepted old baseline. No replacement is required; direct exact case identity checks remain enabled.",
+      "preservedConfiguration": "failed-audit-state-1.json",
+      "currentSuffix": "[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+      "currentBrowserCases": 5622,
+      "caseIdentityNormalization": false,
+      "sourceChanged": false,
+      "testRerun": false,
+      "artifactSha256": "46d6243020390461076118757d53c002d4ea33966db6a10908b48964b5493bd7"
+    }
   },
   "limits": [
     "Only acquire creates scoped directories and owner.lock below a pre-provisioned private root. No credential or SDK client construction.",
