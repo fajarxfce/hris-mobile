@@ -5,6 +5,31 @@ Complete PRD, per-commit pushes and validated phone updates remain authorized. A
 keep working. No subagents. Follow AGENTS.md and architecture. Usecases coordinate repositories
 and policy, never other usecases. ViewModels own screen state. One compiler OR emulator.
 
+## Active finite recovery policies — local validation
+
+Five new source files in .work/history-recovery-visit-policies-2026-11-12, baselinec79180c3.
+5,077 inputs; final candidate bd1b3778b6fff89dbc538968204810fd4674471b799ed59c8dd82b78825e70ae.
+Twenty visit and nine primary-demotion policy cases. Not accepted yet. Focused1/91401 REAPED FAILED
+146.380s/102tests/2new fixture failures; archive failed-focused-candidate-1 and failure-reviews.json.
+Opaque generation IDs follow existing validCollaborationMessageId (including zero UUID), unlike
+account/device identifiers. The test now explicitly asserts that established contract and rejects
+malformed IDs. The Original alias fixture now includes mandatory sourceId plus retained source
+progress. No production weakening, skipped tests or timeout changes. Format2/80317 REAPED PASS35.672s.
+Focused2/78486 RUNNING; reap before browser/full validation. Publisher/writer are prepared, NOT EXECUTED.
+
+A seven-file private next-primary-key-wait-draft has an admitted Original demotion owner,
+write-confirmation policy, fixtures/38common cases plus DI/graph changes. UNREVIEWED/UNCOMPILED/UNAPPLIED.
+It reads provider EOF, finished finite seek, an actual unresolved reference and exact requested head,
+then atomically removes primary work and retains fresh recovery+wake. Successful raw replies are
+copied before suspension; lost storage replies require the unique retained request. Absent/replaced
+captures create no extra generation. The actual storage codec requires published checkpoints for
+progress reads, which is the basis for metadata-before-demotion. Space counterpart, cross-producer
+coverage, global completion, operational deferral, application service and native callbacks remain.
+
+Space projection hosted43136996756 now fully audited16,292=11,576portable+4,716Apple.
+Apple audit89901 REAPED; unsigned application host/16Swift push checks passed. Native Matrix SDK8
+Apple execution remains unproved. Exact ZIP/report/log hashes live in the checked-in measurement.
+
 ## Bounded account history turn reading accepted
 
 Workspace .work/account-history-recovery-turn-read-2026-11-12, baseline f026b80dec655eb3896129126b2b9d93d0222654.
