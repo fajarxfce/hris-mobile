@@ -1,8 +1,40 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 18:01 UTC. Continue implementation beyond checkpoints and push every commit.
+Updated 12 November 2026, 18:26 UTC. Continue implementation beyond checkpoints and push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One compiler OR emulator. Phone install-only:
-announce and select serial; never launch/drive UI, reset data or uninstall. ADB availability question is pending after a fresh connection timeout.
+announce and select serial; never launch/drive UI, reset data or uninstall. Latest phone connect35727 REAPED timeout12s at18:16UTC; release91 remains uninstalled.
+
+## Native account-replacement proof in progress; shared Apple registry accepted
+
+Current uncommitted work is .work/native-account-replacement-2026-11-12 in Mobile and Group.
+Mobile adds a seeded SessionRepository and actual application-source fixture: first key receipt
+commits while only its reply is held, actual account index/session changes to B, old runtime must
+retire, B cannot read A receipt, late callback must not ACK, then A receipt/private identity restore.
+Existing encrypted original/edit/tombstone checks and another offline process remain mandatory.
+No production policy or login/server-revocation behavior is changed or claimed. Group has a separate
+NativeAccountReplacementTest and strict driver; old nine native cases remain unchanged.
+Mobile format1/41505 and format2/19999 REAPED PASS. Proof1/39875 REAPED failed static LongMethod:
+reopened had101 lines against100; exact failed source retained. Scenario evidence selection moved
+to existing HrisEventReadEvidence, no assertions removed. Proof2/10657 REAPED PASS21 in114.780s,
+accepted immutable152,433,161-byte APK76b4ba13de5f3dcb40303e8ce8822dfcae6fad6062bd1609dc8163645b019f6c,
+SDK8 native unchanged. Mobile7 proof files/5,151inputs/70bd7258a94872ca0d7167eb691e1635fdde47facf480da41d9d1fc7515e4093.
+Group3 files/8,753inputs/0bb0b9a7f9a082063bf97fe570fce53e2df3f51c144d492f523b1eac0bb1585d;
+70 driver tests pass. Format1/68660 REAPED PASS20.522s. Source1/23811 still requires reaping;
+then accept-source.py source-1, native.py replacement-1, exact native audit, native.py suite-1
+(10 cases), full Mobile :check and accept-full.py. Native acceptance is NOT yet claimed.
+No emulator runs until compilation ends. Preserve failed input/data, one compiler OR emulator.
+
+Shared registry43266580439 is fully accepted: portable12,604 + Apple5,135 =17,739 cases,
+no dropped/replaced test IDs. Apple auditor3626 REAPED; artifact13971608237/811,082B/
+c203f86b9476516c6f33c9beb5ea1360592a394b95699793a8284d46f772ce5d. Native iOS tests and
+host build passed. Compact measurement now records both audited jobs; do not repeat them.
+Inventory43273697021 has started (portable131394617779; Apple131394617992 queued).
+Store dispatch89306 REAPED created43279731370 on exact836ac52575daf1747aac1cf94a6768a80998023f;
+PENDING behind inventory, no cancellation. Expected12,604portable +5,156Apple, exact13+8 methods.
+Its hosted-audit.py portable|apple hosted-43279731370 is prepared/syntax checked, not executed.
+DO NOT dispatch another same-branch control run until store starts: preserve the pending proof.
+Native SDK8 Intel43267867675 remains building separately; no four-case Swift acceptance yet.
+Release91 accepted/uninstalled; connect35727 timeout at18:16. No install attempted. Continue work.
 
 ## Apple SDK store acquisition locally accepted; preserve pending inventory CI
 

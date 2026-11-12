@@ -27,7 +27,15 @@
   "proofApkUnchangedSha256": "dd2568e9aa6a55b7da571383ef31c1f1d055bd63b30c77f849e5e8e5152e16a0",
   "phoneTouched": false,
   "productionAppleRuntimeEnabled": false,
-  "hostedNativeAcceptance": "not dispatched while previous inventory run waits; preserve that pending run",
+  "hostedNativeAcceptance": {
+    "status": "pending",
+    "runId": 43279731370,
+    "sourceCommit": "836ac52575daf1747aac1cf94a6768a80998023f",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43279731370",
+    "expectedPortable": 12604,
+    "expectedApple": 5156,
+    "priorInventoryRun": 43273697021
+  },
   "limits": [
     "Only acquire creates scoped directories and owner.lock below a pre-provisioned private root. No credential or SDK client construction.",
     "Twenty-one Apple store/inventory methods compile but have not executed locally; hosted OS tests remain required.",

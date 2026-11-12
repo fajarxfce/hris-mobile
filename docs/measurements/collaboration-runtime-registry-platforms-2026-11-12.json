@@ -74,7 +74,7 @@
   "compilerOverlap": false,
   "phoneTouched": false,
   "limits": [
-    "JVM and browser tests pass; native Apple monitor execution requires the separate hosted Apple contracts.",
+    "JVM, browser, Android host and native iOS shared contracts pass; exact prior test identities are retained.",
     "The actual Android SDK/Matrix fixture verifies the same nine cases. No new SDK artifact, transport, retry rule or production Apple runtime is enabled.",
     "No signed-in phone behavior or chat latency is claimed; live Group stays off and all54 PRD groups remain open."
   ],
@@ -99,10 +99,22 @@
       "jobLogSha256": "3a3572baa4a249bf34adb21ce282e1ec237de51252abc025521f18b67dbc2db2"
     },
     "apple": {
+      "sourceCommit": "ddf65dbe485aff6f2ef74d22469a723892d04d93",
       "runId": 43266580439,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43266580439",
       "jobId": 131351645845,
-      "status": "in_progress",
-      "expectedTests": 5135
-    }
+      "artifactId": 13971608237,
+      "bytes": 811082,
+      "sha256": "c203f86b9476516c6f33c9beb5ea1360592a394b95699793a8284d46f772ce5d",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreservedExceptReviewedReplacements": true,
+      "reviewedReplacements": 0,
+      "counts": {
+        "iosSimulatorArm64Test": 5135
+      },
+      "reportManifestSha256": "75d5cbe618dc03a818555c7f26a7e14579a03c729450483178c6ad68b19cf178",
+      "jobLogSha256": "d00b22bff99fb24484954e8839bb8f1d31f3b8353d5a370fd3ec9b7eadabddd1"
+    },
+    "acceptedTotal": 17739
   }
 }
