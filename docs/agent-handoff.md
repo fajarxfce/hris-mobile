@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 21:51 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 22:01 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -57,10 +57,23 @@ caught a directory read after upstream access validation had already failed. Pre
 failed-invalid-access-forwarding-1. The final selector now forwards failures directly;
 only successful binding selection enters its guarded content reader. No assertions changed.
 Format2/68039 REAPED PASS34.459s. Frozen5169inputs/6408e5f86ede8d4ff8753c33c4c0d85380fd96db907ba572632014594c2a263a.
-Focused2/28094 ACTIVE from21:50, expected100 (domain54/data44/application DI2). Full expected
-14,764 with all14,738 prior IDs. Auditors prepared; neither gate accepted yet. Do not edit
-source or start another local compiler/emulator until reaped. After acceptance, commit/push,
-continue composer context and organization UI. All54 PRD groups remain OPEN.
+Focused2/28094 REAPED PASS100/318.592s (domain54/data44/application DI2); strict audit passed.
+Full1/69697 ACTIVE from21:56. Expected14,764 with all14,738 prior IDs. Do not edit source or
+start another local compiler/emulator until reaped. Full auditor and record-acceptance.py are
+prepared/syntax checked; neither full audit nor acceptance recorder has run. After acceptance,
+commit/push, continue composer context and organization UI. All54 PRD groups remain OPEN.
+
+Next draft: Mobile.work/space-thread-contact-2026-11-12, NOT APPLIED. Six copied source paths
+extend the existing encrypted directory with a bounded published observeContact(access,accountId)
+using ReplicaStore.observeDocument. No whole-directory scan, key creation, mutation, network or
+retry. Three existing fakes reject unexpected new calls. Eight shared storage tests are assembled
+in the draft contract (9 existing ->17), covering actual published generation replacement/removal,
+selected-value equality, renewed login, account/space isolation, malformed rows/keys, exact one-row
+reads, late decryption cancellation and source failure termination. Review then apply only after
+current full acceptance/commit/push. No new compiler has run for this draft.
+The downstream context must use exact canonical metadata and optional local contact/sender facts;
+labels must not delay owned history. Existing retained registration.provider metadata may supply
+sender identity after bounded validation; do not use remote SpaceIdentity reads for offline UI.
 
 Hosted follow-up43312753298 is RUNNING on exact1f47eeddb833054ae2b3d52c20439e6d11518a02.
 Dispatch78537 REAPED. Apple131515464968 and portable131515465558 started after the preceding
