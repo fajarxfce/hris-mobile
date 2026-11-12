@@ -8,9 +8,12 @@ Continue working. No subagents. One compiler OR emulator. Follow AGENTS.md and c
 
 Workspace .work/space-primary-key-wait-transfer-2026-11-12, baselined78fd99b (accepted source15a418f7).
 Five source files APPLIED: Space operation, fixture/26common cases, existing DI and graph changes.
-5,085 inputs/adef917c95088c13fee87029afd0c176aaf7ad75fea532c67b75b813414f7a5f.
-Expected13,862local/191JVM+189browser focused. Format1/6685 REAPED PASS36.670s. Focused1/81975
-RUNNING; only compiler active, no emulator. Preserve failed candidates before any fix/refreeze.
+5,085 inputs/5425aedbfd109580a97c1ae78959909d757c9b72ef4770ecaefb6be1a6bd660c.
+Expected13,862local/191JVM+189browser focused. Focused1/81975 REAPED FAILED98tests/26fixture failures
+(all stopped before the operation: reader fixture deliberately clears primary demand). The archived
+failed-focused-candidate-1 remains intact. Corrected the demotion fixture to own a valid Pending
+demand with retained source provenance; production constraints unchanged. Format2/63646 REAPED
+PASS36.260s. Focused2/39990 RUNNING; only compiler active, no emulator.
 Preparation HAS EXECUTED; publisher and accepted handoff writer have NOT. Do not run preparation twice.
 
 It keeps Published logical Space and current Group traversal coordinates, pins immutable binding
