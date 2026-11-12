@@ -51,7 +51,8 @@ or removed assertion. Candidate2 and failure-reviews.json preserve the old sourc
 Format3/42272 REAPED PASS35.943s. Candidate5,072inputs/
 0b1ed4ddb3e72dfdf446cd69696fed7cc88ace4568d1fc9a755ccbaf698c67b0.
 Focused3/13983 REAPED PASS324.170s/158cases, including graph/Apple/Wasm compilation.
-Browser1/45358 RUNNING, expected156; full acceptance remains pending.
+Browser1/45358 REAPED PASS153.928s/156. Focused audit accepted314 and all old IDs.
+Full1/14956 RUNNING, expected13,674; only active compiler.
 Expected158JVM+156browser=314, local13,674, hosted16,406.
 Eight uncommitted source files (five new/three existing),24 common tests. Existing advance/defer
 shares the identity predicate while preserving its original mutation revision ceiling.
@@ -69,11 +70,19 @@ recovery revision. New requested generations/primary work survive; idle/deferred
 read source metadata. prepare-account-turn.py is syntax checked, PREPARED NOT EXECUTED; apply
 only after this stage is accepted, committed, pushed and dispatched. The publisher and handoff writer are also PREPARED NOT EXECUTED. Its selection cannot acknowledge global or historical work.
 
-Three future policy/entity/test files are privately drafted at the active account-turn workspace
+Five future policy/entity/test files are privately drafted at the active account-turn workspace
 next-global-completion-draft, with next-global-completion-state.json. They are UNREVIEWED,
-UNAPPLIED, UNCOMPILED with18 drafted common tests. They inspect local visit evidence without requesting
+UNAPPLIED, UNCOMPILED with29 drafted common tests (visit20/demotion9). They inspect local visit evidence without requesting
 a pass; admitted metadata/source/CAS/application service is still required. Storage trace confirms
 completeRecovery increments the checkpoint revision atomically with its reference outcomes.
+
+Further review notes in next-global-completion-review.md: Company history requires absent
+provider identity while Space requires an explicit provider; shared visit policy must preserve
+its captured nullable identity. Account locator pages have no global inventory version, so page
+rereads do not make a global snapshot. Proposed causal coverage requires atomic primary demotion
+plus fresh recovery/wake and post-restore triggers; prove key-before-metadata and cursor-insertion
+races before activation. Normal room-key IDs should target known histories; account scan remains
+loss/overflow/restore fallback. These producer/coverage contracts are not implemented yet.
 
 ## Next: bounded account recovery service and activation evidence
 
