@@ -66,7 +66,18 @@ class LoadCollaborationSpaceOriginalKeyHistory(
                     registration,
                     platform,
                 ) ?: return@withTimeoutOrNull changed()
-            if (legacy.binding.companyId != companyId) return@withTimeoutOrNull changed()
+            if (legacy.binding.companyId != companyId) {
+                val current = registrations.current(access, runtime.owner.parent.nativeSessionId)
+                admission(runtime, source).let {
+                    if (it is AppResult.Failed) return@withTimeoutOrNull it
+                }
+                if (current is AppResult.Failed) return@withTimeoutOrNull current
+                if ((current as AppResult.Success).value != registration)
+                    return@withTimeoutOrNull changed()
+                return@withTimeoutOrNull AppResult.Success(
+                    CollaborationSpaceOriginalKeyHistoryResolution.SourceUnavailable
+                )
+            }
             resolveMetadata(runtime, source, position, locator.deviceId, registration)
         } ?: changed(FailureKind.Timeout)
     }

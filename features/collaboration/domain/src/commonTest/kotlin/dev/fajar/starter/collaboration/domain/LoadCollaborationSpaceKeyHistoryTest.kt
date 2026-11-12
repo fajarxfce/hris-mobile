@@ -459,6 +459,139 @@ class LoadCollaborationSpaceKeyHistoryTest {
         }
     }
 
+    @Test
+    fun accountLocatorRetainsItsCurrentSpaceAndOriginalAliasScope() = runTest {
+        for (alias in listOf(false, true)) {
+            val f = Fixture()
+            if (alias) f.binding = f.originalAlias()
+            val locator =
+                CollaborationAccountIncomingHistoryLocator.Space(f.base.access.spaceId, f.locator())
+            val result =
+                assertIs<AppResult.Success<*>>(f.loader()(f.base.runtime, f.base.source, locator))
+                    .value
+            val ready = assertIs<CollaborationSpaceKeyHistoryResolution.Ready>(result).history
+            assertEquals(f.binding, ready.binding)
+            assertEquals(locator.history.conversationId, ready.traversal.conversationId)
+            assertEquals(listOf("registration1", "metadata", "registration2"), f.base.calls)
+        }
+    }
+
+    @Test
+    fun anotherAccountOwnedSpaceDoesNotLookUpTheSameConversationInTheCurrentRoot() = runTest {
+        val f = Fixture()
+        f.base.native.setup.now += 365.days
+        val locator = CollaborationAccountIncomingHistoryLocator.Space(f.base.id(901), f.locator())
+        assertEquals(
+            CollaborationSpaceKeyHistoryResolution.SourceUnavailable,
+            assertIs<AppResult.Success<*>>(f.loader()(f.base.runtime, f.base.source, locator)).value,
+        )
+        assertEquals(listOf("registration1", "registration2"), f.base.calls)
+    }
+
+    @Test
+    fun malformedAccountSpaceCannotReachAdmissionOrLocalReads() = runTest {
+        for (spaceId in listOf("bad", "00000000-0000-0000-0000-000000000000")) {
+            val f = Fixture()
+            val locator = CollaborationAccountIncomingHistoryLocator.Space(spaceId, f.locator())
+            assertEquals(
+                FailureKind.Validation,
+                assertIs<AppResult.Failed>(f.loader()(f.base.runtime, f.base.source, locator))
+                    .failure
+                    .kind,
+            )
+            assertTrue(f.base.calls.isEmpty())
+            assertEquals(0, f.base.sourceReads)
+        }
+    }
+
+    @Test
+    fun unavailableSpaceCannotHideMissingRegistrationOrInstalledSource() = runTest {
+        for (missing in listOf("registration", "source")) {
+            val f = Fixture()
+            if (missing == "registration") f.base.registration = null else f.base.installed = null
+            val locator =
+                CollaborationAccountIncomingHistoryLocator.Space(f.base.id(901), f.locator())
+            assertIs<AppResult.Failed>(f.loader()(f.base.runtime, f.base.source, locator))
+            assertFalse("metadata" in f.base.calls)
+        }
+    }
+
+    @Test
+    fun unavailableSpaceRequiresAnUnchangedFinalRegistration() = runTest {
+        val f = Fixture()
+        f.base.hooks["registration2"] = { f.base.registration = null }
+        val locator = CollaborationAccountIncomingHistoryLocator.Space(f.base.id(901), f.locator())
+        assertIs<AppResult.Failed>(f.loader()(f.base.runtime, f.base.source, locator))
+        assertEquals(listOf("registration1", "registration2"), f.base.calls)
+    }
+
+    @Test
+    fun unavailableSpaceFencesOwnershipSourceAndAccessAfterEachRead() = runTest {
+        for (stage in listOf("registration1", "registration2")) {
+            for (change in listOf("account", "native", "source", "denial")) {
+                val f = Fixture()
+                f.base.hooks[stage] = {
+                    when (change) {
+                        "account" -> f.base.native.setup.session = null
+                        "native" -> {
+                            val old = assertNotNull(f.base.native.setup.session)
+                            f.base.native.setup.session =
+                                old.copy(binding = old.binding.copy(serverId = f.base.id(26)))
+                        }
+                        "source" -> f.base.installed = f.base.source.copy(matrixDeviceId = "OTHER")
+                        else -> f.base.directory.deny()
+                    }
+                }
+                val locator =
+                    CollaborationAccountIncomingHistoryLocator.Space(f.base.id(901), f.locator())
+                val failed =
+                    assertIs<AppResult.Failed>(f.loader()(f.base.runtime, f.base.source, locator))
+                if (change == "denial") assertEquals(f.base.directory.denied, failed.failure)
+                if (change == "source") assertEquals(FailureKind.Unavailable, failed.failure.kind)
+                if (change == "native") assertEquals(FailureKind.Unauthorized, failed.failure.kind)
+                assertEquals(stage, f.base.calls.last())
+                assertFalse("metadata" in f.base.calls)
+            }
+        }
+    }
+
+    @Test
+    fun unavailableSpaceReadFailuresAndDeadlinesRemainOperationalFailures() = runTest {
+        for (stage in listOf("registration1", "registration2")) for (stall in listOf(false, true)) {
+            val f = Fixture()
+            if (stall) f.base.hooks[stage] = { awaitCancellation() }
+            else f.base.failures[stage] = f.base.directory.storageFailure
+            val locator =
+                CollaborationAccountIncomingHistoryLocator.Space(f.base.id(901), f.locator())
+            val failed =
+                assertIs<AppResult.Failed>(f.loader()(f.base.runtime, f.base.source, locator))
+            if (stall) assertEquals(FailureKind.Timeout, failed.failure.kind)
+            else assertEquals(f.base.directory.storageFailure, failed.failure)
+            assertEquals(1, f.base.calls.count { it == stage })
+            assertFalse("metadata" in f.base.calls)
+        }
+    }
+
+    @Test
+    fun unavailableSpaceCallerCancellationCannotPublishAWaitingOutcome() = runTest {
+        for (stage in listOf("registration1", "registration2")) {
+            val f = Fixture()
+            val entered = CompletableDeferred<Unit>()
+            f.base.hooks[stage] = {
+                entered.complete(Unit)
+                awaitCancellation()
+            }
+            val locator =
+                CollaborationAccountIncomingHistoryLocator.Space(f.base.id(901), f.locator())
+            val job = async { f.loader()(f.base.runtime, f.base.source, locator) }
+            entered.await()
+            job.cancelAndJoin()
+            assertTrue(job.isCancelled)
+            assertEquals(stage, f.base.calls.last())
+            assertFalse("metadata" in f.base.calls)
+        }
+    }
+
     private class Fixture {
         val base = SpaceOriginalIncomingLoadFixture()
         val conversationId = base.id(940)

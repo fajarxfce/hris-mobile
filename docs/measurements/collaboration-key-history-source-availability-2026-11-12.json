@@ -1,0 +1,63 @@
+{
+  "recordedAt": "2026-11-12T02:10:09.276475+00:00",
+  "sourceBaseline": "85cb61b62b00ebec44566f16388aa5e4446ba76f",
+  "sourceFiles": 5067,
+  "changedSourceFiles": 6,
+  "sourceManifestSha256": "221c1dbac2fe1638749dd5c027225ac37168dae77a3c1a4b19b816160b23f57d",
+  "focused": {
+    "tests": 314,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused-1",
+  "focusedBrowserRun": "browser-1",
+  "full": {
+    "validated": 13626,
+    "fresh": {
+      "tests": 11588,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 571.218,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152161897,
+    "sha256": "63c937180b2ae465ad848886ef0e66ac87783d31ea399faebb10b1671b895a56"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "keyHistorySourceAvailabilityAccepted": true,
+  "newCommonCasesPerTarget": 14,
+  "existingLoaderCaseIdsPreserved": 50,
+  "intentionalExistingExpectationChanges": "Two Company mismatch cases now expect SourceUnavailable with a final registration read, while preserving their identities and refusal to read foreign metadata.",
+  "typedSourceUnavailable": true,
+  "foreignCompanySkipsMetadata": true,
+  "accountSpaceLocatorRetainsActualSpaceId": true,
+  "foreignSpaceSkipsBindingRead": true,
+  "currentSpaceScopedApiAndOriginalAliasesPreserved": true,
+  "stableFinalRegistrationRequired": true,
+  "ownedLocalExpiryBehaviorPreserved": true,
+  "missingInvalidChangedDeniedAndFailedSourcesRemainFailures": true,
+  "genericFailureMapping": false,
+  "localLifetimeSeconds": 5,
+  "hiddenRetry": false,
+  "keyProbe": false,
+  "sourceAcquisition": false,
+  "metadataWrite": false,
+  "historyAcknowledgement": false,
+  "globalAcknowledgement": false,
+  "newListener": false,
+  "nativeSdkExecution": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "starterPortRequired": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [],
+  "failureReviews": {}
+}

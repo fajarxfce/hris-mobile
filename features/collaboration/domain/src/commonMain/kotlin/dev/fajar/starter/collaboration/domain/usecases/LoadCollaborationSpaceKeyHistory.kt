@@ -23,6 +23,22 @@ class LoadCollaborationSpaceKeyHistory(
         runtime: CollaborationSpaceRuntimeReady,
         source: CollaborationSpaceIncomingSource,
         locator: CollaborationIncomingHistoryLocator,
+    ): AppResult<CollaborationSpaceKeyHistoryResolution> =
+        load(runtime, source, runtime.owner.localDirectoryAccess().spaceId, locator)
+
+    /** Account-wide metadata must retain its actual Space owner. */
+    suspend operator fun invoke(
+        runtime: CollaborationSpaceRuntimeReady,
+        source: CollaborationSpaceIncomingSource,
+        locator: CollaborationAccountIncomingHistoryLocator.Space,
+    ): AppResult<CollaborationSpaceKeyHistoryResolution> =
+        load(runtime, source, locator.spaceId, locator.history)
+
+    private suspend fun load(
+        runtime: CollaborationSpaceRuntimeReady,
+        source: CollaborationSpaceIncomingSource,
+        spaceId: String,
+        locator: CollaborationIncomingHistoryLocator,
     ): AppResult<CollaborationSpaceKeyHistoryResolution> {
         currentCoroutineContext().ensureActive()
         val access = runtime.owner.localDirectoryAccess()
@@ -38,6 +54,7 @@ class LoadCollaborationSpaceKeyHistory(
                 !validCollaborationSpaceConversationId(runtime.deviceId) ||
                 !validCollaborationSpaceConversationId(runtime.operationId) ||
                 !validCollaborationSpaceIncomingSource(source) ||
+                !validCollaborationSpaceConversationId(spaceId) ||
                 !validCollaborationSpaceConversationId(locator.conversationId) ||
                 !validCollaborationSpaceConversationId(locator.deviceId)
         )
@@ -66,6 +83,18 @@ class LoadCollaborationSpaceKeyHistory(
                 ) == null
             )
                 return@withTimeoutOrNull changed()
+            if (spaceId != access.spaceId) {
+                val current = registrations.current(access, runtime.owner.parent.nativeSessionId)
+                admission(runtime, source).let {
+                    if (it is AppResult.Failed) return@withTimeoutOrNull it
+                }
+                if (current is AppResult.Failed) return@withTimeoutOrNull current
+                if ((current as AppResult.Success).value != registration)
+                    return@withTimeoutOrNull changed()
+                return@withTimeoutOrNull AppResult.Success(
+                    CollaborationSpaceKeyHistoryResolution.SourceUnavailable
+                )
+            }
             resolveMetadata(runtime, source, locator, registration)
         } ?: changed(FailureKind.Timeout)
     }

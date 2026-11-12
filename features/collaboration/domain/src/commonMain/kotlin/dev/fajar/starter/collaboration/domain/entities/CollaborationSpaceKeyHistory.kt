@@ -17,4 +17,7 @@ sealed interface CollaborationSpaceKeyHistoryResolution {
         CollaborationSpaceKeyHistoryResolution
 
     data object MetadataUnavailable : CollaborationSpaceKeyHistoryResolution
+
+    /** The validated current source cannot serve this historical owner; no metadata was read. */
+    data object SourceUnavailable : CollaborationSpaceKeyHistoryResolution
 }

@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.registeredCollaborationSpaceOriginalIncomingSdk
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationSpaceRegistrationRecord
 import dev.fajar.starter.collaboration.domain.usecases.LoadCollaborationSpaceOriginalKeyHistory
 import dev.fajar.starter.common.result.*
@@ -145,12 +146,11 @@ class LoadCollaborationSpaceOriginalKeyHistoryTest {
     fun anotherCompanyCannotBorrowTheInstalledOriginalIdentity() = runTest {
         val f = SpaceOriginalIncomingLoadFixture()
         assertEquals(
-            FailureKind.Conflict,
-            assertIs<AppResult.Failed>(loader(f)(f.runtime, f.source, f.id(901), locator(f)))
-                .failure
-                .kind,
+            CollaborationSpaceOriginalKeyHistoryResolution.SourceUnavailable,
+            assertIs<AppResult.Success<*>>(loader(f)(f.runtime, f.source, f.id(901), locator(f)))
+                .value,
         )
-        assertEquals(listOf("registration1"), f.calls)
+        assertEquals(listOf("registration1", "registration2"), f.calls)
     }
 
     @Test
@@ -175,16 +175,23 @@ class LoadCollaborationSpaceOriginalKeyHistoryTest {
             validCollaborationSpaceRegistrationRecord(f.access, assertNotNull(f.registration))
         )
         val installed = f.source.copy(matrixUserId = matrixUser)
+        assertNotNull(
+            registeredCollaborationSpaceOriginalIncomingSdk(
+                f.runtime,
+                installed,
+                assertNotNull(f.registration),
+                CollaborationNativePlatform.ANDROID,
+            )
+        )
         f.installed = installed
         assertEquals(
-            FailureKind.Conflict,
-            assertIs<AppResult.Failed>(
+            CollaborationSpaceOriginalKeyHistoryResolution.SourceUnavailable,
+            assertIs<AppResult.Success<*>>(
                     loader(f)(f.runtime, installed, f.position.companyId, locator(f))
                 )
-                .failure
-                .kind,
+                .value,
         )
-        assertEquals(listOf("registration1"), f.calls)
+        assertEquals(listOf("registration1", "registration2"), f.calls)
     }
 
     @Test
@@ -431,6 +438,103 @@ class LoadCollaborationSpaceOriginalKeyHistoryTest {
             job.cancelAndJoin()
             assertTrue(job.isCancelled)
             assertEquals(stage, f.calls.last())
+        }
+    }
+
+    @Test
+    fun unavailableCompanyDoesNotHideMissingRegistration() = runTest {
+        val f = SpaceOriginalIncomingLoadFixture()
+        f.registration = null
+        assertIs<AppResult.Failed>(loader(f)(f.runtime, f.source, f.id(901), locator(f)))
+        assertEquals(listOf("registration1"), f.calls)
+    }
+
+    @Test
+    fun unavailableCompanyRequiresUnchangedFinalRegistration() = runTest {
+        val f = SpaceOriginalIncomingLoadFixture()
+        f.hooks["registration2"] = { f.registration = null }
+        assertIs<AppResult.Failed>(loader(f)(f.runtime, f.source, f.id(901), locator(f)))
+        assertEquals(listOf("registration1", "registration2"), f.calls)
+    }
+
+    @Test
+    fun unavailableCompanyStillFencesLateOwnershipAndSourceChanges() = runTest {
+        for (stage in listOf("registration1", "registration2")) {
+            for (change in listOf("account", "native", "source", "denial")) {
+                val f = SpaceOriginalIncomingLoadFixture()
+                f.hooks[stage] = {
+                    when (change) {
+                        "account" -> f.native.setup.session = null
+                        "native" -> {
+                            val old = assertNotNull(f.native.setup.session)
+                            f.native.setup.session =
+                                old.copy(binding = old.binding.copy(serverId = f.id(26)))
+                        }
+                        "source" -> f.installed = f.source.copy(matrixDeviceId = "OTHER")
+                        else -> f.directory.deny()
+                    }
+                }
+                val failed =
+                    assertIs<AppResult.Failed>(
+                        loader(f)(f.runtime, f.source, f.id(901), locator(f))
+                    )
+                if (change == "denial") assertEquals(f.directory.denied, failed.failure)
+                if (change == "source") assertEquals(FailureKind.Unavailable, failed.failure.kind)
+                if (change == "native") assertEquals(FailureKind.Unauthorized, failed.failure.kind)
+                assertEquals(stage, f.calls.last())
+                assertFalse("metadata" in f.calls)
+            }
+        }
+    }
+
+    @Test
+    fun unavailableCompanyDoesNotConvertStorageFailuresOrDenialsToWaiting() = runTest {
+        for (stage in listOf("registration1", "registration2")) for (deny in listOf(false, true)) {
+            val f = SpaceOriginalIncomingLoadFixture()
+            f.failures[stage] = f.directory.storageFailure
+            if (deny) f.hooks[stage] = { f.directory.deny() }
+            val failed =
+                assertIs<AppResult.Failed>(loader(f)(f.runtime, f.source, f.id(901), locator(f)))
+            assertEquals(
+                if (deny) f.directory.denied else f.directory.storageFailure,
+                failed.failure,
+            )
+            assertEquals(1, f.calls.count { it == stage })
+            assertFalse("metadata" in f.calls)
+        }
+    }
+
+    @Test
+    fun unavailableCompanyRegistrationHasOneBoundedDeadline() = runTest {
+        for (stage in listOf("registration1", "registration2")) {
+            val f = SpaceOriginalIncomingLoadFixture()
+            f.hooks[stage] = { awaitCancellation() }
+            assertEquals(
+                FailureKind.Timeout,
+                assertIs<AppResult.Failed>(loader(f)(f.runtime, f.source, f.id(901), locator(f)))
+                    .failure
+                    .kind,
+            )
+            assertEquals(1, f.calls.count { it == stage })
+            assertFalse("metadata" in f.calls)
+        }
+    }
+
+    @Test
+    fun unavailableCompanyCallerCancellationCannotPublishAWaitingOutcome() = runTest {
+        for (stage in listOf("registration1", "registration2")) {
+            val f = SpaceOriginalIncomingLoadFixture()
+            val entered = CompletableDeferred<Unit>()
+            f.hooks[stage] = {
+                entered.complete(Unit)
+                awaitCancellation()
+            }
+            val job = async { loader(f)(f.runtime, f.source, f.id(901), locator(f)) }
+            entered.await()
+            job.cancelAndJoin()
+            assertTrue(job.isCancelled)
+            assertEquals(stage, f.calls.last())
+            assertFalse("metadata" in f.calls)
         }
     }
 

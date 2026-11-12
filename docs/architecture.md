@@ -1,5 +1,7 @@
 # Architecture
 
+[Historical source availability](collaboration-key-history-source-availability.md) retains actual historical ownership and separates an unavailable source from operational or authorization failure.
+
 [Space historical page projection](collaboration-space-key-page-projection.md) preserves logical Space history and current physical provenance across bounded local read, content acquisition and atomic completion.
 
 [Original historical page completion](collaboration-original-key-reference-completion.md) admits one exact captured page around atomic local recovery completion; primary and global progress retain separate owners.
