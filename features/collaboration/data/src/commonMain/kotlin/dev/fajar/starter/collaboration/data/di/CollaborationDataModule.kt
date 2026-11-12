@@ -638,16 +638,7 @@ class CollaborationDataModule {
         sessions: SessionRepository,
         server: IdentityServer,
         schedules: SyncScheduleRepository,
-    ) =
-        QueueCollaborationSpaceText(
-            messages,
-            conversations,
-            directory,
-            sessions,
-            server,
-            schedules,
-            Clock.System,
-        )
+    ) = QueueCollaborationSpaceText(messages, conversations, directory, sessions, server, schedules)
 
     @Factory
     fun observeSpaceMessages(

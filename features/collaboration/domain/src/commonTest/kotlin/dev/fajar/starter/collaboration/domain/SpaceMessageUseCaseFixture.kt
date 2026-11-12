@@ -127,7 +127,6 @@ internal class SpaceMessageUseCaseFixture {
             sessions,
             native.server,
             scheduler,
-            native.clock,
         )
 
     fun observe() =

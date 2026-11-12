@@ -1,5 +1,7 @@
 # Architecture
 
+[Immutable organization submissions](collaboration-space-immutable-submission.md) retain caller-captured ID, content and time across local queue delays and retries.
+
 [Canonical thread participants](collaboration-space-thread-participants.md) keep exact peer and historical/current sender facts under the existing local thread owner.
 
 [Indexed thread contacts](collaboration-space-thread-contact.md) read one published employee label without scanning the directory; domain still owns admission.

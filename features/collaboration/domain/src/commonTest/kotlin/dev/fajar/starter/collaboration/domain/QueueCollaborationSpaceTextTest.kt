@@ -24,7 +24,7 @@ class QueueCollaborationSpaceTextTest {
         val text = "  exact\ncontent  "
         val result =
             assertIs<AppResult.Success<CollaborationSpaceMessageRecord>>(
-                f.queue()(f.access, f.room.conversation.id, f.id, text, "\$reply")
+                f.queue()(f.access, f.record().intent.copy(text = text, replyToEventId = "\$reply"))
             )
         assertEquals(text, result.value.intent.text)
         assertEquals("\$reply", result.value.intent.replyToEventId)
@@ -37,12 +37,13 @@ class QueueCollaborationSpaceTextTest {
     @Test
     fun replayAfterReauthenticationPreservesOriginalTimestampAndDoesNotWriteAgain() = runTest {
         val f = SpaceMessageUseCaseFixture()
-        val first = f.queue()(f.access, f.room.conversation.id, f.id, f.text)
+        val original = f.record().intent
+        val first = f.queue()(f.access, original)
         f.native.setup.now += 100.days
         val rebound = f.access.copy(sessionId = "replacement")
         f.identity.value = AppResult.Success(f.native.session.copy(id = rebound.sessionId))
         f.canonical = null
-        assertEquals(first, f.queue()(rebound, f.room.conversation.id, f.id, f.text))
+        assertEquals(first, f.queue()(rebound, original))
         assertEquals(1, f.writes.size)
         assertEquals(1, f.canonicalReads)
         assertEquals(2, f.schedules.size)
@@ -55,10 +56,7 @@ class QueueCollaborationSpaceTextTest {
             f.stored = CollaborationSpaceMessageRecord(it, 0, CollaborationMessageState.Queued)
             AppResult.Failed(f.base.storageFailure)
         }
-        assertEquals(
-            AppResult.Success(f.record()),
-            f.queue()(f.access, f.room.conversation.id, f.id, f.text),
-        )
+        assertEquals(AppResult.Success(f.record()), f.queue()(f.access, f.record().intent))
         assertEquals(1, f.writes.size)
         assertEquals(1, f.schedules.size)
     }
@@ -80,10 +78,7 @@ class QueueCollaborationSpaceTextTest {
             )) {
             val f = SpaceMessageUseCaseFixture()
             f.onInsert = { result }
-            val failed =
-                assertIs<AppResult.Failed>(
-                    f.queue()(f.access, f.room.conversation.id, f.id, f.text)
-                )
+            val failed = assertIs<AppResult.Failed>(f.queue()(f.access, f.record().intent))
             if (result is AppResult.Failed) assertEquals(result, failed)
             else
                 assertEquals(
@@ -109,7 +104,7 @@ class QueueCollaborationSpaceTextTest {
         }
         assertEquals(
             AppResult.Failed(f.base.storageFailure),
-            f.queue()(f.access, f.room.conversation.id, f.id, f.text),
+            f.queue()(f.access, f.record().intent),
         )
         assertNotNull(f.stored)
         assertTrue(f.schedules.isEmpty())
@@ -132,11 +127,7 @@ class QueueCollaborationSpaceTextTest {
                 )
             assertEquals(
                 FailureKind.Conflict,
-                assertIs<AppResult.Failed>(
-                        f.queue()(f.access, f.room.conversation.id, f.id, f.text)
-                    )
-                    .failure
-                    .kind,
+                assertIs<AppResult.Failed>(f.queue()(f.access, f.record().intent)).failure.kind,
             )
             assertTrue(f.writes.isEmpty() && f.schedules.isEmpty())
         }
@@ -148,7 +139,7 @@ class QueueCollaborationSpaceTextTest {
         f.stored = f.record().copy(state = CollaborationMessageState.Cancelled)
         assertEquals(
             AppResult.Success(assertNotNull(f.stored)),
-            f.queue()(f.access, f.room.conversation.id, f.id, f.text),
+            f.queue()(f.access, f.record().intent),
         )
         assertTrue(f.writes.isEmpty() && f.schedules.isEmpty())
     }
@@ -158,9 +149,7 @@ class QueueCollaborationSpaceTextTest {
         val f = SpaceMessageUseCaseFixture()
         assertEquals(
             FailureKind.Validation,
-            assertIs<AppResult.Failed>(
-                    f.queue()(f.access, f.room.conversation.id, "invalid", f.text)
-                )
+            assertIs<AppResult.Failed>(f.queue()(f.access, f.record().intent.copy(id = "invalid")))
                 .failure
                 .kind,
         )
@@ -174,11 +163,7 @@ class QueueCollaborationSpaceTextTest {
             f.canonical = canonical
             assertEquals(
                 FailureKind.Unavailable,
-                assertIs<AppResult.Failed>(
-                        f.queue()(f.access, f.room.conversation.id, f.id, f.text)
-                    )
-                    .failure
-                    .kind,
+                assertIs<AppResult.Failed>(f.queue()(f.access, f.record().intent)).failure.kind,
             )
         }
         assertTrue(f.writes.isEmpty() && f.schedules.isEmpty())
@@ -189,10 +174,7 @@ class QueueCollaborationSpaceTextTest {
         for (denied in listOf(false, true)) {
             val f = SpaceMessageUseCaseFixture()
             if (denied) f.base.deny() else f.identity.value = AppResult.Success(null)
-            val result =
-                assertIs<AppResult.Failed>(
-                    f.queue()(f.access, f.room.conversation.id, f.id, f.text)
-                )
+            val result = assertIs<AppResult.Failed>(f.queue()(f.access, f.record().intent))
             if (denied) assertEquals(f.base.denied, result.failure)
             assertEquals(0, f.reads)
             assertTrue(f.writes.isEmpty() && f.schedules.isEmpty())
@@ -205,9 +187,7 @@ class QueueCollaborationSpaceTextTest {
         f.base.beforeAdmission = { f.identity.value = AppResult.Success(null) }
         assertEquals(
             FailureKind.Unauthorized,
-            assertIs<AppResult.Failed>(f.queue()(f.access, f.room.conversation.id, f.id, f.text))
-                .failure
-                .kind,
+            assertIs<AppResult.Failed>(f.queue()(f.access, f.record().intent)).failure.kind,
         )
         assertEquals(0, f.reads)
     }
@@ -223,10 +203,7 @@ class QueueCollaborationSpaceTextTest {
                     if (deny) f.base.deny() else f.identity.value = AppResult.Success(null)
                     AppResult.Failed(f.base.storageFailure)
                 }
-                val result =
-                    assertIs<AppResult.Failed>(
-                        f.queue()(f.access, f.room.conversation.id, f.id, f.text)
-                    )
+                val result = assertIs<AppResult.Failed>(f.queue()(f.access, f.record().intent))
                 assertEquals(
                     if (deny) FailureKind.AccessDenied else FailureKind.Unauthorized,
                     result.failure.kind,
@@ -244,9 +221,7 @@ class QueueCollaborationSpaceTextTest {
                 if (timeout) awaitCancellation() else AppResult.Failed(f.base.unavailable)
             }
             val start = testScheduler.currentTime
-            assertIs<AppResult.Success<*>>(
-                f.queue()(f.access, f.room.conversation.id, f.id, f.text)
-            )
+            assertIs<AppResult.Success<*>>(f.queue()(f.access, f.record().intent))
             assertEquals(if (timeout) 1500L else 0L, testScheduler.currentTime - start)
             assertEquals(1, f.schedules.size)
             assertNotNull(f.stored)
@@ -274,7 +249,7 @@ class QueueCollaborationSpaceTextTest {
                         CollaborationSpaceMessageRecord(it, 0, CollaborationMessageState.Queued)
                     wait()
                 }
-            val job = async { f.queue()(f.access, f.room.conversation.id, f.id, f.text) }
+            val job = async { f.queue()(f.access, f.record().intent) }
             entered.await()
             job.cancelAndJoin()
             stopped.await()
@@ -282,7 +257,7 @@ class QueueCollaborationSpaceTextTest {
             f.onSchedule = { AppResult.Success(Unit) }
             assertEquals(
                 AppResult.Success(assertNotNull(f.stored)),
-                f.queue()(f.access, f.room.conversation.id, f.id, f.text),
+                f.queue()(f.access, f.record().intent),
             )
             assertEquals(1, f.writes.size)
         }
@@ -295,10 +270,7 @@ class QueueCollaborationSpaceTextTest {
             f.base.deny()
             AppResult.Success(Unit)
         }
-        assertEquals(
-            AppResult.Failed(f.base.denied),
-            f.queue()(f.access, f.room.conversation.id, f.id, f.text),
-        )
+        assertEquals(AppResult.Failed(f.base.denied), f.queue()(f.access, f.record().intent))
         assertNotNull(f.stored)
         assertEquals(1, f.schedules.size)
     }
@@ -311,9 +283,7 @@ class QueueCollaborationSpaceTextTest {
             launch(start = CoroutineStart.UNDISPATCHED) {
                 currentCoroutineContext().cancel()
                 invoked = true
-                assertFailsWith<CancellationException> {
-                    f.queue()(f.access, f.room.conversation.id, f.id, f.text)
-                }
+                assertFailsWith<CancellationException> { f.queue()(f.access, f.record().intent) }
             }
         job.join()
         assertTrue(invoked)

@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 23:40 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 23:45 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -115,28 +115,34 @@ the second by coherent first publication of actual results. All existing asserti
 Format5/50573 REAPED 34.862s. Earlier formatting/script failures are recorded in the evidence.
 
 Participant acceptance is pushed: Mobile c962886f / Group c7737190; pushes23675/71427 REAPED.
-ACTIVE: Mobile.work/space-composer-submission-2026-11-12, seven application paths applied
-from that accepted baseline. QueueCollaborationSpaceText now accepts one original intent;
-ID/time/body/owner stay exact across delayed local reads, retries and renewed login.
-The use case no longer allocates time; replay/readback compare the full retained intent.
-No transport, scheduling expansion, ciphertext/schema change or Company alias was added.
+Immutable organization text submission is ACCEPTED in
+Mobile.work/space-composer-submission-2026-11-12. Seven source paths change the existing
+QueueCollaborationSpaceText boundary to one caller-captured original intent. ID, owner,
+conversation, timestamp, text and quote stay exact across local waits and retries. Replay
+and readback compare the whole intent; the queue no longer allocates time. Existing Group
+admission, cancellation, command schema and bounded scheduling stay unchanged. Both native
+proof send sites capture and assert the same original before calling the adapter.
 
-The complete caller search found native proof usage absent from the initial five-path draft.
-Both proof call sites now capture an explicit intent before submission and assert exact
-retention; the adapter receives that intent unchanged. Six new domain methods cover delayed
-reads/mutex, timestamp-only conflict, wrong readback, committed cancellation and invalid input.
-All old assertions remain. Format1/16872 REAPED PASS36.025s. Focused1/54370 REAPED
-PASS59/370.927s and strict audit passes. Frozen5177inputs/
-8a3baeef51fc73ca923b7cc270d69b68f49f796c179a399b52a6582e88a4ca58.
-Full1/99965 is ACTIVE from23:28UTC, expected14,828 with all14,816 prior IDs and12 new
-JVM/browser cases. Group.work/space-composer-submission-2026-11-12 prepares two exact existing
-NativeSpaceOriginalDeliveryTest scenarios against precompiled Group source-2, without changing
-assertions or touching the phone. Run after full acceptance and immutable proof copy, with all
-compiler sessions reaped. The other eight prior native scenarios remain historical evidence;
-this scoped run will not claim ten new executions. This increment is not fully accepted yet.
+Format1/16872 REAPED PASS36.025s. Focused1/54370 REAPED PASS59/370.927s. Full1/99965
+REAPED PASS815.388s. Strict focused/full audits and record-acceptance.py pass.
+Full14,828 =12,790 freshly executed +2,038 exact unchanged cases, all14,816 prior IDs
+retained with12 new JVM/browser cases. Frozen5177inputs/
+8a3baeef51fc73ca923b7cc270d69b68f49f796c179a399b52a6582e88a4ca58;
+reportc7b13b2684cb4b45570779802f01fca6fa829ca9cd88e5e5fddf4b28a17a9d63;
+immutable full-1/accepted-proof.apk153376166B/
+b70c0a0532afdaf9174abd3dc6adf0d673ef48b9c26f97b179f96ec8a79393c7.
 
-After focused/full/native checks, record and push before continuing Group drafts and UI.
-Review ownership and first-frame measurement requirements in docs/collaboration-organization-ui-plan.md.
+Two affected existing NativeSpaceOriginalDeliveryTest scenarios are ACCEPTED on that exact
+proof: Group.work/space-composer-submission-2026-11-12/original-1 /37126 REAPED PASS2/165.315s;
+strict accept-native.py passes. Fresh isolated2560MiB/two-core emulator, boot29.406s, stopped
+afterward; no compilation alongside it and phone untouched. Original provider transactions
+survive an offline recipient, lost acknowledgement/projection and process death. Group
+precompiled source-2 hash7e4c32bb578f148fcbd21c62a8302436bcf1abfb534fc0b561aab9510642b300.
+The other eight previously accepted native scenarios remain historical evidence. Linux
+executes zero Apple cases. No phone, live Group rollout or measured UI latency claim.
+No failed code/test candidate in this increment. All old assertions remain meaningful.
+Commit and push this accepted implementation before applying the next storage increment.
+
 Next storage increment is prepared ONLY in Mobile.work/space-composer-storage-2026-11-12:
 13 isolated DRAFT source paths, not applied or compiled. Two Group contracts and typed
 ComposerCoordinates reuse the existing draft/outbox I/O and codecs; Company frame bytes

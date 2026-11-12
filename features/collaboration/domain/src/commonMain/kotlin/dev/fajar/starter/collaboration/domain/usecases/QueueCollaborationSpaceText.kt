@@ -7,7 +7,6 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
-import kotlin.time.Clock
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -20,29 +19,28 @@ class QueueCollaborationSpaceText(
     private val sessions: SessionRepository,
     private val server: IdentityServer,
     private val schedules: SyncScheduleRepository,
-    private val clock: Clock,
 ) {
     private val submissions = Mutex()
 
-    /** The caller preserves this ID and content until the original outcome is known. */
+    /**
+     * Capture once before presentation/suspension; preserve the full original through every retry.
+     */
     suspend operator fun invoke(
         access: CollaborationSpaceLocalAccess,
-        conversationId: String,
-        id: String,
-        text: String,
-        replyToEventId: String? = null,
+        intent: CollaborationSpaceMessageIntent,
     ): AppResult<CollaborationSpaceMessageRecord> =
         submissions.withLock {
             if (
-                !validCollaborationSpaceConversationId(id) ||
-                    !validCollaborationSpaceConversationId(conversationId) ||
-                    !validCollaborationText(text) ||
-                    (replyToEventId != null && !validCollaborationReplyEventId(replyToEventId))
+                !validCollaborationSpaceMessageIntent(access, intent) ||
+                    intent.forwarded ||
+                    intent.editTarget != null
             )
                 return@withLock collaborationRecoveryFailure(
                     "client.collaboration_invalid_message",
                     FailureKind.Validation,
                 )
+            val id = intent.id
+            val conversationId = intent.conversationId
             var denial: Failure? = null
             suspend fun admitted(): AppResult<Unit> {
                 currentCoroutineContext().ensureActive()
@@ -82,13 +80,7 @@ class QueueCollaborationSpaceText(
                 record: CollaborationSpaceMessageRecord
             ): AppResult<CollaborationSpaceMessageRecord> {
                 if (
-                    !validCollaborationSpaceMessageRecord(access, record) ||
-                        record.intent.id != id ||
-                        record.intent.conversationId != conversationId ||
-                        record.intent.text != text ||
-                        record.intent.replyToEventId != replyToEventId ||
-                        record.intent.forwarded ||
-                        record.intent.editTarget != null
+                    !validCollaborationSpaceMessageRecord(access, record) || record.intent != intent
                 )
                     return collaborationRecoveryFailure(
                         "client.collaboration_message_changed",
@@ -129,16 +121,6 @@ class QueueCollaborationSpaceText(
                     "client.collaboration_conversation_unavailable",
                     FailureKind.Unavailable,
                 )
-            val intent =
-                CollaborationSpaceMessageIntent(
-                    id,
-                    access.messageOwner(),
-                    conversationId,
-                    clock.now(),
-                    text,
-                    replyToEventId,
-                )
-            if (!validCollaborationSpaceMessageIntent(access, intent)) return@withLock invalid()
             currentCoroutineContext().ensureActive()
             val written = messages.insert(access, intent)
             admitted().let { if (it is AppResult.Failed) return@withLock it }

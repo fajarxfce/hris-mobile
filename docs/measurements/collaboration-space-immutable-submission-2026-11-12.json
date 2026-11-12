@@ -1,0 +1,121 @@
+{
+  "date": "2026-11-12",
+  "scope": "Immutable organization text submission at the existing local queue boundary",
+  "baseCommit": "c962886f3907ae966db74530b0acf367947c6734",
+  "sourceFiles": 5177,
+  "sourceManifestSha256": "8a3baeef51fc73ca923b7cc270d69b68f49f796c179a399b52a6582e88a4ca58",
+  "changedSources": {
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisSpaceMixedMessageProof.kt": "e66a81700163071c58c7e1f828738793060cb8afc1e51950d32b5d4589c1ad7e",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofContainer.kt": "6d5bfb76f42cb40da4f5ed0597ad28f0a08179f1d4157037da2148757478a3d1",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "fb775f2fdac604cd66f36e331810eaba139f40fafe49e1ac3db6c3d48df8556e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/QueueCollaborationSpaceText.kt": "279f63b6ad2939e26bdb5e8798b476f2b89b391ec7863f23ad7c58f2c282ebef",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/QueueCollaborationSpaceTextTest.kt": "ca44f302d0d2c7b989f30fce422e9136a3e18f902beea35a3643c2db779703d0",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/QueueSpaceImmutableTextTest.kt": "3e82cb739067503534513c70e9ed168532aebf594f4b5e27a28fad830bc0e1ae",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceMessageUseCaseFixture.kt": "adac6a8c52251b24dade46a3bdd620a7874b119cb218ffa9326ed5c28f9c0015"
+  },
+  "focused": {
+    "accepted": true,
+    "tests": 59,
+    "elapsedSeconds": 370.927,
+    "sourceFiles": 5177,
+    "sourceManifestSha256": "8a3baeef51fc73ca923b7cc270d69b68f49f796c179a399b52a6582e88a4ca58",
+    "resultSha256": "b7b124034dfe0f6832d92c194f308492d421e48eee984c688b2110c372b3ac37",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceMessageStorageTest": 17,
+      "CollaborationSpaceMessageQueueAvailabilityTest": 2,
+      "ObserveCollaborationSpaceMessagesTest": 8,
+      "QueueCollaborationSpaceTextTest": 15,
+      "QueueSpaceImmutableTextTest": 6,
+      "CollaborationSpaceMessagePolicyTest": 9
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-12T23:28:32.959585+00:00",
+    "elapsedSeconds": 815.388,
+    "sourceFiles": 5177,
+    "freshCounts": {
+      "tests": 12790,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153376166,
+      "sha256": "b70c0a0532afdaf9174abd3dc6adf0d673ef48b9c26f97b179f96ec8a79393c7"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 14828,
+    "newCases": 12,
+    "freshTests": 12790,
+    "reusedUnaffectedTests": 2038,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 111,
+    "excludedHistoricalCases": 657,
+    "sourceManifestSha256": "8a3baeef51fc73ca923b7cc270d69b68f49f796c179a399b52a6582e88a4ca58",
+    "reportManifestSha256": "c7b13b2684cb4b45570779802f01fca6fa829ca9cd88e5e5fddf4b28a17a9d63",
+    "nativeClaim": "Two existing affected Original/Space native delivery scenarios executed against the exact current proof APK; the other eight previous scenarios remain historical evidence.",
+    "currentNativeTests": 2
+  },
+  "fullAuditSha256": "c5d4a015587bcdc6e6efcef65369eabe62d0482ee373e10f36b7d76d22aebe52",
+  "native": {
+    "accepted": true,
+    "tests": 2,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "elapsedSeconds": 165.315,
+    "bootSeconds": 29.406,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "phoneTouched": false,
+    "emulatorStopped": true,
+    "noCompilationDuringEmulator": true,
+    "sdk": "26.10.23-hris.8",
+    "apkSha256": "b70c0a0532afdaf9174abd3dc6adf0d673ef48b9c26f97b179f96ec8a79393c7",
+    "nativeLibrarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+    "mobileSourceManifestSha256": "8a3baeef51fc73ca923b7cc270d69b68f49f796c179a399b52a6582e88a4ca58",
+    "groupSourceManifestSha256": "7e4c32bb578f148fcbd21c62a8302436bcf1abfb534fc0b561aab9510642b300",
+    "resultSha256": "650289e424e5ce7b1e2f5585c71390fa0468af65206ad19b2cf69970a7b7674c",
+    "reportHashes": {
+      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": "6eaed50731a816ec377ae61cc9c1ac8c17ee1ebafd9150a0f684794fbadd886a"
+    },
+    "cases": [
+      "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.newSpaceOriginalSharesTheQueueWithoutChangingCompanyOwnershipAfterProcessDeath()",
+      "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.originalQueueSurvivesLostProjectionAndOfflineRecipientWithoutReplacement()"
+    ],
+    "scenarios": [
+      {
+        "kind": "original",
+        "newSpaceOriginal": true,
+        "providerEvents": 3,
+        "native": {
+          "requests": 11,
+          "bootstrapReplay": 2,
+          "directTransport": 3
+        }
+      },
+      {
+        "kind": "original",
+        "newSpaceOriginal": false,
+        "providerEvents": 2,
+        "native": {
+          "requests": 10,
+          "bootstrapReplay": 2,
+          "directTransport": 2
+        }
+      }
+    ]
+  },
+  "nativeAuditSha256": "f6d02dad679e995e3dfac0eecaff0b34c5a8e7b0694c0e6a40bff4901cc4b7e4",
+  "appleCasesExecutedLocally": 0,
+  "phoneInstalledForThisIncrement": false,
+  "groupLiveDeployment": false,
+  "preservedFailures": [],
+  "remaining": "Group editor and outbox storage, domain submission/recovery, canonical thread/list UI and measured first-frame behavior."
+}

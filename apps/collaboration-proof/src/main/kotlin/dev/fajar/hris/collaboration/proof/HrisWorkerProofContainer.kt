@@ -363,10 +363,8 @@ internal class HrisWorkerProofContainer(
 
     suspend fun queueSpace(
         access: CollaborationSpaceLocalAccess,
-        conversationId: String,
-        id: String,
-        body: String,
-    ) = expect(container.koin.get<QueueCollaborationSpaceText>()(access, conversationId, id, body))
+        intent: CollaborationSpaceMessageIntent,
+    ) = expect(container.koin.get<QueueCollaborationSpaceText>()(access, intent))
 
     suspend fun stageSpace(
         ready: CollaborationSpaceRuntimeReady,

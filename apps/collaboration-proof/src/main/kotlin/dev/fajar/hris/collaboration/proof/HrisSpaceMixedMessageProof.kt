@@ -4,6 +4,7 @@ import android.os.Process
 import dev.fajar.starter.collaboration.domain.entities.*
 import java.security.MessageDigest
 import java.util.UUID
+import kotlin.time.Clock
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -51,13 +52,17 @@ internal class HrisSpaceMixedMessageProof(
     ) {
         val logical = id ?: return
         check(ready.owner == scope() && conversation.id == conversationId())
-        val queued =
-            host.queueSpace(
-                ready.owner.localDirectoryAccess(),
-                conversation.id,
+        val local = ready.owner.localDirectoryAccess()
+        val submission =
+            CollaborationSpaceMessageIntent(
                 logical,
+                local.messageOwner(),
+                conversation.id,
+                Clock.System.now(),
                 files.body + "-2",
             )
+        val queued = host.queueSpace(local, submission)
+        check(queued.intent == submission)
         check(queued.intent.owner == ready.owner.localDirectoryAccess().messageOwner())
         val record = host.stageSpace(ready, conversation, logical)
         val state = record.state as CollaborationMessageState.Staged
@@ -100,13 +105,17 @@ internal class HrisSpaceMixedMessageProof(
     ) {
         val logical = requireNotNull(id)
         check(conversation.owner == scope() && conversation.id == conversationId())
-        val record =
-            host.queueSpace(
-                scope().localDirectoryAccess(),
-                conversation.id,
+        val local = scope().localDirectoryAccess()
+        val submission =
+            CollaborationSpaceMessageIntent(
                 logical,
+                local.messageOwner(),
+                conversation.id,
+                Clock.System.now(),
                 files.body + "-2",
             )
+        val record = host.queueSpace(local, submission)
+        check(record.intent == submission)
         check(record.state == CollaborationMessageState.Queued)
         check(record.intent.owner == scope().localDirectoryAccess().messageOwner())
         assertIsolation(host)
