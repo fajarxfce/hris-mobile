@@ -4,6 +4,29 @@ Updated 12 November 2026, 04:03 UTC.
 Complete PRD, per-commit pushes and validated phone updates remain authorized. All54 groups OPEN.
 Continue working. No subagents. Follow AGENTS.md/architecture. One compiler OR emulator.
 
+## Active global completion and deferral validation
+
+Workspace .work/account-history-recovery-turn-completion-2026-11-12; baseline6909331fe7161d66f118d13c6053117fcf1d352f.
+TEN source files APPLIED: eight new domain files, existing DI and graph changes. 58new common cases:
+completion33,deferral13,writeconfirmation12. 5,093inputs/f1ac34bd97f0284d13d405c25bd1fd48294456f6869480c0f7e221e6615d13b4.
+Preparation HAS EXECUTED; do not run the prior prepare-global-turn.py again. Format1/12703 REAPED
+PASS36.338s. Focused1/79353 RUNNING, expected276JVM+274browser=550focused and13,978local overall.
+Only this compiler is active. Preserve failed candidate+results before any fix/refreeze. Current
+publisher and accepted-handoff writer are PREPARED, NOT EXECUTED. Hosted plan is UNDISPATCHED.
+
+CompleteCollaborationSpaceHistoryRecoveryTurn checks actual Company/Space historical coordinates,
+source/root/registration, immutable metadata, two bounded account coverage/progress observations,
+and copied finite page receipts. One demand CAS and exact readback preserve independent work.
+DeferCollaborationSpaceHistoryRecoveryTurn persists operational backoff without history advancement;
+replayed old captures cannot increment retry. Both5s local owners retain cancellation. No worker
+activation or native execution. All54PRD groups remain OPEN.
+
+The prior workspace next-worker-draft contains three selection files/eight new cases, an unreviewed
+application service and DI module. NO service tests, app module registration, worker integration or
+primary demotion call sites yet. No source applied. The review note records30s service+5s followup,
+reserved inventory service, current90s parent and contention/retry behavior requiring tests. Finish
+that coherent path before activating any key/source/restore producer.
+
 ## Published Space primary transfer accepted
 
 Workspace .work/space-primary-key-wait-transfer-2026-11-12; baselined78fd99b2403364a40d20d41463d71451b8e70eb.
@@ -26,11 +49,11 @@ This operation and the prior Original owner remain UNINVOKED by the worker; no p
 Publisher/writer HAVE EXECUTED. Source71b70094d5db2a928f6cb0082d587ccba661c891 and Groupa06fe401 pushed.
 Hosted43152279307 dispatched ONCE with63271 REAPED at2026-11-12T04:03:41.063196+00:00.
 Expected16,688=11,840portable+4,848Apple; artifacts not yet accepted. Workspacehosted-43152279307.
-Do not redispatch. Next global preparation remains unexecuted.
+Do not redispatch. Global preparation has now executed into the active workspace above.
 
 ## Prepared next operations and integration draft
 
-next-global-turn-draft contains10reviewed UNAPPLIED/UNCOMPILED files and58new common cases:
+The reviewed next-global-turn-draft has now been applied in the active workspace above;58new cases:
 completion33,deferral13,writeconfirmation12. Two operation factories and graph resolutions are
 included. next-global-turn-state.json freezes reviewed source hashes and existing-file guards.
 prepare-global-turn.py plus publisher/writer are prepared, NOT EXECUTED. Apply only after this
