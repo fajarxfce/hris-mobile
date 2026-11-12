@@ -4,6 +4,21 @@ Updated 12 November 2026, 05:00 UTC.
 Continue authorized PRD work, per-commit pushes and validated phone installs. All54PRD groups OPEN.
 No subagents. One compiler OR emulator; follow AGENTS.md and clean layer boundaries.
 
+## Accepted source dispatched; next raw mailbox stage ready
+
+Worker sourcea3beb4280411de16eb4c344fa4e427347f4a3c94/Group85007304 pushed; sessions24608/71002 REAPED.
+Hosted43158504066 dispatched ONCE at2026-11-12T05:00:51.572215+00:00;82806 REAPED.
+Refvalidation/history-recovery-worker-service-20261112; expected16,936. No hosted artifacts accepted
+for this source yet; do not redispatch. Global43155076441 remains an independent active audit.
+
+Next four-file raw mailbox draft is reviewed, UNAPPLIED and UNCOMPILED.16common+4JVM race cases.
+prepare-room-key-mailbox.py and its Android audit/publisher/handoff/contract dependencies are all
+PREPARED, NOT EXECUTED. Read next-room-key-state.json. Expectednext14,096local/17,004hosted,
+62JVM+56browser+16Android host focused. No native registration, durable consumer or producer activation.
+
+Phone2256 REAPED:05:00:29.035678UTC/20.015901s timeout. No installation; next retry>=05:33:49UTC.
+Release89 stays ready, install-only and SDK6. MainalreadySDK8. Do not drive phone UI.
+
 ## Serialized history worker service accepted
 
 Workspace .work/history-recovery-worker-service-2026-11-12, baselinef045436117f75966743d72c8cbe953bcc50ebf35.
