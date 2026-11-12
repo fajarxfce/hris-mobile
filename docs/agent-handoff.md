@@ -40,6 +40,14 @@ fairness remain outstanding. No producer activation until the complete path is s
 Phone connect59195 REAPED at2026-11-12T03:51:12.853750+00:00,20.020311s timeout. No install;
 next attempt no earlier04:24:13UTC. Release89 remains validated and install-only. No phone UI.
 
+## Reader hosted validation accepted
+
+Run43143623927/source0505c536 is fully accepted:16,406=11,652portable+4,754Apple. Appleaudit44054
+REAPED, artifact13914001319/766956B/b6880d19a9bb10151ca5ce01a205ef11679c6ea6c4a7e4012087a897109cb764;
+report793397ebcb6f6b1890beb7f0404e62dc9543e76f4b268b660e4a5bbf7a908e6b,
+logd373b8e6e58cfabb963cc4c07169671c73ff2e85a752972ddafb0e59f06e147a. OldcaseIDs retained,
+16Swift push checks and unsigned iOS host passed. Native Apple SDK8 remains unexecuted. No redispatch.
+
 ## Original primary transfer and finite visit policies accepted
 
 Workspace .work/incoming-key-wait-transfer-2026-11-12; baseline7a47d456bc642aebbd937f46c2caf128f339aa6a with accepted
