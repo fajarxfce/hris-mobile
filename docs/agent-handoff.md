@@ -1,5 +1,42 @@
 # Agent continuation — communications long run
 
+Updated 12 November 2026, 05:50 UTC. Continue PRD work and push every commit.
+No subagents. One compiler OR emulator. All54PRD groups OPEN. Phone install-only, never drive UI.
+
+## Owned room-key listener: full gate running
+
+Workspace .work/sdk-room-key-lifecycle-2026-11-12. Nine files applied/5,109inputs;
+manifestb61df1d512efe0f023029a088c329afd248dcc7cbe4a58bf41fbe761934d7a77.
+Android1/30938 REAPED failed112.110s,57/58passed: coroutine stack recovery copied the fixture's
+IllegalArgumentException, breaking assertSame. Archived failed-android-candidate-1 before correction.
+Use non-copyable SubscriptionFailure fixture with extra identity field; keep assertSame and allIDs.
+Production unchanged. Format2/7489 REAPED34.898s. Android2/51045 REAPED PASS58/73.479s;
+focused1/74903 REAPED PASS75/261.072s; browser1/19968 REAPED PASS69/82.584s. Accepted202focused.
+Full1/50176 RUNNING,expected14,164. Publisher/handoff/hosted scripts PREPARED, NOT EXECUTED.
+Only this compiler is active. MainSDK8, no production listener registration or durable key consumer.
+
+Next room-key binding draft now13privateUNAPPLIED/UNCOMPILED/UNREVIEWED files,12domain+10data+
+8Android repository cases. This draft adds typed runtime/source/receipt mapping, exact registry-based
+start/observe/ACK, unavailable-host behavior and DI; no durable intent or producer activation.
+Read next-room-key-binding-state.json and next-room-key-retention-review.md. Shares existing
+SpaceAdoptionStorageFixture through an internal visibility change; no test case removal. Preserve
+source hashes and finish review/tests/preparation before application; no preparer exists yet.
+
+Global43155076441 FULL16,862=11,956portable+4,906Apple now accepted. Appleaudit66179 REAPED;
+artifact13919156258/786625B/407c5d2aaf7a9fdcec9821d051ed59fc9a3d42f0fa6fa0c8c89a0084653c36df.
+Prior IDs and unsigned iOS host checked; this is not native AppleSDK8 execution. Exact hashes in
+measurement. Worker43158504066 portable12,022accepted/Applepending. Mailbox43161963820 pending,
+expected17,004. Do not redispatch. Mailboxa65151c0/Groupa04eb7c5 pushed; checkpoint8f01fb7a/
+Group3d1f8c02 pushed,37716/40652 REAPED.
+
+Phone73146 REAPED05:34:18.237540UTC/20.017224s timeout; next retry>=06:07:38.254781UTC.
+Release89 ready,SDK6. Announce actual installation; explicit10.77.77.3:5555/--install-only.
+Never launch/reset/uninstall/drive the phone. Preserve protected SDK/Inspector trees and live deployment.
+
+## Earlier accepted work and protected constraints
+
+# Agent continuation — communications long run
+
 Updated 12 November 2026, 05:38 UTC. Continue authorized PRD work and push every commit.
 No subagents. One compiler OR emulator. All54PRD groups OPEN. Phone install-only, never drive UI.
 
