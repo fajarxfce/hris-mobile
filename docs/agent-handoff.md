@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 22:10 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 22:19 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -58,28 +58,41 @@ access; correction forwards failures directly and enters guarded content reads o
 No assertion changed. Format2/68039 REAPED34.459s. Source checks, Android release compile/lint,
 shared Wasm/iOS ARM64 compilation and proof assembly pass. Commit/push before the next application.
 
-NEXT: Mobile.work/space-thread-contact-2026-11-12, still NOT APPLIED. Seven draft source paths extend
-existing directory observeContact(access,accountId) via the bounded published observeDocument query.
-No whole-directory scan, key creation, mutation, network or retry. Three existing fakes reject new calls.
-Eight new shared methods extend9 directory cases to17; existing8 admission cases are retained. A new
-Apple file instantiates both contracts:25 native methods require actual hosted Apple execution.
-Prepared/syntax-checked prepare.py, accept-focused.py and accept-full.py require the exact accepted
-current source/reports and pushed HEAD. They apply only after no local heavy process remains.
-Expected focused27, full14,780 with all14,764 old IDs and16 new JVM/browser cases; native test compiler
-is included in both gates. Linux executes0 Apple cases. Draft is not compiled or accepted yet.
+ACTIVE: Mobile.work/space-thread-contact-2026-11-12, seven source paths applied after
+Mobilea74526b7 / Groupa4df8b1a acceptance and pushes were reaped. Existing directory now has
+observeContact(access,accountId), using the bounded published observeDocument query. No whole-
+directory scan, key creation, mutation, network or retry. Three existing fakes reject new calls.
+Eight new shared methods extend9 directory cases to17; existing8 admission methods remain. New
+Apple wrappers instantiate both contracts:25 native methods need actual hosted Apple execution.
 
-Review then apply, format/capture, focused, full, commit/push. Continue participant/composer context
+Format1 stopped before Gradle due to missing pre-format source manifest; launch-failure.json is
+preserved. Captured inputs then format2/42535 REAPED34.802s. Focused1/78741 REAPED FAILED175.034s:
+25 cases, one new test timed out after5s VIRTUAL time in0.022s wall time while actual I/O ran on
+Default. Preserve failed-virtual-clock-1. Only that actual-storage scenario now runs on Default;
+all5000ms deadlines/assertions and production code stay unchanged. Format3/75985 REAPED35.426s.
+
+Focused2/63817 ACTIVE from22:18. Frozen5170inputs/f8d98e8c02c95f72070ec6b5bb02b684428181781ca5d62fe075444d4351f792.
+Expected focused27, full14,780 with all14,764 old IDs and16 new JVM/browser cases. Native test
+compilation is required in both gates (skipped tasks rejected); Linux executes0 Apple cases.
+No full run or native execution yet. Do not edit source or start another compiler/emulator until
+reaped. Auditors are prepared; an acceptance recorder still needs to be written for this increment.
+
+After focused/full acceptance, commit/push. Continue participant/composer context
 and organization UI. Existing retained registration.provider can supply sender metadata only after
 bounded exact validation. Do not infer sender identity from room origin or selected HR company.
-Review visible-thread warming to avoid first-frame bubble-side changes. All54 PRD groups remain OPEN.
+Review visible-thread warming to avoid first-frame bubble-side changes. Mobile docs/collaboration-organization-ui-plan.md records the component/ownership review, skill sources and immutable composer timestamp requirement. All54 PRD groups remain OPEN.
 Keep active hosted43312753298; defer the next control dispatch until this contact increment is accepted,
 so one subsequent run can cover unresolved threads and contact storage together without replacing pending CI.
 
-Hosted follow-up43312753298 is RUNNING on exact1f47eeddb833054ae2b3d52c20439e6d11518a02.
-Dispatch78537 REAPED. Apple131515464968 and portable131515465558 started after the preceding
-control completed. Expected12,716portable (6083desktop/955Android/5678browser) +5,212Apple
-=17,928. Mobile.work/room-binding-observation-2026-11-12/hosted-control and hosted-audit.py
-are prepared; no completed job/audit yet. Do not replace a pending run with another dispatch.
+Hosted follow-up43312753298 on exact1f47eeddb833054ae2b3d52c20439e6d11518a02:
+Portable131515465558 is ACCEPTED; auditor42039 REAPED,12,716 cases (6083desktop/955Android/5678browser).
+Artifact13988508095/4057274B/37aed9c7335c417950dba9f3a3d605dafed3c4b685a16c51042ea1df5d8af9df;
+report66606d0ef5c9bb4081ca1f8daf0c42f2e7d916a1ea3e56a79c9a907ffa4fdbcb;
+log90789c6ad9bb001a16246a3c26449f97d910a1248f63c63f6279b2a7d72c5a8f.
+Zero prior-ID replacements/browser normalization. Apple131515464968 remains in its test step,
+expected5,212; total17,928 only after its audit. Mobile.work/room-binding-observation-2026-11-12/
+hosted-control and hosted-audit.py preserve exact inputs. Do not rerun accepted portable or replace
+an existing pending workflow. Dispatch the next control only after contact acceptance.
 Audit auxiliary inventories missing from the earlier copied Company auditor were restored from
 accepted Apple store evidence BEFORE its first Apple audit: identical13 inventory/8 store IDs.
 See company-thread-publication-2026-11-12/hosted-control/auditor-input-correction.json. New

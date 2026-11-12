@@ -28,3 +28,9 @@ records exact source/report/proof digests and the preserved failed candidate.
 The [canonical thread](collaboration-unresolved-space-thread.md) now consumes this reactive
 binding inside its existing admission owner, preserving known commands before publication.
 Participant/composer context and product UI remain next. Group live rollout stays disabled.
+
+Hosted control43312753298 on exact Mobile1f47eedd passes12,716 portable cases:
+6,083 desktop,955 Android host and5,678 browser. Artifact, report and job-log digests
+are audited with all prior identities retained, zero replacements and no browser-name
+normalization. The compact measurement records this evidence. Apple job131515464968
+is still running; its expected5,212 native shared cases are not yet accepted.
