@@ -83,5 +83,18 @@
       "archive": "failed-policy-candidate-1",
       "scope": "Earlier five-file policy candidate, before the admitted operation was added"
     }
+  },
+  "sourceCommit": "15a418f744cc28149486b168e6a93fb8734285d5",
+  "hosted": {
+    "run": 43148447666,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43148447666",
+    "dispatchedAt": "2026-11-12T03:28:29.149947+00:00",
+    "dispatchSession": 68637,
+    "dispatchSessionReaped": true,
+    "expectedPortable": 11788,
+    "expectedApple": 4822,
+    "expectedTotal": 16610,
+    "status": "in_progress",
+    "artifactsAudited": false
   }
 }

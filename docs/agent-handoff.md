@@ -33,8 +33,9 @@ full gate, commit or CI dispatch. Its old publishers/standalone preparation MUST
 policy-focused-1 retains102tests/2fixture failures: the established opaque UUID contract permits zero,
 and Original alias work requires source provenance. Corrected tests retain production constraints.
 
-Publisher/writer HAVE EXECUTED. Commit/push accepted source/evidence, then guarded dispatch-hosted.py
-ONCE; expected16,610=11,788portable+4,822Apple. Inspect any existing attempt before retrying.
+Source15a418f744cc28149486b168e6a93fb8734285d5 and Group4273bf60 pushed. Hosted43148447666 dispatched ONCE
+with session68637 REAPED at2026-11-12T03:28:29.149947+00:00. Expected16,610=11,788portable+4,822Apple;
+artifacts not yet accepted. Workspace hosted-43148447666; do not redispatch.
 
 ## Next: Space transfer, global service and loss-aware key producer
 
