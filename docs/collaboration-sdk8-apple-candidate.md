@@ -27,6 +27,10 @@ Test clients use only new temporary stores and fictional offline sessions. No em
 or existing device keys enter this job.
 
 The GitHub workflow `collaboration-apple-sdk.yml` builds a candidate and retains diagnostics.
+It uses the standard `macos-15-intel` runner after both attempts of run43261761056 failed
+to acquire an ARM runner before any step started. The five target architectures, Rust source
+and four Swift test identities are unchanged. Native Swift tests execute on the macOS host;
+iOS device and simulator slices are compiled and linked, not executed by this job.
 It does not publish a release or install a production Apple runtime. Local Python checks validate
 the artifact guards; real Swift execution and Mach-O linking require its macOS job. A successful
 candidate still leaves application binding, background execution, signed-in E2EE chat, calls and
