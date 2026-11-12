@@ -1,5 +1,7 @@
 # Architecture
 
+[Room-key callback retention](collaboration-sdk-room-key-mailbox.md) keeps bounded unacknowledged SDK hints across callback/write races; durable consumer and native lifetime remain separate.
+
 [Serialized history service](collaboration-history-recovery-worker-service.md) reserves bounded recovery within the existing incoming worker and transfers finite missing-key work without starving primary messages.
 
 [Global history completion and deferral](collaboration-account-history-recovery-turn-completion.md) verifies a bounded local visit and retains operational retry without creating background scan loops.

@@ -1,5 +1,63 @@
 # Agent continuation — communications long run
 
+Updated 12 November 2026, 05:30 UTC.
+Continue authorized PRD work, per-commit pushes and validated phone installs. All54PRD groups OPEN.
+No subagents. One compiler OR emulator; follow AGENTS.md and clean layer boundaries.
+
+## Next stage review correction
+
+The native draft has four private, unapplied files and 19 Android protocol cases, all uncompiled.
+Expand this stage with a common listener lifecycle owner and actual Android lease cleanup tests
+before applying it. Source-only review is not sufficient to prove parent/store safety; reviewComplete
+is reset to false. Retain late acquisition and failed drain, and block client/store release on failure.
+No runtime registration is enabled in production. Main uses SDK8; release89 still uses SDK6.
+Full audit invocation initially omitted its required run argument, changed no source, then passed
+with full-1 (audit87581 reaped). Actual full start05:18:02.704356UTC,471.245s; all14,096 verified.
+
+## Raw SDK room-key mailbox accepted
+
+Workspace .work/sdk-room-key-mailbox-2026-11-12, baselinef046aeb264bbc477d683a63a359da472eb36b699.
+Four new data files/5,102inputs/7831d455085e08c88d9e3941ab4e86f405f7dc1c8cb0d69e8deee7a174a8c819. Fullfull-1/87129
+REAPED PASS471.245s; audit87581 REAPED. 14,096=11740fresh+
+2356verified unchanged. Focused62JVM+56browser=118 and16Android host cases.
+New16common cases pertarget plus4real JVM thread-race tests. AllpriorIDs preserved. See measurement
+for exact failures and fixes. ProofAPK152205148B/5a383bbc84384985cf6c587d90d39ecf4bb9451c3626e2aa2efecc8b6d43f026; no native/device proof.
+
+The process-local mailbox holds one delivered and one waiting batch,64rooms each,1024characters
+perraw ID. Inputs/snapshots are copied; input/union overflow retains reconciliation. Only the exact
+delivered receipt acknowledges work. New equal-room callbacks remain waiting during a write, while
+waiting callbacks may coalesce. Atomic updates protect callback/ACK/close races. Observation and
+closure are not durable acknowledgment. No SDK client, native task, repository, scheduler, business
+admission or key material is owned by this component. It remains unconnected to runtime/worker.
+
+Publisher/writer HAVE EXECUTED. Commit/push source/evidence then dispatch-hosted.py ONCE.
+Expected17,004=12,074portable+4,930Apple. Inspect dispatch-attempt before retry. Main alreadySDK8;
+release89 is SDK6. Preserve the isolated SDK consumer; do not copy its older fixture over main.
+
+## Next: native listener lifetime and durable key-trigger consumer
+
+Read .work/history-recovery-worker-service-2026-11-12/next-room-key-observation-review.md. The next
+adapter must register after paused session restore establishes crypto, before sync/backup import;
+SDK registration reconciliation covers earlier persisted keys. Null TaskHandle means unavailable.
+Own acquisition outside the caller's cancellation, retain late results, fence callbacks, cancel and
+await isFinished before closing TaskHandle/Encryption/client/store. Permanent registration stays
+outside8 transient children. Failed drain must retain ownership and block store destruction.
+
+The usecase must admit exact root/source/session/registration, retain targeted known-room work or
+bounded account fallback, confirm storage, then acknowledge. Failed/cancelled writes leave the same
+raw receipt pending. Resolve bounded failure scheduling under the existing worker/foreground owner;
+ending a collector on storage failure without a retry owner is insufficient. No loss-unaware flow
+drop or equality-only key suppression. Publish metadata before requesting fresh recovery, including
+new unresolved history behind a global cursor. Retain the existing90s inventory/history/primary
+fairness. Native AppleSDK8 remains unproved by metadata compile or generated Swift assertions.
+
+Phone: inspect latest .work phone evidence before retry. Release89 ready with --install-only;
+announce each installation, select10.77.77.3:5555 explicitly; no UI driving/reset/uninstall.
+
+## Prior checkpoint and protected/live state
+
+# Agent continuation — communications long run
+
 Updated 12 November 2026, 05:15 UTC.
 Continue authorized PRD work and per-commit pushes. No subagents. One compiler OR emulator.
 Follow AGENTS.md and clean boundaries. All54PRD groups OPEN. Phone install-only; no UI driving.

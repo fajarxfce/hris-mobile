@@ -1,0 +1,64 @@
+{
+  "recordedAt": "2026-11-12T05:30:14.586969+00:00",
+  "sourceBaseline": "f046aeb264bbc477d683a63a359da472eb36b699",
+  "sourceFiles": 5102,
+  "changedSourceFiles": 4,
+  "sourceManifestSha256": "7831d455085e08c88d9e3941ab4e86f405f7dc1c8cb0d69e8deee7a174a8c819",
+  "focused": {
+    "tests": 118,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused-1",
+  "focusedBrowserRun": "browser-1",
+  "androidHost": {
+    "tests": 16,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "androidHostRun": "android-1",
+  "full": {
+    "validated": 14096,
+    "fresh": {
+      "tests": 11740,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2356
+  },
+  "fullElapsedSeconds": 471.245,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152205148,
+    "sha256": "5a383bbc84384985cf6c587d90d39ecf4bb9451c3626e2aa2efecc8b6d43f026"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "roomKeyMailboxAccepted": true,
+  "newCommonCasesPerTarget": 16,
+  "newJvmConcurrencyCases": 4,
+  "maximumSlots": 2,
+  "maximumRoomsPerSlot": 64,
+  "maximumRoomIdCharacters": 1024,
+  "copiedRawInputAndSnapshots": true,
+  "overflowRetainsReconciliation": true,
+  "matchingReceiptOnlyAcknowledgment": true,
+  "equalRoomOccurrencesDuringWriteRetained": true,
+  "cancelledConsumerDoesNotAcknowledge": true,
+  "atomicCallbackAckAndClose": true,
+  "processLocalOnly": true,
+  "durableConsumerImplemented": false,
+  "nativeSubscriptionImplemented": false,
+  "nativeSdkExecution": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "starterPortRequired": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [],
+  "failureReviews": {}
+}
