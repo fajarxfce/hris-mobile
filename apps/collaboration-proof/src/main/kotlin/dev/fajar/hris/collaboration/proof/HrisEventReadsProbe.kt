@@ -38,6 +38,7 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                         "event-reads-stage" -> stage()
                         "event-reads-space" -> adopted()
                         "event-reads-local" -> reopened()
+                        "event-reads-worker-state" -> inspectWorker()
                         else -> error("Unknown event-read scenario")
                     }
                 }
@@ -243,7 +244,7 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                 app.activate()
                 val seed = app.spaceRecoverySeed(sender, ready, group)
                 seed.prepare()
-                parent = app.spaceRecovery(seed, sources)
+                parent = app.spaceRecovery(seed, sources::collect)
                 parent.start()
                 val retained = sources.verifyInitial(seed)
                 val runtime =
@@ -291,7 +292,7 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                 app.activate()
                 val seed = app.spaceRecoverySeed(sender, ready, group)
                 seed.prepare()
-                parent = app.spaceRecovery(seed)
+                parent = app.spaceRecovery(seed, app::collectIncoming)
                 parent.start()
                 val conversation =
                     app.prepareOriginalRoom(seed.owner, group.getString("conversationId"))
@@ -309,11 +310,8 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                         .consume(runtime, conversation, files.roomId, ids.getString("latestEdit"))
                 val snapshot =
                     app.incomingHistory()
-                        .read(
-                            runtime.owner.localDirectoryAccess(),
-                            conversation.id,
-                            files.roomId,
-                            runtime.deviceId,
+                        .readOriginal(
+                            app.incomingHistory().originalLocation(runtime.owner, conversation.id),
                             ids.getString("original"),
                             ids.getString("latestEdit"),
                             ids.getString("peer"),
@@ -507,6 +505,48 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
         return result
     }
 
+    private suspend fun inspectWorker() {
+        val group = files.read("original-group", 16_384)
+        val current = sender.currentOwner
+        val owner =
+            CollaborationSpaceOwner(
+                CollaborationNativeParent(
+                    current.sessionId,
+                    current.audience,
+                    current.accountId,
+                    current.nativeSessionId,
+                ),
+                group.getString("spaceId"),
+            )
+        val app =
+            HrisWorkerProofContainer(
+                context,
+                current,
+                files.conversationId,
+                files.fixture.getJSONObject("sender").getString("hrisAccessToken"),
+                sender.repository,
+                http,
+            )
+        var primary: Exception? = null
+        try {
+            app.activate()
+            val retained =
+                app.incomingHistory()
+                    .readWorkerState(
+                        owner,
+                        group.getString("conversationId"),
+                        group.getString("deviceId"),
+                        group.getString("registrationId"),
+                    )
+            files.write("incoming-worker-state", retained)
+        } catch (failure: Exception) {
+            primary = failure
+            throw failure
+        } finally {
+            closeHrisProofResources(primary, listOf({ app.close() }))
+        }
+    }
+
     private suspend fun reopened() {
         val staged = files.read("original-staged", 16_384)
         val adopted = files.read("original-events", 16_384)
@@ -522,6 +562,8 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                 )
             }
         val owner = CollaborationSpaceOwner(parent, group.getString("spaceId"))
+        val deviceId = group.getString("deviceId")
+        val registrationId = group.getString("registrationId")
         val app =
             HrisWorkerProofContainer(
                 context,
@@ -536,19 +578,20 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
             try {
                 app.activate()
                 val runtime = sender.repository as CollaborationSpaceRuntimeRepository
-                check(
-                    !expect(
-                        runtime.isSpaceOpen(
-                            owner,
-                            group.getString("deviceId"),
-                            group.getString("registrationId"),
-                        )
-                    )
-                )
+                check(!expect(runtime.isSpaceOpen(owner, deviceId, registrationId)))
                 val ids = staged.getJSONObject("events")
+                val worker = files.fixture.optBoolean("incomingWorker", false)
+                val history = app.incomingHistory()
                 val snapshot =
-                    app.incomingHistory()
-                        .read(
+                    if (worker) {
+                        history.readOriginal(
+                            history.originalLocation(owner, group.getString("conversationId")),
+                            ids.getString("original"),
+                            ids.getString("latestEdit"),
+                            ids.getString("peer"),
+                        )
+                    } else {
+                        history.read(
                             owner.localDirectoryAccess(),
                             group.getString("conversationId"),
                             files.roomId,
@@ -557,9 +600,9 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                             ids.getString("latestEdit"),
                             ids.getString("peer"),
                         )
+                    }
                 val incoming = adopted.getJSONObject("incoming")
                 val completed = files.fixture.optBoolean("completePendingIncoming", false)
-                val worker = files.fixture.optBoolean("incomingWorker", false)
                 val stored =
                     evidence.retained(
                         snapshot,
@@ -569,30 +612,20 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                     )
                 val expected = if (completed) incoming.getJSONObject("completed") else incoming
                 check(stored.toString() == expected.getJSONObject("retained").toString())
-                check(
-                    !expect(
-                        runtime.isSpaceOpen(
-                            owner,
-                            group.getString("deviceId"),
-                            group.getString("registrationId"),
-                        )
-                    )
-                )
+                check(!expect(runtime.isSpaceOpen(owner, deviceId, registrationId)))
                 checkpoint()
                     .put("incoming", stored)
                     .put("sameRevision", true)
                     .put("runtimeNeverOpened", true)
                     .also { result ->
                         if (files.fixture.optBoolean("incomingSources", false)) {
-                            val receipt = requireNotNull(app.incomingReceipt(owner))
-                            val digest = HrisSpaceIncomingSourcesProofHost.digest(receipt.receiptId)
-                            check(
-                                digest ==
-                                    adopted
-                                        .getJSONObject("incomingSources")
-                                        .getString("receiptDigest")
+                            result.put(
+                                "incomingReceiptDigest",
+                                evidence.retainedReceipt(
+                                    app.incomingReceipt(owner),
+                                    adopted.getJSONObject("incomingSources"),
+                                ),
                             )
-                            result.put("incomingReceiptDigest", digest)
                         }
                     }
             } catch (failure: Exception) {

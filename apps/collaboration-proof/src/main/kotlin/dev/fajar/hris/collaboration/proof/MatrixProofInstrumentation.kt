@@ -158,7 +158,9 @@ class MatrixProofInstrumentation : Instrumentation() {
             "provider" -> NativeMatrixProbe(directory).run()
             "event-reads-stage",
             "event-reads-space",
-            "event-reads-local" -> HrisEventReadsProbe(targetContext, directory).run(scenario)
+            "event-reads-local",
+            "event-reads-worker-state" ->
+                HrisEventReadsProbe(targetContext, directory).run(scenario)
             "space-original-stage",
             "space-original-interrupt",
             "space-original-recover",

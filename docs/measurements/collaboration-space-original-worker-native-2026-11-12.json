@@ -1,0 +1,135 @@
+{
+  "acceptedControls": true,
+  "fullWorkerSuiteAccepted": false,
+  "tests": 6,
+  "elapsedSeconds": 274.307,
+  "apkSha256": "29eb096c6ed4565613c271315524c8a69f9d97184c79d4a85601ef14825cb3b2",
+  "sdk": "26.10.23-hris.8",
+  "nativeLibrarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+  "mobileSourceManifestSha256": "468eccceccefe20f481b04abab7f4252e69e75680ff026bf9d9001fc2db532f4",
+  "groupSourceManifestSha256": "674bcfed931027c2ed49d35e338fe66071b03ae00cf98220ee2142085b424fe9",
+  "resultSha256": "ba58517d35614c772f715a7e1d9909171cbf3721112c4c909121933e6a80944e",
+  "reportHashes": {
+    "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": "576702a7ee16d5700f6c2dc9483cf796693543b7b3b6ed1d2075094a08ec66df",
+    "TEST-dev.fajar.hris.NativeEventReadsTest.xml": "50e5a33b041dc767849603c57b36c5859b7dc7e830e14fe1163435c6ccada0d3"
+  },
+  "fixtureEvidenceSha256": [
+    "b8b19cb7dea49208c5ca03272764591f699dae3b29f68e411750a25a9ecfe880",
+    "79ee40237d07d8d4e671509513915922dd5724d70a03511726f137d41eee773b",
+    "f477e6b85bc7ce392532a84b5b2b68d1c1435a85c1dc413503d43c455302c3d4",
+    "4298691b33cdc19e0370cfbd94298417028dcddf7136e5505514acbebf5d8f4b",
+    "bb3d5129e0822836bf9c5b7d2c4388d2db703edd4ebe0a6b96d29c2933a1c8a3",
+    "71aa38d0c4c5022955c68745ef79700d15ee9e4704e3302593dec3e8f46f3f78"
+  ],
+  "requests": [
+    {
+      "kind": "event-history",
+      "matrix": {
+        "requests": 32,
+        "encryptedSend": 4,
+        "sync": 3,
+        "secretStorage": 2,
+        "providerPage": 2
+      },
+      "native": {
+        "requests": 9,
+        "bootstrapReplay": 1,
+        "directTransport": 4
+      }
+    },
+    {
+      "kind": "event-history",
+      "matrix": {
+        "requests": 32,
+        "encryptedSend": 4,
+        "sync": 3,
+        "secretStorage": 2,
+        "providerPage": 2
+      },
+      "native": {
+        "requests": 9,
+        "bootstrapReplay": 1,
+        "directTransport": 4
+      }
+    },
+    {
+      "kind": "event-history",
+      "matrix": {
+        "requests": 32,
+        "encryptedSend": 4,
+        "sync": 3,
+        "secretStorage": 2,
+        "providerPage": 2
+      },
+      "native": {
+        "requests": 10,
+        "bootstrapReplay": 1,
+        "directTransport": 5
+      }
+    },
+    {
+      "kind": "receipt",
+      "matrix": {
+        "requests": 32,
+        "encryptedSend": 4,
+        "sync": 3,
+        "secretStorage": 2,
+        "providerPage": 2
+      },
+      "native": {
+        "requests": 13,
+        "registration": 1,
+        "bootstrapReplay": 1,
+        "directTransport": 4
+      }
+    },
+    {
+      "kind": "original-delivery",
+      "providerEvents": 3,
+      "native": {
+        "requests": 11,
+        "bootstrapReplay": 2,
+        "directTransport": 3
+      }
+    },
+    {
+      "kind": "original-delivery",
+      "providerEvents": 2,
+      "native": {
+        "requests": 10,
+        "bootstrapReplay": 2,
+        "directTransport": 2
+      }
+    }
+  ],
+  "noCompilationDuringEmulator": true,
+  "phoneTouched": false,
+  "emulatorStopped": true,
+  "mobileFreshUnitTests": 21,
+  "mobileUnchangedValidatedTests": 14491,
+  "groupPythonTests": 29,
+  "workerFailuresPreserved": [
+    {
+      "run": "worker-1",
+      "resultSha256": "c35fcf9a20c952987d532dfd7412118529c6eb861d71e16c930b6c8075aacf43"
+    },
+    {
+      "run": "worker-2",
+      "resultSha256": "7687e593e55c763be0190a6174608ae6706b906890bf8d92b86434bdf26bd1e8"
+    },
+    {
+      "run": "worker-3",
+      "resultSha256": "4b40b6dd78eb6f08e94c0dc6621e5d2708f926eda218b0a5bc44c08f3beb7b71"
+    },
+    {
+      "run": "worker-4",
+      "resultSha256": "22c4c5a01c8611ad5ac954c18c256451d56b8035b0c7d9a7a7008c8c928f3345"
+    }
+  ],
+  "temporaryProductionDiagnosticsRestored": true,
+  "observedWorkerCause": [
+    "Binding_WaitingForPrevious",
+    "Room_Unavailable_space_incoming_binding_pending"
+  ],
+  "remainingWork": "Coalesce duplicate discovery without erasing independent demand; prove finite worker completion and covered hint no-op."
+}

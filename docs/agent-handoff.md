@@ -1,137 +1,57 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 11:20 UTC. Continue the PRD and push every commit. All54 groups OPEN.
+Updated 12 November 2026, 11:48 UTC. Continue the PRD and push every commit. All 54 groups OPEN.
 No subagents. One compiler OR emulator. Phone install-only: announce, explicit serial, never launch
-or drive the phone UI, reset app data or uninstall. No final checkpoint response; continue the work.
+or drive the phone UI, reset app data or uninstall. Continue working beyond checkpoints.
 
-## Active diagnostic — restore temporary production observations
+## Current: duplicate incoming discovery
 
-Mobile has six native fixture files plus ONE TEMPORARY production file modified:
-apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationSpaceIncomingWorker.kt.
-Only bounded enum/local failure categories are emitted through Diagnostics; no queue/timer changes.
-DO NOT COMMIT that worker. Restore from active workspace cause-probe/CollaborationSpaceIncomingWorker.before.kt
-before production acceptance. Normal accepted six-file manifest468eccceccefe20f481b04abab7f4252e69e75680ff026bf9d9001fc2db532f4
-and proof4 are preserved. Temporary formatted worker is archived in cause-probe. Format5/95217
-REAPED38.882s; cause-build-1/84074 ACTIVE, assembleDebug only, not a new full acceptance run.
-One compiler OR emulator. After build passes set Group native-config mobilePhase=cause-build-1,
-run native.py worker-4 once. It captures bounded IncomingProof categories from logcat and then a
-read-only retained-state inspection before stopping the emulator. Group source1 remains exact.
-No phone install or source commit of diagnostic APK. Native worker acceptance is still open.
+Release 89 is installed on 10.77.77.3:5555 (install-only, verified 09:10 UTC). Do not reinstall it.
+Production progressive Company content is Mobile197b55d9 / Groupc192ddcc. Hosted43200304791 is
+fully accepted:17,572 cases (12,490 portable +5,082 Apple); Apple audit22508 REAPED. This does not
+prove native SDK8 execution on iPhone. See the compact CI measurement in both repositories.
 
-Worker3/82326 REAPED FAILED1 in124.235s, but immediate read-only inspection PASSED in the same boot.
-Company history: EOF,15 provider references,zero pending,one message,provider marker null. Remaining:
-one Published Latest room at position2 with no head and retryFailures1; source inventory active with
-retryFailures1; history recovery incomplete after a partition, no unresolved keys. Snapshot unchanged
-and runtime never opened during inspection. No cause for the two deferrals is known yet. Preserve
-worker-3/retained-state.json and all failed userdata; do not raise bounds or delete remaining work.
+The six Mobile fixture files and three Group protocol/test files now use the actual process-owned
+source collector, retained canonical registration and Company history. A read-only diagnostic scenario
+checks retained work without changing demand or opening native transport. Normal proof4 APK is
+149939870B /29eb096c6ed4565613c271315524c8a69f9d97184c79d4a85601ef14825cb3b2, SDK8 x86.
+Mobile proof4 passed21 fresh tests; audit38799 accepted14,512 (14,491 unchanged). Group source1
+compiled;29 Python cases passed. Controls2 completed6/0/0/0 in274.307s. Session85447 was no longer
+available after compaction; durable result and independent strict audit confirm success. No source
+or APK changes, no compiler overlap, emulator stopped, phone untouched. Six controls pass; the full
+worker suite is explicitly OPEN. See collaboration-space-original-worker-native-2026-11-12.json.
 
-Cold clone attempts64461/40356 REAPED failed before inspection: copied qcow sidecars booted without
-the installed package. Flattened clone11617 REAPED compared guest images exactly, restored package
-identity, but private worker-fixture.json was empty after cold boot. No app source failure was inferred.
-All original image hashes stayed identical. These attempts are archived under inspect-worker-2/2b/2c;
-inspect-clone.py is NOT the current diagnostic route. Native runner now inspects immediately after
-failure in the same boot. Existing tests, original images, package identity and phone remain protected.
+Active workspace in both repos: .work/space-original-worker-native-2026-11-12. Normal Mobile source
+manifest468eccceccefe20f481b04abab7f4252e69e75680ff026bf9d9001fc2db532f4 (5131 inputs),
+Group674bcfed931027c2ed49d35e338fe66071b03ae00cf98220ee2142085b424fe9 (8745 inputs).
+Native config is proof-4/source-1. Current output APK and all production sources were restored to
+normal proof4. Temporary worker Diagnostics are archived in cause-probe, NEVER commit or deploy them.
 
-## Current: progressive Company incoming content
+Worker2/3/4 fail the retained four-turn completion bound AFTER two provider pages, with real Company
+content visible before EOF. Same-boot read-only inspection passed:15 provider references,EOF,zero
+pending,one message; remaining Published Latest alias and source inventory have retryFailures1.
+Worker4 temporary category observations confirm Binding_WaitingForPrevious then room Unavailable
+space_incoming_binding_pending. Inventory failure was NOT observed; source inspection identifies
+WaitingForRoom as the likely structural wait. Do not call a finite-bound failure an infinite loop.
 
-Progressive content is committed and pushed: Mobile197b55d9 / Groupc192ddcc.
-Push sessions96985/4493 REAPED. Mobile now has six uncommitted native fixture files; Group has
-three corresponding native protocol/test files. No production change after197b55d9.
+Next production design under review (NOT implemented): local binding discovery currently deduplicates
+Published IDs only, ignoring matching Original/physical work. Coalesce duplicate discovery through
+one named pure policy shared by the use case and scan planner. Inventory may strengthen an unprocessed
+Joined physical request to a fresh unknown-head generation while preserving FIFO/retry/source and
+invalidating stale results; confirm independent hints and membership changes cannot be lost. Avoid
+schema/timer changes without evidence. Existing metadata/source/ownership, CAS and postwrite readback
+must remain. Do not raise worker bounds, drop queued work, or relax content/no-op assertions.
 
-Workspace `.work/space-original-progressive-content-2026-11-12` (Mobile). Exact baseline is the
-accepted native receipt fixture source now committed as7c3fca00;5,131 source inputs. Current16-file
-manifest767b1500d339e2e8e2ef08500b9e6458ae9040098ae17193a3af1d20f0e6a539.
-Eight production files allow exact Provider/Pending captures to read bounded Company content after
-a provider page commits. Source/device/Company/room/runtime checks remain unchanged. Reconciliation
-precedes unresolved event reads; confirmation precedes yielding the next provider page. Provider
-work cannot complete its queue or demote for missing keys before EOF. No schema/SDK/UI changes.
-Eight test/fixture files include10 new cases (5 app/5 common), plus4 intentional behavior test renames
-(7 target-specific XML IDs). test-case-id-replacements.json is explicit; all other predecessor IDs
-must survive. Baseline14,497, final expected14,512 local. Candidate/base file hashes and archives
-are retained. Do not rerun the preparation scripts: later corrections are already applied.
+After correction run focused policy/worker regressions, required full checks, then one fresh actual
+native worker run. Preserve failed candidates/results/userdata. The final covered-hint assertion may
+expose a separate mismatch: QueueCollaborationSpaceIncomingRoom checks Space history while canonical
+content is in Company history. Source review only so far; see covered-hint-review.md. Never add duplicate
+Space content to make that pass. Exact Group turns2/Matrix31/native14 expectations remain pending
+actual final trace review; do not fit request assertions to a total.
 
-Format1/64525 REAPED36.458s. Focused1/61744 REAPED FAILED189/1 after145.432s: physical snapshot
-validator still restricted Pending. Archived failed-focused-candidate-1 BEFORE correction. Added
-same content-phase predicate there and exercised wrong-owner matrix under Provider and Pending.
-Format2/65816 REAPED37.132s;15-file manifest1ddbb8b3b44dd479c6920ea6d7bd290b04691548d5550494188ea30007b0e12f.
-Focused2/45019 REAPED244/276.408s and browser1/97635 REAPED189/107.927s passed; inline audit accepted
-433 cases with explicit ID replacements. Full1/25843 REAPED FAILED2393/1 after301.669s: one registered
-worker test still expected NO content before EOF. All its no-backoff/source/continuation assertions
-passed. Archived failed-full-candidate-1; corrected only that expectation to exact unresolved content,
-confirmed non-exhausted progress and no early completion/demotion. Production unchanged after433 focus.
-Do not rerun unchanged focused browser work merely for this test-only correction.
-Format3/3683 REAPED35.425s, no formatter edits, current16-file manifest above.
-
-Full2/34210 REAPED PASSED in750.173s. Audit77429 REAPED accepted14,512:11,007 current full2,
-1,467 archived passing Data cases from full1 with identical dependencies, and2,038 unchanged baseline.
-The first audit87274 conservatively rejected Data XML hashes; its failure and corrected provenance
-remain archived. The only full1-to-full2 source delta is the unrelated app worker test expectation.
-ProofAPK149059016B/6080a8fe4f8c7c338f1a155c7b13797aedf23ea293ab0a74d91b1e7a6c87d2a7;
-SDK8x86 native hash6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95.
-See [measurement](measurements/collaboration-space-original-progressive-content-2026-11-12.json).
-Hosted CI43200304791 dispatched once from197b55d98c30e19347e15e7012fc5737014e639c at10:25:52.726669UTC;
-session77811 REAPED. Expected17,572 =12,490 portable (5974/947/5569) +5082 Apple. Source-specific
-plan/state/audit files are in hosted-43200304791. Baseline accepted runtime43182776077; explicit
-reviewed case replacements are required. Portable audit16389 REAPED accepted12,490; Apple still running. Do not dispatch again.
-
-## Next: actual canonical worker native acceptance
-
-Active workspace `.work/space-original-worker-native-2026-11-12` in Mobile and Group. Drafts were
-reviewed and applied: five Mobile fixture files, three Group protocol/test files. All production
-inputs match accepted197b55d9. Actual process collector, retained registration-based adoption,
-SynchronizeCollaborationSpaceDevice and durable-source observation replace the old incomplete
-fixture setup. Worker and separate offline reopen read Company history with explicit physical
-coordinates, both metadata indexes and no duplicate Published content. Strict flags companyStorage
-and actualSourceRetained are required. Existing four-turn bound, first-page content, empty-repeat,
-covered-hint and old exact backend request assertions remain; native acceptance is NOT complete.
-
-Mobile format1/1860 REAPED36.924s. Proof1/55870 REAPED FAILED54.665s, zero tests: Detekt found
-reopened scenario109 lines. Failed candidate archived before correction. Receipt comparison moved
-to existing pure evidence assertions; repeated offline runtime coordinates captured once, with both
-before/after checks preserved. No production change. Format2/21982 REAPED35.044s; proof2/88058
-REAPED PASSED124.739s/21fresh tests. Audit73555 REAPED accepted14,512 (21fresh+14,491 unchanged).
-Current5-file/5131-input manifest910a7e78dd0559680aff42a6cd516a79625d7964d353d493dbff9c3c00bc0d1a.
-ProofAPK149932375B/61c634866f194e0bbb24cb62bfc8ca507a4bd59dcd7df6f83db832a61994fb0a,
-immutable copy proof-2/accepted-proof.apk. Not a phone release.
-Group Python29cases passed0.006s. Format1/36796 REAPED21.202s with no edits. Group3-file/8745-input
-manifest674bcfed931027c2ed49d35e338fe66071b03ae00cf98220ee2142085b424fe9.
-Group source1/46483 REAPED PASSED81.736s; source audit inline exit0, class SHA2445e6313d82f0c56a6028957cdcc24f868510bcf836e779b0ef09315366c7b9.
-Worker1/2166 REAPED FAILED106.219s/1 case; source and APK unchanged, no compile overlap. Failure
-originalLocation:193 was a fixture precondition: it required Original indexes before the worker's
-canonical-routing turn. Actual source/adoption/startup succeeded; no provider page yet. Preserved
-fixtureff8e0fdf-5fa1-474f-89e8-dd72ccef82a7 and failed-worker-candidate-1. Index checks now execute in
-readOriginalPage, before both first-page and final content reads; registration still derives coordinates.
-Format3/52678 REAPED35.061s; proof3/8155 REAPED21/117.93s, audit77728 REAPED14,512 (21fresh).
-Manifest8f182851a28e120cc58237ebf67ecf535c47baa289069c10cb783d82f30a0b27;
-APK149932877B/f2813c5494dba52e4453e3c3ba58242d16fa656f40edf71326ad7bc5bbd5cba0.
-
-Worker2/23815 REAPED FAILED126.267s/1: first Company page had one message before EOF, two provider
-pages ran, but wake remained after four registered turns (consumeScheduled:102). Zero active HTTP
-failures and no storage failures. Native18/reg1/bootstrap1; Matrix27/send4/sync5/secret2/provider2.
-Preserve fixturebe486691-5ba5-4780-9e8a-d0d8bc5fbf57, worker-2 userdata, and failed-worker-candidate-2.
-The remaining queue has NOT yet been diagnosed; do not call this an infinite loop or raise limits.
-
-Current sixth fixture file is MatrixProofInstrumentation, adding emulator-only event-reads-worker-state.
-HrisSpaceIncomingProofHost reads retained work and Company history without starting sources/workers;
-it verifies unchanged demand and unopened runtime. Probe prints only bounded counts/phase/flags.
-Format4/27783 REAPED35.959s; proof4/62619 REAPED21/122.112s, audit38799 REAPED14,512 (21fresh).
-Six-file/5131-input manifest468eccceccefe20f481b04abab7f4252e69e75680ff026bf9d9001fc2db532f4;
-APK149939870B/29eb096c6ed4565613c271315524c8a69f9d97184c79d4a85601ef14825cb3b2.
-Group inspect-clone.py / session64461 ACTIVE: clones worker-2 data and encryption images, checks
-relative qcow backing stays in clone, upgrades only cloned proof package, preserves app identity,
-disables data/Wi-Fi, and reads the new scenario. It never touches phone or original failed images.
-Output under Group .work/space-original-worker-native-2026-11-12/inspect-worker-2; reap and inspect
-retained-state.json. Original source-image hashes must remain identical. No compiler until reaped.
-Then diagnose the remaining work before changing production. Native config still points proof-3;
-set it explicitly to the accepted candidate before any fresh test. Do not blindly rerun worker-2.
-Initial prep assertion rejected private Python bytecode before Group writes; corrected by selecting
-only actual draft source files. Preparation did not drop any source or test.
-
-Potential follow-up, source inspection ONLY: QueueCollaborationSpaceIncomingRoom currently checks
-coverage through Space history; canonical worker stores Company history. Final covered-hint check
-may expose this mismatch. Observe the actual failed native stage first; never insert duplicate Space
-facts or relax the no-work assertion. See covered-hint-review.md in the active Mobile workspace.
-Prior detailed design remains in .work/space-incoming-sources-native-2026-11-12/worker-repair-design.md.
+Read prior detailed evidence in [archived handoff](agent-handoff-history-through-original-worker-diagnostics-2026-11-12.md).
+Cold clone attempts failed to recover fixture input; immediate same-boot inspection is now the diagnostic
+route. Original failed images are preserved. No active compiler/emulator at this checkpoint.
 
 ## Accepted native receipt/source proof
 

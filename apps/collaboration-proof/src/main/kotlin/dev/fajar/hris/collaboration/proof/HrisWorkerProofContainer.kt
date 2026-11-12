@@ -1,7 +1,9 @@
 package dev.fajar.hris.collaboration.proof
 
 import android.content.Context
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationIncomingSources
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationState
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.notifications.CollaborationNotificationDelivery
 import dev.fajar.starter.app.work.ApplicationPush
@@ -29,6 +31,7 @@ import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
@@ -216,15 +219,19 @@ internal class HrisWorkerProofContainer(
             ?.demand
             ?.roomKeyReceipt
 
+    suspend fun collectIncoming(states: StateFlow<ApplicationCollaborationState>) {
+        container.koin.get<ApplicationCollaborationIncomingSources>().collect(states)
+    }
+
     fun spaceRecovery(
         seed: HrisSpaceRecoverySeed,
-        sources: HrisSpaceIncomingSourcesProofHost? = null,
+        collectIncoming: suspend (StateFlow<ApplicationCollaborationState>) -> Unit = {},
     ) =
         HrisSpaceRecoveryProofHost(
             container.koin,
             seed,
             scheduled = { scheduledKeys },
-            collectIncoming = { states -> sources?.collect(states) },
+            collectIncoming = collectIncoming,
         )
 
     suspend fun activate() {

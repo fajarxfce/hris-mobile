@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.first
 import org.json.JSONObject
 import org.koin.core.Koin
 
-/** Executes the registered application task over real admission, encrypted storage and SDK I/O. */
+/** Actual process sources and registered task; canonical Company content stays in its owner. */
 internal class HrisSpaceIncomingWorkerProofHost(
     private val koin: Koin,
     private val scheduled: () -> List<String>,
@@ -22,8 +22,9 @@ internal class HrisSpaceIncomingWorkerProofHost(
     private val worker = koin.get<CollaborationSpaceIncomingWorker>()
     private val readWake = koin.get<ReadCollaborationSpaceIncomingWake>()
     private val readDemand = koin.get<ReadCollaborationSpaceIncomingDemand>()
-    private val history = koin.get<CollaborationSpaceHistoryTraversalRepository>()
+    private val history = koin.get<CollaborationHistoryTraversalRepository>()
     private val request = koin.get<QueueCollaborationSpaceIncomingRoom>()
+    private val retained = HrisSpaceIncomingProofHost(koin)
 
     suspend fun consume(
         runtime: CollaborationSpaceRuntimeReady,
@@ -31,11 +32,41 @@ internal class HrisSpaceIncomingWorkerProofHost(
         roomId: String,
         headId: String,
     ): JSONObject = coroutineScope {
-        check(expect(readWake()) == null)
-        check(scheduled().none { it == worker.key })
+        check(koin.getAll<SyncTask>().single { it.key == worker.key } === worker)
         val foreground = koin.get<ApplicationCollaborationIncomingStartup>().start(this)
         try {
-            consumeScheduled(runtime, conversation, roomId, headId).put("automaticStartup", true)
+            val device =
+                requireNotNull(
+                    expect(koin.get<LoadCollaborationSpaceRecoveryDevice>()(runtime.owner.parent))
+                )
+            check(device.owner == runtime.owner && device.operationId == runtime.operationId)
+            val adopted =
+                expect(
+                    koin.get<AdoptCollaborationSpaceRuntime>()(
+                        runtime.owner,
+                        device.registrationId,
+                        runtime.operationId,
+                    )
+                )
+            check(adopted == runtime)
+            expect(koin.get<SynchronizeCollaborationSpaceDevice>()(runtime))
+            val source =
+                requireNotNull(koin.get<CollaborationSpaceSyncRepository>().incomingSource(runtime))
+            withTimeout(5_000) {
+                while (
+                    expect(readDemand(runtime.owner.localDirectoryAccess()))
+                        .snapshot
+                        ?.demand
+                        ?.sources
+                        ?.any { it.source == source } != true
+                ) delay(10)
+            }
+            awaitStartup()
+            check(expect(readWake()) != null)
+            check(scheduled().any { it == worker.key })
+            consumeScheduled(runtime, conversation, roomId, headId)
+                .put("automaticStartup", true)
+                .put("actualSourceRetained", true)
         } finally {
             foreground.cancelAndJoin()
         }
@@ -47,34 +78,27 @@ internal class HrisSpaceIncomingWorkerProofHost(
         roomId: String,
         headId: String,
     ): JSONObject {
-        check(koin.getAll<SyncTask>().single { it.key == worker.key } === worker)
-        val access = runtime.owner.localDirectoryAccess()
-        val key =
-            CollaborationHistoryTraversal(
-                conversation.id,
-                roomId,
-                runtime.deviceId,
-                CollaborationHistoryPurpose.Incoming,
-            )
+        val location = retained.originalLocation(runtime.owner, conversation.id)
+        val access = location.companyAccess
+        val key = location.traversal
+        check(key.roomId == roomId && key.deviceId != runtime.deviceId)
         check(expect(history.progress(access, key)) == null)
-        awaitStartup()
-        check(expect(readWake()) != null)
-        check(scheduled().count { it == worker.key } == 1)
-        // The manual fixture scheduler invokes only the real registered task; no acquisition
-        // usecase is called here. The first page must retain visible content before provider EOF.
-        runRegisteredTurn()
-        val first = requireNotNull(expect(history.progress(access, key)))
-        check(!first.exhausted)
-        val visible =
-            expect(koin.get<ObserveCollaborationSpaceHistory>()(access, conversation.id).first())
-        check(visible.messages.isNotEmpty())
-        check(expect(readWake()) != null)
-        check(scheduled().count { it == worker.key } == 2)
-        var turns = 1
+        var turns = 0
+        var firstTurnMessages: Int? = null
+        // Preserve the previous finite bound. A preparatory canonical-routing turn has no page;
+        // the first non-exhausted provider checkpoint must already expose real Company content.
         while (expect(readWake()) != null && turns < 4) {
             runRegisteredTurn()
             turns += 1
+            val progress = expect(history.progress(access, key))
+            if (progress != null && !progress.exhausted && firstTurnMessages == null) {
+                check(progress.provider == null)
+                val page = retained.readOriginalPage(location)
+                check(page.messages.size == 1)
+                firstTurnMessages = page.messages.size
+            }
         }
+        check(firstTurnMessages == 1)
         check(expect(readWake()) == null)
         check(
             expect(
@@ -83,25 +107,35 @@ internal class HrisSpaceIncomingWorkerProofHost(
                     .isSpaceOpen(runtime.owner, runtime.deviceId, runtime.operationId)
             )
         )
-        val final = expect(readDemand(access))
+        val local = runtime.owner.localDirectoryAccess()
+        val final = expect(readDemand(local))
         check(
             final.snapshot != null &&
                 final.ready.isEmpty() &&
                 !final.roomsPending &&
                 !final.scanPending
         )
-        val references = expect(koin.get<ReadCollaborationSpaceIncomingReferences>()(access, key))
+        val references = expect(history.observeReferences(access, key, limit = 50).first())
         check(
             references.progress?.exhausted == true &&
+                references.progress?.provider == null &&
                 references.events.isEmpty() &&
                 references.after == null
         )
+        val scheduledBeforeRepeat = scheduled().count { it == worker.key }
         runRegisteredTurn()
+        val published =
+            CollaborationHistoryTraversal(
+                conversation.id,
+                roomId,
+                runtime.deviceId,
+                CollaborationHistoryPurpose.Incoming,
+            )
         check(
             !expect(
                 request(
-                    access,
-                    key,
+                    local,
+                    published,
                     CollaborationSpaceIncomingDemandChange.Request(
                         conversation.id,
                         UUID.randomUUID().toString(),
@@ -110,14 +144,12 @@ internal class HrisSpaceIncomingWorkerProofHost(
                 )
             )
         )
-        check(expect(readWake()) == null && expect(readDemand(access)) == final)
-        check(
-            expect(koin.get<ReadCollaborationSpaceIncomingReferences>()(access, key)) == references
-        )
-        check(scheduled().count { it == worker.key } == 2)
+        check(expect(readWake()) == null && expect(readDemand(local)) == final)
+        check(expect(history.observeReferences(access, key, limit = 50).first()) == references)
+        check(scheduled().count { it == worker.key } == scheduledBeforeRepeat)
         return JSONObject()
             .put("turns", turns)
-            .put("firstTurnMessages", visible.messages.size)
+            .put("firstTurnMessages", firstTurnMessages)
             .put("contentBeforeProviderEof", true)
             .put("registeredTask", true)
             .put("emptyRepeatUnchanged", true)

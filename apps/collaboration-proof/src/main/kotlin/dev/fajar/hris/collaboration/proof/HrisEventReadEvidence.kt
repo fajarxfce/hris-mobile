@@ -106,6 +106,13 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
         )
     }
 
+    /** Compare only the durable receipt identity, without installing source observers. */
+    fun retainedReceipt(receipt: CollaborationSpaceRoomKeyReceipt?, previous: JSONObject): String {
+        val digest = HrisSpaceIncomingSourcesProofHost.digest(requireNotNull(receipt).receiptId)
+        check(digest == previous.getString("receiptDigest"))
+        return digest
+    }
+
     /** Independent body/hash assertions over encrypted app storage, including its exact aliases. */
     fun retained(
         snapshot: HrisSpaceIncomingProofHost.Snapshot,
@@ -142,7 +149,14 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
                 CollaborationReplacementEventFact(editId, sender, edit.timestamp, false)
         )
         check(snapshot.redacted == CollaborationHistoryEventFact(redactedId, recipient, null, true))
-        return frontier(snapshot.references, staged, owner, pendingCompleted)
+        return frontier(
+                snapshot.references,
+                staged,
+                owner,
+                pendingCompleted,
+                snapshot.physicalProvider,
+                snapshot.companyOwned,
+            )
             .put("messages", 1)
             .put("originalEventId", originalId)
             .put("replacementEventId", editId)
@@ -162,18 +176,21 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
         staged: JSONObject,
         owner: ProtectedHrisProofOwner,
         pendingCompleted: Boolean,
+        physicalProvider: CollaborationHistoryProviderIdentity,
+        companyOwned: Boolean,
     ): JSONObject {
         val ids = staged.getJSONObject("events")
         val progress = requireNotNull(references.progress)
         val position = requireNotNull(progress.incoming)
         check(progress.exhausted && references.after == null && progress.references in 5..50)
         check(
-            progress.provider ==
+            physicalProvider ==
                 CollaborationHistoryProviderIdentity(
                     owner.currentOwner.companyId,
                     owner.registeredDeviceId,
                 )
         )
+        check(progress.provider == if (companyOwned) null else physicalProvider)
         if (pendingCompleted) check(references.events.isEmpty())
         else check(progress.references == references.events.size.toLong() + 2)
         check(
@@ -202,8 +219,8 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
                     position.pendingAfter,
                     position.pendingThrough,
                     position.pendingRetryRequired,
-                    progress.provider!!.companyId,
-                    progress.provider!!.deviceId,
+                    physicalProvider.companyId,
+                    physicalProvider.deviceId,
                 )
             )
         val pendingFacts = JSONArray()
@@ -229,6 +246,7 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
             .put("pendingHash", hash(pendingFacts.toString()))
             .put("physicalProviderPreserved", true)
             .put("providerExhaustedWithPending", !pendingCompleted)
+            .also { if (companyOwned) it.put("companyStorage", true) }
     }
 
     fun window(
