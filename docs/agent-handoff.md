@@ -1,5 +1,62 @@
 # Agent continuation — communications long run
 
+Updated 12 November 2026, 05:00 UTC.
+Continue authorized PRD work, per-commit pushes and validated phone installs. All54PRD groups OPEN.
+No subagents. One compiler OR emulator; follow AGENTS.md and clean layer boundaries.
+
+## Serialized history worker service accepted
+
+Workspace .work/history-recovery-worker-service-2026-11-12, baselinef045436117f75966743d72c8cbe953bcc50ebf35.
+17files/5new application files/12existing;5,098inputs/174d3aee269298bde939750a796fc178aaeb14f476236c66d5b63f3dcf7cfa87.
+Fullfull-1/15274 REAPED PASS580.273s; audit41195 REAPED.
+14,044=12006fresh+2038verified unchanged. Focused446JVM+
+298browser=744. AllpriorIDs preserved. Added8common cases and50application cases:service24,
+worker19,Original7. Failed candidates and reviews retained in measurement evidence.
+ProofAPK152205148B/4f8b725a08d560950480b36eed526651c59aba5c291c174ca30e944a320e0457; no native/device execution.
+
+Eligible/deferred history is visible independently of primary queue capacity. The existing worker
+adopts history-only work, reserves one30+5s visit after inventory and before primaryFIFO, and reads
+current demand before resume/finish. Delayed history schedules retry; completed unresolved passes
+sleep. Service copies bounded metadata/references, invokes admitted local-before-native content and
+local completion, then exact global completion. Authority failures stay failures; conflict/queue
+contention get one readback without operational backoff. A later requested generation alone does
+not obsolete the active turn. Both primary owners now call finite-EOF key demotion, using current
+persisted Pending phase. Successful transfer skips provider recovery; false transfer permits the
+existing guarded head inspection. Koin and hosted workflow include both new application suites.
+
+Publisher/writer HAVE EXECUTED. Commit/push source/evidence before dispatch-hosted.py ONCE.
+Expected16,936=12,022portable+4,914Apple. Inspect dispatch-attempt before any retry.
+Native key/source/restore producers remain disabled. No live change or Starter port.
+
+## Earlier platform gates
+
+Original43148447666 fully accepted16,610; Space43152279307 fully accepted16,688.
+Both include audited portable/Apple reports, prior case IDs and unsigned iOS host; neither is native
+AppleSDK8 execution. Global43155076441 still pending; inspect its matching-source artifacts.
+
+## Next: loss-aware key callbacks and durable triggers
+
+Read the next-room-key-observation-review.md in this workspace if present. SDK8 native callbacks
+have mutable room IDs and a lag flag, with no stable provider sequence. Copy bounded inputs;
+repeated identical room sets are distinct occurrences. Retain recovery intent before acknowledging
+callbacks and do not lose a key arriving during a suspended write. Known rooms target retained
+history; unknown mapping/overflow/loss/source/restore need bounded account fallback. Metadata must
+be published before a fresh demand, including new unresolved histories behind an active cursor.
+The selected metadata page is not a whole-account revision. Preserve existing worker fairness.
+
+Own a permanent listener outside8 transient native children. Deactivate then cancel/isFinished
+DRAIN including late acquisition before Encryption/client/storeclose. Native AppleSDK8 remains
+unproved by portable tests/iOS compilation. SDK8 wrapper/source/isolated-consumer artifacts are
+protected; see prior checkpoint for paths and accepted evidence. Do not push upstream SDK trees.
+
+Phone last known9282 REAPED:04:26:30.180821UTC/20.020997s timeout; next attempt>=04:59:50UTC.
+Inspect newer phone evidence before retrying. Release89 ready, --install-only and explicitserial;
+announce installation, never launch/drive/reset/uninstall phone UI.
+
+## Prior checkpoint and protected/live constraints
+
+# Agent continuation — communications long run
+
 Updated 12 November 2026, 04:33 UTC.
 Continue authorized PRD work, per-commit pushes and validated phone installs. No subagents.
 One compiler OR emulator; follow AGENTS.md and clean layer boundaries. All54PRD groups OPEN.

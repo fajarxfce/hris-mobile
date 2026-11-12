@@ -16,6 +16,7 @@ internal fun applicationCollaborationSpaceOriginalIncomingTurnModule() = module 
         val events = inject<AcquireCollaborationSpaceOriginalEvents>()
         val complete = inject<CompleteCollaborationSpaceOriginalIncomingReferences>()
         val retire = inject<CompleteCollaborationSpaceOriginalIncomingRoom>()
+        val demote = inject<DemoteCollaborationSpaceOriginalIncomingRoom>()
         val recover = inject<RecoverCollaborationSpaceOriginalIncomingProvider>()
         CollaborationSpaceOriginalIncomingTurn(
             room = { runtime, captured -> room.value(runtime, captured) },
@@ -31,6 +32,7 @@ internal fun applicationCollaborationSpaceOriginalIncomingTurnModule() = module 
                 complete.value(runtime, captured, pending, batch)
             },
             completeRoom = { runtime, captured -> retire.value(runtime, captured) },
+            demoteRoom = { runtime, captured -> demote.value(runtime, captured) },
             recoverProvider = { runtime, captured -> recover.value(runtime, captured) },
         )
     }

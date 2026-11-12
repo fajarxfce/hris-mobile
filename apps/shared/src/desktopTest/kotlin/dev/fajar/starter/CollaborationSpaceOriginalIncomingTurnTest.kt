@@ -198,6 +198,7 @@ class CollaborationSpaceOriginalIncomingTurnTest {
         assertFalse("recover" in f.calls)
         assertEquals(0, f.providerReads)
         assertEquals(1, f.contentRequests.size)
+        assertTrue(f.demotionCaptures.isEmpty())
     }
 
     @Test
@@ -210,7 +211,9 @@ class CollaborationSpaceOriginalIncomingTurnTest {
         assertEquals("client.collaboration_space_incoming_keys_pending", failure.code)
         assertEquals(FailureKind.Unavailable, failure.kind)
         assertEquals(CollaborationSpaceIncomingPhase.Pending, f.current?.phase)
-        assertFalse("recover" in f.calls)
+        assertEquals(1, f.demotionCaptures.size)
+        assertEquals(1, f.calls.count { it == "recover" })
+        assertTrue(f.calls.indexOf("demote-room") < f.calls.indexOf("recover"))
         assertEquals(0, f.providerReads)
     }
 
@@ -294,5 +297,132 @@ class CollaborationSpaceOriginalIncomingTurnTest {
             assertIs<AppResult.Failed>(f.run(published)).failure.kind,
         )
         assertTrue(f.calls.isEmpty())
+    }
+
+    @Test
+    fun finiteMissingKeysTransferWithoutRestartingProviderOrLosingReferences() = runTest {
+        val f =
+            SpaceOriginalIncomingTurnFixture(testScheduler, CollaborationSpaceIncomingPhase.Pending)
+        f.completeResult = false
+        f.retryRequired = true
+        f.demoteResult = true
+        assertEquals(AppResult.Success(true), f.run())
+        assertNull(f.current)
+        assertEquals(listOf("$" + "remote"), f.references.map { it.event.eventId })
+        assertEquals(f.captured, f.demotionCaptures.single().captured)
+        val history = assertNotNull(f.worker.historyRecovery)
+        assertEquals(history.generation, assertNotNull(f.worker.wake).generation)
+        assertEquals(0, f.providerReads)
+        assertFalse("recover" in f.calls)
+        assertTrue(f.calls.indexOf("complete-references") < f.calls.indexOf("demote-room"))
+        assertTrue(f.calls.indexOf("complete-room") < f.calls.indexOf("demote-room"))
+    }
+
+    @Test
+    fun transferAfterProviderCommitUsesPersistedPendingCaptureAndReplayAddsNoPass() = runTest {
+        val f = SpaceOriginalIncomingTurnFixture(testScheduler)
+        f.completeResult = false
+        f.retryRequired = true
+        f.demoteResult = true
+        assertEquals(AppResult.Success(true), f.run())
+        assertEquals(
+            CollaborationSpaceIncomingPhase.Pending,
+            f.demotionCaptures.single().captured.phase,
+        )
+        assertEquals(f.roomCaptures.last(), f.demotionCaptures.single().captured)
+        assertEquals(1, f.providerReads)
+        val history = assertNotNull(f.worker.historyRecovery)
+        val wake = assertNotNull(f.worker.wake)
+        assertEquals(AppResult.Success(true), f.run())
+        assertEquals(history, f.worker.historyRecovery)
+        assertEquals(wake, f.worker.wake)
+        assertEquals(1, f.demotionCaptures.size)
+        assertFalse("recover" in f.calls)
+    }
+
+    @Test
+    fun transferStorageFailureKeepsPrimaryAndCannotFallThroughToRecovery() = runTest {
+        val f =
+            SpaceOriginalIncomingTurnFixture(testScheduler, CollaborationSpaceIncomingPhase.Pending)
+        f.completeResult = false
+        f.retryRequired = true
+        f.demoteResult = true
+        f.failures["demote-room"] = f.failure
+        assertEquals(AppResult.Failed(f.failure), f.run())
+        assertEquals(f.captured, f.current)
+        assertNull(f.worker.historyRecovery)
+        assertEquals(1, f.demotionCaptures.size)
+        assertFalse("recover" in f.calls)
+        assertEquals(0, f.providerReads)
+    }
+
+    @Test
+    fun cancellationDuringTransferJoinsWithoutInventingRecoveryOrProviderWork() = runTest {
+        val f =
+            SpaceOriginalIncomingTurnFixture(testScheduler, CollaborationSpaceIncomingPhase.Pending)
+        f.completeResult = false
+        f.retryRequired = true
+        f.demoteResult = true
+        val entered = CompletableDeferred<Unit>()
+        var stopped = false
+        f.before = { stage ->
+            if (stage == "demote-room")
+                try {
+                    entered.complete(Unit)
+                    awaitCancellation()
+                } finally {
+                    stopped = true
+                }
+        }
+        val running = async { f.run() }
+        entered.await()
+        running.cancelAndJoin()
+        assertTrue(stopped)
+        assertEquals(f.captured, f.current)
+        assertNull(f.worker.historyRecovery)
+        assertFalse("recover" in f.calls)
+        assertEquals(0, f.providerReads)
+    }
+
+    @Test
+    fun unconfirmedTransferAllowsGuardedMissingHeadRecoveryWithoutInlineProviderRead() = runTest {
+        val f =
+            SpaceOriginalIncomingTurnFixture(testScheduler, CollaborationSpaceIncomingPhase.Pending)
+        f.completeResult = false
+        f.retryRequired = true
+        f.recoveryResult = true
+        assertEquals(AppResult.Success(true), f.run())
+        assertEquals(CollaborationSpaceIncomingPhase.Latest, f.current?.phase)
+        assertNull(f.worker.historyRecovery)
+        assertEquals(1, f.demotionCaptures.size)
+        assertEquals(1, f.calls.count { it == "recover" })
+        assertEquals(0, f.providerReads)
+    }
+
+    @Test
+    fun cleanPrimaryCompletionDoesNotAllocateHistoryRecovery() = runTest {
+        val f =
+            SpaceOriginalIncomingTurnFixture(testScheduler, CollaborationSpaceIncomingPhase.Pending)
+        f.demoteResult = true
+        assertEquals(AppResult.Success(true), f.run())
+        assertNull(f.current)
+        assertTrue(f.demotionCaptures.isEmpty())
+        assertNull(f.worker.historyRecovery)
+        assertFalse("recover" in f.calls)
+    }
+
+    @Test
+    fun replacementTaskDuringTransferCannotBeRemovedByTheOldCapture() = runTest {
+        val f =
+            SpaceOriginalIncomingTurnFixture(testScheduler, CollaborationSpaceIncomingPhase.Pending)
+        f.completeResult = false
+        f.retryRequired = true
+        f.demoteResult = true
+        val replacement = f.captured.copy(generation = recoveryId(991))
+        f.before = { if (it == "demote-room") f.current = replacement }
+        assertEquals(FailureKind.Unavailable, assertIs<AppResult.Failed>(f.run()).failure.kind)
+        assertEquals(replacement, f.current)
+        assertNull(f.worker.historyRecovery)
+        assertEquals(0, f.providerReads)
     }
 }

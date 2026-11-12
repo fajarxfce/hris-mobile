@@ -80,6 +80,8 @@ internal class SpaceOriginalIncomingTurnFixture(
     var retryRequired = false
     var completeResult = true
     var recoveryResult = false
+    var demoteResult = false
+    val demotionCaptures = mutableListOf<CollaborationSpaceOriginalIncomingRoom>()
     var nullAt: String? = null
     var before: suspend (String) -> Unit = {}
     val failures = mutableMapOf<String, Failure>()
@@ -265,6 +267,13 @@ internal class SpaceOriginalIncomingTurnFixture(
                     if (completeResult) current = null
                     AppResult.Success(completeResult)
                 }
+            },
+            demoteRoom = { actual, local ->
+                assertEquals(runtime, actual)
+                assertEquals(physicalDevice, local.traversal.deviceId)
+                demotionCaptures += local
+                val failed = step("demote-room")
+                failed ?: AppResult.Success(demoteResult && worker.transfer(local.captured))
             },
             recoverProvider = { actual, local ->
                 assertEquals(runtime, actual)

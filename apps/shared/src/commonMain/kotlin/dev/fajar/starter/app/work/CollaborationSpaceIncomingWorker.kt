@@ -34,6 +34,10 @@ class CollaborationSpaceIncomingWorker(
         suspend (
             CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingSourceProgress, Failure?,
         ) -> AppResult<Boolean>,
+    private val recoverHistory:
+        suspend (CollaborationSpaceRuntimeReady) -> AppResult<
+                CollaborationSpaceHistoryRecoveryOutcome
+            >,
     private val deferPhysical:
         suspend (
             CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingPhysicalRoomDemand, Failure?,
@@ -93,6 +97,10 @@ class CollaborationSpaceIncomingWorker(
             CollaborationHistoryTraversal,
             CollaborationSpaceIncomingRoomDemand,
         ) -> AppResult<Boolean>,
+    private val demoteRoom:
+        suspend (CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingRoom) -> AppResult<
+                Boolean
+            >,
     private val recoverProvider:
         suspend (
             CollaborationSpaceLocalAccess,
@@ -167,7 +175,11 @@ class CollaborationSpaceIncomingWorker(
         val found = readDemand(access)
         if (found is AppResult.Failed) return failed(found)
         val pending = (found as AppResult.Success).value
-        if (pending.turn.isEmpty() && pending.inventoryReady.isEmpty())
+        if (
+            pending.turn.isEmpty() &&
+                pending.inventoryReady.isEmpty() &&
+                pending.historyReady == null
+        )
             return continueOrFinish(access, wake)
         val adopted = adopt(original)
         if (adopted is AppResult.Failed) return failed(adopted)
@@ -180,6 +192,10 @@ class CollaborationSpaceIncomingWorker(
         if (source != null) {
             val processed = processInventory(runtime, source)
             if (processed is AppResult.Failed) return failed(processed)
+        }
+        if (work.historyReady != null) {
+            val recovered = recoverHistory(runtime)
+            if (recovered is AppResult.Failed) return failed(recovered)
         }
         for (task in work.turn) {
             val processed =
@@ -337,12 +353,18 @@ class CollaborationSpaceIncomingWorker(
             return completed
         val completion = (resolved as AppResult.Success).value
         if (completion.more) return AppResult.Success(false)
-        if (completion.retryRequired) return AppResult.Failed(pending("keys_pending"))
+        if (completion.retryRequired) {
+            val transferred = demoteRoom(runtime, local.copy(captured = current))
+            if (transferred is AppResult.Failed || (transferred as AppResult.Success).value)
+                return transferred
+        }
         val revisited = recoverProvider(access, local.traversal, current)
         if (revisited is AppResult.Failed || (revisited as AppResult.Success).value)
             return revisited
         // A changed provider capture remains recoverable without an immediate empty-work loop.
-        return AppResult.Failed(pending("source_pending"))
+        return AppResult.Failed(
+            pending(if (completion.retryRequired) "keys_pending" else "source_pending")
+        )
     }
 
     private suspend fun continueOrFinish(
@@ -353,9 +375,15 @@ class CollaborationSpaceIncomingWorker(
         val loaded = if (runtime == null) readDemand(access) else readRuntimeDemand(runtime)
         if (loaded is AppResult.Failed) return failed(loaded)
         val current = (loaded as AppResult.Success).value
-        if (current.turn.isNotEmpty() || current.inventoryReady.isNotEmpty() || current.scanPending)
+        if (
+            current.turn.isNotEmpty() ||
+                current.inventoryReady.isNotEmpty() ||
+                current.scanPending ||
+                current.historyReady != null
+        )
             return continueWork()
-        if (current.roomsPending) return SyncResult.Retry(pending("deferred"))
+        if (current.roomsPending || current.historyDeferred != null)
+            return SyncResult.Retry(pending("deferred"))
         val finished = finish(access, wake)
         if (finished is AppResult.Failed) return failed(finished)
         return if ((finished as AppResult.Success).value) SyncResult.Complete else continueWork()

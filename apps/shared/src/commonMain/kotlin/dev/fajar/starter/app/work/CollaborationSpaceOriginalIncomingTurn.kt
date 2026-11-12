@@ -49,6 +49,10 @@ class CollaborationSpaceOriginalIncomingTurn(
         suspend (
             CollaborationSpaceRuntimeReady, CollaborationSpaceOriginalIncomingRoom,
         ) -> AppResult<Boolean>,
+    private val demoteRoom:
+        suspend (
+            CollaborationSpaceRuntimeReady, CollaborationSpaceOriginalIncomingRoom,
+        ) -> AppResult<Boolean>,
     private val recoverProvider:
         suspend (
             CollaborationSpaceRuntimeReady, CollaborationSpaceOriginalIncomingRoom,
@@ -118,11 +122,15 @@ class CollaborationSpaceOriginalIncomingTurn(
         if (completed is AppResult.Failed || (completed as AppResult.Success).value)
             return completed
         if (completion.more) return AppResult.Success(false)
-        if (completion.retryRequired) return pending("keys_pending")
+        if (completion.retryRequired) {
+            val transferred = demoteRoom(runtime, current)
+            if (transferred is AppResult.Failed || (transferred as AppResult.Success).value)
+                return transferred
+        }
         val recovered = recoverProvider(runtime, current)
         if (recovered is AppResult.Failed || (recovered as AppResult.Success).value)
             return recovered
-        return pending("source_pending")
+        return pending(if (completion.retryRequired) "keys_pending" else "source_pending")
     }
 
     private fun pending(suffix: String, kind: FailureKind = FailureKind.Unavailable) =

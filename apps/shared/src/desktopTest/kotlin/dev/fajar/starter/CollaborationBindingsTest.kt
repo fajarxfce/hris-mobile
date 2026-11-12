@@ -7,6 +7,7 @@ import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.notifications.CollaborationNotificationCommands
 import dev.fajar.starter.app.notifications.CollaborationNotificationReplies
 import dev.fajar.starter.app.work.CollaborationNotificationReplyRecoveryWorker
+import dev.fajar.starter.app.work.CollaborationSpaceHistoryRecoveryService
 import dev.fajar.starter.app.work.CollaborationSpaceOriginalIncomingTurn
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
@@ -749,6 +750,7 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<DemoteCollaborationSpaceOriginalIncomingRoom>())
                 assertNotNull(container.koin.get<DemoteCollaborationSpaceIncomingRoom>())
                 assertNotNull(container.koin.get<CollaborationSpaceOriginalIncomingTurn>())
+                assertNotNull(container.koin.get<CollaborationSpaceHistoryRecoveryService>())
                 assertNotNull(container.koin.get<AcquireCollaborationSpaceEvents>())
                 assertNotNull(container.koin.get<AcquireCollaborationSpaceProviderHistory>())
                 assertNotNull(container.koin.get<AcquireCollaborationSpaceOriginalEvents>())

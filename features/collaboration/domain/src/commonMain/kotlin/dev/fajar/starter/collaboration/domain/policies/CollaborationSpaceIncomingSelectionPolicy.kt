@@ -21,6 +21,7 @@ fun selectCollaborationSpaceIncomingWork(
     )
         return invalidIncomingSelection()
     val demand = snapshot?.demand
+    val history = demand?.historyRecovery?.takeUnless { it.complete }
     val matching = demand?.sources?.singleOrNull { it.source.storeId == source?.storeId }
     if (matching != null && matching.source != source) return invalidIncomingSelection()
     val logical =
@@ -49,6 +50,9 @@ fun selectCollaborationSpaceIncomingWork(
                         demand.physicalRooms.isNotEmpty() ||
                         demand.sources.any { it.inventoryGeneration != null }),
             physicalReady = physical.filter { it.position in positions },
+            historyReady = history?.takeIf { eligibleCollaborationSpaceHistoryRecovery(it, now) },
+            historyDeferred =
+                history?.takeUnless { eligibleCollaborationSpaceHistoryRecovery(it, now) }?.retry,
             inventoryReady =
                 if (demand != null && demand.rooms.size + demand.physicalRooms.size < 64)
                     demand.sources.filter {

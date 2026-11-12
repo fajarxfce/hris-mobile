@@ -8,6 +8,8 @@ data class CollaborationSpaceIncomingWork(
     val roomsPending: Boolean,
     val physicalReady: List<CollaborationSpaceIncomingPhysicalRoomDemand> = emptyList(),
     val inventoryReady: List<CollaborationSpaceIncomingSourceProgress> = emptyList(),
+    val historyReady: CollaborationSpaceHistoryRecovery? = null,
+    val historyDeferred: CollaborationSpaceIncomingRetry? = null,
 ) {
     val turn: List<CollaborationSpaceIncomingTask>
         get() =

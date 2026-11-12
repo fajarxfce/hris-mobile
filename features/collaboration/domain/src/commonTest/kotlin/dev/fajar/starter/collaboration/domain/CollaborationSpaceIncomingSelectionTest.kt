@@ -163,6 +163,110 @@ class CollaborationSpaceIncomingSelectionTest {
         assertEquals(4, work.ready.size + work.physicalReady.size)
     }
 
+    @Test
+    fun onlyHistoryCanRequireAnAdoptedRuntime() {
+        val history = CollaborationSpaceHistoryRecovery(id(901))
+        val work = selected(CollaborationSpaceIncomingDemand(historyRecovery = history), first)
+        assertTrue(work.turn.isEmpty())
+        assertTrue(work.inventoryReady.isEmpty())
+        assertEquals(history, work.historyReady)
+        assertNull(work.historyDeferred)
+    }
+
+    @Test
+    fun deferredHistoryCannotRequestImmediateContinuation() {
+        val retry = assertNotNull(nextCollaborationSpaceIncomingRetry(null, 1000))
+        val history = CollaborationSpaceHistoryRecovery(id(901), revision = 1, retry = retry)
+        val work =
+            selected(CollaborationSpaceIncomingDemand(historyRecovery = history), first, 2000)
+        assertNull(work.historyReady)
+        assertEquals(retry, work.historyDeferred)
+        assertEquals(history, work.snapshot?.demand?.historyRecovery)
+    }
+
+    @Test
+    fun historyRetryBecomesReadyAtItsDeadlineAndAfterClockRollback() {
+        val retry = assertNotNull(nextCollaborationSpaceIncomingRetry(null, 1000))
+        val history = CollaborationSpaceHistoryRecovery(id(901), revision = 1, retry = retry)
+        for (now in listOf(500L, retry.eligibleAtEpochMillis)) {
+            val work =
+                selected(CollaborationSpaceIncomingDemand(historyRecovery = history), first, now)
+            assertEquals(history, work.historyReady)
+            assertNull(work.historyDeferred)
+        }
+    }
+
+    @Test
+    fun completedWaitingPassStaysAsleep() {
+        val history =
+            CollaborationSpaceHistoryRecovery(
+                id(901),
+                revision = 1,
+                complete = true,
+                unresolved = true,
+            )
+        val work = selected(CollaborationSpaceIncomingDemand(historyRecovery = history), first)
+        assertNull(work.historyReady)
+        assertNull(work.historyDeferred)
+        assertEquals(history, work.snapshot?.demand?.historyRecovery)
+    }
+
+    @Test
+    fun newActualRequestMakesCompletedWaitingHistoryReady() {
+        val previous =
+            CollaborationSpaceHistoryRecovery(
+                id(901),
+                revision = 1,
+                complete = true,
+                unresolved = true,
+            )
+        val next =
+            assertIs<AppResult.Success<CollaborationSpaceHistoryRecovery>>(
+                    planCollaborationSpaceHistoryRecoveryRequest(previous, id(902))
+                )
+                .value
+        val work = selected(CollaborationSpaceIncomingDemand(historyRecovery = next), first)
+        assertEquals(next, work.historyReady)
+        assertNull(work.historyDeferred)
+    }
+
+    @Test
+    fun fullQueueDoesNotStarveHistoryRecovery() {
+        val history = CollaborationSpaceHistoryRecovery(id(901))
+        val work =
+            selected(
+                demand.copy(
+                    nextPosition = 64,
+                    rooms = emptyList(),
+                    physicalRooms = (0..63).map { physical(it, first) },
+                    historyRecovery = history,
+                ),
+                first,
+            )
+        assertEquals(4, work.turn.size)
+        assertEquals(history, work.historyReady)
+        assertTrue(work.inventoryReady.isEmpty())
+    }
+
+    @Test
+    fun accountHistoryIsNotFilteredOutWithAnotherPhysicalSource() {
+        val history = CollaborationSpaceHistoryRecovery(id(901))
+        val third = first.copy(storeId = "3".repeat(64))
+        val work = selected(demand.copy(historyRecovery = history), third)
+        assertEquals(history, work.historyReady)
+        assertEquals(1, work.turn.size)
+    }
+
+    @Test
+    fun deferredHistoryDoesNotHideOtherReadyRooms() {
+        val retry = assertNotNull(nextCollaborationSpaceIncomingRetry(null, 1000))
+        val history = CollaborationSpaceHistoryRecovery(id(901), revision = 1, retry = retry)
+        val work = selected(demand.copy(historyRecovery = history), first, 2000)
+        assertEquals(4, work.turn.size)
+        assertNull(work.historyReady)
+        assertEquals(retry, work.historyDeferred)
+    }
+
     private fun selected(
         value: CollaborationSpaceIncomingDemand,
         source: CollaborationSpaceIncomingSource? = null,

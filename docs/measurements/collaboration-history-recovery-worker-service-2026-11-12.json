@@ -1,0 +1,90 @@
+{
+  "recordedAt": "2026-11-12T05:00:03.677669+00:00",
+  "sourceBaseline": "f045436117f75966743d72c8cbe953bcc50ebf35",
+  "sourceFiles": 5098,
+  "changedSourceFiles": 17,
+  "sourceManifestSha256": "174d3aee269298bde939750a796fc178aaeb14f476236c66d5b63f3dcf7cfa87",
+  "focused": {
+    "tests": 744,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused-2",
+  "focusedBrowserRun": "browser-1",
+  "full": {
+    "validated": 14044,
+    "fresh": {
+      "tests": 12006,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 580.273,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152205148,
+    "sha256": "4f8b725a08d560950480b36eed526651c59aba5c291c174ca30e944a320e0457"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "historyRecoveryWorkerServiceAccepted": true,
+  "newCommonCasesPerTarget": 8,
+  "newApplicationCases": 50,
+  "applicationServiceCases": 24,
+  "workerCases": 19,
+  "addedOriginalTransferCases": 7,
+  "selectedAccountMetadataLimit": 1,
+  "referencePageLimit": 16,
+  "visitLifetimeSeconds": 30,
+  "failureSettlementLifetimeSeconds": 5,
+  "existingParentLifetimeSeconds": 90,
+  "existingWorkerMutexAndParentRetained": true,
+  "historyServiceAfterReservedInventoryBeforePrimary": true,
+  "historyIndependentOfPrimaryQueueCapacity": true,
+  "historyOnlyRuntimeAdoption": true,
+  "deferredHistorySchedulesRetry": true,
+  "completedUnresolvedHistorySleeps": true,
+  "originalAndPublishedTransferInvokedAtFiniteEof": true,
+  "persistedPendingCaptureRequired": true,
+  "transferFailureDoesNotRestartProvider": true,
+  "unconfirmedTransferUsesGuardedHeadRecovery": true,
+  "localCompletionBeforeGlobalCompletion": true,
+  "copiedInputsBeforeSuspension": true,
+  "queueContentionRecheckedWithoutOperationalDeferral": true,
+  "laterRequestAloneDoesNotObsoleteActiveTurn": true,
+  "koinServiceExplicitlyResolved": true,
+  "hostedApplicationSuiteFiltersIncluded": true,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "keyListenerEnabled": false,
+  "nativeSdkExecution": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "starterPortRequired": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [
+    {
+      "run": "focused-1",
+      "exitCode": 1,
+      "elapsedSeconds": 307.335,
+      "freshCounts": {
+        "tests": 298,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "failureReviews": {
+    "focused-1": {
+      "cause": "Kotlin test type inference could not unify a singleton Unavailable subtype list with the nullable sealed-attempt list at service test line124. Production source compiled;298 domain/data tests passed before application test compilation stopped.",
+      "fix": "Specify List<CollaborationSpaceHistoryRecoveryAttempt?> in the expected test value. Assertions and production behavior unchanged.",
+      "candidateArchived": "failed-focused-candidate-1",
+      "session": 39369,
+      "sessionReaped": true
+    }
+  }
+}

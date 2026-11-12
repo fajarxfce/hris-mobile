@@ -1,5 +1,7 @@
 # Architecture
 
+[Serialized history service](collaboration-history-recovery-worker-service.md) reserves bounded recovery within the existing incoming worker and transfers finite missing-key work without starving primary messages.
+
 [Global history completion and deferral](collaboration-account-history-recovery-turn-completion.md) verifies a bounded local visit and retains operational retry without creating background scan loops.
 
 [Space primary key-wait transfer](collaboration-space-primary-key-wait-transfer.md) preserves Published history and physical provider identity while moving unresolved work atomically into recovery.

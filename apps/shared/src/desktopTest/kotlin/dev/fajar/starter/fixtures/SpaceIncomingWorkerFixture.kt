@@ -1,5 +1,6 @@
 package dev.fajar.starter.fixtures
 
+import dev.fajar.starter.app.work.CollaborationSpaceHistoryRecoveryOutcome
 import dev.fajar.starter.app.work.CollaborationSpaceIncomingWorker
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
@@ -74,6 +75,36 @@ internal class SpaceIncomingWorkerFixture(
         {
             AppResult.Success(CollaborationSpaceIncomingBindingResolution.Published)
         }
+    var historyRecovery: CollaborationSpaceHistoryRecovery? = null
+    val historyAttempts = mutableListOf<CollaborationSpaceHistoryRecovery?>()
+    var historyTurn:
+        suspend (CollaborationSpaceRuntimeReady) -> AppResult<
+                CollaborationSpaceHistoryRecoveryOutcome
+            > =
+        {
+            error("No history turn configured")
+        }
+    var demoteRoomResult = false
+    var demoteRoomFailure: Failure? = null
+    val demotions = mutableListOf<CollaborationSpaceIncomingRoom>()
+    private var nextHistoryGeneration = 4800
+
+    fun transfer(captured: CollaborationSpaceIncomingRoomDemand): Boolean {
+        val previous = checkNotNull(work().snapshot).demand
+        if (previous.rooms.none { it == captured }) return false
+        val generation = recoveryId(nextHistoryGeneration++)
+        val planned =
+            assertIs<AppResult.Success<CollaborationSpaceIncomingDemand>>(
+                    planCollaborationSpaceIncomingKeyDemotion(previous, captured, generation)
+                )
+                .value
+        rooms.clear()
+        rooms.addAll(planned.rooms)
+        historyRecovery = planned.historyRecovery
+        wake = CollaborationSpaceIncomingWake(generation)
+        return true
+    }
+
     var nextPosition = count.toLong()
     val rooms =
         (0 until count)
@@ -103,6 +134,7 @@ internal class SpaceIncomingWorkerFixture(
                 if (scanning) recoveryId(805) else null,
                 sources = sources.toList(),
                 physicalRooms = physicalRooms.toList(),
+                historyRecovery = historyRecovery,
             )
         return (selectCollaborationSpaceIncomingWork(
                 if (present) CollaborationSpaceIncomingDemandSnapshot(recoveryId(806), demand)
@@ -198,6 +230,12 @@ internal class SpaceIncomingWorkerFixture(
                 step("inventory")
                 inventoryTurn(actual, captured)
             },
+            recoverHistory = { actual ->
+                check(actual == runtime)
+                historyAttempts += historyRecovery
+                step("history")
+                historyTurn(actual)
+            },
             deferInventory = { actual, captured, failure ->
                 check(actual == runtime)
                 step("defer-inventory")
@@ -248,7 +286,12 @@ internal class SpaceIncomingWorkerFixture(
             finish = { actual, captured ->
                 check(actual == access)
                 step("finish")
-                val done = finishResult && !work().roomsPending && !scanning && wake == captured
+                val done =
+                    finishResult &&
+                        !work().roomsPending &&
+                        historyRecovery?.complete != false &&
+                        !scanning &&
+                        wake == captured
                 if (done) wake = null
                 AppResult.Success(done)
             },
@@ -402,6 +445,13 @@ internal class SpaceIncomingWorkerFixture(
                 val done = !missingKeys && !referencesMore && !hiddenHead
                 if (done) rooms.remove(captured)
                 AppResult.Success(done)
+            },
+            demoteRoom = { actual, room ->
+                check(actual == runtime)
+                demotions += room
+                step("demote-room")
+                demoteRoomFailure?.let { AppResult.Failed(it) }
+                    ?: AppResult.Success(demoteRoomResult && transfer(room.captured))
             },
             recoverProvider = { actual, _, captured ->
                 check(actual == access)
