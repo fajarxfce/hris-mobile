@@ -1,5 +1,67 @@
 # Agent continuation — communications long run
 
+Updated 12 November 2026, 04:28 UTC.
+Complete PRD, per-commit pushes and validated phone updates remain authorized. All54 groups OPEN.
+No subagents. Continue working. One compiler OR emulator. Follow AGENTS.md and clean boundaries.
+
+## Global history completion and operational deferral accepted
+
+Workspace .work/account-history-recovery-turn-completion-2026-11-12; baseline6909331fe7161d66f118d13c6053117fcf1d352f.
+Ten files: eight new domain operation/entity/policy/test files and existing DI/graph changes.
+5,093 inputs/f1ac34bd97f0284d13d405c25bd1fd48294456f6869480c0f7e221e6615d13b4. Fullfull-1/58447 REAPED PASS
+584.505s; audit48731 REAPED. 13,978=11940fresh+
+2038verified unchanged. Focused276JVM+274browser=550 with allpriorIDs preserved.
+New common cases58: completion33,deferral13,writeconfirmation12. Failed candidates/reviews remain in
+measurement evidence. ProofAPK152204909B/f4b89faac43e4b06dfc0877af808a1a9fbacb8825f1ab4a574d0afaa68b9dcb5; no phone/native execution.
+
+CompleteCollaborationSpaceHistoryRecoveryTurn independently verifies current root/source/registration,
+actual Company/Space historical coordinates, metadata and two bounded coverage/progress observations.
+It uses captured admitted local results without generation-requesting readers. Same-pass EOF remains
+evidence after promotion; older passes do not complete the requested pass. Unavailability must be
+confirmed in the actual scope. Waiting content alone does not create another pass. A single demand
+CAS preserves primary and concurrent requested work; changed receipts and readback confirm outcomes.
+
+DeferCollaborationSpaceHistoryRecoveryTurn stores the existing retry policy after operational failure
+without advancing history or replacing the wake. Old captures cannot increase retry again. Both
+operations have5s deadlines and preserve cancellation. Their DI factories are explicitly resolved.
+No worker/producer activation, live deployment or Starter HRIS policy port is included.
+
+Publisher/writer HAVE EXECUTED. Commit/push source/evidence then guarded dispatch-hosted.py ONCE.
+Expected16,862=11,956portable+4,906Apple. Inspect dispatch-attempt before retrying.
+
+## Next: serviced selection and serialized worker integration
+
+Read .work/space-primary-key-wait-transfer-2026-11-12/next-worker-integration-review.md and the older
+.work/incoming-key-wait-transfer-2026-11-12/next-application-history-service-review.md.
+The private next-worker-draft has17UNAPPLIED/UNCOMPILED files. Selection cases:
+8; application service cases:22.
+Review complete:False. Consult its state and review note for current fixture,
+graph and integration gaps. Finish the coherent source/test/wiring scope before applying it.
+Existing worker only adopts a
+runtime for primary/inventory work and can immediately resume when Finish refuses active history.
+Expose eligible/deferred history in incoming selection, runtime adoption and continuation BEFORE
+activating producers. Reserve one bounded visit alongside inventory before primary exhausts90s.
+Completed unresolved passes sleep until real new key/source/restore demand. The application owner
+may compose usecases; domain usecases and repositories must not call peers.
+
+A local page or selected metadata equality is not a whole-account snapshot. Provider writes and
+primary demotion must remain serialized, and every newly unresolved/restore/source producer must
+request only after publishing metadata. Preserve new histories behind the cursor with fresh demand.
+Test no-primary and deferred histories, EOF sleep/new-key wake, contention/lost replies, source/parent
+replacement, cancellation and inventory/history/64-room fairness before worker activation.
+
+Native key callbacks remain later work: targeted known-room recovery, account fallback for loss,
+bounded copied mutable IDs, repeated equal occurrences, durable intent before acknowledgment and
+cancel/isFinished drain including late acquisition. Permanent listener stays outside8 transient slots.
+Native Apple SDK8 remains unproved; local iOS compilation and portable adapter tests do not prove it.
+
+Phone9282 REAPED:2026-11-12T04:26:30.180821UTC/20.020997s timeout. No installation.
+Next attempt no earlier04:59:50UTC. Release89 ready; install-only, explicit serial; no phone UI.
+
+## Prior checkpoint and live/protected constraints
+
+# Agent continuation — communications long run
+
 Updated 12 November 2026, 04:03 UTC.
 Complete PRD, per-commit pushes and validated phone updates remain authorized. All54 groups OPEN.
 Continue working. No subagents. Follow AGENTS.md/architecture. One compiler OR emulator.

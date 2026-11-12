@@ -953,6 +953,61 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun completeSpaceHistoryRecoveryTurn(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        locators: CollaborationIncomingHistoryLocatorRepository,
+        roots: CollaborationSpaceRootRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        originals: CollaborationSpaceOriginalRoomMetadataRepository,
+        bindings: CollaborationSpaceRoomBindingRepository,
+        companyHistory: CollaborationHistoryTraversalRepository,
+        spaceHistory: CollaborationSpaceHistoryTraversalRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        sync: CollaborationSpaceSyncRepository,
+    ) =
+        CompleteCollaborationSpaceHistoryRecoveryTurn(
+            demands,
+            locators,
+            roots,
+            registrations,
+            originals,
+            bindings,
+            companyHistory,
+            spaceHistory,
+            directory,
+            sessions,
+            server,
+            build,
+            sync,
+        )
+
+    @Factory
+    fun deferSpaceHistoryRecoveryTurn(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        roots: CollaborationSpaceRootRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        sync: CollaborationSpaceSyncRepository,
+    ) =
+        DeferCollaborationSpaceHistoryRecoveryTurn(
+            demands,
+            roots,
+            registrations,
+            directory,
+            sessions,
+            server,
+            build,
+            sync,
+            Clock.System,
+        )
+
+    @Factory
     fun readSpaceHistoryRecoveryTurn(
         demands: CollaborationSpaceIncomingDemandRepository,
         locators: CollaborationIncomingHistoryLocatorRepository,
