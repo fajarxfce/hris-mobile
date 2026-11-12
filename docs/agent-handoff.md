@@ -1,148 +1,117 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 09:34 UTC. Continue the PRD and push every commit. All 54 groups OPEN.
-No subagents. One compiler OR emulator. Follow AGENTS.md and clean layer boundaries.
-Phone install-only; announce installations and never launch or drive the phone UI.
+Updated 12 November 2026, 10:05 UTC. Continue the PRD and push every commit. All54 groups OPEN.
+No subagents. One compiler OR emulator. Phone install-only: announce, explicit serial, never launch
+or drive the phone UI, reset app data or uninstall. No final checkpoint response; continue the work.
 
-## Current: native source diagnosis and progressive Company content
+## Current: progressive Company incoming content
 
-Release89 installed09:10:48.391148UTC/27.683s, session65584 REAPED. Explicit serial
-10.77.77.3:5555, install-only upgrade. Device SHA-256 matches validated
-4c790d2314f53c37bfdc3108ac4b801ab33aa9fc177904001fd16793fd0ef52d; existing identity preserved.
-No app launch, UI driving, uninstall or data reset. Delivered release89 is SDK6; current native
-proof uses SDK8. Do not install the proof APK on the phone or rerun the successful installer.
+Mobile branch feat/chat-send-timing-20261107 HEAD7c3fca00; Group branch feat/communication-space
+HEAD1c36fb8b. Native receipt fixture/evidence commits pushed66088/90615 REAPED. Group is clean.
+Mobile has16 uncommitted production/test files for progressive content. Source commits/CI below are
+accepted independently; the current production change is still under full validation.
 
-Native workspace `.work/space-incoming-sources-native-2026-11-12` in Mobile and Group.
-Accepted local Mobile fixture candidate:4 files/5,131 inputs, manifest
-fea5595ef756b068b904acab92dcf5f97b1fd9dc4c655a9897c6810456a1a5ef. Proof1/82359 REAPED124.856s,
-21 fresh cases and all14,476 predecessor cases verified unchanged; audit60137 REAPED.
-APK152227098B/49ecb109dcf7c757b59346d7b0098d1377a332eddc4859461e754c062078f59f,
-SDK8 x86_64 library6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95.
-Group3 uncommitted test/protocol files:8,745 inputs/9c7f3daf294f682182c1a3cda168069ca39e477b936754c867e1ba2b93d95f36,
-source1/60033 REAPED138.848s, testClasses/format/architecture pass,27 Python cases. Format1 failed
-because copied runner used Mobile :formatKotlin; preserved and corrected to Group :format.
+Workspace `.work/space-original-progressive-content-2026-11-12` (Mobile). Exact baseline is the
+accepted native receipt fixture source now committed as7c3fca00;5,131 source inputs. Current16-file
+manifest767b1500d339e2e8e2ef08500b9e6458ae9040098ae17193a3af1d20f0e6a539.
+Eight production files allow exact Provider/Pending captures to read bounded Company content after
+a provider page commits. Source/device/Company/room/runtime checks remain unchanged. Reconciliation
+precedes unresolved event reads; confirmation precedes yielding the next provider page. Provider
+work cannot complete its queue or demote for missing keys before EOF. No schema/SDK/UI changes.
+Eight test/fixture files include10 new cases (5 app/5 common), plus4 intentional behavior test renames
+(7 target-specific XML IDs). test-case-id-replacements.json is explicit; all other predecessor IDs
+must survive. Baseline14,497, final expected14,512 local. Candidate/base file hashes and archives
+are retained. Do not rerun the preparation scripts: later corrections are already applied.
 
-Native1/67430 REAPED FAILED224.323s:7 cases/5 failures, but only ONE actual worker failure.
-Two old controls passed;4 cases did not start because NativeDevice preserves the failed package.
-Keep all native1 userdata and private fixture22b3bedb-d717-4c34-bf90-c95d48ed8385. The two startup503
-responses preceded trace.arm; they did not explain the worker deferral. Do not blame them.
+Format1/64525 REAPED36.458s. Focused1/61744 REAPED FAILED189/1 after145.432s: physical snapshot
+validator still restricted Pending. Archived failed-focused-candidate-1 BEFORE correction. Added
+same content-phase predicate there and exercised wrong-owner matrix under Provider and Pending.
+Format2/65816 REAPED37.132s;15-file manifest1ddbb8b3b44dd479c6920ea6d7bd290b04691548d5550494188ea30007b0e12f.
+Focused2/45019 REAPED244/276.408s and browser1/97635 REAPED189/107.927s passed; inline audit accepted
+433 cases with explicit ID replacements. Full1/25843 REAPED FAILED2393/1 after301.669s: one registered
+worker test still expected NO content before EOF. All its no-backoff/source/continuation assertions
+passed. Archived failed-full-candidate-1; corrected only that expectation to exact unresolved content,
+confirmed non-exhausted progress and no early completion/demotion. Production unchanged after433 focus.
+Do not rerun unchanged focused browser work merely for this test-only correction.
+Format3/3683 REAPED35.425s, no formatter edits, current16-file manifest above.
 
-Diagnostic1/68248 REAPED PASS1 case146.658s/boot33.58s, same accepted APK and source. Actual native
-initial key callback; encrypted write commits but reply is lost; exact receipt precedes ACK;
-2 foreground resumes keep1 write/1 ACK/one instance. Joined process collector and matching receipt
-survive separate offline process reopen. Matrix32 requests (4 sends/3 sync/2 secret storage/2 pages),
-native13 (1 registration/1 bootstrap/4 direct transport). No compiler overlap or phone interaction.
-This is partial native evidence, not the7-case suite acceptance.
+Full2/34210 ACTIVE. run.py full-2 executes full check, Android host tests, release compile/lint,
+Wasm/iOS metadata, all baseline browser modules, proof APK/tests and architecture/format/detekt.
+No source/Inspector edits until reaped. After pass run accept-full.py full-2; expected14,512.
+Audit verifies immutable source/SDK/library inputs, predecessor IDs (except explicit7 replacements),
+archive hashes and unchanged dependency closures. No accepted full result or new proof APK yet.
+Then publish source evidence/docs, commit/push this16-file production change and dispatch hosted CI
+once with updated explicit test-renaming audit. Do not claim native acceptance of this new change.
 
-Worker cause CONFIRMED by read-only diagnostic worker-cause1/4024 REAPED114.267s, boot29.422s.
-SDK source exists; exact demand has no retained source; sole Published task points to LEGACY binding;
-actual resolver returns WaitingForOriginalSource. Diagnostic category IncomingSourcePending.
-Fixture32d19e42-2137-40b7-bb53-339b77d1767d retained. The old fixture replaced the process lifetime
-without incoming collection; it cannot establish canonical Original work. Do not restore a Published
-fallback or fabricate source progress. Test-only diagnostic code was restored to its original bytes.
-Its proof2/9203 and proof3/82912 failed compilation (Failure argument order then required message);
-archives retained,0 tests. Proof4/83631 REAPED passed21/113.203s, only diagnostic APK. Do not deliver it.
+## Next: actual canonical worker native acceptance
 
-Controls1/38538 ACTIVE: six unaffected SDK8 cases, including the new receipt case, on a fresh
-2560MiB2core emulator. Exact accepted proof1 APK restored after verifying every matching input.
-Mobile/Group/Inspector sources MUST stay unchanged until reaped. Keep failed stores. No native audit
-or publisher yet; after results verify strict fixture evidence, XML, source/APK hashes and exact requests.
+Current workspace also has native-draft (5 Mobile files) and native-group-draft (3 Group files),
+UNAPPLIED, Kotlin UNCOMPILED and review INCOMPLETE. Python strict protocol29 cases passed0.004s
+(2 new). native-draft-state.json and base hashes describe them. prepare-native-readers.py,
+prepare-native-worker.py and prepare-native-protocol.py ALREADY EXECUTED; do not rerun them.
+The draft uses an explicit process incoming collector callback, actual retained registration and
+SynchronizeCollaborationSpaceDevice, waits for actual durable source progress, and reads Company
+history through local canonical metadata/registration. It checks progress.provider is null and no
+duplicate Published content. Worker and separate offline branch use that Company reader. New strict
+flags are companyStorage and actualSourceRetained. Unrelated six controls keep their existing shape.
 
-A separate production gap was found by source review: Original incoming returns after each provider
-page without reading content until provider EOF. Published incoming already retains content before EOF.
-Do NOT remove the native contentBeforeProviderEof assertion to conceal this gap.
-Private Mobile workspace `.work/space-original-progressive-content-2026-11-12` contains a reviewed
-initial production draft (7 files) and tests (6 files),13 total; NOT APPLIED or compiled. It admits
-bounded content only for exact Provider/Pending captures, reuses reconciliation/outcome confirmation,
-and yields Provider tasks without completion/demotion/recovery.10 new tests (5 app/5 common), plus
-4 intentional behavior test renames (7 existing target-specific XML IDs). All other IDs must survive.
-`test-case-id-replacements.json` is explicit; audit scripts account only for these replacements.
-`prepare-tests.py` ALREADY EXECUTED; two extra tests appended afterward. Do not rerun it.
-Source base-files.json captures exact pre-edit hashes. No production changed yet.
-Focused plan244 desktop/app +189 browser; full expected14,512. run.py/expected.json/init/audit scripts
-and all14,497 predecessor reports copied. Before applying, finish controls, archive evidence, verify
-base-files hashes; apply draft only, format, freeze source/candidate, then run focused/browser and full.
-Review cancellation, stale captures, provider seek retention and missing keys before native integration.
-Native worker repair design remains `.work/space-incoming-sources-native-2026-11-12/worker-repair-design.md`:
-use actual process collector plus synchronization, verify Company-owned content and no Published copy,
-then separate offline reopen. Never weaken exact request evidence to fit a total.
+Review before applying: actual first-page content projection includes edits; current registration
+identity versus device receipt; source lifetime; finite4-turn drain; covered hint suppression;
+canonical alias/physical inventory overlap. Existing Group exact worker turns2/Matrix31/native14
+assertions are intentionally unchanged in the draft until real stage evidence explains changes.
+Do not raise thresholds, drop pending work or remove content-before-EOF/empty-repeat assertions.
+Read `.work/space-incoming-sources-native-2026-11-12/worker-repair-design.md` for detailed constraints.
+No new native runner workspace/source compilation prepared yet. Preserve failed stores.
 
-Hosted runtime43182776077 portable12,444 audited40813 REAPED. One Apple retry51634 submitted
-08:53:42.697912UTC; job131075548574 remains running. No more blind retries.
-Application43186091942 portable12,475 audited1434 REAPED, artifact13930690541,
-zip14e1bed13c5f6f741f12d5d36f99d5fa1c885dab568d2bf00979ca176d619129;
-reports354e563d7051b74d1e7d283d506ead93e0ba3e350b95fb4f3c2c1c605c633ed0.
-Apple initially failed before tests on Maven Central429; one failed-job retry95997 REAPED submitted
-09:20:02.265532UTC, new Apple job131088394619 queued. Portable reattached as131088396166; no claim
-that portable reran. Retry records prevent resubmission. Source98fa082d remains expected17,552.
+## Accepted native receipt/source proof
 
-## Process-owned incoming sources accepted locally
+Mobile7c3fca00 / Group1c36fb8b are test/evidence-only commits. Measurement
+[collaboration-space-incoming-sources-native-2026-11-12.json](measurements/collaboration-space-incoming-sources-native-2026-11-12.json)
+accepts six controls, explicitly NOT the complete worker suite. Native controls1/38538 REAPED6/0
+in274.319s, boot28.447s, fresh2560MiB2core emulator, no compiler overlap/phone interaction; audit inline
+exit0. New case: actual initial native key receipt, real encrypted write with lost reply, ACK only
+after independent durable confirmation,2 foreground resumes/1 write/1 ACK/one instance, joined
+collector and identical receipt after offline process reopening. Matrix32/native13 requests.
+Proof1/82359 REAPED21 fresh unit cases,14,476 predecessors unchanged; audit60137. APK152227098B/
+49ecb109dcf7c757b59346d7b0098d1377a332eddc4859461e754c062078f59f, SDK8x86_64 library
+6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95. Source manifestfea5595ef756b068b904acab92dcf5f97b1fd9dc4c655a9897c6810456a1a5ef.
+Group source1/60033 REAPED138.848s/8,745 inputs/9c7f3daf294f682182c1a3cda168069ca39e477b936754c867e1ba2b93d95f36;
+Python27 original protocol cases passed. Group formatter is :format, Mobile :formatKotlin.
 
-Workspace `.work/space-application-sources-2026-11-12`, baseline
-`cef427683f8167436faa7d8bec3f523ae7a16453`. 13 files/5,130 inputs, manifest
-`2cb91e7d99aa490f59289e984f94158b01e9bd40c6ba649a72664165575113db`.
-Format69985 REAPED/36.452s; focused27621 REAPED303/203.674s; browser8337 REAPED192/92.412s.
-495 focused accepted. Full1/56719 REAPED420.609s, build successful. Initial audit41002 rejected
-318 presentation cases restored from cache because its conservative closure includes the changed
-domain test file. Original run/audit failure preserved. Only those318 cases were rerun in
-cached-revalidation-1/29416 REAPED41.091s. Audit29171 REAPED verifies separate source-matched
-archive provenance, prior IDs and dependency closures.14,497 local=12,459 fresh+2,038 unchanged.
-No Kotlin/test failure or production correction in this stage. Read measurement for exact hashes.
-Publisher EXECUTED. Commit/push accepted source/evidence, then dispatch-hosted.py ONCE.
-Hosted plan remains UNDISPATCHED, expected17,552=12,475 portable+5,077 Apple.
+Initial native1/67430 failed7/5:2 passed,1 actual old-worker failure,4 not started because the failed
+package was protected. Keep native1 userdata and fixture22b3bedb-d717-4c34-bf90-c95d48ed8385.
+Diagnostic1/68248 independently passed the new receipt case146.658s. Worker-cause1/4024 REAPED114.267s
+confirmed SDK source exists but exact demand lacks retained source; sole Published task is LEGACY;
+actual resolver returns WaitingForOriginalSource. Fixture32d19e42-2137-40b7-bb53-339b77d1767d retained.
+The old fixture omitted process incoming collection. Startup503s preceded trace.arm and were NOT
+the demonstrated cause. Temporary diagnostic code restored. Its proof2/proof3 compile mistakes are
+archived; proof4/83631 passed21/113.203s. Never deliver that diagnostic APK to the phone.
 
-27 new app cases (22 source owner,3 lifetime,2 foreground) plus2 common late-metadata cases.
-ApplicationCollaborationLifetime owns one process collector. Exact native publication selects key
-and sync children; root/account/instance changes cancel AND join the previous children. Failures
-are independent; foreground entry starts one finite pass without a retry timer. No new SDK/client,
-sync acquisition, native close handle or ViewModel dependency. Category-only diagnostics deduplicate
-repeated sync failures. CI explicitly selects the new app class. Canonical metadata precedes primary
-conversion, and late physical hints survive completed history sweeps; unresolved primary work gets
-confirmed fresh recovery demand. SDK8 already emits initial reconciliation and import notifications.
-Source wiring is enabled; no live deployment or native-runtime acceptance is claimed.
+## Hosted and phone status
 
-## Next: actual native callback through the application owner
+Runtime publication cef42768: CI43182776077 FULL17,519 accepted (12,444 portable +5,075 Apple).
+Portable40813 and Apple74560 REAPED. One failed-job retry completed; do not retry or poll again.
+Apple artifact13933157085/803728B/d1518594c2d29536de8a3487161d900cfb712af942a8ff0e25b1c3dfce4da871.
+[CI measurement](measurements/collaboration-space-runtime-publication-ci-2026-11-12.json) preserves
+report/log hashes. This is common Kotlin simulator validation, not native Matrix SDK8 Apple proof.
+Application incoming sources98fa082d: local14,497 accepted (12,459 fresh+2,038 unchanged),13 files/
+5,130 inputs/2cb91e7d99aa490f59289e984f94158b01e9bd40c6ba649a72664165575113db.
+CI43186091942 portable12,475 audited1434 REAPED; one Apple retry95997 submitted09:20:02.265532UTC
+after proven Maven Central429. Apple131088394619 still running, portable reattached131088396166.
+Expected17,552. Do not submit another retry. Source-specific .work audit records remain authoritative.
+Consumer43176939497 FULL17,470; targeted43172811544 FULL17,314; binding43168158361 FULL17,170;
+lifecycle43165090113 FULL17,085 audited. Historical gaps remain in the linked history.
 
-`native-draft` contains4 Mobile files and `native-group-draft` contains3 Group files, all UNAPPLIED,
-UNREVIEWED and Kotlin UNCOMPILED. Private Python protocol27 cases passed0.003s (4 new).
-Read next-native-state.json/design.md. Partial draft generators already ran; do not rerun them.
-The existing HrisSpaceRecoveryProofHost replaces ApplicationCollaborationLifetime and omits the
-incoming delegate. The draft adds an optional delegate for the new fixture while preserving all
-old variants. New host uses actual application owner, native callbacks and encrypted repository;
-one write is held, then committed while its response is lost. ACK independently checks the exact
-durable receipt. Two foreground resumes must keep one write/ACK/native instance. Separate offline
-process reopening compares the receipt digest and unchanged messages without SDK acquisition.
-
-Review DI resolution order, race/teardown paths, bounded write gate and strict Group/Python proof.
-No native preparer yet. Compile proof/server fixtures with no emulator, then run isolated fictional
-fixtures on2560MiB2core emulator with the precompiled768MiB harness. No phone UI, live backend
-mutation, protected message resend or SDK rebuild. This draft does NOT yet prove late keys during
-an app write, changed accounts, long quiet request bounds or Apple native callbacks. Those and the
-remaining PRD work stay open. Protocol fakes/Apple compilation are not native SDK acceptance.
-
-## Hosted evidence
-
-Runtime publication cef42768 / Group cf66781b pushed81544/54467 REAPED.
-CI43182776077 was dispatched ONCE08:25:10.618006UTC (11348 REAPED), expected17,519.
-Apple job131062567285 failed BEFORE compilation/tests: Gradle could not resolve Kotlin MPP2.3.21
-in the pinned inspector included build. Log SHA93dfa9a1a736f49c02f0403bb5ef9f1c49ff981d6f8a8b610f36b2954737fc30.
-Workflow/catalog/verification metadata match accepted consumer66f537a4; underlying download cause
-is not logged. Failure review saved. Portable is pending. Do not blindly redispatch; after the run
-finishes, one retry of the failed job is justified by unchanged inputs and adjacent successful run.
-Consumer43176939497 FULL17,470 audited: portable78231 / Apple57691 REAPED.
-Targeted43172811544 FULL17,314 audited: portable57960 / Apple2467 REAPED.
-Binding43168158361 FULL17,170 and lifecycle43165090113 FULL17,085 audited. Source-specific audit
-files remain authoritative; a green workflow alone is not acceptance.
-
-Phone36696 REAPED08:23:43.714411UTC,20.020610s timeout; next>=08:57:23.735021UTC.
-No install. Validated release89 remains ready. No repeated availability question.
-[Previous checkpoint](agent-handoff-history-through-runtime-publication-2026-11-12.md).
+Release89 INSTALLED on10.77.77.3:5555 at09:10:48.391148UTC/27.683s, session65584 REAPED.
+Install-only upgrade; device SHA matches validated4c790d2314f53c37bfdc3108ac4b801ab33aa9fc177904001fd16793fd0ef52d;
+existing identity preserved. No launch, UI driving, uninstall or data reset. Delivered89 is SDK6,
+not current SDK8 proof. Do not rerun the successful installer. No phone availability question pending.
+[Previous checkpoint](agent-handoff-history-through-native-receipt-proof-2026-11-12.md).
 
 ## Protected environment and prior evidence
 
 Validated release89 is in .work/release-phone-2026-11-10-build89. It is SDK6, nondebuggable arm64,
-123809167B/4c790d2314f53c37bfdc3108ac4b801ab33aa9fc177904001fd16793fd0ef52d. Use install.py
---install-only. No phone UI/reset/uninstall. Main is SDK8, with protected source/wrapper worktrees;
+123809167B/4c790d2314f53c37bfdc3108ac4b801ab33aa9fc177904001fd16793fd0ef52d. Already installed; future phone updates remain install-only. No phone UI/reset/uninstall. Main is SDK8, with protected source/wrapper worktrees;
 do not rebuild or push those forks, copy old runtime fixtures, or dispatch the legacy SDK4 workflow.
 Never resend the recorded Control77/Warm77/Recovery78/Registry82/Parent83/History84/Selected86/Joined87
 native messages; Draft66 was never sent. Preserve Bima stores and original keys.
