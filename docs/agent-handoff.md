@@ -49,18 +49,23 @@ using the same15s bound as the adjacent test. No production UI or assertions cha
 Final format76253 REAPED; targeted UI28849 REAPED PASS2.
 The final unfiltered run above also preserves every old AppFlow case.
 
-Publisher and accepted writer HAVE EXECUTED. Commit/push, then dispatch ONCE
-validation/original-local-key-page-content-20261111; expected15,932=11,336portable+4,596Apple.
-Attach actual run/source. Previous documentationb2854a66/Groupc0a9b377 pushed24993/37726REAPED.
+Publisher and accepted writer HAVE EXECUTED. Source changes were committed/pushed separately:
+AppFlow941224bb/60814REAPED; generic0c99908e/39997REAPED; featuree4650f88/20636REAPED.
+Group documentationa5d0d9d3/11341REAPED. Current source tree is clean.
+Hosted43126523314 was dispatched ONCE by39160REAPED at00:20:07UTC12Nov on e4650f882e71708100feebaf900834353bb5a128.
+Ref validation/original-local-key-page-content-20261111, expected15,932=11,336portable+4,596Apple.
+It is IN PROGRESS, not audited. hosted-plan.json has the run ID; never dispatch it again.
 
 ## Next implementation and generic port
 
-First complete the required Starter reporter port: compose-fluent-starter/.work/karma-line-reporter-port-2026-11-11.
-Four exact generic files; refresh/verify draft hashes against final Mobile source before apply.py.
-Apply requires accepted/pushed/clean Mobile and unchanged Starter70cf5ef. check.py selects root,
-all KMP browsers, Android builds/lint, production Web and iOS metadata. accept.py preserves358 prior
-IDs; publish.py is prepared. No HRIS policy copied. GitHub template copies tracked configuration.
-Preserve per-module fragments. One compiler OR emulator; finish Starter gate before next Mobile.
+Required Starter reporter port is APPLIED and under independent validation:
+compose-fluent-starter/.work/karma-line-reporter-port-2026-11-11. Four exact generic files from
+Mobilee4650f88; Starterbase70cf5ef. check-full1/68417 RUNNING since00:20UTC12Nov,2GiB/one worker,
+root+all44 KMP browser modules+three Android builds/lint+production Web+iOS metadata+quality.
+Read result.json before restarting; one compiler only. accept.py preserves358 prior IDs and checks
+actual module config/task order. publish.py PREPARED NOT EXECUTED. Prepared manifest690773f7 and
+acceptedcf23e510 are separately labelled; the four generic file hashes match both. No HRIS/UI test
+port. Finish Starter acceptance/commit/push and record it here before next Mobile compilation.
 
 Next11-file next-original-key-completion-draft is REVIEWED, UNAPPLIED/UNTESTED(5existing/6new).
 Dedicated CompleteCollaborationSpaceOriginalKeyReferences admits current local Company/source/
@@ -71,7 +76,7 @@ Only confirmed true yields attempted generation/counts/cursor; false/lost/cancel
 are not receipts. No primary/SDK/global I/O or hidden retry.32 new common cases plus reader29,
 primary completion20/policy9, recovery storage56, metadata18 and graph2 controls.
 
-Read next-original-key-completion-review.md/contract. Guarded prepare/configure scripts PREPARED
+Read next-original-key-completion-review.md/contract. Guarded prepare/configure scripts and next publisher PREPARED
 NOT EXECUTED; original generators/snippets are STALE. Nextworkspace original-key-reference-completion-2026-11-11:
 5,056 inputs,13,422local,166+164focused,16,028hosted=11,400portable+4,628Apple. Preserve Karma inputs
 and conditional full report refresh. Then Space/Original-alias projection:15 partial unreviewed/
