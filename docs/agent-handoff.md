@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 07:05 UTC.
+Updated 12 November 2026, 07:19 UTC.
 Continue PRD work and push every commit. All 54 PRD groups remain OPEN. No subagents.
 One compiler OR emulator. Follow AGENTS.md. Phone install-only; never drive its UI.
 
@@ -28,28 +28,37 @@ portable12,142 is audited (62050 REAPED), Apple pending. Mailbox43161963820 FULL
 Each has its own audit workspace.
 Read their latest state, do not infer artifact acceptance from a green status or redispatch them.
 
-## Next: serial durable key-hint consumer
+## Current: durable key-hint consumer under validation
 
-Read next-durable-key-review.md and next-durable-key-state.json in this workspace. Twelve private
-draft files are UNAPPLIED/UNCOMPILED/UNREVIEWED:18policy+26consumer+8storage cases and DI identity.
-No preparer exists yet. Expected next increment104local/156hosted must be re-derived after review.
-The draft has schema9, exact receipt/intent confirmation and one serial collector; production
-application activation is absent. Local startup IDs alone do not prove native installation.
-See the Git-tracked room-key retention plan. Enforce one application-owned
-collector and cancellation/join lifetime. Classify <=64 known rooms using existing immutable local
-Original/Published indexes; unknown mapping/loss/overflow becomes one account request. Read failures
-remain failures. Atomically retain exact receipt evidence, recovery intent and wake before SDK ACK;
-worker progress or unrelated requests must not erase uncertain-write proof. Keep the same receipt
-through retries, preserve another same-room occurrence, and bound failure scheduling. Publish new
-unresolved metadata before demand. Preserve existing 90s worker inventory/history/primary fairness.
-SDK restore creates OlmMachine before asynchronous network/backup initialization; no broad init barrier.
-Null subscription is unavailable, not a reason for callers to loop registration. Native Apple adapter
-and execution remain separate. Main SDK8; validated phone release89 remains SDK6.
+12 source files are APPLIED but NOT accepted/committed in the mobile tree. Workspace
+.work/durable-room-key-consumer-2026-11-12; baseline f969fd734a3d5e41026fbb389ad37e9386f98290.
+5,123 source inputs, corrected manifest b9d17f3fe4e7307e3bf1356d2331be6a55522e78f8d707ab862cd79d52ee20cd.
+18 policy + 26 consumer cases/target, 8 storage cases/target, existing DI identity assertion.
+Expected focused415 JVM +364 browser; full14,429 local and17,470 hosted, none accepted yet.
+Focused1/93516 REAPED failed Detekt LongMethod encode103>100 before tests. Archived complete
+failed-focused-candidate-1 before correction: physical-room DTO mapping now has its own toDto.
+No schema/policy/test/threshold change. Format2/28976 REAPED passed37.304s. Focused2/9583 ACTIVE.
+Only this compiler; no emulator. Read actual result before browser/full/audit. Preserve any failure
+before correction/refreeze. publish.py and write-accepted-handoff.py PREPARED, NOT executed.
+Durable hosted plan UNDISPATCHED, previous43172811544, validation/durable-room-key-consumer-20261112.
 
-Phone88178 REAPED:06:41:59.039024UTC,20.017508s timeout. No install; next retry>=07:15:19.056565UTC.
-Use explicit10.77.77.3:5555 and --install-only.
-Announce actual installation. Never launch/drive/reset/uninstall phone UI. Preserve protected SDK/
-Inspector trees and live deployment. HRIS policy is not a Starter port.
+One serial DI-owned consumer admits root/session/registered source, classifies copied callbacks by
+local immutable Original/Published indexes, atomically retains exact receipt + recovery + wake,
+then acknowledges. Schema9 preserves1–8. Exact witness survives unrelated producer/worker progress;
+bounded retries reuse raw occurrence UUID. No production application/source/restore activation yet.
+Next trace actual native publication/retirement before app cancel/join wiring. Local startup IDs
+alone do not prove installed runtime; do not wait for asynchronous SDK backup/network initialization.
+Read the Git room-key retention plan. Keep metadata before demand and90s worker fairness.
+
+Targeted source f969fd73 and Group88f66458 were pushed; hosted43172811544 dispatched ONCE
+07:06:21.309506UTC, session78248 REAPED. Both jobs pending at07:17; expected17,314.
+Lifecycle43165090113 both jobs succeeded, Apple audit18114 ACTIVE; portable12,142 already audited.
+Binding43168158361 portable12,205 already audited, Apple pending. Mailbox43161963820 FULL17,004
+already audited. Never infer acceptance from status or redispatch these runs.
+
+Phone26630 REAPED:07:16:44.346845UTC,20.020912s timeout. No install;
+next retry>=07:50:04.367764UTC. Explicit10.77.77.3:5555, --install-only, announce actual installation.
+Never launch/drive/reset/uninstall phone UI. Main SDK8; validated phone release89 SDK6.
 
 ## Protected environment and prior evidence
 
