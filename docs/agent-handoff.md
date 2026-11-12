@@ -1,5 +1,39 @@
 # Agent continuation — communications long run
 
+Updated 12 November 2026, 04:33 UTC.
+Continue authorized PRD work, per-commit pushes and validated phone installs. No subagents.
+One compiler OR emulator; follow AGENTS.md and clean layer boundaries. All54PRD groups OPEN.
+
+## Active worker service validation
+
+Workspace .work/history-recovery-worker-service-2026-11-12; source baselinef045436117f75966743d72c8cbe953bcc50ebf35.
+17 files APPLIED, 5new application files/12existing;5,098inputs.
+Frozen manifest71227925629d445c77ecee383f13eccadc33a5eb0d4291a2038c8a770a77240e. Format1/81743 REAPED PASS36.697s.
+Focused1/39369 RUNNING; expected446JVM then298browser=744focused; full expected14,044local.
+Eight new common cases and50new application cases (service24,worker19,Original additions7).
+Preparation HAS EXECUTED; do not reapply the prior draft. Preserve any failed candidate before edits.
+
+Selection exposes ready/deferred history independently of primary queue capacity. Worker adopts
+history-only work and reserves one bounded30+5s visit after inventory, before primaryFIFO. Deferred
+history requests scheduled retry, completed unresolved passes sleep. Existing90s parent/mutex owns
+all work. Both primary owners invoke finite-EOF key demotion with the actual Pending capture.
+True/failed transfer cannot restart provider; false transfer may inspect missing-head coverage.
+Queue-contention readback does not manufacture operational retry. CI explicitly includes the two
+new service/worker suites. No producer/native listener activation, live change or phone install.
+
+Next: accept/fix focused then browser/full, push coherent source/evidence, dispatch exactly once.
+Publish/handoff scripts for this worker stage are NOT prepared yet. Native key/source/restore
+producers remain later work: copied bounded callback input, occurrence retention before ACK,
+metadata-before-demand ordering, targeted known-room work and account fallback on loss.
+
+Phone9282 REAPED:04:26:30.180821UTC/20.020997s timeout. Next attempt>=04:59:50UTC.
+Release89 remains ready with --install-only; announce before installation, explicitserial,
+never launch/drive/reset/uninstall phone UI. Continue independent work while unavailable.
+
+## Accepted checkpoints and protected state
+
+# Agent continuation — communications long run
+
 Updated 12 November 2026, 04:28 UTC.
 Complete PRD, per-commit pushes and validated phone updates remain authorized. All54 groups OPEN.
 No subagents. Continue working. One compiler OR emulator. Follow AGENTS.md and clean boundaries.
