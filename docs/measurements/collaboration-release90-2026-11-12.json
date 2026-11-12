@@ -1,0 +1,60 @@
+{
+  "accepted": true,
+  "at": "2026-11-12T15:32:22.808032+00:00",
+  "versionCode": 90,
+  "sourceCommit": "65459d8cc5c7e307032d4f937853b18f37e1c3e5",
+  "apkSha256": "44018233229d128f626eb8c4a429c38a7b530e477dda7cc4659265f696e3f26c",
+  "bytes": 124317071,
+  "sdk": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.8",
+  "sourceManifestSha256": "fa9e0e92bf2617c93e76d9641d938b72d04c461b7bf19c0915fdc7d2c0639ac9",
+  "fullSourceTests": 14581,
+  "nativeProofCases": 8,
+  "releaseStartupAccepted": true,
+  "sameExecutableDexAcrossAbis": true,
+  "nonDebuggable": true,
+  "samePreviouslyInstalledSigner": true,
+  "lintIssues": 0,
+  "phoneInstalled": false,
+  "phoneUiTouched": false,
+  "liveGroupChanged": false,
+  "limitations": [
+    "Native encrypted-chat scenarios use the dedicated x86 proof; release startup uses the actual x86 product without an employee account.",
+    "ARM64 product runtime, retained employee-account upgrade and chat latency are not claimed by the emulator startup.",
+    "Live Group remains disabled on schema116.4. Native Apple SDK8 execution and all54 PRD acceptance groups remain separate."
+  ],
+  "sdkVerification": {
+    "nativeSha256": "27ad4f7c31fcca109aa0d7635b2e20e0e76a2a81bdbbfe0bf158f389ef274869",
+    "nativeBytes": 97549328,
+    "elfClass": "ELF64",
+    "requiredElfAlignment": 16384,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "requiredSymbolsPresent": true,
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.8",
+    "publicationReleaseId": 441121763,
+    "aarSha256": "6eebe8dab124541783d2b1d746cf30ea4b8dd2a599980cccb823927780678717",
+    "strippedNativeMatchesVerifiedSdk": true
+  },
+  "phoneConnection": {
+    "checkedAt": "2026-11-12T15:35:49Z",
+    "outcome": "ADB connect timed out after12 seconds",
+    "installed": false,
+    "availabilityQuestionPending": true
+  },
+  "startup": {
+    "freshEmulatorRamMiB": 2560,
+    "cores": 2,
+    "coldLaunchMs": 3461,
+    "reopenedLaunchMs": 2946,
+    "bothProcessesStableSeconds": 10,
+    "screen": "First onboarding screen rendered",
+    "authenticatedEmployee": false,
+    "screenshotSha256": "c62c60ac507aef625b1315ffdea42785c4efe10b00d89b2c18cf534c37005739",
+    "emulatorStopped": true
+  },
+  "executableDexSha256": "eb937b88e037bb37e8abaa692386d94e2c1a9e863684ed7272fb89970f1599ea"
+}

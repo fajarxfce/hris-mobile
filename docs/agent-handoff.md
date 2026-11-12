@@ -1,8 +1,8 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 15:08 UTC. Continue implementation beyond checkpoints and push every commit.
+Updated 12 November 2026, 15:37 UTC. Continue implementation beyond checkpoints and push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One compiler OR emulator. Phone install-only:
-announce and select serial; never launch/drive UI, reset data or uninstall. No question is pending.
+announce and select serial; never launch/drive UI, reset data or uninstall. ADB availability question is pending after a fresh connection timeout.
 
 ## Accepted: canonical Original covered hints
 
@@ -99,29 +99,43 @@ reservation before emulator/test start; later check found no owned process/liste
 ran unchanged sources after port availability. All failed userdata remain. Earlier two launcher
 errors occurred before compilation (missing pre-format manifest and wrong cwd) and are in state.json.
 
-## Immediate continuation
+## Release90 accepted; phone connection pending
 
-Commit/push this accepted Mobile proof/docs and Group test/trace/docs atomically. Then prepare release90
-from the pushed Mobile HEAD with accepted full/native inputs and SDK8. Existing release89 is already
-installed; do not reinstall it. Build/verify signed ARM64 release and owned emulator startup before
-announcing any new phone installation; install-only to10.77.77.3:5555, no UI drive/reset/uninstall.
-Keep live Group OFF and schema116.4. A new product release is not yet built or accepted. No compiler
-or emulator is active. Continue remaining communications work beyond this checkpoint.
+Mobile65459d8cc5c7e307032d4f937853b18f37e1c3e5 and Groupe8e4a880 are committed/pushed.
+Release workspace: /home/fajar/hris/hris-mobile/.work/release-phone-2026-11-12-build90.
+Exact pushed source, accepted14,581 local and8 native cases, publishedSDK8 and unchanged Inspector
+inputs bind this package. x86 build63455, verifier51374, startup72164, ARM build99033 all REAPED PASS.
+Final verifier/acceptor56112 completed: release-acceptance.json accepted at15:32:22.808032UTC.
+Actual product cold/reopened startup passed in a fresh2560MiB/two-core emulator, which stopped.
+First onboarding screen visually inspected, no employee account or chat latency claim.
+ARM124,317,071B/SHA44018233229d128f626eb8c4a429c38a7b530e477dda7cc4659265f696e3f26c;
+version90/1.0.0, same signer, nondebuggable, zero lint,16KiB ELF/ZIP, SDK8 symbols verified.
+Executable DEX matches accepted x86. [Release evidence](measurements/collaboration-release90-2026-11-12.json).
 
-## Current hosted control
+Phone10.77.77.3:5555 was absent, reconnect21786 timed out after12s at15:35UTC. Asked asynchronously
+whether address changed or is active again; no installation90 has started. Release89 already installed,
+do not reinstall89. On availability verify device state, announce EACH installation then run from Mobile:
+setsid --wait python3 .work/release-phone-2026-11-12-build90/install.py --install-only
+Inspect existing install-result.json first if present; don't blindly retry. Keep identity/data and verify
+installed bytes. Never launch/drive/reset/uninstall phone. Mobile HEAD is no longer locked by packaging;
+the accepted artifact remains bound to65459d8c. Keep live Group OFF/schema116.4.
 
-43236203251 was dispatched once at14:20:42.535678UTC on exact Mobileab513ace,
-ref ci/space-original-covered-hints-20261112; dispatch97308/state41777 REAPED. Portable audit83958
-REAPED accepts12,559 (6,006 desktop/952 Android/5,601 browser), zero replacement/removal. Initial
-audit24775 failed only its inherited prior-stage increment17: planned platform totals and IDs already
-passed. ZIP comparison proves26 added cases (13 Original cases on desktop and browser), no removed
-IDs. Corrected increments are26 portable/13 Apple; original auditor/diagnosis are preserved.
-Portable job131244125085, artifact13954845945/4,038,316B; ZIPccbed96eca039e5ccaa5a39c6a4275027ce00468644d7d9d6dfe603df755e2c9,
-reports7fbe3c53b118f450cf962bf5e755b9674cca3ebd280b064ae2e5e012e796ca42,
-log67272ae8d2e845ffcbf8a71d120bf467017bc1d4487497e5523cffefd4da23df.
-Apple remains running; expected5,114, total17,673. Audit only after success with corrected
-.work/space-original-covered-hint-2026-11-12/hosted-audit.py apple hosted-43236203251. Do not redispatch.
-The later late-key slice changes only Android proof and Group tests; hosted control scope stays ab513ace.
+Continue communications after installation. Next evidence gap: actual registered worker must consume
+retained late-key recovery after process death and project the fifth encrypted message under its
+canonical Company owner. Current late-key test proves only retained recovery, not its completion.
+Keep existing eight cases and bounds unchanged; use a separate typed scenario and trace actual failure
+before changing production policy. Native AppleSDK8, account replacement and PRD remain open.
+
+## Hosted control fully accepted
+
+43236203251 on exact Mobileab513ace is fully accepted:17,673 =12,559 portable +5,114 Apple,
+zero case replacements/removals. Audits83958/75582 REAPED. Do not poll or redispatch.
+Portable6006desktop/952Android/5601browser. iOS host and push-envelope steps passed; native Matrix
+SDK8 Apple execution is separate. Later65459d8c adds Android proof/docs only to this common source.
+[Compact evidence](measurements/collaboration-original-covered-hints-ci-2026-11-12.json) retains
+artifact IDs, ZIP/report/log hashes and original failed-auditor correction. The inherited prior-stage
+increment17 was wrong: declared totals/exact IDs already matched; actual26 portable/13Apple additions,
+no removals. Preserve original auditor and audit-correction.json; no behavioral assertion was loosened.
 
 ## Other CI and phone
 
@@ -134,8 +148,8 @@ Do not poll or repeat either accepted CI run. Apple job90min,
 host step30; portable60. Apple host/contract success does not prove native Matrix SDK8 execution.
 
 Release89 was installed on10.77.77.3:5555 at09:10UTC,65584 REAPED. SDK6 install-only upgrade, identity
-preserved and no UI interaction. Do not reinstall. Current SDK8 x86 proof is not a phone release.
-Firebase IAM is verified; no availability/credential question is pending.
+preserved and no UI interaction. Do not reinstall. SDK8 release90 is accepted but not installed yet.
+Firebase IAM is verified; no credential question is pending; ADB availability remains pending.
 
 ## Protected environment
 
