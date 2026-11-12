@@ -181,7 +181,7 @@ class RetainCollaborationSpaceRoomInventoryTest {
                 f.base.id(88),
                 0,
                 "\$known",
-                CollaborationSpaceIncomingMembership.Joined,
+                CollaborationSpaceIncomingMembership.Left,
                 false,
             )
         f.snapshot =
@@ -196,6 +196,43 @@ class RetainCollaborationSpaceRoomInventoryTest {
         assertEquals(0, f.writes)
         assertNull(f.wake)
         assertEquals(listOf(old), f.snapshot?.demand?.physicalRooms)
+    }
+
+    @Test
+    fun joinedPhysicalRequirementAndCursorCommitTogetherAcrossLostReply() = runTest {
+        for (lostReply in listOf(false, true)) {
+            val f = SpaceRoomInventoryRetentionFixture()
+            val old =
+                CollaborationSpaceIncomingPhysicalRoomDemand(
+                    f.base.source.storeId,
+                    "!room:test",
+                    f.base.id(88),
+                    0,
+                    "\$known",
+                    CollaborationSpaceIncomingMembership.Joined,
+                    false,
+                    CollaborationSpaceIncomingRetry(1_000, 31_000, 1),
+                )
+            val before = assertNotNull(f.snapshot)
+            f.snapshot =
+                before.copy(
+                    demand = before.demand.copy(nextPosition = 1, physicalRooms = listOf(old))
+                )
+            f.replyLost = lostReply
+            assertEquals(AppResult.Success(CollaborationSpaceInventoryOutcome.Complete), f.run())
+            val retained = assertNotNull(f.snapshot).demand
+            val next = retained.physicalRooms.single()
+            assertNotEquals(old.generation, next.generation)
+            assertEquals(
+                old.copy(generation = next.generation, headEventId = null, limited = true),
+                next,
+            )
+            assertNull(retained.sources.single().inventoryGeneration)
+            assertEquals(1, f.writes)
+            assertNotNull(f.wake)
+            assertEquals(AppResult.Success(CollaborationSpaceInventoryOutcome.Obsolete), f.run())
+            assertEquals(1, f.writes)
+        }
     }
 
     @Test

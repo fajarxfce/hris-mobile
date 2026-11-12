@@ -785,7 +785,16 @@ class CollaborationDataModule {
         directory: CollaborationSpaceDirectoryRepository,
         sessions: SessionRepository,
         server: IdentityServer,
-    ) = DiscoverCollaborationSpaceIncomingRooms(demands, inventory, directory, sessions, server)
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+    ) =
+        DiscoverCollaborationSpaceIncomingRooms(
+            demands,
+            inventory,
+            directory,
+            sessions,
+            server,
+            registrations,
+        )
 
     @Factory
     fun requestSpaceIncomingScan(

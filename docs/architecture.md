@@ -1,5 +1,7 @@
 # Architecture
 
+[Registered-source discovery](collaboration-space-incoming-discovery.md) shares existing incoming work and atomically strengthens unresolved Joined inventory without changing worker bounds.
+
 [Process-owned incoming sources](collaboration-space-application-sources.md) bind exact native publication to serial key/sync retention, with cancellation/join and finite foreground resume.
 
 [Installed runtime publication](collaboration-space-runtime-publication.md) observes exact instance identity and retirement through existing resources; incoming application activation remains separate.

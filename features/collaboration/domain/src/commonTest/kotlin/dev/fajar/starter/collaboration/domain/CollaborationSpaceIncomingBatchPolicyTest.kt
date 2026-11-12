@@ -90,6 +90,37 @@ class CollaborationSpaceIncomingBatchPolicyTest {
     }
 
     @Test
+    fun laterKnownHeadCannotWeakenUnresolvedInventoryCatchUp() {
+        val before =
+            queued(limited = true).let {
+                it.copy(
+                    physicalRooms = it.physicalRooms.map { room -> room.copy(headEventId = null) }
+                )
+            }
+        val result = retain(before, batch())
+        val room = result.demand.physicalRooms.single()
+        assertTrue(result.wakeRequired)
+        assertNull(room.headEventId)
+        assertTrue(room.limited)
+        assertNotEquals(before.physicalRooms.single().generation, room.generation)
+        assertEquals(before.physicalRooms.single().retry, room.retry)
+        assertEquals(before.physicalRooms.single().position, room.position)
+        val left =
+            retain(
+                before,
+                batch(
+                    rooms =
+                        listOf(hint().copy(membership = CollaborationSpaceIncomingMembership.Left))
+                ),
+            )
+        assertEquals(
+            CollaborationSpaceIncomingMembership.Left,
+            left.demand.physicalRooms.single().membership,
+        )
+        assertEquals(hint().headEventId, left.demand.physicalRooms.single().headEventId)
+    }
+
+    @Test
     fun membershipOrNewLimitedRequirementCreatesWorkWithoutTreatingItAsRevocation() {
         for (hint in
             listOf(

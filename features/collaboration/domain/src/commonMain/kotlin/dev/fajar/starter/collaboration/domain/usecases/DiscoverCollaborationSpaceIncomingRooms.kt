@@ -18,14 +18,16 @@ class DiscoverCollaborationSpaceIncomingRooms(
     private val directory: CollaborationSpaceDirectoryRepository,
     private val sessions: SessionRepository,
     private val server: IdentityServer,
+    private val registrations: CollaborationSpaceRegistrationCommandRepository,
 ) {
-    suspend operator fun invoke(access: CollaborationSpaceLocalAccess): AppResult<Boolean> =
-        withTimeoutOrNull(5_000) {
-            admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+    suspend operator fun invoke(owner: CollaborationSpaceOwner): AppResult<Boolean> {
+        val access = owner.localDirectoryAccess()
+        return withTimeoutOrNull(5_000) {
+            admission(owner).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             val loaded = demands.current(access)
             val observed = (loaded as? AppResult.Success)?.value
             val snapshot = observed?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
-            admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            admission(owner).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             if (loaded is AppResult.Failed) return@withTimeoutOrNull loaded
             if (observed == null) return@withTimeoutOrNull AppResult.Success(false)
             if (
@@ -45,16 +47,15 @@ class DiscoverCollaborationSpaceIncomingRooms(
                     ?.value
                     ?.takeIf { it.bindings.size <= limit }
                     ?.let { it.copy(bindings = it.bindings.toList()) }
-            admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            admission(owner).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             if (received is AppResult.Failed) return@withTimeoutOrNull received
             if (page == null) return@withTimeoutOrNull changed()
+            val loadedRegistration = registration(owner)
+            if (loadedRegistration is AppResult.Failed) return@withTimeoutOrNull loadedRegistration
+            val record = (loadedRegistration as AppResult.Success).value
+            val original = record?.command?.legacy
             val additions =
-                page.bindings.filter { binding ->
-                    current.rooms.none {
-                        it.target ==
-                            CollaborationSpaceIncomingTarget.Published(binding.conversation.id)
-                    }
-                }
+                undiscoveredCollaborationSpaceIncomingBindings(current, page.bindings, original)
             val planned =
                 discoverCollaborationSpaceIncomingRooms(
                     access,
@@ -62,28 +63,67 @@ class DiscoverCollaborationSpaceIncomingRooms(
                     page,
                     List(additions.size) { Uuid.random().toString() },
                     Uuid.random().toString(),
+                    original,
                 )
             if (planned is AppResult.Failed) return@withTimeoutOrNull planned
             val next = (planned as AppResult.Success).value
-            val saved = demands.replace(access, snapshot, next)
-            admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
-            val reply = demands.current(access)
-            val retained =
-                (reply as? AppResult.Success)
-                    ?.value
-                    ?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
-            admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
-            if (reply is AppResult.Failed) return@withTimeoutOrNull reply
-            confirmCollaborationSpaceIncomingScanWrite(
-                access,
-                snapshot.demand,
-                next,
-                retained,
-                saved,
-            )
+            retain(owner, snapshot, next, record)
         } ?: changed(FailureKind.Timeout)
+    }
 
-    private suspend fun admission(access: CollaborationSpaceLocalAccess): AppResult<Unit> {
+    /** The discovery cursor commits only against its captured queue and registration. */
+    private suspend fun retain(
+        owner: CollaborationSpaceOwner,
+        snapshot: CollaborationSpaceIncomingDemandSnapshot,
+        next: CollaborationSpaceIncomingDemand,
+        record: CollaborationSpaceRegistrationRecord?,
+    ): AppResult<Boolean> {
+        val access = owner.localDirectoryAccess()
+        val before = registration(owner)
+        if (before is AppResult.Failed) return before
+        if ((before as AppResult.Success).value != record) return changed()
+        val saved = demands.replace(access, snapshot, next)
+        admission(owner).let { if (it is AppResult.Failed) return it }
+        val reply = demands.current(access)
+        val retained =
+            (reply as? AppResult.Success)
+                ?.value
+                ?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
+        val after = registration(owner)
+        if (after is AppResult.Failed) return after
+        if ((after as AppResult.Success).value != record) return changed()
+        if (reply is AppResult.Failed) return reply
+        return confirmCollaborationSpaceIncomingScanWrite(
+            access,
+            snapshot.demand,
+            next,
+            retained,
+            saved,
+        )
+    }
+
+    /** Local provenance only: no native opening or credential-age admission is required. */
+    private suspend fun registration(
+        owner: CollaborationSpaceOwner
+    ): AppResult<CollaborationSpaceRegistrationRecord?> {
+        admission(owner).let { if (it is AppResult.Failed) return it }
+        val access = owner.localDirectoryAccess()
+        val loaded = registrations.current(access, owner.parent.nativeSessionId)
+        admission(owner).let { if (it is AppResult.Failed) return it }
+        if (loaded is AppResult.Failed) return loaded
+        val record = (loaded as AppResult.Success).value ?: return AppResult.Success(null)
+        if (
+            !validCollaborationSpaceRegistrationRecord(access, record) ||
+                record.command.binding.nativeSessionId != owner.parent.nativeSessionId
+        )
+            return changed()
+        return AppResult.Success(
+            record.takeIf { it.outcome is CollaborationSpaceRegistrationOutcome.Registered }
+        )
+    }
+
+    private suspend fun admission(owner: CollaborationSpaceOwner): AppResult<Unit> {
+        val access = owner.localDirectoryAccess()
         currentCoroutineContext().ensureActive()
         val gate = directory.admission(access)
         val current = sessions.current()
@@ -95,13 +135,11 @@ class DiscoverCollaborationSpaceIncomingRooms(
             }
         }
         if (current is AppResult.Failed) return current
-        val owned =
-            localCollaborationSpaceAccess(
-                access,
-                (current as AppResult.Success).value,
-                server.audience,
-            )
+        val session = (current as AppResult.Success).value
+        val owned = localCollaborationSpaceAccess(access, session, server.audience)
         if (owned is AppResult.Failed) return owned
+        if (session?.binding?.serverId != owner.parent.nativeSessionId)
+            return changed(FailureKind.Unauthorized)
         if (gate is AppResult.Failed) return gate
         return AppResult.Success(Unit)
     }

@@ -1,0 +1,88 @@
+{
+  "date": "2026-11-12",
+  "scope": "Registered-source local discovery and physical inventory coalescing",
+  "baseCommit": "1d34a6ba",
+  "sourceManifestSha256": "18c8f550c9034604a9803184c0f2a3e06971fea5ba2b6725e0fbe201d355571b",
+  "sourceInputs": 5133,
+  "changedFiles": 13,
+  "productionFiles": 7,
+  "newDomainTestMethods": 13,
+  "acceptedLocal": true,
+  "nativeWorkerAccepted": false,
+  "phoneRelease": false,
+  "liveDeployment": false,
+  "full": {
+    "validatedCases": 14538,
+    "freshCases": 12500,
+    "unchangedBaselineCases": 2038,
+    "sourceMatchedPriorCases": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "elapsedSeconds": 772.064,
+    "startedAt": "2026-11-12T12:25:45.415557+00:00",
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "reportManifestSha256": "15bbe58bba044d3aacb734283ebbef201c522baecd440216852349e4e63137bd"
+  },
+  "selectedCasesIncludedInFullRun": 185,
+  "reviewedTargetCaseReplacements": 4,
+  "reviewedMethodRenames": [
+    {
+      "class": "CollaborationSpaceInventoryRetentionPolicyTest",
+      "old": "anExistingPhysicalTurnKeepsItsKnownHeadGenerationPositionAndRetry",
+      "new": "inventoryStrengthensPhysicalWorkWithoutLosingFifoBackoffOrSource",
+      "reason": "Inventory now commits a new unknown-head generation on queued Joined physical work, preserving FIFO/retry/source."
+    },
+    {
+      "class": "CollaborationSpaceInventoryRetentionPolicyTest",
+      "old": "aPartialPageStopsBeforeExistingWorkAndRetriesThatExactRoomAfterItDrains",
+      "new": "aPartialPagePreservesALeftHintAndRetriesThatExactRoomAfterItDrains",
+      "reason": "Structural waiting remains required for Left membership; Joined work can carry a strengthened requirement."
+    }
+  ],
+  "proofApk": {
+    "bytes": 152426868,
+    "sha256": "f59b410073dd1847d779472f63cef68386fc329534cf4ec11927091331457d3c"
+  },
+  "sdkVersion": "26.10.23-hris.8",
+  "sdkX86NativeSha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+  "checks": [
+    "full check",
+    "Android host tests",
+    "Android release compile/lint",
+    "Wasm browser tests",
+    "iOS source-set metadata",
+    "proof APK/unit tests",
+    "format",
+    "architecture",
+    "detekt"
+  ],
+  "earlierNativeEvidence": {
+    "phase": "worker-5",
+    "sourceManifestSha256": "307b04ec4d903a0d34e1fb917f36d0efaf482936cdce089860f6c13f57ba1b5e",
+    "passed": false,
+    "elapsedSeconds": 137.255,
+    "remainingLogicalRooms": 0,
+    "remainingPhysicalRooms": 0,
+    "inventoryActive": false,
+    "inventoryRequested": false,
+    "historyReady": true,
+    "firstPageContentVisible": true,
+    "coveredHintAssertionReached": false,
+    "activeHttpFailures": 0,
+    "storageFailures": 0,
+    "sameBootReadOnlyInspectionPassed": true
+  },
+  "hostedExpected": {
+    "portable": 12516,
+    "apple": 5095,
+    "total": 17611
+  },
+  "hostedDispatched": false,
+  "preservedCorrections": [
+    "Original fixture required its retained source.",
+    "Current registered source must fence canonical and physical deduplication.",
+    "Local ownership must precede native-family admission to preserve Unauthorized classification."
+  ]
+}

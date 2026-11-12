@@ -109,14 +109,75 @@ internal class SpaceIncomingScanFixture {
     val ensureWake = EnsureCollaborationSpaceIncomingWake(wakes)
     val readWake = ReadCollaborationSpaceIncomingWake(wakes)
     val resume = ResumeCollaborationSpaceIncomingRecovery(wakes, schedules)
-    val discover =
+    val owner = request.provider.runtime.owner
+    val source =
+        CollaborationSpaceIncomingSource(
+            "a".repeat(64),
+            request.base.queue.identity.matrixUserId,
+            request.base.model.transport.matrixDeviceId,
+        )
+    val registered =
+        CollaborationSpaceRegistrationRecord(
+            CollaborationSpaceRegistrationCommand(
+                id(970),
+                CollaborationSpaceDeviceBinding(
+                    access.audience,
+                    access.accountId,
+                    access.spaceId,
+                    owner.parent.nativeSessionId,
+                ),
+                CollaborationNativePlatform.ANDROID,
+                5,
+                request.base.native.setup.now,
+                request.base.queue.identity,
+                "Fixture device",
+                CollaborationSpaceDeviceOrigin.LEGACY,
+                CollaborationSpaceLegacySdk(
+                    request.base.queue.binding.copy(nativeSessionId = owner.parent.nativeSessionId),
+                    request.base.queue.device.deviceId,
+                    CollaborationLocalDeviceIdentity(
+                        source.matrixUserId,
+                        source.matrixDeviceId,
+                        "a".repeat(64),
+                    ),
+                ),
+            ),
+            2,
+            1,
+            CollaborationSpaceRegistrationOutcome.Registered(
+                CollaborationSetupReceipt(request.provider.runtime.deviceId, 0)
+            ),
+        )
+    var registration: CollaborationSpaceRegistrationRecord? = registered
+    var registrationReads = 0
+    private val registrations =
+        object :
+            CollaborationSpaceRegistrationCommandRepository by SpaceRegistrationFixture().commands {
+            override suspend fun current(
+                access: CollaborationSpaceLocalAccess,
+                nativeSessionId: String,
+            ): AppResult<CollaborationSpaceRegistrationRecord?> {
+                assertEquals(this@SpaceIncomingScanFixture.access, access)
+                assertEquals(owner.parent.nativeSessionId, nativeSessionId)
+                registrationReads++
+                return request.base.read("registration") { registration }
+            }
+        }
+    private val discoverRooms =
         DiscoverCollaborationSpaceIncomingRooms(
             request.demands,
             inventory,
             request.base.directory.directory,
             request.base.native.setup.sessions,
             request.base.native.server,
+            registrations,
         )
+
+    suspend fun discover(actual: CollaborationSpaceLocalAccess): AppResult<Boolean> {
+        assertEquals(access, actual)
+        return discoverRooms(owner)
+    }
+
     val read =
         ReadCollaborationSpaceIncomingDemand(
             request.demands,

@@ -154,7 +154,16 @@ private fun mergeIncomingPhysicalHints(
             rooms[offset] =
                 previous.copy(
                     generation = generations[index],
-                    headEventId = hint.headEventId,
+                    // An inventory catch-up must not become a covered-head shortcut before
+                    // it has resolved. Membership changes still replace the old requirement.
+                    headEventId =
+                        if (
+                            previous.headEventId == null &&
+                                previous.limited &&
+                                previous.membership == hint.membership
+                        )
+                            null
+                        else hint.headEventId,
                     membership = hint.membership,
                     limited = previous.limited || hint.limited,
                 )

@@ -95,18 +95,28 @@ class CollaborationSpaceInventoryRetentionPolicyTest {
     }
 
     @Test
-    fun anExistingPhysicalTurnKeepsItsKnownHeadGenerationPositionAndRetry() {
+    fun inventoryStrengthensPhysicalWorkWithoutLosingFifoBackoffOrSource() {
         val old = physical(0).copy(retry = retry)
         val current = demand().copy(nextPosition = 1, physicalRooms = listOf(old))
         val result = retained(current, progress, page(listOf(joined(roomId(0)))))
-        assertEquals(CollaborationSpaceInventoryOutcome.WaitingForRoom, result.outcome)
-        assertEquals(0, result.acceptedRooms)
-        assertEquals(current, result.demand)
+        assertEquals(CollaborationSpaceInventoryOutcome.Complete, result.outcome)
+        assertEquals(1, result.acceptedRooms)
+        assertEquals(current.nextPosition, result.demand.nextPosition)
+        val next = result.demand.physicalRooms.single()
+        assertEquals(old.copy(generation = id(800), headEventId = null, limited = true), next)
+        val stale =
+            assertIs<AppResult.Success<CollaborationSpaceIncomingPhysicalResolution>>(
+                    resolveCollaborationSpaceIncomingPhysicalRoom(result.demand, old, id(900))
+                )
+                .value
+        assertEquals(CollaborationSpaceIncomingBindingResolution.Obsolete, stale.outcome)
+        assertEquals(result.demand, stale.demand)
     }
 
     @Test
-    fun aPartialPageStopsBeforeExistingWorkAndRetriesThatExactRoomAfterItDrains() {
-        val old = physical(2).copy(position = 0)
+    fun aPartialPagePreservesALeftHintAndRetriesThatExactRoomAfterItDrains() {
+        val old =
+            physical(2).copy(position = 0, membership = CollaborationSpaceIncomingMembership.Left)
         val current = demand().copy(nextPosition = 1, physicalRooms = listOf(old))
         val first = retained(current, progress, page((0..3).map { joined(roomId(it)) }))
         assertEquals(CollaborationSpaceInventoryOutcome.WaitingForRoom, first.outcome)
@@ -269,6 +279,26 @@ class CollaborationSpaceInventoryRetentionPolicyTest {
         val captured = assertNotNull(captureCollaborationSpaceInventoryPage(page(original)))
         original.clear()
         assertEquals(listOf(joined(roomId(0))), captured.rooms)
+    }
+
+    @Test
+    fun fullCapacityStillAllowsStrengtheningTheExactPhysicalRequirement() {
+        val rooms = (0 until 64).map(::physical)
+        val current = demand().copy(nextPosition = 64, physicalRooms = rooms)
+        val next = retained(current, progress, page(listOf(joined(roomId(0))))).demand
+        assertEquals(64, next.physicalRooms.size)
+        assertEquals(64L, next.nextPosition)
+        assertEquals(rooms.drop(1), next.physicalRooms.drop(1))
+        assertNull(next.physicalRooms.first().headEventId)
+        assertNotEquals(rooms.first().generation, next.physicalRooms.first().generation)
+    }
+
+    @Test
+    fun alreadyUnknownWorkStillGetsANewGenerationForAnIndependentInventoryPass() {
+        val old = physical(0).copy(headEventId = null, limited = true)
+        val current = demand().copy(nextPosition = 1, physicalRooms = listOf(old))
+        val next = retained(current, progress, page(listOf(joined(roomId(0))))).demand
+        assertEquals(old.copy(generation = id(800)), next.physicalRooms.single())
     }
 
     private val source =

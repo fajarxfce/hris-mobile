@@ -42,7 +42,7 @@ class CollaborationSpaceIncomingWorker(
         suspend (
             CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingPhysicalRoomDemand, Failure?,
         ) -> AppResult<Boolean>,
-    private val discover: suspend (CollaborationSpaceLocalAccess) -> AppResult<Boolean>,
+    private val discover: suspend (CollaborationSpaceOwner) -> AppResult<Boolean>,
     private val finish:
         suspend (CollaborationSpaceLocalAccess, CollaborationSpaceIncomingWake) -> AppResult<
                 Boolean
@@ -170,7 +170,7 @@ class CollaborationSpaceIncomingWorker(
             val seeded = requestScan(access, wake.generation)
             if (seeded is AppResult.Failed) return failed(seeded)
         }
-        val scanned = discover(access)
+        val scanned = discover(original.owner)
         if (scanned is AppResult.Failed) return failed(scanned)
         val found = readDemand(access)
         if (found is AppResult.Failed) return failed(found)

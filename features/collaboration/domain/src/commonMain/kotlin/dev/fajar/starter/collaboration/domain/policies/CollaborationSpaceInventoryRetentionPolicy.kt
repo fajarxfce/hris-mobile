@@ -36,10 +36,11 @@ fun captureCollaborationSpaceInventoryPage(
 }
 
 /**
- * Retain only a consumed prefix. An existing physical turn is not evidence of inventory coverage:
- * leave it unchanged and resume this room after it drains. Fresh unknown-head work starts from
- * Latest; existing logical progress and source positions stay intact. Only Joined rooms create
- * incoming work. Other memberships neither join a room nor authorize fresh content acquisition.
+ * Retain only a consumed prefix. A queued Joined physical turn can carry a fresh unknown-head
+ * requirement before resolution; replacing its generation invalidates older captured results.
+ * Preserve FIFO/backoff and never replace a newer Left hint. Existing logical progress and source
+ * positions stay intact. Only Joined rooms create incoming work. Other memberships neither join a
+ * room nor authorize fresh content acquisition.
  */
 fun retainCollaborationSpaceInventoryPage(
     observed: CollaborationSpaceIncomingDemand,
@@ -150,11 +151,24 @@ private fun planInventoryRoomPrefix(
     var blocked: CollaborationSpaceInventoryOutcome? = null
     for ((index, room) in page.rooms.withIndex()) {
         if (room.membership == CollaborationSpaceInventoryMembership.Joined) {
+            val offset =
+                physical.indexOfFirst {
+                    it.sourceId == page.source.storeId && it.roomId == room.roomId
+                }
+            val previous = physical.getOrNull(offset)
+            if (previous?.membership == CollaborationSpaceIncomingMembership.Joined) {
+                physical[offset] =
+                    previous.copy(
+                        generation = generations[index],
+                        headEventId = null,
+                        limited = true,
+                    )
+                accepted++
+                continue
+            }
             blocked =
                 when {
-                    physical.any {
-                        it.sourceId == page.source.storeId && it.roomId == room.roomId
-                    } -> CollaborationSpaceInventoryOutcome.WaitingForRoom
+                    previous != null -> CollaborationSpaceInventoryOutcome.WaitingForRoom
                     current.rooms.size + physical.size == 64 ->
                         CollaborationSpaceInventoryOutcome.Capacity
                     else -> null

@@ -37,6 +37,7 @@ fun discoverCollaborationSpaceIncomingRooms(
     page: CollaborationSpaceRoomBindingPage,
     roomGenerations: List<String>,
     newerScanGeneration: String,
+    original: CollaborationSpaceLegacySdk? = null,
 ): AppResult<CollaborationSpaceIncomingDemand> {
     if (!validCollaborationSpaceIncomingDemand(access, current)) return invalidIncomingScan()
     val requested = current.rescanGeneration ?: return invalidIncomingScan()
@@ -65,12 +66,7 @@ fun discoverCollaborationSpaceIncomingRooms(
                     (scan.cursor != null && cursor.afterId <= scan.cursor.afterId)))
     )
         return invalidIncomingScan()
-    val additions =
-        page.bindings.filter { binding ->
-            current.rooms.none {
-                it.target == CollaborationSpaceIncomingTarget.Published(binding.conversation.id)
-            }
-        }
+    val additions = undiscoveredCollaborationSpaceIncomingBindings(current, page.bindings, original)
     if (
         roomGenerations.size != additions.size ||
             roomGenerations.any { !validCollaborationMessageId(it) } ||

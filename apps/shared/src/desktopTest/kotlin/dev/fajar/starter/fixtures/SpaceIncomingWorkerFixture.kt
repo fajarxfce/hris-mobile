@@ -278,7 +278,7 @@ internal class SpaceIncomingWorkerFixture(
                 }
             },
             discover = { actual ->
-                check(actual == access)
+                check(actual == owner)
                 step("discover")
                 scanning = false
                 AppResult.Success(true)
