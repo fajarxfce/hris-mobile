@@ -1,5 +1,7 @@
 # Architecture
 
+[Bounded account recovery selection](collaboration-account-history-recovery-turn-read.md) captures one admitted metadata row under the current registered source and an unchanged recovery turn.
+
 [Historical source availability](collaboration-key-history-source-availability.md) retains actual historical ownership and separates an unavailable source from operational or authorization failure.
 
 [Space historical page projection](collaboration-space-key-page-projection.md) preserves logical Space history and current physical provenance across bounded local read, content acquisition and atomic completion.

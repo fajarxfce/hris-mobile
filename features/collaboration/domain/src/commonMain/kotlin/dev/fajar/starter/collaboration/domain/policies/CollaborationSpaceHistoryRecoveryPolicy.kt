@@ -114,16 +114,26 @@ fun planCollaborationSpaceHistoryRecoveryDefer(
     return AppResult.Success(current.copy(revision = current.revision + 1, retry = retry))
 }
 
+/**
+ * Concurrent producers may replace the requested generation without advancing the captured turn.
+ */
+fun sameCollaborationSpaceHistoryRecoveryTurn(
+    captured: CollaborationSpaceHistoryRecovery,
+    current: CollaborationSpaceHistoryRecovery,
+): Boolean =
+    validCollaborationSpaceHistoryRecovery(captured) &&
+        validCollaborationSpaceHistoryRecovery(current) &&
+        !captured.complete &&
+        !current.complete &&
+        (captured.requestedGeneration == null || current.requestedGeneration != null) &&
+        captured.copy(requestedGeneration = current.requestedGeneration) == current
+
 private fun matchingHistoryRecoveryTurn(
     current: CollaborationSpaceHistoryRecovery,
     captured: CollaborationSpaceHistoryRecovery,
 ): Boolean =
-    validCollaborationSpaceHistoryRecovery(current) &&
-        validCollaborationSpaceHistoryRecovery(captured) &&
-        !current.complete &&
-        current.revision < MAX_HISTORY_RECOVERY_REVISION &&
-        (captured.requestedGeneration == null || current.requestedGeneration != null) &&
-        captured.copy(requestedGeneration = current.requestedGeneration) == current
+    current.revision < MAX_HISTORY_RECOVERY_REVISION &&
+        sameCollaborationSpaceHistoryRecoveryTurn(captured, current)
 
 private fun invalidHistoryRecovery(kind: FailureKind = FailureKind.Conflict) =
     collaborationRecoveryFailure("client.collaboration_incoming_demand_changed", kind)

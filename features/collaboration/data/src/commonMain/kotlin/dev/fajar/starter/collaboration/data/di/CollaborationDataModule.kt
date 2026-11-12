@@ -912,7 +912,6 @@ class CollaborationDataModule {
         metadata: CollaborationSpaceConversationMetadataRepository,
         originals: CollaborationSpaceOriginalConversationRepository,
         originalMetadata: CollaborationSpaceOriginalRoomMetadataRepository,
-        clock: Clock,
     ) =
         ResolveCollaborationSpaceIncomingBinding(
             demands,
@@ -928,7 +927,7 @@ class CollaborationDataModule {
             metadata,
             originals,
             originalMetadata,
-            clock,
+            Clock.System,
         )
 
     @Factory
@@ -951,6 +950,31 @@ class CollaborationDataModule {
             sessions,
             server,
             sync,
+        )
+
+    @Factory
+    fun readSpaceHistoryRecoveryTurn(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        locators: CollaborationIncomingHistoryLocatorRepository,
+        roots: CollaborationSpaceRootRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        sync: CollaborationSpaceSyncRepository,
+    ) =
+        ReadCollaborationSpaceHistoryRecoveryTurn(
+            demands,
+            locators,
+            roots,
+            registrations,
+            directory,
+            sessions,
+            server,
+            build,
+            sync,
+            Clock.System,
         )
 
     @Factory

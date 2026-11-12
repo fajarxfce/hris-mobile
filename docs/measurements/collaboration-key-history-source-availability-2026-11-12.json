@@ -71,6 +71,27 @@
     "expectedApple": 4730,
     "expectedTotal": 16334,
     "status": "in_progress",
-    "artifactsAudited": false
+    "artifactsAudited": false,
+    "portableAccepted": true,
+    "portableAudit": {
+      "sourceCommit": "20957650ba9c7bb8f6448025f189c0bf2915cbb5",
+      "runId": 43139532066,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43139532066",
+      "jobId": 130922873547,
+      "artifactId": 13911035023,
+      "bytes": 3936158,
+      "sha256": "2e66813b3c0984d0e1569038c7292d15975681f755870b239a68310a4f187940",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreserved": true,
+      "counts": {
+        "desktopTest": 5530,
+        "testAndroidHostTest": 857,
+        "wasmJsBrowserTest": 5217
+      },
+      "reportManifestSha256": "7b8c61b8175828e06e656787d7aaf701da1293e4adfebadb66beca2909b98d3e",
+      "jobLogSha256": "7f3125f96168c941db215ad933c0738364dfd06194138a260352aab199890833"
+    },
+    "portableAuditProcessFinished": true,
+    "portableAuditSessionObservation": "Completed audit artifact verified; session identifier not retained across context boundary. No audit process remains."
   }
 }

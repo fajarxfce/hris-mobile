@@ -1,0 +1,118 @@
+{
+  "recordedAt": "2026-11-12T02:45:17.397761+00:00",
+  "sourceBaseline": "f026b80dec655eb3896129126b2b9d93d0222654",
+  "sourceFiles": 5072,
+  "changedSourceFiles": 8,
+  "sourceManifestSha256": "0b1ed4ddb3e72dfdf446cd69696fed7cc88ace4568d1fc9a755ccbaf698c67b0",
+  "focused": {
+    "tests": 314,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused-3",
+  "focusedBrowserRun": "browser-1",
+  "full": {
+    "validated": 13674,
+    "fresh": {
+      "tests": 11636,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 580.4,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152169846,
+    "sha256": "d3f6e5a970b6fad161195aaed1208f8c7cfb12c4ddddbb14db09d874138905de"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "accountHistoryRecoveryTurnReadAccepted": true,
+  "newCommonCasesPerTarget": 24,
+  "maximumMetadataRows": 1,
+  "metadataLookahead": true,
+  "actualCompanyAndSpaceAndHistoricalDevicePreserved": true,
+  "currentAccountRootSourceAndRegistrationRequired": true,
+  "capturedMetadataCopiedBeforeSuspension": true,
+  "finalRecoveryRevisionRequired": true,
+  "sharedTurnIdentityPreservesMutationRevisionCeiling": true,
+  "compositionClockOwnerCorrected": true,
+  "previousLazyResolverExplicitlyResolved": true,
+  "concurrentPrimaryAndRequestedGenerationPreserved": true,
+  "absentCompleteAndDeferredDoNotReadSourceMetadata": true,
+  "backwardClockCannotStrandRetainedWork": true,
+  "localLifetimeSeconds": 5,
+  "failedDeniedChangedCancelledOrLateReadsCannotPublish": true,
+  "workCreation": false,
+  "historyAcknowledgement": false,
+  "globalAcknowledgement": false,
+  "transportRead": false,
+  "nativeSdkExecution": false,
+  "workerActivation": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "starterPortRequired": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [
+    {
+      "run": "focused-1",
+      "exitCode": 1,
+      "elapsedSeconds": 119.355,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "run": "focused-2",
+      "exitCode": 1,
+      "elapsedSeconds": 287.381,
+      "freshCounts": {
+        "tests": 158,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "failureReviews": {
+    "focused-1": {
+      "recordedAt": "2026-11-12T02:16:23.282147+00:00",
+      "session": 92831,
+      "sessionReaped": true,
+      "exitCode": 1,
+      "elapsedSeconds": 119.355,
+      "testsExecuted": 0,
+      "sourceManifestSha256": "1219a29b225220134ab9f760191d2dc65aacc7dd76844a7dcc8930d2f119c766",
+      "cause": "Two new request assertions inferred Pair<Nothing?, Int> or Pair<String, Int>, conflicting with the recorded Pair<String?, Int> collection under kotlin.test.assertEquals generic inference.",
+      "correction": "Declare List<Pair<String?, Int>> in both expected request assertions. Same cursor and limit values; no assertion removed or production changed.",
+      "changedFile": "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadCollaborationSpaceHistoryRecoveryTurnTest.kt",
+      "preservedCandidate": "failed-focused-candidate-1"
+    },
+    "focused-2": {
+      "recordedAt": "2026-11-12T02:24:03.512039+00:00",
+      "session": 12916,
+      "sessionReaped": true,
+      "exitCode": 1,
+      "elapsedSeconds": 287.381,
+      "testsExecuted": 158,
+      "failures": 1,
+      "failedCase": "CollaborationBindingsTest.oneApplicationRuntimeOwnsObservationAcrossRepeatedStartsAndClosesBeforeDisposal",
+      "sourceManifestSha256": "34ff82891f5cbc343c235e6db72db0f22efb08a65222690f70d58dda814daed8",
+      "cause": "The new factory requested an unregistered kotlin.time.Clock from Koin. Tracing production composition found the existing lazy physical-binding resolver had the same latent dependency; its factory was not directly resolved by the graph test. Other time-dependent factories provide Clock.System at this composition boundary.",
+      "correction": "Provide Clock.System in both affected owning data-module factories, preserving injectable domain constructor clocks. Explicitly resolve both operations in the existing graph test; no fake Clock registration, removed assertion, timeout or weakened policy.",
+      "changedFiles": [
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+        "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt"
+      ],
+      "preservedCandidate": "failed-focused-candidate-2"
+    }
+  }
+}
