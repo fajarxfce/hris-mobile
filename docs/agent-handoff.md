@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 12:23 UTC. Continue the PRD and push every commit. All 54 groups OPEN.
+Updated 12 November 2026, 12:32 UTC. Continue the PRD and push every commit. All 54 groups OPEN.
 No subagents. One compiler OR emulator. Phone install-only: announce, explicit serial, never launch
 or drive the phone UI, reset app data or uninstall. Continue working beyond checkpoints.
 
@@ -9,7 +9,7 @@ or drive the phone UI, reset app data or uninstall. Continue working beyond chec
 Mobile has13 uncommitted source/test files under active validation. Workspace
 .work/space-incoming-discovery-coalescing-2026-11-12; baseline Mobile1d34a6ba (native fixtures)
 and Group7b4a18d6 are committed/pushed; pushes49977/47874 REAPED. No production diagnostics remain.
-Current5133-input manifest307b04ec4d903a0d34e1fb917f36d0efaf482936cdce089860f6c13f57ba1b5e.
+Current5133-input manifest18c8f550c9034604a9803184c0f2a3e06971fea5ba2b6725e0fbe201d355571b.
 
 Local discovery now matches canonical/physical work only through the current parent's registered
 legacy identity and exact Company. The use case receives the owning parent, fences registration
@@ -38,20 +38,25 @@ emulator stopped, phone untouched. Native18/reg1/bootstrap1, Matrix27/send4/sync
 zero active HTTP/storage failures. Preserve fixture1ae42615-77a1-480f-8278-703253da957b and worker5 images.
 Failure remains consumeScheduled:102 (four-turn wake); covered-hint assertion has NOT been reached.
 
-Full1/session26048 ACTIVE, required :check/platform/build gates. Do not edit source until it exits.
-CRITICAL REVIEW BEFORE PRODUCTION COMMIT: admission currently checks native-family mismatch before
-local ownership and returns Conflict, changing session replacement classification. After full1 exits,
-archive its candidate, move family check after local ownership validation, return Unauthorized, and
-strengthen/add classification regressions. See admission-review.md in active workspace. Expected final
-185 focused/14538 full cases after one added regression; current full1 candidate has184/14536. Its
-passing result must NOT be called final acceptance. Update full audit conservatively for changed
-source and rerun required checks. No production or phone release commit yet.
+Full1/26048 REAPED PASSED733.204s,12,477 fresh tests; audit98776 REAPED verified14,536
+(plus21 source-exact proof cases and2,038 unchanged). reviewed-full-candidate-1 preserves that exact
+source, full audit and all artifacts. It is superseded by the admission classification correction.
+Current code now checks local ownership FIRST, retains client.session_changed/Unauthorized, and
+rejects a mismatched native family as Unauthorized. Existing failure regression asserts classification;
+one new native-family regression stops before metadata I/O. Format4/6780 REAPED35.961s. Current
+13-file manifest above. Full2/session99148 ACTIVE from12:25:45UTC; do not edit source or start emulator.
+It covers the185 selected cases within expected14,538 total; no separate185-case focused run occurred.
+Run accept-full.py full-2 after completion. It requires current source or verified unchanged module
+closures, preserves all baseline case IDs except four target-specific reviewed renames, and rejects
+missing affected reports. The old focused3/proof1/native5 evidence is for its recorded source; do not
+claim final native acceptance. No production or phone release commit yet.
 
 Next root review: service asks account history locators for limit1, but the data mapper limits raw
 rows BEFORE filtering internal metadata. Existing tests describe22 internal families; each can cost
 a whole worker turn. The exact remaining native cursor sequence is not exposed. Proposed bounded
-filtered scan (max16 raw+1 lookahead, still one real history visit) is DESIGN ONLY under
-.work/space-history-locator-scan-2026-11-12/design-review.md. Finish the coalescing correction/gates and
+filtered scan (max16 raw+1 lookahead, still one real history visit) is DRAFT ONLY under
+.work/space-history-locator-scan-2026-11-12/design-review.md. Four files are drafted under draft/ with
+draft-base-files.json (two data files, shared mapper/storage tests;5+1 new cases). No draft was applied. Finish the coalescing correction/gates and
 commit/push before applying it. Optional read-only diagnostic can compare remaining locator counts
 for limit1/16 without IDs. Do not raise worker bounds or invent complete native acceptance.
 
@@ -96,7 +101,7 @@ actual final trace review; do not fit request assertions to a total.
 
 Read prior detailed evidence in [archived handoff](agent-handoff-history-through-original-worker-diagnostics-2026-11-12.md).
 Cold clone attempts failed to recover fixture input; immediate same-boot inspection is now the diagnostic
-route. Original failed images are preserved. Full compiler26048 is active; no emulator at this checkpoint.
+route. Original failed images are preserved. Full compiler99148 is active; no emulator at this checkpoint.
 
 ## Accepted native receipt/source proof
 
