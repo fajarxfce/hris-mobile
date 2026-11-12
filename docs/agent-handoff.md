@@ -1,13 +1,41 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 10:37 UTC. Continue the PRD and push every commit. All54 groups OPEN.
+Updated 12 November 2026, 11:20 UTC. Continue the PRD and push every commit. All54 groups OPEN.
 No subagents. One compiler OR emulator. Phone install-only: announce, explicit serial, never launch
 or drive the phone UI, reset app data or uninstall. No final checkpoint response; continue the work.
+
+## Active diagnostic — restore temporary production observations
+
+Mobile has six native fixture files plus ONE TEMPORARY production file modified:
+apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationSpaceIncomingWorker.kt.
+Only bounded enum/local failure categories are emitted through Diagnostics; no queue/timer changes.
+DO NOT COMMIT that worker. Restore from active workspace cause-probe/CollaborationSpaceIncomingWorker.before.kt
+before production acceptance. Normal accepted six-file manifest468eccceccefe20f481b04abab7f4252e69e75680ff026bf9d9001fc2db532f4
+and proof4 are preserved. Temporary formatted worker is archived in cause-probe. Format5/95217
+REAPED38.882s; cause-build-1/84074 ACTIVE, assembleDebug only, not a new full acceptance run.
+One compiler OR emulator. After build passes set Group native-config mobilePhase=cause-build-1,
+run native.py worker-4 once. It captures bounded IncomingProof categories from logcat and then a
+read-only retained-state inspection before stopping the emulator. Group source1 remains exact.
+No phone install or source commit of diagnostic APK. Native worker acceptance is still open.
+
+Worker3/82326 REAPED FAILED1 in124.235s, but immediate read-only inspection PASSED in the same boot.
+Company history: EOF,15 provider references,zero pending,one message,provider marker null. Remaining:
+one Published Latest room at position2 with no head and retryFailures1; source inventory active with
+retryFailures1; history recovery incomplete after a partition, no unresolved keys. Snapshot unchanged
+and runtime never opened during inspection. No cause for the two deferrals is known yet. Preserve
+worker-3/retained-state.json and all failed userdata; do not raise bounds or delete remaining work.
+
+Cold clone attempts64461/40356 REAPED failed before inspection: copied qcow sidecars booted without
+the installed package. Flattened clone11617 REAPED compared guest images exactly, restored package
+identity, but private worker-fixture.json was empty after cold boot. No app source failure was inferred.
+All original image hashes stayed identical. These attempts are archived under inspect-worker-2/2b/2c;
+inspect-clone.py is NOT the current diagnostic route. Native runner now inspects immediately after
+failure in the same boot. Existing tests, original images, package identity and phone remain protected.
 
 ## Current: progressive Company incoming content
 
 Progressive content is committed and pushed: Mobile197b55d9 / Groupc192ddcc.
-Push sessions96985/4493 REAPED. Mobile now has five uncommitted native fixture files; Group has
+Push sessions96985/4493 REAPED. Mobile now has six uncommitted native fixture files; Group has
 three corresponding native protocol/test files. No production change after197b55d9.
 
 Workspace `.work/space-original-progressive-content-2026-11-12` (Mobile). Exact baseline is the
@@ -44,7 +72,7 @@ See [measurement](measurements/collaboration-space-original-progressive-content-
 Hosted CI43200304791 dispatched once from197b55d98c30e19347e15e7012fc5737014e639c at10:25:52.726669UTC;
 session77811 REAPED. Expected17,572 =12,490 portable (5974/947/5569) +5082 Apple. Source-specific
 plan/state/audit files are in hosted-43200304791. Baseline accepted runtime43182776077; explicit
-reviewed case replacements are required. Not audited yet; do not dispatch again.
+reviewed case replacements are required. Portable audit16389 REAPED accepted12,490; Apple still running. Do not dispatch again.
 
 ## Next: actual canonical worker native acceptance
 
@@ -67,10 +95,35 @@ ProofAPK149932375B/61c634866f194e0bbb24cb62bfc8ca507a4bd59dcd7df6f83db832a61994f
 immutable copy proof-2/accepted-proof.apk. Not a phone release.
 Group Python29cases passed0.006s. Format1/36796 REAPED21.202s with no edits. Group3-file/8745-input
 manifest674bcfed931027c2ed49d35e338fe66071b03ae00cf98220ee2142085b424fe9.
-Group source1/46483 ACTIVE: compile.py source-1 compiles server tests and checks format/architecture.
-Do not edit Group source until reaped. Then accept-source.py source-1 and native.py worker-1 for
-one isolated registered-worker diagnostic. Native config points Mobile proof-2 / Group source-1.
-One compiler OR emulator; emulator2560MiB/2cores, explicit emulator-5562, preserve failed userdata.
+Group source1/46483 REAPED PASSED81.736s; source audit inline exit0, class SHA2445e6313d82f0c56a6028957cdcc24f868510bcf836e779b0ef09315366c7b9.
+Worker1/2166 REAPED FAILED106.219s/1 case; source and APK unchanged, no compile overlap. Failure
+originalLocation:193 was a fixture precondition: it required Original indexes before the worker's
+canonical-routing turn. Actual source/adoption/startup succeeded; no provider page yet. Preserved
+fixtureff8e0fdf-5fa1-474f-89e8-dd72ccef82a7 and failed-worker-candidate-1. Index checks now execute in
+readOriginalPage, before both first-page and final content reads; registration still derives coordinates.
+Format3/52678 REAPED35.061s; proof3/8155 REAPED21/117.93s, audit77728 REAPED14,512 (21fresh).
+Manifest8f182851a28e120cc58237ebf67ecf535c47baa289069c10cb783d82f30a0b27;
+APK149932877B/f2813c5494dba52e4453e3c3ba58242d16fa656f40edf71326ad7bc5bbd5cba0.
+
+Worker2/23815 REAPED FAILED126.267s/1: first Company page had one message before EOF, two provider
+pages ran, but wake remained after four registered turns (consumeScheduled:102). Zero active HTTP
+failures and no storage failures. Native18/reg1/bootstrap1; Matrix27/send4/sync5/secret2/provider2.
+Preserve fixturebe486691-5ba5-4780-9e8a-d0d8bc5fbf57, worker-2 userdata, and failed-worker-candidate-2.
+The remaining queue has NOT yet been diagnosed; do not call this an infinite loop or raise limits.
+
+Current sixth fixture file is MatrixProofInstrumentation, adding emulator-only event-reads-worker-state.
+HrisSpaceIncomingProofHost reads retained work and Company history without starting sources/workers;
+it verifies unchanged demand and unopened runtime. Probe prints only bounded counts/phase/flags.
+Format4/27783 REAPED35.959s; proof4/62619 REAPED21/122.112s, audit38799 REAPED14,512 (21fresh).
+Six-file/5131-input manifest468eccceccefe20f481b04abab7f4252e69e75680ff026bf9d9001fc2db532f4;
+APK149939870B/29eb096c6ed4565613c271315524c8a69f9d97184c79d4a85601ef14825cb3b2.
+Group inspect-clone.py / session64461 ACTIVE: clones worker-2 data and encryption images, checks
+relative qcow backing stays in clone, upgrades only cloned proof package, preserves app identity,
+disables data/Wi-Fi, and reads the new scenario. It never touches phone or original failed images.
+Output under Group .work/space-original-worker-native-2026-11-12/inspect-worker-2; reap and inspect
+retained-state.json. Original source-image hashes must remain identical. No compiler until reaped.
+Then diagnose the remaining work before changing production. Native config still points proof-3;
+set it explicitly to the accepted candidate before any fresh test. Do not blindly rerun worker-2.
 Initial prep assertion rejected private Python bytecode before Group writes; corrected by selecting
 only actual draft source files. Preparation did not drop any source or test.
 
@@ -113,9 +166,11 @@ Apple artifact13933157085/803728B/d1518594c2d29536de8a3487161d900cfb712af942a8ff
 report/log hashes. This is common Kotlin simulator validation, not native Matrix SDK8 Apple proof.
 Application incoming sources98fa082d: local14,497 accepted (12,459 fresh+2,038 unchanged),13 files/
 5,130 inputs/2cb91e7d99aa490f59289e984f94158b01e9bd40c6ba649a72664165575113db.
-CI43186091942 portable12,475 audited1434 REAPED; one Apple retry95997 submitted09:20:02.265532UTC
-after proven Maven Central429. Apple131088394619 still running, portable reattached131088396166.
-Expected17,552. Do not submit another retry. Source-specific .work audit records remain authoritative.
+CI43186091942 FULL17,552 accepted:12,475 portable +5,077 Apple. Apple audit36067 REAPED;
+artifact13936256127/803482B/3f8d39ed49a0e3ecb0d49779822bc90b3b64be6581707f73501c0c9835224f25.
+One failed-job retry after documented Maven Central429 passed; do not retry or poll again.
+[Application CI measurement](measurements/collaboration-space-application-sources-ci-2026-11-12.json)
+contains whitelisted counts/artifact/report/log hashes. Apple host build passed; no native SDK8 iPhone claim.
 Consumer43176939497 FULL17,470; targeted43172811544 FULL17,314; binding43168158361 FULL17,170;
 lifecycle43165090113 FULL17,085 audited. Historical gaps remain in the linked history.
 

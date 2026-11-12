@@ -1,0 +1,43 @@
+{
+  "sourceCommit": "98fa082d77a72caae69dc1e4fc870ed2d23f9a60",
+  "runId": 43186091942,
+  "validatedTests": 17552,
+  "portable": {
+    "sourceCommit": "98fa082d77a72caae69dc1e4fc870ed2d23f9a60",
+    "runId": 43186091942,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43186091942",
+    "jobId": 131073504569,
+    "artifactId": 13930690541,
+    "bytes": 4028143,
+    "sha256": "14e1bed13c5f6f741f12d5d36f99d5fa1c885dab568d2bf00979ca176d619129",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreserved": true,
+    "counts": {
+      "desktopTest": 5964,
+      "testAndroidHostTest": 947,
+      "wasmJsBrowserTest": 5564
+    },
+    "reportManifestSha256": "354e563d7051b74d1e7d283d506ead93e0ba3e350b95fb4f3c2c1c605c633ed0",
+    "jobLogSha256": "fb39e03918363d70fc743ebf2a6ddcc80c212c449643d00b81442abcf0e467e0"
+  },
+  "apple": {
+    "sourceCommit": "98fa082d77a72caae69dc1e4fc870ed2d23f9a60",
+    "runId": 43186091942,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43186091942",
+    "jobId": 131088394619,
+    "artifactId": 13936256127,
+    "bytes": 803482,
+    "sha256": "3f8d39ed49a0e3ecb0d49779822bc90b3b64be6581707f73501c0c9835224f25",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreserved": true,
+    "counts": {
+      "iosSimulatorArm64Test": 5077
+    },
+    "reportManifestSha256": "13a02a14c97ce9461189f52dc9b7c3db7c42461e134f9a06b23e3b43fb0e5f5b",
+    "jobLogSha256": "1000037229c887d6338d00e627d95039e55d90afbe52eef9b0881b54b42f933f"
+  },
+  "notes": [
+    "Initial Apple attempt failed before tests because Maven Central returned HTTP429. One failed-job retry passed.",
+    "Apple common Kotlin tests and application host build passed; this is not a native Matrix SDK8 iPhone execution claim."
+  ]
+}

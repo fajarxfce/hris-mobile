@@ -27,3 +27,5 @@ counts, late keys, storage uncertainty, offline/restart and Apple native impleme
 separate acceptance work. The live Group gate and services are unchanged.
 
 [Exact validation evidence](measurements/collaboration-space-application-sources-2026-11-12.json).
+
+Hosted validation for source98fa082d is complete:17,552 cases (12,475 portable and5,077 Apple), with exact predecessor case identities and artifact hashes checked. The [CI measurement](measurements/collaboration-space-application-sources-ci-2026-11-12.json) records the one Apple dependency-resolution retry. The Apple host build passed; native Matrix SDK8 acceptance remains separate.
