@@ -1,12 +1,33 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 20:27 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 20:45 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
 is waived; native Apple/call/push behavior is not accepted merely by compilation.
 
 ## Current next implementation
+
+ACTIVE: canonical thread commands in Mobile.work/canonical-thread-commands-2026-11-12.
+15 source paths change,5167 inputs: existing canonical observer evolves to
+ObserveCollaborationSpaceThread, returning typed history plus separate Space/Original
+command lists. No API/SDK/mutation or Company reads for Space-only rooms. Old history
+assertions inspect the same nested component; no prior test IDs removed.
+Format1/39167 REAPED PASS36.269s. Focused1/42217 REAPED234.510s,51 cases/2 failures:
+42 domain cases pass; both new data failures assumed reopen retained the old local
+session. Existing Scenario.reopen also renews login. Preserve failed-storage-fixture-1.
+Tests now require the new access explicitly, retain all content comparisons, reject
+old-session lookup and read originals through renewed Company access. Production was
+not changed for those fixture failures. App DI2 did not run after the data failures.
+
+Review found a separate concern: combine waits for all first values before propagating
+a known failure. New deterministic case aKnownCommandFailureDoesNotWaitForAnotherCommandStore
+holds the original source and expects the canonical failure immediately. It has not run.
+Format2/88470 REAPED PASS35.045s. Red-fast-1/36525 ACTIVE from20:43; expect one
+real failure with current production. Frozen5167inputs/4aac27ec2961a30229c6060ca037fed5d7726ee0e43ddb6d435c7004ed85ebb9. Preserve the red candidate, fix the read-state
+composition only after evidence, keep all assertions, rerun focused expected54 and
+full expected14724 with prior14688 IDs. No full/current native claim for these edits yet.
+No source edits or second compiler/emulator until the active red compiler is reaped.
 
 Company thread publication is ACCEPTED: Mobile151438b4ba85f599fb2eefc080a6ac15423ac6e1,
 Group6158096d evidence (later Group1480acdf records hosted progress). Both pushed.
@@ -19,11 +40,11 @@ Preserve red1 (16cases/one real failure,3values instead of2), failed-publication
 and exact111 historical excluded XML/657 cases. Source/native acceptance is finished; do not rerun.
 
 Release92 is fully ACCEPTED and UNINSTALLED; see Phone delivery below. No local heavy process
-remains after ARM build39435 and verifier38284 REAPED. App sources may now change.
+remains after ARM build39435 and verifier38284 REAPED. The release gates are finished; the new source formatter above is active.
 
 NEXT: implement canonical bound-room pending-command projection in the existing observer.
 Mobile.work/canonical-thread-commands-2026-11-12 has plan.json and a verified14688-case
-baseline (1455 reports), current source manifest and historical native10. No source edits yet.
+baseline (1455 reports), current source manifest and historical native10. Source implementation and validation are active as recorded above.
 Evolve ObserveCollaborationSpaceThreadHistory into ObserveCollaborationSpaceThread, keeping
 CollaborationSpaceThreadHistory as the typed history component of a new thread snapshot.
 Add separate Space/Original Company command lists; never coerce ownership or collapse equal
@@ -83,21 +104,21 @@ loge91af91423786ab3bfabc2351a7092696633806add4044c676bc337ee28b3f50.
 Portableauditor13912 accepted12,604; Chrome156→157 changed only launcher suffix on5,601 old
 cases. Failed auditor/audit-correction retained. Both compact measurements updated. Do not rerun.
 
-Store43279731370 on836ac52575daf1747aac1cf94a6768a80998023f: PORTABLE ACCEPTED12,604;
-auditor42655 REAPED. Job131439574875 success. Artifact13979103864/4047761B/
-46d6243020390461076118757d53c002d4ea33966db6a10908b48964b5493bd7;
-report865d8fb4dfd65dc9b2dab91ed7ac356b2d3d38c9e01c434e9192ef725a47f18e;
-log6ea31e8b1fecaeb4d96afaa35fb03af4791999c871fb0ae111a6c2a1c197411c.
-Prepared config wrongly copied the prior Chrome156→157 replacement; all current browser
-reports are156 and preserve original case IDs directly. Failed config/auditor22498 and
-correction retained; no normalization, test rerun or source change. Apple131439575160
-still in progress; run Mobile.work/apple-sdk-store-2026-11-12/hosted-audit.py apple
-hosted-43279731370 after success; expected5,156Apple including13inventory and8store methods.
+Store43279731370 on836ac52575daf1747aac1cf94a6768a80998023f is FULLY ACCEPTED:
+12,604portable +5,156native iOS =17,760. Portable42655 and Apple76810 REAPED; no rerun.
+Appleartifact13981937933/815305B/b74647c86112a58ae525e4ea6d096458f20dfddae47680f50d8a1b2a53833cae;
+report32203e2d29e44a9197a695b1506e4ae00ba0a059b4de03e5b46cecdb024d5aff;
+log70d167799a99029438f15c02abdf579ceaedd6354ccf461200c70e85642a56e8.
+All8 new store and13 unchanged inventory methods execute; prior IDs, host build and
+push fields verified. Portableartifact13979103864/4047761B/46d6243020390461076118757d53c002d4ea33966db6a10908b48964b5493bd7.
+Prepared config incorrectly copied a Chrome156→157 replacement; actual current browser
+reports are156, matching the baseline directly. Failed config/auditor22498 and correction
+retained; no case normalization, test rerun or source change. Both audits finished.
 
-New control43297910558 on151438b4ba85f599fb2eefc080a6ac15423ac6e1 is PENDING behind store.
-It covers canonical history + Company cancellation, expected12,666portable +5,187Apple =17,853.
-Mobile.work/company-thread-publication-2026-11-12/hosted-control/state.json and hosted-audit.py
-are prepared. Dispatch48900 REAPED. DO NOT dispatch another pending same-branch control run.
+Control43297910558 on151438b4ba85f599fb2eefc080a6ac15423ac6e1 has STARTED:
+portable131478498528 running, Apple131478499227 queued at20:44. Expected12,666portable
++5,187Apple =17,853. Mobile.work/company-thread-publication-2026-11-12/hosted-control
+state and hosted-audit.py prepared; neither audit run. Do not dispatch multiple pending runs.
 Inventory and store local main ARM64/metadata, all21 native-test method compilation and full
 `:check` pass. Linux executed0 Apple cases. Both adapters require a pre-provisioned private,
 backup-excluded root; store creation and existing-only access remain separate. No product binding.

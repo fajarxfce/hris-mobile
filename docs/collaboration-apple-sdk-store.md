@@ -39,5 +39,8 @@ inventory contention, partial/empty stores, redirected entries, failed cleanup
 and cancellation in both acquisition modes. Compilation and native execution
 are tracked separately in `.work/apple-sdk-store-2026-11-12`; local format/static checks, ARM64/metadata and21 simulator-test method compilation,
 and full `:check` pass. The14,626 unchanged-platform reports retain exact accepted
-hashes; no new test executes on Linux. Native Apple execution remains pending. No Apple product binding, SDK publication,
+hashes; no new test executes on Linux. Hosted run43279731370 now executes all21 Apple store/inventory methods and accepts
+5,156 native iOS cases plus12,604 portable cases. Artifact digests, original case identities,
+unsigned host build and push-envelope checks pass. See the compact
+[hosted evidence](measurements/collaboration-apple-sdk-store-2026-11-12.json). No Apple product binding, SDK publication,
 key generation or live Group activation is included.
