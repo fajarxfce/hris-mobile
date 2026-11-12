@@ -52,7 +52,7 @@ Read the Git room-key retention plan. Keep metadata before demand and90s worker 
 
 Targeted source f969fd73 and Group88f66458 were pushed; hosted43172811544 dispatched ONCE
 07:06:21.309506UTC, session78248 REAPED. Both jobs pending at07:17; expected17,314.
-Lifecycle43165090113 both jobs succeeded, Apple audit18114 ACTIVE; portable12,142 already audited.
+Lifecycle43165090113 FULL17,085 =portable12,142 +Apple4,943 audited; Apple18114 REAPED.
 Binding43168158361 portable12,205 already audited, Apple pending. Mailbox43161963820 FULL17,004
 already audited. Never infer acceptance from status or redispatch these runs.
 
