@@ -9,6 +9,36 @@ import kotlinx.coroutines.test.runTest
 
 class ReadCollaborationSpaceOriginalIncomingReferencesTest {
     @Test
+    fun supersededProviderCaptureCannotStartReadingReferences() = runTest {
+        val f = SpaceOriginalPendingReadFixture()
+        f.capture(f.room.captured.copy(phase = CollaborationSpaceIncomingPhase.Provider))
+        val old = f.room
+        f.capture(f.room.captured.copy(generation = f.base.id(999)))
+        assertEquals(AppResult.Success(null), f.read(f.base.runtime, old))
+        assertTrue(f.requests.isEmpty())
+        assertEquals(0, f.transition.writes)
+        assertTrue(f.provider.saved.isEmpty())
+    }
+
+    @Test
+    fun providerPageExposesBoundedOwnedReferencesBeforeEofWithoutMovingAnyPosition() = runTest {
+        val f = SpaceOriginalPendingReadFixture()
+        f.capture(f.room.captured.copy(phase = CollaborationSpaceIncomingPhase.Provider))
+        val previous = requireNotNull(f.provider.progress).copy(next = "next-provider-page")
+        f.provider.progress = previous
+        val page =
+            assertNotNull(
+                assertIs<AppResult.Success<CollaborationHistoryReferences?>>(f.run()).value
+            )
+        assertEquals(f.events, page.events)
+        assertEquals(previous, page.progress)
+        assertFalse(requireNotNull(page.progress).exhausted)
+        assertEquals(listOf<Pair<String?, Int>>(null to 16), f.requests)
+        assertEquals(0, f.transition.writes)
+        assertTrue(f.provider.saved.isEmpty())
+    }
+
+    @Test
     fun readsOriginalCompanyAndPhysicalDeviceWithoutNetworkOrWrites() = runTest {
         val f = SpaceOriginalPendingReadFixture()
         val result =
@@ -25,17 +55,11 @@ class ReadCollaborationSpaceOriginalIncomingReferencesTest {
     }
 
     @Test
-    fun providerPhasesCannotStartAPendingPass() = runTest {
-        for (phase in
-            listOf(
-                CollaborationSpaceIncomingPhase.Latest,
-                CollaborationSpaceIncomingPhase.Provider,
-            )) {
-            val f = SpaceOriginalPendingReadFixture()
-            f.capture(f.room.captured.copy(phase = phase))
-            assertEquals(FailureKind.Validation, assertIs<AppResult.Failed>(f.run()).failure.kind)
-            assertTrue(f.provider.calls.isEmpty())
-        }
+    fun latestWithoutARetainedPageCannotReadIncomingReferences() = runTest {
+        val f = SpaceOriginalPendingReadFixture()
+        f.capture(f.room.captured.copy(phase = CollaborationSpaceIncomingPhase.Latest))
+        assertEquals(FailureKind.Validation, assertIs<AppResult.Failed>(f.run()).failure.kind)
+        assertTrue(f.provider.calls.isEmpty())
     }
 
     @Test

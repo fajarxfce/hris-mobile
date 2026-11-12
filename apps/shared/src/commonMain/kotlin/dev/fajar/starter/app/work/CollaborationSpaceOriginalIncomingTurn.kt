@@ -84,9 +84,6 @@ class CollaborationSpaceOriginalIncomingTurn(
             val reloaded = room(runtime, retained)
             if (reloaded is AppResult.Failed) return reloaded
             current = (reloaded as AppResult.Success).value ?: return AppResult.Success(true)
-            // Yield remaining work through the existing queue owner without a retry deadline.
-            if (current.captured.phase != CollaborationSpaceIncomingPhase.Pending)
-                return AppResult.Success(false)
         }
         return receivePending(runtime, current)
     }
@@ -118,6 +115,10 @@ class CollaborationSpaceOriginalIncomingTurn(
         val resolved = completeReferences(runtime, current, references, batch)
         if (resolved is AppResult.Failed) return resolved
         val completion = (resolved as AppResult.Success).value ?: return AppResult.Success(true)
+        // Content is visible before provider EOF. The next page still owns this primary task;
+        // missing keys cannot demote it or discharge its wake while pagination remains.
+        if (current.captured.phase == CollaborationSpaceIncomingPhase.Provider)
+            return AppResult.Success(false)
         val completed = completeRoom(runtime, current)
         if (completed is AppResult.Failed || (completed as AppResult.Success).value)
             return completed

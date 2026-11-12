@@ -9,6 +9,25 @@ import kotlinx.coroutines.test.runTest
 
 class CompleteCollaborationSpaceOriginalIncomingReferencesTest {
     @Test
+    fun providerOutcomesResolveBeforeEofWithoutAdvancingProviderOrRetiringPrimaryWork() = runTest {
+        val f = SpaceOriginalReferenceCompletionFixture()
+        f.pending.capture(
+            f.pending.room.captured.copy(phase = CollaborationSpaceIncomingPhase.Provider)
+        )
+        val progress = requireNotNull(f.provider.progress).copy(next = "next-provider-page")
+        f.provider.progress = progress
+        f.references = f.references.copy(progress = progress)
+        f.acquired()
+        assertEquals(CollaborationSpaceIncomingReferenceCompletion(2, 0, false, false), success(f))
+        assertEquals(f.references.events, f.committed)
+        assertEquals(1, f.advances.size)
+        assertEquals(progress, f.provider.progress)
+        assertEquals(0, f.pending.transition.writes)
+        assertTrue(f.provider.saved.isEmpty())
+        assertTrue(f.provider.requests.isEmpty())
+    }
+
+    @Test
     fun retainedBatchResolvesBeforeAdvancingOnlyItsOriginalCompanySeek() = runTest {
         val f = SpaceOriginalReferenceCompletionFixture()
         assertEquals(CollaborationSpaceIncomingReferenceCompletion(2, 0, false, false), success(f))
@@ -276,7 +295,7 @@ class CompleteCollaborationSpaceOriginalIncomingReferencesTest {
             f.complete(
                 f.runtime,
                 room.copy(
-                    captured = room.captured.copy(phase = CollaborationSpaceIncomingPhase.Provider)
+                    captured = room.captured.copy(phase = CollaborationSpaceIncomingPhase.Latest)
                 ),
                 f.references,
                 f.batch,

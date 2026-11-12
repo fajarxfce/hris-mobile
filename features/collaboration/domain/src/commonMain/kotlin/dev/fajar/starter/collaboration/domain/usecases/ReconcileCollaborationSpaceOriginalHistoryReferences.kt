@@ -30,8 +30,7 @@ class ReconcileCollaborationSpaceOriginalHistoryReferences(
     ): AppResult<CollaborationHistoryReconciliation?> {
         currentCoroutineContext().ensureActive()
         if (
-            !validCollaborationSpaceOriginalIncomingRoom(runtime, room) ||
-                room.captured.phase != CollaborationSpaceIncomingPhase.Pending ||
+            !validCollaborationSpaceOriginalIncomingContentRoom(runtime, room) ||
                 references.events.size > 16
         )
             return changed(FailureKind.Validation)

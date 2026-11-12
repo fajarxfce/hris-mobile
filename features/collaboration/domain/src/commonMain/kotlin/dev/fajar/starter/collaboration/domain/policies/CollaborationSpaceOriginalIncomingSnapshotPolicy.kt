@@ -11,8 +11,7 @@ fun validCollaborationSpaceOriginalIncomingSnapshot(
     eventId: String,
 ): Boolean {
     if (
-        !validCollaborationSpaceOriginalIncomingRoom(runtime, room) ||
-            room.captured.phase != CollaborationSpaceIncomingPhase.Pending ||
+        !validCollaborationSpaceOriginalIncomingContentRoom(runtime, room) ||
             !validCollaborationSpaceIncomingSource(source) ||
             source.storeId != room.captured.sourceId ||
             !validCollaborationEventId(eventId)

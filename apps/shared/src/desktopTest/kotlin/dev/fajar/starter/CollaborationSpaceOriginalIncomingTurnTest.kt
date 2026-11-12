@@ -12,6 +12,81 @@ import kotlinx.coroutines.test.*
 
 class CollaborationSpaceOriginalIncomingTurnTest {
     @Test
+    fun cancellationBeforeProviderEofJoinsEveryContentStageAndKeepsPrimaryWork() = runTest {
+        for (stage in
+            listOf("references-1", "reconcile", "references-2", "events", "complete-references")) {
+            val f = SpaceOriginalIncomingTurnFixture(testScheduler)
+            f.providerMore = true
+            val entered = CompletableDeferred<Unit>()
+            var stopped = false
+            f.before = {
+                if (it == stage)
+                    try {
+                        entered.complete(Unit)
+                        awaitCancellation()
+                    } finally {
+                        stopped = true
+                    }
+            }
+            val job = async { f.run() }
+            entered.await()
+            job.cancelAndJoin()
+            assertTrue(stopped, stage)
+            assertEquals(CollaborationSpaceIncomingPhase.Provider, f.current?.phase)
+            assertEquals("next-page", f.progress?.next)
+            assertFalse(f.calls.any { it in setOf("complete-room", "demote-room", "recover") })
+        }
+    }
+
+    @Test
+    fun missingKeysBeforeProviderEofKeepPrimaryPaginationInsteadOfDemotion() = runTest {
+        val f = SpaceOriginalIncomingTurnFixture(testScheduler)
+        f.providerMore = true
+        f.retryRequired = true
+        f.demoteResult = true
+        assertEquals(AppResult.Success(false), f.run())
+        assertEquals(CollaborationSpaceIncomingPhase.Provider, f.current?.phase)
+        assertEquals(1, f.completionSources.size)
+        assertTrue(f.demotionCaptures.isEmpty())
+        assertFalse(f.calls.any { it in setOf("complete-room", "demote-room", "recover") })
+    }
+
+    @Test
+    fun retainedProviderContentAvoidsEventReadsAndKeepsItsNextPosition() = runTest {
+        val f = SpaceOriginalIncomingTurnFixture(testScheduler)
+        f.providerMore = true
+        f.localEventIds = f.references.map { it.event.eventId }.toSet()
+        assertEquals(AppResult.Success(false), f.run())
+        assertTrue(f.contentRequests.isEmpty())
+        assertEquals("next-page", f.progress?.next)
+        assertEquals(1, f.completionSources.size)
+        assertFalse("complete-room" in f.calls)
+    }
+
+    @Test
+    fun providerContentFailurePreservesCommittedPageForTheNextTurn() = runTest {
+        val f = SpaceOriginalIncomingTurnFixture(testScheduler)
+        f.providerMore = true
+        f.failures["events"] = f.failure
+        assertEquals(AppResult.Failed(f.failure), f.run())
+        assertEquals("next-page", f.progress?.next)
+        assertEquals(CollaborationSpaceIncomingPhase.Provider, f.current?.phase)
+        assertTrue(f.completionSources.isEmpty())
+        assertFalse(f.calls.any { it in setOf("complete-room", "demote-room", "recover") })
+    }
+
+    @Test
+    fun changedProviderCaptureBeforeLocalReconciliationCannotAcquireContent() = runTest {
+        val f = SpaceOriginalIncomingTurnFixture(testScheduler)
+        f.providerMore = true
+        f.nullAt = "reconcile"
+        assertEquals(AppResult.Success(true), f.run())
+        assertTrue(f.contentRequests.isEmpty())
+        assertTrue(f.completionSources.isEmpty())
+        assertEquals(CollaborationSpaceIncomingPhase.Provider, f.current?.phase)
+    }
+
+    @Test
     fun providerCompletionReloadsThePersistedPendingCaptureBeforeAcquiringOnlyUnresolvedEvents() =
         runTest {
             val f = SpaceOriginalIncomingTurnFixture(testScheduler)
@@ -52,15 +127,21 @@ class CollaborationSpaceOriginalIncomingTurnTest {
     }
 
     @Test
-    fun incompleteProviderPageFinishesOneTurnWithoutTreatingItAsMissingKeys() = runTest {
+    fun incompleteProviderPageRetainsContentBeforeYieldingItsNextPage() = runTest {
         val f = SpaceOriginalIncomingTurnFixture(testScheduler)
         f.providerMore = true
         assertEquals(AppResult.Success(false), f.run())
         assertEquals(CollaborationSpaceIncomingPhase.Provider, f.current?.phase)
         assertEquals(1, f.providerReads)
-        assertTrue(f.contentRequests.isEmpty())
-        assertEquals(0, f.referenceReads)
-        assertFalse("complete-room" in f.calls || "recover" in f.calls)
+        assertEquals(listOf(listOf("$" + "remote")), f.contentRequests)
+        assertEquals(
+            CollaborationSpaceIncomingPhase.Provider,
+            f.contentRooms.single().captured.phase,
+        )
+        assertEquals(2, f.referenceReads)
+        assertEquals(1, f.completionSources.size)
+        assertFalse(requireNotNull(f.progress).exhausted)
+        assertFalse(f.calls.any { it in setOf("complete-room", "demote-room", "recover") })
     }
 
     @Test

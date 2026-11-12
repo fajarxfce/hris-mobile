@@ -10,6 +10,19 @@ import kotlinx.coroutines.test.runTest
 
 class AcquireCollaborationSpaceOriginalEventsTest {
     @Test
+    fun providerCaptureRetainsOriginalContentUnderItsExactCompanyAndDevice() = runTest {
+        val f = SpaceOriginalIncomingContentFixture(CollaborationSpaceIncomingPhase.Provider)
+        f.put(f.source())
+        val result = success(f, listOf("\$original"))
+        assertEquals(f.request, result.room)
+        assertEquals(f.physical.companyId, result.room.conversation.conversation.position.companyId)
+        assertNotEquals(f.runtime.deviceId, result.room.traversal.deviceId)
+        assertEquals(1, f.originalWrites.size)
+        assertTrue(f.base.saved.isEmpty())
+        assertTrue(f.base.requests.isEmpty())
+    }
+
+    @Test
     fun rejectsEmptyOversizedRepeatedAndMalformedInputsBeforeIo() = runTest {
         for (ids in
             listOf(
@@ -159,33 +172,45 @@ class AcquireCollaborationSpaceOriginalEventsTest {
 
     @Test
     fun wrongPhysicalOwnerDeviceRoomOrLogicalRuntimeNeverReachesStorage() = runTest {
-        val seed = SpaceOriginalIncomingContentFixture()
-        seed.put(seed.source())
-        val snap = seed.snapshots.getValue("\$original")
-        val p = snap.physical
-        val variants =
+        for (phase in
             listOf(
-                snap.copy(runtime = snap.runtime.copy(operationId = seed.local.id(999))),
-                snap.copy(physical = p.copy(owner = p.owner.copy(sessionId = "different"))),
-                snap.copy(
-                    physical = p.copy(owner = p.owner.copy(audience = "https://different.example"))
-                ),
-                snap.copy(physical = p.copy(owner = p.owner.copy(accountId = seed.local.id(999)))),
-                snap.copy(physical = p.copy(owner = p.owner.copy(companyId = seed.local.id(999)))),
-                snap.copy(
-                    physical = p.copy(owner = p.owner.copy(nativeSessionId = seed.local.id(998)))
-                ),
-                snap.copy(physical = p.copy(deviceId = seed.local.id(999))),
-                snap.copy(physical = p.copy(roomId = "!other:example.test")),
-                snap.copy(physical = p.copy(roomJoined = false)),
-                snap.copy(physical = p.copy(roomEncrypted = false)),
-                snap.copy(physical = p.copy(event = p.event.copy(eventId = "\$different"))),
-            )
-        for (value in variants) {
-            val f = SpaceOriginalIncomingContentFixture()
-            f.snapshots["\$original"] = value
-            assertIs<AppResult.Failed>(f.acquire(f.runtime, f.request, listOf("\$original")))
-            assertTrue(f.originalWrites.isEmpty())
+                CollaborationSpaceIncomingPhase.Provider,
+                CollaborationSpaceIncomingPhase.Pending,
+            )) {
+            val seed = SpaceOriginalIncomingContentFixture(phase)
+            seed.put(seed.source())
+            val snap = seed.snapshots.getValue("\$original")
+            val p = snap.physical
+            val variants =
+                listOf(
+                    snap.copy(runtime = snap.runtime.copy(operationId = seed.local.id(999))),
+                    snap.copy(physical = p.copy(owner = p.owner.copy(sessionId = "different"))),
+                    snap.copy(
+                        physical =
+                            p.copy(owner = p.owner.copy(audience = "https://different.example"))
+                    ),
+                    snap.copy(
+                        physical = p.copy(owner = p.owner.copy(accountId = seed.local.id(999)))
+                    ),
+                    snap.copy(
+                        physical = p.copy(owner = p.owner.copy(companyId = seed.local.id(999)))
+                    ),
+                    snap.copy(
+                        physical =
+                            p.copy(owner = p.owner.copy(nativeSessionId = seed.local.id(998)))
+                    ),
+                    snap.copy(physical = p.copy(deviceId = seed.local.id(999))),
+                    snap.copy(physical = p.copy(roomId = "!other:example.test")),
+                    snap.copy(physical = p.copy(roomJoined = false)),
+                    snap.copy(physical = p.copy(roomEncrypted = false)),
+                    snap.copy(physical = p.copy(event = p.event.copy(eventId = "\$different"))),
+                )
+            for (value in variants) {
+                val f = SpaceOriginalIncomingContentFixture(phase)
+                f.snapshots["\$original"] = value
+                assertIs<AppResult.Failed>(f.acquire(f.runtime, f.request, listOf("\$original")))
+                assertTrue(f.originalWrites.isEmpty())
+            }
         }
     }
 
@@ -367,18 +392,15 @@ class AcquireCollaborationSpaceOriginalEventsTest {
     }
 
     @Test
-    fun providerPhasesCannotReadContentBeforePendingOwnership() = runTest {
-        for (phase in
-            listOf(
-                CollaborationSpaceIncomingPhase.Latest,
-                CollaborationSpaceIncomingPhase.Provider,
-            )) {
-            val f = SpaceOriginalIncomingContentFixture()
-            val wrong = f.request.copy(captured = f.request.captured.copy(phase = phase))
-            assertIs<AppResult.Failed>(f.acquire(f.runtime, wrong, listOf("\$original")))
-            assertTrue(f.base.calls.isEmpty())
-            assertEquals(0, f.local.sourceReads)
-        }
+    fun latestWithoutARetainedPageCannotAcquireContent() = runTest {
+        val f = SpaceOriginalIncomingContentFixture()
+        val wrong =
+            f.request.copy(
+                captured = f.request.captured.copy(phase = CollaborationSpaceIncomingPhase.Latest)
+            )
+        assertIs<AppResult.Failed>(f.acquire(f.runtime, wrong, listOf("\$original")))
+        assertTrue(f.base.calls.isEmpty())
+        assertEquals(0, f.local.sourceReads)
     }
 
     @Test

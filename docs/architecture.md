@@ -83,6 +83,8 @@ handles. Runtime binding and durable inventory coverage remain separate from thi
 [Canonical alias handoff](collaboration-space-logical-alias-routing.md) converts retained LEGACY demand into fresh Original work
 through the existing resolver and worker, preserving source progress and independent producer demand.
 
+[Progressive Original content](collaboration-original-progressive-content.md) retains bounded Company message content after each provider page while preserving primary pagination and independent queue completion.
+
 [Original application turns](collaboration-space-original-application-turn.md) run Company-backed incoming work inside the existing
 worker lifetime, reconciling retained facts before finite acquisition and independent completion.
 

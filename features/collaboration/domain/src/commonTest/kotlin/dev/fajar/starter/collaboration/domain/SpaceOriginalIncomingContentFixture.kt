@@ -8,11 +8,12 @@ import dev.fajar.starter.common.result.*
 import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.Flow
 
-internal class SpaceOriginalIncomingContentFixture {
+internal class SpaceOriginalIncomingContentFixture(
+    phase: CollaborationSpaceIncomingPhase = CollaborationSpaceIncomingPhase.Pending
+) {
     val base =
         SpaceOriginalProviderHistoryFixture().also {
-            it.base.captured =
-                it.base.captured.copy(phase = CollaborationSpaceIncomingPhase.Pending)
+            it.base.captured = it.base.captured.copy(phase = phase)
             it.base.demand(
                 requireNotNull(it.base.snapshot).demand.copy(rooms = listOf(it.base.captured))
             )

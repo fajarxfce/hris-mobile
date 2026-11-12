@@ -12,8 +12,7 @@ fun planCollaborationSpaceOriginalIncomingReferences(
 ): AppResult<CollaborationSpaceIncomingReferencePlan> {
     val progress = source.progress ?: return invalidIncomingReferences()
     if (
-        !validCollaborationSpaceOriginalIncomingRoom(runtime, room) ||
-            room.captured.phase != CollaborationSpaceIncomingPhase.Pending ||
+        !validCollaborationSpaceOriginalIncomingContentRoom(runtime, room) ||
             progress.provider != null
     )
         return invalidIncomingReferences()

@@ -32,8 +32,7 @@ class CompleteCollaborationSpaceOriginalIncomingReferences(
     ): AppResult<CollaborationSpaceIncomingReferenceCompletion?> {
         currentCoroutineContext().ensureActive()
         if (
-            !validCollaborationSpaceOriginalIncomingRoom(runtime, room) ||
-                room.captured.phase != CollaborationSpaceIncomingPhase.Pending ||
+            !validCollaborationSpaceOriginalIncomingContentRoom(runtime, room) ||
                 source.events.size > 16 ||
                 (batch != null && batch.items.size > 16)
         )

@@ -1,15 +1,14 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 10:05 UTC. Continue the PRD and push every commit. All54 groups OPEN.
+Updated 12 November 2026, 10:29 UTC. Continue the PRD and push every commit. All54 groups OPEN.
 No subagents. One compiler OR emulator. Phone install-only: announce, explicit serial, never launch
 or drive the phone UI, reset app data or uninstall. No final checkpoint response; continue the work.
 
 ## Current: progressive Company incoming content
 
-Mobile branch feat/chat-send-timing-20261107 HEAD7c3fca00; Group branch feat/communication-space
-HEAD1c36fb8b. Native receipt fixture/evidence commits pushed66088/90615 REAPED. Group is clean.
-Mobile has16 uncommitted production/test files for progressive content. Source commits/CI below are
-accepted independently; the current production change is still under full validation.
+The 16-file Mobile progressive-content change is locally accepted and being committed with this
+handoff and measurement. Base native fixture commits: Mobile7c3fca00 / Group1c36fb8b. Group receives
+documentation only for this change. Native worker acceptance remains the next task.
 
 Workspace `.work/space-original-progressive-content-2026-11-12` (Mobile). Exact baseline is the
 accepted native receipt fixture source now committed as7c3fca00;5,131 source inputs. Current16-file
@@ -35,13 +34,16 @@ confirmed non-exhausted progress and no early completion/demotion. Production un
 Do not rerun unchanged focused browser work merely for this test-only correction.
 Format3/3683 REAPED35.425s, no formatter edits, current16-file manifest above.
 
-Full2/34210 ACTIVE. run.py full-2 executes full check, Android host tests, release compile/lint,
-Wasm/iOS metadata, all baseline browser modules, proof APK/tests and architecture/format/detekt.
-No source/Inspector edits until reaped. After pass run accept-full.py full-2; expected14,512.
-Audit verifies immutable source/SDK/library inputs, predecessor IDs (except explicit7 replacements),
-archive hashes and unchanged dependency closures. No accepted full result or new proof APK yet.
-Then publish source evidence/docs, commit/push this16-file production change and dispatch hosted CI
-once with updated explicit test-renaming audit. Do not claim native acceptance of this new change.
+Full2/34210 REAPED PASSED in750.173s. Audit77429 REAPED accepted14,512:11,007 current full2,
+1,467 archived passing Data cases from full1 with identical dependencies, and2,038 unchanged baseline.
+The first audit87274 conservatively rejected Data XML hashes; its failure and corrected provenance
+remain archived. The only full1-to-full2 source delta is the unrelated app worker test expectation.
+ProofAPK149059016B/6080a8fe4f8c7c338f1a155c7b13797aedf23ea293ab0a74d91b1e7a6c87d2a7;
+SDK8x86 native hash6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95.
+See [measurement](measurements/collaboration-space-original-progressive-content-2026-11-12.json).
+Hosted plan/dispatch/audit scripts prepared in workspace; NOT dispatched yet. Expected17,572 =
+12,490 portable (5974/947/5569) +5082 Apple; baseline accepted runtime43182776077, explicit reviewed
+case replacements. Commit/push accepted source, then dispatch once while clean. No native claim.
 
 ## Next: actual canonical worker native acceptance
 

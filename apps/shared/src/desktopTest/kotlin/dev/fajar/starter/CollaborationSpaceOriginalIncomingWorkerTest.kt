@@ -42,7 +42,10 @@ class CollaborationSpaceOriginalIncomingWorkerTest {
         assertNull(f.worker.deferred.single().second)
         assertTrue(assertNotNull(f.current).position > f.captured.position)
         assertNull(assertNotNull(f.current).retry)
-        assertTrue(f.contentRequests.isEmpty())
+        assertEquals(listOf(listOf("$" + "remote")), f.contentRequests)
+        assertEquals(1, f.completionSources.size)
+        assertFalse(assertNotNull(f.progress).exhausted)
+        assertFalse(f.calls.any { it in setOf("complete-room", "demote-room", "recover") })
     }
 
     @Test

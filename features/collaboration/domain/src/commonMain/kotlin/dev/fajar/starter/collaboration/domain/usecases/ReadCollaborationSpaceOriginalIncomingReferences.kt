@@ -28,10 +28,7 @@ class ReadCollaborationSpaceOriginalIncomingReferences(
         room: CollaborationSpaceOriginalIncomingRoom,
     ): AppResult<CollaborationHistoryReferences?> {
         currentCoroutineContext().ensureActive()
-        if (
-            !validCollaborationSpaceOriginalIncomingRoom(runtime, room) ||
-                room.captured.phase != CollaborationSpaceIncomingPhase.Pending
-        )
+        if (!validCollaborationSpaceOriginalIncomingContentRoom(runtime, room))
             return changed(FailureKind.Validation)
         return withTimeoutOrNull(5_000) {
             val source = sync.incomingSource(runtime)

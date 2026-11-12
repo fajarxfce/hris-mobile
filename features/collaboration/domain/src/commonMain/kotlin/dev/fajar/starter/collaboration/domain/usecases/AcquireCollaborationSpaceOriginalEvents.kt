@@ -100,8 +100,7 @@ class AcquireCollaborationSpaceOriginalEvents(
         val validOrigin =
             when (origin) {
                 is OriginalEventOrigin.Incoming ->
-                    validCollaborationSpaceOriginalIncomingRoom(runtime, origin.room) &&
-                        origin.room.captured.phase == CollaborationSpaceIncomingPhase.Pending
+                    validCollaborationSpaceOriginalIncomingContentRoom(runtime, origin.room)
                 is OriginalEventOrigin.KeyHistory ->
                     validCollaborationSpaceOriginalKeyHistory(runtime, origin.history)
             }

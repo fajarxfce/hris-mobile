@@ -9,6 +9,25 @@ import kotlinx.coroutines.test.runTest
 
 class ReconcileCollaborationSpaceOriginalHistoryReferencesTest {
     @Test
+    fun providerReferencesReconcileRetainedFactsWithoutChangingPagination() = runTest {
+        val f = SpaceOriginalHistoryReconciliationFixture()
+        f.pending.capture(
+            f.pending.room.captured.copy(phase = CollaborationSpaceIncomingPhase.Provider)
+        )
+        val progress = requireNotNull(f.provider.progress).copy(next = "next-provider-page")
+        f.provider.progress = progress
+        f.references = f.references.copy(progress = progress)
+        f.retainOriginal()
+        f.retainReplacement()
+        assertEquals(CollaborationHistoryReconciliation(2, 0, null), success(f))
+        assertEquals(f.references.events, f.committed)
+        assertEquals(progress, f.provider.progress)
+        assertTrue(f.provider.requests.isEmpty())
+        assertTrue(f.provider.saved.isEmpty())
+        assertEquals(0, f.pending.transition.writes)
+    }
+
+    @Test
     fun exactOriginalAndReplacementFactsResolveWithoutProviderOrQueueWork() = runTest {
         val f = SpaceOriginalHistoryReconciliationFixture()
         f.retainOriginal()
@@ -163,12 +182,12 @@ class ReconcileCollaborationSpaceOriginalHistoryReferencesTest {
     }
 
     @Test
-    fun nonPendingAndOversizedInputsFailBeforeStorage() = runTest {
+    fun unpagedAndOversizedInputsFailBeforeStorage() = runTest {
         val f = SpaceOriginalHistoryReconciliationFixture()
         val room =
             f.pending.room.copy(
                 captured =
-                    f.pending.room.captured.copy(phase = CollaborationSpaceIncomingPhase.Provider)
+                    f.pending.room.captured.copy(phase = CollaborationSpaceIncomingPhase.Latest)
             )
         assertIs<AppResult.Failed>(f.reconcile(f.runtime, room, f.references))
         val oversized = f.references.copy(events = List(17) { f.pending.reference(it) })

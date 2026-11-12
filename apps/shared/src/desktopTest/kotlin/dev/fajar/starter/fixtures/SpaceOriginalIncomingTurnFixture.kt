@@ -188,7 +188,13 @@ internal class SpaceOriginalIncomingTurnFixture(
             },
             readReferences = { actual, local ->
                 assertEquals(runtime, actual)
-                assertEquals(CollaborationSpaceIncomingPhase.Pending, local.captured.phase)
+                assertTrue(
+                    local.captured.phase in
+                        setOf(
+                            CollaborationSpaceIncomingPhase.Provider,
+                            CollaborationSpaceIncomingPhase.Pending,
+                        )
+                )
                 referenceReads++
                 val name = "references-$referenceReads"
                 val failed = step(name)
@@ -215,7 +221,13 @@ internal class SpaceOriginalIncomingTurnFixture(
             },
             acquireEvents = { actual, local, ids ->
                 assertEquals(runtime, actual)
-                assertEquals(CollaborationSpaceIncomingPhase.Pending, local.captured.phase)
+                assertTrue(
+                    local.captured.phase in
+                        setOf(
+                            CollaborationSpaceIncomingPhase.Provider,
+                            CollaborationSpaceIncomingPhase.Pending,
+                        )
+                )
                 contentRequests += ids.toList()
                 contentRooms += local
                 val failed = step("events")

@@ -27,3 +27,12 @@ fun validCollaborationSpaceOriginalIncomingRoom(
         value.traversal.roomId == room.roomId &&
         value.traversal.purpose == CollaborationHistoryPurpose.Incoming
 }
+
+/** Content can consume retained references after a page commits, independently of provider EOF. */
+fun validCollaborationSpaceOriginalIncomingContentRoom(
+    runtime: CollaborationSpaceRuntimeReady,
+    value: CollaborationSpaceOriginalIncomingRoom,
+): Boolean =
+    validCollaborationSpaceOriginalIncomingRoom(runtime, value) &&
+        value.captured.phase in
+            setOf(CollaborationSpaceIncomingPhase.Provider, CollaborationSpaceIncomingPhase.Pending)
