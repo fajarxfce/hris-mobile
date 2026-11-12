@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 13:06 UTC. Continue the PRD and push every commit. All 54 acceptance groups OPEN.
+Updated 12 November 2026, 13:15 UTC. Continue the PRD and push every commit. All 54 acceptance groups OPEN.
 No subagents. One compiler OR emulator. Phone install-only: announce and select serial; never
 launch/drive UI, reset data or uninstall. Continue beyond checkpoints.
 
@@ -40,21 +40,28 @@ are correctly retained in Company/original-device history. Fix local coverage in
 case; don't copy facts into Space, suppress unknown work or weaken the final no-op assertion.
 Company coverage requires provider=null; Published Space uses non-null provider identity.
 
-Private `.work/space-original-covered-hint-2026-11-12` has source-review.md and TWO DRAFT domain
-files under draft/: a named pure original-coverage policy and QueueCollaborationSpaceIncomingRoom.
-They are NOT applied, formatted, compiled or tested. draft-base-files.json anchors existing source.
-Draft adds explicit owner/native-family admission, registered legacy Company/device matching,
-finite source/pending/repeated progress reads and registration fencing. Needs review, DI/caller
-updates and meaningful regression tests before application. Avoid assertions based on pagination
-token or matching IDs alone; preserve unknown/unclean work on normal alias routing.
+The eight-file coverage change is now APPLIED and uncommitted in Mobile. Workspace
+`.work/space-original-covered-hint-2026-11-12`, baseline accepted metadata6d9f745a/14,555 cases.
+Current5,136-input manifest715c8509eadb97a6ad773ae4d1f1c21a48dce909f84d941381ecc05e2dc3542b.
+It adds named pure Original coverage policies; the owning queue use case receives an explicit
+parent, resolves registered legacy Company/device provenance, reads one source/pending page,
+confirms unchanged progress, and fences registration/admission. Unknown/unclean history stays
+on normal Latest alias routing. DI and the native caller pass the existing dependencies/owner.
+No content duplication, native opening, schema, worker limit or retry changes.
 
-Important test finding: SpaceIncomingRequestFixture borrows a LEGACY binding from
-OriginalTransportFixture even for tests labelled Published Space. Make its default an actual
-SPACE room (origin SPACE, both original refs null) and introduce explicit Original cases. Use
-different published/original device and conversation IDs. OriginalQueueMatchFixture's old native
-family must not be silently reused as the current family when constructing registered coverage.
-The native failure is already the real regression; don't claim compile-only failure as red proof.
-Group exact turns2/Matrix31/native14 expectations remain unreached and await complete trace review.
+The existing Published fixture now explicitly uses SPACE origin with no Original references;
+its original borrowed LEGACY binding obscured the bug. A separate Original fixture uses distinct
+Company/conversation/device identities. Thirteen new Original regressions cover exact clean facts,
+unknown/unfinished/active pending history, different registration, session/denial/replacement,
+storage/cancellation and preserved independent work. Existing21 Published tests keep their IDs.
+
+Format1/96904 REAPED35.586s. Focused1/session26911 ACTIVE, expected70 cases:34 domain desktop,
+34 domain browser and2 shared DI cases. No test acceptance yet. Do not edit source/start emulator
+during it. After completion run accept-focused.py focused-1; preserve failures before correction.
+Then exact proof APK/21 tests, native worker7 with unchanged assertions, and full baseline gate
+(expected14,581 local =14,555+26). All runners/audits are prepared privately.
+Native worker6 remains the behavioral regression; constructor/compiler failures are not red proof.
+Group exact turns2/Matrix31/native14 assertions remain unreached and need actual final trace review.
 
 ## CI, prior commit and phone
 
@@ -63,7 +70,7 @@ Documentation66193342 /3a70bfb9 pushes19803/58065 REAPED. Hosted control43220169
 remains active; last query17879 REAPED showed portable and Apple in progress. State/auditor live in
 `.work/space-incoming-discovery-coalescing-2026-11-12/hosted-43220169006`. Expected17,611=12,516
 portable (5,987/947/5,582) +5,095 Apple. Audit against fully accepted progressive43200304791.
-Metadata expected hosted17,634=12,533 portable(5,993/952/5,588)+5,101 Apple; not dispatched yet.
+Metadata6d9f745a / Groupa867612a pushed;26418/15641 REAPED. Hosted metadata43224352728 is active on exact6d9f745a; dispatch81388 REAPED, single attempt. Expected17,634=12,533 portable(5,993/952/5,588)+5,101 Apple. State/auditor live under metadata workspace hosted-43224352728 and use coalescing43220169006 as predecessor. Coalescing12762 REAPED last status: portable application-bindings/compilation and Apple setup-adapter steps still running.
 
 Release89 is INSTALLED on10.77.77.3:5555, verified09:10UTC (65584 REAPED). Do not reinstall.
 SDK6, install-only upgrade, identity preserved and no UI interaction. Current SDK8 x86 proof APKs
