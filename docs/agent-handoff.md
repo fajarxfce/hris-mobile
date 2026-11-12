@@ -5,30 +5,41 @@ Complete PRD, per-commit pushes and validated phone updates remain authorized. A
 keep working. No subagents. Follow AGENTS.md and architecture. Usecases coordinate repositories
 and policy, never other usecases. ViewModels own screen state. One compiler OR emulator.
 
-## Active finite recovery policies — local validation
+## Active combined Original key-wait transfer — local validation
 
-Five new source files in .work/history-recovery-visit-policies-2026-11-12, baselinec79180c3.
-5,077 inputs; final candidate bd1b3778b6fff89dbc538968204810fd4674471b799ed59c8dd82b78825e70ae.
-Twenty visit and nine primary-demotion policy cases. Not accepted yet. Focused1/91401 REAPED FAILED
-146.380s/102tests/2new fixture failures; archive failed-focused-candidate-1 and failure-reviews.json.
-Opaque generation IDs follow existing validCollaborationMessageId (including zero UUID), unlike
-account/device identifiers. The test now explicitly asserts that established contract and rejects
-malformed IDs. The Original alias fixture now includes mandatory sourceId plus retained source
-progress. No production weakening, skipped tests or timeout changes. Format2/80317 REAPED PASS35.672s.
-Focused2/78486 RUNNING; reap before browser/full validation. Publisher/writer are prepared, NOT EXECUTED.
+Workspace .work/incoming-key-wait-transfer-2026-11-12, source baseline7a47d456 (accepted sources0505c536).
+Twelve files: ten new domain policy/entity/test/fixture files and two existing DI/graph files.
+5,082 inputs/6381702b3d1e979b12d360ade21cbdc46b13bc6f05547c6f442ab994a8cf855f.
+Expected13,810full local,306JVM+304browser focused;68new common cases (visit20,demotion9,
+admitted Original operation27,write confirmation12). Format1/83357 REAPED PASS36.931s.
+Focused1/48088 RUNNING; reap before browser/full. Only this compiler is active, no emulator.
 
-A seven-file private next-primary-key-wait-draft has an admitted Original demotion owner,
-write-confirmation policy, fixtures/38common cases plus DI/graph changes. UNREVIEWED/UNCOMPILED/UNAPPLIED.
-It reads provider EOF, finished finite seek, an actual unresolved reference and exact requested head,
-then atomically removes primary work and retains fresh recovery+wake. Successful raw replies are
-copied before suspension; lost storage replies require the unique retained request. Absent/replaced
-captures create no extra generation. The actual storage codec requires published checkpoints for
-progress reads, which is the basis for metadata-before-demotion. Space counterpart, cross-producer
-coverage, global completion, operational deferral, application service and native callbacks remain.
+The preliminary .work/history-recovery-visit-policies-2026-11-12 gate passed225JVM+223browser
+(78486REAPED400.427s,27527REAPED145.230s). Its separate full gate/commit/CI was folded into this
+complete operation scope BEFORE dispatch; do not run its old publishers or standalone preparation.
+The earlier failure is archived in combined policy-focused-1/failed-policy-candidate-1:102tests,
+2fixture failures,146.380s,session91401REAPED. Opaque generations follow existing message-ID UUID
+validation (zero allowed); Original alias data requires sourceId and retained source progress.
+Corrected fixtures preserve assertions/production policy; no skip or timeout increases.
 
-Space projection hosted43136996756 now fully audited16,292=11,576portable+4,716Apple.
-Apple audit89901 REAPED; unsigned application host/16Swift push checks passed. Native Matrix SDK8
-Apple execution remains unproved. Exact ZIP/report/log hashes live in the checked-in measurement.
+DemoteCollaborationSpaceOriginalIncomingRoom is composed but NOT invoked by the worker. It requires
+provider EOF, a finished finite seek, real unresolved references, exact requested head, current
+Company metadata and registered Original source. Its single demand CAS retires primary work and
+retains fresh recovery+wake. Snapshots are copied before suspension; lost replies need the unique
+retained request. No extra generation for absent/replaced tasks. Codec progress reads require
+published checkpoints, establishing metadata before this request, not a cross-store transaction.
+The worker still must serialize provider writes; Space transfer, source/restore coverage, global
+completion, deferral, application sequencing and loss-aware/drained native listeners remain work.
+All54PRD groups OPEN; no producer activation or claim of full account snapshot coverage.
+
+Combined publisher is prepared, NOT EXECUTED. Need accepted handoff writer and final review, then
+one full gate/atomic feature commit. Hosted plan refvalidation/incoming-key-wait-transfer-20261112
+is UNDISPATCHED; expected16,610=11,788portable+4,822Apple, compared with reader43143623927.
+Do not execute superseded .work/.../prepare-original-transfer.py or publish policy-only acceptance.
+
+Space projection hosted43136996756 fully audited16,292=11,576portable+4,716Apple. Apple audit89901
+REAPED; unsigned host/16Swift checks passed, native MatrixSDK8 Apple runtime unproved. Source
+availability43139532066 Apple host and reader43143623927 CI remain in progress; inspect artifacts.
 
 ## Bounded account history turn reading accepted
 
