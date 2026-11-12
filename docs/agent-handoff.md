@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 19:43 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 20:09 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -9,12 +9,40 @@ is waived; native Apple/call/push behavior is not accepted merely by compilation
 ## Current next implementation
 
 ACTIVE: .work/company-thread-publication-2026-11-12, base Mobileed4e61f5 / Group6c34ecbd.
-One new Company slow-consumer regression is the only source change; production is untouched.
-Formatter1/8189 REAPED PASS35.369s. Red1/52219 ACTIVE from19:42UTC; expect16 cases with the
-new denial-buffering case failing. Reap before edits/new compiler/emulator. Frozen5161inputs/
-e82199b1009c8ba034cf0aee75d1720fd3257111d06266ebf9bd1173211a1f8d.
-Preserve exact failing candidate before a demonstrated fix. Do not mark the work complete here.
+Two source paths now change: Company ObserveCollaborationThread and its existing test class.
+Red1/52219 REAPED:16 cases, one failure; slow collector received3 values rather than2 after denial.
+The default/outer buffer chain retained a snapshot outside cancelled readers. Move the rendezvous
+inside admission flatMapLatest, remove the outer channel. Preserve exact regression assertions and
+failed-publication-boundary-1. Formatter2/72483 PASS34.441s; green1/59720 REAPED PASS16/92.365s.
+Full1/95318 REAPED PASS668.332s; independent audit accepts14,688 cases:12,650 fresh
+and2,038 unchanged, all14,686 prior IDs retained. Frozen5161inputs/
+52aa82e138e376350b6f43a2e09fa33c757359c41f59b23bd619ac05f0609663.
+Report manifest2d942e3fa5cd90e46d74baaf60442c5c146f76e37e26e1102943a955e985a14a.
+Immutable full-1/accepted-proof.apk152443552B/
+293446ec43495b4abb323cde31d1cc110b00a707fe38ecd346115ab8c92a928b.
+Native suite-1/20256 REAPED PASS10/476.311s; strict accept-native.py passes.
+Exact current-source immutable APK, boot28.424s,2560MiB/two cores, no compilation
+during emulator; emulator stopped and phone untouched. Group source2 provenance retained.
+All current Company source/native gates are finished. Do not rerun them.
+Keep the exact111 historical reports/657 cases excluded with retained digests.
+Apple inventory acceptance is pushed as Mobilee056b86a / Group890b61b3; its measurement
+is compacted to digests/counts/required13 in Mobile7f7fa717 / Groupa4ecdae3 (pushed).
+Full423-report details remain in the Apple artifact.
 
+Apple SDK8 Intel43267867675 FAILED after the9000-second aggregate build deadline during
+native target4; first3 targets completed in42m46s/37m37s/41m46s. No Swift cases executed.
+Failed artifact13979116356/digest6d1a3b994c2a123359b0da700463a3743cc03c313126c907232098576eb4c0d8
+is preserved. Isolated worktree .worktrees/hris-mobile-apple-budget-2026-11-12 has pushed
+fix/apple-sdk-build-budget-20261112 at3c9c41a9f45f0533e4591a632d1df862668a06d0.
+Only framework/job build budgets change to300/360minutes; all architectures, tests, source,
+resource limits and Swift/link deadlines remain fixed. Python guard tests10 pass.
+New candidate43296438399/job131455907436 is IN PROGRESS; no package accepted or published.
+Mobile .work/sdk8-apple-build-budget-2026-11-12/audit-hosted.py is prepared for that exact run.
+Integrate its tooling/evidence after release92, retaining this main handoff.
+Release92 scripts prepared, not built; full14688/native10 are accepted. Commit/push the
+Company fix, snapshot that clean head into release92/state.json, then build x86, inspect
+fresh release startup, build/verify ARM64 and install-only when the phone is available.
+Release91 remains accepted/uninstalled; latest20:00 ADB12-second timeout (95589 REAPED).
 
 Canonical local Space thread history is ACCEPTED and pushed as Mobileed4e61f5 / Group6c34ecbd in Mobile
 .work/space-thread-history-routing-2026-11-12. Read docs/collaboration-space-thread-history.md.
@@ -28,7 +56,7 @@ Inputs5161/cd6f263a89da0b2a974501b099286b8884a66c7d19b2de2b9680cdc74165f35f.
 Report manifest61c2a871b3500217b05c5b2fbc35c1d5d168a5e5c84734f441cf283dd14161eb.
 Immutable full-1/accepted-proof.apk152443503B/
 0bbdd271e6bdb09064d27e720d11a51479a4a124b0072765b3e33adb843435f6; SDK8 native unchanged.
-No new native suite or phone claim. Canonical-history gates are finished; the Company compiler above is active. Do not rerun accepted canonical gates.
+No new native suite or phone claim. Canonical-history gates are finished; the current-source native suite above has passed. Do not rerun accepted canonical gates.
 
 Preserve failed-test-compile-1, failed-publication-boundary-1 and full-1/failed-auditor-1.py.
 The exact slow-consumer test demonstrated an extra outer buffer holding a page outside cancellation;
@@ -36,11 +64,9 @@ removing only that extra handoff fixes it. Assertions retained. Audit excluded11
 files/657 historical cases outside both accepted baseline and current execution; no accepted IDs
 removed, no test rerun for the audit correction. Digests and audit-correction.json are preserved.
 
-NEXT: independently reproduce the analogous Company ObserveCollaborationThread boundary before
-changing it. .work/space-thread-history-routing-2026-11-12/company-publication-followup.md explains
-it and company-publication-regression.kt is a prepared, uninstalled test snippet. Keep current parallel
-context/history/queue startup. After this regression, continue canonical pending-message projection
-and product routing. Do not stop at this checkpoint; push every accepted commit.
+NEXT: record/push accepted code and prepare the next
+validated phone build. Then continue canonical pending-message projection and product routing.
+Keep current parallel context/history/queue startup. Do not stop at this checkpoint; push every commit.
 
 ## Current completed increment
 

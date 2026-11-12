@@ -69,17 +69,19 @@ class ObserveCollaborationThread(
                         requireNotNull(session).binding.serverId,
                     )
                 emitAll(
-                    lists.observeAdmission(expected).flatMapLatest { gate ->
-                        when (gate) {
-                            is AppResult.Failed -> flowOf(gate)
-                            is AppResult.Success ->
-                                gate.value.denial?.let { flowOf(AppResult.Failed(it)) }
-                                    ?: observeStored(workspaceId, owner, conversationId, window)
+                    lists
+                        .observeAdmission(expected)
+                        .flatMapLatest { gate ->
+                            when (gate) {
+                                is AppResult.Failed -> flowOf(gate)
+                                is AppResult.Success ->
+                                    gate.value.denial?.let { flowOf(AppResult.Failed(it)) }
+                                        ?: observeStored(workspaceId, owner, conversationId, window)
+                            }
                         }
-                    }
+                        .buffer(0)
                 )
             }
-            .buffer(0)
             .distinctUntilChanged()
 
     private fun observeStored(

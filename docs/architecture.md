@@ -512,6 +512,9 @@ the finite worker batch limit.
 [History replay](collaboration-chat-history-replay.md) preserves encrypted records
 and revisions when original messages or redactions have not changed.
 
+[Company thread publication](collaboration-thread-publication-lifetime.md) keeps queued
+local snapshots inside the admission reader cancellation boundary, including slow consumers.
+
 [Cached room entry](collaboration-chat-first-frame.md) retains bounded screen state
 under the account/company navigation graph and keeps guarded local thread reads
 in the domain use case.

@@ -1,0 +1,91 @@
+{
+  "startedAt": "2026-11-12T19:49:40.448677+00:00",
+  "elapsedSeconds": 668.332,
+  "sourceFiles": 5161,
+  "freshCounts": {
+    "tests": 12650,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152443552,
+    "sha256": "293446ec43495b4abb323cde31d1cc110b00a707fe38ecd346115ab8c92a928b"
+  },
+  "fullyAccepted": true,
+  "validatedTests": 14688,
+  "newCases": 2,
+  "freshTests": 12650,
+  "reusedUnaffectedTests": 2038,
+  "priorCaseIdsPreserved": true,
+  "excludedHistoricalReports": 111,
+  "excludedHistoricalCases": 657,
+  "sourceManifestSha256": "52aa82e138e376350b6f43a2e09fa33c757359c41f59b23bd619ac05f0609663",
+  "reportManifestSha256": "2d942e3fa5cd90e46d74baaf60442c5c146f76e37e26e1102943a955e985a14a",
+  "scope": "Company thread snapshot publication lifetime",
+  "baseCommit": "ed4e61f55ecc334e18c461e41e058c4f30116ed2",
+  "changedSourceFiles": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationThread.kt": "2ab76fee9ebd956481ae4b6f07ae9e6fc3df688bcabd98f2bd6c321b68ee7079",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveCollaborationThreadTest.kt": "1176c1b6f97cea745d64a919dc2e4d56ef62b844209ba8520cc094a30c5bd458"
+  },
+  "red": {
+    "tests": 16,
+    "failures": 1,
+    "expectedValues": 2,
+    "actualValues": 3,
+    "elapsedSeconds": 106.56,
+    "preserved": "failed-publication-boundary-1"
+  },
+  "green": {
+    "tests": 16,
+    "failures": 0,
+    "elapsedSeconds": 92.365
+  },
+  "nativeSuiteAccepted": true,
+  "nativeSuiteStatus": "passed",
+  "phoneInstalled": false,
+  "liveGroupChanged": false,
+  "native": {
+    "accepted": true,
+    "tests": 10,
+    "counts": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "elapsedSeconds": 476.311,
+    "bootSeconds": 28.424,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "phoneTouched": false,
+    "emulatorStopped": true,
+    "noCompilationDuringEmulator": true,
+    "sdk": "26.10.23-hris.8",
+    "apkSha256": "293446ec43495b4abb323cde31d1cc110b00a707fe38ecd346115ab8c92a928b",
+    "nativeLibrarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+    "mobileSourceManifestSha256": "52aa82e138e376350b6f43a2e09fa33c757359c41f59b23bd619ac05f0609663",
+    "groupSourceManifestSha256": "7e4c32bb578f148fcbd21c62a8302436bcf1abfb534fc0b561aab9510642b300",
+    "resultSha256": "555fc2b7380a5db580079682c81e95fa2d294862958e0222938e2762622e0d02",
+    "reportHashes": {
+      "TEST-dev.fajar.hris.NativeEventReadsTest.xml": "43887f0e4d28c852b7ae3657e3fe35d3e18986e10e7825e3838d1f7c93ca256d",
+      "TEST-dev.fajar.hris.NativeSpaceLateKeysTest.xml": "d06d463366886e550eb19c9ee74bb9f2b339a42f2bdcc8662cca2064245352b9",
+      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": "d296148d902c2440f9698829941074d0a33d0dfaf9badefb1a7e69f22ae64176",
+      "TEST-dev.fajar.hris.NativeAccountReplacementTest.xml": "f88a23eb275d11686215e7011a9a539cfcd368f8973ad243dbd172907ed47610"
+    },
+    "cases": [
+      "dev.fajar.hris.NativeAccountReplacementTest.nativeAccountReplacementRetiresHeldReplyAndPreservesOriginalEncryptedHistory()",
+      "dev.fajar.hris.NativeEventReadsTest.completedIncomingReferencesRemainExhaustedAcrossOfflineReopen()",
+      "dev.fajar.hris.NativeEventReadsTest.exactEncryptedEventsSurviveOriginalRuntimeAdoptionWithoutPresentationRelabeling()",
+      "dev.fajar.hris.NativeEventReadsTest.nativeIncomingHintsPreserveExactSyncPositionsAndObserveStoredKeys()",
+      "dev.fajar.hris.NativeEventReadsTest.nativeIncomingReceiptSurvivesLostReplyForegroundAndOfflineReopen()",
+      "dev.fajar.hris.NativeEventReadsTest.registeredIncomingWorkerRetainsContentBeforeEofAndStopsAcrossOfflineReopen()",
+      "dev.fajar.hris.NativeSpaceLateKeysTest.realKeyDuringLostReceiptReplySurvivesQuietObservationAndOfflineReopen()",
+      "dev.fajar.hris.NativeSpaceLateKeysTest.retainedLateKeyRecoveryDrainsThroughRegisteredWorkerAfterProcessLoss()",
+      "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.newSpaceOriginalSharesTheQueueWithoutChangingCompanyOwnershipAfterProcessDeath()",
+      "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.originalQueueSurvivesLostProjectionAndOfflineRecipientWithoutReplacement()"
+    ]
+  },
+  "nativeAuditSha256": "f00b18cd012e3a2dd39480991a332201986cd45c8140bc9965508216e7383145"
+}

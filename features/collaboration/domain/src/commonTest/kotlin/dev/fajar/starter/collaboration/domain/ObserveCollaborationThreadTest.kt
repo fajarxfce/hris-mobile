@@ -1,3 +1,5 @@
+@file:OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+
 package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
@@ -9,6 +11,37 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
 
 class ObserveCollaborationThreadTest {
+
+    @Test
+    fun slowConsumerCannotReceiveQueuedContentAfterCompanyDenial() = runTest {
+        val f = ThreadObservationFixture()
+        assertIs<AppResult.Success<*>>(f.owner.queue())
+        val first = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        val values = mutableListOf<AppResult<CollaborationRead<CollaborationThreadSnapshot>>>()
+        val job =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                f.observe().collect {
+                    values += it
+                    if (values.size == 1) {
+                        first.complete(Unit)
+                        release.await()
+                    }
+                }
+            }
+        first.await()
+        f.owner.records.value = emptyList()
+        runCurrent()
+        f.owner.gate.value = CollaborationListAdmission("denied", f.owner.denied)
+        runCurrent()
+        assertEquals(0, f.history.active)
+        assertEquals(0, f.owner.activeMessageObservers)
+        release.complete(Unit)
+        runCurrent()
+        assertEquals(2, values.size)
+        assertEquals(AppResult.Failed(f.owner.denied), values.last())
+        job.cancelAndJoin()
+    }
 
     @Test
     fun pendingRecipientMetadataDoesNotDelayTheFirstMessageWindow() = runTest {
