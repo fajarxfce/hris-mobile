@@ -8,7 +8,7 @@ repositories/policies, never other usecases; repositories map datasource results
 ## Active Original historical completion implementation
 
 The next reviewed11-file draft was APPLIED by21398REAPED at00:25:47UTC12Nov. It is UNCOMMITTED
-and UNTESTED, ready for formatting/validation after Starter acceptance. Workspace
+and under validation. Format65268 REAPED PASS36.488s; focused1/98754 RUNNING. Workspace
 .work/original-key-reference-completion-2026-11-11; source baseline6c40ccef1361564c706e10243dc183f18088bf5e,
 13,358 cases/5,050 inputs. prepare-next-original-key-completion.py and configure-next-original-key-completion.py
 HAVE EXECUTED; do not rerun old configure over the focused-coverage refinement.
@@ -21,7 +21,8 @@ Focused coverage now explicitly includes the changed29 page-acquisition cases al
 Old330 prediction is superseded only for focused selection; full13,422 and hosted16,028 unchanged.
 Expected/run/freeze/accept/dispatch/publisher scripts are prepared in the new workspace. Publication
 requires reviews for any future failed attempts. No native/primary/global activation. Early source architecture check48154 REAPED PASS; this is not compilation or final acceptance.
-Starter68417 is now reaped and accepted; proceed with one Mobile compiler. Keep working through the PRD.
+Frozen candidate5,056inputs/d7847851b4ec12648c4f2061c509ea63b14fc09aad17f8418620c02d082f8b90.
+Starter68417 is now reaped and accepted;98754 is the only compiler. Keep working through the PRD.
 
 ## Local recovery content and browser reporting accepted
 
@@ -72,7 +73,9 @@ AppFlow941224bb/60814REAPED; generic0c99908e/39997REAPED; featuree4650f88/20636R
 Group documentationa5d0d9d3/11341REAPED. That accepted source is retained; the next uncommitted implementation is described above.
 Hosted43126523314 was dispatched ONCE by39160REAPED at00:20:07UTC12Nov on e4650f882e71708100feebaf900834353bb5a128.
 Ref validation/original-local-key-page-content-20261111, expected15,932=11,336portable+4,596Apple.
-It is IN PROGRESS, not audited. hosted-plan.json has the run ID; never dispatch it again.
+Portable completed and audit64714 REAPED accepted11,336 (5,396desktop/857Android/5,083browser).
+Artifact13904961843/3,915,289bytes/eae54b2e1d7748367ef16c44106ace046ddfdbcf156609a50fc714bce278b387;
+prior IDs preserved. Apple remains IN PROGRESS. hosted-plan.json has the run ID; never redispatch.
 
 ## Next implementation and generic port
 
