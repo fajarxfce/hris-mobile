@@ -1,3 +1,27 @@
+# Apple SDK build budget continuation
+
+Isolated branch fix/apple-sdk-build-budget-20261112, based on Mobilee056b86a.
+This checkout changes only the SDK Apple build driver, its CI budget and evidence.
+The main Mobile checkout has an active source-exact native suite; do not edit its
+sources, SDK checkouts or run a second local compiler/emulator.
+
+Run43267867675 / job131356202237 at9b7c4d3f failed on the9000-second aggregate
+framework deadline during target4, after target1/2/3 compiled in42m46s/37m37s/41m46s.
+The preserved artifact13979116356 has SHA256
+6d1a3b994c2a123359b0da700463a3743cc03c313126c907232098576eb4c0d8.
+No Swift contract ran; this is not accepted native evidence.
+
+The framework compilation budget is now300minutes and job360minutes. All five
+architectures, pinned source/toolchain, sequential two-job build, four Swift tests,
+30-minute Swift/device/simulator deadlines and exact binary acceptance stay intact.
+Existing Python guard tests pass10 cases in0.222s. Commit/push, dispatch this workflow once,
+then audit its exact source, artifact digest, all four Swift cases and five native
+architectures. Keep failed evidence. Do not publish or bind an unaccepted package.
+Afterward integrate the tooling/evidence change, retaining the main branch handoff, when its
+source-exact native/release work is complete. Continue the product long run there.
+
+## Parent checkpoint retained for context
+
 # Agent continuation — communications long run
 
 Updated 12 November 2026, 19:43 UTC. Continue beyond checkpoints; push every commit.

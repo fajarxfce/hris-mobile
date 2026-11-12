@@ -16,6 +16,8 @@ import xml.etree.ElementTree as ET
 from build_collaboration_sdk import run, sha
 
 
+# The first three release targets took 38–43 minutes each on the Intel runner.
+FRAMEWORK_BUILD_TIMEOUT_SECONDS = 5 * 60 * 60
 SLICE_ARCHITECTURES = {
     ("ios", ""): {"arm64"},
     ("ios", "simulator"): {"arm64", "x86_64"},
@@ -122,7 +124,8 @@ def build(args):
               "version": manifest["version"], "upstream": revision, "rust": base["rust"],
               "manifestSha256": sha(patches / "apple-incoming-hints-build.json"),
               "baseManifestSha256": manifest["baseManifestSha256"], "targets": manifest["targets"],
-              "candidateOnly": True, "published": False, "passed": False}
+              "candidateOnly": True, "published": False, "passed": False,
+              "frameworkBuildTimeoutSeconds": FRAMEWORK_BUILD_TIMEOUT_SECONDS}
     try:
         with (out / "build.log").open("w") as log:
             if args.bootstrap:
@@ -154,7 +157,7 @@ def build(args):
                        "--macos-deployment-target", manifest["macosDeploymentTarget"]]
             for target in manifest["targets"]:
                 command += ["--target", target]
-            run(command, cwd=sdk, env=env, log=log, timeout=9000)
+            run(command, cwd=sdk, env=env, log=log, timeout=FRAMEWORK_BUILD_TIMEOUT_SECONDS)
             if {name: sha(sdk / name) for name in expected} != before:
                 raise ValueError("SDK source changed during compilation")
             generated = sdk / "bindings/apple/generated"

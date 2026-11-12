@@ -17,6 +17,17 @@ must contain the exact recovery and SDK8 symbols, with native architectures matc
 XCFramework declarations. The generated Swift package, native libraries, license, Cargo lock
 and input/output hashes are retained together.
 
+The first Intel candidate, run43267867675 at9b7c4d3f, hit the build driver's
+150-minute deadline during the fourth target. The first three optimized targets
+completed in42m46s,37m37s and41m46s; no Rust compiler error or Swift test failure
+preceded the timeout. The five-target build now has a bounded300-minute budget,
+recorded in its result, inside a360-minute job. Two Cargo jobs, sequential targets,
+all five architectures and the existing30-minute Swift/link deadlines remain fixed.
+The failed artifact and its digest are retained in the
+[build-budget evidence](measurements/collaboration-sdk8-apple-build-budget-2026-11-12.json).
+This adjusts infrastructure scheduling; native acceptance still requires all four
+Swift contracts, architecture/symbol checks and both iOS links to pass.
+
 The driver stages the existing Swift source and its original raw-key continuity test unchanged,
 plus three native SDK8 tests. These exercise passphrase-based retained identity and wrong-key
 refusal, absent-store reads without file creation, stored sync position, room-key registration

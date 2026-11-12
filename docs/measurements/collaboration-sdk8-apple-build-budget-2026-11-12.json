@@ -1,0 +1,42 @@
+{
+  "acceptedNative": false,
+  "failedRun": 43267867675,
+  "failedSourceCommit": "9b7c4d3fac0127e2f440e8dc5fb420dc66c22cfc",
+  "failedJob": 131356202237,
+  "runner": "macos-15-intel",
+  "artifactId": 13979116356,
+  "artifactSha256": "6d1a3b994c2a123359b0da700463a3743cc03c313126c907232098576eb4c0d8",
+  "artifactBuildLogSha256": "ad0b314828d7e257bdb2377afbe8bc02874b37181da92d9cae70f25bc1edb7cf",
+  "resultSha256": "fc05c9cdba6aff6947e41b1464de785db3354990828e736ce4dc96e02b75a3d7",
+  "cause": "Aggregate 9000-second native build deadline expired during fourth sequential target; first three release targets completed.",
+  "completedTargets": [
+    {
+      "target": "aarch64-apple-ios",
+      "seconds": 2566
+    },
+    {
+      "target": "aarch64-apple-ios-sim",
+      "seconds": 2257
+    },
+    {
+      "target": "x86_64-apple-ios",
+      "seconds": 2506
+    }
+  ],
+  "incompleteTarget": "aarch64-apple-darwin",
+  "expectedTargets": 5,
+  "newFrameworkBuildTimeoutSeconds": 18000,
+  "newJobTimeoutMinutes": 360,
+  "swiftTestTimeoutSeconds": 1800,
+  "eachIosLinkTimeoutSeconds": 1800,
+  "swiftCases": 4,
+  "cargoJobs": 2,
+  "sequential": true,
+  "published": false,
+  "localGuardTests": {
+    "tests": 10,
+    "failures": 0,
+    "errors": 0,
+    "elapsedSeconds": 0.222
+  }
+}

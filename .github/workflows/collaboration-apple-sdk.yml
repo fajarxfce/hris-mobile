@@ -24,7 +24,8 @@ concurrency:
 jobs:
   native:
     runs-on: macos-15-intel
-    timeout-minutes: 210
+    # Includes five sequential native builds, Swift contracts and both iOS links.
+    timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
         with:
