@@ -97,5 +97,18 @@
       "testsRemoved": false,
       "productionRelaxed": false
     }
+  },
+  "sourceCommit": "71b70094d5db2a928f6cb0082d587ccba661c891",
+  "hosted": {
+    "run": 43152279307,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43152279307",
+    "dispatchedAt": "2026-11-12T04:03:41.063196+00:00",
+    "dispatchSession": 63271,
+    "dispatchSessionReaped": true,
+    "expectedPortable": 11840,
+    "expectedApple": 4848,
+    "expectedTotal": 16688,
+    "status": "in_progress",
+    "artifactsAudited": false
   }
 }
