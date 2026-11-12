@@ -1,20 +1,37 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 17:18 UTC. Continue implementation beyond checkpoints and push every commit.
+Updated 12 November 2026, 17:38 UTC. Continue implementation beyond checkpoints and push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One compiler OR emulator. Phone install-only:
 announce and select serial; never launch/drive UI, reset data or uninstall. ADB availability question is pending after a fresh connection timeout.
 
-## Release91 prepared from accepted shared-runtime source
+## Release91 accepted; installation waits for phone connection
 
-Mobile .work/release-phone-2026-11-12-build91 contains build/verification/startup/acceptance runners
-and exact accepted14,626-case/9-native input manifests. No build or installation has run yet.
-Use the next pushed Mobile HEAD in state.sourceCommit and keep Mobile HEAD/source inputs frozen
-through packaging acceptance. Build x86_64, verify it, cold/reopen the actual release on fresh owned
-2560MiB/2core emulator, inspect the screenshot, then build/verify ARM64 and accept-release.py.
-One compiler OR emulator. Same existing app ID, dev signer, SDK8 and server endpoint; version91 only.
-Release90 remains accepted but uninstalled,89 already installed earlier; never reinstall89. After91
-is accepted, it supersedes90 for a future announced install-only transfer. Phone remains unreachable;
-never launch/drive/reset/uninstall its UI. Shared CI43266580439 and Intel SDK8 CI43267867675 continue.
+Mobile .work/release-phone-2026-11-12-build91 is fully accepted from frozen/pushed
+source b816431824e4255fcc101641bc6257894ff6649e; source manifest
+ d42bae7604ca4b3d37fad253ab660c806bf2dc4e51e31d03089b9dfa6edba7c4 (5,143inputs).
+x86 build44236 REAPED PASS638.089s; verification84440 REAPED PASS. Startup83877 REAPED
+PASS93.611s on fresh2560MiB/2core emulator: boot31.499s, cold2891ms/reopen1557ms, separate
+processes each stable10s without fatal exception. Actual onboarding screenshot inspected; emulator
+stopped before ARM compilation. No authenticated employee or phone UI was used.
+ARM build87006 REAPED PASS44.425s; verification7779 REAPED PASS; final acceptance at17:37UTC.
+ARM APK124,317,071B/45e26962b2acc839498558affd2fbce059f602f29d1b62e25f2b55276740cf7d.
+Both APKs have identical executable DEX8fc42ca34377f35529d808e451b97e275e98f17490f12c14e03f465653619aef,
+nondebuggable release, prior dev signer, SDK26.10.23-hris.8,16KiB ELF/ZIP checks and zero lint issues.
+Accepted inputs:14,626 local cases and9 native cases. See measurements/collaboration-release91-2026-11-12.json.
+Mobile source lock is now released. Release91 supersedes uninstalled90;89 was installed earlier,
+never reinstall89. Phone connect59791 REAPED timeout12s at17:37UTC; existing availability/IP question
+is still pending. No installation was attempted. Once connected, announce EACH actual installation,
+then run build91/install.py --install-only with its explicit10.77.77.3:5555 serial. Never launch,
+drive, reset or uninstall the user's phone. Preserve retained app identity and compare exact APK bytes.
+
+Shared CI43266580439 portable job131351646411 SUCCEEDED on exactddf65dbe485aff6f2ef74d22469a723892d04d93.
+Auditor10948 REAPED PASS12,604 =6,027desktop+955Android+5,622browser; all old test IDs retained,
+zero replacements. Artifact13967932208/4,036,781B, digest8464806ef675082eaf50c80f6dba2ea90ad9a41c096dd240b1998d7399510a59;
+report manifestce9fe1e49d58396910d6d3314e5f2ed5e52f8c3a3b236f9331843f7fbec55d74.
+Apple shared job131351645845 and Intel native SDK8 CI43267867675 remain IN_PROGRESS. Do not repeat
+portable audit/gates. The native SDK job passed its guards and is building; no Swift native result yet.
+Continue Apple adapter work and audit those exact results when complete; no production Apple runtime
+or live Group activation. All54 PRD groups remain OPEN.
 
 ## Native late-key worker recovery fully validated
 
