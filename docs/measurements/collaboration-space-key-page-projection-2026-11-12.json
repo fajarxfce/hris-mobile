@@ -79,6 +79,27 @@
     "expectedApple": 4716,
     "expectedTotal": 16292,
     "status": "in_progress",
-    "artifactsAudited": false
+    "artifactsAudited": false,
+    "portableAccepted": true,
+    "portableAuditSession": 36779,
+    "portableAuditReaped": true,
+    "portableAudit": {
+      "sourceCommit": "82e9def35162cc6983516282ec53aae7fb9105e3",
+      "runId": 43136996756,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43136996756",
+      "jobId": 130914625691,
+      "artifactId": 13908234330,
+      "bytes": 3934230,
+      "sha256": "18ecebcf206555c772cc37a4098d62d5f5cf22dd0174c092fffb874c7e651f32",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreserved": true,
+      "counts": {
+        "desktopTest": 5516,
+        "testAndroidHostTest": 857,
+        "wasmJsBrowserTest": 5203
+      },
+      "reportManifestSha256": "f679515643b36a509161da6fec5026bf9e7e08f2bd53e90e5ad17be63c340a21",
+      "jobLogSha256": "2c8bb27f1f0678f94d829e82dd8834a8594f138433b9d0a90c1e090f726ff5d8"
+    }
   }
 }

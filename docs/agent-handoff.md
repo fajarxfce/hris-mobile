@@ -41,7 +41,9 @@ Format1/84741 REAPED PASS37.088s; new5,072inputs with frozen manifest
 Focused1/92831 REAPED FAILED119.355s before executing tests: two new request assertions
 needed explicit Pair<String?, Int> expected types. Archived failed-focused-candidate-1 and
 failure-reviews.json preserve exact source/result. Only those assertion types changed; values,
-coverage and production remain. Format2/89512 RUNNING before a new frozen candidate.
+coverage and production remain. Format2/89512 REAPED PASS39.200s. New candidate5,072inputs/
+34ff82891f5cbc343c235e6db72db0f22efb08a65222690f70d58dda814daed8; focused2/12916 RUNNING.
+New24-case reader JVM suite passed within that still-running gate; do not claim the full gate yet.
 Expected158JVM+156browser=314, local13,674, hosted16,406.
 Eight uncommitted source files (five new/three existing),24 common tests. Existing advance/defer
 shares the identity predicate while preserving its original mutation revision ceiling.
@@ -59,9 +61,9 @@ recovery revision. New requested generations/primary work survive; idle/deferred
 read source metadata. prepare-account-turn.py is syntax checked, PREPARED NOT EXECUTED; apply
 only after this stage is accepted, committed, pushed and dispatched. The publisher and handoff writer are also PREPARED NOT EXECUTED. Its selection cannot acknowledge global or historical work.
 
-Two future policy/entity files are privately drafted at the active account-turn workspace
+Three future policy/entity/test files are privately drafted at the active account-turn workspace
 next-global-completion-draft, with next-global-completion-state.json. They are UNREVIEWED,
-UNAPPLIED, UNCOMPILED and have no tests yet. They inspect local visit evidence without requesting
+UNAPPLIED, UNCOMPILED with18 drafted common tests. They inspect local visit evidence without requesting
 a pass; admitted metadata/source/CAS/application service is still required. Storage trace confirms
 completeRecovery increments the checkpoint revision atomically with its reference outcomes.
 
@@ -97,6 +99,10 @@ no distinctUntilChanged or loss-unaware SharedFlow drop. Permanent listeners hav
 outside the eight transient native children. No new consumer, listener or live setting is enabled.
 
 ## Prior accepted chain
+
+Space projection hosted43136996756 portable accepted11,576 with audit36779 REAPED.
+All prior IDs/artifact/report/log hashes verified; Apple remains in progress. Its checked-in
+measurement retains exact evidence. Original43133923106 is building its iOS host.
 
 Space page projection accepted13,598 local and484 focused cases; prior hosted state is
 in_progress. Verify actual artifacts before accepting
