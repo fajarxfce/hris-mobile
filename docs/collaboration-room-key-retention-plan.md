@@ -104,3 +104,13 @@ installation/publication, late subscribe, duplicate publish, retirement during b
 same-coordinate recreation, foreign coordinates, cancellation, authority loss and credential-write
 recovery. These are draft tests, not execution evidence. Native acceptance and Apple adapter remain
 required; original metadata-before-demand and90-second worker fairness remain unchanged.
+
+The pinned SDK8 already emits `RoomKeyChangeBatch::reconciliation()` at listener registration,
+before its live stream. The existing durable callback receipt covers keys restored before attachment.
+`import_room_keys` also notifies that store stream. Source inspection matched the build manifest:
+`encryption.rs` SHA256 `1067eb456bf46073c227d521a4569eafd215551ff54c000a4bdf0760450bff40`;
+`room_key_changes/tests.rs` `35691220a3ae29492d2395fdeb785cc810bbecd4eb231b53305947a5e33255c6`.
+This is source verification, not a new native execution. Do not add a synthetic startup receipt,
+a separate key request, a schema change or a broad initialization barrier for this already-covered
+case. Verify the existing initial reconciliation through application/native acceptance. Metadata
+publication behind the history cursor still needs its independent producer audit.

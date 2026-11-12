@@ -30,14 +30,25 @@ and lifecycle43165090113 FULL17,085 are audited. Mailbox
 ## Current: installed runtime publication under validation
 
 Workspace .work/space-runtime-publication-2026-11-12, baseline66f537a4cba7f13080acc0f734fe669e8ef4d51d.
-11 source files APPLIED, NOT accepted/compiled. Expected5,127inputs,12new common +13new Android
-protocol cases; focused56JVM+54browser+116Android, full14,466local/17,519hosted. Format1/27217 ACTIVE.
-Preparer has EXECUTED; never rerun private partial generators. Native lease revisions publish once
-and retire before drain. Existing registry candidate + credential failures produce instance UUIDs;
-same-coordinate recreation gets a new UUID. Read-only observer/domain validation + DI; no app activation.
-After format, freeze source and run Android/focused/browser/full/audits sequentially. Preserve failed
-candidate+manifest+run before fixing. Future publisher/handoff scripts are prepared, not executed.
-Hosted publication plan UNDISPATCHED; current sole compiler is format1. Do not start an emulator.
+11 source files APPLIED, NOT accepted/committed;5,127inputs, final manifest
+b4c0b77605df85d4ad73c8a6c56a632b2d2d1195f0f649444ad4cb54d2eb0456.
+Android1/43735 failed new-class JUnit initialization (one method inferred non-Unit); archived before
+fixing runBlocking<Unit>. Android2/70426 passed116/85.684s, but its manifest is pre-final-test-fix.
+Focused1/60136 failed common-test type inference in two expected nullable-publication lists; archived
+before making those two list types explicit. Production unchanged by both test corrections.
+Format3/52115 REAPED passed35.022s. Focused2/42721 REAPED PASS56/368.456s;
+browser1/99510 REAPED PASS54/139.727s; Android3/75055 REAPED PASS116/29.819s.
+Focused110 and final Android116 audits accepted (Android inline exit0). Full1/89532 ACTIVE.
+No other compiler/emulator. Preserve failures before correction/refreeze. Publisher/handoff prepared,
+NOT executed; hosted publication plan UNDISPATCHED, expected14,466local/17,519hosted.
+
+Application-sources-draft now has11 private files, NOT reviewed/applied/compiled. State JSON in this
+workspace records22owner+3lifetime+2foreground cases and pending metadata-producer audit. Generators
+already executed; do not rerun partial generators. No preparer yet. Expected next increment27 local/
+portable, zero Apple tests (app host tests); future total14,493local/17,546hosted still provisional.
+Native acceptance remains required before claiming production behavior.
+
+Phone81329 REAPED07:50:21.494115UTC,20.014804s timeout. No install; next>=08:23:41.509030UTC.
 
 ## Next: application incoming activation and native acceptance
 
