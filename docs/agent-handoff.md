@@ -1,65 +1,51 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 07:19 UTC.
-Continue PRD work and push every commit. All 54 PRD groups remain OPEN. No subagents.
-One compiler OR emulator. Follow AGENTS.md. Phone install-only; never drive its UI.
+Updated 12 November 2026, 07:39 UTC.
+Continue PRD and push every commit. All 54 PRD groups OPEN. No subagents. One compiler OR emulator.
+Follow AGENTS.md and clean boundaries. Phone install-only; announce installs, never drive its UI.
 
-## Targeted history service accepted locally
+## Durable key consumer accepted locally
 
-Workspace .work/targeted-history-recovery-2026-11-12. Baseline b95d3632d64ab9f2a2224fb2787ef6aa47ab9329.
-16 source files, 5,117 inputs; manifest af0efe6b32ce7224ff58f90904dbf07d720b4df362076f1f7704a4fbf17dae70.
-Focused 326 JVM + 275 browser = 601. Full full-1/24080 REAPED,
-588.922s; audit 93911 REAPED. Local 14,325 =
-12287 fresh + 2038 verified unchanged. All prior IDs retained.
-39 new domain cases/target, 7 encrypted-storage cases/target, 6 app-service cases.
-See measurement for any preserved failed candidates and exact APK/source hashes.
+Workspace .work/durable-room-key-consumer-2026-11-12, baseline f969fd734a3d5e41026fbb389ad37e9386f98290.
+12 files / 5,123 inputs / b9d17f3fe4e7307e3bf1356d2331be6a55522e78f8d707ab862cd79d52ee20cd.
+415 JVM +364 browser =779 focused. Full full-1/34352 REAPED,
+587.451s; audit 85250 REAPED. Local14,429 =
+12391 fresh +2038 verified unchanged. All prior case IDs retained.
+18 policy+26 consumer+8 encrypted-storage cases per supported target; existing DI graph asserts one
+collector instance. Read measurement for preserved failures/corrections and exact proof/source hashes.
 
-Active/requested room predicates stay separate. Requested union and encoding overflow become
-account-wide without changing the active cursor. Schema 8 retains predicates; schemas 1–7 preserved.
-Service filters after local metadata and before reference/provider work. Completion independently
-verifies excluded Original/Published histories; stale or narrowed scope cannot confirm a lost write.
-Nested predicates are captured before suspension; account-wide primary demotion needs a wide witness.
-No durable callback receipt or production listener/source/restore producer is enabled yet.
+The use case admits current root/session/registered source, explicitly registers the existing parent
+listener, classifies physical rooms locally and atomically retains exact receipt+intent+wake before
+ACK. Receipt survives worker/other-producer progress and stays stable through3 bounded5s attempts,
+with250/500ms backoff. Authority/unavailable failures terminate. A second collector waits on the
+lifetime Mutex. Schema9 keeps1–8 compatibility. No application collector activation or native proof.
 
-Publisher/writer EXECUTED. Push source/evidence before dispatch-hosted.py ONCE, expected 17,314 =
-12,303 portable + 5,011 Apple. Verify prior dispatch-attempt before any retry. Binding run 43168158361
-is source b95d3632; portable12,205 is audited (7169 REAPED), Apple pending. Lifecycle43165090113
-portable12,142 is audited (62050 REAPED), Apple pending. Mailbox43161963820 FULL17,004 is audited.
-Each has its own audit workspace.
-Read their latest state, do not infer artifact acceptance from a green status or redispatch them.
+Publisher/handoff EXECUTED. Push source/evidence, then dispatch-hosted.py ONCE, expected17,470 =
+12,407portable+5,063Apple. Inspect dispatch-attempt before retry. Targeted-history43172811544 is
+sourcef969fd73, expected17,314; inspect its current artifacts. Binding43168158361 FULL17,170
+and lifecycle43165090113 FULL17,085 are audited. Mailbox
+43161963820 FULL17,004 is audited. Do not redispatch old sources or call protocol checks native proof.
 
-## Current: durable key-hint consumer under validation
+## Next: application incoming activation and native acceptance
 
-12 source files are APPLIED but NOT accepted/committed in the mobile tree. Workspace
-.work/durable-room-key-consumer-2026-11-12; baseline f969fd734a3d5e41026fbb389ad37e9386f98290.
-5,123 source inputs, corrected manifest b9d17f3fe4e7307e3bf1356d2331be6a55522e78f8d707ab862cd79d52ee20cd.
-18 policy + 26 consumer cases/target, 8 storage cases/target, existing DI identity assertion.
-Expected focused415 JVM +364 browser; full14,429 local and17,470 hosted, none accepted yet.
-Focused1/93516 REAPED failed Detekt LongMethod encode103>100 before tests. Archived complete
-failed-focused-candidate-1 before correction: physical-room DTO mapping now has its own toDto.
-No schema/policy/test/threshold change. Format2/28976 REAPED passed37.304s. Focused2/9583 ACTIVE.
-Focused2/9583 REAPED PASS415/423.224s; browser1/78649 REAPED PASS364/154.547s.
-Focused779 audited; full1/34352 ACTIVE. Only this compiler; no emulator. Preserve any failure
-before correction/refreeze. publish.py and write-accepted-handoff.py PREPARED, NOT executed.
-Durable hosted plan UNDISPATCHED, previous43172811544, validation/durable-room-key-consumer-20261112.
+The serial use-case owner must be wired to actual installed runtime publication/retirement and
+root/account changes, with cancellation AND join. ObserveCollaborationSpaceIncomingStartup only
+proves local root/bootstrap facts; constructing RuntimeReady from those IDs does not prove installation
+or make a failed collector restart when the SDK later appears. Read runtime-publication-draft and next-runtime-publication-design.md:11 private files,12 common
++13 Android publication cases, not yet applied/compiled. Actual lease publication/retirement and
+per-instance UUID are observed without acquisition. Review next-runtime-publication-state.json
+and use the preparer only after the current source is accepted, pushed and dispatched.
+Activate sync/source/restore producers coherently with metadata publication and existing worker service;
+metadata must precede new history demand, including histories behind the active cursor. Preserve90s
+worker inventory/history/primary fairness and no extra transport/client per callback. Native execution
+must measure requests, finite retry, keys arriving during a write and offline/process recovery before
+claiming the former loops resolved. Apple native key adapter still requires implementation/proof.
 
-One serial DI-owned consumer admits root/session/registered source, classifies copied callbacks by
-local immutable Original/Published indexes, atomically retains exact receipt + recovery + wake,
-then acknowledges. Schema9 preserves1–8. Exact witness survives unrelated producer/worker progress;
-bounded retries reuse raw occurrence UUID. No production application/source/restore activation yet.
-Next trace actual native publication/retirement before app cancel/join wiring. Local startup IDs
-alone do not prove installed runtime; do not wait for asynchronous SDK backup/network initialization.
-Read the Git room-key retention plan. Keep metadata before demand and90s worker fairness.
-
-Targeted source f969fd73 and Group88f66458 were pushed; hosted43172811544 dispatched ONCE
-07:06:21.309506UTC, session78248 REAPED. Both jobs pending at07:17; expected17,314.
-Lifecycle43165090113 FULL17,085 =portable12,142 +Apple4,943 audited; Apple18114 REAPED.
-Binding43168158361 FULL17,170 =portable12,205 +Apple4,965 audited; Apple49999 REAPED. Mailbox43161963820 FULL17,004
-already audited. Never infer acceptance from status or redispatch these runs.
-
-Phone26630 REAPED:07:16:44.346845UTC,20.020912s timeout. No install;
-next retry>=07:50:04.367764UTC. Explicit10.77.77.3:5555, --install-only, announce actual installation.
-Never launch/drive/reset/uninstall phone UI. Main SDK8; validated phone release89 SDK6.
+SDK restore creates OlmMachine before asynchronous network/backup setup. Do not wait for broad E2EE
+initialization or loop registration after an unavailable stream. Raw parent owns final listener disposal.
+Phone26630 REAPED07:16:44.346845UTC,20.020912s timeout; next>=07:50:04.367764UTC.
+No installation.
+[Previous accepted checkpoint](agent-handoff-history-through-targeted-recovery-2026-11-12.md).
 
 ## Protected environment and prior evidence
 

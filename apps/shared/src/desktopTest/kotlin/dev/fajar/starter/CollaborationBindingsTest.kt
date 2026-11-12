@@ -348,6 +348,10 @@ class CollaborationBindingsTest {
                     container.koin.get<RetainCollaborationSpaceSyncBatches>(),
                     container.koin.get<RetainCollaborationSpaceSyncBatches>(),
                 )
+                assertSame(
+                    container.koin.get<RetainCollaborationSpaceRoomKeys>(),
+                    container.koin.get<RetainCollaborationSpaceRoomKeys>(),
+                )
                 assertSame(runtime, container.koin.get<CollaborationRuntimeRepository>())
                 assertSame(
                     runtime,

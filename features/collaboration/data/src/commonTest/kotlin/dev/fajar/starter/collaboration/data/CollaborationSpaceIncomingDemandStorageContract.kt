@@ -18,6 +18,239 @@ abstract class CollaborationSpaceIncomingDemandStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
 
     @Test
+    fun keyReceiptAndRecoveryWakeReopenBeforeAnyNativeSourcePositionExists() = withDatabase { f ->
+        val receipt = retainedRoomKeyReceipt()
+        val before =
+            CollaborationSpaceIncomingDemand(
+                historyRecovery = retainedHistoryRecovery(),
+                roomKeyReceipt = receipt,
+            )
+        val wake = CollaborationSpaceIncomingWake(receipt.receiptId)
+        val initial = saved(f.demands().replace(f.local(), null, before, wake))
+        val page =
+            f.database.replicas
+                .observe(
+                    incomingDemandScope(f.local()),
+                    incomingDemandPartition(f.local()),
+                    limit = INCOMING_DEMAND_READ_LIMIT,
+                )
+                .first()
+        assertEquals(INCOMING_DEMAND_ROOM_KEY_RECEIPT_CHECKPOINT, page.checkpoint?.payload)
+        assertEquals(1, page.documents.size)
+        f.reopen()
+        assertEquals(AppResult.Success(initial), f.demands().current(f.local()))
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+        assertTrue(initial.demand.sources.isEmpty())
+    }
+
+    @Test
+    fun maximumReceiptAndTargetPredicatesFitAllExistingEncryptedParts() = withDatabase { f ->
+        val receipt =
+            retainedRoomKeyReceipt()
+                .copy(
+                    source =
+                        CollaborationSpaceIncomingSource(
+                            "a".repeat(64),
+                            "@" + "u".repeat(240) + ":example.test",
+                            "D".repeat(255),
+                        )
+                )
+        val recovery =
+            retainedHistoryRecovery()
+                .copy(
+                    roomIds = List(64) { "!a${it.toString().padStart(2, '0')}" + "漢".repeat(100) },
+                    requestedRoomIds =
+                        List(64) { "!b${it.toString().padStart(2, '0')}" + "\"\\".repeat(90) },
+                )
+        val before = physicalDemand(64).copy(historyRecovery = recovery, roomKeyReceipt = receipt)
+        val initial = saved(f.demands().replace(f.local(), null, before))
+        val page =
+            f.database.replicas
+                .observe(
+                    incomingDemandScope(f.local()),
+                    incomingDemandPartition(f.local()),
+                    limit = INCOMING_DEMAND_READ_LIMIT,
+                )
+                .first()
+        assertEquals(INCOMING_DEMAND_ROOM_KEY_RECEIPT_CHECKPOINT, page.checkpoint?.payload)
+        assertEquals(129, page.documents.size)
+        assertTrue(page.documents.all { assertNotNull(it.payload).length <= 131072 })
+        assertTrue(page.documents.sumOf { assertNotNull(it.payload).length.toLong() } <= 4_194_304L)
+        f.reopen()
+        assertEquals(AppResult.Success(initial), f.demands().current(f.local()))
+    }
+
+    @Test
+    fun completedRecoveryAndUnrelatedRequestsPreserveTheKeyReceipt() = withDatabase { f ->
+        val receipt = retainedRoomKeyReceipt()
+        val recovery = CollaborationSpaceHistoryRecovery(historyId(9200))
+        val before =
+            CollaborationSpaceIncomingDemand(historyRecovery = recovery, roomKeyReceipt = receipt)
+        val initial = saved(f.demands().replace(f.local(), null, before))
+        val completed =
+            assertIs<AppResult.Success<CollaborationSpaceHistoryRecovery>>(
+                    planCollaborationSpaceHistoryRecoveryAdvance(
+                        recovery,
+                        recovery,
+                        null,
+                        false,
+                        false,
+                    )
+                )
+                .value
+        val next = before.copy(historyRecovery = completed, rescanGeneration = historyId(9500))
+        val retained = saved(f.demands().replace(f.local(), initial, next))
+        f.reopen()
+        assertEquals(AppResult.Success(retained), f.demands().current(f.local()))
+        assertEquals(receipt, retained.demand.roomKeyReceipt)
+        assertTrue(assertNotNull(retained.demand.historyRecovery).complete)
+    }
+
+    @Test
+    fun olderRecoveryHeadersCannotCarryAKeyReceipt() = withDatabase { f ->
+        val recovery = retainedHistoryRecovery().copy(roomIds = listOf("!target:test"))
+        saved(
+            f.demands()
+                .replace(
+                    f.local(),
+                    null,
+                    CollaborationSpaceIncomingDemand(
+                        historyRecovery = recovery,
+                        roomKeyReceipt = retainedRoomKeyReceipt(),
+                    ),
+                )
+        )
+        for ((marker, schema) in
+            listOf(
+                INCOMING_DEMAND_HISTORY_RECOVERY_CHECKPOINT to 7,
+                INCOMING_DEMAND_TARGETED_HISTORY_CHECKPOINT to 8,
+            )) {
+            assertHistoryRecoveryHeaderRejected(f, marker) { fields ->
+                JsonObject(fields + ("schema" to JsonPrimitive(schema)))
+            }
+        }
+    }
+
+    @Test
+    fun receiptFrameRequiresItsVersionReceiptAndRecoveryState() = withDatabase { f ->
+        saved(
+            f.demands()
+                .replace(
+                    f.local(),
+                    null,
+                    CollaborationSpaceIncomingDemand(
+                        historyRecovery = retainedHistoryRecovery(),
+                        roomKeyReceipt = retainedRoomKeyReceipt(),
+                    ),
+                )
+        )
+        for (change in 0..4) assertHistoryRecoveryHeaderRejected(
+            f,
+            INCOMING_DEMAND_ROOM_KEY_RECEIPT_CHECKPOINT,
+        ) { fields ->
+            when (change) {
+                0 -> JsonObject(fields + ("schema" to JsonPrimitive(8)))
+                1 -> JsonObject(fields - "roomKeyReceipt")
+                2 -> JsonObject(fields + ("roomKeyReceipt" to JsonNull))
+                3 -> JsonObject(fields - "historyRecovery")
+                else -> JsonObject(fields + ("historyRecovery" to JsonNull))
+            }
+        }
+    }
+
+    @Test
+    fun authenticatedReceiptIdentityRejectsMalformedOrOversizedFields() = withDatabase { f ->
+        saved(
+            f.demands()
+                .replace(
+                    f.local(),
+                    null,
+                    CollaborationSpaceIncomingDemand(
+                        historyRecovery = retainedHistoryRecovery(),
+                        roomKeyReceipt = retainedRoomKeyReceipt(),
+                    ),
+                )
+        )
+        for ((name, value) in
+            listOf(
+                "receiptId" to "bad",
+                "runtimeDeviceId" to "bad",
+                "runtimeOperationId" to "bad",
+                "storeId" to "a".repeat(63),
+                "matrixUserId" to "not-a-user",
+                "matrixDeviceId" to "D".repeat(256),
+                "matrixDeviceId" to "bad\ncontrol",
+            )) {
+            assertHistoryRecoveryHeaderRejected(f, INCOMING_DEMAND_ROOM_KEY_RECEIPT_CHECKPOINT) {
+                fields ->
+                JsonObject(
+                    fields +
+                        ("roomKeyReceipt" to
+                            JsonObject(
+                                fields.getValue("roomKeyReceipt").jsonObject +
+                                    (name to JsonPrimitive(value))
+                            ))
+                )
+            }
+        }
+    }
+
+    @Test
+    fun durableKeyReceiptRemainsRootScopedAcrossSessionRenewal() = withDatabase { f ->
+        val initial =
+            saved(
+                f.demands()
+                    .replace(
+                        f.local(),
+                        null,
+                        CollaborationSpaceIncomingDemand(
+                            historyRecovery = retainedHistoryRecovery(),
+                            roomKeyReceipt = retainedRoomKeyReceipt(),
+                        ),
+                    )
+            )
+        assertEquals(
+            AppResult.Success(null),
+            f.demands().current(f.local().copy(spaceId = historyId(402))),
+        )
+        val renewed = f.access.copy(sessionId = "renewed-key-owner")
+        f.reopen(renewed)
+        assertEquals(
+            AppResult.Success(initial),
+            f.demands().current(f.local().copy(sessionId = renewed.sessionId)),
+        )
+    }
+
+    @Test
+    fun aKeyReceiptCannotBePersistedWithoutItsRecoveryIntent() = withDatabase { f ->
+        val before =
+            CollaborationSpaceIncomingDemand(
+                historyRecovery = retainedHistoryRecovery(),
+                roomKeyReceipt = retainedRoomKeyReceipt(),
+            )
+        val initial = saved(f.demands().replace(f.local(), null, before))
+        assertIs<AppResult.Failed>(
+            f.demands()
+                .replace(
+                    f.local(),
+                    initial,
+                    before.copy(historyRecovery = null),
+                    CollaborationSpaceIncomingWake(historyId(9501)),
+                )
+        )
+        f.reopen()
+        assertEquals(AppResult.Success(initial), f.demands().current(f.local()))
+    }
+
+    private fun retainedRoomKeyReceipt() =
+        CollaborationSpaceRoomKeyReceipt(
+            CollaborationSpaceIncomingSource("a".repeat(64), "@keys:example.test", "KEYDEVICE"),
+            historyId(9400),
+            historyId(9401),
+            historyId(9402),
+        )
+
+    @Test
     fun maximumTargetPredicatesFitTheEncryptedHeaderWithAllExistingParts() = withDatabase { f ->
         val active = List(64) { "!a${it.toString().padStart(2, '0')}" + "漢".repeat(100) }
         val requested = List(64) { "!b${it.toString().padStart(2, '0')}" + "\"\\".repeat(90) }

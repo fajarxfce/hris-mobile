@@ -55,6 +55,12 @@ fun validCollaborationSpaceIncomingDemand(value: CollaborationSpaceIncomingDeman
             !validCollaborationSpaceHistoryRecovery(value.historyRecovery)
     )
         return false
+    if (
+        value.roomKeyReceipt != null &&
+            (value.historyRecovery == null ||
+                !validCollaborationSpaceRoomKeyReceipt(value.roomKeyReceipt))
+    )
+        return false
     if (value.sources.any { !validCollaborationSpaceIncomingSourceProgress(it) }) return false
     val sources = value.sources.map { it.source.storeId }.toSet()
     if (sources.size != value.sources.size) return false

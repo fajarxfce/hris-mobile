@@ -84,3 +84,23 @@ Test cancellation/timeout after the synchronous raw ACK and before its result is
 interpretation cannot be proved against the actual adapter, revise it before activation. A failed
 AppResult still preserves classification and current admission. Retry explicit contention only when
 BOTH FailureKind.Conflict and the operation's contention code match; authority errors never retry.
+
+## Actual installed runtime observation (next, not enabled)
+
+The durable root/bootstrap observer cannot detect SDK publication or recreation with unchanged
+logical IDs. The next contract observes the existing exact registry candidate and publishes an
+ephemeral instance UUID only after native publication. The lease retires synchronously before
+drain; failed cleanup cannot publish it again. Credential failures stay typed; confirmed persistence
+retry can restore the same instance. A new lease receives a new UUID. Observation never acquires a
+store, SDK client, sync, queue writer or network request and does not own runtime disposal.
+
+A domain observation use case checks logical coordinates and instance identity. Application
+collectLatest must cancel and join sync/key consumers on root/account/instance changes. Background
+key receipt and bounded recovery after failed retention still need an explicit process/foreground
+owner. Do not activate only from local startup IDs or add a polling/re-registration timer.
+
+Private implementation review includes12 common and13 Android protocol cases: subscribe before
+installation/publication, late subscribe, duplicate publish, retirement during blocked/failed drain,
+same-coordinate recreation, foreign coordinates, cancellation, authority loss and credential-write
+recovery. These are draft tests, not execution evidence. Native acceptance and Apple adapter remain
+required; original metadata-before-demand and90-second worker fairness remain unchanged.

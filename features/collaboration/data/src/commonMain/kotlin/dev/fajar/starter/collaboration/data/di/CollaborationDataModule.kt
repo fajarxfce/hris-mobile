@@ -841,6 +841,36 @@ class CollaborationDataModule {
         )
 
     @Single
+    fun retainSpaceRoomKeys(
+        keys: CollaborationSpaceRoomKeyRepository,
+        sync: CollaborationSpaceSyncRepository,
+        demands: CollaborationSpaceIncomingDemandRepository,
+        roots: CollaborationSpaceRootRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        originals: CollaborationSpaceOriginalRoomMetadataRepository,
+        bindings: CollaborationSpaceRoomBindingRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        schedules: SyncScheduleRepository,
+    ) =
+        RetainCollaborationSpaceRoomKeys(
+            keys,
+            sync,
+            demands,
+            roots,
+            registrations,
+            originals,
+            bindings,
+            directory,
+            sessions,
+            server,
+            build,
+            schedules,
+        )
+
+    @Single
     fun retainSpaceSyncBatches(
         sync: CollaborationSpaceSyncRepository,
         demands: CollaborationSpaceIncomingDemandRepository,

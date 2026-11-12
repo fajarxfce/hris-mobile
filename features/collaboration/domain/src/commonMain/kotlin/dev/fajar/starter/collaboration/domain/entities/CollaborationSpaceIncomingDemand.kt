@@ -50,6 +50,8 @@ data class CollaborationSpaceIncomingDemand(
     val sources: List<CollaborationSpaceIncomingSourceProgress> = emptyList(),
     val physicalRooms: List<CollaborationSpaceIncomingPhysicalRoomDemand> = emptyList(),
     val historyRecovery: CollaborationSpaceHistoryRecovery? = null,
+    /** Survives worker completion and unrelated producers until the serial collector advances. */
+    val roomKeyReceipt: CollaborationSpaceRoomKeyReceipt? = null,
 ) {
     override fun toString() = "CollaborationSpaceIncomingDemand([redacted])"
 }

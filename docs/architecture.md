@@ -1,5 +1,7 @@
 # Architecture
 
+[Durable room-key retention](collaboration-durable-room-key-consumer.md) serializes exact receipt/intent/wake confirmation before raw ACK; application activation remains separate.
+
 [Targeted history recovery](collaboration-targeted-history-recovery.md) retains bounded active/requested room predicates and independently proves exclusions before the existing worker advances.
 
 [Source-bound room-key observation](collaboration-space-room-key-binding.md) maps retained callbacks and exact ACK under the installed runtime; durable intent and production activation remain separate.

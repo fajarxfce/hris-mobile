@@ -1,0 +1,90 @@
+{
+  "recordedAt": "2026-11-12T07:39:21.223753+00:00",
+  "sourceBaseline": "f969fd734a3d5e41026fbb389ad37e9386f98290",
+  "sourceFiles": 5123,
+  "changedSourceFiles": 12,
+  "sourceManifestSha256": "b9d17f3fe4e7307e3bf1356d2331be6a55522e78f8d707ab862cd79d52ee20cd",
+  "focused": {
+    "tests": 779,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "full": {
+    "validated": 14429,
+    "fresh": {
+      "tests": 12391,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 587.451,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152225464,
+    "sha256": "ed11d4b0ff4a244e050d6f5517509a5383f7462f81ca869b2952206cf0342182"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "durableRoomKeyConsumerAccepted": true,
+  "newPolicyCasesPerTarget": 18,
+  "newConsumerCasesPerTarget": 26,
+  "newStorageCasesPerTarget": 8,
+  "encryptedSchema": 9,
+  "oldSchemasPreserved": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "serialCollectorBoundInDi": true,
+  "secondCollectorWaitsBeforeRegistration": true,
+  "currentRootSessionAndRegisteredSourceRequired": true,
+  "localPhysicalIndexClassification": true,
+  "receiptAndIntentAndWakeAtomic": true,
+  "exactReceiptSurvivesWorkerAndOtherProducerProgress": true,
+  "rawUuidStableAcrossRetries": true,
+  "maximumAttemptsPerBatch": 3,
+  "operationTimeoutMillis": 5000,
+  "finiteBackoffMillis": [
+    250,
+    500
+  ],
+  "authorityFailureNeverRetries": true,
+  "ackOnlyAfterDurableConfirmation": true,
+  "negativeAckNeverConsumesSuccessor": true,
+  "applicationActivationEnabled": false,
+  "nativeSdkExecution": false,
+  "appleNativeAdapterImplemented": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "starterPortRequired": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [
+    {
+      "run": "focused-1",
+      "exitCode": 1,
+      "elapsedSeconds": 62.961,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "failureReviews": {
+    "focused-1": {
+      "run": "focused-1",
+      "cause": "Detekt LongMethod: encode 103 lines, limit 100; no tests executed.",
+      "correction": "Map physical-room DTO in a dedicated toDto mapping beside the other DTO mappings. Preserve codec schema, validation, tests and rule thresholds.",
+      "productionBehaviorChanged": false
+    }
+  }
+}
