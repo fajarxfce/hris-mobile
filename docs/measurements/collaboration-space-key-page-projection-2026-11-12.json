@@ -67,5 +67,18 @@
   "starterPortRequired": false,
   "all54PrdGroupsRemainOpen": true,
   "preservedFailedRuns": [],
-  "failureReviews": {}
+  "failureReviews": {},
+  "sourceCommit": "82e9def35162cc6983516282ec53aae7fb9105e3",
+  "hosted": {
+    "run": 43136996756,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43136996756",
+    "dispatchedAt": "2026-11-12T01:48:14.200511+00:00",
+    "dispatchSession": 12969,
+    "dispatchSessionReaped": true,
+    "expectedPortable": 11576,
+    "expectedApple": 4716,
+    "expectedTotal": 16292,
+    "status": "in_progress",
+    "artifactsAudited": false
+  }
 }

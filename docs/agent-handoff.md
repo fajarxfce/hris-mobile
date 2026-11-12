@@ -27,9 +27,11 @@ Completion binds outcomes to the exact captured page and invokes the existing Sp
 once. False/unknown/cancelled/stale replies cannot acknowledge work. No Company fallback,
 transport/key probe, hidden retry, global receipt, collector or application activation was added.
 
-The guarded preparation, publisher and this writer HAVE EXECUTED. Commit/push source and evidence,
-then dispatch ONCE using this workspace's dispatch-hosted.py. Expected 16,292 = 11,576 portable +
-4,716 Apple. Inspect any existing dispatch-attempt file and hosted-plan before repeating an action.
+The guarded preparation, publisher and this writer HAVE EXECUTED. Mobile82e9def3 and Group9a525dfe
+are pushed (sessions29327/65021 REAPED). Hosted43136996756 dispatched ONCE by12969 REAPED at
+2026-11-12T01:48:14.200511+00:00. Ref validation/space-key-page-projection-20261112; IN PROGRESS, not audited.
+Expected16,292=11,576portable+4,716Apple. hosted-plan.json and hosted-43136996756/state.json
+retain exact source/run; never redispatch.
 
 ## Next: serve bounded account recovery before enabling key producers
 
