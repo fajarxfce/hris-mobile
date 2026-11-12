@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 22:55 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 23:18 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -78,43 +78,43 @@ deadline expired in22ms wall time around actual Default I/O. Only that test scen
 Default; all deadlines/assertions and production behavior stay unchanged. Format3/75985 passed35.426s.
 
 Indexed-contact acceptance commits Mobile5d67729f / Groupd02599c0 are pushed; sessions41570
-and59970 REAPED. One follow-up control43322026579 now has portable131549893156 running and Apple131549893690 queued,
+and59970 REAPED. One follow-up control43322026579 now has portable131549893156 running and Apple131549893690 running,
 exact5d67729f9e4ddafc8a8850fb4c6c796236d0d7a1. Expected12,758 portable +5,250 Apple =18,008,
 including25 newly instantiated native directory/admission methods. No new hosted pass is claimed.
 Mobile.work/space-thread-contact-2026-11-12/hosted-control and hosted-audit.py preserve the
 configuration; the auditor additionally requires every immediately preceding control case ID.
 Keep this exact run; do not dispatch another pending control. Dispatch29198 REAPED.
 
-ACTIVE: Mobile.work/space-thread-participants-2026-11-12, eleven application paths applied after
-contact acceptance and both pushes. Existing canonical observation now carries exact conversation
-metadata, indexed peer labels, bounded selected registration identity and exact Original self identity.
-Initial content includes actual participant results; absence/failure remain explicit and do not erase readable history. The selected
-binding child owns one finite async metadata read shared by unresolved facts and peer lookup;
-no API, native SDK, writes or outer content-forwarding subscription is introduced. Repository
-wiring stays in data, pure validation/capture in domain. All source remains unaccepted until checks.
+Canonical local thread participants are ACCEPTED in
+Mobile.work/space-thread-participants-2026-11-12. Eleven application paths add exact
+conversation metadata, indexed peer labels, bounded selected registration identity and
+Original self identity. First success includes actual local participant results and
+history; observed absence/failure stays explicit and never erases readable history.
+Known command/history failures publish before participant reads finish. All reads remain
+under the existing account, Group admission and selected-binding child. No API, SDK,
+mutation, new cache, artificial delay or retry loop was introduced.
 
-Format1/45683 REAPED35.863s. Focused1/55147 FAILED62.016s,0 tests: Detekt rejected
-observeThread at101 lines. Preserve failed-duplicated-command-observation-1. Both branches
-now share one named cold canonical-command read within the same owner; no layer/threshold change.
-Format2/94905 REAPED35.192s; both call sites corrected before compilation. Format3/78896
-REAPED35.473s. Focused2/33776 REAPED FAILED147.032s:70 tests/6 existing emission assertions.
-Partial participant onStart states produced multiple initial snapshots of unchanged history.
-Preserve failed-partial-participant-publication-1 with all source/report/log evidence.
+Focused3/60323 REAPED PASS 118 / 385.176s. Full1/16458 REAPED PASS 821.860s;
+strict audits and record-acceptance.py pass. Full 14,816 = 12,778 fresh + 2,038 exact
+unchanged cases, preserving all 14,780 prior IDs with 36 new JVM/browser cases.
+Source 5176 / 31665fbad262b090004ea63c1acfc8ccf2da1b3f205e8097c99a1b121e34651d;
+report afe40d08066370cf67958a2d9a1e27c7e0d4d2a77930844941f61db205914f98;
+immutable proof 153377284B / f1da56c2cb07bf976d155aa9094168d11d956f40d6c56abcdcf92dc08fb057b3.
+Both domain/data native iOS test sources compiled. Linux executed 0 Apple cases.
+No new phone installation, UI latency or live Group deployment is claimed.
 
-Correction: first success contains actual local participant results together with history;
-observed absence/failure is explicit and still permits readable history. Known content/command
-failures publish before participant reads finish. No debounce, arbitrary delay or API. Every old
-assertion stays unchanged. The new held-reader test now proves coherent initial publication and
-joined cancellation; actual cold/warm UI latency still needs measurement. Format4/53649 REAPED
-35.726s; a local correction script stopped on an indentation assertion before new-test cleanup,
-which was completed before compilation. Format5/50573 REAPED34.862s. Focused3/60323 ACTIVE
-from22:53, expected118. Frozen5176inputs/31665fbad262b090004ea63c1acfc8ccf2da1b3f205e8097c99a1b121e34651d.
-Full expected14,816, retaining all14,780 prior IDs with36 new JVM/browser cases. Both domain/data
-native iOS test compilation are required; Linux executes0 Apple cases. No full run yet. Do not
-edit source or start another compiler/emulator until reaped. Prepared auditors retain exact baselines.
-After focused/full acceptance, commit/push before further implementation. Continue immutable composer
-submission time/drafts and organization UI. Component/ownership review remains in Mobile
- docs/collaboration-organization-ui-plan.md. All54 PRD acceptance groups remain OPEN.
+Preserve failed-duplicated-command-observation-1 (Detekt101, 0 tests) and
+failed-partial-participant-publication-1 (70 tests, 6 existing emission failures).
+The first was resolved by sharing one cold canonical-command observation within its owner;
+the second by coherent first publication of actual results. All existing assertions remain.
+Format5/50573 REAPED 34.862s. Earlier formatting/script failures are recorded in the evidence.
+
+NEXT: immutable composer submission ID/time, then Group drafts and organization UI.
+Draft-only Mobile.work/space-composer-submission-2026-11-12 has five paths and six new
+methods; verify base hashes before application. It is not yet tested or accepted.
+Commit and push accepted work before application. Review component ownership and measured
+first-frame requirements in docs/collaboration-organization-ui-plan.md. All 54 acceptance
+groups remain OPEN; continue beyond this checkpoint.
 
 Hosted follow-up43312753298 on exact1f47eeddb833054ae2b3d52c20439e6d11518a02:
 Portable131515465558 is ACCEPTED; auditor42039 REAPED,12,716 cases (6083desktop/955Android/5678browser).
@@ -223,15 +223,26 @@ Inventory and store local main ARM64/metadata, all21 native-test method compilat
 `:check` pass. Linux executed0 Apple cases. Both adapters require a pre-provisioned private,
 backup-excluded root; store creation and existing-only access remain separate. No product binding.
 
-Native SDK8 Apple43267867675 FAILED on the150-minute framework build deadline; top
-section records exact failed artifact and measured target times. New isolated budget-only
-candidate43296438399 on3c9c41a9f45f0533e4591a632d1df862668a06d0/job131455907436 is running.
-Use Mobile.work/sdk8-apple-build-budget-2026-11-12/audit-hosted.py only after success.
-All4 Swift identities,5 architectures/3 slices and device/simulator links remain required.
-Two older ARM attempts43261761056 failed before any step due to runner capacity; preserve.
-No SDK publication or Apple app runtime binding yet. The app still selects unavailable Apple
-Matrix runtime; actual bridge/composition follows accepted native SDK8. Preserve failed evidence
-and fix demonstrated causes only. Independent Android/Group product work may continue.
+Native SDK8 Apple 43296438399 FAILED on exact
+3c9c41a9f45f0533e4591a632d1df862668a06d0 / job131455907436 after 10471.129s.
+All five Rust targets and three XCFramework slices built. Export inspection then failed:
+Xcode16.4 Apple LLVM17 nm could not decode Rust1.96 LLVM22.1.2 compiler_builtins bitcode
+(unknown attributes102/105). Zero Swift contracts executed. This was not a build timeout.
+The complete failed artifact and job log remain in
+Mobile.work/sdk8-apple-build-budget-2026-11-12/hosted-43296438399.
+Artifact13992067219 / 18757B / d48c496130814b7a083d3483ccf9e37f523d6fb33cd4ca7916d3f308aaf831db;
+job log7042ba65af48e9eb6e4112845ddc564ce96dda87e15dc8042da89ef4fb480884.
+
+An isolated fix in .worktrees/hris-mobile-apple-budget-2026-11-12 uses llvm-nm from the
+exact pinned Rust sysroot, verifies compiler/reader provenance and tests a real tiny Rust
+archive before the expensive build. No old-reader fallback or ignored failure. Five
+architectures, all required exports, four Swift contracts and device/simulator links remain
+required. The fix is not yet hosted-accepted. Keep it separate from main app source and
+avoid duplicate native dispatch. The old success auditor is pinned to the FAILED head;
+prepare a new exact-head auditor for the new run. Preserve the older deadline failure
+43267867675 and two pre-step runner-capacity failures. No SDK publication or Apple app
+runtime binding yet; the app still selects the unavailable Apple Matrix runtime.
+Independent Android/Group work continues.
 
 ## Phone delivery
 
@@ -247,8 +258,9 @@ fresh2560MiB/two cores, cold2908ms/reopen2145ms, stable10s/process. Both screens
 were inspected and show complete onboarding. ARM39435 REAPED42.972s, verify38284 REAPED.
 All gates are finished; do not rebuild. No authenticated release/phone latency claim.
 
-Latest ADB1835 REAPED timeout15s at22:00UTC; no installation attempted. At20:12UTC the
-WireGuard handshake was34837s old; route is correct viawg0. Do not repeat availability questions.
+Latest ADB94840 REAPED: timeout after 15 seconds at23:15UTC; no install attempted.
+WireGuard peer10.77.77.3 last handshake10:32:22UTC (checked23:05); route viawg0 is correct.
+Do not repeat availability questions. Continue bounded connection checks independently.
 When10.77.77.3:5555 connects, announce EACH actual installation, then run Mobile
 .work/release-phone-2026-11-12-build92/install.py --install-only. Inspect any existing
 install-result first; never uninstall/reset/downgrade/launch/drive the phone UI. Preserve app data.

@@ -2,10 +2,15 @@ package dev.fajar.starter.collaboration.domain.entities
 
 /** Admitted local facts distinguish a selected history source from an unresolved room. */
 sealed interface CollaborationSpaceThreadSnapshot {
+    val conversation: CollaborationSpaceConversationMetadata
+    val participants: CollaborationSpaceThreadParticipants
+
     data class Bound(
         val history: CollaborationSpaceThreadHistory,
         val spaceCommands: List<CollaborationSpaceMessageRecord>,
         val originalCommands: List<CollaborationMessageRecord>,
+        override val conversation: CollaborationSpaceConversationMetadata,
+        override val participants: CollaborationSpaceThreadParticipants,
     ) : CollaborationSpaceThreadSnapshot {
         override fun toString() = "CollaborationSpaceThreadSnapshot.Bound([redacted])"
     }
@@ -15,8 +20,9 @@ sealed interface CollaborationSpaceThreadSnapshot {
      */
     data class Unresolved(
         val access: CollaborationSpaceLocalAccess,
-        val conversation: CollaborationSpaceConversationMetadata,
+        override val conversation: CollaborationSpaceConversationMetadata,
         val spaceCommands: List<CollaborationSpaceMessageRecord>,
+        override val participants: CollaborationSpaceThreadParticipants,
     ) : CollaborationSpaceThreadSnapshot {
         override fun toString() = "CollaborationSpaceThreadSnapshot.Unresolved([redacted])"
     }

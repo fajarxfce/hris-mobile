@@ -1,5 +1,7 @@
 # Architecture
 
+[Canonical thread participants](collaboration-space-thread-participants.md) keep exact peer and historical/current sender facts under the existing local thread owner.
+
 [Indexed thread contacts](collaboration-space-thread-contact.md) read one published employee label without scanning the directory; domain still owns admission.
 
 [Unresolved canonical threads](collaboration-unresolved-space-thread.md) expose actual local commands before room publication and switch readers under the same admission owner.

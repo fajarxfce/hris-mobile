@@ -87,3 +87,11 @@ long-press/multi-selection and account/Group revocation. Inspect rendered screen
 and record frame/latency measurements on the dedicated emulator. Screenshot evidence
 and a successful build are separate from actual delivery/call behavior. Phone delivery
 remains install-only after its own accepted release checks.
+
+## Accepted local participants
+
+The canonical thread now publishes history with actual local participant results on its
+first success. Observed absence and failed metadata remain explicit; no provisional
+identity is fabricated. This preserves coherent initial publication. Bounded route warming
+and cold/warm first-frame measurements are still required before claiming immediate room
+rendering. See [participant evidence](collaboration-space-thread-participants.md).

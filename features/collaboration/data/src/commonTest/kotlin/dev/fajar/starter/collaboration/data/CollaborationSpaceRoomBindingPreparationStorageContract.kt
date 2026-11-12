@@ -28,6 +28,113 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
 
     @Test
+    fun canonicalParticipantsReopenExactOriginalIdentityAndSelectedProviderWithoutTransport() =
+        withDatabase { f ->
+            val binding = f.binding()
+            assertEquals(AppResult.Success(true), f.bindings().retain(f.access, binding))
+            val registration = f.registration()
+            assertEquals(
+                AppResult.Success(CollaborationSetupInsertion.STORED),
+                f.registrations().insert(f.access, registration),
+            )
+            val original = CollaborationSelfIdentity("@original-owner:matrix.example.test")
+            val position = requireNotNull(binding.original).conversation.position
+            val company =
+                CollaborationLocalAccess(
+                    f.access.sessionId,
+                    f.access.audience,
+                    f.access.accountId,
+                    position.companyId,
+                )
+            assertEquals(AppResult.Success(true), f.originalIdentity().retain(company, original))
+            val contact = f.contact("Stored colleague")
+            f.publishContact(contact, historyId(14201))
+            val before =
+                withTimeout(5_000) {
+                    f.observeHistory()(f.access, f.conversation().id)
+                        .filterIsInstance<AppResult.Success<CollaborationSpaceThreadSnapshot>>()
+                        .first()
+                        .value
+                }
+            assertEquals(binding.conversation, before.conversation)
+            assertEquals(AppResult.Success(contact), before.participants.contact)
+            assertEquals(
+                AppResult.Success(registration.provider),
+                before.participants.selectedIdentity,
+            )
+            assertEquals(AppResult.Success(original), before.participants.originalIdentity)
+            val key = f.history.keys.read()
+            val previousAccess = f.access
+            f.reopen()
+            assertNotEquals(previousAccess.sessionId, f.access.sessionId)
+            val after =
+                withTimeout(5_000) {
+                    f.observeHistory()(f.access, f.conversation().id)
+                        .filterIsInstance<AppResult.Success<CollaborationSpaceThreadSnapshot>>()
+                        .first()
+                        .value
+                }
+            assertEquals(before.participants, after.participants)
+            assertEquals(before.conversation, after.conversation)
+            assertEquals(key, f.history.keys.read())
+            assertEquals(0, f.roomReads + f.originalReads)
+        }
+
+    @Test
+    fun canonicalParticipantsObservePublishedContactChangesWithoutReplacingOwnedHistory() =
+        withDatabase { f ->
+            val binding = f.binding()
+            assertEquals(AppResult.Success(true), f.bindings().retain(f.access, binding))
+            val position = requireNotNull(binding.original).conversation.position
+            val company =
+                CollaborationLocalAccess(
+                    f.access.sessionId,
+                    f.access.audience,
+                    f.access.accountId,
+                    position.companyId,
+                )
+            assertEquals(
+                AppResult.Success(true),
+                f.history.repository.merge(
+                    company,
+                    position.conversationId,
+                    binding.room.roomId,
+                    listOf(f.history.event(1)),
+                ),
+            )
+            val contact = f.contact("Original label")
+            f.publishContact(contact, historyId(14202))
+            coroutineScope {
+                val values = Channel<CollaborationSpaceThreadSnapshot.Bound>(8)
+                val job = launch {
+                    f.observeHistory()(f.access, f.conversation().id)
+                        .filterIsInstance<AppResult.Success<CollaborationSpaceThreadSnapshot>>()
+                        .collect {
+                            values.send(assertIs<CollaborationSpaceThreadSnapshot.Bound>(it.value))
+                        }
+                }
+                try {
+                    val before = withTimeout(5_000) { values.receive() }
+                    assertEquals(AppResult.Success(contact), before.participants.contact)
+                    assertEquals(AppResult.Success(null), before.participants.selectedIdentity)
+                    assertEquals(AppResult.Success(null), before.participants.originalIdentity)
+                    val updated = contact.copy(displayName = "Published label")
+                    f.publishContact(updated, historyId(14203))
+                    val after = withTimeout(5_000) { values.receive() }
+                    assertEquals(AppResult.Success(updated), after.participants.contact)
+                    assertEquals(before.history, after.history)
+                    assertEquals(
+                        listOf(f.history.event(1).eventId),
+                        after.history.page.messages.map { it.primaryEventId },
+                    )
+                    assertEquals(0, f.roomReads + f.originalReads)
+                } finally {
+                    job.cancelAndJoin()
+                }
+            }
+        }
+
+    @Test
     fun knownLocalCommandsFollowOriginalBindingPublicationAndEncryptedReopen() = withDatabase { f ->
         val conversation = f.conversation()
         assertEquals(AppResult.Success(true), f.metadata().retain(f.access, conversation))
@@ -956,10 +1063,93 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                 history.repository,
                 spaceMessages(),
                 originalMessages(),
+                registrations(),
+                originalIdentity(),
                 directory(),
                 sessions,
                 IdentityServer(access.audience, "Fictional server"),
             )
+
+        fun registrations() =
+            EncryptedCollaborationSpaceRegistrationCommandRepository(
+                history.database.commands,
+                history.cipher,
+                commandKey,
+            )
+
+        fun originalIdentity() =
+            EncryptedCollaborationIdentityRepository(
+                history.database.replicas,
+                history.cipher,
+                history.keys,
+            )
+
+        fun registration(): CollaborationSpaceRegistrationCommand {
+            val provider =
+                CollaborationSpaceIdentity(
+                    access.spaceId,
+                    access.accountId,
+                    room.serverName,
+                    "@hrisg_${access.spaceId.replace("-", "")}_${access.accountId.replace("-", "")}:${room.serverName}",
+                    CollaborationSpaceIdentityOrigin.SPACE,
+                    null,
+                    0,
+                    now,
+                )
+            return CollaborationSpaceRegistrationCommand(
+                historyId(14200),
+                CollaborationSpaceDeviceBinding(
+                    access.audience,
+                    access.accountId,
+                    access.spaceId,
+                    owner.parent.nativeSessionId,
+                ),
+                CollaborationNativePlatform.ANDROID,
+                5,
+                now,
+                provider,
+                "Fictional device",
+                CollaborationSpaceDeviceOrigin.SPACE,
+                null,
+            )
+        }
+
+        fun contact(name: String) =
+            CollaborationSpaceContact(
+                peer,
+                name,
+                listOf(CollaborationSpaceContactCompany(position.companyId, "Fictional company")),
+                false,
+            )
+
+        suspend fun publishContact(contact: CollaborationSpaceContact, generation: String) {
+            val directory = directory()
+            val previous =
+                assertIs<AppResult.Success<CollaborationSpaceDirectoryCheckpoint?>>(
+                        directory.checkpoint(access)
+                    )
+                    .value
+            assertEquals(
+                AppResult.Success(true),
+                directory.begin(access, previous, generation, now),
+            )
+            val checkpoint =
+                assertNotNull(
+                    assertIs<AppResult.Success<CollaborationSpaceDirectoryCheckpoint?>>(
+                            directory.checkpoint(access)
+                        )
+                        .value
+                )
+            assertEquals(
+                AppResult.Success(true),
+                directory.append(
+                    access,
+                    checkpoint,
+                    CollaborationSpaceContactPage(owner, listOf(contact), null),
+                    now,
+                ),
+            )
+        }
 
         fun directory() =
             EncryptedCollaborationSpaceDirectoryRepository(

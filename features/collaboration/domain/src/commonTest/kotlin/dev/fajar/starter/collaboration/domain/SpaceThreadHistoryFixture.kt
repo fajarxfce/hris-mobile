@@ -16,6 +16,7 @@ internal class SpaceThreadHistoryFixture(val legacy: Boolean = false) {
     val access = room.access
     val id = room.conversation.id
     val commands = SpaceThreadCommandStores(room)
+    val participants = SpaceThreadParticipantStores(room)
     var metadataReads = 0
     var bindingStarts = 0
     var bindingStops = 0
@@ -82,6 +83,9 @@ internal class SpaceThreadHistoryFixture(val legacy: Boolean = false) {
         }
     val directory =
         object : CollaborationSpaceDirectoryRepository by base.directory {
+            override fun observeContact(access: CollaborationSpaceLocalAccess, accountId: String) =
+                participants.observeContact(access, accountId)
+
             override suspend fun admission(
                 access: CollaborationSpaceLocalAccess
             ): AppResult<CollaborationSpaceDirectoryAdmission> {
@@ -216,6 +220,8 @@ internal class SpaceThreadHistoryFixture(val legacy: Boolean = false) {
             originals,
             commands.spaces,
             commands.originals,
+            participants.commands,
+            participants.identities,
             directory,
             sessions,
             native.server,

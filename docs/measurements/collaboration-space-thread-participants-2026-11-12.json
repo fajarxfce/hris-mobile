@@ -1,0 +1,103 @@
+{
+  "date": "2026-11-12",
+  "scope": "Canonical local thread participants under the existing session and Group admission lifetime",
+  "baseCommit": "5d67729f9e4ddafc8a8850fb4c6c796236d0d7a1",
+  "sourceFiles": 5176,
+  "sourceManifestSha256": "31665fbad262b090004ea63c1acfc8ccf2da1b3f205e8097c99a1b121e34651d",
+  "changedSources": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "eefe791e815306407b4c326a7095edfb4c98f89ca2d81ea28d8173a0ff737ee3",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingPreparationStorageContract.kt": "8343e84d74e387845202dfbb1806cb814a93ebeec107b0b8a82ebe8c98b7c94e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceThreadParticipants.kt": "13deb3c251739660e51cf9e945f7a2bdc8d776cde6ed2e8c492b972a71e9a4f6",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceThreadSnapshot.kt": "bed1368ba80b8fc5e8f0fd42c03dabc17525579361589808a52a0ceefdf08629",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceThreadParticipantPolicy.kt": "9c1e15fd1772b77c23f8ec956f9a46bdac3e112615ee58e7d574ccd0a7f05522",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceThread.kt": "228d2742dc6920b4e17a19eff04a3f843167e55238bcb83ab27d7b06301b84ea",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceThreadParticipantsTest.kt": "ed6da3c070769123f492d2e53739e009d1d48f6438d1575634b7813d592f7ff8",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceThreadHistoryFixture.kt": "f2c4d1b198ea412de6e5a62a09d9d97b4354ea0ed3c8c2b9643b95aa9891fe22",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceThreadParticipantLifetimeTest.kt": "9ea07dadbe1de59711846d2e3bad8dc787cb33867c9e1c73b8981c4d1ba4da4a",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceThreadParticipantPolicyTest.kt": "2d133b749b8d919f02a2be35ea7045eaa10aba74137b8baf10e4f39d1c60c99a",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceThreadParticipantStores.kt": "3b040cf937b3ecf1adfa3b72de45ae716cafeb56b53041cafa5d11a000f1a2d6"
+  },
+  "focused": {
+    "accepted": true,
+    "tests": 118,
+    "elapsedSeconds": 385.176,
+    "sourceFiles": 5176,
+    "sourceManifestSha256": "31665fbad262b090004ea63c1acfc8ccf2da1b3f205e8097c99a1b121e34651d",
+    "resultSha256": "4fd8f16945ef94e8386a97fdd34436ffe084862b5955dc1b9c110055c67fe365",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceRoomBindingStorageTest": 33,
+      "CollaborationSpaceRoomBindingPreparationStorageTest": 13,
+      "ObserveSpaceThreadCommandsTest": 6,
+      "ObserveSpaceThreadHistoryRoutingTest": 6,
+      "ObserveUnresolvedSpaceThreadTest": 7,
+      "UnresolvedSpaceThreadLifetimeTest": 4,
+      "CollaborationSpaceHistoryLocationTest": 9,
+      "ObserveSpaceThreadHistoryAdmissionTest": 8,
+      "ObserveSpaceThreadParticipantsTest": 6,
+      "SpaceThreadCommandLifetimeTest": 4,
+      "SpaceThreadCommandPolicyTest": 6,
+      "SpaceThreadHistorySnapshotTest": 4,
+      "SpaceThreadParticipantLifetimeTest": 4,
+      "SpaceThreadParticipantPolicyTest": 6
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-12T23:01:17.875851+00:00",
+    "elapsedSeconds": 821.86,
+    "sourceFiles": 5176,
+    "freshCounts": {
+      "tests": 12778,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153377284,
+      "sha256": "f1da56c2cb07bf976d155aa9094168d11d956f40d6c56abcdcf92dc08fb057b3"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 14816,
+    "newCases": 36,
+    "freshTests": 12778,
+    "reusedUnaffectedTests": 2038,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 111,
+    "excludedHistoricalCases": 657,
+    "sourceManifestSha256": "31665fbad262b090004ea63c1acfc8ccf2da1b3f205e8097c99a1b121e34651d",
+    "reportManifestSha256": "afe40d08066370cf67958a2d9a1e27c7e0d4d2a77930844941f61db205914f98",
+    "nativeClaim": "No changed SDK/proof source; earlier accepted ten native scenarios remain historical evidence. This gate does not claim new native or phone behavior."
+  },
+  "fullAuditSha256": "bc07fcfb9b28f651e164e687a6df26670b22f3d16a57f5531fc5445c54ca9461",
+  "preservedFailures": [
+    {
+      "path": "failed-duplicated-command-observation-1",
+      "run": "focused-1",
+      "session": "55147 REAPED",
+      "elapsedSeconds": 62.016,
+      "testsExecuted": 0,
+      "cause": "observeThread reached101 logical lines. The bound and unresolved branches duplicate the same canonical command observation, validation and unread-source boundary.",
+      "correction": "Use one named cold canonical-command read in the existing collector owner for both branches. No new layer, owner, retry, assertion or deadline change."
+    },
+    {
+      "path": "failed-partial-participant-publication-1",
+      "run": "focused-2",
+      "session": "33776 REAPED",
+      "elapsedSeconds": 147.032,
+      "testsExecuted": 70,
+      "failures": 6,
+      "cause": "Partial participant onStart values publish extra initial snapshots for unchanged history/commands. Six existing emission/lifetime assertions fail (3 expected vs5;2 vs3;single vsmultiple).",
+      "correction": "Publish a coherent first local snapshot only after selected participant reads have actual results. Absence and failures remain explicit and do not erase readable history; known command/history failures still publish before participant reads finish. No API or delay/debounce added. Preserve all existing assertions; replace the new unread-success test with explicit held-reader/cancellation evidence for the corrected publication contract.",
+      "remaining": "Measure cold/warm first-frame behavior during organization UI integration; do not infer speed from coherent flow publication."
+    }
+  ],
+  "newDomainMethods": 16,
+  "newSharedStorageMethods": 2,
+  "appleCasesExecutedLocally": 0,
+  "nativeSdkExecutedForThisIncrement": false,
+  "phoneInstalledForThisIncrement": false,
+  "groupLiveDeployment": false,
+  "remaining": "Actual hosted native Apple execution, immutable organization composer/drafts, organization thread presentation and measured first-frame behavior."
+}
