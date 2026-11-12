@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 13:15 UTC. Continue the PRD and push every commit. All 54 acceptance groups OPEN.
+Updated 12 November 2026, 13:19 UTC. Continue the PRD and push every commit. All 54 acceptance groups OPEN.
 No subagents. One compiler OR emulator. Phone install-only: announce and select serial; never
 launch/drive UI, reset data or uninstall. Continue beyond checkpoints.
 
@@ -42,7 +42,7 @@ Company coverage requires provider=null; Published Space uses non-null provider 
 
 The eight-file coverage change is now APPLIED and uncommitted in Mobile. Workspace
 `.work/space-original-covered-hint-2026-11-12`, baseline accepted metadata6d9f745a/14,555 cases.
-Current5,136-input manifest715c8509eadb97a6ad773ae4d1f1c21a48dce909f84d941381ecc05e2dc3542b.
+Current5,136-input manifest0c3be4a8ce87881e81680f3935a6564f6b59c1aa42a100753d3479262c415018.
 It adds named pure Original coverage policies; the owning queue use case receives an explicit
 parent, resolves registered legacy Company/device provenance, reads one source/pending page,
 confirms unchanged progress, and fences registration/admission. Unknown/unclean history stays
@@ -55,9 +55,7 @@ Company/conversation/device identities. Thirteen new Original regressions cover 
 unknown/unfinished/active pending history, different registration, session/denial/replacement,
 storage/cancellation and preserved independent work. Existing21 Published tests keep their IDs.
 
-Format1/96904 REAPED35.586s. Focused1/session26911 ACTIVE, expected70 cases:34 domain desktop,
-34 domain browser and2 shared DI cases. No test acceptance yet. Do not edit source/start emulator
-during it. After completion run accept-focused.py focused-1; preserve failures before correction.
+Format1/96904 REAPED35.586s. Focused1/26911 REAPED FAILED117.278s before tests: the active-pending fixture used Int0 for an opaque String cursor. Production compiled; zero tests ran. Archived exact8-file source as failed-focused-candidate-1 before correcting only the fixture to valid cursor "seek". No production change. Focused2/session54233 ACTIVE, expected70 cases (34 domain desktop +34 browser +2 shared DI). No test acceptance yet. Do not edit source/start emulator. After completion run accept-focused.py focused-2; accept-full.py now uses focused2/proof1, not the failed run.
 Then exact proof APK/21 tests, native worker7 with unchanged assertions, and full baseline gate
 (expected14,581 local =14,555+26). All runners/audits are prepared privately.
 Native worker6 remains the behavioral regression; constructor/compiler failures are not red proof.
@@ -66,7 +64,7 @@ Group exact turns2/Matrix31/native14 assertions remain unreached and need actual
 ## CI, prior commit and phone
 
 Coalescing source f11eea10 / Group b620663c is committed/pushed and accepted14,538 locally.
-Documentation66193342 /3a70bfb9 pushes19803/58065 REAPED. Hosted control43220169006 on exactf11eea10
+Documentation4257dfac /18cdb196 pushes51703/31022 REAPED. Hosted control43220169006 on exactf11eea10
 remains active; last query17879 REAPED showed portable and Apple in progress. State/auditor live in
 `.work/space-incoming-discovery-coalescing-2026-11-12/hosted-43220169006`. Expected17,611=12,516
 portable (5,987/947/5,582) +5,095 Apple. Audit against fully accepted progressive43200304791.
