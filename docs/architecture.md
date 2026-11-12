@@ -1,5 +1,7 @@
 # Architecture
 
+[Native account replacement](collaboration-native-account-replacement.md) verifies stale callback retirement and original encrypted receipt, identity and offline history continuity through actual application ownership.
+
 [Apple SDK store acquisition](collaboration-apple-sdk-store.md) shares the original native owner with inventory and keeps explicit creation separate from existing-only reads.
 
 [Existing Apple SDK inventory](collaboration-apple-sdk-inventory.md) reads original file facts under an exclusive native directory lock and reuses the shared repository and admission policy. Native execution and product binding remain separate gates.

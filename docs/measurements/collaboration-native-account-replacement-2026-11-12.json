@@ -1,0 +1,159 @@
+{
+  "date": "2026-11-12",
+  "scope": "Actual Android account retirement during held committed room-key reply, followed by existing identity and offline history reads",
+  "productionBehaviorChanged": false,
+  "mobileSourceFiles": 5151,
+  "mobileSourceManifestSha256": "70bd7258a94872ca0d7167eb691e1635fdde47facf480da41d9d1fc7515e4093",
+  "groupSourceFiles": 8753,
+  "groupSourceManifestSha256": "7e4c32bb578f148fcbd21c62a8302436bcf1abfb534fc0b561aab9510642b300",
+  "sdk": "26.10.23-hris.8",
+  "nativeLibrarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+  "proof": {
+    "acceptedProofBuild": true,
+    "fullChecksAccepted": true,
+    "nativeWorkerAccepted": true,
+    "tests": 21,
+    "elapsedSeconds": 114.78,
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152433161,
+      "sha256": "76b4ba13de5f3dcb40303e8ce8822dfcae6fad6062bd1609dc8163645b019f6c"
+    },
+    "sourceManifestSha256": "70bd7258a94872ca0d7167eb691e1635fdde47facf480da41d9d1fc7515e4093",
+    "nativeLibrarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+    "sourceFiles": 5151,
+    "phoneTouched": false
+  },
+  "protocol": {
+    "modules": [
+      "test_collaboration_event_reads_native",
+      "test_collaboration_late_keys_native",
+      "test_collaboration_late_key_recovery_native",
+      "test_collaboration_space_original",
+      "test_collaboration_account_replacement_native"
+    ],
+    "tests": 70,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "logSha256": "fb574ef04b2337615975a4dcf88305f48c468ba36e3f5b684dfa0f4e0bf28372"
+  },
+  "nativeSingle": {
+    "tests": 1,
+    "elapsedSeconds": 110.983,
+    "bootSeconds": 29.414,
+    "resultSha256": "e27168c9345c4c3c00640fcf305f0861bba455f796936ed0063563dbf4348905"
+  },
+  "nativeSuite": {
+    "tests": 10,
+    "counts": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "elapsedSeconds": 481.291,
+    "bootSeconds": 29.405,
+    "cases": [
+      "dev.fajar.hris.NativeAccountReplacementTest.nativeAccountReplacementRetiresHeldReplyAndPreservesOriginalEncryptedHistory()",
+      "dev.fajar.hris.NativeEventReadsTest.completedIncomingReferencesRemainExhaustedAcrossOfflineReopen()",
+      "dev.fajar.hris.NativeEventReadsTest.exactEncryptedEventsSurviveOriginalRuntimeAdoptionWithoutPresentationRelabeling()",
+      "dev.fajar.hris.NativeEventReadsTest.nativeIncomingHintsPreserveExactSyncPositionsAndObserveStoredKeys()",
+      "dev.fajar.hris.NativeEventReadsTest.nativeIncomingReceiptSurvivesLostReplyForegroundAndOfflineReopen()",
+      "dev.fajar.hris.NativeEventReadsTest.registeredIncomingWorkerRetainsContentBeforeEofAndStopsAcrossOfflineReopen()",
+      "dev.fajar.hris.NativeSpaceLateKeysTest.realKeyDuringLostReceiptReplySurvivesQuietObservationAndOfflineReopen()",
+      "dev.fajar.hris.NativeSpaceLateKeysTest.retainedLateKeyRecoveryDrainsThroughRegisteredWorkerAfterProcessLoss()",
+      "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.newSpaceOriginalSharesTheQueueWithoutChangingCompanyOwnershipAfterProcessDeath()",
+      "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.originalQueueSurvivesLostProjectionAndOfflineRecipientWithoutReplacement()"
+    ],
+    "reportHashes": {
+      "TEST-dev.fajar.hris.NativeEventReadsTest.xml": "fec343505241561f12c402c5c96f88e2107a62d3ee29f3731745685ca3164cef",
+      "TEST-dev.fajar.hris.NativeSpaceLateKeysTest.xml": "0ccc7381dc9b08c27e7328124491c48697a182615c26587b53e973d1460e6ac2",
+      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": "ad16675a0b8ad5b96d4ab8362b295cad82f310200472c2c1ced2169ea3d4efaa",
+      "TEST-dev.fajar.hris.NativeAccountReplacementTest.xml": "f82996099a6be3b530a6447381d9cd3e3554c23ec3a35967fc39ac7c103d55f2"
+    },
+    "resultSha256": "19d8faeec590c8951de82c8919a78e57e13f516bffa71b57d63a519bbb548ebd"
+  },
+  "accountReplacement": {
+    "kind": "accountReplacement",
+    "native": {
+      "requests": 13,
+      "registration": 1,
+      "bootstrapReplay": 1,
+      "directTransport": 4
+    },
+    "matrix": {
+      "requests": 32,
+      "encryptedSend": 4,
+      "sync": 3,
+      "secretStorage": 2,
+      "providerPage": 2
+    },
+    "proof": {
+      "receiptCommittedBeforeReplacement": true,
+      "replacementParentPublished": true,
+      "previousRuntimeClosed": true,
+      "replacementCannotReadOriginalReceipt": true,
+      "lateReplyNotAcknowledged": true,
+      "originalReceiptRestored": true,
+      "receiptWrites": 1,
+      "nativeAcknowledgements": 0,
+      "receiptDigest": "d3251b6356bd4357fcd7835e19c91660db0b24759207eed275cea66418f69592",
+      "originalPrivateIdentityPreserved": true
+    },
+    "offlineRequests": 0
+  },
+  "fullCheck": {
+    "startedAt": "2026-11-12T18:43:54.307691+00:00",
+    "elapsedSeconds": 69.7,
+    "sourceFiles": 5151,
+    "freshCounts": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152433161,
+      "sha256": "76b4ba13de5f3dcb40303e8ce8822dfcae6fad6062bd1609dc8163645b019f6c"
+    },
+    "fullyAccepted": true,
+    "nativeSuiteAccepted": true,
+    "validatedTests": 14626,
+    "sourceCurrentProofTests": 21,
+    "unchangedProductionTests": 14605,
+    "freshProductionTests": 0,
+    "reusedProductionTests": 14605,
+    "priorCaseIdsPreserved": true,
+    "sourceManifestSha256": "70bd7258a94872ca0d7167eb691e1635fdde47facf480da41d9d1fc7515e4093",
+    "reportManifestSha256": "14938a42cab9332ae4740820e7e86697d2ceb08f5caea72b6f04616012c13202"
+  },
+  "phoneTouched": false,
+  "emulatorRamMiB": 2560,
+  "emulatorCores": 2,
+  "emulatorStopped": true,
+  "compilerOverlap": false,
+  "retainedFailures": [
+    {
+      "phase": "proof-1",
+      "kind": "Static LongMethod: reopened101 lines against100",
+      "correction": "Moved receipt scenario evidence selection to existing evidence owner; no assertion removed"
+    },
+    {
+      "phase": "replacement-1",
+      "kind": "Driver fixture prefix rejected before app preparation",
+      "correction": "Restored required fictional-hris-worker prefix; original guards unchanged"
+    },
+    {
+      "phase": "suite-1",
+      "kind": "Port5563 TIME_WAIT prevented preflight reservation before any process start",
+      "correction": "Waited for OS port release; identical source/APK accepted in suite-2"
+    }
+  ],
+  "limits": [
+    "Seeded session replacement, fixture interactive activation and OS scheduler; no login UI or server revocation acceptance.",
+    "Existing-only native possession proves original identity and released directory ownership; restoring A does not automatically reopen a client in this fixture.",
+    "No new production SDK artifact, UI, phone latency, automatic background relaunch, Apple runtime binding or live Group activation."
+  ]
+}

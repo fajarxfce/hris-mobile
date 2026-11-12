@@ -214,6 +214,19 @@ internal class HrisWorkerProofContainer(
 
     fun lateKeyRecovery() = HrisLateKeyRecoveryProofHost(container.koin)
 
+    fun accountReplacement() =
+        HrisAccountReplacementProofHost(
+            container.koin,
+            application.initialSession,
+            replaceSession = { session ->
+                database.accounts.activate(
+                    session.id,
+                    accountStorageKey(owner.audience, session.user.id),
+                )
+                application.sessions.replace(session)
+            },
+        )
+
     suspend fun incomingReceipt(owner: CollaborationSpaceOwner) =
         expect(
                 container.koin

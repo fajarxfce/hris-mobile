@@ -158,6 +158,7 @@ class MatrixProofInstrumentation : Instrumentation() {
             "provider" -> NativeMatrixProbe(directory).run()
             "event-reads-stage",
             "event-reads-space",
+            "event-reads-account-replacement",
             "event-reads-local",
             "event-reads-late-recovery",
             "event-reads-late-recovered-local",

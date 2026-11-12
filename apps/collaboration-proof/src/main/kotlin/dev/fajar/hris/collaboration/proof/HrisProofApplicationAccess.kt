@@ -7,7 +7,6 @@ import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.*
-import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.network.*
 import dev.fajar.starter.workspace.domain.entities.*
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
@@ -41,7 +40,7 @@ internal class HrisProofApplicationAccess(
     val build = AppBuild(AppPlatform.Android, 1, "proof", null)
     val server = IdentityServer(owner.audience, "Fictional sender proof")
     private val now = clock.now()
-    private val session =
+    val initialSession =
         Session(
             owner.sessionId,
             User(owner.accountId, "Fictional sender", "sender@example.test"),
@@ -79,25 +78,7 @@ internal class HrisProofApplicationAccess(
     val workspaceId
         get() = workspace.id
 
-    val sessions =
-        object : SessionRepository {
-            override val persistent = true
-
-            override fun observe() = flow {
-                emit(AppResult.Success(session))
-                awaitCancellation()
-            }
-
-            override suspend fun current() = AppResult.Success(session)
-
-            override suspend fun compareAndSet(
-                expected: Session?,
-                updated: Session?,
-            ): AppResult<Boolean> = error("No login mutation in sender proof")
-
-            override suspend fun clear(sessionId: String): AppResult<Boolean> =
-                error("No logout in sender proof")
-        }
+    val sessions = HrisProofSessionRepository(initialSession)
     val workspaces =
         object : WorkspaceRepository {
             override fun observe(

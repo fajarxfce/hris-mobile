@@ -108,6 +108,14 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
         )
     }
 
+    /** Only explicit receipt scenarios may require a durable receipt in offline evidence. */
+    fun retainedReceiptProof(fixture: JSONObject, adopted: JSONObject): JSONObject? {
+        val selected =
+            listOf("incomingSources", "accountReplacement").filter { fixture.optBoolean(it, false) }
+        check(selected.size <= 1) { "Conflicting durable receipt proof scenarios" }
+        return selected.singleOrNull()?.let(adopted::getJSONObject)
+    }
+
     /** Compare only the durable receipt identity, without installing source observers. */
     fun retainedReceipt(receipt: CollaborationSpaceRoomKeyReceipt?, previous: JSONObject): String {
         val digest = HrisSpaceIncomingSourcesProofHost.digest(requireNotNull(receipt).receiptId)

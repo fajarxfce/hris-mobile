@@ -2,10 +2,13 @@ package dev.fajar.hris.collaboration.proof
 
 import android.content.Context
 import android.os.Process
+import dev.fajar.starter.collaboration.data.di.androidCollaborationSdkPossessionRepository
 import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeLease
+import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkEndpoint
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.network.*
 import java.io.File
 import java.util.UUID
@@ -37,6 +40,7 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                     when (scenario) {
                         "event-reads-stage" -> stage()
                         "event-reads-space" -> adopted()
+                        "event-reads-account-replacement" -> accountReplacement()
                         "event-reads-local" -> reopened()
                         "event-reads-worker-state" -> inspectWorker()
                         "event-reads-late-recovery" ->
@@ -335,6 +339,75 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                 throw failure
             } finally {
                 sources.release()
+                closeHrisProofResources(primary, listOf({ parent?.close() }, { app.close() }))
+            }
+        files.write("original-events", result.put("runtimeReleased", true))
+    }
+
+    private suspend fun accountReplacement() {
+        val staged = files.read("original-staged", 16_384)
+        val ready = files.read("original-ready", 16_384)
+        val group = files.read("original-group", 16_384)
+        val app =
+            HrisWorkerProofContainer(
+                context,
+                sender.currentOwner,
+                files.conversationId,
+                files.fixture.getJSONObject("sender").getString("hrisAccessToken"),
+                sender.repository,
+                http,
+            )
+        val replacement = app.accountReplacement()
+        var parent: HrisSpaceRecoveryProofHost? = null
+        var primary: Exception? = null
+        val result =
+            try {
+                app.activate()
+                val seed = app.spaceRecoverySeed(sender, ready, group)
+                seed.prepare()
+                parent = app.spaceRecovery(seed, replacement::collect)
+                parent.start()
+                val runtime = replacement.adopt(seed)
+                val captured =
+                    captureAdopted(runtime, staged)
+                        .put("incoming", retainIncoming(app, runtime, group, staged))
+                val replaced =
+                    replacement.replaceAndRestore(
+                        runtime,
+                        receiver.currentOwner,
+                        files.fixture.getJSONObject("recipient").getString("hrisAccessToken"),
+                    )
+                val possession =
+                    androidCollaborationSdkPossessionRepository(
+                        context,
+                        IdentityServer(files.home.toString(), "Fictional account replacement"),
+                        CollaborationSdkEndpoint(files.home.toString(), allowCleartext = true),
+                    )
+                val identity =
+                    requireNotNull(
+                            expect(
+                                possession.readPrivateIdentity(
+                                    sender.currentOwner,
+                                    sender.registeredDeviceId,
+                                )
+                            )
+                        )
+                        .identity
+                val expected = ready.getJSONObject("sender")
+                check(
+                    identity.matrixUserId == expected.getString("matrixUserId") &&
+                        identity.matrixDeviceId == expected.getString("matrixDeviceId") &&
+                        identity.fingerprint == expected.getString("fingerprint")
+                )
+                captured.put(
+                    "accountReplacement",
+                    replaced.put("originalPrivateIdentityPreserved", true),
+                )
+            } catch (failure: Exception) {
+                primary = failure
+                throw failure
+            } finally {
+                replacement.release()
                 closeHrisProofResources(primary, listOf({ parent?.close() }, { app.close() }))
             }
         files.write("original-events", result.put("runtimeReleased", true))
@@ -690,13 +763,11 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                     .put("sameRevision", true)
                     .put("runtimeNeverOpened", true)
                     .also { result ->
-                        if (files.fixture.optBoolean("incomingSources", false)) {
+                        val receiptProof = evidence.retainedReceiptProof(files.fixture, adopted)
+                        if (receiptProof != null) {
                             result.put(
                                 "incomingReceiptDigest",
-                                evidence.retainedReceipt(
-                                    app.incomingReceipt(owner),
-                                    adopted.getJSONObject("incomingSources"),
-                                ),
+                                evidence.retainedReceipt(app.incomingReceipt(owner), receiptProof),
                             )
                         }
                     }
