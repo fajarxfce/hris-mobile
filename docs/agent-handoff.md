@@ -1,8 +1,51 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 08:48 UTC. Continue the PRD and push every commit. All 54 groups OPEN.
+Updated 12 November 2026, 09:04 UTC. Continue the PRD and push every commit. All 54 groups OPEN.
 No subagents. One compiler OR emulator. Follow AGENTS.md and clean layer boundaries.
 Phone install-only; announce installations and never launch or drive the phone UI.
+
+## Current: native process-source validation
+
+Mobile source98fa082d and Group docs f84482a8 pushed41204/11026 REAPED. Application CI43186091942
+dispatched ONCE08:49:17.822306UTC (97812 REAPED), expected17,552. Hosted state exists.
+
+Workspace `.work/space-incoming-sources-native-2026-11-12` exists in BOTH Mobile and Group worktrees.
+Preparer53746 REAPED applied4 Mobile fixture files and3 Group test/protocol files. NOT committed or
+native-accepted. Mobile format80896 REAPED35.503s; proof82359 REAPED124.856s; audit60137 REAPED.
+`:check`,21 fresh proof cases,format,architecture,detekt and APK pass;14,476 previous case IDs remain
+verified unchanged.5,131 Mobile inputs/fea5595ef756b068b904acab92dcf5f97b1fd9dc4c655a9897c6810456a1a5ef.
+APK152227098B/49ecb109dcf7c757b59346d7b0098d1377a332eddc4859461e754c062078f59f, SDK8x86_64
+native library6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95 independently verified.
+Group format1/86152 failed before edits because runner used Mobile task :formatKotlin; command/log
+preserved. Correct repository task :format passed format2/91822 REAPED20.96s. Source1/60033 REAPED
+138.848s,8,745 inputs/9c7f3daf294f682182c1a3cda168069ca39e477b936754c867e1ba2b93d95f36,
+format/architecture/testClasses pass; source audit inline exit0. Python27 cases pass (4 new).
+
+Native1/67430 ACTIVE in Group workspace. One fresh2560MiB2core emulator, precompiled768MiB test
+harness, no compiler overlap. Expected7 cases in2 XML reports:6 previous SDK8 controls plus new
+application receipt/lifecycle/offline case. `native-config.json` names proof-1/source-1. Do not change
+Mobile/Group/Inspector inputs while running. No native acceptance script/publisher yet; implement
+independent evidence audit after the result. Preserve any failed native store and trace. Never resend
+protected demo messages. Do not label this native-accepted before exact evidence succeeds.
+
+The new fixture wraps repository boundaries only to hold then commit one real encrypted write and
+return a lost-reply failure; native ACK checks the exact durable receipt independently. It invokes
+real application source ownership under actual root/setup/native publication. Two foreground passes
+must keep one receipt/write/ACK/instance. A separate process opens offline and checks matching receipt
+digest and original messages. Old fixture variants preserve empty incoming override. New Python
+strict evidence rejects incomplete/extra fields, wrong booleans/counts and changed offline digest.
+Late keys DURING an app write, replacement accounts, long quiet request counts and Apple native key
+adapter remain separate acceptance work even if this baseline passes.
+
+Runtime CI43182776077 portable12,444 audited40813 REAPED (current job131075551755). Apple plugin
+resolution failure log reviewed; ONE failed-job retry sent08:53:42.697912UTC,51634 REAPED, now job
+131075548574. Do not send another retry blindly. Application CI43186091942 Apple131073503970 failed
+before tests because Maven Central returned429 for coroutines-test1.10.2, disabling stdlib resolution;
+logSHA39653ea69cd660129384f36dfbffc8bcc87e7e1a1f9cf5085ab049bc896471d8. Review saved, no retry yet;
+portable remains pending. Later one failed-job retry after the run completes is justified; avoid
+adding dependency requests while throttled. No dependency version/verification policy changed.
+
+Phone92283 REAPED08:57:38.769500UTC,20.020773s timeout; next>=09:31:18.790273UTC. No install.
 
 ## Process-owned incoming sources accepted locally
 
