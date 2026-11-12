@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 20:45 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 21:09 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -20,14 +20,19 @@ Tests now require the new access explicitly, retain all content comparisons, rej
 old-session lookup and read originals through renewed Company access. Production was
 not changed for those fixture failures. App DI2 did not run after the data failures.
 
-Review found a separate concern: combine waits for all first values before propagating
-a known failure. New deterministic case aKnownCommandFailureDoesNotWaitForAnotherCommandStore
-holds the original source and expects the canonical failure immediately. It has not run.
-Format2/88470 REAPED PASS35.045s. Red-fast-1/36525 ACTIVE from20:43; expect one
-real failure with current production. Frozen5167inputs/4aac27ec2961a30229c6060ca037fed5d7726ee0e43ddb6d435c7004ed85ebb9. Preserve the red candidate, fix the read-state
-composition only after evidence, keep all assertions, rerun focused expected54 and
-full expected14724 with prior14688 IDs. No full/current native claim for these edits yet.
-No source edits or second compiler/emulator until the active red compiler is reaped.
+Review proved a separate first-result defect: combine withheld a known command failure
+while another command store had not emitted. Red-fast-1/36525 REAPED expected FAIL106.977s,
+exact one-case failure: expected storage failure but received no emission. Preserve
+failed-delayed-failure-1. The observer now explicitly distinguishes unread sources from
+successful empty lists; known failures publish immediately, success waits for real local
+results. No fabricated empty success, hidden retry, new observer owner or relaxed assertions.
+Format3/47114 completed PASS36.158s. Frozen5167inputs/d5b43a1a846de9618d0601dcd8b1cca1c916e81c18b77009582fa732800a9bee.
+Focused2/39262 REAPED PASS54/375.346s; strict focused audit passes, all prior IDs retained.
+Full1/7705 ACTIVE from20:57; expected14724 with all14688 prior IDs retained. Full auditor
+prepared, not run. No current native/phone claim for these edits. No source edits or second
+compiler/emulator before reaping. Subsequent room-binding-observation-2026-11-12 contains an
+UNAPPLIED eight-file draft: reactive local binding read, seven shared storage cases, explicit
+fake implementations. Validate/review after current acceptance and commit; no claimed gate.
 
 Company thread publication is ACCEPTED: Mobile151438b4ba85f599fb2eefc080a6ac15423ac6e1,
 Group6158096d evidence (later Group1480acdf records hosted progress). Both pushed.
@@ -116,9 +121,14 @@ reports are156, matching the baseline directly. Failed config/auditor22498 and c
 retained; no case normalization, test rerun or source change. Both audits finished.
 
 Control43297910558 on151438b4ba85f599fb2eefc080a6ac15423ac6e1 has STARTED:
-portable131478498528 running, Apple131478499227 queued at20:44. Expected12,666portable
-+5,187Apple =17,853. Mobile.work/company-thread-publication-2026-11-12/hosted-control
-state and hosted-audit.py prepared; neither audit run. Do not dispatch multiple pending runs.
+Portable131478498528 is ACCEPTED: auditor70237 REAPED,12,666 cases, zero prior-ID
+replacements/browser normalization. Artifact13984756078/4054447B/ad79fb987c703e4235b3823f92b184c8013df4f4c07c89c20f271281728ed056;
+report701f6640e829f93997f1f048a87c40bb8eccd8d9bd05f6217cd4e3c29f1fc816;
+logf2bd2d8d0e6a4866b3a53fc9c08b1f82dc58afe20310cbcb66ae5a656b0d1fb8.
+Apple131478499227 is still running at21:08; expect5,187, total17,853 only after its
+own audit. Mobile.work/company-thread-publication-2026-11-12/hosted-control keeps artifacts
+and full portable manifest. Run hosted-audit.py apple hosted-control after success.
+Do not rerun accepted portable or dispatch multiple pending controls.
 Inventory and store local main ARM64/metadata, all21 native-test method compilation and full
 `:check` pass. Linux executed0 Apple cases. Both adapters require a pre-provisioned private,
 backup-excluded root; store creation and existing-only access remain separate. No product binding.
@@ -147,7 +157,7 @@ fresh2560MiB/two cores, cold2908ms/reopen2145ms, stable10s/process. Both screens
 were inspected and show complete onboarding. ARM39435 REAPED42.972s, verify38284 REAPED.
 All gates are finished; do not rebuild. No authenticated release/phone latency claim.
 
-Latest ADB97763 REAPED timeout12s at20:26UTC; no installation attempted. At20:12UTC the
+Latest ADB63043 REAPED timeout15s at20:58UTC; no installation attempted. At20:12UTC the
 WireGuard handshake was34837s old; route is correct viawg0. Do not repeat availability questions.
 When10.77.77.3:5555 connects, announce EACH actual installation, then run Mobile
 .work/release-phone-2026-11-12-build92/install.py --install-only. Inspect any existing

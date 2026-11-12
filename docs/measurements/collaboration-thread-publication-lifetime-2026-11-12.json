@@ -87,5 +87,33 @@
       "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.originalQueueSurvivesLostProjectionAndOfflineRecipientWithoutReplacement()"
     ]
   },
-  "nativeAuditSha256": "f00b18cd012e3a2dd39480991a332201986cd45c8140bc9965508216e7383145"
+  "nativeAuditSha256": "f00b18cd012e3a2dd39480991a332201986cd45c8140bc9965508216e7383145",
+  "hostedControl": {
+    "status": "portable accepted; Apple job still running",
+    "runId": 43297910558,
+    "sourceCommit": "151438b4ba85f599fb2eefc080a6ac15423ac6e1",
+    "portable": {
+      "sourceCommit": "151438b4ba85f599fb2eefc080a6ac15423ac6e1",
+      "runId": 43297910558,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43297910558",
+      "jobId": 131478498528,
+      "artifactId": 13984756078,
+      "bytes": 4054447,
+      "sha256": "ad79fb987c703e4235b3823f92b184c8013df4f4c07c89c20f271281728ed056",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreservedExceptReviewedReplacements": true,
+      "reviewedReplacements": 0,
+      "browserRuntimeCaseSuffixChanges": 0,
+      "browserRuntimeChange": null,
+      "counts": {
+        "desktopTest": 6058,
+        "testAndroidHostTest": 955,
+        "wasmJsBrowserTest": 5653
+      },
+      "reportManifestSha256": "701f6640e829f93997f1f048a87c40bb8eccd8d9bd05f6217cd4e3c29f1fc816",
+      "jobLogSha256": "f2bd2d8d0e6a4866b3a53fc9c08b1f82dc58afe20310cbcb66ae5a656b0d1fb8"
+    },
+    "appleJobId": 131478499227,
+    "expectedAppleCases": 5187
+  }
 }

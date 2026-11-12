@@ -32,3 +32,10 @@ This change belongs to the existing HRIS Company observer. It adds no datasource
 repository, ViewModel state or shared helper. Native SDK and storage formats are
 unchanged. The separate canonical organization history uses its already accepted
 ownership boundary.
+
+Hosted control run43297910558 validates exact Mobile source151438b4 independently.
+Its portable job passes12,666 cases:6,058 desktop,955 Android host and5,653 browser.
+The artifact digest, ZIP integrity, full case inventory and prior test identities are
+verified with zero replacements or browser-name normalization. Apple job131478499227
+is still running; its expected5,187 cases are not yet accepted. Compact artifact,
+report and job-log digests are included in the existing measurement.
