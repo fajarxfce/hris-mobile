@@ -5,6 +5,7 @@ import dev.fajar.starter.collaboration.data.identity.*
 import dev.fajar.starter.collaboration.data.repositories.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
+import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationSpaceThreadHistory
 import dev.fajar.starter.collaboration.domain.usecases.PrepareCollaborationSpaceRoomBinding
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
@@ -24,6 +25,197 @@ import kotlinx.coroutines.test.runTest
 
 abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
+
+    @Test
+    fun canonicalHistoryReadsOriginalCiphertextAfterReopenWithoutCopyingOrAcquiringRooms() =
+        withDatabase { f ->
+            assertEquals(AppResult.Success(f.binding()), f.prepare()(f.conversation()))
+            val binding = f.binding()
+            val position = requireNotNull(binding.original).conversation.position
+            val company =
+                CollaborationLocalAccess(
+                    f.access.sessionId,
+                    f.access.audience,
+                    f.access.accountId,
+                    position.companyId,
+                )
+            assertEquals(
+                AppResult.Success(true),
+                f.history.repository.merge(
+                    company,
+                    position.conversationId,
+                    binding.room.roomId,
+                    listOf(f.history.event(1)),
+                ),
+            )
+            assertEquals(
+                AppResult.Success(true),
+                f.spaceHistory()
+                    .merge(
+                        f.access,
+                        f.conversation().id,
+                        binding.room.roomId,
+                        listOf(f.history.event(2)),
+                    ),
+            )
+            val before =
+                assertIs<AppResult.Success<CollaborationSpaceThreadHistory>>(
+                        f.observeHistory()(f.access, f.conversation().id).first()
+                    )
+                    .value
+            assertEquals(
+                listOf(f.history.event(1).eventId),
+                before.page.messages.map { it.primaryEventId },
+            )
+            assertEquals(
+                position.conversationId,
+                assertIs<CollaborationSpaceHistoryLocation.Original>(before.location).conversationId,
+            )
+            val bindings = f.rawBindings()
+            val key = f.history.keys.read()
+            f.reopen()
+            val after =
+                assertIs<AppResult.Success<CollaborationSpaceThreadHistory>>(
+                        f.observeHistory()(f.access, f.conversation().id).first()
+                    )
+                    .value
+            assertEquals(before.page, after.page)
+            assertEquals(f.access, after.access)
+            assertEquals(bindings.documents, f.rawBindings().documents)
+            assertEquals(key, f.history.keys.read())
+            assertEquals(
+                listOf(f.history.event(2).eventId),
+                assertIs<AppResult.Success<CollaborationHistoryPage>>(
+                        f.spaceHistory()
+                            .observe(f.access, f.conversation().id, binding.room.roomId)
+                            .first()
+                    )
+                    .value
+                    .messages
+                    .map { it.primaryEventId },
+            )
+            assertEquals(1, f.roomReads)
+            assertEquals(1, f.originalReads)
+        }
+
+    @Test
+    fun canonicalSpaceHistoryNeverSelectsACompanyPartitionWithIdenticalIds() = withDatabase { f ->
+        val original = f.binding()
+        val binding =
+            original.copy(
+                room =
+                    original.room.copy(
+                        origin = CollaborationSpaceRoomOrigin.SPACE,
+                        original = null,
+                    ),
+                original = null,
+            )
+        assertEquals(AppResult.Success(true), f.bindings().retain(f.access, binding))
+        val company =
+            CollaborationLocalAccess(
+                f.access.sessionId,
+                f.access.audience,
+                f.access.accountId,
+                f.access.spaceId,
+            )
+        assertEquals(
+            AppResult.Success(true),
+            f.history.repository.merge(
+                company,
+                f.conversation().id,
+                binding.room.roomId,
+                listOf(f.history.event(2)),
+            ),
+        )
+        assertEquals(
+            AppResult.Success(true),
+            f.spaceHistory()
+                .merge(
+                    f.access,
+                    f.conversation().id,
+                    binding.room.roomId,
+                    listOf(f.history.event(1)),
+                ),
+        )
+        val before =
+            assertIs<AppResult.Success<CollaborationSpaceThreadHistory>>(
+                    f.observeHistory()(f.access, f.conversation().id).first()
+                )
+                .value
+        assertIs<CollaborationSpaceHistoryLocation.Space>(before.location)
+        assertEquals(
+            listOf(f.history.event(1).eventId),
+            before.page.messages.map { it.primaryEventId },
+        )
+        val key = f.history.keys.read()
+        f.reopen()
+        val after =
+            assertIs<AppResult.Success<CollaborationSpaceThreadHistory>>(
+                    f.observeHistory()(f.access, f.conversation().id).first()
+                )
+                .value
+        assertEquals(before.page, after.page)
+        assertEquals(key, f.history.keys.read())
+        assertEquals(0, f.roomReads + f.originalReads)
+    }
+
+    @Test
+    fun canonicalHistoryHonorsPersistedGroupDenialAcrossReopenUntilItsAdmissionIsCleared() =
+        withDatabase { f ->
+            assertEquals(AppResult.Success(f.binding()), f.prepare()(f.conversation()))
+            val binding = f.binding()
+            val position = requireNotNull(binding.original).conversation.position
+            val company =
+                CollaborationLocalAccess(
+                    f.access.sessionId,
+                    f.access.audience,
+                    f.access.accountId,
+                    position.companyId,
+                )
+            assertEquals(
+                AppResult.Success(true),
+                f.history.repository.merge(
+                    company,
+                    position.conversationId,
+                    binding.room.roomId,
+                    listOf(f.history.event(1)),
+                ),
+            )
+            val before =
+                assertIs<AppResult.Success<CollaborationSpaceThreadHistory>>(
+                        f.observeHistory()(f.access, f.conversation().id).first()
+                    )
+                    .value
+            val denied =
+                Failure(FailureKind.AccessDenied, "Denied", code = "collaboration_access_denied")
+            assertEquals(AppResult.Success(true), f.directory().restrict(f.access, denied))
+            f.reopen()
+            assertEquals(
+                denied.code,
+                assertIs<AppResult.Failed>(
+                        f.observeHistory()(f.access, f.conversation().id).first()
+                    )
+                    .failure
+                    .code,
+            )
+            val admission =
+                assertIs<AppResult.Success<CollaborationSpaceDirectoryAdmission>>(
+                        f.directory().admission(f.access)
+                    )
+                    .value
+            assertNotNull(admission.revision)
+            assertEquals(AppResult.Success(true), f.directory().admit(f.access, admission.revision))
+            assertEquals(
+                before.page,
+                assertIs<AppResult.Success<CollaborationSpaceThreadHistory>>(
+                        f.observeHistory()(f.access, f.conversation().id).first()
+                    )
+                    .value
+                    .page,
+            )
+            assertEquals(1, f.roomReads)
+            assertEquals(1, f.originalReads)
+        }
 
     @Test
     fun lostCanonicalAndBindingPublicationResponsesRecoverThroughActualEncryptedIndexes() =
@@ -407,8 +599,25 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                 history.keys,
             )
 
-        private fun bindings(store: ReplicaStore = history.database.replicas) =
+        fun bindings(store: ReplicaStore = history.database.replicas) =
             EncryptedCollaborationSpaceRoomBindingRepository(store, history.cipher, history.keys)
+
+        fun spaceHistory() =
+            EncryptedCollaborationSpaceHistoryRepository(
+                history.database.replicas,
+                history.cipher,
+                history.keys,
+            )
+
+        fun observeHistory() =
+            ObserveCollaborationSpaceThreadHistory(
+                bindings(),
+                spaceHistory(),
+                history.repository,
+                directory(),
+                sessions,
+                IdentityServer(access.audience, "Fictional server"),
+            )
 
         fun directory() =
             EncryptedCollaborationSpaceDirectoryRepository(

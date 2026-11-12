@@ -1,5 +1,7 @@
 # Architecture
 
+[Canonical organization thread history](collaboration-space-thread-history.md) reads the exact original or Space namespace under Group admission without copying content or waiting for live transport.
+
 [Native account replacement](collaboration-native-account-replacement.md) verifies stale callback retirement and original encrypted receipt, identity and offline history continuity through actual application ownership.
 
 [Apple SDK store acquisition](collaboration-apple-sdk-store.md) shares the original native owner with inventory and keeps explicit creation separate from existing-only reads.

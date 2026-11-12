@@ -1,6 +1,9 @@
+Status: implemented and accepted; see [contract and evidence](collaboration-space-thread-history.md).
+The following records the implementation boundary and the corrected admission decision.
+
 # Canonical Space thread history — local routing before product UI
 
-Base Mobile312f294d / Groupfdbb8efd; native10, proof21, full14,626 accepted. No UI or production edits yet.
+Base Mobile312f294d / Groupfdbb8efd; native10, proof21, full14,626 accepted. Domain implementation accepted; product UI remains separate.
 The current presentation has no CollaborationSpace references; ObserveCollaborationThread reads Company
 history, while ObserveCollaborationSpaceHistory deliberately reads only the Space namespace. Real native
 incoming workers preserve LEGACY content in Company history. Product routing must not fabricate companyId.
@@ -12,8 +15,11 @@ existing validCollaborationSpaceRoomBinding. No date, SDK, native credential or 
 A missing binding stays unavailable; it never means an empty history or permission to fall back by UUID.
 
 The owning observation use case should coordinate SessionRepository, Space directory admission, immutable
-binding repository, and the selected history repository. Original reads must additionally retain the actual
-Company list admission; Company and Space denials remain independent and sticky. Cancel and join old reads
+binding repository, and the selected history repository. Group directory admission owns both routes;
+the original Company is a physical content coordinate, not current HR authority. Existing Original
+acquisition and native adoption contracts explicitly preserve this separation. The earlier proposal to
+add Company list admission was rejected during contract review: HR selection/denial must not replace
+organization ownership. Keep confirmed Group denial sticky. Cancel and join old reads
 on account/admission replacement; confirm current scope after suspending binding reads and before publication.
 Never call another use case/repository implementation, mutate stores, fetch API/SDK, invent IDs or copy history.
 Preserve typed logical identity and original physical coordinates alongside bounded history pages. Reuse
@@ -29,4 +35,4 @@ contract intact for raw Space-only consumers. Do not claim user-visible routing 
 Apple CI inventory43273697021 portable accepted12,604 with Chrome156→157 environment suffix recorded;
 Apple job still running. Store43279731370 remains pending; NEVER replace it with another same-branch run.
 Native SDK8 Intel43267867675 still running. Phone91 accepted/uninstalled; latest18:27 ADB timeout,
-18:40 WireGuard last handshake8hours. No compiler/emulator running. Push every accepted commit.
+18:40 WireGuard last handshake8hours. Focused3 and full1 accepted after the slow-consumer boundary correction. Push every accepted commit.

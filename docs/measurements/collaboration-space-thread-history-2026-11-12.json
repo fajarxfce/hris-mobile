@@ -1,0 +1,86 @@
+{
+  "acceptedAt": "2026-11-12T19:38:41.152332+00:00",
+  "baseCommit": "312f294d",
+  "scope": "Canonical local Space thread history selects immutable Original or Space storage under Group admission; bounded copied pages, cancellation and sticky denial. Domain/data DI only; product route remains separate.",
+  "sourceFiles": 5161,
+  "sourceManifestSha256": "cd6f263a89da0b2a974501b099286b8884a66c7d19b2de2b9680cdc74165f35f",
+  "changedSourceHashes": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "16101721e43c2056173ee5f5b619b3788d25b5f89feac0117f37357a2973b7e7",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "e1a04ad745fa1c391f51170e0a261fa2ad101af6cf381c26d721b156bc1ed476",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingPreparationStorageContract.kt": "e14c3559ad95a43a65d592fde06b846c38147637d6477b26bc5c570ddcab14d9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceHistoryLocation.kt": "ffa334ff564ec9ed0db5bcd49baf6d786e9aa57946ed4e80ca11e12dd6d19c12",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceThreadHistory.kt": "f84f4739a6377a55032dae6a6e87ad53835a1a414180c0ae1f3ef5d08a478431",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceHistoryLocationPolicy.kt": "162174bf3227a23c14730b839a791a8b9457aa5817606dfa6ffc547b19268cd1",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceThreadHistoryPolicy.kt": "ed2c6a3b4f28513587dd560175d871e98c4bcc32fb23a1da3cc7db0a7cf36f5f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceThreadHistory.kt": "45aaa05aa9ca16b2fe3fe31cab830d19695aac3b04bd18bbc2866ec242849bd2",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceHistoryLocationTest.kt": "f38ceae74ff9e1c75798601334ff48a6f274ad395ee8e0777ece2740eb479d07",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceThreadHistoryAdmissionTest.kt": "b6cfab4fd15c722463a302218e99521286d09ae1e3286c8c74a2b8c1b4247568",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceThreadHistoryRoutingTest.kt": "976a3a1af1af3dc35f7c1f2fda4dd06927926299fbacbc1f1a526bbc5b871984",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceThreadHistoryFixture.kt": "3335571ca1eed5d0f9cfcb3f85129cbb30545bc17b072b2aef4e42c641716cd9",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceThreadHistorySnapshotTest.kt": "47e08001e1ad42506403abab86d1d23267018589f499964b0419b2d752ab59b1"
+  },
+  "focused": {
+    "elapsedSeconds": 273.041,
+    "freshCounts": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true
+  },
+  "full": {
+    "elapsedSeconds": 822.013,
+    "validatedTests": 14686,
+    "newCases": 60,
+    "freshTests": 12648,
+    "reusedUnaffectedTests": 2038,
+    "priorCaseIdsPreserved": true,
+    "reportManifestSha256": "61c2a871b3500217b05c5b2fbc35c1d5d168a5e5c84734f441cf283dd14161eb"
+  },
+  "targets": [
+    "check",
+    "formatCheck",
+    "architectureCheck",
+    "detekt",
+    "Android host tests",
+    "Android release compile and lint",
+    "shared Wasm compile",
+    "shared iOS ARM64 compile",
+    "domain/data Chromium tests",
+    "proof APK assembly and21 unit tests"
+  ],
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152443503,
+    "sha256": "0bbdd271e6bdb09064d27e720d11a51479a4a124b0072765b3e33adb843435f6",
+    "immutableCopy": ".work/space-thread-history-routing-2026-11-12/full-1/accepted-proof.apk",
+    "sdkNativeSha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95"
+  },
+  "failedEvidence": [
+    {
+      "phase": "focused-1",
+      "cause": "New test expected-list type inference; zero cases executed",
+      "preserved": "failed-test-compile-1"
+    },
+    {
+      "phase": "focused-2",
+      "tests": 27,
+      "failures": 1,
+      "cause": "Extra outer coroutine rendezvous retained a stale page after revocation",
+      "fix": "Remove redundant outer buffer; retain exact regression assertions",
+      "preserved": "failed-publication-boundary-1"
+    }
+  ],
+  "auditCorrection": {
+    "excludedHistoricalReports": 111,
+    "excludedHistoricalCases": 657,
+    "reason": "Preexisting browser XML from before2026-11-12 outside both accepted baseline and current execution. Exact digests preserved; all14626 prior accepted IDs retained.",
+    "testSourcesChangedForAudit": false
+  },
+  "phoneInstalled": false,
+  "newNativeSdkExecution": false,
+  "groupLiveEnabled": false,
+  "next": "Reproduce similar Company observer slow-consumer boundary independently, then canonical pending messages and product routing; continue existing Apple hosted gates."
+}

@@ -439,6 +439,7 @@ class CollaborationBindingsTest {
                 )
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceMessages>())
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceHistory>())
+                assertNotNull(container.koin.get<ObserveCollaborationSpaceThreadHistory>())
                 assertNotNull(container.koin.get<CollaborationSpaceHistoryRepository>())
                 assertSame(
                     container.koin.get<CollaborationSpaceHistoryTraversalRepository>(),

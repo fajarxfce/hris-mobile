@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 18:54 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 19:37 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -8,12 +8,31 @@ is waived; native Apple/call/push behavior is not accepted merely by compilation
 
 ## Current next implementation
 
-Mobile .work/space-thread-history-routing-2026-11-12 is prepared from accepted312f294d.
-Read Mobile docs/collaboration-space-thread-history-plan.md. Review found no Space-aware presentation;
-existing Company and Space history observers remain separate. Implement typed local canonical-history
-selection with actual Original coordinates and separate Company/Space admission before wiring UI.
-No production code edited yet; no compiler/emulator active. Accepted native account proof is pushed:
-Mobile312f294d, Groupfdbb8efd (60283/99233 REAPED). Continue work beyond this checkpoint.
+Canonical local Space thread history is ACCEPTED in Mobile
+.work/space-thread-history-routing-2026-11-12. Read docs/collaboration-space-thread-history.md.
+13 changed inputs add typed physical location and one owned observation use case, data DI and
+actual encrypted storage integration. Original Company coordinates remain under Group admission;
+HR Company selection/denial does not replace organization authority. Product UI remains separate.
+
+Focused3/74590 REAPED PASS36/273.041s. Full1/7777 REAPED PASS822.013s; strict audit accepts14,686:
+12,648 fresh and2,038 unchanged cases, all14,626 prior identities preserved,60 new across JVM/browser.
+Inputs5161/cd6f263a89da0b2a974501b099286b8884a66c7d19b2de2b9680cdc74165f35f.
+Report manifest61c2a871b3500217b05c5b2fbc35c1d5d168a5e5c84734f441cf283dd14161eb.
+Immutable full-1/accepted-proof.apk152443503B/
+0bbdd271e6bdb09064d27e720d11a51479a4a124b0072765b3e33adb843435f6; SDK8 native unchanged.
+No new native suite or phone claim. No compiler/emulator remains active. Do not rerun accepted gates.
+
+Preserve failed-test-compile-1, failed-publication-boundary-1 and full-1/failed-auditor-1.py.
+The exact slow-consumer test demonstrated an extra outer buffer holding a page outside cancellation;
+removing only that extra handoff fixes it. Assertions retained. Audit excluded111 old browser XML
+files/657 historical cases outside both accepted baseline and current execution; no accepted IDs
+removed, no test rerun for the audit correction. Digests and audit-correction.json are preserved.
+
+NEXT: independently reproduce the analogous Company ObserveCollaborationThread boundary before
+changing it. .work/space-thread-history-routing-2026-11-12/company-publication-followup.md explains
+it and company-publication-regression.kt is a prepared, uninstalled test snippet. Keep current parallel
+context/history/queue startup. After this regression, continue canonical pending-message projection
+and product routing. Do not stop at this checkpoint; push every accepted commit.
 
 ## Current completed increment
 
@@ -86,8 +105,8 @@ ARM124,317,071B /45e26962b2acc839498558affd2fbce059f602f29d1b62e25f2b55276740cf7
 Fresh x86 emulator cold2891ms/reopen1557ms, each stable10s, actual onboarding screenshot inspected.
 Release91 supersedes uninstalled90;89 installed09:10UTC earlier. Never reinstall89.
 
-Last connect11559 REAPED timeout12s at18:27UTC (also35727 at18:16); no install attempted.
-Route is10.77.77.3 viawg0. At18:40UTC the peer handshake was about8hours old. Do not repeatedly
+Latest connect87876 REAPED timeout12s at19:22UTC (also75528 at19:03 and50256 at18:59); no install attempted.
+Route is10.77.77.3 viawg0. At19:16UTC the peer handshake was31,445s old. Do not repeatedly
 ask for availability. Once explicit ADB serial10.77.77.3:5555 connects, announce EACH install,
 then `setsid --wait python3 .work/release-phone-2026-11-12-build91/install.py --install-only`.
 Inspect any existing install-result first, preserve signer/identity and verify exact APK bytes.
