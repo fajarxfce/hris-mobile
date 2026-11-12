@@ -10,7 +10,8 @@ Workspace .work/account-history-recovery-turn-completion-2026-11-12; baseline690
 TEN source files APPLIED: eight new domain files, existing DI and graph changes. 58new common cases:
 completion33,deferral13,writeconfirmation12. 5,093inputs/f1ac34bd97f0284d13d405c25bd1fd48294456f6869480c0f7e221e6615d13b4.
 Preparation HAS EXECUTED; do not run the prior prepare-global-turn.py again. Format1/12703 REAPED
-PASS36.338s. Focused1/79353 RUNNING, expected276JVM+274browser=550focused and13,978local overall.
+PASS36.338s. Focused1/79353 REAPED PASS276cases/435.764s and browser1/42987 REAPED
+PASS274cases/158.615s; accepted550focused. Full1/58447 RUNNING, expected13,978local overall.
 Only this compiler is active. Preserve failed candidate+results before any fix/refreeze. Current
 publisher and accepted-handoff writer are PREPARED, NOT EXECUTED. Hosted plan is UNDISPATCHED.
 
@@ -21,11 +22,14 @@ DeferCollaborationSpaceHistoryRecoveryTurn persists operational backoff without 
 replayed old captures cannot increment retry. Both5s local owners retain cancellation. No worker
 activation or native execution. All54PRD groups remain OPEN.
 
-The prior workspace next-worker-draft contains three selection files/eight new cases, an unreviewed
-application service and DI module. NO service tests, app module registration, worker integration or
-primary demotion call sites yet. No source applied. The review note records30s service+5s followup,
-reserved inventory service, current90s parent and contention/retry behavior requiring tests. Finish
-that coherent path before activating any key/source/restore producer.
+The prior workspace next-worker-draft now contains11UNAPPLIED/UNREVIEWED files: three selection
+files/eightnew cases; service/module/fixture/22application tests; four worker/Original/module
+integration drafts. No worker fixture reconciliation, graph change or integration tests yet.
+Constructor call sites remain incomplete, so DO NOT apply/compile this draft yet. Review its
+next-worker-integration-review.md:30s service+5s followup, reserved inventory, current90s parent,
+contention handling and the false-transfer/provider-recovery distinction all need validation.
+Normal missing keys must transfer without provider restart; preserve that existing test intent.
+Complete this coherent path before enabling any key/source/restore producer.
 
 ## Published Space primary transfer accepted
 
