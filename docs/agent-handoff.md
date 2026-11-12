@@ -1,5 +1,41 @@
 # Agent continuation — communications long run
 
+Updated 12 November 2026, 05:15 UTC.
+Continue authorized PRD work and per-commit pushes. No subagents. One compiler OR emulator.
+Follow AGENTS.md and clean boundaries. All54PRD groups OPEN. Phone install-only; no UI driving.
+
+## Active raw room-key mailbox validation
+
+Workspace .work/sdk-room-key-mailbox-2026-11-12; baselinef046aeb264bbc477d683a63a359da472eb36b699.
+FOUR new data files APPLIED,5,102inputs/7831d455085e08c88d9e3941ab4e86f405f7dc1c8cb0d69e8deee7a174a8c819.
+Format1/29037 REAPED PASS36.585s; focused1/10952 REAPED PASS62cases/273.921s;
+browser1/41590 REAPED PASS56cases/82.163s. Accepted118focused. Android1/21286 RUNNING,
+expected16host cases. Full14,096local still required. No failures so far. Preparation HAS EXECUTED.
+Do not reapply the prior draft. Publisher/Android audit/accepted-handoff scripts are ready but
+publication is NOT executed. Expectedhosted17,004 after local acceptance, source push and one dispatch.
+
+Mailbox owns two bounded process-local slots with copied64room/1024character inputs. Exact receipt
+ACK preserves new equal-room callbacks during suspended persistence.16common/4JVM race tests;
+no native registration, durable consumer, runtime activation, live change or Starter port.
+
+A private next-native-room-key-draft has2UNAPPLIED/UNREVIEWED files (common raw source contract,
+Android source). Tests/parent integration/durable consumer NOT implemented. Read next-native-room-key-
+source-review.md. Register after paused session restore, before sync/import. Native acquisition and
+handle assignment are protected from cancellation; stop fences callbacks and drains isFinished
+before handle/Encryption close. Failed cleanup must block parent client/store release. Finish tests
+and actual lifetime integration before activating callbacks. MainalreadySDK8; release89 remainsSDK6.
+
+Global43155076441 portable audit64634 REAPED accepted11,956 cases; Apple pending. The checked-in
+measurement holds exact artifact hashes. Original43148447666 FULL16,610 and Space43152279307
+FULL16,688 accepted. Worker43158504066 remains active, expected16,936; do not redispatch.
+
+Phone2256 REAPED05:00:29.035678UTC/20.015901s timeout. Next retry>=05:33:49UTC. Release89 ready;
+announce installation, explicit10.77.77.3:5555 and --install-only. Never launch/reset/uninstall UI.
+
+## Accepted worker source and protected/live constraints
+
+# Agent continuation — communications long run
+
 Updated 12 November 2026, 05:00 UTC.
 Continue authorized PRD work, per-commit pushes and validated phone installs. All54PRD groups OPEN.
 No subagents. One compiler OR emulator; follow AGENTS.md and clean layer boundaries.
