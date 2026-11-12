@@ -6,12 +6,34 @@ plugins {
     id("starter.web.toolchain")
 }
 
+val generatedKarmaConfig = layout.buildDirectory.dir("generated/karma.config.d")
+val prepareKarmaConfig by
+    tasks.registering(Sync::class) {
+        if (project != rootProject) {
+            from(layout.projectDirectory.dir("karma.config.d")) { rename { "00-module-$it" } }
+        }
+        from(rootProject.layout.projectDirectory.dir("karma.config.d")) {
+            rename { "10-shared-$it" }
+        }
+        into(generatedKarmaConfig)
+    }
+
 kotlin {
     jvm("desktop") { compilerOptions { jvmTarget.set(JvmTarget.JVM_17) } }
     iosArm64()
     iosSimulatorArm64()
     @OptIn(ExperimentalWasmDsl::class)
-    wasmJs { browser { testTask { useKarma { useChromeHeadless() } } } }
+    wasmJs {
+        browser {
+            testTask {
+                inputs.files(prepareKarmaConfig).withPathSensitivity(PathSensitivity.RELATIVE)
+                useKarma {
+                    useChromeHeadless()
+                    useConfigDirectory(generatedKarmaConfig.get().asFile)
+                }
+            }
+        }
+    }
     applyDefaultHierarchyTemplate()
     sourceSets.commonTest.dependencies { implementation(kotlin("test")) }
 }
