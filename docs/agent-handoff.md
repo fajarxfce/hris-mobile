@@ -1,5 +1,49 @@
 # Agent continuation — communications long run
 
+Updated 12 November 2026, 06:03 UTC. Continue PRD work and push every commit.
+No subagents. One compiler OR emulator. All54PRD groups OPEN. Phone install-only; never drive UI.
+
+## Active typed room-key binding gate
+
+Workspace .work/space-room-key-binding-2026-11-12; baselinea55e83de25d75e92f3bafb92c6fffe67429e9eaf.
+Thirteen files APPLIED,5,116inputs/19874f69749ad1d57071a7b8eeca30e8b8acbbecdaf5fa37302e6106c339905e.
+Preparation32529 REAPED; format1 same session PASS37.079s. Before freeze, add an actual repository
+retirement-during-registration case with a controllable fake subscription. No source behavior change
+or failed run. Format2/21869 REAPED PASS35.792s. Android1/15664 RUNNING,expected93. Then focused97JVM,
+91browser and full14,227local. Added12domain+10common data+9Android repo cases, all old IDs retained.
+Publisher/writer/hosted scripts PREPARED, NOT EXECUTED; expected17,170hosted. Previous draft counts
+14,226/17,169/92Android are superseded by the pre-freeze review. Preparation HAS EXECUTED; do not
+reapply the lifecycle draft. Current stage only adds typed source/runtime observation and exact ACK.
+No durable key intent, production registration or source/restore/key collector activation.
+
+Read next-key-intent-design.md for unresolved durable confirmation/targeting design, not an implemented
+feature. Explicit receipt evidence must survive worker progress and unrelated requests; wrapper/global
+requested-generation equality alone cannot confirm an uncertain write. Preserve bounded scheduling,
+metadata-before-demand causality and existing worker fairness. Do not add transport lookup per callback.
+
+## Listener accepted and dispatched; worker fully audited
+
+Listener sourcea55e83de/Groupc651d6a7 pushed,73600/49543 REAPED. Local14,164=11,808fresh+2,356retained;
+full50176 REAPED475.815s, audit58829 REAPED.202focused. Initial exception fixture failure and correction
+are preserved in measurement. Proof152205148B/2abdfb15ff3583fd1662670f63dda342afed2f7286d4ccbe2f4d3976fae34375.
+Hosted43165090113 dispatchedONCE06:00:15.546925UTC,71202 REAPED; expected17,085; hosted state exists.
+Mailbox43161963820 still pending at last check. Do not redispatch either source.
+Worker43158504066 FULL16,936=12,022portable+4,914Apple accepted; Apple35503 REAPED,
+artifact13918859245/782872B/572a5601b84e701a1be66959f5dafd9b33bdae3e20747b6b6537152a7d51a0e5.
+Global43155076441 FULL16,862 accepted. Exact artifact/report/log hashes are in measurements.
+These protocol/unsigned host gates do not prove native AppleSDK8 execution.
+
+SDK source trace confirms restoreSession creates OlmMachine before spawning other E2EE initialization.
+Subscribe after restore; do not await broad network/backup initialization. Null stream means absent
+OlmMachine, not missing recipient room keys. MainSDK8; validated release89 remainsSDK6.
+Phone73146 REAPED05:34:18.237540UTC/20.017224s timeout; next retry>=06:07:38.254781UTC.
+Announce actual installation, explicit10.77.77.3:5555/--install-only. No phone UI/reset/uninstall.
+Preserve protected SDK/Inspector trees and live deployment. No Starter HRIS-policy port.
+
+## Earlier accepted work and protected constraints
+
+# Agent continuation — communications long run
+
 Updated 12 November 2026, 05:59 UTC.
 Continue authorized PRD work, per-commit pushes and validated phone installs. All54PRD groups OPEN.
 No subagents. One compiler OR emulator. Follow AGENTS.md and clean layer boundaries.

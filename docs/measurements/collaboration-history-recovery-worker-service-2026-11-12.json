@@ -176,5 +176,90 @@
     ],
     "auditSession": 60917,
     "auditSessionReaped": true
-  }
+  },
+  "hostedApple": {
+    "sourceCommit": "a3beb4280411de16eb4c344fa4e427347f4a3c94",
+    "runId": 43158504066,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43158504066",
+    "jobId": 130983940245,
+    "artifactId": 13918859245,
+    "bytes": 782872,
+    "sha256": "572a5601b84e701a1be66959f5dafd9b33bdae3e20747b6b6537152a7d51a0e5",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreserved": true,
+    "counts": {
+      "iosSimulatorArm64Test": 4914
+    },
+    "reportManifestSha256": "b81855e8512aaa624e329f9972b08e1add524a6e745bd699485ecb3cf8b09b4b",
+    "jobLogSha256": "3cd18d0b1156666b9a52ef1dc7b87c30055bdcb12ddb38b184bb5469aaf01485",
+    "steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check out verified network inspector",
+        "conclusion": "success"
+      },
+      {
+        "name": "Select Xcode 26.3",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-java@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run gradle/actions/setup-gradle@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Prepare public app-link test registrations",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check Apple push envelope routing",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check Apple setup adapter",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build iOS application host",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/upload-artifact@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run gradle/actions/setup-gradle@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/setup-java@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Check out verified network inspector",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "conclusion": "success"
+      }
+    ],
+    "auditSession": 35503,
+    "auditSessionReaped": true
+  },
+  "hostedTotalAccepted": 16936
 }
