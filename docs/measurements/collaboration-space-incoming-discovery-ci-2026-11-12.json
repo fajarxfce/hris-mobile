@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-12",
+  "scope": "Registered-source discovery hosted validation",
+  "sourceCommit": "f11eea101a9f273a5845668b4bd37e4bdcb792e9",
+  "runId": 43220169006,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43220169006",
+  "complete": false,
+  "portableAccepted": true,
+  "appleAccepted": false,
+  "expectedPortable": 12516,
+  "expectedApple": 5095,
+  "expectedTotal": 17611,
+  "portable": {
+    "jobId": 131189377426,
+    "artifactId": 13946618859,
+    "bytes": 4041558,
+    "sha256": "0b5ddb30ca10349d0510b23b41bdbad3dd11b5ca15a4eb9667d9a4a972f7c99a",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreservedExceptReviewedReplacements": true,
+    "reviewedReplacements": 4,
+    "counts": {
+      "desktopTest": 5987,
+      "testAndroidHostTest": 947,
+      "wasmJsBrowserTest": 5582
+    },
+    "reportManifestSha256": "f17f1ee4c1fbbd00b4049c9a16066c3d6df72ad52dd7866e98a70ff6f6e4458a",
+    "jobLogSha256": "cff7e85a298bb423c16ec68d2e1205ddc4fb2135c498500e0fb27c22ebe683ca"
+  },
+  "nativeAppleSdk8ExecutionProven": false,
+  "phoneRelease": false,
+  "liveDeployment": false
+}

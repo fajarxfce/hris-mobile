@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 13:19 UTC. Continue the PRD and push every commit. All 54 acceptance groups OPEN.
+Updated 12 November 2026, 13:24 UTC. Continue the PRD and push every commit. All 54 acceptance groups OPEN.
 No subagents. One compiler OR emulator. Phone install-only: announce and select serial; never
 launch/drive UI, reset data or uninstall. Continue beyond checkpoints.
 
@@ -55,9 +55,14 @@ Company/conversation/device identities. Thirteen new Original regressions cover 
 unknown/unfinished/active pending history, different registration, session/denial/replacement,
 storage/cancellation and preserved independent work. Existing21 Published tests keep their IDs.
 
-Format1/96904 REAPED35.586s. Focused1/26911 REAPED FAILED117.278s before tests: the active-pending fixture used Int0 for an opaque String cursor. Production compiled; zero tests ran. Archived exact8-file source as failed-focused-candidate-1 before correcting only the fixture to valid cursor "seek". No production change. Focused2/session54233 ACTIVE, expected70 cases (34 domain desktop +34 browser +2 shared DI). No test acceptance yet. Do not edit source/start emulator. After completion run accept-focused.py focused-2; accept-full.py now uses focused2/proof1, not the failed run.
-Then exact proof APK/21 tests, native worker7 with unchanged assertions, and full baseline gate
-(expected14,581 local =14,555+26). All runners/audits are prepared privately.
+Format1/96904 REAPED35.586s. Focused1/26911 REAPED FAILED117.278s before tests: the active-pending fixture used Int0 for an opaque String cursor. Production compiled; zero tests ran. Exact8-file source is archived as failed-focused-candidate-1. Only the fixture changed to valid cursor "seek".
+Focused2/54233 REAPED PASSED70/0 in332.067s (34 domain desktop +34 browser +2 shared DI).
+Strict audit inline exit0; all prior case IDs preserved. Report manifest
+06099ea61e29a97c35e4957e811b67780aa7b41789293bd6371fd26f36a74d02.
+Proof1/session45999 ACTIVE; no source edits/emulator during build. After completion run
+accept-proof.py proof-1, set Group native config from planned-native-config.json, then native
+worker7 with unchanged assertions. Full baseline gate expected14,581 local. All audits are
+prepared; accept-full.py uses focused2/proof1, never the failed run.
 Native worker6 remains the behavioral regression; constructor/compiler failures are not red proof.
 Group exact turns2/Matrix31/native14 assertions remain unreached and need actual final trace review.
 
@@ -65,7 +70,7 @@ Group exact turns2/Matrix31/native14 assertions remain unreached and need actual
 
 Coalescing source f11eea10 / Group b620663c is committed/pushed and accepted14,538 locally.
 Documentation4257dfac /18cdb196 pushes51703/31022 REAPED. Hosted control43220169006 on exactf11eea10
-remains active; last query17879 REAPED showed portable and Apple in progress. State/auditor live in
+has portable accepted12,516 and Apple pending. Portable audit14182 REAPED, artifact13946618859/4,041,558B; ZIP0b5ddb30ca10349d0510b23b41bdbad3dd11b5ca15a4eb9667d9a4a972f7c99a. See compact collaboration-space-incoming-discovery-ci-2026-11-12.json; source/case/archive/log hashes verified. State/auditor live in
 `.work/space-incoming-discovery-coalescing-2026-11-12/hosted-43220169006`. Expected17,611=12,516
 portable (5,987/947/5,582) +5,095 Apple. Audit against fully accepted progressive43200304791.
 Metadata6d9f745a / Groupa867612a pushed;26418/15641 REAPED. Hosted metadata43224352728 is active on exact6d9f745a; dispatch81388 REAPED, single attempt. Expected17,634=12,533 portable(5,993/952/5,588)+5,101 Apple. State/auditor live under metadata workspace hosted-43224352728 and use coalescing43220169006 as predecessor. Coalescing12762 REAPED last status: portable application-bindings/compilation and Apple setup-adapter steps still running.
