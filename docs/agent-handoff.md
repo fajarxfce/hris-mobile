@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 16:43 UTC. Continue implementation beyond checkpoints and push every commit.
+Updated 12 November 2026, 16:51 UTC. Continue implementation beyond checkpoints and push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One compiler OR emulator. Phone install-only:
 announce and select serial; never launch/drive UI, reset data or uninstall. ADB availability question is pending after a fresh connection timeout.
 
@@ -62,12 +62,30 @@ must all pass before unsigned iOS device AND simulator linking. No production ru
 Local10 tests pass; YAML/Python syntax valid; dry-run Apple patch applies and every protected SDK8
 source digest remains unchanged. Native Swift/Mach-O execution is NOT claimed. Candidate inputs
 and local evidence are in Mobile .work/sdk8-apple-planning-2026-11-12; see its Git contract at
-docs/collaboration-sdk8-apple-candidate.md. Push triggers the new macOS candidate workflow; obtain
-and record its exact commit/run before claiming acceptance. No package publication. Preserve
-failed diagnostics if it fails; change only demonstrated causes. No local compiler/emulator active.
+docs/collaboration-sdk8-apple-candidate.md. Mobile dde4dfd1a3a85b8374599d9b346374fd6a25648e was pushed (8901 REAPED).
+Hosted candidate run43261761056/job131334639711 is QUEUED at the last check; no native result yet.
+https://github.com/fajarxfce/hris-mobile/actions/runs/43261761056
+Group handoff779e1780 pushed (34071 REAPED). Audit the exact native artifact before acceptance. No package publication. Preserve
+failed diagnostics if it fails; change only demonstrated causes. One local Gradle gate currently owns the build; see the next work paragraph.
 The actual Apple app still selects an unavailable Matrix runtime; bridge implementation follows
 accepted native SDK8. Do not rebuild/mutate protected SDK forks or Android release assets.
-Phone90 remains accepted and pending connection; all54 PRD groups stay OPEN and live Group stays OFF.
+Phone90 remains accepted and pending connection; connect26825 REAPED timeout12s. Server wg0 has
+its route/peer, but the last phone handshake was over6hours old at16:45UTC. Existing availability
+question remains pending; do not retry installation until explicit ADB connection succeeds.
+
+Next work is under Mobile .work/sdk-runtime-registry-portable-2026-11-12 (uncommitted): move the
+SDK-free SdkRuntimeRegistry and SdkSpaceRuntimeIdentity from Android to commonMain. Keep JVM
+synchronized semantics; Apple uses NSRecursiveLock and Wasm's single event loop has synchronous
+non-suspending transitions. Reentrancy is required because inspection calls reservation internally.
+Move two existing18-case registry test files byte-for-byte to commonTest, retaining Android IDs.
+Three new common cases cover nested exception cleanup and competing capacity/inspection. Original
+Android thread-race tests remain unchanged. format1/96964 REAPED PASS35.626s. Current5,143-input source manifest
+d42bae7604ca4b3d37fad253ab660c806bf2dc4e51e31d03089b9dfa6edba7c4,13 changed paths.
+registry-jvm-1/42828 is RUNNING: full955 expected Android host cases +21 focused desktop. Reap
+before another compiler/emulator. Then registry-browser21, full check (expected14,626) and the
+nine-case native suite on the new proof APK before
+acceptance/phone delivery. No Apple application runtime or additional transport is enabled.
+All54 PRD groups stay OPEN and live Group stays OFF.
 
 ## Accepted: canonical Original covered hints
 
