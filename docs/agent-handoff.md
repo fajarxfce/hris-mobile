@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 22:38 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 22:47 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -77,17 +77,35 @@ and failed-virtual-clock-1: focused1/78741 ran25 cases/one new failure175.034s. 
 deadline expired in22ms wall time around actual Default I/O. Only that test scenario moved to
 Default; all deadlines/assertions and production behavior stay unchanged. Format3/75985 passed35.426s.
 
-NEXT: commit/push this accepted increment, then dispatch one subsequent collaboration control
-for unresolved threads plus indexed contacts. Do not replace any existing pending workflow.
-Mobile.work/space-thread-participants-2026-11-12 contains DRAFT ONLY production/fixture/tests;
-no participant source is applied or verified. Its exact base digests must match before application.
-Continue local canonical metadata, peer labels, bounded registration provider identity and exact
-Original identity under the existing admission/session/binding child. A finite metadata async read
-can serve both unresolved facts and peer lookup once; no outer content-forwarding buffer. Preserve
-unread/absent/failed participant observations and independent command failures. Domain owns policy;
-DI stays in data. Validate cancellation, denied publication, namespace provenance and actual encrypted
-reopen. Then continue immutable composer timestamps/drafts and organization UI. The component and
-ownership review is in Mobile docs/collaboration-organization-ui-plan.md. All54 PRD groups remain OPEN.
+Indexed-contact acceptance commits Mobile5d67729f / Groupd02599c0 are pushed; sessions41570
+and59970 REAPED. One follow-up control43322026579 was dispatched and is PENDING behind43312753298,
+exact5d67729f9e4ddafc8a8850fb4c6c796236d0d7a1. Expected12,758 portable +5,250 Apple =18,008,
+including25 newly instantiated native directory/admission methods. No new hosted pass is claimed.
+Mobile.work/space-thread-contact-2026-11-12/hosted-control and hosted-audit.py preserve the
+configuration; the auditor additionally requires every immediately preceding control case ID.
+Do not replace this pending run. Dispatch29198 REAPED.
+
+ACTIVE: Mobile.work/space-thread-participants-2026-11-12, eleven application paths applied after
+contact acceptance and both pushes. Existing canonical observation now carries exact conversation
+metadata, indexed peer labels, bounded selected registration identity and exact Original self identity.
+Unread/absent/failed metadata remain distinct from independently readable history. The selected
+binding child owns one finite async metadata read shared by unresolved facts and peer lookup;
+no API, native SDK, writes or outer content-forwarding subscription is introduced. Repository
+wiring stays in data, pure validation/capture in domain. All source remains unaccepted until checks.
+
+Format1/45683 REAPED PASS35.863s. Focused1/55147 REAPED FAILED62.016s before test execution:
+Detekt rejected observeThread at101 lines. Preserve failed-duplicated-command-observation-1.
+Both bound/unresolved branches duplicated canonical command observation/validation. One named
+cold read now serves both inside the existing owner; no new layer or relaxed threshold/assertion.
+Format2/94905 REAPED35.192s; review corrected both call sites before another compile. Format3/78896
+REAPED35.473s. Focused2/33776 ACTIVE from22:46, expected118 including16 new domain and2 new
+actual encrypted-storage methods. Frozen5176inputs/0563116ab88bf7e8290de9cd998a27659029963aba4093d7371c85e31afb0ab3.
+Full expected14,816, retaining all14,780 prior IDs with36 new JVM/browser cases. Both domain/data
+native iOS test compilation are required; Linux executes0 Apple cases. No full run yet. Do not
+edit source or start another compiler/emulator until reaped. Prepared auditors retain exact baselines.
+After focused/full acceptance, commit/push before further implementation. Continue immutable composer
+submission time/drafts and organization UI. Component/ownership review remains in Mobile
+ docs/collaboration-organization-ui-plan.md. All54 PRD acceptance groups remain OPEN.
 
 Hosted follow-up43312753298 on exact1f47eeddb833054ae2b3d52c20439e6d11518a02:
 Portable131515465558 is ACCEPTED; auditor42039 REAPED,12,716 cases (6083desktop/955Android/5678browser).
