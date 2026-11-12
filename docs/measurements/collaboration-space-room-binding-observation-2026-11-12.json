@@ -69,7 +69,7 @@
   "groupLiveDeployment": false,
   "remaining": "Wire typed unresolved history and exact conversation metadata into the existing domain thread owner, then composer context and organization UI. The current thread still uses its one-shot binding read.",
   "hostedControl": {
-    "status": "portable accepted; Apple still running",
+    "status": "portable and native shared Apple accepted",
     "sourceCommit": "1f47eeddb833054ae2b3d52c20439e6d11518a02",
     "runId": 43312753298,
     "portable": {
@@ -95,6 +95,27 @@
     },
     "portableAuditSession": "42039 REAPED",
     "appleJobId": 131515464968,
-    "expectedAppleCases": 5212
+    "expectedAppleCases": 5212,
+    "apple": {
+      "sourceCommit": "1f47eeddb833054ae2b3d52c20439e6d11518a02",
+      "runId": 43312753298,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43312753298",
+      "jobId": 131515464968,
+      "artifactId": 13991123191,
+      "bytes": 824426,
+      "sha256": "c4c7ed6d34a450aa12ecffd2ca517dbf5924d7fbcfc02e942234d9a9af452260",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreservedExceptReviewedReplacements": true,
+      "reviewedReplacements": 0,
+      "browserRuntimeCaseSuffixChanges": 0,
+      "counts": {
+        "iosSimulatorArm64Test": 5212
+      },
+      "reportManifestSha256": "8731c7f5ee12dff7982403aa308ddbde50516d5df8be986dbcf1cae4ee1bce80",
+      "jobLogSha256": "2d691567117de25c1996870b06c7624af04ba8c8fbbd9b8e27f50f19b9b72db8"
+    },
+    "appleAuditSession": "83748 REAPED",
+    "acceptedCases": 17928,
+    "complete": true
   }
 }
