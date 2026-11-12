@@ -34,7 +34,10 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.storage.safeStorageCall
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.update
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.Room
 
@@ -71,6 +74,9 @@ internal constructor(
     private val acquisitionComplete = AtomicBoolean()
     private val acquisitionFinished = CompletableDeferred<Unit>()
     private val published = AtomicBoolean()
+    internal val instanceId = java.util.UUID.randomUUID().toString()
+    private val entryRevision = MutableStateFlow(0L)
+    internal val entryChanges = entryRevision.asStateFlow()
     private val httpObservationStarted = AtomicBoolean()
     private var httpObservationJob: Job? = null
     private val readinessStarted = AtomicBoolean()
@@ -247,9 +253,10 @@ internal constructor(
 
     /** Registry invalidation is synchronous; its caller drains outside the registry monitor. */
     internal fun requestClose() {
-        stopRequested.set(true)
+        val changed = stopRequested.compareAndSet(false, true)
         readiness?.deactivate()
         roomKeys.deactivate()
+        if (changed) entryRevision.update { it + 1 }
     }
 
     internal val availableForEntry
@@ -268,7 +275,7 @@ internal constructor(
                     code = "client.collaboration_runtime_opening",
                 )
             )
-        published.set(true)
+        if (published.compareAndSet(false, true)) entryRevision.update { it + 1 }
         return if (stopRequested.get()) syncStopped() else AppResult.Success(Unit)
     }
 
@@ -584,9 +591,7 @@ internal constructor(
     }
 
     override suspend fun close(): AppResult<Unit> {
-        stopRequested.set(true)
-        readiness?.deactivate()
-        roomKeys.deactivate()
+        requestClose()
         return shutdown.close()
     }
 

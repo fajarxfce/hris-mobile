@@ -891,6 +891,10 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun observeSpaceRuntimePublication(runtimes: CollaborationSpaceRuntimeRepository) =
+        ObserveCollaborationSpaceRuntimePublication(runtimes)
+
+    @Factory
     fun observeSpaceIncomingStartup(
         roots: CollaborationSpaceRootRepository,
         registrations: CollaborationSpaceRegistrationCommandRepository,

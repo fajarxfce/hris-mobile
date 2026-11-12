@@ -641,6 +641,37 @@ class AndroidCollaborationRuntimeRepository(
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun observePublication(
+        runtime: CollaborationSpaceRuntimeReady
+    ): Flow<AppResult<CollaborationSpaceRuntimePublication?>> =
+        registry.handoverChanges
+            .flatMapLatest {
+                val lease =
+                    registry.findSpaceCandidate(
+                        runtime.owner,
+                        runtime.deviceId,
+                        runtime.operationId,
+                    )
+                if (lease == null) flowOf(AppResult.Success(null))
+                else
+                    combine(lease.entryChanges, lease.credentialFailures) { _, failure ->
+                        when {
+                            failure != null -> AppResult.Failed(failure)
+                            registry.findSpace(
+                                runtime.owner,
+                                runtime.deviceId,
+                                runtime.operationId,
+                            ) !== lease -> AppResult.Success(null)
+                            else ->
+                                AppResult.Success(
+                                    CollaborationSpaceRuntimePublication(runtime, lease.instanceId)
+                                )
+                        }
+                    }
+            }
+            .distinctUntilChanged()
+
     override suspend fun isSpaceOpen(
         owner: CollaborationSpaceOwner,
         deviceId: String,

@@ -5,9 +5,19 @@ import dev.fajar.starter.common.result.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
 
 /** Original store I/O and logical SDK lifetime. The owning use case admits every live operation. */
 interface CollaborationSpaceRuntimeRepository {
+    /**
+     * Existing exact client only. Null before publication/after retirement; a different instance ID
+     * on recreation, including the same logical owner/device/bootstrap. No acquisition or I/O.
+     * Observation owns no client lifetime and retained local facts do not depend on this stream.
+     */
+    fun observePublication(
+        runtime: CollaborationSpaceRuntimeReady
+    ): Flow<AppResult<CollaborationSpaceRuntimePublication?>> = flowOf(AppResult.Success(null))
+
     /** Bounded callbacks from installed native clients only; no acquisition or wake scheduling. */
     fun spaceReadinessSignals(): Flow<CollaborationSpaceReadinessSignal> = emptyFlow()
 

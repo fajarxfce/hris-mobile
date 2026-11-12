@@ -1,0 +1,98 @@
+{
+  "recordedAt": "2026-11-12T08:23:53.355386+00:00",
+  "sourceBaseline": "66f537a4cba7f13080acc0f734fe669e8ef4d51d",
+  "sourceFiles": 5127,
+  "changedSourceFiles": 11,
+  "sourceManifestSha256": "b4c0b77605df85d4ad73c8a6c56a632b2d2d1195f0f649444ad4cb54d2eb0456",
+  "focused": {
+    "tests": 110,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "androidHost": {
+    "tests": 116,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "full": {
+    "validated": 14466,
+    "fresh": {
+      "tests": 12428,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 524.549,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152227098,
+    "sha256": "c95a142759b0c4584e5bbe73ec70cd9eae1ea61a661d2c30c39741d314cc94a2"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "runtimePublicationAccepted": true,
+  "newCommonCasesPerTarget": 12,
+  "newAndroidProtocolCases": 13,
+  "existingRegistryOnly": true,
+  "noAcquisitionOrPollingFromObservation": true,
+  "publishedInstanceUuidSurvivesCredentialRetry": true,
+  "newUuidOnRecreation": true,
+  "retirementVisibleBeforeNativeDrain": true,
+  "failedDrainCannotRepublish": true,
+  "credentialFailuresRemainTyped": true,
+  "observerCancellationDoesNotCloseClient": true,
+  "domainObservationBoundInDi": true,
+  "applicationConsumerActivationEnabled": false,
+  "nativeSdkExecution": false,
+  "appleNativeAdapterImplemented": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "starterPortRequired": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [
+    {
+      "run": "android-1",
+      "exitCode": 1,
+      "elapsedSeconds": 157.493,
+      "freshCounts": {
+        "tests": 104,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "run": "focused-1",
+      "exitCode": 1,
+      "elapsedSeconds": 88.916,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "failureReviews": {
+    "android-1": {
+      "cause": "JUnit4 rejected the entire new class: one expression-body test inferred AppResult.Failed as return type instead of Unit. 103 existing selected cases passed; the 13 new cases did not execute.",
+      "correction": "Declare the affected runBlocking result as Unit. Preserve every assertion and production source.",
+      "archive": "failed-android-candidate-1",
+      "productionBehaviorChanged": false
+    },
+    "focused-1": {
+      "cause": "Common test compilation could not infer two nested generic expected list types containing nullable publications; no tests executed.",
+      "correction": "Declare both expected lists as List<AppResult<CollaborationSpaceRuntimePublication?>>. Preserve assertion values, production source and validation rules.",
+      "archive": "failed-focused-candidate-1",
+      "productionBehaviorChanged": false
+    }
+  },
+  "fullProcessCompleted": true,
+  "fullReapOutputLostAtCompaction": true,
+  "fullAuditSession": 95664,
+  "fullAuditReaped": true
+}

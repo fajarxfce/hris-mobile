@@ -16,6 +16,7 @@ internal class SpaceRuntimeSyncClientSource(
     var keyListener: RoomKeyChangesListener? = null
     val keySubscriptionEntered = CompletableDeferred<Unit>()
     var beforeKeySubscribe: suspend () -> Unit = {}
+    var beforePause: suspend () -> Unit = {}
     var keySubscriptionAvailable = true
     private val keyRegistrations = AtomicInteger()
     val keySubscriptions
@@ -88,7 +89,7 @@ internal class SpaceRuntimeSyncClientSource(
                     override fun close() = Unit
                 }
 
-            override suspend fun pause() = Unit
+            override suspend fun pause() = beforePause()
 
             override fun close() {
                 releases.incrementAndGet()

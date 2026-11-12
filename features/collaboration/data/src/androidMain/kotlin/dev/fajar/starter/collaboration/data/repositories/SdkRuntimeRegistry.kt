@@ -342,6 +342,16 @@ internal class SdkRuntimeRegistry<T : Any>(
     /** Public readiness lookup still requires the exact immutable bootstrap operation. */
     fun findSpace(owner: CollaborationSpaceOwner, deviceId: String, operationId: String): T? =
         synchronized(monitor) {
+            findSpaceCandidate(owner, deviceId, operationId)?.takeIf(available)
+        }
+
+    /** Observe publication/retirement of this resource without granting access before publish. */
+    fun findSpaceCandidate(
+        owner: CollaborationSpaceOwner,
+        deviceId: String,
+        operationId: String,
+    ): T? =
+        synchronized(monitor) {
             if (retention?.parent != owner.parent) return@synchronized null
             entries.values
                 .singleOrNull {
@@ -351,7 +361,6 @@ internal class SdkRuntimeRegistry<T : Any>(
                         !it.retired
                 }
                 ?.resource
-                ?.takeIf(available)
         }
 
     /** Current-space denial/removal stops its resources without changing original stored facts. */

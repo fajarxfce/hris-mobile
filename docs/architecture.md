@@ -1,5 +1,7 @@
 # Architecture
 
+[Installed runtime publication](collaboration-space-runtime-publication.md) observes exact instance identity and retirement through existing resources; incoming application activation remains separate.
+
 [Durable room-key retention](collaboration-durable-room-key-consumer.md) serializes exact receipt/intent/wake confirmation before raw ACK; application activation remains separate.
 
 [Targeted history recovery](collaboration-targeted-history-recovery.md) retains bounded active/requested room predicates and independently proves exclusions before the existing worker advances.
