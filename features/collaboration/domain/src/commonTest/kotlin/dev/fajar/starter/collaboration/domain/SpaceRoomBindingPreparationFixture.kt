@@ -7,6 +7,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.days
+import kotlinx.coroutines.flow.Flow
 
 internal class SpaceRoomBindingPreparationFixture(legacy: Boolean = false) {
     val source = SpaceRoomPreparationFixture()
@@ -96,6 +97,12 @@ internal class SpaceRoomBindingPreparationFixture(legacy: Boolean = false) {
 
     val bindings =
         object : CollaborationSpaceRoomBindingRepository {
+            override fun observeByConversation(
+                access: CollaborationSpaceLocalAccess,
+                conversationId: String,
+            ): Flow<AppResult<CollaborationSpaceRoomBinding?>> =
+                error("Binding observation is not part of this fixture")
+
             override suspend fun getByConversation(
                 access: CollaborationSpaceLocalAccess,
                 conversationId: String,

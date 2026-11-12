@@ -8,13 +8,14 @@ import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceRoomBindingInventoryRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceRoomBindingRepository
+import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.safeStorageCall
+import dev.fajar.starter.storage.safeStorageFlow
 import kotlin.uuid.Uuid
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import org.koin.core.annotation.*
 
 @Single
@@ -32,6 +33,32 @@ class EncryptedCollaborationSpaceRoomBindingRepository(
         require(validCollaborationSpaceConversationId(conversationId))
         lookup(access) { it.conversationId(conversationId) }
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun observeByConversation(
+        access: CollaborationSpaceLocalAccess,
+        conversationId: String,
+    ): Flow<AppResult<CollaborationSpaceRoomBinding?>> =
+        safeStorageFlow(
+                flow {
+                    require(validCollaborationSpaceConversationId(conversationId))
+                    emitAll(
+                        replicas.observePublishedCheckpoint(
+                            spaceRoomBindingScope(access),
+                            spaceRoomBindingPartition(access),
+                        )
+                    )
+                }
+            )
+            .mapLatest { result ->
+                when (result) {
+                    is AppResult.Failed -> result
+                    is AppResult.Success ->
+                        safeStorageCall { lookup(access) { it.conversationId(conversationId) } }
+                }
+            }
+            .distinctUntilChanged()
+            .flowOn(Dispatchers.Default)
 
     override suspend fun findByRoom(
         access: CollaborationSpaceLocalAccess,

@@ -10,6 +10,7 @@ import kotlin.io.encoding.Base64
 import kotlin.test.*
 import kotlin.time.Instant
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 
@@ -95,6 +96,256 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
             AppResult.Success(value),
             bindings().findByRoom(access, value.room.serverName, value.room.roomId),
         )
+    }
+
+    @Test
+    fun publishedBindingObservationStartsKeylessAndFollowsCreationAndRemoval() = withDatabase { f ->
+        coroutineScope {
+            val access = f.local()
+            val value = binding(access, legacy = true)
+            val values = Channel<AppResult<CollaborationSpaceRoomBinding?>>(8)
+            val job = launch {
+                f.bindings().observeByConversation(access, value.conversation.id).collect {
+                    values.send(it)
+                }
+            }
+            try {
+                assertEquals(AppResult.Success(null), values.receive())
+                assertNull(f.keys.read())
+                assertEquals(AppResult.Success(true), f.bindings().retain(access, value))
+                assertEquals(AppResult.Success(value), values.receive())
+                assertEquals(AppResult.Success(true), f.bindings().retain(access, value))
+                assertEquals(
+                    AppResult.Success(true),
+                    f.bindings().retain(access, binding(access, 2)),
+                )
+                assertTrue(
+                    f.database.replicas.clear(
+                        spaceRoomBindingScope(access),
+                        spaceRoomBindingPartition(access),
+                    )
+                )
+                // Identical retention and another conversation cannot add a duplicate value.
+                assertEquals(AppResult.Success(null), values.receive())
+            } finally {
+                job.cancelAndJoin()
+                values.close()
+            }
+        }
+    }
+
+    @Test
+    fun publishedBindingObservationRetainsBothOriginsAcrossReopenAndRenewedLogin() =
+        withDatabase { f ->
+            val access = f.local()
+            val values = listOf(binding(access), binding(access, 2, legacy = true))
+            for (value in values) assertEquals(
+                AppResult.Success(true),
+                f.bindings().retain(access, value),
+            )
+            val before = f.rawBindings()
+            val renewed =
+                f.access.copy(sessionId = "binding-observer-renewed", companyId = historyId(9955))
+            f.reopen(renewed)
+            for (value in values) {
+                assertEquals(
+                    AppResult.Success(value),
+                    f.bindings()
+                        .observeByConversation(f.local(renewed), value.conversation.id)
+                        .first(),
+                )
+                assertEquals(
+                    AppResult.Success(null),
+                    f.bindings().observeByConversation(access, value.conversation.id).first(),
+                )
+            }
+            assertEquals(before.documents, f.rawBindings(f.local(renewed)).documents)
+            assertEquals(
+                before.checkpoint?.payload,
+                f.rawBindings(f.local(renewed)).checkpoint?.payload,
+            )
+        }
+
+    @Test
+    fun publishedBindingObservationRecoversFromMalformedPairOnlyAfterAnotherLocalPublication() =
+        withDatabase { f ->
+            coroutineScope {
+                val access = f.local()
+                val value = binding(access, legacy = true)
+                assertEquals(AppResult.Success(true), f.bindings().retain(access, value))
+                val malformed = MutableStateFlow(true)
+                val store =
+                    object : ReplicaStore by f.database.replicas {
+                        override fun observeQueries(
+                            scope: ReplicaScope,
+                            partition: String,
+                            queries: List<ReplicaQuery>,
+                        ) =
+                            f.database.replicas.observeQueries(scope, partition, queries).map { raw
+                                ->
+                                if (malformed.value)
+                                    raw.copy(pages = listOf(raw.pages[0], emptyList()))
+                                else raw
+                            }
+                    }
+                val values = Channel<AppResult<CollaborationSpaceRoomBinding?>>(8)
+                val job = launch {
+                    f.bindings(store).observeByConversation(access, value.conversation.id).collect {
+                        values.send(it)
+                    }
+                }
+                try {
+                    assertIs<AppResult.Failed>(values.receive())
+                    val before = f.rawBindings()
+                    malformed.value = false
+                    assertEquals(
+                        AppResult.Success(true),
+                        f.bindings().retain(access, binding(access, 2)),
+                    )
+                    assertEquals(AppResult.Success(value), values.receive())
+                    val after = f.rawBindings()
+                    assertTrue(after.documents.containsAll(before.documents))
+                    f.assertBinding(value)
+                } finally {
+                    job.cancelAndJoin()
+                    values.close()
+                }
+            }
+        }
+
+    @Test
+    fun publishedBindingObservationRejectsReplacementDuringComplementaryIndexRead() =
+        withDatabase { f ->
+            val value = binding(f.local(), legacy = true)
+            assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), value))
+            val store =
+                object : ReplicaStore by f.database.replicas {
+                    override fun observeQueries(
+                        scope: ReplicaScope,
+                        partition: String,
+                        queries: List<ReplicaQuery>,
+                    ) = flow {
+                        val page =
+                            f.database.replicas.observeQueries(scope, partition, queries).first()
+                        f.activate(
+                            f.access.copy(
+                                sessionId = "observed-foreign",
+                                accountId = historyId(9956),
+                            )
+                        )
+                        emit(page)
+                    }
+                }
+            // Inactive scopes publish absence. An older in-flight lookup may fail before the
+            // new checkpoint cancels it, but neither path may publish the previous account's data.
+            val absent =
+                f.bindings(store)
+                    .observeByConversation(f.local(), value.conversation.id)
+                    .onEach { result ->
+                        when (result) {
+                            is AppResult.Success -> assertNull(result.value)
+                            is AppResult.Failed ->
+                                assertEquals(FailureKind.Storage, result.failure.kind)
+                        }
+                    }
+                    .first { it is AppResult.Success }
+            assertEquals(AppResult.Success(null), absent)
+            f.activate()
+            f.assertBinding(value)
+        }
+
+    @Test
+    fun aNewPublishedCheckpointCancelsTheOlderBindingReadBeforePublishing() = withDatabase { f ->
+        val access = f.local()
+        val value = binding(access, legacy = true)
+        assertEquals(AppResult.Success(true), f.bindings().retain(access, value))
+        val entered = CompletableDeferred<Unit>()
+        val retired = CompletableDeferred<Unit>()
+        var reads = 0
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override fun observeQueries(
+                    scope: ReplicaScope,
+                    partition: String,
+                    queries: List<ReplicaQuery>,
+                ) = flow {
+                    reads++
+                    if (reads == 1) {
+                        try {
+                            entered.complete(Unit)
+                            awaitCancellation()
+                        } finally {
+                            retired.complete(Unit)
+                        }
+                    }
+                    emitAll(f.database.replicas.observeQueries(scope, partition, queries))
+                }
+            }
+        val result =
+            CoroutineScope(currentCoroutineContext()).async {
+                f.bindings(store).observeByConversation(access, value.conversation.id).first()
+            }
+        entered.await()
+        assertEquals(AppResult.Success(true), f.bindings().retain(access, binding(access, 2)))
+        assertEquals(AppResult.Success(value), result.await())
+        assertTrue(retired.isCompleted)
+        assertEquals(2, reads)
+        f.assertBinding(value)
+    }
+
+    @Test
+    fun cancellingPublishedBindingObservationJoinsItsPendingPairRead() = withDatabase { f ->
+        val value = binding(f.local(), legacy = true)
+        assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), value))
+        val entered = CompletableDeferred<Unit>()
+        val stopped = CompletableDeferred<Unit>()
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override fun observeQueries(
+                    scope: ReplicaScope,
+                    partition: String,
+                    queries: List<ReplicaQuery>,
+                ) =
+                    flow<ReplicaQueryPage> {
+                        try {
+                            entered.complete(Unit)
+                            awaitCancellation()
+                        } finally {
+                            stopped.complete(Unit)
+                        }
+                    }
+            }
+        val result =
+            CoroutineScope(currentCoroutineContext()).async {
+                f.bindings(store).observeByConversation(f.local(), value.conversation.id).first()
+            }
+        entered.await()
+        result.cancelAndJoin()
+        assertTrue(stopped.isCompleted)
+        assertFailsWith<CancellationException> { result.await() }
+        f.assertBinding(value)
+    }
+
+    @Test
+    fun invalidPublishedBindingObservationDoesNotCreateKeysOrRepairLostOnes() = withDatabase { f ->
+        val access = f.local()
+        val value = binding(access)
+        for ((owner, id) in
+            listOf(
+                access to "invalid",
+                access.copy(spaceId = "invalid") to value.conversation.id,
+            )) {
+            assertIs<AppResult.Failed>(f.bindings().observeByConversation(owner, id).first())
+            assertNull(f.keys.read())
+        }
+        assertEquals(AppResult.Success(true), f.bindings().retain(access, value))
+        val before = f.rawBindings()
+        f.keys.write(null)
+        assertIs<AppResult.Failed>(
+            f.bindings().observeByConversation(access, value.conversation.id).first()
+        )
+        assertNull(f.keys.read())
+        assertEquals(before, f.rawBindings())
     }
 
     @Test

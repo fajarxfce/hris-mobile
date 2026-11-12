@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 21:12 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 21:39 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -26,19 +26,35 @@ require renewed access and unchanged facts) and failed-delayed-failure-1 (one re
 failure,106.977s, fixed without relaxing the assertion). Format3/47114 completed36.158s.
 The two failed candidates, prior111 excluded XML/657 cases and all exact hashes remain.
 
-NEXT: commit/push this accepted increment, then apply the eight-file draft in Mobile
-.work/room-binding-observation-2026-11-12 with prepare-after-acceptance.py. It checks the
-accepted baseline, clean/pushed production source and absence of another heavy process.
-The draft adds reactive binding observation through existing bounded encrypted indexes,
-seven shared storage cases and explicit fixture implementations. It is UNAPPLIED/UNTESTED.
-Expected focused35 (storage33/application DI2), full14,738 including all14,724 prior IDs.
-Review concurrent publication/clear, malformed-pair recovery and cancellation; preserve any
-failure rather than suppressing assertions or introducing retries. After this contract,
-evolve the existing canonical observer to support typed unresolved history using exact
-local metadata, then composer context and product UI. Missing binding is never proof of
-empty remote history. Keep local pending content visible through a binding transition.
-No second observer owner, usecase-to-usecase calls or invented Company coordinates.
-All54 PRD groups remain OPEN; continue beyond this checkpoint. No local heavy process now.
+Reactive room-binding observation is ACCEPTED in Mobile.work/room-binding-observation-2026-11-12.
+Eight source paths add observeByConversation with existing bounded pair authentication,
+mapLatest cancellation and identical-value suppression. No network, key creation, writes or
+retry loop. Domain thread integration is still next; existing one-shot reads are unchanged.
+Focused2/60839 REAPED PASS35/193.488s; full1/75682 REAPED PASS850.194s.
+Strict full audit accepts14,738 =12,700 fresh +2,038 unchanged, all14,724 prior IDs retained,
+14 new JVM/browser cases. Source5167/de55d4ceec4573371da3d0045ba8940af2a8020c018cc0bd21aa6012c5c01dcb;
+reportc1effcd37c88061bbb58843bb5624ce64424310d8793f5e070be9fded11b0dd8;
+immutable proof full-1/accepted-proof.apk153463347B/243d6ddde57389372f003f9093e7eac24daf37342d8ab546210d36636bd9a4e2.
+Preserve failed-inactive-scope-expectation-1: focused1/86697 had33 cases/two new incorrect
+Storage expectations184.208s. Existing ReplicaDao returns absence for inactive scopes.
+Corrected tests require exact absence, reject every non-null old-account result and preserve
+all reopened content/ciphertext; intermediate in-flight failures remain Storage. Production
+was not changed for the correction. Format2/83100 REAPED35.394s. No new native/phone claim.
+
+NEXT: commit/push accepted binding observation, then review/apply the UNTESTED draft in Mobile
+.work/unresolved-space-thread-2026-11-12. Eleven draft paths (two new files have null entries
+in draft-base.json) contain typed Bound/Unresolved snapshots, reactive binding selection BEFORE
+the final content child, exact metadata/command reads, fixture/type adapters,11 new domain
+cases and2 real encrypted transition/reopen cases. Draft generators have already run; edit
+files directly, do not rerun them over later changes. No applier/runner for this draft yet.
+It must capture the accepted14,738-case baseline before application, preserve all previous
+history/command assertions and review cancellation/slow-consumer behavior. Expected focused100
+(domain54/data44/application DI2) and full14,764 if the13 new shared methods remain unchanged.
+Unknown metadata stays unavailable; a missing local binding never proves empty remote history.
+No second observer owner, invented Company coordinates or transport acquisition. After this,
+continue composer context and organization UI. All54 PRD groups remain OPEN; do not stop.
+The current two accepted increments can now share one exact-source hosted follow-up after push;
+expected12,716portable +5,212Apple =17,928. Keep current control/native jobs; at most one pending run.
 
 Company thread publication is ACCEPTED: Mobile151438b4ba85f599fb2eefc080a6ac15423ac6e1,
 Group6158096d evidence (later Group1480acdf records hosted progress). Both pushed.
@@ -116,7 +132,7 @@ Portable131478498528 is ACCEPTED: auditor70237 REAPED,12,666 cases, zero prior-I
 replacements/browser normalization. Artifact13984756078/4054447B/ad79fb987c703e4235b3823f92b184c8013df4f4c07c89c20f271281728ed056;
 report701f6640e829f93997f1f048a87c40bb8eccd8d9bd05f6217cd4e3c29f1fc816;
 logf2bd2d8d0e6a4866b3a53fc9c08b1f82dc58afe20310cbcb66ae5a656b0d1fb8.
-Apple131478499227 is still running at21:08; expect5,187, total17,853 only after its
+Apple131478499227 completed its test step and is building the host at21:33; expect5,187, total17,853 only after its
 own audit. Mobile.work/company-thread-publication-2026-11-12/hosted-control keeps artifacts
 and full portable manifest. Run hosted-audit.py apple hosted-control after success.
 Do not rerun accepted portable or dispatch multiple pending controls.
@@ -148,7 +164,7 @@ fresh2560MiB/two cores, cold2908ms/reopen2145ms, stable10s/process. Both screens
 were inspected and show complete onboarding. ARM39435 REAPED42.972s, verify38284 REAPED.
 All gates are finished; do not rebuild. No authenticated release/phone latency claim.
 
-Latest ADB63043 REAPED timeout15s at20:58UTC; no installation attempted. At20:12UTC the
+Latest ADB3122 REAPED timeout15s at21:30UTC; no installation attempted. At20:12UTC the
 WireGuard handshake was34837s old; route is correct viawg0. Do not repeat availability questions.
 When10.77.77.3:5555 connects, announce EACH actual installation, then run Mobile
 .work/release-phone-2026-11-12-build92/install.py --install-only. Inspect any existing

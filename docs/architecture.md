@@ -1,5 +1,7 @@
 # Architecture
 
+[Published room bindings](collaboration-space-room-binding-observation.md) follow authenticated local changes while session/admission policy stays in domain.
+
 [Canonical thread commands](collaboration-space-thread-commands.md) combine actual local
 history and both original command namespaces under the existing admission owner.
 

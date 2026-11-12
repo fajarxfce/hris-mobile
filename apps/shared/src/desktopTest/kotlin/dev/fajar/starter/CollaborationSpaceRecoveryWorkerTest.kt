@@ -16,6 +16,7 @@ import kotlin.test.*
 import kotlin.time.Duration.Companion.nanoseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.*
 
 class CollaborationSpaceRecoveryWorkerTest {
@@ -532,6 +533,12 @@ class CollaborationSpaceRecoveryWorkerTest {
             (0 until count step 2).associate { n -> binding(n).let { it.conversation.id to it } }
         val bindings =
             object : CollaborationSpaceRoomBindingRepository {
+                override fun observeByConversation(
+                    access: CollaborationSpaceLocalAccess,
+                    conversationId: String,
+                ): Flow<AppResult<CollaborationSpaceRoomBinding?>> =
+                    error("Binding observation is not part of this fixture")
+
                 override suspend fun getByConversation(
                     access: CollaborationSpaceLocalAccess,
                     conversationId: String,

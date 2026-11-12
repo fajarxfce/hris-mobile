@@ -7,6 +7,7 @@ import dev.fajar.starter.common.result.*
 import kotlin.test.*
 import kotlin.time.Duration.Companion.days
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runTest
 
 class LoadCollaborationSpaceKeyHistoryTest {
@@ -615,6 +616,12 @@ class LoadCollaborationSpaceKeyHistoryTest {
             )
         val bindings =
             object : CollaborationSpaceRoomBindingRepository {
+                override fun observeByConversation(
+                    access: CollaborationSpaceLocalAccess,
+                    conversationId: String,
+                ): Flow<AppResult<CollaborationSpaceRoomBinding?>> =
+                    error("Binding observation is not part of this fixture")
+
                 override suspend fun getByConversation(
                     access: CollaborationSpaceLocalAccess,
                     conversationId: String,

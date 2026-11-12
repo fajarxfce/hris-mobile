@@ -2,6 +2,7 @@ package dev.fajar.starter.collaboration.domain.repositories
 
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.result.AppResult
+import kotlinx.coroutines.flow.Flow
 
 /** Account-owned encrypted facts, independent of current login or provider credentials. */
 interface CollaborationSpaceRoomBindingRepository {
@@ -9,6 +10,12 @@ interface CollaborationSpaceRoomBindingRepository {
         access: CollaborationSpaceLocalAccess,
         conversationId: String,
     ): AppResult<CollaborationSpaceRoomBinding?>
+
+    /** Published local changes only; absence is not proof that remote history is empty. */
+    fun observeByConversation(
+        access: CollaborationSpaceLocalAccess,
+        conversationId: String,
+    ): Flow<AppResult<CollaborationSpaceRoomBinding?>>
 
     suspend fun findByRoom(
         access: CollaborationSpaceLocalAccess,

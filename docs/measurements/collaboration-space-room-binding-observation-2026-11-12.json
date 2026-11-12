@@ -1,0 +1,71 @@
+{
+  "date": "2026-11-12",
+  "scope": "Reactive exact local room binding observation",
+  "baseCommit": "e30894121cba6dd64038bf0a913b422727fa421c",
+  "sourceFiles": 5167,
+  "sourceManifestSha256": "de55d4ceec4573371da3d0045ba8940af2a8020c018cc0bd21aa6012c5c01dcb",
+  "changedSources": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationSpaceRecoveryWorkerTest.kt": "c39809a93f0d9e3fd5e4f1c3e197491b04f50e2160af5cb7302cb66861ddeb22",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceRoomBindingRepository.kt": "1d515329ea7622b8238f4844bc83de8024fb18177f1458f084ff1100337f1cdb",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingStorageContract.kt": "b9c8895c7f11e5e8de1b804e20a4958304e47e9e663fb76f3244141db799084d",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceRoomBindingRepository.kt": "1928e4eea26be32d6dac42214b3e9d4a126828e91d9dd5335dd8d3f4ea29fc10",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/LoadCollaborationSpaceKeyHistoryTest.kt": "7d6f2102ed298658b1f49f540a5a3feb99a1fc9ab9911451d2be1f426d3fd23d",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceKeyReferenceReadFixture.kt": "6258701912f9ec653c2fb2c66cbd0b96783a57ef1913f73b36177f7d8f9a7424",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceOriginalDeliveryFixture.kt": "fa8affa90aed532954ccb67e36dd21948c530d6eed85bc082bdf623841fc67b9",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRoomBindingPreparationFixture.kt": "8266859e58f45c979b90d5dd9919649194f9a14b54aeb237aa6988315bff473e"
+  },
+  "focused": {
+    "accepted": true,
+    "tests": 35,
+    "elapsedSeconds": 193.488,
+    "sourceFiles": 5167,
+    "sourceManifestSha256": "de55d4ceec4573371da3d0045ba8940af2a8020c018cc0bd21aa6012c5c01dcb",
+    "resultSha256": "e87a658dc1f88df68a4315f53e8917c3d945ffe8a2e6abf5c8bfb0aa4c5d3300",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceRoomBindingStorageTest": 33
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-12T21:24:30.858205+00:00",
+    "elapsedSeconds": 850.194,
+    "sourceFiles": 5167,
+    "freshCounts": {
+      "tests": 12700,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153463347,
+      "sha256": "243d6ddde57389372f003f9093e7eac24daf37342d8ab546210d36636bd9a4e2"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 14738,
+    "newCases": 14,
+    "freshTests": 12700,
+    "reusedUnaffectedTests": 2038,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 111,
+    "excludedHistoricalCases": 657,
+    "sourceManifestSha256": "de55d4ceec4573371da3d0045ba8940af2a8020c018cc0bd21aa6012c5c01dcb",
+    "reportManifestSha256": "c1effcd37c88061bbb58843bb5624ce64424310d8793f5e070be9fded11b0dd8",
+    "nativeClaim": "No changed SDK/proof source; earlier accepted ten native scenarios remain historical evidence. This gate does not claim new native or phone behavior."
+  },
+  "fullAuditSha256": "25cce1ed4b7a9fdaafe188352d18dacf5cda8addc1b4451715ac296ed83132b8",
+  "preservedFailure": {
+    "path": "failed-inactive-scope-expectation-1",
+    "tests": 33,
+    "failures": 2,
+    "elapsedSeconds": 184.208,
+    "sourceManifestSha256": "83a95d4ac1790b64d4a9c995662f837007d9a7a1551c5fbdd8872abdd072bf41",
+    "cause": "New tests incorrectly required failure for inactive raw scopes. The existing datasource contract returns absence. Corrected assertions require exact absence for old sessions, reject every non-null result during replacement and preserve reopened content/ciphertext. Intermediate in-flight failures stay Storage. Production was unchanged for this correction."
+  },
+  "newSharedStorageMethods": 7,
+  "nativeSuiteExecutedForThisIncrement": false,
+  "phoneInstalledForThisIncrement": false,
+  "groupLiveDeployment": false,
+  "remaining": "Wire typed unresolved history and exact conversation metadata into the existing domain thread owner, then composer context and organization UI. The current thread still uses its one-shot binding read."
+}

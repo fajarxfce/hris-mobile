@@ -55,6 +55,12 @@ internal class SpaceOriginalDeliveryFixture {
 
     val bindings =
         object : CollaborationSpaceRoomBindingRepository {
+            override fun observeByConversation(
+                access: CollaborationSpaceLocalAccess,
+                conversationId: String,
+            ): Flow<AppResult<CollaborationSpaceRoomBinding?>> =
+                error("Binding observation is not part of this fixture")
+
             override suspend fun getByConversation(
                 access: CollaborationSpaceLocalAccess,
                 conversationId: String,
