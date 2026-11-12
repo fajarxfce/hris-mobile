@@ -4,6 +4,29 @@ Updated 12 November 2026, 03:27 UTC.
 Complete PRD, per-commit pushes and validated phone updates remain authorized. All54 groups OPEN.
 Continue working. No subagents. One compiler OR emulator. Follow AGENTS.md and clean layers.
 
+## Active Published Space transfer — local validation
+
+Workspace .work/space-primary-key-wait-transfer-2026-11-12, baselined78fd99b (accepted source15a418f7).
+Five source files APPLIED: Space operation, fixture/26common cases, existing DI and graph changes.
+5,085 inputs/adef917c95088c13fee87029afd0c176aaf7ad75fea532c67b75b813414f7a5f.
+Expected13,862local/191JVM+189browser focused. Format1/6685 REAPED PASS36.670s. Focused1/81975
+RUNNING; only compiler active, no emulator. Preserve failed candidates before any fix/refreeze.
+Preparation HAS EXECUTED; publisher and accepted handoff writer have NOT. Do not run preparation twice.
+
+It keeps Published logical Space and current Group traversal coordinates, pins immutable binding
+including Original aliases, and checks the checkpoint's current Original physical company/device.
+Unresolved provider EOF transfers exact primary work+fresh recovery+wake atomically with shared
+confirmation. Original tasks cannot use this owner. No worker/producer activation is included.
+
+Current workspace next-global-turn-draft contains ONLY an unreviewed/uncompiled/unapplied typed
+attempt entity, with no tests, completion/deferral operation or worker changes yet. Read the prior
+workspace next-global-completion-operation-review.md and next-application-history-service-review.md.
+Complete/confirm a selected global page without a mutating reader, then integrate ready/deferred
+history into adoption and continuation. Existing worker ignores it and Finish refuses active work;
+producer activation now would cause empty-work resume loops. Reserve history service before long
+primary work; completed waiting passes sleep until real new demand. Keep source/restore publication
+coverage and loss-aware native listener ownership as explicit remaining work.
+
 ## Original primary transfer and finite visit policies accepted
 
 Workspace .work/incoming-key-wait-transfer-2026-11-12; baseline7a47d456bc642aebbd937f46c2caf128f339aa6a with accepted
@@ -40,9 +63,8 @@ artifacts not yet accepted. Workspace hosted-43148447666; do not redispatch.
 ## Next: Space transfer, global service and loss-aware key producer
 
 The next-space-transfer-draft/state in this workspace contains five reviewed but UNAPPLIED/UNCOMPILED
-files and26drafted common cases. prepare-space-transfer.py, publish-space-transfer.py and
-write-space-transfer-handoff.py are prepared, NOT EXECUTED. Recheck recorded hashes and follow the
-guarded preparation only after this accepted source is pushed and its hosted run recorded.
+files and26drafted common cases. Preparation has now executed into the active workspace above;
+do not run it again. Its publisher and accepted handoff writer remain unexecuted.
 Read next-global-completion-operation-review.md for the later operation shape.
 
 Implement the corresponding admitted Space primary transfer while preserving Published logical
