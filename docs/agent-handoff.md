@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 21:39 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 21:45 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -41,20 +41,33 @@ Corrected tests require exact absence, reject every non-null old-account result 
 all reopened content/ciphertext; intermediate in-flight failures remain Storage. Production
 was not changed for the correction. Format2/83100 REAPED35.394s. No new native/phone claim.
 
-NEXT: commit/push accepted binding observation, then review/apply the UNTESTED draft in Mobile
-.work/unresolved-space-thread-2026-11-12. Eleven draft paths (two new files have null entries
-in draft-base.json) contain typed Bound/Unresolved snapshots, reactive binding selection BEFORE
-the final content child, exact metadata/command reads, fixture/type adapters,11 new domain
-cases and2 real encrypted transition/reopen cases. Draft generators have already run; edit
-files directly, do not rerun them over later changes. No applier/runner for this draft yet.
-It must capture the accepted14,738-case baseline before application, preserve all previous
-history/command assertions and review cancellation/slow-consumer behavior. Expected focused100
-(domain54/data44/application DI2) and full14,764 if the13 new shared methods remain unchanged.
-Unknown metadata stays unavailable; a missing local binding never proves empty remote history.
-No second observer owner, invented Company coordinates or transport acquisition. After this,
-continue composer context and organization UI. All54 PRD groups remain OPEN; do not stop.
-The current two accepted increments can now share one exact-source hosted follow-up after push;
-expected12,716portable +5,212Apple =17,928. Keep current control/native jobs; at most one pending run.
+ACTIVE: unresolved canonical thread integration in Mobile.work/unresolved-space-thread-2026-11-12.
+Applied11 paths after accepted/pushed Mobile1f47eeddb833054ae2b3d52c20439e6d11518a02 and
+Groupeca0fc61 evidence. Snapshot now distinguishes Bound(existing typed history and ledgers)
+from Unresolved(exact local metadata and canonical commands). Reactive binding selection joins
+the authority pipeline BEFORE the only content-producing child. No extra forwarding bridge,
+Company guess, history fabrication, room creation, API or SDK work. Bound reads skip the separate
+metadata repository; unresolved reads capture metadata/commands concurrently and propagate
+known failure without waiting for another first result. Existing assertion identities remain;
+the successful result type now explicitly selects Bound when reading its history fields.
+
+The candidate adds11 domain and2 actual encrypted transition/reopen cases, plus test adapters.
+Format1/18221 REAPED PASS35.148s. Frozen5169inputs/af23dad3d41224f9db11792cd14094f337c9a51839e2da993eb9c97cfa544d79.
+Focused1/99930 ACTIVE from21:44, expected100 (domain54/data44/application DI2). Full expected
+14,764 with all14,738 prior IDs. Auditors prepared; neither gate accepted yet. Do not edit
+source or start another local compiler/emulator until reaped. Preserve failures and fix actual
+causes; never weaken cancellation, prior assertions or owned-content checks. After acceptance,
+commit/push, continue composer context and organization UI. All54 PRD groups remain OPEN.
+
+Hosted follow-up43312753298 is PENDING behind43297910558 on exact1f47eeddb833054ae2b3d52c20439e6d11518a02.
+Dispatch78537 REAPED. Expected12,716portable (6083desktop/955Android/5678browser) +5,212Apple
+=17,928. Mobile.work/room-binding-observation-2026-11-12/hosted-control and hosted-audit.py
+are prepared; no jobs/audits yet. Keep this pending run, do not dispatch another while pending.
+Audit auxiliary inventories missing from the earlier copied Company auditor were restored from
+accepted Apple store evidence BEFORE its first Apple audit: identical13 inventory/8 store IDs.
+See company-thread-publication-2026-11-12/hosted-control/auditor-input-correction.json. New
+follow-up setup initially stopped on the missing auxiliary file; dispatch succeeded once and
+was not repeated. Both auditors now have their exact inputs; no source/test/assertion change.
 
 Company thread publication is ACCEPTED: Mobile151438b4ba85f599fb2eefc080a6ac15423ac6e1,
 Group6158096d evidence (later Group1480acdf records hosted progress). Both pushed.
