@@ -40,8 +40,9 @@ Workspace .work/space-key-page-projection-2026-11-12; baselinee4bfc84c981e7321b8
 13,422cases/5,056inputs. prepare-space-key-projection.py HAS EXECUTED; do not rerun it.
 Fifteen source files (four existing/eleven new) remain UNCOMMITTED/UNTESTED. Format1/26869 is
 REAPED PASS37.580s. Candidate5,067inputs/2dd3b692d1bb649fe572317bd69dd1f4de4aff0fe98ff004843e094d055e0b91.
-Focused1/42704 RUNNING, the only compiler. All159 selected domain cases have passed;
-wait for complete result and reap before browser/full. Read state/result before another operation.
+Focused1/42704 REAPED PASS424.376s/243cases, including iOS/Wasm metadata.
+Browser1/58090 REAPED PASS156.785s/241cases. Focused audit accepts484 cases and all old IDs.
+Full1/50055 RUNNING, the only compiler; expected13,598. Read result before another operation.
 Expected5,067inputs,13,598local,484focused(243JVM/241browser),16,292hosted(11,576portable/4,716Apple).
 Reader19/acquisition34/completion35 new common cases preserve primary25, loader26, reference12,
 policy8, storage56/26 and both graph controls. Both known Original fixture defects are corrected.
@@ -53,11 +54,16 @@ actual current registered physical provenance. Acquisition reuses scoped local f
 reads; primary transport admission stays intact. The primary fixture throws if the new historical
 dependencies are used. Completion uses only the Space recovery.complete overload. DI/graph drafts
 include the now-accepted Original completion graph; do not replace it with an earlier version.
-Four production files are drafted (UNAPPLIED/UNREVIEWED, NO tests yet) in the active Space
-workspace's next-source-availability-draft. Read next-source-availability-state.json. They add
-SourceUnavailable for a valid current registration serving another Company and a typed account
-Space locator overload preserving its actual spaceId, both with a final registration fence.
-Preserve generic failure/denial semantics and add explicit unavailable-path tests before review.
+Six source-availability files (four production/two test suites) are statically REVIEWED,
+UNAPPLIED and UNCOMPILED in the active Space workspace's next-source-availability-draft.
+Read next-source-availability-state.json/contract/review. Fourteen new common cases (6Company/
+8Space), all50 old loader IDs retained; two Company mismatch expectations intentionally refine
+Conflict to SourceUnavailable with a final registration read and no foreign metadata read.
+A typed account Space locator preserves actual spaceId. Generic failures, missing registration,
+source changes, denials, cancellation and deadlines remain failures. prepare-source-availability.py,
+publish-source-availability.py and write-source-availability-handoff.py are PREPARED NOT EXECUTED.
+Expectednext6existingfiles/5,067inputs,314focused,13,626local,16,334hosted. Apply only after the
+active Space stage is accepted, committed, pushed and dispatched. No worker/producer activation.
 The global-design notes also require confirming local status after completing an older generation;
 a null receipt cursor may have promoted the requested generation and cannot mean global EOF.
 Then finish bounded global recovery service, unavailable-source outcomes, atomic primary EOF demotion
@@ -85,7 +91,7 @@ shared Apple tests do not establish native Matrix SDK8 Apple behavior. Current m
 
 ## Device and protected state
 
-Phone10.77.77.3:5555 timeout35681REAPED01:03:37UTC12Nov/20.021s; no install. Retry no earlier01:36UTC12Nov.
+Phone10.77.77.3:5555 timeout45268REAPED01:36:53UTC12Nov/20.020s; no install. Retry no earlier02:09UTC12Nov.
 Release89 SDK6 ready: `.work/release-phone-2026-11-10-build89/install.py --install-only`. Announce
 before installing. Explicit serial/signature/hash guards; **never launch, drive, reset or uninstall
 on the employee's phone**. APK123809167B/4c790d2314f53c37bfdc3108ac4b801ab33aa9fc177904001fd16793fd0ef52d.
