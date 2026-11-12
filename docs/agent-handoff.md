@@ -43,7 +43,12 @@ needed explicit Pair<String?, Int> expected types. Archived failed-focused-candi
 failure-reviews.json preserve exact source/result. Only those assertion types changed; values,
 coverage and production remain. Format2/89512 REAPED PASS39.200s. New candidate5,072inputs/
 34ff82891f5cbc343c235e6db72db0f22efb08a65222690f70d58dda814daed8; focused2/12916 RUNNING.
-New24-case reader JVM suite passed within that still-running gate; do not claim the full gate yet.
+New24-case reader suite passed, but focused2/12916 REAPED FAILED287.381s:158tests/1graphfailure.
+New factory requested an unregistered Clock; production tracing found the existing lazy physical
+binding resolver had the same latent dependency. Both data factories now supply Clock.System,
+keeping domain clock injection. Existing graph now explicitly resolves both. No fake clock binding
+or removed assertion. Candidate2 and failure-reviews.json preserve the old source/result.
+Format3/42272 RUNNING; full/browser acceptance still pending.
 Expected158JVM+156browser=314, local13,674, hosted16,406.
 Eight uncommitted source files (five new/three existing),24 common tests. Existing advance/defer
 shares the identity predicate while preserving its original mutation revision ceiling.
