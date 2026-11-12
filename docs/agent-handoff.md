@@ -20,11 +20,24 @@ ACK. Receipt survives worker/other-producer progress and stays stable through3 b
 with250/500ms backoff. Authority/unavailable failures terminate. A second collector waits on the
 lifetime Mutex. Schema9 keeps1–8 compatibility. No application collector activation or native proof.
 
-Publisher/handoff EXECUTED. Push source/evidence, then dispatch-hosted.py ONCE, expected17,470 =
-12,407portable+5,063Apple. Inspect dispatch-attempt before retry. Targeted-history43172811544 is
-sourcef969fd73, expected17,314; inspect its current artifacts. Binding43168158361 FULL17,170
+Publisher/handoff EXECUTED. Source66f537a4 and Group e1bbaa19 pushed (53112/12301 REAPED).
+Consumer CI43176939497 dispatched ONCE07:40:00.363508UTC (84948 REAPED), expected17,470 =
+12,407portable+5,063Apple. Hosted state exists. No redispatch. Targeted-history43172811544 is
+sourcef969fd73:portable12,303 audited (57960 REAPED); Apple pending, expected total17,314. Binding43168158361 FULL17,170
 and lifecycle43165090113 FULL17,085 are audited. Mailbox
 43161963820 FULL17,004 is audited. Do not redispatch old sources or call protocol checks native proof.
+
+## Current: installed runtime publication under validation
+
+Workspace .work/space-runtime-publication-2026-11-12, baseline66f537a4cba7f13080acc0f734fe669e8ef4d51d.
+11 source files APPLIED, NOT accepted/compiled. Expected5,127inputs,12new common +13new Android
+protocol cases; focused56JVM+54browser+116Android, full14,466local/17,519hosted. Format1/27217 ACTIVE.
+Preparer has EXECUTED; never rerun private partial generators. Native lease revisions publish once
+and retire before drain. Existing registry candidate + credential failures produce instance UUIDs;
+same-coordinate recreation gets a new UUID. Read-only observer/domain validation + DI; no app activation.
+After format, freeze source and run Android/focused/browser/full/audits sequentially. Preserve failed
+candidate+manifest+run before fixing. Future publisher/handoff scripts are prepared, not executed.
+Hosted publication plan UNDISPATCHED; current sole compiler is format1. Do not start an emulator.
 
 ## Next: application incoming activation and native acceptance
 
