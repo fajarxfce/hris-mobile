@@ -1,0 +1,86 @@
+{
+  "recordedAt": "2026-11-12T05:59:16.794672+00:00",
+  "sourceBaseline": "a65151c0d26583c31b647fddb276318f5cfc8969",
+  "sourceFiles": 5109,
+  "changedSourceFiles": 9,
+  "sourceManifestSha256": "b61df1d512efe0f023029a088c329afd248dcc7cbe4a58bf41fbe761934d7a77",
+  "focused": {
+    "tests": 144,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused-1",
+  "focusedBrowserRun": "browser-1",
+  "androidHost": {
+    "tests": 58,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "androidHostRun": "android-2",
+  "full": {
+    "validated": 14164,
+    "fresh": {
+      "tests": 11808,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2356
+  },
+  "fullElapsedSeconds": 475.815,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152205148,
+    "sha256": "2abdfb15ff3583fd1662670f63dda342afed2f7286d4ccbe2f4d3976fae34375"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "roomKeyLifecycleAccepted": true,
+  "newCommonLifecycleCasesPerTarget": 13,
+  "newAndroidSourceProtocolCases": 19,
+  "newAndroidParentCases": 10,
+  "borrowedInstalledClient": true,
+  "permanentRegistrationOutsideTransientChildren": true,
+  "acquisitionOwnedIndependentlyOfCaller": true,
+  "lateNativeHandleRetained": true,
+  "callbackFenceBeforeDrain": true,
+  "drainBeforeHandleAndEncryptionClose": true,
+  "failedCleanupBlocksParentClientAndStoreRelease": true,
+  "readsAndObservationNeverAcquire": true,
+  "noAutomaticAcquisitionRetry": true,
+  "noExtraSyncOrTransportFromRegistration": true,
+  "durableConsumerImplemented": false,
+  "productionRegistrationEnabled": false,
+  "nativeSdkExecution": false,
+  "appleNativeAdapterImplemented": false,
+  "originalProducerEnabled": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "starterPortRequired": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [
+    {
+      "run": "android-1",
+      "exitCode": 1,
+      "elapsedSeconds": 112.11,
+      "freshCounts": {
+        "tests": 58,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "failureReviews": {
+    "android-1": {
+      "failure": "57 of 58 passed; source exception identity assertion saw kotlinx.coroutines recovered-stacktrace copy of IllegalArgumentException.",
+      "fix": "Use a non-copyable fixture exception with an extra identity field, retaining assertSame to verify no datasource error remapping. Production code and case IDs unchanged.",
+      "sourceManifestSha256": "aa8933a876b0b1e1a188c9fd559d24ea467ac96c0c1d58b64569fb3a9aeb86cf",
+      "archive": "failed-android-candidate-1",
+      "session": 30938,
+      "sessionReaped": true
+    }
+  }
+}

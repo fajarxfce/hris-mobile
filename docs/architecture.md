@@ -1,5 +1,7 @@
 # Architecture
 
+[Owned room-key registration](collaboration-sdk-room-key-lifecycle.md) keeps late SDK handles and blocks parent/store release after failed listener cleanup; production key triggering remains disabled.
+
 [Room-key callback retention](collaboration-sdk-room-key-mailbox.md) keeps bounded unacknowledged SDK hints across callback/write races; durable consumer and native lifetime remain separate.
 
 [Serialized history service](collaboration-history-recovery-worker-service.md) reserves bounded recovery within the existing incoming worker and transfers finite missing-key work without starving primary messages.

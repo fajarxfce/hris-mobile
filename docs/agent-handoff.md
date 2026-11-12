@@ -1,5 +1,65 @@
 # Agent continuation — communications long run
 
+Updated 12 November 2026, 05:59 UTC.
+Continue authorized PRD work, per-commit pushes and validated phone installs. All54PRD groups OPEN.
+No subagents. One compiler OR emulator. Follow AGENTS.md and clean layer boundaries.
+
+## Ready next stage and SDK readiness trace
+
+Next-room-key-binding draft13files is REVIEWED, UNAPPLIED and UNCOMPILED:12domain+10common data+
+8Android repository cases. prepare-room-key-binding.py, publish-room-key-binding.py and
+write-room-key-binding-handoff.py are PREPARED, NOT EXECUTED. Expected14,226local/17,169hosted,
+97JVM+91browser+92Androidfocused. Read next-room-key-binding-state.json. Wait for this accepted
+source push and one hosted dispatch/runId before preparing the next stage. No production activation.
+
+SDK source trace confirms restoreSession awaits Client.activate/BaseClient.activate and OlmMachine
+setup, then spawns other E2EE initialization. Key stream reads that existing machine directly.
+Register after successful restore without awaiting broad asynchronous network/backup initialization;
+null stream means absent OlmMachine, not a recipient lacking room keys. This is source review only,
+not another native/device proof. Keep this detail in the durable-consumer design.
+
+Global43155076441 FULL16,862 accepted (Apple66179 reaped), worker43158504066 portable12,022accepted/
+Applepending, mailbox43161963820 pending at the latest checkpoint. Inspect fresh run state before audit.
+All54PRD groups OPEN. No phone installation; next ADB retry>=06:07:38.254781UTC.
+
+## Owned room-key listener accepted locally
+
+Workspace .work/sdk-room-key-lifecycle-2026-11-12, baselinea65151c0d26583c31b647fddb276318f5cfc8969.
+Nine files,5,109inputs/b61df1d512efe0f023029a088c329afd248dcc7cbe4a58bf41fbe761934d7a77. Fullfull-1/50176
+REAPED PASS475.815s; audit58829 REAPED. 14,164=11808fresh+
+2356verified unchanged. Focused75JVM+69browser=144; Android58. Added13common,
+19raw Android source and10actual parent protocol cases. All prior IDs preserved; retain failed
+candidates/reviews in measurement if any. ProofAPK152205148B/2abdfb15ff3583fd1662670f63dda342afed2f7286d4ccbe2f4d3976fae34375.
+
+The raw source borrows the installed client, retains a late TaskHandle inside protected acquisition,
+fences callbacks before cancel, drains isFinished, then closes TaskHandle/Encryption. Common lifecycle
+owns one opening independently of caller cancellation, with no automatic retry. The Android lease
+holds the listener outside its8 transient children; failed stop blocks client pause/close/store unlock.
+The explicit internal start is NOT called from production initialization. Native execution and Apple
+native adapter are not proved/implemented by these protocol tests. MainSDK8; release89 remainsSDK6.
+
+Publisher/writer HAVE EXECUTED. Push source/evidence before dispatch-hosted.py ONCE, expected
+17,085=12,142portable+4,943Apple. Inspect dispatch-attempt first. Mailbox43161963820 is a separate
+source audit; inspect its workspace and prior worker/global hosted artifacts without redispatch.
+
+## Next: admitted key-hint retention and durable triggering
+
+Add typed root/source/registration-bound observation and exact ACK. Use local metadata to target
+known rooms; unknown mapping/overflow/loss/source restore require bounded account fallback.
+Retain and confirm durable recovery intent before ACK; failed/cancelled writes keep the same receipt.
+Bound failure scheduling under an explicit owner rather than restarting collection in an emission loop.
+Publish unresolved metadata before new recovery demand, including history behind an active cursor.
+Do not change worker90s/inventory/history/primary fairness or use transport resolution per callback.
+New source/restore producers remain disabled until the complete consumer is serviced.
+
+Phone73146 REAPED:05:34:18.237540UTC/20.017224s timeout, no install. Next retry>=06:07:38.254781UTC.
+Release89 ready; announce install, explicit10.77.77.3:5555, --install-only. Never launch/drive/reset/
+uninstall phone UI. No new live deployment or Starter port. Preserve protected SDK/Inspector trees.
+
+## Prior checkpoint and protected/live state
+
+# Agent continuation — communications long run
+
 Updated 12 November 2026, 05:50 UTC. Continue PRD work and push every commit.
 No subagents. One compiler OR emulator. All54PRD groups OPEN. Phone install-only, never drive UI.
 

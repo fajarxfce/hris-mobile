@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationClie
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationHttpObservation
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationRawEventSource
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationRoomInventorySource
+import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationRoomKeySource
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationRoomSource
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationTimelineSource
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkStoreLease
@@ -81,6 +82,20 @@ internal constructor(
         SdkSyncLifecycle(lifetime) { createAndroidCollaborationSync(nativeClient, lifetime) }
 
     internal fun observeSyncBatches() = sync.observeBatches()
+
+    private val roomKeys =
+        SdkRoomKeyLifecycle(lifetime, AndroidCollaborationRoomKeySource(nativeClient))
+
+    /** Explicit registration only. Production acquisition does not enable this producer yet. */
+    internal suspend fun startRoomKeyObservation(): AppResult<Unit> = syncOperation {
+        roomKeys.start()
+    }
+
+    internal fun observeRoomKeys() = roomKeys.observe()
+
+    internal fun currentRoomKeys() = roomKeys.current()
+
+    internal fun acknowledgeRoomKeys(receiptId: String) = roomKeys.acknowledge(receiptId)
 
     private val children = SdkChildResources(lifetime)
     private val rooms = AndroidCollaborationRoomSource(nativeClient)
@@ -234,6 +249,7 @@ internal constructor(
     internal fun requestClose() {
         stopRequested.set(true)
         readiness?.deactivate()
+        roomKeys.deactivate()
     }
 
     internal val availableForEntry
@@ -570,12 +586,16 @@ internal constructor(
     override suspend fun close(): AppResult<Unit> {
         stopRequested.set(true)
         readiness?.deactivate()
+        roomKeys.deactivate()
         return shutdown.close()
     }
 
     private suspend fun releaseResources(): SdkShutdownAttempt {
         // Never pause/destroy the client or unlock its directory while restore still uses it.
         acquisitionFinished.await()
+        val keysStopped = roomKeys.stop()
+        if (keysStopped is AppResult.Failed)
+            return SdkShutdownAttempt(keysStopped, released = false)
         val readinessResult = safeStorageCall {
             readiness?.close()
             Unit

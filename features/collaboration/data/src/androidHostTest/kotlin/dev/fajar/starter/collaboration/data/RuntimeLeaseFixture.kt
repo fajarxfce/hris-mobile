@@ -26,6 +26,7 @@ import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.Encryption
 import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomKeyChangesListener
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.SyncResponseRoomsV2
@@ -95,6 +96,12 @@ internal class RuntimeLeaseFixture(
     var readRoom: (String) -> Room? = { error("No room read expected") }
     var joinRoom: suspend (String) -> Room = { error("No room join expected") }
     var readinessListener: ToDeviceMessageListener? = null
+    var roomKeyListener: RoomKeyChangesListener? = null
+    var beforeRoomKeySubscribe: suspend () -> Unit = {}
+    var roomKeyTaskFinished = true
+    var roomKeyCancelFails = false
+    var roomKeyTaskCloseFails = false
+    var roomKeyEncryptionCloseFails = false
     var expectedReadinessEventType = "dev.fajar.hris.recipient_ready"
     var beforeReadinessSubscribe: () -> Unit = {}
     var failReadinessSubscribe = false
@@ -192,6 +199,30 @@ internal class RuntimeLeaseFixture(
 
             override fun encryption(): Encryption =
                 object : Encryption(NoHandle) {
+                    private var ownsRoomKeys = false
+
+                    override suspend fun subscribeToRoomKeyChanges(
+                        listener: RoomKeyChangesListener
+                    ): TaskHandle {
+                        ownsRoomKeys = true
+                        calls += "keys.subscribe"
+                        roomKeyListener = listener
+                        beforeRoomKeySubscribe()
+                        return object : TaskHandle(NoHandle) {
+                            override fun cancel() {
+                                calls += "keys.cancel"
+                                check(!roomKeyCancelFails) { "Fixture key cancellation failure" }
+                            }
+
+                            override fun isFinished(): Boolean = roomKeyTaskFinished
+
+                            override fun close() {
+                                calls += "keys.close"
+                                check(!roomKeyTaskCloseFails) { "Fixture key handle close failure" }
+                            }
+                        }
+                    }
+
                     override suspend fun ed25519Key(): String? = signingKey
 
                     override suspend fun curve25519Key(): String =
@@ -202,7 +233,12 @@ internal class RuntimeLeaseFixture(
                     }
 
                     override fun close() {
-                        calls += "encryption.close"
+                        if (ownsRoomKeys) {
+                            calls += "keys.encryption.close"
+                            check(!roomKeyEncryptionCloseFails) {
+                                "Fixture encryption close failure"
+                            }
+                        } else calls += "encryption.close"
                     }
                 }
 
