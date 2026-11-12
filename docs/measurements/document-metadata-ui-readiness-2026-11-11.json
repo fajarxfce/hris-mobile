@@ -26,7 +26,7 @@
     "exitCode": 0
   },
   "correctedManifestSha256": "cf23e510352c001c8d6c008550576f2e7a00fc0920ba22b50d0648f30084cc8a",
-  "fullValidationAccepted": false,
+  "fullValidationAccepted": true,
   "regression": {
     "run": "ui-readiness-1",
     "session": 28849,
@@ -42,5 +42,16 @@
     "reportSha256": "76fe2f749f5a9249ab74eb1662e1b1c15639cea4723f4ce39861cf2f9d1cd1dd",
     "preservedTestIds": true,
     "productionUiChanged": false
+  },
+  "fullValidation": {
+    "run": "full-4",
+    "session": 21474,
+    "reaped": true,
+    "tests": 13358,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "sourceManifestSha256": "cf23e510352c001c8d6c008550576f2e7a00fc0920ba22b50d0648f30084cc8a",
+    "allPriorCaseIdsPreserved": true
   }
 }

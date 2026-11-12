@@ -46,7 +46,10 @@ class AcquireCollaborationSpaceOriginalEvents(
         history: CollaborationSpaceOriginalKeyHistory,
         eventIds: List<String>,
     ): AppResult<CollaborationSpaceOriginalKeyHistoryBatch> =
-        when (val result = acquire(runtime, OriginalEventOrigin.KeyHistory(history), eventIds)) {
+        when (
+            val result =
+                acquire(runtime, OriginalEventOrigin.KeyHistory.ExplicitEvents(history), eventIds)
+        ) {
             is AppResult.Failed -> result
             is AppResult.Success ->
                 AppResult.Success(
@@ -54,13 +57,44 @@ class AcquireCollaborationSpaceOriginalEvents(
                 )
         }
 
+    /** Reuses admitted local facts and acquires only missing sources from this captured page. */
+    suspend operator fun invoke(
+        runtime: CollaborationSpaceRuntimeReady,
+        history: CollaborationSpaceOriginalKeyHistory,
+        references: CollaborationHistoryReferences,
+    ): AppResult<CollaborationSpaceOriginalKeyHistoryBatch> {
+        currentCoroutineContext().ensureActive()
+        if (references.events.size > 16)
+            return originalIncomingFailure("invalid_request", FailureKind.Validation)
+        val captured = references.copy(events = references.events.toList())
+        if (!validCollaborationSpaceOriginalKeyHistoryReferences(runtime, history, captured))
+            return originalIncomingFailure("invalid_request", FailureKind.Validation)
+        return when (
+            val result =
+                acquire(
+                    runtime,
+                    OriginalEventOrigin.KeyHistory.RecoveryPage(history, captured),
+                    captured.events.map { it.event.eventId },
+                )
+        ) {
+            is AppResult.Failed -> result
+            is AppResult.Success ->
+                AppResult.Success(
+                    CollaborationSpaceOriginalKeyHistoryBatch(runtime, history, result.value)
+                )
+        }
+    }
+
     private suspend fun acquire(
         runtime: CollaborationSpaceRuntimeReady,
         origin: OriginalEventOrigin,
         eventIds: List<String>,
     ): AppResult<List<CollaborationIncomingHistoryResult>> {
         currentCoroutineContext().ensureActive()
-        if (eventIds.size !in 1..16)
+        if (
+            eventIds.size > 16 ||
+                (eventIds.isEmpty() && origin !is OriginalEventOrigin.KeyHistory.RecoveryPage)
+        )
             return originalIncomingFailure("invalid_request", FailureKind.Validation)
         val captured = eventIds.toList()
         val validOrigin =
@@ -109,6 +143,7 @@ class AcquireCollaborationSpaceOriginalEvents(
         var registered: CollaborationSpaceRegistrationRecord? = null
         val acquired = mutableMapOf<String, CollaborationAcquiredEvent>()
         val plans = linkedMapOf<String, CollaborationIncomingHistoryPlan>()
+        val retained = mutableMapOf<String, CollaborationIncomingHistoryOutcome>()
 
         suspend fun run(): AppResult<List<CollaborationIncomingHistoryResult>> {
             try {
@@ -148,6 +183,13 @@ class AcquireCollaborationSpaceOriginalEvents(
 
         suspend fun retain(): AppResult<List<CollaborationIncomingHistoryResult>> {
             for (id in ids) {
+                val local = retainedReference(id)
+                if (local is AppResult.Failed) return local
+                val outcome = (local as AppResult.Success).value
+                if (outcome != null) {
+                    retained[id] = outcome
+                    continue
+                }
                 val read = acquired[id]?.let { AppResult.Success(it) } ?: readEvent(id)
                 if (read is AppResult.Failed) return read
                 val planned = plan((read as AppResult.Success).value)
@@ -201,12 +243,51 @@ class AcquireCollaborationSpaceOriginalEvents(
             val latest = current()
             if (latest is AppResult.Failed) return latest
             return AppResult.Success(
-                plans.map { (id, plan) ->
+                ids.map { id ->
                     CollaborationIncomingHistoryResult(
                         id,
-                        collaborationIncomingHistoryOutcome(plan),
+                        retained[id] ?: collaborationIncomingHistoryOutcome(plans.getValue(id)),
                     )
                 }
+            )
+        }
+
+        suspend fun retainedReference(id: String): AppResult<CollaborationIncomingHistoryOutcome?> {
+            val page =
+                (origin as? OriginalEventOrigin.KeyHistory.RecoveryPage)?.references
+                    ?: return AppResult.Success(null)
+            val reference = page.events.single { it.event.eventId == id }
+            val found = checked {
+                history.getEventFact(
+                    companyAccess,
+                    position.conversationId,
+                    expectedMetadata.room.roomId,
+                    id,
+                )
+            }
+            if (found is AppResult.Failed) return found
+            val fact = (found as AppResult.Success).value
+            if (fact != null) {
+                if (!matchesCollaborationRetainedOriginal(reference.event, fact))
+                    return originalIncomingFailure("local_original_changed")
+                return AppResult.Success(
+                    CollaborationIncomingHistoryOutcome.Retained(listOf(id), emptyList())
+                )
+            }
+            val foundEdit = checked {
+                edits.getReplacementFact(
+                    companyAccess,
+                    position.conversationId,
+                    expectedMetadata.room.roomId,
+                    id,
+                )
+            }
+            if (foundEdit is AppResult.Failed) return foundEdit
+            val edit = (foundEdit as AppResult.Success).value ?: return AppResult.Success(null)
+            if (!matchesCollaborationRetainedReplacement(reference.event, edit))
+                return originalIncomingFailure("local_replacement_changed")
+            return AppResult.Success(
+                CollaborationIncomingHistoryOutcome.Retained(emptyList(), listOf(id))
             )
         }
 
@@ -295,6 +376,17 @@ class AcquireCollaborationSpaceOriginalEvents(
                         )
                 }
             if (!valid) return originalIncomingFailure("event_owner_changed")
+            val reference =
+                (origin as? OriginalEventOrigin.KeyHistory.RecoveryPage)
+                    ?.references
+                    ?.events
+                    ?.singleOrNull { it.event.eventId == id }
+            if (
+                reference != null &&
+                    (snapshot.physical.event.sender != reference.event.sender ||
+                        snapshot.physical.event.timestamp != reference.event.timestamp)
+            )
+                return originalIncomingFailure("event_source_changed")
             acquired[id] = snapshot.physical.event
             return AppResult.Success(snapshot.physical.event)
         }
@@ -455,8 +547,17 @@ private sealed interface OriginalEventOrigin {
             get() = room.conversation
     }
 
-    data class KeyHistory(val history: CollaborationSpaceOriginalKeyHistory) : OriginalEventOrigin {
+    sealed interface KeyHistory : OriginalEventOrigin {
+        val history: CollaborationSpaceOriginalKeyHistory
         override val conversation
             get() = history.conversation
+
+        data class ExplicitEvents(override val history: CollaborationSpaceOriginalKeyHistory) :
+            KeyHistory
+
+        data class RecoveryPage(
+            override val history: CollaborationSpaceOriginalKeyHistory,
+            val references: CollaborationHistoryReferences,
+        ) : KeyHistory
     }
 }

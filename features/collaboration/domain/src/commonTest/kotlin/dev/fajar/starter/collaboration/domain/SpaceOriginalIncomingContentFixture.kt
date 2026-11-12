@@ -37,6 +37,7 @@ internal class SpaceOriginalIncomingContentFixture {
     val snapshots = mutableMapOf<String, CollaborationSpaceEventSnapshot>()
     val originals = mutableMapOf<String, CollaborationHistoryMessage>()
     val aliases = mutableMapOf<String, CollaborationHistoryEventFact>()
+    val replacementFacts = mutableMapOf<String, CollaborationReplacementEventFact>()
     val originalWrites = mutableListOf<List<CollaborationHistoryChange>>()
     val editWrites = mutableListOf<List<CollaborationMessageEdit>>()
     var originalResponse: AppResult<Boolean> = AppResult.Success(true)
@@ -121,8 +122,10 @@ internal class SpaceOriginalIncomingContentFixture {
                 conversationId: String,
                 roomId: String,
                 eventId: String,
-            ): AppResult<CollaborationReplacementEventFact?> =
-                error("No cursor or receipt inference")
+            ): AppResult<CollaborationReplacementEventFact?> {
+                scope(access, conversationId, roomId)
+                return read("replacement:$eventId") { replacementFacts[eventId] }
+            }
 
             override suspend fun mergeEdits(
                 access: CollaborationLocalAccess,

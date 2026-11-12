@@ -1,0 +1,265 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "adf06b0e82db427bd4d8a642e1eea7330bd0d8d0",
+  "sourceFiles": 5050,
+  "changedSourceFiles": 9,
+  "sourceManifestSha256": "cf23e510352c001c8d6c008550576f2e7a00fc0920ba22b50d0648f30084cc8a",
+  "focused": {
+    "tests": 254,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "full-4",
+  "focusedBrowserRun": "full-4",
+  "full": {
+    "validated": 13358,
+    "fresh": {
+      "tests": 13358,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 0
+  },
+  "fullElapsedSeconds": 1583.919,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 148895176,
+    "sha256": "1fc567eba49f0187d5632b33621aee5c079f63127b03f20ffdeaf0f647fc6606"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "originalLocalKeyPageContentAccepted": true,
+  "newDomainCasesPerTarget": 29,
+  "existingPrimaryAndExplicitIdContractsPreserved": true,
+  "historicalDevicePreserved": true,
+  "exactRetainedIdentityRequired": true,
+  "rawSourceIdentityRequired": true,
+  "scopedOriginalAndReplacementFactReads": true,
+  "localFactsAvoidSdkAndRewrite": true,
+  "sourceResultOrderPreserved": true,
+  "maximumSourceEvents": 16,
+  "invocationLifetimeSeconds": 15,
+  "inputCopiedBeforeSuspension": true,
+  "emptyPageStillAdmitted": true,
+  "noPrimaryQueueDependency": true,
+  "referenceAcknowledgement": false,
+  "globalAcknowledgement": false,
+  "keyProbe": false,
+  "hiddenRetry": false,
+  "globalConsumerEnabled": false,
+  "keysProducerEnabled": false,
+  "newCollector": false,
+  "nativeSdkExecution": false,
+  "fullKeyBlockedQueueLivenessProven": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "phoneInstalled": false,
+  "starterChanged": false,
+  "starterReporterPortRequired": true,
+  "karmaReporterLineFraming": true,
+  "karmaReporterFailure": {
+    "recordedAt": "2026-11-11T22:37:32.850073+00:00",
+    "run": "full-1",
+    "session": 14104,
+    "reaped": true,
+    "exitCode": 1,
+    "elapsedSeconds": 460.42,
+    "freshCounts": {
+      "tests": 6674,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "manifestSha256": "26eba43c5ad5c682b95d3133b2fcf89b94d39be87fabf2629519f17172416e9c",
+    "failedTask": ":features:collaboration:domain:wasmJsBrowserTest",
+    "cause": "kotlin-web-helpers3.0.0 writes individual TeamCity messages without newline. Gradle Kotlin2.3.21 buffers until LF;3252 domain tests cross its1MiB limit (previous3223 fit). Overflow emits testFailed outside an active parsed test and TCServiceMessagesClient throws no running test.",
+    "maxLoggedLineBytes": 1048577,
+    "limitsWillRemainEnabled": true,
+    "npmCacheModified": false,
+    "upstreamPackagesInspected": [
+      "3.0.0",
+      "3.1.0",
+      "3.2.0",
+      "3.3.0",
+      "3.3.2",
+      "3.4.0",
+      "3.5.0",
+      "3.5.4"
+    ],
+    "plannedFix": "Configure a line-framed Kotlin Karma reporter through the shared KMP convention; retain every service message and propagate failures. Add a standalone Node regression under the existing root Python checks and rerun unchanged business cases plus full browser suites."
+  },
+  "moduleConfigFailure": {
+    "recordedAt": "2026-11-11T23:22:15.872260+00:00",
+    "run": "full-2",
+    "session": 77316,
+    "reaped": true,
+    "exitCode": 1,
+    "elapsedSeconds": 713.378,
+    "freshCounts": {
+      "tests": 13237,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0
+    },
+    "manifestSha256": "74adf28ea2fb3846848d84d383c0696d296ce466b0265200466b57ed7d61ea6d",
+    "cause": "The new root useConfigDirectory replaced KotlinKarma\u2019s default per-project config directory. Existing tracked data/karma.config.d/fixture-timeout.js (10000ms) was omitted; both 603-record storage cases hit Mocha default 2000ms. This regression was introduced by this reporter integration, not by storage changes.",
+    "existingModuleConfig": "features/collaboration/data/karma.config.d/fixture-timeout.js",
+    "existingModuleConfigSha256": "495ec71dff8d16e3c3e687bddeef74557b1d36f4f44a0021695fe304bd5a3839",
+    "existingTimeoutMillis": 10000,
+    "failureDetails": [
+      {
+        "file": "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationHistoryStorageTest.xml",
+        "case": "overlappingWindowsTraverseBeyondFiveHundredInBothDirectionsAcrossRestart[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "time": "0.008",
+        "type": "Error",
+        "message": "Error: Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves.",
+        "text": "Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves.\n\n"
+      },
+      {
+        "file": "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTes-EGHL8H0CPEP8C.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceHistoryStorageTest.xml",
+        "case": "overlappingWindowsTraverseBeyondFiveHundredInBothDirectionsAcrossRestart[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "time": "0.0",
+        "type": "Error",
+        "message": "Error: Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves.",
+        "text": "Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves.\n\n"
+      }
+    ],
+    "fix": "Merge original module fragments and shared reporter into a generated directory through a Gradle Sync task; module fragments first, shared reporter last. Track task outputs as browser-test inputs. Preserve the existing module timeout and all test bodies."
+  },
+  "moduleConfigWiring": {
+    "sourceManifestSha256": "690773f7f9678db804834d3eca55939d05cf61e7ffc7d918fa71dbfd9fc11b4b",
+    "run": "wiring-1",
+    "session": 46792,
+    "reaped": true,
+    "elapsedSeconds": 55.866,
+    "generatedFiles": {
+      "domain": {
+        "10-shared-kotlin-line-reporter.js": "0837b085e970d0b5cfb9a7255a0cbb4ca5a90d98d096f51eb89ae8375cda35b0"
+      },
+      "data": {
+        "00-module-fixture-timeout.js": "495ec71dff8d16e3c3e687bddeef74557b1d36f4f44a0021695fe304bd5a3839",
+        "10-shared-kotlin-line-reporter.js": "0837b085e970d0b5cfb9a7255a0cbb4ca5a90d98d096f51eb89ae8375cda35b0"
+      }
+    },
+    "existingModuleTimeoutPreservedMillis": 10000,
+    "sharedReporterFollowsModuleFragments": true,
+    "rootPythonAndNodeRegressionPassed": true
+  },
+  "uiReadinessFailure": {
+    "recordedAt": "2026-11-11T23:48:16.486640+00:00",
+    "run": "full-3",
+    "session": 87890,
+    "sessionReaped": true,
+    "elapsedSeconds": 861.499,
+    "freshCounts": {
+      "tests": 850,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "690773f7f9678db804834d3eca55939d05cf61e7ffc7d918fa71dbfd9fc11b4b",
+    "failingCase": "metadataDenialStaysClosedUntilAdmittedRetryAndLeavingCancelsAcquisition[desktop]",
+    "failureMessage": "androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 15000 ms",
+    "reportSha256": "720136455ce38c238b4fa1468100c3c36eb72d79c663c0ae9a913d952595690c",
+    "screenshotSha256": "015cc83bb7af068df4a20ca6eadadc2e217e1f9e76abf85ad4540218dbb0ccd2",
+    "observation": "Failure occurred at first Try again wait. Screenshot and semantics still show PASSPORT-21 and no denial branch. The test clicked Refresh after HTTP active=0, without waiting for the owning acquisition to publish completion and enable Refresh. Adjacent denial test already waits for this exact readiness condition. Same case passed on unchanged source in full-2.",
+    "fix": "Wait for exactly one enabled Refresh before each of two Refresh clicks, then assert enabled. No sleeps, production changes, timeout increases, skipped assertions or test ID changes.",
+    "failureScreenshotVisuallyInspected": true,
+    "regressionAccepted": false
+  },
+  "uiReadinessRegression": {
+    "run": "ui-readiness-1",
+    "session": 28849,
+    "sessionReaped": true,
+    "elapsedSeconds": 79.041,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "cf23e510352c001c8d6c008550576f2e7a00fc0920ba22b50d0648f30084cc8a",
+    "reportSha256": "76fe2f749f5a9249ab74eb1662e1b1c15639cea4723f4ce39861cf2f9d1cd1dd",
+    "preservedTestIds": true,
+    "productionUiChanged": false
+  },
+  "reporterNodeRegressionSha256": "0395d793b4bdb241ef5c24f7ac3be5161a7cf79760dfcef688d0733b15b783ea",
+  "sharedBuildReportsRefreshed": true,
+  "reporterNodeRegressionCases": 8,
+  "reporterNodeRegressionFormat": "node-spec",
+  "publicationGuardReview": {
+    "recordedAt": "2026-11-12T00:18:34.408607+00:00",
+    "kind": "evidence-publication-guard-format-mismatch",
+    "fullTestRunAffected": false,
+    "sourceChanged": false,
+    "cause": "The retained Node report uses the default Spec reporter with Unicode summary markers, despite its .tap filename. Publisher incorrectly required TAP marker # pass8. All eight actual test results passed.",
+    "correction": "Validate all six actual Spec summary counts and eight passed test records. Original report bytes retained; no test rerun, suppression or altered result.",
+    "publisherBeforeSha256": "a316994e9775a274c6255a081acfeb56cf5f7ead70105cb8ac6465a374c1d47c",
+    "nodeReportSha256": "0395d793b4bdb241ef5c24f7ac3be5161a7cf79760dfcef688d0733b15b783ea"
+  },
+  "upstreamReporterFailurePreserved": true,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [
+    {
+      "run": "full-1",
+      "exitCode": 1,
+      "elapsedSeconds": 460.42,
+      "freshCounts": {
+        "tests": 6674,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "run": "full-2",
+      "exitCode": 1,
+      "elapsedSeconds": 713.378,
+      "freshCounts": {
+        "tests": 13237,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "run": "full-3",
+      "exitCode": 1,
+      "elapsedSeconds": 861.499,
+      "freshCounts": {
+        "tests": 850,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "preservedPassingFocusedRun": "focused-1",
+  "fixtureStrengthening": {
+    "testFile": "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/AcquireCollaborationSpaceOriginalKeyPageTest.kt",
+    "applied": true,
+    "reason": "Two captured-identity tests previously changed only the raw envelope while leaving typed original content inconsistent. Existing content validation would reject them even without the new source-identity guard. Keep each raw original coherent and independently assert its ordinary content plan is valid before asserting the historical page rejects the mismatch.",
+    "productionChanges": false,
+    "removedCaseIds": false,
+    "replacements": {
+      "import dev.fajar.starter.collaboration.domain.entities.*": "import dev.fajar.starter.collaboration.domain.entities.*\nimport dev.fajar.starter.collaboration.domain.policies.planCollaborationIncomingHistory",
+      "            f.put(\n                if (sender) event.copy(sender = \"@other:example.test\")\n                else event.copy(timestamp = event.timestamp + 1)\n            )": "            val raw = f.source(\n                if (sender) f.original().copy(sender = \"@other:example.test\")\n                else f.original().copy(timestamp = event.timestamp + 1)\n            )\n            assertIs<AppResult.Success<CollaborationIncomingHistoryPlan>>(planCollaborationIncomingHistory(raw))\n            f.put(raw)",
+      "        f.put(original.copy(timestamp = original.timestamp + 1))": "        val raw = f.source(f.original().copy(timestamp = original.timestamp + 1))\n        assertIs<AppResult.Success<CollaborationIncomingHistoryPlan>>(planCollaborationIncomingHistory(raw))\n        f.put(raw)"
+    },
+    "draftSha256": "2493d43bda3be1e32ecd19cd25d801ffaf30392ad07446f5c8692f53fea12724",
+    "passedRun": "focused-1",
+    "previousManifestSha256": "690b5657198cf5dfa14b192791118fb79f8cfb67f12dc7258b44004aa3c1db03"
+  },
+  "focusedEvidenceOrigin": "selected-class-reports-from-unfiltered-full-run",
+  "earlierFocusedRunnerRecovery": {
+    "originalSession": 67474,
+    "runnerLost": true,
+    "buildSurvived": true,
+    "exitStatusObserved": true,
+    "exitObservedAt": "2026-11-11T23:03:20.555948+00:00"
+  },
+  "earlierFocusedTimingOrigin": "Source-manifest timestamp; original runner interrupted by server restart"
+}

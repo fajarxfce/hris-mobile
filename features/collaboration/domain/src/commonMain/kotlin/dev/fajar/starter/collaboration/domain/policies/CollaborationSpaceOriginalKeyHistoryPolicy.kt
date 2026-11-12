@@ -23,3 +23,13 @@ fun validCollaborationSpaceOriginalKeyHistory(
         value.traversal.roomId == room.roomId &&
         value.traversal.purpose == CollaborationHistoryPurpose.Incoming
 }
+
+/** A finite captured recovery page; structural validation never grants native admission. */
+fun validCollaborationSpaceOriginalKeyHistoryReferences(
+    runtime: CollaborationSpaceRuntimeReady,
+    history: CollaborationSpaceOriginalKeyHistory,
+    references: CollaborationHistoryReferences,
+): Boolean =
+    validCollaborationSpaceOriginalKeyHistory(runtime, history) &&
+        references.progress?.provider == null &&
+        boundedCollaborationHistoryRecoveryReferences(references) == references
