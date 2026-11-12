@@ -4,6 +4,25 @@ Updated 12 November 2026, 04:33 UTC.
 Continue authorized PRD work, per-commit pushes and validated phone installs. No subagents.
 One compiler OR emulator; follow AGENTS.md and clean layer boundaries. All54PRD groups OPEN.
 
+## Worker validation correction and next raw callback draft
+
+Focused1/39369 REAPED failed307.335s after298 passing domain/data tests: service-test line124
+needed an explicit nullable sealed-attempt list type. Failed candidate is archived in
+failed-focused-candidate-1; production code unchanged. Format2/82465 REAPED PASS36.667s.
+Focused2/66925 RUNNING, manifest174d3aee269298bde939750a796fc178aaeb14f476236c66d5b63f3dcf7cfa87.
+New application suites currently report24service+19worker+29Original cases passed, but the run
+and platform compilation are not accepted yet. Worker publisher/handoff writer are now PREPARED,
+NOT EXECUTED. Preserve failure evidence through final publication.
+
+Space43152279307 portable audit67649 REAPED accepted11,840 cases. Artifact13915821915/3965334B,
+SHA35d63197fc90d9021f7ebfad12b6775369f0257939ad8de0fa0cadf3ecad9257. Apple still pending.
+The checked-in Space transfer measurement now contains its portable audit hashes and case counts.
+
+Private next-room-key-draft has3new UNAPPLIED/UNCOMPILED/UNREVIEWED data files: raw batch, a two-slot
+mailbox and16common cases. No native registration, durable consumer or thread-race integration.
+Read next-room-key-observation-review.md in the active worker workspace. Do not activate raw key
+collection until storage confirmation/ACK, failure rescheduling and native handle drain are solved.
+
 ## Active worker service validation
 
 Workspace .work/history-recovery-worker-service-2026-11-12; source baselinef045436117f75966743d72c8cbe953bcc50ebf35.
