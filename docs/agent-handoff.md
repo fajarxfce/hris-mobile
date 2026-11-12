@@ -31,23 +31,36 @@ Same-boot read-only inspection passed; no active HTTP/storage failure. Covered-h
 unreached. Full native acceptance remains OPEN. Preserve all failed emulator images.
 Native Group runner config still points to proof1: select exact future source/APK before another run.
 
-## Next: skip internal account metadata within bounded discovery
+## Active: bounded account metadata discovery
 
-`.work/space-history-locator-scan-2026-11-12` contains four DRAFT files and exact draft-base hashes.
-Nothing is applied yet. Account service requests limit1; current mapper takes raw rows BEFORE
-filtering internal metadata, costing empty worker turns. Proposed data-only change scans at most
-16 raw rows plus one lookahead and returns at most the requested meaningful locators. Cursor
-retains the last consumed raw row; validate all observed scope/ordering/partitions. Keep one actual
-history visit per turn, no key/content reads or worker-bound change.
-After committing/pushing current acceptance, apply tests first and record failing reproduction,
-then data implementation, relevant platform/full gates, and native worker with unchanged assertions.
-Five mapper + one shared database regression are drafted. Record the one reviewed mapper method
-rename across targets. Do not claim the exact remaining native row sequence, which is not exposed.
+Discovery acceptance is committed/pushed: Mobile `f11eea10`, Group `b620663c`; pushes75111/55740
+REAPED. Hosted control run43220169006 is active on exact f11eea10. Dispatch66173 REAPED success;
+an earlier local filename assertion stopped before any dispatch attempt and was corrected.
+Expected17,611 =12,516 portable (5,987 desktop +947 Android +5,582 browser) +5,095 Apple.
+Audit scripts/state live in the coalescing workspace. Baseline CI43200304791 is fully accepted.
 
-Prepared source-specific CI scripts and plan are in the coalescing workspace, NOT dispatched yet.
-Expected 17,611 = 12,516 portable (5,987 desktop + 947 Android + 5,582 browser) + 5,095 Apple.
-Dispatch only after accepted source is committed/pushed, verify artifacts against progressive CI
-43200304791. That previous run is fully accepted (17,572); do not poll it again.
+Mobile `.work/space-history-locator-scan-2026-11-12` now has four uncommitted source/test changes
+(two data files, two shared test files). Exact baseline is the accepted5,133-input coalescing source
+and14,538-case report map, archived before edits. Account reader now reads max17 raw checkpoints;
+mapper consumes max16, skips internal metadata and returns at most requested meaningful locators.
+It stops before an unreturned locator and retains the last consumed raw partition as continuation.
+All observed rows, including lookahead, are validated. One real history visit per worker turn,
+no content/key reads or schema/worker-bound change. Company/Space-specific readers stay unchanged.
+
+Format1/80540 REAPED35.774s. Tests-only red1/15312 REAPED failed47/8 in66.543s, with production
+unchanged. Strict review confirmed all eight intended mapper/storage failures, including limit1
+metadata skips, bounded lookahead, observer closure and actual database reopen. Source manifest
+66e73f7413cfb8d53e646059746e6ab597e22750aef1e883548fd8018d048666.
+Two production drafts then applied. Format2/83510 ACTIVE; freeze current sources after completion
+and run focused1 (expected113:47 desktop +19 Android +47 browser). Five mapper and one shared DB
+case are new; one mapper method rename is reviewed across three local targets.
+
+Next: focused/source audits, exact proof APK and unchanged native registered-worker assertions.
+Then full gates (expected14,555 local) and commit/push. Do not edit sources during gates or run an
+emulator with a compiler. Preserve red1 evidence and failed native images. The separate covered-hint
+hypothesis is still unproven; QueueCollaborationSpaceIncomingRoom currently checks Space history
+while canonical Original facts live under Company. Do not create duplicate Space facts or weaken
+the covered-hint assertion. Group exact turn/request assertions await an actual complete trace.
 
 ## Phone and protected environment
 
