@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 12:40 UTC. Continue the PRD and push every commit. All 54 acceptance groups remain OPEN.
+Updated 12 November 2026, 12:58 UTC. Continue the PRD and push every commit. All 54 acceptance groups remain OPEN.
 No subagents. One compiler OR emulator. Phone install-only: announce, explicit serial, never launch
 or drive its UI, reset data or uninstall. Continue beyond checkpoints.
 
@@ -51,16 +51,41 @@ Format1/80540 REAPED35.774s. Tests-only red1/15312 REAPED failed47/8 in66.543s, 
 unchanged. Strict review confirmed all eight intended mapper/storage failures, including limit1
 metadata skips, bounded lookahead, observer closure and actual database reopen. Source manifest
 66e73f7413cfb8d53e646059746e6ab597e22750aef1e883548fd8018d048666.
-Two production drafts then applied. Format2/83510 ACTIVE; freeze current sources after completion
-and run focused1 (expected113:47 desktop +19 Android +47 browser). Five mapper and one shared DB
-case are new; one mapper method rename is reviewed across three local targets.
+Two production drafts then applied. Format2/83510 REAPED35.821s; focused1/53587 REAPED113/0
+in263.917s (47 desktop +19 Android +47 browser); strict audit inline exit0. Current4-file/5,133-input
+manifest0741f7720eca8ca6b2ae6ff1fd9303bc1501b848f06eea95401b47ed50c406b5.
+Five mapper + one shared DB case are new; one mapper method rename is reviewed across3 local targets.
+Focused report manifest0f2d5ae08a8cec769ff57a86bccccee12742c87302410169d36888586cdd30c1.
 
-Next: focused/source audits, exact proof APK and unchanged native registered-worker assertions.
-Then full gates (expected14,555 local) and commit/push. Do not edit sources during gates or run an
-emulator with a compiler. Preserve red1 evidence and failed native images. The separate covered-hint
-hypothesis is still unproven; QueueCollaborationSpaceIncomingRoom currently checks Space history
-while canonical Original facts live under Company. Do not create duplicate Space facts or weaken
-the covered-hint assertion. Group exact turn/request assertions await an actual complete trace.
+Proof1/37780 REAPED21/0 in133.208s; strict audit exit0. Immutable proof1 APK152,426,868B/
+d0b076feecf5b29543eb36ae218bd26de1c3320ac6e3faf60b07f8ba5244d7c9, SDK8 x86 library
+6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95.
+Group native config now selects this metadata workspace/proof1 and existing Group source1.
+
+Native worker6/36993 REAPED FAILED1 in125.280s, boot28.420s. It advanced to the final covered-head
+request assertion at HrisSpaceIncomingWorkerProofHost.consumeScheduled:134. Before it, first-page
+content, completion within the unchanged4-turn bound, empty incoming demand and Company EOF all
+passed. Same-boot read-only inspection passed: history recovery COMPLETE, no physical/inventory
+work, Company15 refs/zero pending/one message, but final hint creates one Published Latest task
+with head and zero retry. Preserve fixture96d6a8f7-4513-4aa7-9274-d046840c3f87 and worker6 images.
+Native18/reg1/bootstrap1, Matrix27/send4/sync5/secret2/provider2; zero active HTTP/storage failures.
+Two startup failures precede trace.arm and are not established causes. Sources/APK unchanged, no
+compile overlap, emulator stopped, phone untouched. Final repeat equality and offline worker reopen
+remain UNREACHED. Evidence: metadata workspace native-worker-6.json/review.md.
+
+Full metadata gate full1/session49554 ACTIVE, expected14,555 local. No source edits/emulator until
+completion. Run accept-full.py full-1, then commit/push accepted4-file change and compact evidence.
+No full or native acceptance claim yet. Independent coalescing CI43220169006 remains active.
+
+Next root is now confirmed: QueueCollaborationSpaceIncomingRoom checks Published Space history for
+a LEGACY binding although canonical facts live under Company/original-device coordinates. Private
+source review is `.work/space-original-covered-hint-2026-11-12/source-review.md`; NO source draft is
+applied. Resolve actual registered legacy provenance, validate clean original source/pending state
+and preserve current admission/registration around reads. Keep unknown facts on normal alias
+routing; do not create duplicate Space content or weaken the final no-op assertion. Existing Space
+coverage expects non-null provider identity; Original expects provider=null, so don't reuse the
+wrong progression rules. Group exact turns2/Matrix31/native14 assertions remain unreached and need
+actual final trace review, not fitting totals.
 
 ## Phone and protected environment
 
