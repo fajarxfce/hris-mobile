@@ -1,56 +1,61 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 08:23 UTC.
-Continue PRD and push every commit. All54 groups OPEN. No subagents. One compiler OR emulator.
-Follow AGENTS.md, clean boundaries and the protected environment below. Phone install-only.
+Updated 12 November 2026, 08:36 UTC. Continue the PRD and push every commit. All 54 groups OPEN.
+No subagents. One compiler OR emulator. Follow AGENTS.md and clean layer boundaries.
+Phone install-only, announce every installation; never launch or drive its UI.
 
-## Installed runtime publication accepted locally
+## Current: process-owned incoming sources under full validation
 
-Workspace .work/space-runtime-publication-2026-11-12. Baseline66f537a4cba7f13080acc0f734fe669e8ef4d51d.
-11 files /5,127 source inputs /b4c0b77605df85d4ad73c8a6c56a632b2d2d1195f0f649444ad4cb54d2eb0456.
-56 JVM +54 browser +116 Android protocol =226 focused. Fullfull-1/89532 completed (the final reap output was lost at compaction; exit0/result and closed session verified),
-524.549s; audit95664 REAPED. Local14,466 =
-12428 fresh +2038 verified unchanged. Prior case IDs retained.
-12 new common cases/target,13 Android protocol cases, existing app DI resolution assertion.
-Read measurement for failed candidates/corrections and exact proof/source hashes.
+Workspace `.work/space-application-sources-2026-11-12`, baseline
+`cef427683f8167436faa7d8bec3f523ae7a16453`. 13 files APPLIED, not accepted/committed;
+5,130 inputs, manifest `2cb91e7d99aa490f59289e984f94158b01e9bd40c6ba649a72664165575113db`.
+Format1/69985 REAPED,36.452s. Focused1/27621 REAPED,303 cases/203.674s.
+Browser1/8337 REAPED,192 cases/92.412s. Focused audit495 accepted inline exit0.
+Full1/56719 ACTIVE; no other compiler/emulator. Expected14,497 local/17,552 hosted.
+Publisher prepared, NOT executed. Accepted-handoff writer still required. Hosted plan UNDISPATCHED.
+Preparer executed; never rerun. Its first preflight failed on two existing control-class names before
+source application; partial preparation archived under the runtime-publication workspace.
+No test failure in the current source so far. Preserve failed candidates before any correction.
 
-The repository observes its existing exact registry candidate. Only a published available lease
-produces an instance UUID; retirement is visible before native drain, including failed cleanup.
-Same-coordinate recreation has a new UUID; confirmed credential retry preserves the current one.
-Observers neither acquire nor close SDK resources. Domain validates requested/published identity.
-No application incoming collector activation, new transport, phone release or native proof here.
+27 new app cases (22 source owner,3 lifetime,2 foreground) plus2 common late-metadata cases.
+ApplicationCollaborationLifetime owns the collector. Exact native publication selects the child;
+root/account/instance changes cancel AND join old children. Key/sync failures are independent.
+Foreground entry restarts one finite pass; no retry timer, additional SDK/client/sync acquisition,
+native close ownership or UI dependency. Diagnostics contain categories only. CI selects the new
+application class explicitly. Metadata audit reviewed all canonical writers, primary conversion
+and confirmed key-wait demotion; newly discovered primary work survives an already completed sweep.
+SDK8 already emits registration reconciliation and imports notify the same stream. No schema10,
+synthetic startup receipt, separate startup request or broad encryption-init barrier is needed.
 
-Publisher/handoff EXECUTED. Push accepted source/evidence, then dispatch-hosted.py ONCE.
-Expected17,519 =12,444portable +5,075Apple. Inspect any dispatch-attempt before retry.
-Previous consumer run is in ../durable-room-key-consumer-2026-11-12/hosted-plan.json; source-specific
-expected17,470. Consumer portable12,407 audited (78231 REAPED), Apple pending. Read each prior workspace's audit state, not green status alone. Binding43168158361
-FULL17,170 and lifecycle43165090113 FULL17,085 are audited. Targeted43172811544 expected17,314;
-check current audits. No blind workflow redispatch. Apple protocol checks are not native SDK proof.
+## Accepted runtime publication and hosted evidence
 
-## Next: process-owned incoming activation
+Runtime publication source cef42768 / Group cf66781b pushed (81544/54467 REAPED).
+11 files/5,127 inputs, manifest b4c0b77605df85d4ad73c8a6c56a632b2d2d1195f0f649444ad4cb54d2eb0456.
+Full1/89532 completed exit0/524.549s; final reap output lost at compaction, closed session/result
+verified. Audit95664 REAPED.14,466 local=12,428 fresh+2,038 verified unchanged;226 focused.
+CI43182776077 dispatched ONCE08:25:10.618006UTC (11348 REAPED); hosted state exists;
+expected17,519=12,444 portable+5,075 Apple. No redispatch.
+Consumer66f537a4 CI43176939497: portable12,407 accepted (78231 REAPED), Apple pending;
+expected17,470. Targetedf969fd73 CI43172811544 FULL17,314 audited (portable57960/Apple2467 REAPED).
+Binding43168158361 FULL17,170 and lifecycle43165090113 FULL17,085 are audited.
+Read source-specific workspace audit files; green workflow status alone is not acceptance.
 
-The application-sources-draft has12 UNAPPLIED/UNREVIEWED/UNCOMPILED files:27app cases +2common
-late metadata/hint cases. next-application-sources-state.json records provisional14,497local/17,552
-hosted expectations and incomplete metadata audit. No preparer yet. Do not rerun partial generators.
-Read ../durable-room-key-consumer-2026-11-12/next-application-source-owner-design.md and the Git
-room-key retention plan. Wire one process-owned child of ApplicationCollaborationLifetime using
-actual publication, root/session admission and cancel AND join on replacement. Subscribe sync/key
-consumers without starting an extra native client or sync. Keep callbacks observed in background
-while the runtime/process lives. After a finite local failure, an explicit foreground-entry event
-may resume the pending receipt; do not add a registration retry timer. Same-instance resume must
-retain exact receipt/intent identity. Native lifetime owns listener disposal.
+## Next: native incoming-source proof and remaining PRD
 
-Audit startup/restore and all new Original/Published metadata/source publication before activation.
-Immutable metadata must precede corresponding demand; metadata behind an active recovery cursor
-needs a requested pass. SDK8 already emits a registration reconciliation hint and imports notify
-the same stream (manifest-matched source reviewed07:51). Reuse the existing callback receipt; no
-synthetic startup signal, schema10 or separate key request is needed. Preserve90s worker fairness,
-active/requested predicates and exact receipt confirmation. Native proof must measure finite request
-counts, late keys, cancellation, uncertain storage, offline/restart and source changes. Apple native
-key adapter and acceptance remain required. Do not claim old production loops resolved from mocks.
+Finish full validation, audit source/case retention, publish evidence, commit/push and dispatch once.
+Then exercise actual SDK8 key registration through the process-owned consumer and encrypted storage.
+The existing HrisSpaceRecoveryProofHost replaces ApplicationCollaborationLifetime and currently
+omits the new incoming delegate: native proof must wire it explicitly or use the production module.
+A raw SDK callback test alone is not application activation evidence. Extend isolated fictional
+fixtures without resending any protected demo message. Measure initial stored-key reconciliation,
+retained receipt before ACK, lost write reply, foreground resume without new registration, exact
+publication replacement, finite request counts, late keys and offline/process reopening. Reuse
+real SDK/storage and bound fixture failure injections; do not label fake callbacks native proof.
+Native plan/draft is still pending implementation. Apple native key adapter and acceptance remain
+open. No live deployment or new release was performed for these foundation changes.
 
 Phone36696 REAPED08:23:43.714411UTC,20.020610s timeout; next>=08:57:23.735021UTC.
-No installation.
+No install. Validated release89 remains ready. Do not repeat availability questions.
 [Previous checkpoint](agent-handoff-history-through-durable-key-consumer-2026-11-12.md).
 
 ## Protected environment and prior evidence
