@@ -38,7 +38,11 @@ The reviewed eight-file draft HAS BEEN APPLIED successfully. Workspace
 13,626cases/5,067inputs. prepare-account-turn.py HAS EXECUTED; never reapply it.
 Format1/84741 REAPED PASS37.088s; new5,072inputs with frozen manifest
 1219a29b225220134ab9f760191d2dc65aacc7dd76844a7dcc8930d2f119c766.
-Focused1/92831 RUNNING; expected158JVM+156browser=314, local13,674, hosted16,406.
+Focused1/92831 REAPED FAILED119.355s before executing tests: two new request assertions
+needed explicit Pair<String?, Int> expected types. Archived failed-focused-candidate-1 and
+failure-reviews.json preserve exact source/result. Only those assertion types changed; values,
+coverage and production remain. Format2/89512 RUNNING before a new frozen candidate.
+Expected158JVM+156browser=314, local13,674, hosted16,406.
 Eight uncommitted source files (five new/three existing),24 common tests. Existing advance/defer
 shares the identity predicate while preserving its original mutation revision ceiling.
 No global advance, worker or key producer enabled. The scripts in the new workspace are prepared;
@@ -54,6 +58,12 @@ one account metadata row and validates current root, local owner, source, regist
 recovery revision. New requested generations/primary work survive; idle/deferred passes do not
 read source metadata. prepare-account-turn.py is syntax checked, PREPARED NOT EXECUTED; apply
 only after this stage is accepted, committed, pushed and dispatched. The publisher and handoff writer are also PREPARED NOT EXECUTED. Its selection cannot acknowledge global or historical work.
+
+Two future policy/entity files are privately drafted at the active account-turn workspace
+next-global-completion-draft, with next-global-completion-state.json. They are UNREVIEWED,
+UNAPPLIED, UNCOMPILED and have no tests yet. They inspect local visit evidence without requesting
+a pass; admitted metadata/source/CAS/application service is still required. Storage trace confirms
+completeRecovery increments the checkpoint revision atomically with its reference outcomes.
 
 ## Next: bounded account recovery service and activation evidence
 
