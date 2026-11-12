@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 23:18 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 23:21 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -78,9 +78,14 @@ deadline expired in22ms wall time around actual Default I/O. Only that test scen
 Default; all deadlines/assertions and production behavior stay unchanged. Format3/75985 passed35.426s.
 
 Indexed-contact acceptance commits Mobile5d67729f / Groupd02599c0 are pushed; sessions41570
-and59970 REAPED. One follow-up control43322026579 now has portable131549893156 running and Apple131549893690 running,
+and59970 REAPED. One follow-up control43322026579 now has portable131549893156 accepted and Apple131549893690 running,
 exact5d67729f9e4ddafc8a8850fb4c6c796236d0d7a1. Expected12,758 portable +5,250 Apple =18,008,
-including25 newly instantiated native directory/admission methods. No new hosted pass is claimed.
+including25 newly instantiated native directory/admission methods. Portable is ACCEPTED:
+auditor54485 REAPED,12,758 cases (6104desktop/955Android/5699browser), every prior ID retained.
+Artifact13993706111 /4071134B/0510d2693045b003268ebdbb91473a38462b88678238824e6f82f47e898ef6cd;
+report09907c9e65a6abcf2f8d2bc066390087eb9324859f3dcc72e701faaa14f4455b;
+job log79fbb403f1f9d9695d42b6dfcb8a63c8441122706926d960ad24e83a65660e36.
+Apple is still running; no new Apple pass claimed. Do not rerun accepted portable.
 Mobile.work/space-thread-contact-2026-11-12/hosted-control and hosted-audit.py preserve the
 configuration; the auditor additionally requires every immediately preceding control case ID.
 Keep this exact run; do not dispatch another pending control. Dispatch29198 REAPED.
@@ -109,12 +114,25 @@ The first was resolved by sharing one cold canonical-command observation within 
 the second by coherent first publication of actual results. All existing assertions remain.
 Format5/50573 REAPED 34.862s. Earlier formatting/script failures are recorded in the evidence.
 
-NEXT: immutable composer submission ID/time, then Group drafts and organization UI.
-Draft-only Mobile.work/space-composer-submission-2026-11-12 has five paths and six new
-methods; verify base hashes before application. It is not yet tested or accepted.
-Commit and push accepted work before application. Review component ownership and measured
-first-frame requirements in docs/collaboration-organization-ui-plan.md. All 54 acceptance
-groups remain OPEN; continue beyond this checkpoint.
+Participant acceptance is pushed: Mobile c962886f / Group c7737190; pushes23675/71427 REAPED.
+ACTIVE: Mobile.work/space-composer-submission-2026-11-12, seven application paths applied
+from that accepted baseline. QueueCollaborationSpaceText now accepts one original intent;
+ID/time/body/owner stay exact across delayed local reads, retries and renewed login.
+The use case no longer allocates time; replay/readback compare the full retained intent.
+No transport, scheduling expansion, ciphertext/schema change or Company alias was added.
+
+The complete caller search found native proof usage absent from the initial five-path draft.
+Both proof call sites now capture an explicit intent before submission and assert exact
+retention; the adapter receives that intent unchanged. Six new domain methods cover delayed
+reads/mutex, timestamp-only conflict, wrong readback, committed cancellation and invalid input.
+All old assertions remain. Format1/16872 REAPED PASS36.025s. Focused1 is running, expected59;
+full expects14,828 with all14,816 prior IDs and12 new JVM/browser cases. Native execution of
+the affected Original/Space delivery scenarios is required after compilation. Keep sources
+frozen, one local compiler OR emulator. This increment has no acceptance or phone claim yet.
+
+After focused/full/native checks, record and push before continuing Group drafts and UI.
+Review ownership and first-frame measurement requirements in docs/collaboration-organization-ui-plan.md.
+All54 acceptance groups remain OPEN; continue beyond this checkpoint.
 
 Hosted follow-up43312753298 on exact1f47eeddb833054ae2b3d52c20439e6d11518a02:
 Portable131515465558 is ACCEPTED; auditor42039 REAPED,12,716 cases (6083desktop/955Android/5678browser).
@@ -233,13 +251,17 @@ Mobile.work/sdk8-apple-build-budget-2026-11-12/hosted-43296438399.
 Artifact13992067219 / 18757B / d48c496130814b7a083d3483ccf9e37f523d6fb33cd4ca7916d3f308aaf831db;
 job log7042ba65af48e9eb6e4112845ddc564ce96dda87e15dc8042da89ef4fb480884.
 
-An isolated fix in .worktrees/hris-mobile-apple-budget-2026-11-12 uses llvm-nm from the
-exact pinned Rust sysroot, verifies compiler/reader provenance and tests a real tiny Rust
-archive before the expensive build. No old-reader fallback or ignored failure. Five
+The isolated fix65e649d12375af02a359470789e26584ad26c292 is committed and pushed
+(push10232 REAPED). Exactly one native run43327713661/job131564298006 is active;
+dispatch41039 REAPED. All17 builder guards pass locally and the hosted guard step passes.
+Mobile.work/sdk8-apple-symbol-reader-2026-11-12 records source hashes, failed predecessor
+and a success-only audit pinned to this head/job, requiring the real retained archive probe.
+The fix uses llvm-nm from the exact pinned Rust sysroot, verifies compiler/reader provenance
+and tests a real tiny Rust archive before the expensive build. No old-reader fallback or ignored failure. Five
 architectures, all required exports, four Swift contracts and device/simulator links remain
 required. The fix is not yet hosted-accepted. Keep it separate from main app source and
-avoid duplicate native dispatch. The old success auditor is pinned to the FAILED head;
-prepare a new exact-head auditor for the new run. Preserve the older deadline failure
+avoid duplicate native dispatch. The older budget auditor remains pinned to the FAILED head;
+use the new symbol-reader workspace auditor for this run. Preserve the older deadline failure
 43267867675 and two pre-step runner-capacity failures. No SDK publication or Apple app
 runtime binding yet; the app still selects the unavailable Apple Matrix runtime.
 Independent Android/Group work continues.
