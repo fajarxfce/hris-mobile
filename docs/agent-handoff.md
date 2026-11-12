@@ -5,6 +5,24 @@ The full PRD, per-commit pushes and validated phone updates are authorized. All5
 OPEN; keep working beyond this gate. No subagents. Read AGENTS.md/architecture. Usecases coordinate
 repositories/policies, never other usecases; repositories map datasource results; ViewModels own UI.
 
+## Active Original historical completion implementation
+
+The next reviewed11-file draft was APPLIED by21398REAPED at00:25:47UTC12Nov. It is UNCOMMITTED
+and UNTESTED, awaiting the existing Starter compiler before formatting/validation. Workspace
+.work/original-key-reference-completion-2026-11-11; source baseline6c40ccef1361564c706e10243dc183f18088bf5e,
+13,358 cases/5,050 inputs. prepare-next-original-key-completion.py and configure-next-original-key-completion.py
+HAVE EXECUTED; do not rerun old configure over the focused-coverage refinement.
+
+One completion owner checks current Company/source/registration around one existing atomic
+recovery.complete. A separate OriginalKeyPageBatch binds results to the captured references;
+primary and explicit-ID APIs preserve their contracts.32 new common cases;5,056 expected inputs.
+Focused coverage now explicitly includes the changed29 page-acquisition cases alongside29 reader,
+20 primary completion,9 policy,56 storage,18 metadata and2 graph controls:195 JVM+193 browser=388.
+Old330 prediction is superseded only for focused selection; full13,422 and hosted16,028 unchanged.
+Expected/run/freeze/accept/dispatch/publisher scripts are prepared in the new workspace. Publication
+requires reviews for any future failed attempts. No native/primary/global activation. Format/test
+only after Starter68417 is reaped; do not start a second compiler. Keep working through the PRD.
+
 ## Local recovery content and browser reporting accepted
 
 Nine source files accepted:4 Kotlin acquisition/policy/test files,4 generic Karma/tool files and
@@ -51,7 +69,7 @@ The final unfiltered run above also preserves every old AppFlow case.
 
 Publisher and accepted writer HAVE EXECUTED. Source changes were committed/pushed separately:
 AppFlow941224bb/60814REAPED; generic0c99908e/39997REAPED; featuree4650f88/20636REAPED.
-Group documentationa5d0d9d3/11341REAPED. Current source tree is clean.
+Group documentationa5d0d9d3/11341REAPED. That accepted source is retained; the next uncommitted implementation is described above.
 Hosted43126523314 was dispatched ONCE by39160REAPED at00:20:07UTC12Nov on e4650f882e71708100feebaf900834353bb5a128.
 Ref validation/original-local-key-page-content-20261111, expected15,932=11,336portable+4,596Apple.
 It is IN PROGRESS, not audited. hosted-plan.json has the run ID; never dispatch it again.
@@ -67,7 +85,7 @@ actual module config/task order. publish.py PREPARED NOT EXECUTED. Prepared mani
 acceptedcf23e510 are separately labelled; the four generic file hashes match both. No HRIS/UI test
 port. Finish Starter acceptance/commit/push and record it here before next Mobile compilation.
 
-Next11-file next-original-key-completion-draft is REVIEWED, UNAPPLIED/UNTESTED(5existing/6new).
+Next11-file next-original-key-completion-draft is REVIEWED and now APPLIED/UNTESTED(5existing/6new); see the active section.
 Dedicated CompleteCollaborationSpaceOriginalKeyReferences admits current local Company/source/
 registration and ONE existing recovery.complete under5s. Distinct OriginalKeyPageBatch binds
 outcomes to the exact captured page; old explicit-ID batches cannot authorize completion. Existing
@@ -76,9 +94,9 @@ Only confirmed true yields attempted generation/counts/cursor; false/lost/cancel
 are not receipts. No primary/SDK/global I/O or hidden retry.32 new common cases plus reader29,
 primary completion20/policy9, recovery storage56, metadata18 and graph2 controls.
 
-Read next-original-key-completion-review.md/contract. Guarded prepare/configure scripts and next publisher PREPARED
-NOT EXECUTED; original generators/snippets are STALE. Nextworkspace original-key-reference-completion-2026-11-11:
-5,056 inputs,13,422local,166+164focused,16,028hosted=11,400portable+4,628Apple. Preserve Karma inputs
+Read next-original-key-completion-review.md/contract. Guarded prepare/configure HAVE EXECUTED; publisher copied/prepared, not executed.
+Original generators/snippets and old configure are STALE after the focused-coverage refinement. Nextworkspace original-key-reference-completion-2026-11-11:
+5,056 inputs,13,422local,195+193focused,16,028hosted=11,400portable+4,628Apple. Preserve Karma inputs
 and conditional full report refresh. Then Space/Original-alias projection:15 partial unreviewed/
 uncompiled draft files (19 reader+34 acquisition+35 completion cases, fixtures/policies/page batch,
 three owners, DI/both-order graph). No source applied. Draft primary fixture rejects new historical
