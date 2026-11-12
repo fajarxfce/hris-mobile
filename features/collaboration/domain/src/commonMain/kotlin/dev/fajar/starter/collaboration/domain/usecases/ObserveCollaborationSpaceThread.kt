@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.*
 /** One local subscription under Group authority, including content retained in an Original room. */
 class ObserveCollaborationSpaceThread(
     private val bindings: CollaborationSpaceRoomBindingRepository,
+    private val metadata: CollaborationSpaceConversationMetadataRepository,
     private val spaces: CollaborationSpaceHistoryRepository,
     private val originals: CollaborationHistoryRepository,
     private val spaceMessages: CollaborationSpaceMessageRepository,
@@ -74,7 +75,16 @@ class ObserveCollaborationSpaceThread(
                 .flatMapLatest { admitted ->
                     when (admitted) {
                         is AppResult.Failed -> flowOf(admitted)
-                        is AppResult.Success -> observeStored()
+                        is AppResult.Success -> observeBindings()
+                    }
+                }
+                .buffer(0)
+                .distinctUntilChanged()
+                // Select authority and binding before the only content-producing child.
+                .flatMapLatest { binding ->
+                    when (binding) {
+                        is AppResult.Failed -> flowOf(binding)
+                        is AppResult.Success -> observeSelected(binding.value)
                     }
                 }
                 .buffer(0)
@@ -116,34 +126,102 @@ class ObserveCollaborationSpaceThread(
             return if (owned is AppResult.Failed) owned else AppResult.Success(Unit)
         }
 
-        private fun observeStored(): Flow<AppResult<CollaborationSpaceThreadSnapshot>> = flow {
+        private fun observeBindings(): Flow<AppResult<CollaborationSpaceRoomBinding?>> = flow {
             val admitted = current()
             if (admitted is AppResult.Failed) {
                 emit(admitted)
                 return@flow
             }
-            val binding = bindings.getByConversation(access, conversationId)
-            val selected =
-                when (binding) {
-                    is AppResult.Failed -> binding
-                    is AppResult.Success ->
-                        resolveCollaborationSpaceHistoryLocation(
-                            access,
-                            conversationId,
-                            binding.value,
+            emitAll(bindings.observeByConversation(access, conversationId))
+        }
+
+        private fun observeSelected(
+            binding: CollaborationSpaceRoomBinding?
+        ): Flow<AppResult<CollaborationSpaceThreadSnapshot>> = flow {
+            val admitted = current()
+            if (admitted is AppResult.Failed) {
+                emit(admitted)
+                return@flow
+            }
+            if (binding == null) {
+                emitAll(observeUnresolved())
+                return@flow
+            }
+            when (
+                val selected =
+                    resolveCollaborationSpaceHistoryLocation(access, conversationId, binding)
+            ) {
+                is AppResult.Failed -> emit(selected)
+                is AppResult.Success -> emitAll(observeThread(selected.value))
+            }
+        }
+
+        private fun observeUnresolved(): Flow<AppResult<CollaborationSpaceThreadSnapshot>> = flow {
+            val context =
+                flow {
+                        val stored = metadata.getById(access, conversationId)
+                        emit(
+                            when (stored) {
+                                is AppResult.Failed -> stored
+                                is AppResult.Success -> {
+                                    val value = stored.value
+                                    when {
+                                        value == null ->
+                                            collaborationRecoveryFailure(
+                                                "client.collaboration_conversation_unavailable",
+                                                FailureKind.Unavailable,
+                                            )
+                                        value.id != conversationId ||
+                                            !validCollaborationSpaceConversationMetadata(
+                                                access,
+                                                value,
+                                            ) ->
+                                            collaborationRecoveryFailure(
+                                                "client.collaboration_invalid_response",
+                                                FailureKind.Unexpected,
+                                            )
+                                        else -> AppResult.Success(value)
+                                    }
+                                }
+                            }
                         )
+                    }
+                    .onStart<AppResult<CollaborationSpaceConversationMetadata>?> { emit(null) }
+            val commands =
+                spaceMessages
+                    .observe(access, conversationId)
+                    .map { records ->
+                        when (records) {
+                            is AppResult.Failed -> records
+                            is AppResult.Success ->
+                                collaborationSpaceThreadCommands(
+                                    access,
+                                    conversationId,
+                                    records.value,
+                                )
+                        }
+                    }
+                    .onStart<AppResult<List<CollaborationSpaceMessageRecord>>?> { emit(null) }
+            combine(context, commands) { facts, queued ->
+                    when {
+                        facts is AppResult.Failed -> facts
+                        queued is AppResult.Failed -> queued
+                        facts == null || queued == null -> null
+                        else ->
+                            AppResult.Success(
+                                CollaborationSpaceThreadSnapshot.Unresolved(
+                                    access,
+                                    (facts as AppResult.Success).value,
+                                    (queued as AppResult.Success).value,
+                                )
+                            )
+                    }
                 }
-            val current = current()
-            if (current is AppResult.Failed) {
-                emit(current)
-                return@flow
-            }
-            if (selected is AppResult.Failed) {
-                emit(selected)
-                return@flow
-            }
-            val location = (selected as AppResult.Success).value
-            emitAll(observeThread(location))
+                .filterNotNull()
+                .collect { snapshot ->
+                    val allowed = current()
+                    emit(if (allowed is AppResult.Failed) allowed else snapshot)
+                }
         }
 
         private fun observeThread(
@@ -233,7 +311,7 @@ class ObserveCollaborationSpaceThread(
                         history == null || canonical == null || original == null -> null
                         else ->
                             AppResult.Success(
-                                CollaborationSpaceThreadSnapshot(
+                                CollaborationSpaceThreadSnapshot.Bound(
                                     (history as AppResult.Success).value,
                                     (canonical as AppResult.Success).value,
                                     (original as AppResult.Success).value,

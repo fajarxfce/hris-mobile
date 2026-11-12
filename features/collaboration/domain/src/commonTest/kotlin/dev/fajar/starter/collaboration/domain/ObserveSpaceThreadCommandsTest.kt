@@ -39,7 +39,7 @@ class ObserveSpaceThreadCommandsTest {
         f.commands.spaceFacts.value = AppResult.Success(listOf(canonical))
         f.commands.originalFacts.value = AppResult.Success(listOf(original))
         val snapshot =
-            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(
                     f.observe()(f.access, f.id).first()
                 )
                 .value
@@ -59,7 +59,7 @@ class ObserveSpaceThreadCommandsTest {
         f.commands.spaceFacts.value = AppResult.Success(listOf(command))
         f.commands.readOriginal = { error("Space room must not read a Company ledger") }
         val snapshot =
-            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(
                     f.observe()(f.access, f.id).first()
                 )
                 .value
@@ -96,7 +96,9 @@ class ObserveSpaceThreadCommandsTest {
         runCurrent()
         assertEquals(3, values.size)
         val snapshots =
-            values.map { assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(it).value }
+            values.map {
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(it).value
+            }
         assertEquals(
             listOf(emptyList(), listOf(queued), listOf(sent)),
             snapshots.map { it.spaceCommands },
@@ -145,7 +147,8 @@ class ObserveSpaceThreadCommandsTest {
         records.clear()
         release.complete(Unit)
         val snapshot =
-            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(result.await()).value
+            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(result.await())
+                .value
         assertEquals(
             setOf("previous"),
             assertIs<CollaborationMessageState.Staging>(snapshot.spaceCommands.single().state)

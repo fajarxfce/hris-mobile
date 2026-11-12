@@ -57,7 +57,7 @@ class SpaceThreadHistorySnapshotTest {
         messages.clear()
         release.complete(Unit)
         val read =
-            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(result.await())
+            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(result.await())
                 .value
                 .history
         assertEquals(f.page(), read.page)

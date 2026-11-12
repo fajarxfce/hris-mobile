@@ -1,5 +1,7 @@
 # Architecture
 
+[Unresolved canonical threads](collaboration-unresolved-space-thread.md) expose actual local commands before room publication and switch readers under the same admission owner.
+
 [Published room bindings](collaboration-space-room-binding-observation.md) follow authenticated local changes while session/admission policy stays in domain.
 
 [Canonical thread commands](collaboration-space-thread-commands.md) combine actual local

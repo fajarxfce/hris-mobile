@@ -16,6 +16,53 @@ internal class SpaceThreadHistoryFixture(val legacy: Boolean = false) {
     val access = room.access
     val id = room.conversation.id
     val commands = SpaceThreadCommandStores(room)
+    var metadataReads = 0
+    var bindingStarts = 0
+    var bindingStops = 0
+    var readMetadata: suspend () -> AppResult<CollaborationSpaceConversationMetadata?> = {
+        AppResult.Success(null)
+    }
+    var readBindings: () -> Flow<AppResult<CollaborationSpaceRoomBinding?>> = {
+        flow { emit(room.bindings.getByConversation(access, id)) }
+    }
+    val bindings =
+        object : CollaborationSpaceRoomBindingRepository by room.bindings {
+            override fun observeByConversation(
+                access: CollaborationSpaceLocalAccess,
+                conversationId: String,
+            ): Flow<AppResult<CollaborationSpaceRoomBinding?>> = flow {
+                assertEquals(this@SpaceThreadHistoryFixture.access, access)
+                assertEquals(id, conversationId)
+                bindingStarts++
+                try {
+                    emitAll(readBindings())
+                } finally {
+                    bindingStops++
+                }
+            }
+        }
+    val metadata =
+        object : CollaborationSpaceConversationMetadataRepository {
+            override suspend fun getById(
+                access: CollaborationSpaceLocalAccess,
+                conversationId: String,
+            ): AppResult<CollaborationSpaceConversationMetadata?> {
+                assertEquals(this@SpaceThreadHistoryFixture.access, access)
+                assertEquals(id, conversationId)
+                metadataReads++
+                return readMetadata()
+            }
+
+            override suspend fun findByPeer(
+                access: CollaborationSpaceLocalAccess,
+                peerAccountId: String,
+            ): AppResult<CollaborationSpaceConversationMetadata?> = error("No peer lookup")
+
+            override suspend fun retain(
+                access: CollaborationSpaceLocalAccess,
+                conversation: CollaborationSpaceConversation,
+            ): AppResult<Boolean> = error("No metadata mutation")
+        }
     val identity = MutableStateFlow<AppResult<Session?>>(AppResult.Success(native.session))
     var currentIdentity: suspend () -> AppResult<Session?> = { identity.value }
     var currentAdmission: suspend () -> AppResult<CollaborationSpaceDirectoryAdmission> = {
@@ -163,7 +210,8 @@ internal class SpaceThreadHistoryFixture(val legacy: Boolean = false) {
 
     fun observe() =
         ObserveCollaborationSpaceThread(
-            room.bindings,
+            bindings,
+            metadata,
             spaces,
             originals,
             commands.spaces,

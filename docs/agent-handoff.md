@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 22:01 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 22:10 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -29,7 +29,7 @@ The two failed candidates, prior111 excluded XML/657 cases and all exact hashes 
 Reactive room-binding observation is ACCEPTED in Mobile.work/room-binding-observation-2026-11-12.
 Eight source paths add observeByConversation with existing bounded pair authentication,
 mapLatest cancellation and identical-value suppression. No network, key creation, writes or
-retry loop. Domain thread integration is still next; existing one-shot reads are unchanged.
+retry loop. The accepted unresolved thread below now consumes this observer; one-shot methods stay available.
 Focused2/60839 REAPED PASS35/193.488s; full1/75682 REAPED PASS850.194s.
 Strict full audit accepts14,738 =12,700 fresh +2,038 unchanged, all14,724 prior IDs retained,
 14 new JVM/browser cases. Source5167/de55d4ceec4573371da3d0045ba8940af2a8020c018cc0bd21aa6012c5c01dcb;
@@ -41,39 +41,39 @@ Corrected tests require exact absence, reject every non-null old-account result 
 all reopened content/ciphertext; intermediate in-flight failures remain Storage. Production
 was not changed for the correction. Format2/83100 REAPED35.394s. No new native/phone claim.
 
-ACTIVE: unresolved canonical thread integration in Mobile.work/unresolved-space-thread-2026-11-12.
-Applied11 paths after accepted/pushed Mobile1f47eeddb833054ae2b3d52c20439e6d11518a02 and
-Groupeca0fc61 evidence. Snapshot now distinguishes Bound(existing typed history and ledgers)
-from Unresolved(exact local metadata and canonical commands). Reactive binding selection joins
-the authority pipeline BEFORE the only content-producing child. No extra forwarding bridge,
-Company guess, history fabrication, room creation, API or SDK work. Bound reads skip the separate
-metadata repository; unresolved reads capture metadata/commands concurrently and propagate
-known failure without waiting for another first result. Existing assertion identities remain;
-the successful result type now explicitly selects Bound when reading its history fields.
+Unresolved canonical thread integration is ACCEPTED in Mobile.work/unresolved-space-thread-2026-11-12.
+Eleven source paths evolve the existing observer to Bound(authenticated history plus both applicable
+command ledgers) and Unresolved(exact local canonical metadata and commands). Reactive binding selection
+stays before the sole content-producing child. Missing bindings never fabricate empty history; current
+Group/session checks and cancellation join guard all publication. Bound reads skip separate metadata.
 
-The candidate adds11 domain and2 actual encrypted transition/reopen cases, plus test adapters.
-Focused1/99930 REAPED FAILED145.168s:54 domain cases, one existing invalid-request test
-caught a directory read after upstream access validation had already failed. Preserve
-failed-invalid-access-forwarding-1. The final selector now forwards failures directly;
-only successful binding selection enters its guarded content reader. No assertions changed.
-Format2/68039 REAPED PASS34.459s. Frozen5169inputs/6408e5f86ede8d4ff8753c33c4c0d85380fd96db907ba572632014594c2a263a.
-Focused2/28094 REAPED PASS100/318.592s (domain54/data44/application DI2); strict audit passed.
-Full1/69697 ACTIVE from21:56. Expected14,764 with all14,738 prior IDs. Do not edit source or
-start another local compiler/emulator until reaped. Full auditor and record-acceptance.py are
-prepared/syntax checked; neither full audit nor acceptance recorder has run. After acceptance,
-commit/push, continue composer context and organization UI. All54 PRD groups remain OPEN.
+Focused2/28094 REAPED PASS100/318.592s; full1/69697 REAPED PASS814.218s. Both strict audits and
+record-acceptance.py PASS. Full14,764 =12,726 fresh +2,038 exact unchanged, retaining all14,738 prior
+IDs with26 new JVM/browser cases. Source5169/6408e5f86ede8d4ff8753c33c4c0d85380fd96db907ba572632014594c2a263a;
+reporteb11db2da6200bd7085f754e0da1f2a81ec17b49404d5e35845f13ef24f580e1;
+immutable full-1/accepted-proof.apk153468122B/b8da3ed626f2aff7991980f6b862a671506997e8aff569175920139c06c610b7.
+No new native execution/phone claim. Preserve failed-invalid-access-forwarding-1: focused1/99930 ran54
+cases/one existing failure145.168s. The final selector read directory admission after upstream invalid
+access; correction forwards failures directly and enters guarded content reads only for success.
+No assertion changed. Format2/68039 REAPED34.459s. Source checks, Android release compile/lint,
+shared Wasm/iOS ARM64 compilation and proof assembly pass. Commit/push before the next application.
 
-Next draft: Mobile.work/space-thread-contact-2026-11-12, NOT APPLIED. Six copied source paths
-extend the existing encrypted directory with a bounded published observeContact(access,accountId)
-using ReplicaStore.observeDocument. No whole-directory scan, key creation, mutation, network or
-retry. Three existing fakes reject unexpected new calls. Eight shared storage tests are assembled
-in the draft contract (9 existing ->17), covering actual published generation replacement/removal,
-selected-value equality, renewed login, account/space isolation, malformed rows/keys, exact one-row
-reads, late decryption cancellation and source failure termination. Review then apply only after
-current full acceptance/commit/push. No new compiler has run for this draft.
-The downstream context must use exact canonical metadata and optional local contact/sender facts;
-labels must not delay owned history. Existing retained registration.provider metadata may supply
-sender identity after bounded validation; do not use remote SpaceIdentity reads for offline UI.
+NEXT: Mobile.work/space-thread-contact-2026-11-12, still NOT APPLIED. Seven draft source paths extend
+existing directory observeContact(access,accountId) via the bounded published observeDocument query.
+No whole-directory scan, key creation, mutation, network or retry. Three existing fakes reject new calls.
+Eight new shared methods extend9 directory cases to17; existing8 admission cases are retained. A new
+Apple file instantiates both contracts:25 native methods require actual hosted Apple execution.
+Prepared/syntax-checked prepare.py, accept-focused.py and accept-full.py require the exact accepted
+current source/reports and pushed HEAD. They apply only after no local heavy process remains.
+Expected focused27, full14,780 with all14,764 old IDs and16 new JVM/browser cases; native test compiler
+is included in both gates. Linux executes0 Apple cases. Draft is not compiled or accepted yet.
+
+Review then apply, format/capture, focused, full, commit/push. Continue participant/composer context
+and organization UI. Existing retained registration.provider can supply sender metadata only after
+bounded exact validation. Do not infer sender identity from room origin or selected HR company.
+Review visible-thread warming to avoid first-frame bubble-side changes. All54 PRD groups remain OPEN.
+Keep active hosted43312753298; defer the next control dispatch until this contact increment is accepted,
+so one subsequent run can cover unresolved threads and contact storage together without replacing pending CI.
 
 Hosted follow-up43312753298 is RUNNING on exact1f47eeddb833054ae2b3d52c20439e6d11518a02.
 Dispatch78537 REAPED. Apple131515464968 and portable131515465558 started after the preceding
@@ -198,7 +198,7 @@ fresh2560MiB/two cores, cold2908ms/reopen2145ms, stable10s/process. Both screens
 were inspected and show complete onboarding. ARM39435 REAPED42.972s, verify38284 REAPED.
 All gates are finished; do not rebuild. No authenticated release/phone latency claim.
 
-Latest ADB57949 REAPED timeout15s at21:48UTC; no installation attempted. At20:12UTC the
+Latest ADB1835 REAPED timeout15s at22:00UTC; no installation attempted. At20:12UTC the
 WireGuard handshake was34837s old; route is correct viawg0. Do not repeat availability questions.
 When10.77.77.3:5555 connects, announce EACH actual installation, then run Mobile
 .work/release-phone-2026-11-12-build92/install.py --install-only. Inspect any existing

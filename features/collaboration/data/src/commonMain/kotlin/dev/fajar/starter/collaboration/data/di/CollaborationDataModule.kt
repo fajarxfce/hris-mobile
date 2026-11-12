@@ -1557,6 +1557,7 @@ class CollaborationDataModule {
     @Factory
     fun observeSpaceThread(
         bindings: CollaborationSpaceRoomBindingRepository,
+        metadata: CollaborationSpaceConversationMetadataRepository,
         spaces: CollaborationSpaceHistoryRepository,
         originals: CollaborationHistoryRepository,
         spaceMessages: CollaborationSpaceMessageRepository,
@@ -1567,6 +1568,7 @@ class CollaborationDataModule {
     ) =
         ObserveCollaborationSpaceThread(
             bindings,
+            metadata,
             spaces,
             originals,
             spaceMessages,

@@ -144,7 +144,8 @@ class SpaceThreadCommandLifetimeTest {
         records.clear()
         release.complete(Unit)
         val snapshot =
-            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(result.await()).value
+            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(result.await())
+                .value
         assertEquals(
             setOf("previous"),
             assertIs<CollaborationMessageState.Staging>(snapshot.originalCommands.single().state)

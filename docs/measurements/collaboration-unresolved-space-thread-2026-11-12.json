@@ -1,0 +1,86 @@
+{
+  "date": "2026-11-12",
+  "scope": "Unresolved canonical thread and reactive room publication",
+  "baseCommit": "1f47eeddb833054ae2b3d52c20439e6d11518a02",
+  "sourceFiles": 5169,
+  "sourceManifestSha256": "6408e5f86ede8d4ff8753c33c4c0d85380fd96db907ba572632014594c2a263a",
+  "changedSources": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "ae54aefb6ff6355c7f8d2d7a89b287404fa4429a8abbfce87974b7572e58bace",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingPreparationStorageContract.kt": "642ae67e6df24742c122255288c10c6202f2383e5ab7f6985777a8c1aaa68d28",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceThreadSnapshot.kt": "669625bf650a1f05c8488581e9d575cd1ea68092c2bac2c63cdf4473c62d6f5e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceThread.kt": "92cd8c0909d05bad32b85a3da9c69df8d15056fcd70816c7156536c2d0f5c548",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceThreadCommandsTest.kt": "b2f82af5db98608ec26693372497a7f5a401e01fd695ae736a3bbd6c6296ccc4",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceThreadHistoryRoutingTest.kt": "a7d2601aa20863c8586cc5699a5555ba37a950c571e93b5a8f13a2cd7437de1e",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveUnresolvedSpaceThreadTest.kt": "b4cfaa92fd18531e554e218da65aa22536475d30ed93c3693363119465a727e5",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceThreadCommandLifetimeTest.kt": "6f21bb4b695970087559d610311623958a2aaf3d76b73628657efc654c294c0e",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceThreadHistoryFixture.kt": "11790a05111a02b0d8f496745921c812c199b5aa13ad10f8fb8caf934b70a3c7",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceThreadHistorySnapshotTest.kt": "23ad6e03274064f7dac359fe23f29eea182c16a38da58d9dbdaa0dcf19df6c90",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/UnresolvedSpaceThreadLifetimeTest.kt": "f0e1c67ae32bba8233686545b945abf7f093fbbca084343eb2802a843628cb4b"
+  },
+  "focused": {
+    "accepted": true,
+    "tests": 100,
+    "elapsedSeconds": 318.592,
+    "sourceFiles": 5169,
+    "sourceManifestSha256": "6408e5f86ede8d4ff8753c33c4c0d85380fd96db907ba572632014594c2a263a",
+    "resultSha256": "d9763047f4edcebe6d300fd4cad5ecbfaa1d2d5c458725bf55bc58b4e64f82f3",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceRoomBindingStorageTest": 33,
+      "CollaborationSpaceRoomBindingPreparationStorageTest": 11,
+      "CollaborationSpaceHistoryLocationTest": 9,
+      "ObserveSpaceThreadCommandsTest": 6,
+      "ObserveSpaceThreadHistoryAdmissionTest": 8,
+      "ObserveUnresolvedSpaceThreadTest": 7,
+      "SpaceThreadCommandLifetimeTest": 4,
+      "SpaceThreadCommandPolicyTest": 6,
+      "SpaceThreadHistorySnapshotTest": 4,
+      "UnresolvedSpaceThreadLifetimeTest": 4,
+      "ObserveSpaceThreadHistoryRoutingTest": 6
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-12T21:56:25.431881+00:00",
+    "elapsedSeconds": 814.218,
+    "sourceFiles": 5169,
+    "freshCounts": {
+      "tests": 12726,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153468122,
+      "sha256": "b8da3ed626f2aff7991980f6b862a671506997e8aff569175920139c06c610b7"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 14764,
+    "newCases": 26,
+    "freshTests": 12726,
+    "reusedUnaffectedTests": 2038,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 111,
+    "excludedHistoricalCases": 657,
+    "sourceManifestSha256": "6408e5f86ede8d4ff8753c33c4c0d85380fd96db907ba572632014594c2a263a",
+    "reportManifestSha256": "eb11db2da6200bd7085f754e0da1f2a81ec17b49404d5e35845f13ef24f580e1",
+    "nativeClaim": "No changed SDK/proof source; earlier accepted ten native scenarios remain historical evidence. This gate does not claim new native or phone behavior."
+  },
+  "fullAuditSha256": "90e6c3aaa3cbe474db14b6c606617db7e1398b557f83e50c9575240629afcceb",
+  "preservedFailure": {
+    "path": "failed-invalid-access-forwarding-1",
+    "tests": 54,
+    "failures": 1,
+    "elapsedSeconds": 145.168,
+    "sourceManifestSha256": "af23dad3d41224f9db11792cd14094f337c9a51839e2da993eb9c97cfa544d79",
+    "cause": "The final selector performed a directory read after upstream invalid-access validation had failed. The existing invalid-request test rejected this access.",
+    "correction": "Forward the failed result directly; successful binding selection alone enters the guarded content reader. Existing validation, cancellation and content assertions are unchanged."
+  },
+  "newDomainMethods": 11,
+  "newSharedStorageMethods": 2,
+  "nativeSuiteExecutedForThisIncrement": false,
+  "phoneInstalledForThisIncrement": false,
+  "groupLiveDeployment": false,
+  "remaining": "Local thread participant/composer context and organization presentation; absence of a room binding never proves remote history is empty."
+}

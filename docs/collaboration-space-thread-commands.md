@@ -42,7 +42,7 @@ the two failed candidates, source/report digests and complete audit provenance.
 Linux compilation executes no Apple tests.
 
 This bound-room contract performs no API or SDK operation and changes no data format.
-Unresolved room bindings and composer context precede organization chat presentation.
-An absent binding is still unavailable, never proof of empty remote history. Group live
-rollout remains disabled. This increment claims no new phone latency or native Apple
+[Unresolved thread integration](collaboration-unresolved-space-thread.md) now preserves known
+canonical commands before a room appears. Missing bindings never prove empty remote history.
+Participant/composer context and organization presentation remain next; Group live rollout is disabled. This increment claims no new phone latency or native Apple
 SDK behavior.

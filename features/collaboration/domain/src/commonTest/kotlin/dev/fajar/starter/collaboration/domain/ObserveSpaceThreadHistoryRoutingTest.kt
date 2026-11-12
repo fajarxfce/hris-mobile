@@ -16,7 +16,7 @@ class ObserveSpaceThreadHistoryRoutingTest {
         for (legacy in listOf(false, true)) {
             val f = SpaceThreadHistoryFixture(legacy)
             val read =
-                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(
                         f.observe()(f.access, f.id).first()
                     )
                     .value
@@ -97,7 +97,7 @@ class ObserveSpaceThreadHistoryRoutingTest {
         f.facts.value = AppResult.Success(empty)
         assertEquals(
             empty,
-            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(
                     f.observe()(f.access, f.id).first()
                 )
                 .value

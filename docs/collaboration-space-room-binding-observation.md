@@ -25,6 +25,6 @@ or phone behavior is claimed by this increment.
 [Evidence](measurements/collaboration-space-room-binding-observation-2026-11-12.json)
 records exact source/report/proof digests and the preserved failed candidate.
 
-The current thread still uses its one-shot binding read. Typed unresolved history and
-exact local conversation metadata must enter the same domain observation owner before
-product UI integration. Group live rollout remains disabled.
+The [canonical thread](collaboration-unresolved-space-thread.md) now consumes this reactive
+binding inside its existing admission owner, preserving known commands before publication.
+Participant/composer context and product UI remain next. Group live rollout stays disabled.

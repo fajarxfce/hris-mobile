@@ -20,11 +20,170 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 
 abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
+
+    @Test
+    fun knownLocalCommandsFollowOriginalBindingPublicationAndEncryptedReopen() = withDatabase { f ->
+        val conversation = f.conversation()
+        assertEquals(AppResult.Success(true), f.metadata().retain(f.access, conversation))
+        val canonical =
+            CollaborationSpaceMessageIntent(
+                historyId(14171),
+                f.access.messageOwner(),
+                conversation.id,
+                conversation.createdAt,
+                "Before the room is retained",
+            )
+        val position = requireNotNull(f.binding().original).conversation.position
+        val company =
+            CollaborationLocalAccess(
+                f.access.sessionId,
+                f.access.audience,
+                f.access.accountId,
+                position.companyId,
+            )
+        val original =
+            CollaborationMessageIntent(
+                canonical.id,
+                company.messageOwner(),
+                position.conversationId,
+                conversation.createdAt,
+                "Original pending text",
+            )
+        assertEquals(
+            AppResult.Success(CollaborationMessageInsertion.STORED),
+            f.spaceMessages().insert(f.access, canonical),
+        )
+        assertEquals(
+            AppResult.Success(CollaborationMessageInsertion.STORED),
+            f.originalMessages().insert(company, original),
+        )
+        coroutineScope {
+            val values = Channel<AppResult<CollaborationSpaceThreadSnapshot>>(8)
+            val job = launch {
+                f.observeHistory()(f.access, conversation.id).collect { values.send(it) }
+            }
+            try {
+                val unresolved =
+                    assertIs<CollaborationSpaceThreadSnapshot.Unresolved>(
+                        assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                                values.receive()
+                            )
+                            .value
+                    )
+                assertEquals(conversation.localMetadata(), unresolved.conversation)
+                assertEquals(listOf(canonical), unresolved.spaceCommands.map { it.intent })
+                assertEquals(AppResult.Success(true), f.bindings().retain(f.access, f.binding()))
+                val bound =
+                    assertIs<CollaborationSpaceThreadSnapshot.Bound>(
+                        assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                                values.receive()
+                            )
+                            .value
+                    )
+                assertIs<CollaborationSpaceHistoryLocation.Original>(bound.history.location)
+                assertEquals(listOf(canonical), bound.spaceCommands.map { it.intent })
+                assertEquals(listOf(original), bound.originalCommands.map { it.intent })
+                assertEquals(0, f.roomReads)
+                assertEquals(0, f.originalReads)
+            } finally {
+                job.cancelAndJoin()
+                values.close()
+            }
+        }
+        val keys = f.history.keys.read()
+        f.reopen()
+        val restored =
+            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(
+                    f.observeHistory()(f.access, conversation.id).first()
+                )
+                .value
+        assertEquals(listOf(canonical), restored.spaceCommands.map { it.intent })
+        assertEquals(listOf(original), restored.originalCommands.map { it.intent })
+        assertEquals(f.access, restored.history.access)
+        assertEquals(keys, f.history.keys.read())
+    }
+
+    @Test
+    fun aSpaceBindingAppearsAndDisappearsWithoutReopeningOrDroppingCanonicalCommands() =
+        withDatabase { f ->
+            val conversation = f.conversation()
+            assertEquals(AppResult.Success(true), f.metadata().retain(f.access, conversation))
+            val command =
+                CollaborationSpaceMessageIntent(
+                    historyId(14172),
+                    f.access.messageOwner(),
+                    conversation.id,
+                    conversation.createdAt,
+                    "Canonical offline text",
+                )
+            assertEquals(
+                AppResult.Success(CollaborationMessageInsertion.STORED),
+                f.spaceMessages().insert(f.access, command),
+            )
+            val space =
+                f.binding().let {
+                    it.copy(
+                        room =
+                            it.room.copy(
+                                origin = CollaborationSpaceRoomOrigin.SPACE,
+                                original = null,
+                            ),
+                        original = null,
+                    )
+                }
+            coroutineScope {
+                val values = Channel<AppResult<CollaborationSpaceThreadSnapshot>>(8)
+                val job = launch {
+                    f.observeHistory()(f.access, conversation.id).collect { values.send(it) }
+                }
+                try {
+                    val first =
+                        assertIs<CollaborationSpaceThreadSnapshot.Unresolved>(
+                            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                                    values.receive()
+                                )
+                                .value
+                        )
+                    assertEquals(listOf(command), first.spaceCommands.map { it.intent })
+                    assertEquals(AppResult.Success(true), f.bindings().retain(f.access, space))
+                    val bound =
+                        assertIs<CollaborationSpaceThreadSnapshot.Bound>(
+                            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                                    values.receive()
+                                )
+                                .value
+                        )
+                    assertIs<CollaborationSpaceHistoryLocation.Space>(bound.history.location)
+                    assertEquals(listOf(command), bound.spaceCommands.map { it.intent })
+                    assertTrue(bound.originalCommands.isEmpty())
+                    assertTrue(
+                        f.history.database.replicas.clear(
+                            spaceRoomBindingScope(f.access),
+                            spaceRoomBindingPartition(f.access),
+                        )
+                    )
+                    val published =
+                        assertIs<CollaborationSpaceThreadSnapshot.Unresolved>(
+                            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                                    values.receive()
+                                )
+                                .value
+                        )
+                    assertEquals(first, published)
+                    assertEquals(0, f.roomReads)
+                    assertEquals(0, f.originalReads)
+                } finally {
+                    job.cancelAndJoin()
+                    values.close()
+                }
+            }
+        }
 
     @Test
     fun canonicalThreadReopensBothEncryptedCommandNamespacesWithoutMovingTheirOriginals() =
@@ -64,7 +223,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                 f.originalMessages().insert(company, original),
             )
             val before =
-                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(
                         f.observeHistory()(f.access, f.conversation().id).first()
                     )
                     .value
@@ -73,7 +232,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
             val keys = f.history.keys.read()
             f.reopen()
             val after =
-                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(
                         f.observeHistory()(f.access, f.conversation().id).first()
                     )
                     .value
@@ -167,7 +326,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
             )
             f.reopen()
             val snapshot =
-                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(
                         f.observeHistory()(f.access, f.conversation().id).first()
                     )
                     .value
@@ -218,7 +377,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                     ),
             )
             val before =
-                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(
                         f.observeHistory()(f.access, f.conversation().id).first()
                     )
                     .value
@@ -235,7 +394,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
             val key = f.history.keys.read()
             f.reopen()
             val after =
-                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(
                         f.observeHistory()(f.access, f.conversation().id).first()
                     )
                     .value
@@ -299,7 +458,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                 ),
         )
         val before =
-            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(
                     f.observeHistory()(f.access, f.conversation().id).first()
                 )
                 .value
@@ -312,7 +471,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
         val key = f.history.keys.read()
         f.reopen()
         val after =
-            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(
                     f.observeHistory()(f.access, f.conversation().id).first()
                 )
                 .value
@@ -345,7 +504,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                 ),
             )
             val before =
-                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(
                         f.observeHistory()(f.access, f.conversation().id).first()
                     )
                     .value
@@ -371,7 +530,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
             assertEquals(AppResult.Success(true), f.directory().admit(f.access, admission.revision))
             assertEquals(
                 before.page,
-                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot.Bound>>(
                         f.observeHistory()(f.access, f.conversation().id).first()
                     )
                     .value
@@ -792,6 +951,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
         fun observeHistory() =
             ObserveCollaborationSpaceThread(
                 bindings(),
+                metadata(),
                 spaceHistory(),
                 history.repository,
                 spaceMessages(),
