@@ -27,9 +27,11 @@ it cannot complete a whole-account pass or a newer request. Local lifetime is fi
 credential expiry does not hide owned local work. No new SDK/primary/global I/O, timer or collector.
 
 prepare/configure HAVE EXECUTED; never rerun old configure over the focused-coverage refinement.
-Publish and this accepted writer HAVE EXECUTED. Commit/push source and both handoffs, then dispatch
-ONCE using this workspace's guarded dispatch-hosted.py. Expected 16,028 = 11,400 portable + 4,628 Apple.
-If a dispatch-attempt file already exists, inspect it and hosted-plan.json instead of repeating it.
+Publish and accepted writer HAVE EXECUTED. Mobile e6f3aa05/source push40445 REAPED;
+Group00e0e8aa/push39003 REAPED. Hosted43133923106 dispatched ONCE by60493 REAPED on
+2026-11-12T01:21:11UTC; ref validation/original-key-reference-completion-20261111.
+Expected16,028=11,400portable+4,628Apple. IN PROGRESS, not audited. hosted-plan.json and
+hosted-43133923106/state.json have exact source/run; never redispatch.
 
 ## Next Space implementation
 
