@@ -1,0 +1,101 @@
+{
+  "recordedAt": "2026-11-12T04:03:17.623810+00:00",
+  "sourceBaseline": "d78fd99b2403364a40d20d41463d71451b8e70eb",
+  "sourceFiles": 5085,
+  "changedSourceFiles": 5,
+  "sourceManifestSha256": "feffb13055f3d60271f51501d56ba4dbdb29d77c2bb1558ad8d71d6e6305d79a",
+  "focused": {
+    "tests": 380,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused-3",
+  "focusedBrowserRun": "browser-1",
+  "full": {
+    "validated": 13862,
+    "fresh": {
+      "tests": 11824,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 589.219,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152186173,
+    "sha256": "cb836eeae13881992414d1325e7ee565741ddbac6fa3ac68dbcfc4bcaee3b3ec"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "historyRecoveryVisitPoliciesAccepted": true,
+  "spacePrimaryKeyWaitTransferAccepted": true,
+  "newCommonCasesPerTarget": 26,
+  "admittedSpaceOperationCases": 26,
+  "publishedLogicalCoordinatesPreserved": true,
+  "originalPhysicalAliasDoesNotRedirectHistory": true,
+  "currentGroupTraversalDeviceRequired": true,
+  "currentOriginalCompanyAndDeviceProviderRequired": true,
+  "immutableBindingPinnedAcrossReads": true,
+  "currentAccountSourceAndRegistrationRequired": true,
+  "providerEofAndFinitePendingSeekRequired": true,
+  "actualUnresolvedReferenceAndOptionalHeadRequired": true,
+  "primaryRemovalRecoveryAndWakeInOneCas": true,
+  "sharedExactWriteConfirmation": true,
+  "obsoleteCaptureCreatesNoPass": true,
+  "full64RoomQueueCovered": true,
+  "spaceDiFactoryExplicitlyResolved": true,
+  "localLifetimeSeconds": 5,
+  "internalWriteRetries": false,
+  "globalCoverageProof": false,
+  "workerActivation": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "nativeSdkExecution": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "starterPortRequired": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [
+    {
+      "run": "focused-1",
+      "exitCode": 1,
+      "elapsedSeconds": 142.829,
+      "freshCounts": {
+        "tests": 98,
+        "failures": 26,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "run": "focused-2",
+      "exitCode": 1,
+      "elapsedSeconds": 117.492,
+      "freshCounts": {
+        "tests": 98,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "failureReviews": {
+    "focused-1": {
+      "cause": "The reused key-reference reader fixture deliberately clears primary demand and leaves the earlier Latest capture. The Space demotion fixture incorrectly required that cleared snapshot instead of explicitly constructing its own Pending task and retained source progress. All 26 cases failed during fixture construction, before the operation ran.",
+      "correction": "Construct a valid Pending Published demand with next position and source provenance in this fixture; keep the historical reader fixture and production constraints unchanged. Assert initial demand validity.",
+      "preservedCandidate": "failed-focused-candidate-1",
+      "testsRemoved": false,
+      "productionRelaxed": false
+    },
+    "focused-2": {
+      "cause": "The alias coexistence test gave two independent Original and Published tasks the same generation; the existing queue validator correctly rejects duplicate task generations. 25 of 26 operation cases passed; this alias setup was invalid.",
+      "correction": "Give the additional Original task its own generation, and assert both the alias binding and combined demand are valid before testing logical isolation.",
+      "preservedCandidate": "failed-focused-candidate-2",
+      "testsRemoved": false,
+      "productionRelaxed": false
+    }
+  }
+}

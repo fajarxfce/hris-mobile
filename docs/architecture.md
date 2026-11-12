@@ -1,5 +1,7 @@
 # Architecture
 
+[Space primary key-wait transfer](collaboration-space-primary-key-wait-transfer.md) preserves Published history and physical provider identity while moving unresolved work atomically into recovery.
+
 [Original key-wait transfer](collaboration-incoming-key-wait-transfer.md) verifies published unresolved history before atomic primary removal and a fresh recovery request with its wake.
 
 [Bounded account recovery selection](collaboration-account-history-recovery-turn-read.md) captures one admitted metadata row under the current registered source and an unchanged recovery turn.

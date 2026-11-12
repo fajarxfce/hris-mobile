@@ -1,123 +1,90 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 03:27 UTC.
+Updated 12 November 2026, 04:03 UTC.
 Complete PRD, per-commit pushes and validated phone updates remain authorized. All54 groups OPEN.
-Continue working. No subagents. One compiler OR emulator. Follow AGENTS.md and clean layers.
+Continue working. No subagents. Follow AGENTS.md/architecture. One compiler OR emulator.
 
-## Active Published Space transfer — full validation
+## Published Space primary transfer accepted
 
-Workspace .work/space-primary-key-wait-transfer-2026-11-12; baselined78fd99b (accepted15a418f7).
-Five source files APPLIED, 5,085inputs/feffb13055f3d60271f51501d56ba4dbdb29d77c2bb1558ad8d71d6e6305d79a.
-Focused3/24163 REAPED PASS191cases/399.504s; browser1/77451 REAPED PASS189cases/155.913s.
-Focused acceptance380cases confirms exact manifests and oldcaseIDs. Full1/93405 RUNNING,
-expected13,862; only compiler active. Preparation HAS EXECUTED, accepted publisher/writer have NOT.
-Failed candidates1/2 archived before fixes: 26construction failures from a reader-cleared primary
-snapshot, then one alias-test duplicate task generation. Corrected fixture ownership and unique
-alias generation; production constraints unchanged. Format3/17851 REAPED35.394s.
+Workspace .work/space-primary-key-wait-transfer-2026-11-12; baselined78fd99b2403364a40d20d41463d71451b8e70eb.
+Five files: new Space operation/fixture/26common cases and existing DI/graph changes.
+5,085 inputs/feffb13055f3d60271f51501d56ba4dbdb29d77c2bb1558ad8d71d6e6305d79a. Fullfull-1/93405 REAPED PASS
+589.219s, audit80907 REAPED. 13,862=11824fresh+
+2038verified unchanged. Focused191JVM+189browser=380, allpriorIDs retained.
+ProofAPK152186173B/cb836eeae13881992414d1325e7ee565741ddbac6fa3ac68dbcfc4bcaee3b3ec; no phone/native execution.
+Exact failed attempts and audits are in the checked-in measurement.
 
-Published logical Space coordinates and current Group traversal device remain separate from the
-Original physical provider company/device. Metadata/source/registration, finite provider EOF,
-pending seek, unresolved source and exact write/readback precede atomic primary removal+fresh
-recovery+wake. Both demotion owners remain UNINVOKED; no worker/producer activation.
+DemoteCollaborationSpaceIncomingRoom keeps Published Space coordinates and Group traversal device,
+including physical Original aliases. It pins immutable binding and current registered Original
+source, and requires the checkpoint provider to identify the current physical Company/device.
+One pending reference proves unresolved content only after provider EOF and finite seek completion;
+the optional requested head and final progress must match. One demand CAS stores primary removal,
+fresh/coalesced recovery and wake. Shared confirmation preserves concurrent work and rejects false,
+fabricated or unconfirmed replies. Obsolete captures create no extra pass. Both DI factories resolve.
+This operation and the prior Original owner remain UNINVOKED by the worker; no producer activation.
 
-Next private draft next-global-turn-draft now contains10reviewed UNAPPLIED/UNCOMPILED files:
-Complete/DeferCollaborationSpaceHistoryRecoveryTurn, typed attempt, exact write confirmation,
-shared fixture/58new cases (33completion,13deferral,12confirmation), existing DI/graph changes.
-It rechecks metadata/actual historical coordinates, source/root/registration, bounded one-row
-coverage and existing progress without generation-requesting readers. Complete/waiting/older passes
-remain distinct; operational deferral uses the existing bounded retry policy. One CAS and exact
-readback preserve primary/new requests. No automatic write retry or new global pass. Draft/source
-hashes and guards are in next-global-turn-state.json. prepare-global-turn.py and its publisher/
-handoff scripts are PREPARED, NOT EXECUTED. Baseline next scope only after current full acceptance,
-source/evidence push and ONE hosted dispatch. Expectednext13,978local/16,862hosted.
+Publisher/writer HAVE EXECUTED. Commit/push source/evidence, then guarded dispatch-hosted.py ONCE.
+Expected16,688=11,840portable+4,848Apple. Inspect any dispatch-attempt before retrying.
 
-Continue worker integration after global operations: eligible/deferred selection must cause adoption
-and scheduled continuation. Current worker ignores history and Finish refusal can cause immediate
-resume loops. Reserve history service before long primary work, keep completed waiting asleep and
-preserve post-publication producer/restore causality. Native key callback receipt/lifetime and64-room
-fairness remain outstanding. No producer activation until the complete path is serviced.
+## Prepared next operations and integration draft
 
-Phone connect59195 REAPED at2026-11-12T03:51:12.853750+00:00,20.020311s timeout. No install;
-next attempt no earlier04:24:13UTC. Release89 remains validated and install-only. No phone UI.
+next-global-turn-draft contains10reviewed UNAPPLIED/UNCOMPILED files and58new common cases:
+completion33,deferral13,writeconfirmation12. Two operation factories and graph resolutions are
+included. next-global-turn-state.json freezes reviewed source hashes and existing-file guards.
+prepare-global-turn.py plus publisher/writer are prepared, NOT EXECUTED. Apply only after this
+accepted source/evidence push and one hosted dispatch. Expectednext13,978local/16,862hosted.
 
-## Reader hosted validation accepted
+next-worker-draft contains three existing selection files/eight new cases plus an unreviewed
+application service and DI module. It has NO service tests, app module registration, worker calls,
+primary demotion integration or complete dependency guards. Nothing is applied. Read
+next-worker-integration-review.md. Do not treat the draft as ready for compilation or activation.
 
-Run43143623927/source0505c536 is fully accepted:16,406=11,652portable+4,754Apple. Appleaudit44054
-REAPED, artifact13914001319/766956B/b6880d19a9bb10151ca5ce01a205ef11679c6ea6c4a7e4012087a897109cb764;
-report793397ebcb6f6b1890beb7f0404e62dc9543e76f4b268b660e4a5bbf7a908e6b,
-logd373b8e6e58cfabb963cc4c07169671c73ff2e85a752972ddafb0e59f06e147a. OldcaseIDs retained,
-16Swift push checks and unsigned iOS host passed. Native Apple SDK8 remains unexecuted. No redispatch.
+Phone59195 REAPED:03:51:12.853750UTC/20.020311s timeout. No installation; next attempt no earlier
+04:24:13UTC. Release89 remains ready and install-only. No phone UI/reset/uninstall.
 
-## Original primary transfer and finite visit policies accepted
+## Next: admitted global advancement and complete worker service
 
-Workspace .work/incoming-key-wait-transfer-2026-11-12; baseline7a47d456bc642aebbd937f46c2caf128f339aa6a with accepted
-reader sources0505c536. Twelve files: ten new domain files plus existing DI and graph coverage.
-5,082 inputs/6381702b3d1e979b12d360ade21cbdc46b13bc6f05547c6f442ab994a8cf855f. 68new common cases: visit20,demotion9,Originaloperation27,
-writeconfirmation12. Fullfull-1/59452 REAPED PASS575.233s;
-audit32018 REAPED. 13,810=11772fresh+
-2038verified unchanged. Focused306JVM+304browser=610, allpriorIDs preserved.
-ProofAPK152180224B/0a50dbf30b530e9da59183661443865b92a463dd766189fbcdadfbafc78a9fe3; no phone/native execution.
-Failed candidates preserved: policy-focused-1. The measurement records exact failure reviews.
+Read .work/incoming-key-wait-transfer-2026-11-12/next-application-history-service-review.md. Current
+worker process() adopts only for primary/inventory work; continueOrFinish ignores history and
+immediately resumes when Finish refuses an active record. Producers MUST remain disabled until
+eligible/deferred history selection, runtime adoption, service and continuation all handle it.
+Reserve one bounded history visit alongside inventory before primary work exhausts90s. Completed
+unresolved history sleeps until a real new key/source/restore request; no recurring account scan.
 
-DemoteCollaborationSpaceOriginalIncomingRoom verifies current Company/source/registered physical
-device, metadata, provider EOF, finished finite seek, actual unresolved references and requested-head
-coverage. It then allocates one fresh request and commits primary removal+recovery+wake in one CAS.
-Success snapshots are copied before suspension. Lost storage replies need the unique retained
-request; false, malformed, fabricated and unconfirmed replies cannot complete the transfer. Replays
-after an absent/replaced capture create no extra generation. Clean primary completion stays separate.
-The DI graph resolves the new factory. It is NOT called by the worker yet.
+Global completion must inspect existing progress, not call generation-requesting key readers as
+neutral readback. Preserve original read plus exact page receipt: same-generation EOF survives
+promotion, another pass's EOF does not complete the requested pass. Validate actual metadata
+coordinates/coverage, root/source/registration and current recovery revision, then one CAS/readback
+preserving concurrent primary/new-generation demand. Typed unavailable metadata/source retains
+waiting; generic failures cannot become completion. Add operational deferral and cancellation tests.
 
-Shared finite-visit policy inspects existing progress without re-requesting old opaque generations.
-Same-generation EOF survives later promotion; another pass's EOF does not finish the requested pass.
-Company absent provider and Space explicit provider identities stay distinct. The replacement policy
-preserves unrelated lanes, active cursor/retry and alias identity, including a full64-room queue.
+Both primary owners read published checkpoints before requesting recovery, but this is causal
+ordering, not a history/demand cross-store transaction. The existing worker must serialize provider
+writes and transfer. Equal account pages have no inventory version and cannot prove a whole-account
+snapshot. Source/backup restore must request after publication too. Test key-before-metadata,
+insertions before/after EOF, concurrent resolution and reply loss across the actual producers.
+Connect primary demotion only once this global service exists. Normal key callbacks should target
+known rooms; account scans are fallback for loss/overflow/unknown mapping or source/backup restore.
 
-The preliminary policy-only gate passed448cases and was folded into this operation BEFORE a separate
-full gate, commit or CI dispatch. Its old publishers/standalone preparation MUST NOT run. Archive
-policy-focused-1 retains102tests/2fixture failures: the established opaque UUID contract permits zero,
-and Original alias work requires source provenance. Corrected tests retain production constraints.
+Native listeners require copied bounded room IDs/loss and durable occurrence receipts; equal lists
+can be different events. No distinctUntilChanged or loss-unaware drop. Permanent listener ownership
+stays outside eight transient native children; cancel and isFinished drain before store close,
+including late acquisition. Complete communications PRD; all54groups remain OPEN.
 
-Source15a418f744cc28149486b168e6a93fb8734285d5 and Group4273bf60 pushed. Hosted43148447666 dispatched ONCE
-with session68637 REAPED at2026-11-12T03:28:29.149947+00:00. Expected16,610=11,788portable+4,822Apple;
-artifacts not yet accepted. Workspace hosted-43148447666; do not redispatch.
+## Earlier validation
 
-## Next: Space transfer, global service and loss-aware key producer
-
-The next-space-transfer-draft/state in this workspace contains five reviewed but UNAPPLIED/UNCOMPILED
-files and26drafted common cases. Preparation has now executed into the active workspace above;
-do not run it again. Its publisher and accepted handoff writer remain unexecuted.
-Read next-global-completion-operation-review.md for the later operation shape.
-
-Implement the corresponding admitted Space primary transfer while preserving Published logical
-coordinates, physical Original provenance and distinct aliases. Then complete/defer a captured
-account history turn and integrate service into the existing serialized incoming worker. A local
-page receipt is not a global completion receipt. Use a nonmutating progress inspection, exact metadata
-page/root/source/registration and current recovery revision, preserving concurrent primary updates
-and a later requested generation. Unknown storage replies need exact readback, never blind retries.
-
-The traversal codec accepts only published checkpoints, so successful progress reads establish
-metadata-before-demotion. This is causal ordering, not a cross-store transaction. The worker must
-serialize provider writes and transfer. Equal account locator pages have no inventory revision and
-cannot prove a whole-account snapshot. Every unresolved primary/restore producer must request after
-metadata publication; test key-before-metadata, insertions before/after EOF, concurrent resolution
-and CAS loss before activation. Prefer targeted known-room key recovery; account scans are fallback
-for loss/overflow/unknown mapping or source/backup restoration.
-
-Normal equal-room callback lists can represent different occurrences. Retain IDs/loss before their
-acknowledgement. No distinctUntilChanged or loss-unaware SharedFlow drop. Permanent native listeners
-need explicit ownership outside eight transient children, cancellation and isFinished drain before
-store close, including late acquisition. Do not activate producers before worker service handles
-historyRecovery: current Finish refuses active records. Complete all remaining communications PRD.
-
-## Earlier accepted chain
-
-Reader0505c536 accepted13,674local/314focused; hosted43143623927. Sourceavailability20957650 accepted
-13,626/314; hosted43139532066. Space82e9def3 hosted43136996756 fullyaccepted16,292. Originalcompletion
+Combined Original transfer/visit policies accepted13,810local/610focused with68new common cases;
+source15a418f7 hosted43148447666 portableaccepted11,788 (audit83262 REAPED); Applepending.
+Its measurement preserves artifact/report/log hashes and the preliminary policy fixture errors.
+The standalone policy-only full gate/publishers were superseded before dispatch; never run them.
+Reader0505c536 accepted13,674/314; hosted43143623927 fullyaccepted16,406
+(11,652portable+4,754Apple), Appleaudit44054 REAPED; hashes are in its measurement. Sourceavailability20957650 hosted43139532066
+fullyaccepted16,334. Spaceprojection82e9def3 hosted43136996756 fullyaccepted16,292. Originalcompletion
 e6f3aa05 hosted43133923106 fullyaccepted16,028. Localcontente4650f88 hosted43126523314 fullyaccepted
-15,932. Measurements hold exact current audits, preserved failures and hashes. AccountCI startup
-failure and older OriginalApp missing30case run remain unaccepted. Shared Apple tests and unsigned
-application host do not establish native MatrixSDK8 Apple runtime. Starterbadfc0d accepted906fresh,
-all358priorIDs and44browser modules; no generic port for this domain-only scope.
+15,932. Consult measurements for current audit state and all ZIP/report/log hashes. Account startup
+failure and older OriginalApp missing30case run stay unaccepted. Native MatrixSDK8 Apple runtime
+remains unproved by shared iOS tests/unsigned host. Starterbadfc0d accepted906fresh/all358priorIDs;
+no generic Starter port for these domain-only operations.
 
 ## Device and protected state
 

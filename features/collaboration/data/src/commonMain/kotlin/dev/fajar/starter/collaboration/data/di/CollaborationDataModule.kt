@@ -1204,6 +1204,30 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun demoteSpaceIncomingRoom(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        bindings: CollaborationSpaceRoomBindingRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        history: CollaborationSpaceHistoryTraversalRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        sync: CollaborationSpaceSyncRepository,
+    ) =
+        DemoteCollaborationSpaceIncomingRoom(
+            demands,
+            bindings,
+            registrations,
+            history,
+            directory,
+            sessions,
+            server,
+            build,
+            sync,
+        )
+
+    @Factory
     fun completeSpaceOriginalIncomingReferences(
         demands: CollaborationSpaceIncomingDemandRepository,
         metadata: CollaborationSpaceOriginalRoomMetadataRepository,
