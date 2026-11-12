@@ -21,6 +21,7 @@ internal class HrisSpaceRecoveryProofHost(
     private val koin: Koin,
     private val seed: HrisSpaceRecoverySeed,
     private val scheduled: () -> List<String>,
+    private val collectIncoming: suspend (StateFlow<ApplicationCollaborationState>) -> Unit = {},
 ) {
     private val lifetime = SupervisorJob()
     private val scope = CoroutineScope(lifetime + Dispatchers.Default)
@@ -44,6 +45,7 @@ internal class HrisSpaceRecoveryProofHost(
                             get(),
                             get(),
                             get(),
+                            collectSpaceIncoming = collectIncoming,
                             observePush = { emptyFlow() },
                             activate = { emptyFlow() },
                             observeSpaceReadiness = { readiness.value.observe() },

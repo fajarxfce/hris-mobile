@@ -176,6 +176,10 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
     }
 
     private suspend fun adopted() {
+        if (files.fixture.optBoolean("incomingSources", false)) {
+            adoptedWithSources()
+            return
+        }
         if (files.fixture.optBoolean("incomingWorker", false)) {
             adoptedWithWorker()
             return
@@ -214,6 +218,55 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                     primary,
                     listOf({ lease?.close()?.let { expect(it) } }, { app.close() }),
                 )
+            }
+        files.write("original-events", result.put("runtimeReleased", true))
+    }
+
+    private suspend fun adoptedWithSources() {
+        val staged = files.read("original-staged", 16_384)
+        val ready = files.read("original-ready", 16_384)
+        val group = files.read("original-group", 16_384)
+        val app =
+            HrisWorkerProofContainer(
+                context,
+                sender.currentOwner,
+                files.conversationId,
+                files.fixture.getJSONObject("sender").getString("hrisAccessToken"),
+                sender.repository,
+                http,
+            )
+        val sources = app.incomingSources()
+        var parent: HrisSpaceRecoveryProofHost? = null
+        var primary: Exception? = null
+        val result =
+            try {
+                app.activate()
+                val seed = app.spaceRecoverySeed(sender, ready, group)
+                seed.prepare()
+                parent = app.spaceRecovery(seed, sources)
+                parent.start()
+                val retained = sources.verifyInitial(seed)
+                val runtime =
+                    CollaborationSpaceRuntimeReady(
+                        seed.owner,
+                        group.getString("deviceId"),
+                        seed.operationId,
+                    )
+                val captured =
+                    captureAdopted(runtime, staged)
+                        .put("incoming", retainIncoming(app, runtime, group, staged))
+                parent.close()
+                parent = null
+                val stopped = sources.verifyStopped(seed.owner)
+                retained.put("processCollectorJoined", stopped.getBoolean("processCollectorJoined"))
+                retained.put("receiptSurvivesStop", stopped.getBoolean("receiptSurvivesStop"))
+                captured.put("incomingSources", retained)
+            } catch (failure: Exception) {
+                primary = failure
+                throw failure
+            } finally {
+                sources.release()
+                closeHrisProofResources(primary, listOf({ parent?.close() }, { app.close() }))
             }
         files.write("original-events", result.put("runtimeReleased", true))
     }
@@ -529,6 +582,19 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                     .put("incoming", stored)
                     .put("sameRevision", true)
                     .put("runtimeNeverOpened", true)
+                    .also { result ->
+                        if (files.fixture.optBoolean("incomingSources", false)) {
+                            val receipt = requireNotNull(app.incomingReceipt(owner))
+                            val digest = HrisSpaceIncomingSourcesProofHost.digest(receipt.receiptId)
+                            check(
+                                digest ==
+                                    adopted
+                                        .getJSONObject("incomingSources")
+                                        .getString("receiptDigest")
+                            )
+                            result.put("incomingReceiptDigest", digest)
+                        }
+                    }
             } catch (failure: Exception) {
                 primary = failure
                 throw failure

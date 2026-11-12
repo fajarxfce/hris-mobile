@@ -205,8 +205,27 @@ internal class HrisWorkerProofContainer(
         group: JSONObject,
     ) = HrisSpaceRecoverySeed(container.koin, original, previous, group)
 
-    fun spaceRecovery(seed: HrisSpaceRecoverySeed) =
-        HrisSpaceRecoveryProofHost(container.koin, seed) { scheduledKeys }
+    fun incomingSources() = HrisSpaceIncomingSourcesProofHost(container.koin)
+
+    suspend fun incomingReceipt(owner: CollaborationSpaceOwner) =
+        expect(
+                container.koin
+                    .get<CollaborationSpaceIncomingDemandRepository>()
+                    .current(owner.localDirectoryAccess())
+            )
+            ?.demand
+            ?.roomKeyReceipt
+
+    fun spaceRecovery(
+        seed: HrisSpaceRecoverySeed,
+        sources: HrisSpaceIncomingSourcesProofHost? = null,
+    ) =
+        HrisSpaceRecoveryProofHost(
+            container.koin,
+            seed,
+            scheduled = { scheduledKeys },
+            collectIncoming = { states -> sources?.collect(states) },
+        )
 
     suspend fun activate() {
         database.accounts.activate(

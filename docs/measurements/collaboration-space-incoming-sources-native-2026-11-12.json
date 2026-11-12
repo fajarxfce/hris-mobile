@@ -1,0 +1,132 @@
+{
+  "at": "2026-11-12T09:37:55.571375+00:00",
+  "acceptedControls": true,
+  "fullWorkerSuiteAccepted": false,
+  "reason": "Old worker fixture source collection absent, confirmed separately; progressive Company content and revised worker fixture remain open",
+  "tests": 6,
+  "counts": {
+    "tests": 6,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "startedAt": "2026-11-12T09:29:16.009587+00:00",
+  "elapsedSeconds": 274.319,
+  "bootSeconds": 28.447,
+  "memoryMiB": 2560,
+  "cores": 2,
+  "phoneTouched": false,
+  "emulatorStopped": true,
+  "noCompilationDuringEmulator": true,
+  "apkSha256": "49ecb109dcf7c757b59346d7b0098d1377a332eddc4859461e754c062078f59f",
+  "sdk": "26.10.23-hris.8",
+  "nativeLibrarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+  "mobileSourceManifestSha256": "fea5595ef756b068b904acab92dcf5f97b1fd9dc4c655a9897c6810456a1a5ef",
+  "groupSourceManifestSha256": "9c7f3daf294f682182c1a3cda168069ca39e477b936754c867e1ba2b93d95f36",
+  "resultSha256": "f870df7bfafd48703e3904ef22edc7e9c01ef8eaf5b26de402af3aed9b7813d2",
+  "reportHashes": {
+    "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": "f7f435835b730580dc5084224fde360135a8b03874619459ab318f936ed11abf",
+    "TEST-dev.fajar.hris.NativeEventReadsTest.xml": "479a7f08da2e9530397993e56bad54918d0d4a2d0fdab7a578d2c313bb86a84a"
+  },
+  "cases": [
+    "dev.fajar.hris.NativeEventReadsTest.completedIncomingReferencesRemainExhaustedAcrossOfflineReopen()",
+    "dev.fajar.hris.NativeEventReadsTest.exactEncryptedEventsSurviveOriginalRuntimeAdoptionWithoutPresentationRelabeling()",
+    "dev.fajar.hris.NativeEventReadsTest.nativeIncomingHintsPreserveExactSyncPositionsAndObserveStoredKeys()",
+    "dev.fajar.hris.NativeEventReadsTest.nativeIncomingReceiptSurvivesLostReplyForegroundAndOfflineReopen()",
+    "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.newSpaceOriginalSharesTheQueueWithoutChangingCompanyOwnershipAfterProcessDeath()",
+    "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.originalQueueSurvivesLostProjectionAndOfflineRecipientWithoutReplacement()"
+  ],
+  "fixtureEvidenceSha256": [
+    "8204ea11cbe557bf0a1447ef16a11abe220446ebd1e9e94c1526616f570ae863",
+    "a430867487c2108fac5a5c5a6c43a5fa9ef455cfae02de6db5209a95e344c947",
+    "3493fe12ac0550d6a88bd38600aa89c19e3871f4de27c3fddd45fa46033bc9fe",
+    "77bd44e8b70c588c317a3fb1c181e584a523c86a6f71f10204e438b002596d9b",
+    "06fe2eff2d6c99672364646a92cffd667be6827471a194d8994c6a44c81d4e21",
+    "5b2b0ca150f23b9ebae48792bfee9940f4f3eac683a39573e29db4ec8a05a402"
+  ],
+  "requests": [
+    {
+      "kind": "event-history",
+      "matrix": {
+        "requests": 32,
+        "encryptedSend": 4,
+        "sync": 3,
+        "secretStorage": 2,
+        "providerPage": 2
+      },
+      "native": {
+        "requests": 9,
+        "bootstrapReplay": 1,
+        "directTransport": 4
+      }
+    },
+    {
+      "kind": "event-history",
+      "matrix": {
+        "requests": 32,
+        "encryptedSend": 4,
+        "sync": 3,
+        "secretStorage": 2,
+        "providerPage": 2
+      },
+      "native": {
+        "requests": 9,
+        "bootstrapReplay": 1,
+        "directTransport": 4
+      }
+    },
+    {
+      "kind": "event-history",
+      "matrix": {
+        "requests": 32,
+        "encryptedSend": 4,
+        "sync": 3,
+        "secretStorage": 2,
+        "providerPage": 2
+      },
+      "native": {
+        "requests": 10,
+        "bootstrapReplay": 1,
+        "directTransport": 5
+      }
+    },
+    {
+      "kind": "receipt",
+      "matrix": {
+        "requests": 32,
+        "encryptedSend": 4,
+        "sync": 3,
+        "secretStorage": 2,
+        "providerPage": 2
+      },
+      "native": {
+        "requests": 13,
+        "registration": 1,
+        "bootstrapReplay": 1,
+        "directTransport": 4
+      }
+    },
+    {
+      "kind": "original-delivery",
+      "providerEvents": 3,
+      "native": {
+        "requests": 11,
+        "bootstrapReplay": 2,
+        "directTransport": 3
+      }
+    },
+    {
+      "kind": "original-delivery",
+      "providerEvents": 2,
+      "native": {
+        "requests": 10,
+        "bootstrapReplay": 2,
+        "directTransport": 2
+      }
+    }
+  ],
+  "receiptWrites": 1,
+  "nativeAcknowledgements": 1,
+  "foregroundResumes": 2,
+  "offlineReceiptPreserved": true
+}
