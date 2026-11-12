@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-12",
+  "scope": "Indexed local organization contact observation",
+  "baseCommit": "a74526b76548e124c203f210b67470f1458299f4",
+  "sourceFiles": 5170,
+  "sourceManifestSha256": "f8d98e8c02c95f72070ec6b5bb02b684428181781ca5d62fe075444d4351f792",
+  "changedSources": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/SpaceRecoveryLocalStorageFixture.kt": "33ffe9e8e1c0d420bd27953aaf44785360361c2f68639cea879d74915a5b113e",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceDirectoryRepository.kt": "540918b0c0e231e6b614593226ec294c3c1db17ae5fb09e576863d108934ffe3",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/SpaceDirectoryStorageContract.kt": "8ffa43594639a912ec46d383ab7012ca490e09234df8c2cf8dadd179723cda48",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleSpaceDirectoryStorageTest.kt": "e7248266f0226fdeef19d0ed67fa174c50c899de3835fcdd15a716144f7dab4e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceDirectoryRepository.kt": "c48963136820dc6a1856c52a418c14ba9f55a824491d4c951f85b97fb557cf02",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceDirectoryUseCaseFixture.kt": "e3d95bf6dc6e77fcfb0a8a0f988b4ac1af13d4117333435efae9b48c1939af13",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRecoveryLocalStorageFixture.kt": "5564f8f06804690a247aff3ea792d2907f70a8d1148ebb8ecc348194fed791ea"
+  },
+  "focused": {
+    "accepted": true,
+    "tests": 27,
+    "elapsedSeconds": 233.574,
+    "sourceFiles": 5170,
+    "sourceManifestSha256": "f8d98e8c02c95f72070ec6b5bb02b684428181781ca5d62fe075444d4351f792",
+    "resultSha256": "ad443a8c17e30cdd55cc950c87573722ca67629004a61e57b4c16b7799cbfd6b",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "SpaceDirectoryAdmissionStorageTest": 8,
+      "SpaceDirectoryStorageTest": 17
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-12T22:22:32.667270+00:00",
+    "elapsedSeconds": 851.602,
+    "sourceFiles": 5170,
+    "freshCounts": {
+      "tests": 12742,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152453400,
+      "sha256": "baa8d26ced35a470468b1305911d0ab0a67dd64ccdf2e33fb36a714424c3b8e4"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 14780,
+    "newCases": 16,
+    "freshTests": 12742,
+    "reusedUnaffectedTests": 2038,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 111,
+    "excludedHistoricalCases": 657,
+    "sourceManifestSha256": "f8d98e8c02c95f72070ec6b5bb02b684428181781ca5d62fe075444d4351f792",
+    "reportManifestSha256": "cfc6224f22abe54446036d4286fe594bbdf77581ee61055acd52c28088eb89a8",
+    "nativeClaim": "No changed SDK/proof source; earlier accepted ten native scenarios remain historical evidence. This gate does not claim new native or phone behavior."
+  },
+  "fullAuditSha256": "5b43a9dd88c7767400c61187c807e8f1e9391c4d7ca6a956f785b636288891d3",
+  "preservedFailure": {
+    "path": "failed-virtual-clock-1",
+    "tests": 25,
+    "failures": 1,
+    "elapsedSeconds": 175.034,
+    "sourceManifestSha256": "a01d8fb88d26cfe299f59ea7af2b2564b08eea6ce88438719bfa5d8f139a36a5",
+    "cause": "The first selected-contact observation timed out after5000 virtual milliseconds in0.022 wall seconds while actual I/O ran on Default.",
+    "correction": "Run the actual-storage scenario on Default so its unchanged5000ms deadlines measure real time. All assertions and production code remain unchanged."
+  },
+  "preservedLaunchFailure": "format-1/launch-failure.json; no compiler started before missing manifest was captured",
+  "newSharedStorageMethods": 8,
+  "appleDirectoryMethodsPrepared": 17,
+  "appleAdmissionMethodsPrepared": 8,
+  "appleTestCompilationRequired": true,
+  "appleCasesExecutedLocally": 0,
+  "nativeSuiteExecutedForThisIncrement": false,
+  "phoneInstalledForThisIncrement": false,
+  "groupLiveDeployment": false,
+  "remaining": "Execute the new25 native directory/admission methods in hosted Apple control. Continue canonical participant/composer context and organization presentation."
+}

@@ -21,6 +21,12 @@ interface CollaborationSpaceDirectoryRepository {
         access: CollaborationSpaceLocalAccess
     ): Flow<AppResult<CollaborationSpaceDirectorySnapshot>>
 
+    /** One published contact by account; absence grants no eligibility or HR resource access. */
+    fun observeContact(
+        access: CollaborationSpaceLocalAccess,
+        accountId: String,
+    ): Flow<AppResult<CollaborationSpaceContact?>>
+
     /**
      * Starts a fresh generation only after the previous one completed. Pending work must resume.
      */

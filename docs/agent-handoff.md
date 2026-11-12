@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 22:19 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 22:38 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -58,31 +58,36 @@ access; correction forwards failures directly and enters guarded content reads o
 No assertion changed. Format2/68039 REAPED34.459s. Source checks, Android release compile/lint,
 shared Wasm/iOS ARM64 compilation and proof assembly pass. Commit/push before the next application.
 
-ACTIVE: Mobile.work/space-thread-contact-2026-11-12, seven source paths applied after
-Mobilea74526b7 / Groupa4df8b1a acceptance and pushes were reaped. Existing directory now has
-observeContact(access,accountId), using the bounded published observeDocument query. No whole-
-directory scan, key creation, mutation, network or retry. Three existing fakes reject new calls.
-Eight new shared methods extend9 directory cases to17; existing8 admission methods remain. New
-Apple wrappers instantiate both contracts:25 native methods need actual hosted Apple execution.
+Indexed local contact observation is ACCEPTED in Mobile.work/space-thread-contact-2026-11-12.
+Seven application paths extend the existing directory with one authenticated published contact
+lookup, without full-directory paging, key creation, network, mutations or retry. Existing
+admission and full-directory contracts remain. Three existing fakes reject unexpected calls.
 
-Format1 stopped before Gradle due to missing pre-format source manifest; launch-failure.json is
-preserved. Captured inputs then format2/42535 REAPED34.802s. Focused1/78741 REAPED FAILED175.034s:
-25 cases, one new test timed out after5s VIRTUAL time in0.022s wall time while actual I/O ran on
-Default. Preserve failed-virtual-clock-1. Only that actual-storage scenario now runs on Default;
-all5000ms deadlines/assertions and production code stay unchanged. Format3/75985 REAPED35.426s.
+Focused2/63817 REAPED PASS27/233.574s; full1/63047 REAPED PASS851.602s. Strict audits and
+record-acceptance.py pass. Full14,780 =12,742 fresh +2,038 exact unchanged, retaining all14,764
+prior IDs with16 new JVM/browser cases. Source5170/f8d98e8c02c95f72070ec6b5bb02b684428181781ca5d62fe075444d4351f792;
+reportcfc6224f22abe54446036d4286fe594bbdf77581ee61055acd52c28088eb89a8;
+immutable full-1/accepted-proof.apk152453400B/baa8d26ced35a470468b1305911d0ab0a67dd64ccdf2e33fb36a714424c3b8e4.
+Android release compile/lint, shared Wasm/iOS ARM64 compile, native test compile, source checks
+and proof assembly pass. Linux executes0 new Apple cases; wrappers instantiate17 directory
+and8 admission methods, requiring25 actual hosted Apple executions. No phone/native latency claim.
 
-Focused2/63817 ACTIVE from22:18. Frozen5170inputs/f8d98e8c02c95f72070ec6b5bb02b684428181781ca5d62fe075444d4351f792.
-Expected focused27, full14,780 with all14,764 old IDs and16 new JVM/browser cases. Native test
-compilation is required in both gates (skipped tasks rejected); Linux executes0 Apple cases.
-No full run or native execution yet. Do not edit source or start another compiler/emulator until
-reaped. Auditors are prepared; an acceptance recorder still needs to be written for this increment.
+Preserve format-1/launch-failure.json (no Gradle started before missing manifest was captured)
+and failed-virtual-clock-1: focused1/78741 ran25 cases/one new failure175.034s. A5000ms virtual
+deadline expired in22ms wall time around actual Default I/O. Only that test scenario moved to
+Default; all deadlines/assertions and production behavior stay unchanged. Format3/75985 passed35.426s.
 
-After focused/full acceptance, commit/push. Continue participant/composer context
-and organization UI. Existing retained registration.provider can supply sender metadata only after
-bounded exact validation. Do not infer sender identity from room origin or selected HR company.
-Review visible-thread warming to avoid first-frame bubble-side changes. Mobile docs/collaboration-organization-ui-plan.md records the component/ownership review, skill sources and immutable composer timestamp requirement. All54 PRD groups remain OPEN.
-Keep active hosted43312753298; defer the next control dispatch until this contact increment is accepted,
-so one subsequent run can cover unresolved threads and contact storage together without replacing pending CI.
+NEXT: commit/push this accepted increment, then dispatch one subsequent collaboration control
+for unresolved threads plus indexed contacts. Do not replace any existing pending workflow.
+Mobile.work/space-thread-participants-2026-11-12 contains DRAFT ONLY production/fixture/tests;
+no participant source is applied or verified. Its exact base digests must match before application.
+Continue local canonical metadata, peer labels, bounded registration provider identity and exact
+Original identity under the existing admission/session/binding child. A finite metadata async read
+can serve both unresolved facts and peer lookup once; no outer content-forwarding buffer. Preserve
+unread/absent/failed participant observations and independent command failures. Domain owns policy;
+DI stays in data. Validate cancellation, denied publication, namespace provenance and actual encrypted
+reopen. Then continue immutable composer timestamps/drafts and organization UI. The component and
+ownership review is in Mobile docs/collaboration-organization-ui-plan.md. All54 PRD groups remain OPEN.
 
 Hosted follow-up43312753298 on exact1f47eeddb833054ae2b3d52c20439e6d11518a02:
 Portable131515465558 is ACCEPTED; auditor42039 REAPED,12,716 cases (6083desktop/955Android/5678browser).

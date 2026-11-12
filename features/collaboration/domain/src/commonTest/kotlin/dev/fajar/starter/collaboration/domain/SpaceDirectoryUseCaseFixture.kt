@@ -75,6 +75,11 @@ internal class SpaceDirectoryUseCaseFixture {
         }
     val directory =
         object : CollaborationSpaceDirectoryRepository {
+            override fun observeContact(
+                access: CollaborationSpaceLocalAccess,
+                accountId: String,
+            ): Flow<AppResult<CollaborationSpaceContact?>> = error("No contact lookup")
+
             override suspend fun checkpoint(
                 access: CollaborationSpaceLocalAccess
             ): AppResult<CollaborationSpaceDirectoryCheckpoint?> {

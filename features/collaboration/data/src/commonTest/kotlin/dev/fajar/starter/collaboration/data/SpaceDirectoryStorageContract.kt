@@ -275,6 +275,331 @@ abstract class SpaceDirectoryStorageContract {
         assertTrue(f.snapshot().contacts.isEmpty())
     }
 
+    @Test
+    fun oneContactReadsNoKeyBeforePublicationAndRejectsInvalidTargetsBeforeStorage() =
+        withDatabase { f ->
+            var reads = 0
+            val store =
+                object : ReplicaStore by f.database.replicas {
+                    override fun observeDocument(
+                        scope: ReplicaScope,
+                        partition: String,
+                        id: String,
+                    ): Flow<ReplicaPage> {
+                        reads++
+                        return f.database.replicas.observeDocument(scope, partition, id)
+                    }
+                }
+            val repository = f.repository(store)
+            for (target in listOf("bad", f.access.accountId)) {
+                assertIs<AppResult.Failed>(repository.observeContact(f.access, target).first())
+            }
+            assertEquals(0, reads)
+            assertEquals(
+                AppResult.Success(null),
+                repository.observeContact(f.access, spaceDirectoryId(1)).first(),
+            )
+            assertEquals(1, reads)
+            assertNull(f.keys.read())
+            assertNull(f.checkpoint())
+        }
+
+    @Test
+    fun oneContactUsesAnExactPublishedIndexWithoutReadingTheRestOfTheDirectory() =
+        withDatabase { f ->
+            f.seed(400)
+            val target = spaceDirectoryId(399)
+            val queries = mutableListOf<String>()
+            val store =
+                object : ReplicaStore by f.database.replicas {
+                    override fun observe(
+                        scope: ReplicaScope,
+                        partition: String,
+                        after: String?,
+                        limit: Int,
+                    ): Flow<ReplicaPage> = error("One contact cannot page the directory")
+
+                    override fun observeDocument(
+                        scope: ReplicaScope,
+                        partition: String,
+                        id: String,
+                    ): Flow<ReplicaPage> {
+                        assertEquals(directoryScope(f.access), scope)
+                        assertEquals(directoryPartition(f.access), partition)
+                        queries += id
+                        return f.database.replicas.observeDocument(scope, partition, id).onEach {
+                            page ->
+                            assertTrue(page.documents.size <= 1)
+                            assertTrue(page.documents.all { it.id == target })
+                        }
+                    }
+                }
+            assertEquals(
+                AppResult.Success(spaceDirectoryContact(399)),
+                f.repository(store).observeContact(f.access, target).first(),
+            )
+            assertEquals(listOf(target), queries)
+            assertEquals(400, f.snapshot().contacts.size)
+        }
+
+    @Test
+    fun contactObservationKeepsPublishedLabelsUntilReplacementAndThenObservesRemoval() =
+        withDatabase { f ->
+            f.seed(50)
+            val target = spaceDirectoryId(7)
+            val before = spaceDirectoryContact(7)
+            val updated =
+                before.copy(
+                    displayName = "Updated fictional colleague",
+                    companies =
+                        listOf(
+                            CollaborationSpaceContactCompany(
+                                spaceDirectoryId(91005),
+                                "Another fictional company",
+                            )
+                        ),
+                )
+            withContext(Dispatchers.Default) {
+                val values =
+                    kotlinx.coroutines.channels.Channel<AppResult<CollaborationSpaceContact?>>(8)
+                val job = launch {
+                    f.repository.observeContact(f.access, target).collect { values.send(it) }
+                }
+                try {
+                    assertEquals(AppResult.Success(before), withTimeout(5_000) { values.receive() })
+                    f.begin(80001)
+                    f.append(
+                        (1..50).map { if (it == 7) updated else spaceDirectoryContact(it) },
+                        more = true,
+                    )
+                    assertEquals(
+                        AppResult.Success(before),
+                        f.repository.observeContact(f.access, target).first(),
+                    )
+                    f.append(listOf(spaceDirectoryContact(51)))
+                    assertEquals(
+                        AppResult.Success(updated),
+                        withTimeout(5_000) { values.receive() },
+                    )
+                    assertTrue(
+                        f.database.replicas.clear(
+                            directoryScope(f.access),
+                            directoryPartition(f.access),
+                        )
+                    )
+                    assertEquals(AppResult.Success(null), withTimeout(5_000) { values.receive() })
+                } finally {
+                    job.cancelAndJoin()
+                    values.close()
+                }
+            }
+        }
+
+    @Test
+    fun equalSelectedContactDoesNotPublishAgainWhenAnotherContactChanges() = withDatabase { f ->
+        f.seed(3)
+        val target = spaceDirectoryId(2)
+        val before =
+            f.database.replicas
+                .observeDocument(directoryScope(f.access), directoryPartition(f.access), target)
+                .first()
+        f.begin(80001)
+        f.append(
+            (1..3).map {
+                spaceDirectoryContact(it).let { contact ->
+                    if (it == 1) contact.copy(displayName = "Changed other colleague") else contact
+                }
+            }
+        )
+        val after =
+            f.database.replicas
+                .observeDocument(directoryScope(f.access), directoryPartition(f.access), target)
+                .first()
+        assertNotEquals(before.checkpoint, after.checkpoint)
+        val firstDelivered = CompletableDeferred<Unit>()
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override fun observeDocument(
+                    scope: ReplicaScope,
+                    partition: String,
+                    id: String,
+                ): Flow<ReplicaPage> = flow {
+                    emit(before)
+                    firstDelivered.await()
+                    emit(after)
+                }
+            }
+        val values =
+            f.repository(store)
+                .observeContact(f.access, target)
+                .onEach { firstDelivered.complete(Unit) }
+                .toList()
+        assertEquals(listOf(AppResult.Success(spaceDirectoryContact(2))), values)
+    }
+
+    @Test
+    fun aSelectedContactSurvivesRenewedLoginWithoutBecomingReadableToAnotherAccount() =
+        withDatabase { f ->
+            f.seed(3)
+            val keys = f.keys.read()
+            val target = spaceDirectoryId(2)
+            val expected = AppResult.Success(spaceDirectoryContact(2))
+            val renewed = f.access.copy(sessionId = "renewed-contact-login")
+            f.reopen(renewed)
+            assertEquals(expected, f.repository.observeContact(renewed, target).first())
+            assertEquals(
+                AppResult.Success(null),
+                f.repository.observeContact(f.access, target).first(),
+            )
+            assertEquals(
+                AppResult.Success(null),
+                f.repository
+                    .observeContact(renewed.copy(spaceId = spaceDirectoryId(99999)), target)
+                    .first(),
+            )
+            val other =
+                renewed.copy(
+                    sessionId = "another-contact-account",
+                    accountId = spaceDirectoryId(90003),
+                )
+            f.activate(other)
+            assertEquals(
+                AppResult.Success(null),
+                f.repository.observeContact(other, target).first(),
+            )
+            assertEquals(
+                AppResult.Success(null),
+                f.repository.observeContact(renewed, target).first(),
+            )
+            f.activate(renewed)
+            assertEquals(expected, f.repository.observeContact(renewed, target).first())
+            assertEquals(keys, f.keys.read())
+        }
+
+    @Test
+    fun selectedContactRejectsMalformedRowsAndCheckpointsWithoutReplacingCiphertext() =
+        withDatabase { f ->
+            f.seed(3)
+            val target = spaceDirectoryId(2)
+            val page =
+                f.database.replicas
+                    .observeDocument(directoryScope(f.access), directoryPartition(f.access), target)
+                    .first()
+            val raw = page.documents.single()
+            val checkpoint = assertNotNull(page.checkpoint)
+            for (altered in
+                listOf(
+                    page.copy(checkpoint = null),
+                    page.copy(checkpoint = checkpoint.copy(published = false)),
+                    page.copy(checkpoint = checkpoint.copy(revision = checkpoint.revision + 1)),
+                    page.copy(documents = listOf(raw, raw)),
+                    page.copy(documents = listOf(raw.copy(id = spaceDirectoryId(1)))),
+                    page.copy(documents = listOf(raw.copy(sortKey = spaceDirectoryId(1)))),
+                    page.copy(documents = listOf(raw.copy(tags = setOf("unexpected")))),
+                    page.copy(documents = listOf(raw.copy(payload = "corrupted"))),
+                )) {
+                val store =
+                    object : ReplicaStore by f.database.replicas {
+                        override fun observeDocument(
+                            scope: ReplicaScope,
+                            partition: String,
+                            id: String,
+                        ) = flowOf(altered)
+                    }
+                assertEquals(
+                    FailureKind.Storage,
+                    assertIs<AppResult.Failed>(
+                            f.repository(store).observeContact(f.access, target).first()
+                        )
+                        .failure
+                        .kind,
+                )
+            }
+            assertEquals(
+                page,
+                f.database.replicas
+                    .observeDocument(directoryScope(f.access), directoryPartition(f.access), target)
+                    .first(),
+            )
+            assertEquals(
+                AppResult.Success(spaceDirectoryContact(2)),
+                f.repository.observeContact(f.access, target).first(),
+            )
+            f.keys.write(null)
+            assertEquals(
+                FailureKind.Storage,
+                assertIs<AppResult.Failed>(f.repository.observeContact(f.access, target).first())
+                    .failure
+                    .kind,
+            )
+            assertNull(f.keys.read())
+            assertEquals(
+                page,
+                f.database.replicas
+                    .observeDocument(directoryScope(f.access), directoryPartition(f.access), target)
+                    .first(),
+            )
+        }
+
+    @Test
+    fun cancellingSelectedContactDecryptionJoinsTheReadWithoutPublishingLateContent() =
+        withDatabase { f ->
+            f.seed(1)
+            val before = f.raw()
+            val entered = CompletableDeferred<Unit>()
+            val release = CompletableDeferred<Unit>()
+            val encryption =
+                object : ContentCipher by f.cipher {
+                    override suspend fun decrypt(
+                        key: ByteArray,
+                        associatedData: ByteArray,
+                        ciphertext: ByteArray,
+                    ): ByteArray =
+                        withContext(NonCancellable) {
+                            entered.complete(Unit)
+                            release.await()
+                            f.cipher.decrypt(key, associatedData, ciphertext)
+                        }
+                }
+            coroutineScope {
+                val values = mutableListOf<AppResult<CollaborationSpaceContact?>>()
+                val pending = launch {
+                    f.repository(encryption = encryption)
+                        .observeContact(f.access, spaceDirectoryId(1))
+                        .toList(values)
+                }
+                entered.await()
+                pending.cancel()
+                assertFalse(pending.isCompleted)
+                release.complete(Unit)
+                pending.join()
+                assertTrue(pending.isCancelled)
+                assertTrue(values.isEmpty())
+            }
+            assertEquals(before, f.raw())
+        }
+
+    @Test
+    fun selectedContactStorageFailureCompletesWithoutRetryOrAnEmptySuccess() = withDatabase { f ->
+        var reads = 0
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override fun observeDocument(
+                    scope: ReplicaScope,
+                    partition: String,
+                    id: String,
+                ): Flow<ReplicaPage> = flow {
+                    reads++
+                    error("Unavailable contact storage")
+                }
+            }
+        val values = f.repository(store).observeContact(f.access, spaceDirectoryId(1)).toList()
+        assertEquals(1, values.size)
+        assertEquals(FailureKind.Storage, assertIs<AppResult.Failed>(values.single()).failure.kind)
+        assertEquals(1, reads)
+        assertNull(f.keys.read())
+    }
+
     private fun withDatabase(block: suspend (SpaceDirectoryStorageFixture) -> Unit) = runTest {
         val fixture = SpaceDirectoryStorageFixture(databaseOwner())
         try {

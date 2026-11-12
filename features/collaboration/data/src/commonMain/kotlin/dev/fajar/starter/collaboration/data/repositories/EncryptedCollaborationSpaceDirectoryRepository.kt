@@ -145,6 +145,50 @@ class EncryptedCollaborationSpaceDirectoryRepository(
             }
             .flowOn(Dispatchers.Default)
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun observeContact(
+        access: CollaborationSpaceLocalAccess,
+        accountId: String,
+    ): Flow<AppResult<CollaborationSpaceContact?>> =
+        safeStorageFlow(
+                flow {
+                    collaborationId(accountId)
+                    require(accountId != access.accountId)
+                    emitAll(
+                        replicas.observeDocument(
+                            directoryScope(access),
+                            directoryPartition(access),
+                            accountId,
+                        )
+                    )
+                }
+            )
+            .mapLatest { result ->
+                when (result) {
+                    is AppResult.Failed -> result
+                    is AppResult.Success ->
+                        safeStorageCall {
+                            val page = result.value
+                            val raw = page.checkpoint
+                            if (raw == null) {
+                                require(page.documents.isEmpty())
+                                return@safeStorageCall null
+                            }
+                            require(raw.published)
+                            require(
+                                page.documents.size <= 1 &&
+                                    page.documents.all { it.id == accountId }
+                            )
+                            withKey(access) { codec ->
+                                val checkpoint = codec.checkpoint(raw)
+                                page.documents.singleOrNull()?.let { codec.contact(checkpoint, it) }
+                            }
+                        }
+                }
+            }
+            .distinctUntilChanged()
+            .flowOn(Dispatchers.Default)
+
     private suspend fun snapshot(
         access: CollaborationSpaceLocalAccess,
         first: ReplicaPage,

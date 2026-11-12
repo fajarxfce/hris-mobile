@@ -91,6 +91,11 @@ internal class SpaceRecoveryLocalStorageFixture(val owner: CollaborationSpaceOwn
         }
     val directory =
         object : CollaborationSpaceDirectoryRepository {
+            override fun observeContact(
+                access: CollaborationSpaceLocalAccess,
+                accountId: String,
+            ): Flow<AppResult<CollaborationSpaceContact?>> = error("No contact lookup")
+
             override suspend fun admission(
                 access: CollaborationSpaceLocalAccess
             ): AppResult<CollaborationSpaceDirectoryAdmission> {
