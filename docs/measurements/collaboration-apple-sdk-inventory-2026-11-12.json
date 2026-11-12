@@ -30,5 +30,12 @@
     "The 13 new Apple tests are compiled but not executed on Linux. Hosted Apple execution remains required.",
     "Unchanged Android/JVM/browser/proof reports retain their exact previously accepted hashes; no claim that they reran.",
     "No credential enrollment, store creation, native SDK client, app binding or live Group activation."
-  ]
+  ],
+  "hosted": {
+    "runId": 43273697021,
+    "sourceCommit": "dd405660a3ea920a4f27781f006d83b7b7fd636a",
+    "status": "pending",
+    "expectedPortable": 12604,
+    "expectedApple": 5148
+  }
 }

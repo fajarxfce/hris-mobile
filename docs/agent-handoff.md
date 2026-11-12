@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 17:50 UTC. Continue implementation beyond checkpoints and push every commit.
+Updated 12 November 2026, 17:52 UTC. Continue implementation beyond checkpoints and push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One compiler OR emulator. Phone install-only:
 announce and select serial; never launch/drive UI, reset data or uninstall. ADB availability question is pending after a fresh connection timeout.
 
@@ -24,9 +24,13 @@ accepted unchanged-platform report digests. Strict local audit confirms the four
 changes, identical source during all gates and identical Inspector inputs/proof APK. No compiler
 or emulator remains active. Compact evidence is in both repositories' measurements directory.
 
-Push this implementation, dispatch collaboration-control.yml for its exact pushed Mobile SHA,
-then audit expected12,604 portable and5,148 Apple cases (prior5,135 plus13 new inventory methods),
-retaining all prior case identities. Native Apple execution is NOT yet claimed. Shared registry
+Mobile dd405660a3ea920a4f27781f006d83b7b7fd636a is pushed (45023 REAPED). Dispatch48333 REAPED;
+CI43273697021 is PENDING on that exact SHA behind43266580439, without cancellation.
+https://github.com/fajarxfce/hris-mobile/actions/runs/43273697021
+Expect12,604 portable and5,148 Apple cases (prior5,135 plus13 new inventory methods), retaining
+all prior identities. Use .work/apple-sdk-inventory-2026-11-12/hosted-audit.py portable|apple
+hosted-43273697021 only after each job succeeds; exact13 Apple method identities are captured.
+Native Apple execution is NOT yet claimed. Shared registry
 CI43266580439 Apple job131351645845 remains in progress; its portable audit is already accepted.
 The new workflow must queue behind it without cancellation. Intel native SDK8 CI43267867675 is
 still building; on success use Mobile .work/sdk8-apple-planning-2026-11-12/audit-hosted.py to verify
