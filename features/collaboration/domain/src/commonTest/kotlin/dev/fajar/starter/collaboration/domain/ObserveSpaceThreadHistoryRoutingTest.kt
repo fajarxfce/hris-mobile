@@ -16,10 +16,11 @@ class ObserveSpaceThreadHistoryRoutingTest {
         for (legacy in listOf(false, true)) {
             val f = SpaceThreadHistoryFixture(legacy)
             val read =
-                assertIs<AppResult.Success<CollaborationSpaceThreadHistory>>(
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
                         f.observe()(f.access, f.id).first()
                     )
                     .value
+                    .history
             assertEquals(f.access, read.access)
             assertEquals(f.id, read.conversationId)
             assertEquals(f.page(), read.page)
@@ -44,7 +45,7 @@ class ObserveSpaceThreadHistoryRoutingTest {
         val f = SpaceThreadHistoryFixture(true)
         f.native.setup.now += 1000.days
         f.native.setup.workspace = null
-        val values = mutableListOf<AppResult<CollaborationSpaceThreadHistory>>()
+        val values = mutableListOf<AppResult<CollaborationSpaceThreadSnapshot>>()
         val job =
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                 f.observe()(f.access, f.id).toList(values)
@@ -96,10 +97,11 @@ class ObserveSpaceThreadHistoryRoutingTest {
         f.facts.value = AppResult.Success(empty)
         assertEquals(
             empty,
-            assertIs<AppResult.Success<CollaborationSpaceThreadHistory>>(
+            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
                     f.observe()(f.access, f.id).first()
                 )
                 .value
+                .history
                 .page,
         )
         assertEquals(1, f.room.bindingReads)
@@ -142,7 +144,7 @@ class ObserveSpaceThreadHistoryRoutingTest {
     fun failedCompletedSourceDoesNotRetryOrRefetchBindingsOnTokenRefresh() = runTest {
         val f = SpaceThreadHistoryFixture()
         f.readFacts = { flowOf(AppResult.Failed(f.base.storageFailure)) }
-        val values = mutableListOf<AppResult<CollaborationSpaceThreadHistory>>()
+        val values = mutableListOf<AppResult<CollaborationSpaceThreadSnapshot>>()
         val job =
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                 f.observe()(f.access, f.id).toList(values)
@@ -155,7 +157,7 @@ class ObserveSpaceThreadHistoryRoutingTest {
             )
         runCurrent()
         assertEquals(
-            listOf<AppResult<CollaborationSpaceThreadHistory>>(
+            listOf<AppResult<CollaborationSpaceThreadSnapshot>>(
                 AppResult.Failed(f.base.storageFailure)
             ),
             values,

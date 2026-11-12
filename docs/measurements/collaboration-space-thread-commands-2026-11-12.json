@@ -1,0 +1,93 @@
+{
+  "date": "2026-11-12",
+  "scope": "Bound canonical local history and separate canonical/Original command projection",
+  "baseCommit": "151438b4ba85f599fb2eefc080a6ac15423ac6e1",
+  "sourceFiles": 5167,
+  "sourceManifestSha256": "d5b43a1a846de9618d0601dcd8b1cca1c916e81c18b77009582fa732800a9bee",
+  "changedSources": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "6cdf307fcd514453788b434988befcf793f042a7aae05b4936cd6af6da207ce5",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "43226007f3c0e590beb1f96ba3b9d0d830693fe29cbbc66814d51b20bbfaefab",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingPreparationStorageContract.kt": "4038ec19d96dd161e89252347ab7bb695fd48b083b743e90a5f5af54ba95b299",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceThreadSnapshot.kt": "397af077072ab7ecd25023dfa96cf14612d2360c3412c8092e6bd81c5bb82b92",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceThreadCommandPolicy.kt": "9c5ea6c0f071a89cb2ed6467e2dfa76149087ca506bab5143d0c907bd1d5020c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceThread.kt": "98eaf051d38f0341e25c4b74951b4bed72dd08440efa53698d0b43e220a03b4a",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceThreadHistory.kt": null,
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceThreadCommandsTest.kt": "9247b717752b5025edc339360e178e85debc45c2ed5fdceedee1af7acc72f5e6",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceThreadHistoryAdmissionTest.kt": "a197d67d9a230e623fa8dd8405a0b7554d30f836607c75a71f6290a1b107ff73",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceThreadHistoryRoutingTest.kt": "90cb808f59281181c0044d5886bcd7b018ee2aedf83a6dced9353e4148fe1556",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceThreadCommandLifetimeTest.kt": "c55e09fba52e42fae89ccbd3bb0a505de3fc3d94de5a9b618cc1be6c3fb5e809",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceThreadCommandPolicyTest.kt": "a973deab05f1a5ddc34cdf4bd72897a139fa737594978b7dc75c4f6e1f40805a",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceThreadCommandStores.kt": "8cf3de983f80adf6e00ee0b9dff9520b97a0ac8609227f41386e2170d063c8e6",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceThreadHistoryFixture.kt": "64246d25611fbe232831ee8ffccc594d35f46ac022e2c9f65bde88731490a233",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceThreadHistorySnapshotTest.kt": "d366093d18e692bcec4d51b720762968fb10f38268c0fd78049e16cea4672b1b"
+  },
+  "focused": {
+    "accepted": true,
+    "tests": 54,
+    "elapsedSeconds": 375.346,
+    "sourceFiles": 5167,
+    "sourceManifestSha256": "d5b43a1a846de9618d0601dcd8b1cca1c916e81c18b77009582fa732800a9bee",
+    "resultSha256": "5266df5c08a5090d1e74fd328367b7281fe301a137d6e3889505b300a2a60b15",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceRoomBindingPreparationStorageTest": 9,
+      "CollaborationSpaceHistoryLocationTest": 9,
+      "ObserveSpaceThreadHistoryAdmissionTest": 8,
+      "ObserveSpaceThreadHistoryRoutingTest": 6,
+      "SpaceThreadCommandLifetimeTest": 4,
+      "SpaceThreadCommandPolicyTest": 6,
+      "SpaceThreadHistorySnapshotTest": 4,
+      "ObserveSpaceThreadCommandsTest": 6
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-12T20:57:32.144310+00:00",
+    "elapsedSeconds": 818.37,
+    "sourceFiles": 5167,
+    "freshCounts": {
+      "tests": 12686,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152448537,
+      "sha256": "1d0f69c08658a78d05ed0119adac99d6f8e4ebf060ee73d6e11035507ab53301"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 14724,
+    "newCases": 36,
+    "freshTests": 12686,
+    "reusedUnaffectedTests": 2038,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 111,
+    "excludedHistoricalCases": 657,
+    "sourceManifestSha256": "d5b43a1a846de9618d0601dcd8b1cca1c916e81c18b77009582fa732800a9bee",
+    "reportManifestSha256": "2b3e6966b740810893e35f8025a607af525fdb524ae4b3bbb6c93772a0d8d06e",
+    "nativeClaim": "No changed SDK/proof source; earlier accepted ten native scenarios remain historical evidence. This gate does not claim new native or phone behavior."
+  },
+  "fullAuditSha256": "4cc4e01afb33800792fe0cfe71d02cbb51c4f42a12de73bab38e232ef730dbbe",
+  "preservedFailures": [
+    {
+      "path": "failed-storage-fixture-1",
+      "elapsedSeconds": 234.51,
+      "tests": 51,
+      "failures": 2,
+      "cause": "New reopen assertions incorrectly retained the previous local login; actual storage preserved facts and renewed access. Assertions now require renewed access and reject the old session. Production was unchanged for this correction."
+    },
+    {
+      "path": "failed-delayed-failure-1",
+      "elapsedSeconds": 106.977,
+      "tests": 1,
+      "failures": 1,
+      "sourceManifestSha256": "4aac27ec2961a30229c6060ca037fed5d7726ee0e43ddb6d435c7004ed85ebb9",
+      "cause": "combine withheld a known command read failure while another source had no first emission. Explicit unread states now propagate known failure without inventing successful empty stores; exact regression preserved."
+    }
+  ],
+  "nativeSuiteExecutedForThisIncrement": false,
+  "phoneInstalledForThisIncrement": false,
+  "groupLiveDeployment": false,
+  "remaining": "Unresolved bindings, composer context and organization UI; Apple shared runtime execution and native SDK8 gates remain separately tracked."
+}

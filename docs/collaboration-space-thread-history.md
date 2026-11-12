@@ -1,5 +1,9 @@
 # Canonical organization thread history
 
+The observer now evolves into `ObserveCollaborationSpaceThread`; its history component
+retains the contract below. [Canonical thread commands](collaboration-space-thread-commands.md)
+documents the additional local command projection and its separate validation.
+
 `ObserveCollaborationSpaceThreadHistory` resolves a retained canonical room binding and
 observes its existing local history. `Space` selects the organization partition;
 `Original` selects the exact original Company/conversation/room coordinates. The output

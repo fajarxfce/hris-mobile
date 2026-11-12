@@ -25,7 +25,7 @@ class ObserveSpaceThreadHistoryAdmissionTest {
     fun confirmedDenialSurvivesFailedCleanupMalformedGatesAndFailedSessionRecovery() = runTest {
         for (legacy in listOf(false, true)) {
             val f = SpaceThreadHistoryFixture(legacy)
-            val values = mutableListOf<AppResult<CollaborationSpaceThreadHistory>>()
+            val values = mutableListOf<AppResult<CollaborationSpaceThreadSnapshot>>()
             val job =
                 backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                     f.observe()(f.access, f.id).toList(values)
@@ -73,7 +73,7 @@ class ObserveSpaceThreadHistoryAdmissionTest {
                 retired.complete(Unit)
             }
         }
-        val values = mutableListOf<AppResult<CollaborationSpaceThreadHistory>>()
+        val values = mutableListOf<AppResult<CollaborationSpaceThreadSnapshot>>()
         val job =
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                 f.observe()(f.access, f.id).toList(values)
@@ -115,28 +115,28 @@ class ObserveSpaceThreadHistoryAdmissionTest {
             checks++
             if (checks >= 3) AppResult.Success(blocked) else AppResult.Success(f.base.open)
         }
-        val values = mutableListOf<AppResult<CollaborationSpaceThreadHistory>>()
+        val values = mutableListOf<AppResult<CollaborationSpaceThreadSnapshot>>()
         val job =
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                 f.observe()(f.access, f.id).toList(values)
             }
         runCurrent()
         assertEquals(
-            listOf<AppResult<CollaborationSpaceThreadHistory>>(AppResult.Failed(f.base.denied)),
+            listOf<AppResult<CollaborationSpaceThreadSnapshot>>(AppResult.Failed(f.base.denied)),
             values,
         )
         f.currentAdmission = { AppResult.Failed(f.base.storageFailure) }
         f.facts.value = AppResult.Success(f.page().copy(revision = "changed"))
         runCurrent()
         assertEquals(
-            listOf<AppResult<CollaborationSpaceThreadHistory>>(AppResult.Failed(f.base.denied)),
+            listOf<AppResult<CollaborationSpaceThreadSnapshot>>(AppResult.Failed(f.base.denied)),
             values,
         )
         f.currentAdmission = { AppResult.Success(f.base.open) }
         f.facts.value = AppResult.Success(f.page())
         runCurrent()
         assertEquals(
-            listOf<AppResult<CollaborationSpaceThreadHistory>>(AppResult.Failed(f.base.denied)),
+            listOf<AppResult<CollaborationSpaceThreadSnapshot>>(AppResult.Failed(f.base.denied)),
             values,
         )
         f.base.gate.value = AppResult.Success(blocked)
@@ -159,7 +159,7 @@ class ObserveSpaceThreadHistoryAdmissionTest {
                 emit(AppResult.Success(f.page()))
             }
         }
-        val values = mutableListOf<AppResult<CollaborationSpaceThreadHistory>>()
+        val values = mutableListOf<AppResult<CollaborationSpaceThreadSnapshot>>()
         val job =
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                 f.observe()(f.access, f.id).toList(values)
@@ -170,7 +170,7 @@ class ObserveSpaceThreadHistoryAdmissionTest {
         release.complete(Unit)
         runCurrent()
         assertEquals(
-            listOf<AppResult<CollaborationSpaceThreadHistory>>(AppResult.Failed(f.base.denied)),
+            listOf<AppResult<CollaborationSpaceThreadSnapshot>>(AppResult.Failed(f.base.denied)),
             values,
         )
         assertEquals(1, f.stops)
@@ -183,7 +183,7 @@ class ObserveSpaceThreadHistoryAdmissionTest {
             val f = SpaceThreadHistoryFixture()
             val first = CompletableDeferred<Unit>()
             val release = CompletableDeferred<Unit>()
-            val values = mutableListOf<AppResult<CollaborationSpaceThreadHistory>>()
+            val values = mutableListOf<AppResult<CollaborationSpaceThreadSnapshot>>()
             val job =
                 backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                     f.observe()(f.access, f.id).collect {
@@ -224,7 +224,7 @@ class ObserveSpaceThreadHistoryAdmissionTest {
             )
         for (replacement in replacements) {
             f.identity.value = AppResult.Success(f.native.session)
-            val values = mutableListOf<AppResult<CollaborationSpaceThreadHistory>>()
+            val values = mutableListOf<AppResult<CollaborationSpaceThreadSnapshot>>()
             val job =
                 backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                     f.observe()(f.access, f.id).toList(values)

@@ -5,7 +5,7 @@ import dev.fajar.starter.collaboration.data.identity.*
 import dev.fajar.starter.collaboration.data.repositories.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
-import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationSpaceThreadHistory
+import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationSpaceThread
 import dev.fajar.starter.collaboration.domain.usecases.PrepareCollaborationSpaceRoomBinding
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
@@ -25,6 +25,165 @@ import kotlinx.coroutines.test.runTest
 
 abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
+
+    @Test
+    fun canonicalThreadReopensBothEncryptedCommandNamespacesWithoutMovingTheirOriginals() =
+        withDatabase { f ->
+            assertEquals(AppResult.Success(f.binding()), f.prepare()(f.conversation()))
+            val position = requireNotNull(f.binding().original).conversation.position
+            val company =
+                CollaborationLocalAccess(
+                    f.access.sessionId,
+                    f.access.audience,
+                    f.access.accountId,
+                    position.companyId,
+                )
+            val id = historyId(14101)
+            val canonical =
+                CollaborationSpaceMessageIntent(
+                    id,
+                    f.access.messageOwner(),
+                    f.conversation().id,
+                    f.conversation().createdAt,
+                    "Canonical queued text",
+                )
+            val original =
+                CollaborationMessageIntent(
+                    id,
+                    company.messageOwner(),
+                    position.conversationId,
+                    f.conversation().createdAt,
+                    "Original queued text",
+                )
+            assertEquals(
+                AppResult.Success(CollaborationMessageInsertion.STORED),
+                f.spaceMessages().insert(f.access, canonical),
+            )
+            assertEquals(
+                AppResult.Success(CollaborationMessageInsertion.STORED),
+                f.originalMessages().insert(company, original),
+            )
+            val before =
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                        f.observeHistory()(f.access, f.conversation().id).first()
+                    )
+                    .value
+            assertEquals(listOf(canonical), before.spaceCommands.map { it.intent })
+            assertEquals(listOf(original), before.originalCommands.map { it.intent })
+            val keys = f.history.keys.read()
+            f.reopen()
+            val after =
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                        f.observeHistory()(f.access, f.conversation().id).first()
+                    )
+                    .value
+            assertNotEquals(before.history.access.sessionId, after.history.access.sessionId)
+            assertEquals(f.access, after.history.access)
+            val oldLocation =
+                assertIs<CollaborationSpaceHistoryLocation.Original>(before.history.location)
+            val renewedCompany = company.copy(sessionId = f.access.sessionId)
+            assertEquals(
+                before.copy(
+                    history =
+                        before.history.copy(
+                            access = f.access,
+                            location = oldLocation.copy(access = renewedCompany),
+                        )
+                ),
+                after,
+            )
+            assertNull(
+                assertIs<AppResult.Success<CollaborationMessageRecord?>>(
+                        f.originalMessages().get(company, id)
+                    )
+                    .value
+            )
+            assertEquals(keys, f.history.keys.read())
+            assertEquals(
+                original,
+                assertIs<AppResult.Success<CollaborationMessageRecord?>>(
+                        f.originalMessages().get(renewedCompany, id)
+                    )
+                    .value
+                    ?.intent,
+            )
+            assertEquals(
+                canonical,
+                assertIs<AppResult.Success<CollaborationSpaceMessageRecord?>>(
+                        f.spaceMessages().get(f.access, id)
+                    )
+                    .value
+                    ?.intent,
+            )
+            assertEquals(1, f.roomReads)
+            assertEquals(1, f.originalReads)
+        }
+
+    @Test
+    fun spaceThreadNeverIncludesCompanyCommandsWithIdenticalOwnerConversationAndMessageIds() =
+        withDatabase { f ->
+            val originalBinding = f.binding()
+            val binding =
+                originalBinding.copy(
+                    room =
+                        originalBinding.room.copy(
+                            origin = CollaborationSpaceRoomOrigin.SPACE,
+                            original = null,
+                        ),
+                    original = null,
+                )
+            assertEquals(AppResult.Success(true), f.bindings().retain(f.access, binding))
+            val company =
+                CollaborationLocalAccess(
+                    f.access.sessionId,
+                    f.access.audience,
+                    f.access.accountId,
+                    f.access.spaceId,
+                )
+            val id = historyId(14102)
+            val canonical =
+                CollaborationSpaceMessageIntent(
+                    id,
+                    f.access.messageOwner(),
+                    f.conversation().id,
+                    f.conversation().createdAt,
+                    "Space-only queued text",
+                )
+            val original =
+                CollaborationMessageIntent(
+                    id,
+                    company.messageOwner(),
+                    f.conversation().id,
+                    f.conversation().createdAt,
+                    "Separate Company queued text",
+                )
+            assertEquals(
+                AppResult.Success(CollaborationMessageInsertion.STORED),
+                f.spaceMessages().insert(f.access, canonical),
+            )
+            assertEquals(
+                AppResult.Success(CollaborationMessageInsertion.STORED),
+                f.originalMessages().insert(company, original),
+            )
+            f.reopen()
+            val snapshot =
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
+                        f.observeHistory()(f.access, f.conversation().id).first()
+                    )
+                    .value
+            assertIs<CollaborationSpaceHistoryLocation.Space>(snapshot.history.location)
+            assertEquals(listOf(canonical), snapshot.spaceCommands.map { it.intent })
+            assertTrue(snapshot.originalCommands.isEmpty())
+            assertEquals(
+                original,
+                assertIs<AppResult.Success<CollaborationMessageRecord?>>(
+                        f.originalMessages().get(company.copy(sessionId = f.access.sessionId), id)
+                    )
+                    .value
+                    ?.intent,
+            )
+            assertEquals(0, f.roomReads + f.originalReads)
+        }
 
     @Test
     fun canonicalHistoryReadsOriginalCiphertextAfterReopenWithoutCopyingOrAcquiringRooms() =
@@ -59,10 +218,11 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                     ),
             )
             val before =
-                assertIs<AppResult.Success<CollaborationSpaceThreadHistory>>(
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
                         f.observeHistory()(f.access, f.conversation().id).first()
                     )
                     .value
+                    .history
             assertEquals(
                 listOf(f.history.event(1).eventId),
                 before.page.messages.map { it.primaryEventId },
@@ -75,10 +235,11 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
             val key = f.history.keys.read()
             f.reopen()
             val after =
-                assertIs<AppResult.Success<CollaborationSpaceThreadHistory>>(
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
                         f.observeHistory()(f.access, f.conversation().id).first()
                     )
                     .value
+                    .history
             assertEquals(before.page, after.page)
             assertEquals(f.access, after.access)
             assertEquals(bindings.documents, f.rawBindings().documents)
@@ -138,10 +299,11 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                 ),
         )
         val before =
-            assertIs<AppResult.Success<CollaborationSpaceThreadHistory>>(
+            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
                     f.observeHistory()(f.access, f.conversation().id).first()
                 )
                 .value
+                .history
         assertIs<CollaborationSpaceHistoryLocation.Space>(before.location)
         assertEquals(
             listOf(f.history.event(1).eventId),
@@ -150,10 +312,11 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
         val key = f.history.keys.read()
         f.reopen()
         val after =
-            assertIs<AppResult.Success<CollaborationSpaceThreadHistory>>(
+            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
                     f.observeHistory()(f.access, f.conversation().id).first()
                 )
                 .value
+                .history
         assertEquals(before.page, after.page)
         assertEquals(key, f.history.keys.read())
         assertEquals(0, f.roomReads + f.originalReads)
@@ -182,10 +345,11 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                 ),
             )
             val before =
-                assertIs<AppResult.Success<CollaborationSpaceThreadHistory>>(
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
                         f.observeHistory()(f.access, f.conversation().id).first()
                     )
                     .value
+                    .history
             val denied =
                 Failure(FailureKind.AccessDenied, "Denied", code = "collaboration_access_denied")
             assertEquals(AppResult.Success(true), f.directory().restrict(f.access, denied))
@@ -207,10 +371,11 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
             assertEquals(AppResult.Success(true), f.directory().admit(f.access, admission.revision))
             assertEquals(
                 before.page,
-                assertIs<AppResult.Success<CollaborationSpaceThreadHistory>>(
+                assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(
                         f.observeHistory()(f.access, f.conversation().id).first()
                     )
                     .value
+                    .history
                     .page,
             )
             assertEquals(1, f.roomReads)
@@ -399,6 +564,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
 
     private class Scenario(val history: CollaborationHistoryFixture) {
         private val now = Instant.parse("2026-11-07T00:00:00Z")
+        private val commandKey = MemoryCredentialStore()
         var owner =
             CollaborationSpaceOwner(
                 CollaborationNativeParent(
@@ -609,11 +775,27 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                 history.keys,
             )
 
+        fun spaceMessages() =
+            EncryptedCollaborationSpaceMessageRepository(
+                history.database.commands,
+                history.cipher,
+                commandKey,
+            )
+
+        fun originalMessages() =
+            EncryptedCollaborationMessageRepository(
+                history.database.commands,
+                history.cipher,
+                commandKey,
+            )
+
         fun observeHistory() =
-            ObserveCollaborationSpaceThreadHistory(
+            ObserveCollaborationSpaceThread(
                 bindings(),
                 spaceHistory(),
                 history.repository,
+                spaceMessages(),
+                originalMessages(),
                 directory(),
                 sessions,
                 IdentityServer(access.audience, "Fictional server"),

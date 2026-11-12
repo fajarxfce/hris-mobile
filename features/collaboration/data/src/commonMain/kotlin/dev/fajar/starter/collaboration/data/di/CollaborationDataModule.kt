@@ -1555,18 +1555,22 @@ class CollaborationDataModule {
     ) = ObserveCollaborationSpaceHistory(history, directory, sessions, server)
 
     @Factory
-    fun observeSpaceThreadHistory(
+    fun observeSpaceThread(
         bindings: CollaborationSpaceRoomBindingRepository,
         spaces: CollaborationSpaceHistoryRepository,
         originals: CollaborationHistoryRepository,
+        spaceMessages: CollaborationSpaceMessageRepository,
+        originalMessages: CollaborationMessageRepository,
         directory: CollaborationSpaceDirectoryRepository,
         sessions: SessionRepository,
         server: IdentityServer,
     ) =
-        ObserveCollaborationSpaceThreadHistory(
+        ObserveCollaborationSpaceThread(
             bindings,
             spaces,
             originals,
+            spaceMessages,
+            originalMessages,
             directory,
             sessions,
             server,

@@ -1,5 +1,8 @@
 # Architecture
 
+[Canonical thread commands](collaboration-space-thread-commands.md) combine actual local
+history and both original command namespaces under the existing admission owner.
+
 [Canonical organization thread history](collaboration-space-thread-history.md) reads the exact original or Space namespace under Group admission without copying content or waiting for live transport.
 
 [Native account replacement](collaboration-native-account-replacement.md) verifies stale callback retirement and original encrypted receipt, identity and offline history continuity through actual application ownership.

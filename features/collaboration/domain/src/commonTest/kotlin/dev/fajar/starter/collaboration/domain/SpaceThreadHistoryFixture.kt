@@ -2,7 +2,7 @@ package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
-import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationSpaceThreadHistory
+import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationSpaceThread
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.Session
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
@@ -15,6 +15,7 @@ internal class SpaceThreadHistoryFixture(val legacy: Boolean = false) {
     val native = room.native
     val access = room.access
     val id = room.conversation.id
+    val commands = SpaceThreadCommandStores(room)
     val identity = MutableStateFlow<AppResult<Session?>>(AppResult.Success(native.session))
     var currentIdentity: suspend () -> AppResult<Session?> = { identity.value }
     var currentAdmission: suspend () -> AppResult<CollaborationSpaceDirectoryAdmission> = {
@@ -161,10 +162,12 @@ internal class SpaceThreadHistoryFixture(val legacy: Boolean = false) {
         }
 
     fun observe() =
-        ObserveCollaborationSpaceThreadHistory(
+        ObserveCollaborationSpaceThread(
             room.bindings,
             spaces,
             originals,
+            commands.spaces,
+            commands.originals,
             directory,
             sessions,
             native.server,

@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 21:09 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 21:12 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -8,31 +8,37 @@ is waived; native Apple/call/push behavior is not accepted merely by compilation
 
 ## Current next implementation
 
-ACTIVE: canonical thread commands in Mobile.work/canonical-thread-commands-2026-11-12.
-15 source paths change,5167 inputs: existing canonical observer evolves to
-ObserveCollaborationSpaceThread, returning typed history plus separate Space/Original
-command lists. No API/SDK/mutation or Company reads for Space-only rooms. Old history
-assertions inspect the same nested component; no prior test IDs removed.
-Format1/39167 REAPED PASS36.269s. Focused1/42217 REAPED234.510s,51 cases/2 failures:
-42 domain cases pass; both new data failures assumed reopen retained the old local
-session. Existing Scenario.reopen also renews login. Preserve failed-storage-fixture-1.
-Tests now require the new access explicitly, retain all content comparisons, reject
-old-session lookup and read originals through renewed Company access. Production was
-not changed for those fixture failures. App DI2 did not run after the data failures.
+Canonical bound thread commands are ACCEPTED in Mobile.work/canonical-thread-commands-2026-11-12.
+The existing observer is now ObserveCollaborationSpaceThread: typed history plus separate
+Space and Original Company command ledgers under the same Group admission/session owner.
+Pending and sent-but-unarchived facts remain; equal UUIDs across namespaces never collapse.
+Known failures publish even while another source has no initial result. No API/SDK/write.
 
-Review proved a separate first-result defect: combine withheld a known command failure
-while another command store had not emitted. Red-fast-1/36525 REAPED expected FAIL106.977s,
-exact one-case failure: expected storage failure but received no emission. Preserve
-failed-delayed-failure-1. The observer now explicitly distinguishes unread sources from
-successful empty lists; known failures publish immediately, success waits for real local
-results. No fabricated empty success, hidden retry, new observer owner or relaxed assertions.
-Format3/47114 completed PASS36.158s. Frozen5167inputs/d5b43a1a846de9618d0601dcd8b1cca1c916e81c18b77009582fa732800a9bee.
-Focused2/39262 REAPED PASS54/375.346s; strict focused audit passes, all prior IDs retained.
-Full1/7705 ACTIVE from20:57; expected14724 with all14688 prior IDs retained. Full auditor
-prepared, not run. No current native/phone claim for these edits. No source edits or second
-compiler/emulator before reaping. Subsequent room-binding-observation-2026-11-12 contains an
-UNAPPLIED eight-file draft: reactive local binding read, seven shared storage cases, explicit
-fake implementations. Validate/review after current acceptance and commit; no claimed gate.
+Focused2/39262 REAPED PASS54/375.346s; full1/7705 REAPED PASS818.370s.
+Strict full audit accepts14,724 =12,686 freshly executed +2,038 exact unchanged cases;
+all14,688 prior IDs remain, with36 new JVM/browser cases. Android release compile/lint,
+shared Wasm/iOS ARM64 compilation, source quality and proof assembly pass. No new native
+execution or phone claim for this increment. Source5167/d5b43a1a846de9618d0601dcd8b1cca1c916e81c18b77009582fa732800a9bee;
+report2b3e6966b740810893e35f8025a607af525fdb524ae4b3bbb6c93772a0d8d06e;
+immutable proof full-1/accepted-proof.apk152448537B/1d0f69c08658a78d05ed0119adac99d6f8e4ebf060ee73d6e11035507ab53301.
+Preserve failed-storage-fixture-1 (two new tests assumed unchanged login; now explicitly
+require renewed access and unchanged facts) and failed-delayed-failure-1 (one real combine
+failure,106.977s, fixed without relaxing the assertion). Format3/47114 completed36.158s.
+The two failed candidates, prior111 excluded XML/657 cases and all exact hashes remain.
+
+NEXT: commit/push this accepted increment, then apply the eight-file draft in Mobile
+.work/room-binding-observation-2026-11-12 with prepare-after-acceptance.py. It checks the
+accepted baseline, clean/pushed production source and absence of another heavy process.
+The draft adds reactive binding observation through existing bounded encrypted indexes,
+seven shared storage cases and explicit fixture implementations. It is UNAPPLIED/UNTESTED.
+Expected focused35 (storage33/application DI2), full14,738 including all14,724 prior IDs.
+Review concurrent publication/clear, malformed-pair recovery and cancellation; preserve any
+failure rather than suppressing assertions or introducing retries. After this contract,
+evolve the existing canonical observer to support typed unresolved history using exact
+local metadata, then composer context and product UI. Missing binding is never proof of
+empty remote history. Keep local pending content visible through a binding transition.
+No second observer owner, usecase-to-usecase calls or invented Company coordinates.
+All54 PRD groups remain OPEN; continue beyond this checkpoint. No local heavy process now.
 
 Company thread publication is ACCEPTED: Mobile151438b4ba85f599fb2eefc080a6ac15423ac6e1,
 Group6158096d evidence (later Group1480acdf records hosted progress). Both pushed.
@@ -45,22 +51,7 @@ Preserve red1 (16cases/one real failure,3values instead of2), failed-publication
 and exact111 historical excluded XML/657 cases. Source/native acceptance is finished; do not rerun.
 
 Release92 is fully ACCEPTED and UNINSTALLED; see Phone delivery below. No local heavy process
-remains after ARM build39435 and verifier38284 REAPED. The release gates are finished; the new source formatter above is active.
-
-NEXT: implement canonical bound-room pending-command projection in the existing observer.
-Mobile.work/canonical-thread-commands-2026-11-12 has plan.json and a verified14688-case
-baseline (1455 reports), current source manifest and historical native10. Source implementation and validation are active as recorded above.
-Evolve ObserveCollaborationSpaceThreadHistory into ObserveCollaborationSpaceThread, keeping
-CollaborationSpaceThreadHistory as the typed history component of a new thread snapshot.
-Add separate Space/Original Company command lists; never coerce ownership or collapse equal
-UUIDs across namespaces. Group admission still owns both; Space-only rooms perform no Company
-message I/O. Reuse the current reader lifetime, validation policies and repositories, not a
-second copied observer or usecase-to-usecase orchestration. Freeze staging baselines before
-suspended admission checks, retain pending and sent-but-unarchived facts, retire all readers
-on cancellation. Preserve all existing history test identities/assertions; add meaningful
-command ownership, concurrency, immutable snapshot and actual encrypted reopen cases.
-Unbound conversations/composer metadata remain a subsequent contract before product UI.
-Do not stop at this checkpoint. Push every commit and continue the product long run.
+remains after ARM build39435 and verifier38284 REAPED. The release gates and canonical command checks above are finished.
 
 Canonical history baseline is Mobileed4e61f5 / Group6c34ecbd, full14686 accepted; no rerun.
 Inventory compact evidence cleanup is Mobile7f7fa717 / Groupa4ecdae3, already pushed.

@@ -10,10 +10,12 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 /** One local subscription under Group authority, including content retained in an Original room. */
-class ObserveCollaborationSpaceThreadHistory(
+class ObserveCollaborationSpaceThread(
     private val bindings: CollaborationSpaceRoomBindingRepository,
     private val spaces: CollaborationSpaceHistoryRepository,
     private val originals: CollaborationHistoryRepository,
+    private val spaceMessages: CollaborationSpaceMessageRepository,
+    private val originalMessages: CollaborationMessageRepository,
     private val directory: CollaborationSpaceDirectoryRepository,
     private val sessions: SessionRepository,
     private val server: IdentityServer,
@@ -22,7 +24,7 @@ class ObserveCollaborationSpaceThreadHistory(
         access: CollaborationSpaceLocalAccess,
         conversationId: String,
         window: CollaborationHistoryWindow = CollaborationHistoryWindow(),
-    ): Flow<AppResult<CollaborationSpaceThreadHistory>> =
+    ): Flow<AppResult<CollaborationSpaceThreadSnapshot>> =
         flow {
                 if (
                     !validCollaborationSpaceConversationId(conversationId) ||
@@ -49,7 +51,7 @@ class ObserveCollaborationSpaceThreadHistory(
         var denial: Failure? = null
 
         @OptIn(ExperimentalCoroutinesApi::class)
-        fun observe(): Flow<AppResult<CollaborationSpaceThreadHistory>> =
+        fun observe(): Flow<AppResult<CollaborationSpaceThreadSnapshot>> =
             sessions
                 .observe()
                 .map { session ->
@@ -114,7 +116,7 @@ class ObserveCollaborationSpaceThreadHistory(
             return if (owned is AppResult.Failed) owned else AppResult.Success(Unit)
         }
 
-        private fun observeStored(): Flow<AppResult<CollaborationSpaceThreadHistory>> = flow {
+        private fun observeStored(): Flow<AppResult<CollaborationSpaceThreadSnapshot>> = flow {
             val admitted = current()
             if (admitted is AppResult.Failed) {
                 emit(admitted)
@@ -141,6 +143,12 @@ class ObserveCollaborationSpaceThreadHistory(
                 return@flow
             }
             val location = (selected as AppResult.Success).value
+            emitAll(observeThread(location))
+        }
+
+        private fun observeThread(
+            location: CollaborationSpaceHistoryLocation
+        ): Flow<AppResult<CollaborationSpaceThreadSnapshot>> = flow {
             val pages =
                 when (location) {
                     is CollaborationSpaceHistoryLocation.Space ->
@@ -164,22 +172,80 @@ class ObserveCollaborationSpaceThreadHistory(
                             window.overlap,
                         )
                 }
-            pages.collect { page ->
-                val snapshot =
-                    when (page) {
-                        is AppResult.Failed -> page
-                        is AppResult.Success ->
-                            collaborationSpaceThreadHistory(
-                                access,
-                                conversationId,
-                                location,
-                                window,
-                                page.value,
+            val capturedHistory =
+                pages
+                    .map { page ->
+                        when (page) {
+                            is AppResult.Failed -> page
+                            is AppResult.Success ->
+                                collaborationSpaceThreadHistory(
+                                    access,
+                                    conversationId,
+                                    location,
+                                    window,
+                                    page.value,
+                                )
+                        }
+                    }
+                    .onStart<AppResult<CollaborationSpaceThreadHistory>?> { emit(null) }
+            val canonicalCommands =
+                spaceMessages
+                    .observe(access, conversationId)
+                    .map { records ->
+                        when (records) {
+                            is AppResult.Failed -> records
+                            is AppResult.Success ->
+                                collaborationSpaceThreadCommands(
+                                    access,
+                                    conversationId,
+                                    records.value,
+                                )
+                        }
+                    }
+                    .onStart<AppResult<List<CollaborationSpaceMessageRecord>>?> { emit(null) }
+            val retainedCommands =
+                when (location) {
+                    is CollaborationSpaceHistoryLocation.Space ->
+                        flowOf(AppResult.Success(emptyList<CollaborationMessageRecord>()))
+                    is CollaborationSpaceHistoryLocation.Original ->
+                        originalMessages.observe(location.access, location.conversationId).map {
+                            records ->
+                            when (records) {
+                                is AppResult.Failed -> records
+                                is AppResult.Success ->
+                                    collaborationSpaceOriginalThreadCommands(
+                                        location,
+                                        records.value,
+                                    )
+                            }
+                        }
+                }.onStart<AppResult<List<CollaborationMessageRecord>>?> { emit(null) }
+            // An unread source is not an empty store. Known failures can publish immediately;
+            // successful content still requires actual results from every selected local source.
+            combine(capturedHistory, canonicalCommands, retainedCommands) {
+                    history,
+                    canonical,
+                    original ->
+                    when {
+                        history is AppResult.Failed -> history
+                        canonical is AppResult.Failed -> canonical
+                        original is AppResult.Failed -> original
+                        history == null || canonical == null || original == null -> null
+                        else ->
+                            AppResult.Success(
+                                CollaborationSpaceThreadSnapshot(
+                                    (history as AppResult.Success).value,
+                                    (canonical as AppResult.Success).value,
+                                    (original as AppResult.Success).value,
+                                )
                             )
                     }
-                val allowed = current()
-                emit(if (allowed is AppResult.Failed) allowed else snapshot)
-            }
+                }
+                .filterNotNull()
+                .collect { snapshot ->
+                    val allowed = current()
+                    emit(if (allowed is AppResult.Failed) allowed else snapshot)
+                }
         }
     }
 }

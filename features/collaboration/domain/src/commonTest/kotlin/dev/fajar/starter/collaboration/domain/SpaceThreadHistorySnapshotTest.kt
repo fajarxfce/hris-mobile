@@ -57,7 +57,9 @@ class SpaceThreadHistorySnapshotTest {
         messages.clear()
         release.complete(Unit)
         val read =
-            assertIs<AppResult.Success<CollaborationSpaceThreadHistory>>(result.await()).value
+            assertIs<AppResult.Success<CollaborationSpaceThreadSnapshot>>(result.await())
+                .value
+                .history
         assertEquals(f.page(), read.page)
         assertEquals(listOf("\$original"), read.page.messages.single().eventIds)
     }
@@ -99,7 +101,7 @@ class SpaceThreadHistorySnapshotTest {
             }
             AppResult.Success(f.base.open)
         }
-        val values = mutableListOf<AppResult<CollaborationSpaceThreadHistory>>()
+        val values = mutableListOf<AppResult<CollaborationSpaceThreadSnapshot>>()
         val job =
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                 f.observe()(f.access, f.id).toList(values)
