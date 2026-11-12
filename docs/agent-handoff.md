@@ -4,6 +4,23 @@ Updated 12 November 2026, 04:33 UTC.
 Continue authorized PRD work, per-commit pushes and validated phone installs. No subagents.
 One compiler OR emulator; follow AGENTS.md and clean layer boundaries. All54PRD groups OPEN.
 
+## Active full worker gate and accepted Original CI
+
+Worker focused2/66925 REAPED PASS446cases/223.666s; browser1/50259 REAPED PASS298cases/149.320s.
+Accepted744focused with prior IDs retained. Full1/15274 RUNNING, expected14,044local. Only this
+compiler is active. Manifest174d3aee269298bde939750a796fc178aaeb14f476236c66d5b63f3dcf7cfa87.
+Publisher/writer prepared, NOT EXECUTED. First focused failure is archived/reviewed; preserve it.
+
+Original transfer/visit CI43148447666 now FULL16,610=11,788portable+4,822Apple accepted.
+Apple25320 REAPED; artifact13915873720/778207B/05bf160d170648f0f06722fd2df8509c89a7b176ca85754d52efd4b6e8263a86.
+All prior case IDs,16Swift envelope cases and unsigned iOS host verified. This is not nativeAppleSDK8
+execution. Space43152279307 remains portable accepted/Apple pending; global43155076441 running.
+
+Next raw mailbox draft now4UNAPPLIED files,16common/4JVM concurrency cases, reviewed but uncompiled.
+It owns process-local retention only; no native subscription/ACK-after-storage/scheduling activation.
+Main code already usesSDK8. Release89 is SDK6; preserve the isolated SDK consumer and its5dirtyfiles.
+Do not copy its stale runtime fixture over the main source, which now preserves actual sync positions.
+
 ## Worker validation correction and next raw callback draft
 
 Focused1/39369 REAPED failed307.335s after298 passing domain/data tests: service-test line124
