@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 23:29 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 23:40 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -137,12 +137,16 @@ this scoped run will not claim ten new executions. This increment is not fully a
 
 After focused/full/native checks, record and push before continuing Group drafts and UI.
 Review ownership and first-frame measurement requirements in docs/collaboration-organization-ui-plan.md.
-Next storage design is in Mobile.work/space-composer-storage-2026-11-12: seven isolated
-DRAFT source paths only, not applied or tested. Reuse existing draft/outbox repositories and
-codecs through typed ComposerCoordinates, preserving exact Company frame bytes and a separate
-Group partition. Add atomic Group recovery wake without a new polling loop. Required remaining
-work: actual Company frame-compatibility and Group encrypted-storage race/isolation tests,
-real app DI, and domain/finite-worker consumers before product activation. Review plan.json.
+Next storage increment is prepared ONLY in Mobile.work/space-composer-storage-2026-11-12:
+13 isolated DRAFT source paths, not applied or compiled. Two Group contracts and typed
+ComposerCoordinates reuse the existing draft/outbox I/O and codecs; Company frame bytes
+stay unchanged. Group handoff adds its recovery wake to the same replica transaction.
+Three independent legacy-frame/protocol methods and13 actual encrypted-storage scenarios
+are drafted, with desktop/browser/Apple wrappers and same-instance application DI assertions.
+Expected new JVM/browser cases32, Apple methods16; none executed yet. Review the drafts and
+plan.json. prepare.py is syntax-checked but NOT executed, and requires current queue full/native
+acceptance plus clean pushed source. The original draft generator refuses to overwrite these
+reviewed files. Domain editor/submit and finite-worker consumption still precede UI activation.
 All54 acceptance groups remain OPEN; continue beyond this checkpoint.
 
 Hosted follow-up43312753298 on exact1f47eeddb833054ae2b3d52c20439e6d11518a02:
@@ -291,7 +295,7 @@ fresh2560MiB/two cores, cold2908ms/reopen2145ms, stable10s/process. Both screens
 were inspected and show complete onboarding. ARM39435 REAPED42.972s, verify38284 REAPED.
 All gates are finished; do not rebuild. No authenticated release/phone latency claim.
 
-Latest ADB94840 REAPED: timeout after 15 seconds at23:15UTC; no install attempted.
+Latest ADB49225 REAPED: timeout after 15 seconds at23:29UTC; no install attempted.
 WireGuard peer10.77.77.3 last handshake10:32:22UTC (checked23:05); route viawg0 is correct.
 Do not repeat availability questions. Continue bounded connection checks independently.
 When10.77.77.3:5555 connects, announce EACH actual installation, then run Mobile
