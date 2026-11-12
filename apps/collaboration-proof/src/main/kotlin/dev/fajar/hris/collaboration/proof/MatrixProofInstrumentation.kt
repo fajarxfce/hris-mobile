@@ -159,6 +159,8 @@ class MatrixProofInstrumentation : Instrumentation() {
             "event-reads-stage",
             "event-reads-space",
             "event-reads-local",
+            "event-reads-late-recovery",
+            "event-reads-late-recovered-local",
             "event-reads-worker-state" ->
                 HrisEventReadsProbe(targetContext, directory).run(scenario)
             "space-original-stage",

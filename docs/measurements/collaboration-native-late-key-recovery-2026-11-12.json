@@ -1,0 +1,78 @@
+{
+  "date": "2026-11-12",
+  "scope": "Native late-key worker recovery after process reopening",
+  "nativeAccepted": true,
+  "fullSourceCheckStatus": "running",
+  "fullSourceCheckSession": 61257,
+  "sourceManifestSha256": "887a2915efd183103f4b3332f93f8493f34811f54583e93dee5ab3e9775a5e44",
+  "groupSourceManifestSha256": "9b8904cafd1425e9c7e7d146e36a49d30c47b7fdff9a9384de8d28cae1552d38",
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152433161,
+    "sha256": "5ccb64752cf57a2d7696af20dc007a0fde7f822f3ac5a91e139d0a2766952935"
+  },
+  "sdk": "26.10.23-hris.8",
+  "nativeLibrarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+  "native": {
+    "tests": 9,
+    "counts": {
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "elapsedSeconds": 445.28,
+    "bootSeconds": 31.465,
+    "reportHashes": {
+      "TEST-dev.fajar.hris.NativeSpaceLateKeysTest.xml": "e4f0489a577eb044a203d1819484c96bdb87e90e4a9cdc67578f216f2a177df8",
+      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": "9bd38820933cc19f1a63c82da2c1904cf3f606972195706786998092da3c490a",
+      "TEST-dev.fajar.hris.NativeEventReadsTest.xml": "2ad59f8e10c1dc781459aa91433463f864427bcac0c15b0e3eb30f255dd5fa27"
+    },
+    "cases": [
+      "dev.fajar.hris.NativeEventReadsTest.completedIncomingReferencesRemainExhaustedAcrossOfflineReopen()",
+      "dev.fajar.hris.NativeEventReadsTest.exactEncryptedEventsSurviveOriginalRuntimeAdoptionWithoutPresentationRelabeling()",
+      "dev.fajar.hris.NativeEventReadsTest.nativeIncomingHintsPreserveExactSyncPositionsAndObserveStoredKeys()",
+      "dev.fajar.hris.NativeEventReadsTest.nativeIncomingReceiptSurvivesLostReplyForegroundAndOfflineReopen()",
+      "dev.fajar.hris.NativeEventReadsTest.registeredIncomingWorkerRetainsContentBeforeEofAndStopsAcrossOfflineReopen()",
+      "dev.fajar.hris.NativeSpaceLateKeysTest.realKeyDuringLostReceiptReplySurvivesQuietObservationAndOfflineReopen()",
+      "dev.fajar.hris.NativeSpaceLateKeysTest.retainedLateKeyRecoveryDrainsThroughRegisteredWorkerAfterProcessLoss()",
+      "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.newSpaceOriginalSharesTheQueueWithoutChangingCompanyOwnershipAfterProcessDeath()",
+      "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.originalQueueSurvivesLostProjectionAndOfflineRecipientWithoutReplacement()"
+    ],
+    "resultSha256": "e99355bd87b9971bffe1acb576d2a1aadc88fc9d5e18143796623043eab2721b"
+  },
+  "proofUnitTests": 21,
+  "protocol": {
+    "tests": 65,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "logSha256": "19935cedd920864e241bfe15df6c8b7950c60f4d5d6aff2dc9e8d01fe4db987e"
+  },
+  "lateRecovery": {
+    "messages": 2,
+    "pendingReferences": 0,
+    "receiptPreserved": true,
+    "recoveryComplete": true,
+    "offlineBeforeAndAfterRecovery": true,
+    "offlineCountersUnchanged": true,
+    "native": {
+      "requests": 18,
+      "registration": 1,
+      "bootstrapReplay": 1
+    },
+    "matrix": {
+      "requests": 33,
+      "encryptedSend": 5,
+      "sync": 7,
+      "secretStorage": 4,
+      "providerPage": 2
+    },
+    "quietMillis": 30009
+  },
+  "phoneTouched": false,
+  "productionChanged": false,
+  "liveGroupChanged": false,
+  "automaticWorkManagerRestartProven": false,
+  "nativeAppleSdk8Proven": false
+}

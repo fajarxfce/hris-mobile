@@ -1,8 +1,45 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 15:37 UTC. Continue implementation beyond checkpoints and push every commit.
+Updated 12 November 2026, 16:06 UTC. Continue implementation beyond checkpoints and push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One compiler OR emulator. Phone install-only:
 announce and select serial; never launch/drive UI, reset data or uninstall. ADB availability question is pending after a fresh connection timeout.
+
+## Native late-key worker recovery accepted; full check running
+
+Workspace .work/space-late-key-recovery-native-2026-11-12 in Mobile and Group.
+Five Mobile proof files and four Group test/driver files; no production change.
+Source manifests: Mobile887a2915efd183103f4b3332f93f8493f34811f54583e93dee5ab3e9775a5e44 (5,138inputs),
+Group9b8904cafd1425e9c7e7d146e36a49d30c47b7fdff9a9384de8d28cae1552d38 (8,750inputs).
+Mobile format1/68873 and format2/17784 REAPED; proof1/66434 failed Detekt LongMethod before proof
+compilation. Archived failed-static-candidate-1. Moved pure payload checks to existing evidence
+owner; no assertions removed. Proof2/23805 REAPED PASS21/142.435s and accept-proof.py passed.
+Immutable proof-2/accepted-proof.apk:152,433,161B/5ccb64752cf57a2d7696af20dc007a0fde7f822f3ac5a91e139d0a2766952935,
+SDK8/x86native6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95.
+Groupformat1/39382 REAPED22.101s; source1/16261 REAPED81.277s. Test classSHA
+a04193063aabbd9648bf38d73f6948e7817455998ec26844fc1001c58f207aed. Python65/0,
+protocol logSHA19935cedd920864e241bfe15df6c8b7950c60f4d5d6aff2dc9e8d01fe4db987e.
+Single late1/43704 REAPED PASS158.299s/boot31.532; strict native audit passed.
+Suite1/89939 failed port reservation BEFORE emulator/test startup. Follow-up at15:55:20UTC found
+no5562/5563 sockets, device or owned heavy process; transient occupant was not captured. No source
+change. Suite2/59462 REAPED PASS9/0 in445.280s, boot31.465; strict audit accepts all eight prior IDs
+plus the new recovery case. Fresh2560MiB/two-core emulator stopped; no compiler overlap or phone.
+Actual two-generation recovery, same receipt/journal, original/edit/tombstone plus second message,
+no unresolved references, exact completed projection in a further offline process and zero offline
+server traffic pass. New case total18 native/33 Matrix,5 encrypted sends,7sync,4secret,2provider pages.
+Fixture scheduler invokes the actual registered task; automatic OS relaunch and new collector
+concurrency remain separate. No new phone release is needed for these proof-only changes.
+
+Mobile full1/61257 started16:03:29UTC and is RUNNING; sources must remain unchanged. It uses version90
+and is recompiling desktop targets. Reap before another compiler/emulator. After success:
+python3 .work/space-late-key-recovery-native-2026-11-12/accept-full.py full-1
+python3 .work/space-late-key-recovery-native-2026-11-12/write-evidence.py
+Then update this handoff/contract to the actual full result and push. The baseline is ONLY the
+previous full-accepted14581 verified reports; unaccepted leftover reports were excluded during
+preparation. Nine-case native/proof/source artifacts are already accepted; do not rerun them absent
+a new change/failure. Phone90 remains accepted but uninstalled; availability question still pending.
+Next inspect native AppleSDK8 binding/package execution before a production Apple adapter. The
+current Swift proof pins upstream26.10.27 and the app still selects an unavailable runtime on Apple;
+common-host CI success is not native chat support. Do not rebuild/mutate protected SDK forks.
 
 ## Accepted: canonical Original covered hints
 
@@ -120,11 +157,9 @@ Inspect existing install-result.json first if present; don't blindly retry. Keep
 installed bytes. Never launch/drive/reset/uninstall phone. Mobile HEAD is no longer locked by packaging;
 the accepted artifact remains bound to65459d8c. Keep live Group OFF/schema116.4.
 
-Continue communications after installation. Next evidence gap: actual registered worker must consume
-retained late-key recovery after process death and project the fifth encrypted message under its
-canonical Company owner. Current late-key test proves only retained recovery, not its completion.
-Keep existing eight cases and bounds unchanged; use a separate typed scenario and trace actual failure
-before changing production policy. Native AppleSDK8, account replacement and PRD remain open.
+Continue communications after installation; current native recovery and pending full check are recorded
+at the top. Native AppleSDK8, account replacement and the remaining PRD still require implementation
+and acceptance. Keep live Group OFF/schema116.4 until its separate rollout gate is satisfied.
 
 ## Hosted control fully accepted
 

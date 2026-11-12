@@ -39,6 +39,12 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                         "event-reads-space" -> adopted()
                         "event-reads-local" -> reopened()
                         "event-reads-worker-state" -> inspectWorker()
+                        "event-reads-late-recovery" ->
+                            HrisLateKeyRecoveryProbe(context, files, sender, http)
+                                .run(offline = false)
+                        "event-reads-late-recovered-local" ->
+                            HrisLateKeyRecoveryProbe(context, files, sender, http)
+                                .run(offline = true)
                         else -> error("Unknown event-read scenario")
                     }
                 }

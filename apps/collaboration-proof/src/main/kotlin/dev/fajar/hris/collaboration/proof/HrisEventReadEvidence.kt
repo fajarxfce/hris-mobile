@@ -173,6 +173,41 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
             .put("noSpaceSendWork", true)
     }
 
+    /**
+     * The second message must decrypt with the late key, while earlier content keeps its contract.
+     */
+    fun lateRecovered(
+        snapshot: HrisSpaceIncomingProofHost.Snapshot,
+        staged: JSONObject,
+        owner: ProtectedHrisProofOwner,
+        lateId: String,
+        lateFact: CollaborationHistoryEventFact?,
+    ): JSONObject {
+        val page = snapshot.page
+        check(page.messages.size == 2 && page.next == null)
+        val original =
+            page.messages.single {
+                it.primaryEventId == staged.getJSONObject("events").getString("original")
+            }
+        val late = page.messages.single { it.primaryEventId == lateId }
+        check(late.sender == recipient && late.logicalId == canonical("lateLogicalId"))
+        check(late.eventIds == listOf(lateId) && late.text == files.body + "-late-key")
+        check(
+            !late.redacted && late.latestEdit == null && late.contentHash == hash(lateKeyContent())
+        )
+        check(lateFact == CollaborationHistoryEventFact(lateId, late.sender, late.timestamp, false))
+        return retained(
+                snapshot.copy(page = page.copy(messages = listOf(original))),
+                staged,
+                owner,
+                pendingCompleted = true,
+            )
+            .put("messages", 2)
+            .put("lateEventId", lateId)
+            .put("lateHash", late.contentHash)
+            .put("messageOrder", JSONArray(page.messages.map { it.primaryEventId }))
+    }
+
     private fun frontier(
         references: CollaborationHistoryReferences,
         staged: JSONObject,
