@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 17:09 UTC. Continue implementation beyond checkpoints and push every commit.
+Updated 12 November 2026, 17:18 UTC. Continue implementation beyond checkpoints and push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One compiler OR emulator. Phone install-only:
 announce and select serial; never launch/drive UI, reset data or uninstall. ADB availability question is pending after a fresh connection timeout.
 
@@ -66,8 +66,13 @@ docs/collaboration-sdk8-apple-candidate.md. Mobile dde4dfd1a3a85b8374599d9b34637
 Hosted SDK8 candidate run43261761056 attempt1/job131334639711 FAILED before any step: GitHub
 reported hosted runner acquisition failure and macOS ARM capacity constraints. Exact annotations
 are retained in .work/sdk8-apple-planning-2026-11-12/failed-hosted-start.json. No source/build failure.
-Same-commit rerun20007 REAPED; attempt2 is QUEUED. No Swift native result yet. Official runner-images
-README confirms standard macos-15-intel is available if this capacity retry also fails.
+Same-commit rerun20007 REAPED; attempt2/job131345691423 also FAILED before any step with the
+same acquisition/capacity annotations (read16155/57501 REAPED). No Swift compile/runtime failure.
+Both failure records are preserved. Official runner-images README confirms macos-15-intel.
+Mobile9b7c4d3f changes ONLY that runner and its documentation; SDK source/patches/five targets/four
+Swift tests unchanged. Push65823 REAPED. Intel SDK8 run43267867675 is IN_PROGRESS on exact head
+9b7c4d3fac0127e2f440e8dc5fb420dc66c22cfc; unlike the ARM attempts, it acquired a runner.
+https://github.com/fajarxfce/hris-mobile/actions/runs/43267867675
 https://github.com/fajarxfce/hris-mobile/actions/runs/43261761056
 Group handoff779e1780 pushed (34071 REAPED). Audit the exact native artifact before acceptance. No package publication. Preserve
 failed diagnostics if it fails; change only demonstrated causes. One local Gradle gate currently owns the build; see the next work paragraph.
@@ -77,7 +82,7 @@ Phone90 remains accepted and pending connection; connect26825 REAPED timeout12s.
 its route/peer, but the last phone handshake was over6hours old at16:45UTC. Existing availability
 question remains pending; do not retry installation until explicit ADB connection succeeds.
 
-## Portable runtime registry: focused and native gates passed; full running
+## Portable runtime registry locally and natively accepted; hosted validation running
 
 Workspace .work/sdk-runtime-registry-portable-2026-11-12 in Mobile and Group. SDK-free registry and
 Space identity moved to commonMain. The only registry code transformation replaces its Any/synchronized
@@ -99,15 +104,28 @@ Group reuses byte-identical precompiled prior source1 (8750 inputs/9b8904cafd142
 Native suite1/78343 REAPED PASS9/426.365s, boot28.417. Strict native audit passed with the SAME nine
 case IDs and assertions. Fresh2560MiB/2core emulator stopped; no compiler overlap or phone interaction.
 
-Full1/2779 is RUNNING. Keep build inputs unchanged and reap before another compiler/emulator.
-Expected14,626 cases = prior14,581 +36 newly portable old cases +9 new platform cases. Baseline XML
-is archived from exact accepted reports; no case replacement. Full auditor also requires the exact
-21 registry methods on desktop/browser/Android. After success run accept-full.py full-1, then
-write-evidence.py and update the compact measurement from its explicitly partial state. Do not rerun
-focused/proof/native gates absent source changes/failure. Shared Apple CI still needs dispatch on the
-pushed registry commit, expected12,604 portable +5,135 Apple =17,739. This is independent of the four
-Swift SDK8 tests in run43261761056. No production Apple runtime is enabled.
-Phone90 remains accepted and uninstalled pending WireGuard/ADB; all54 PRD groups OPEN and live Group OFF.
+Full1/2779 REAPED PASS470.690s. Auditor85674 REAPED accepts14,626:
+4,829 fresh +21 current-input proof +9,776 unchanged dependency-verified; zero failure/error/skip
+or case replacement. All prior14,581 identities remain; the exact21 registry cases also pass on
+Android/desktop/browser. Report manifest45a43d45b883b1a85916bf72ac21c677aa01ab4fc52effc38093ecacf8826d54.
+Full check, Android host/release compile/lint, Wasm, iOS metadata, proof and static checks pass with
+the same accepted proof APK and input manifests. Compact measurement is now fully updated.
+No local compiler/emulator active. Do not repeat these gates absent source changes or failures.
+
+Mobile production commitddf65dbe485aff6f2ef74d22469a723892d04d93 pushed (33626 REAPED); Group docs
+398aa634 pushed (88477 REAPED). Shared CI43266580439 is on that EXACT head; dispatch72623 REAPED.
+Apple job131351645845 and portable131351646411 both running at last check. This uses the same
+collaboration-control.yml as accepted baseline43236203251/ab513ace (its historical CI branch explains
+why a branch-filtered run listing does not include it). Expected12,604 portable =6,027 desktop +955
+Android +5,622 browser; Apple5,135; total17,739. Auditor is ready in the Mobile workspace:
+python3 .work/sdk-runtime-registry-portable-2026-11-12/hosted-audit.py portable hosted-43266580439
+python3 .work/sdk-runtime-registry-portable-2026-11-12/hosted-audit.py apple hosted-43266580439
+Only run each after its job completes; preserve exact prior IDs/artifact digest/CRC/step evidence.
+The shared Apple monitor tests are independent of the four Swift SDK8 candidate tests. No production
+Apple runtime is enabled. Next Apple boundaries are documented in local apple-next-boundaries.md:
+existing-only inventory, exclusive directory leases and synchronous identity-read cancellation;
+reuse shared repositories/use cases instead of copying Android orchestration. Native acceptance
+precedes product binding. Phone90 remains accepted/uninstalled; all54 PRD groups OPEN, live Group OFF.
 
 ## Accepted: canonical Original covered hints
 

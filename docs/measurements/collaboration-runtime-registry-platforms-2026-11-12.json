@@ -1,21 +1,44 @@
 {
   "date": "2026-11-12",
-  "scope": "Shared SDK runtime registry",
-  "validationState": "native-and-focused-passed; full check running",
+  "scope": "Shared SDK runtime registry with reentrant JVM/Apple exclusion and synchronous browser transitions",
   "sourceFiles": 5143,
   "sourceManifestSha256": "d42bae7604ca4b3d37fad253ab660c806bf2dc4e51e31d03089b9dfa6edba7c4",
-  "focusedDesktopCases": 21,
-  "focusedBrowserCases": 21,
-  "androidHostCases": 955,
-  "all952PriorAndroidIdentitiesRetained": true,
-  "movedTestFilesByteIdentical": 2,
-  "registryLogicOtherwiseUnchanged": true,
+  "sourceChanges": {
+    "registryAndSpaceIdentityMovedToCommon": true,
+    "registryLogicOtherwiseUnchanged": true,
+    "movedTestFilesByteIdentical": 2,
+    "existingAndroidCasesRetained": 952,
+    "additionalCommonCases": 3,
+    "clientLimitUnchanged": 5,
+    "borrowLimitUnchanged": 2
+  },
+  "local": {
+    "validatedTests": 14626,
+    "freshCounts": {
+      "tests": 4829,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "validatedReusedTests": 9776,
+    "sourceMatchedPriorTests": 21,
+    "reportManifestSha256": "45a43d45b883b1a85916bf72ac21c677aa01ab4fc52effc38093ecacf8826d54",
+    "elapsedSeconds": 470.69
+  },
+  "focused": {
+    "androidHostTests": 955,
+    "desktopTests": 21,
+    "browserTests": 21,
+    "priorAndroidIdentitiesRetained": true
+  },
   "proofApk": {
     "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
     "bytes": 152433161,
     "sha256": "dd2568e9aa6a55b7da571383ef31c1f1d055bd63b30c77f849e5e8e5152e16a0"
   },
-  "proofCases": 21,
+  "proofTests": 21,
+  "sdk": "26.10.23-hris.8",
+  "nativeLibrarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
   "native": {
     "tests": 9,
     "counts": {
@@ -26,6 +49,11 @@
     },
     "elapsedSeconds": 426.365,
     "bootSeconds": 28.417,
+    "reportHashes": {
+      "TEST-dev.fajar.hris.NativeSpaceLateKeysTest.xml": "1015f4600b615a9353317ea45c6345219b65b038b7dc563494111b303d1a6465",
+      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": "375036415d60e5ba769d0c89459f336a29381c9f803b8e30971833d78e95d262",
+      "TEST-dev.fajar.hris.NativeEventReadsTest.xml": "34a28ab524be745061192773e70ef551da58a0b76dc016d6ee828b6c250bd6c0"
+    },
     "cases": [
       "dev.fajar.hris.NativeEventReadsTest.completedIncomingReferencesRemainExhaustedAcrossOfflineReopen()",
       "dev.fajar.hris.NativeEventReadsTest.exactEncryptedEventsSurviveOriginalRuntimeAdoptionWithoutPresentationRelabeling()",
@@ -38,19 +66,16 @@
       "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.originalQueueSurvivesLostProjectionAndOfflineRecipientWithoutReplacement()"
     ],
     "resultSha256": "ccc0749be8e8def11771c771aaba3d1ff07cc8c4be0de72f27065965b81f0a8e",
-    "reportHashes": {
-      "TEST-dev.fajar.hris.NativeSpaceLateKeysTest.xml": "1015f4600b615a9353317ea45c6345219b65b038b7dc563494111b303d1a6465",
-      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": "375036415d60e5ba769d0c89459f336a29381c9f803b8e30971833d78e95d262",
-      "TEST-dev.fajar.hris.NativeEventReadsTest.xml": "34a28ab524be745061192773e70ef551da58a0b76dc016d6ee828b6c250bd6c0"
-    },
     "groupSourceManifestSha256": "9b8904cafd1425e9c7e7d146e36a49d30c47b7fdff9a9384de8d28cae1552d38"
   },
-  "nativeLibrarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
-  "fullCheckSession": 2779,
-  "fullAccepted": false,
-  "appleMonitorNativeAcceptance": false,
-  "phoneTouched": false,
+  "emulatorRamMiB": 2560,
+  "emulatorCores": 2,
   "emulatorStopped": true,
   "compilerOverlap": false,
-  "all54PrdGroupsOpen": true
+  "phoneTouched": false,
+  "limits": [
+    "JVM and browser tests pass; native Apple monitor execution requires the separate hosted Apple contracts.",
+    "The actual Android SDK/Matrix fixture verifies the same nine cases. No new SDK artifact, transport, retry rule or production Apple runtime is enabled.",
+    "No signed-in phone behavior or chat latency is claimed; live Group stays off and all54 PRD groups remain open."
+  ]
 }
