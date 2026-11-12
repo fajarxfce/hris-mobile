@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 14:18 UTC. Continue implementation beyond checkpoints and push every commit.
+Updated 12 November 2026, 15:08 UTC. Continue implementation beyond checkpoints and push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One compiler OR emulator. Phone install-only:
 announce and select serial; never launch/drive UI, reset data or uninstall. No question is pending.
 
@@ -57,21 +57,71 @@ Matrix30/send4/sync5/secret2/provider2, native18 (11 device GET,1 identity GET,4
 updated only after preserved worker7/8 phase traces; no Mobile assertion or bound was removed.
 [Native evidence](measurements/collaboration-original-covered-hints-native-2026-11-12.json).
 
+## Accepted: real late keys and bounded realtime idle
+
+Workspaces .work/space-late-key-native-2026-11-12 in Mobile and Group. Four Mobile proof files,
+four Group test/driver/trace files; no product policy, retry timer, schema or SDK artifact changed.
+The peer rotates a real key and sends a fifth encrypted event before adoption. One source sync
+receives it while the first receipt transaction is committed and its reply held/lost. Two different
+receipts commit/ACK once each, the first is not rewritten, the same native instance drains both,
+and the unfinished first recovery retains the successor generation. Offline reopening reads the
+identical obligations in a new process without SDK opening and releases storage.
+
+The30-second window permits only the existing10-second cursor long polls, with bounded2–4 requests,
+actual completed durations9–20s, start spacing>=9s and unchanged native/non-sync counters. This is
+not a claim that a connected realtime app makes zero requests or that pending history was drained.
+The app source owner/native/storage are actual; fixture activation and OS scheduling are replaced.
+
+Mobile format2/52140 REAPED36.736s, proof1/42606 REAPED PASSED21/112.575s. Immutable proof-1/accepted-proof.apk
+152,433,182B/a97b93375016117bd77860c8751358fe34bf0c1911945c1b17b8964488b3ae3a,
+SDK26.10.23-hris.8/x86 library6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95.
+5,137 inputs, manifestfa9e0e92bf2617c93e76d9641d938b72d04c461b7bf19c0915fdc7d2c0639ac9.
+Group format3/90848 REAPED19.976s, source3/37794 REAPED79.995s,8,748 inputs manifest
+daf48fe37ba6a1639b0ace11a0d89ab2693f0432f1dfd63a8b1f2acbf720e0ad;
+late test class1652e61a06c3f1b967c128379aeddc744c2538989139bf1db254d288f3581b14.
+Python protocol58 passes (10 new,29 event,19 original); shared CI discovery includes the new driver tests.
+
+Single late3/46108 REAPED PASSED167.971s, boot30.471s; strict native audit passed. Full suite2/84165
+REAPED PASSED8/0 in368.326s, boot30.459s; strict audit passed. All7 prior case IDs/assertions retained.
+Fresh2560MiB/two-core emulator stopped, no compiler overlap or phone use. Late case total native7,
+Matrix29/send5/sync7/secretStorage2, no active HTTP failures. Full-suite quiet window30,009ms.
+Full Mobile1/77371 REAPED PASSED101.257s; audit/evidence49182 REAPED accepts14,581:
+952 fresh +21 current-input proof +13,608 unchanged dependency-verified; zero fail/error/skip or
+case replacement. Full check, Android host/release compile/lint, Wasm, iOS metadata, proof and static
+gates pass, same APK/source/Inspector inputs. Reports00ec81f6042a2fa8a52a0b41586dc715471c50539811161335b21fd5d39a5732.
+
+Failure provenance: late1/4724 stopped before receipts because the fixture expected send order while
+provider IDs are sorted; all3 actual sender IDs/counts were correct. Sorted expected IDs, preserved
+failed-staging-candidate-1. Late2/2528 proved receipt processing but rejected3 normal sync polls during
+30,008ms; source confirmed the existing timeout10000 pump. Added bounded timing observation instead
+of changing any product timer; preserved failed-quiet-candidate-2. Suite1/52411 failed its port
+reservation before emulator/test start; later check found no owned process/listener/device. Suite2
+ran unchanged sources after port availability. All failed userdata remain. Earlier two launcher
+errors occurred before compilation (missing pre-format manifest and wrong cwd) and are in state.json.
+
 ## Immediate continuation
 
-Commit/push the accepted Mobile source/docs and Group full evidence, then dispatch the prepared
-hosted control once: dispatch-hosted.py requires clean tree, accepted full gate and pushed HEAD.
-Plan: ci/space-original-covered-hints-20261112,17,673 cases =12,559 portable(6,006 desktop/952 Android/
-5,601 browser)+5,114 Apple. Auditor compares exact IDs with metadata43224352728, zero renames. Record
-actual dispatch/run metadata; do not inherit stale state.json IDs, URLs, refs or totals. Continue work
-while CI runs. Update this paragraph after dispatch.
+Commit/push this accepted Mobile proof/docs and Group test/trace/docs atomically. Then prepare release90
+from the pushed Mobile HEAD with accepted full/native inputs and SDK8. Existing release89 is already
+installed; do not reinstall it. Build/verify signed ARM64 release and owned emulator startup before
+announcing any new phone installation; install-only to10.77.77.3:5555, no UI drive/reset/uninstall.
+Keep live Group OFF and schema116.4. A new product release is not yet built or accepted. No compiler
+or emulator is active. Continue remaining communications work beyond this checkpoint.
 
-Next implementation is [real key arrival during a held receipt reply](collaboration-native-late-key-plan.md). Keep the seven
-accepted cases; use a separate typed receipt proof because the additional real encrypted event
-changes the physical head. Prepare the peer's fresh session during staging, then receive it with one
-source sync while the first committed receipt's reply is held/lost. Verify distinct durable receipts,
-recovery obligation before ACK, no repeated first write, offline reopen and finite quiet requests.
-Keep existing deadlines, real SDK callbacks and owned resource cleanup. No SDK fork rebuild is needed.
+## Current hosted control
+
+43236203251 was dispatched once at14:20:42.535678UTC on exact Mobileab513ace,
+ref ci/space-original-covered-hints-20261112; dispatch97308/state41777 REAPED. Portable audit83958
+REAPED accepts12,559 (6,006 desktop/952 Android/5,601 browser), zero replacement/removal. Initial
+audit24775 failed only its inherited prior-stage increment17: planned platform totals and IDs already
+passed. ZIP comparison proves26 added cases (13 Original cases on desktop and browser), no removed
+IDs. Corrected increments are26 portable/13 Apple; original auditor/diagnosis are preserved.
+Portable job131244125085, artifact13954845945/4,038,316B; ZIPccbed96eca039e5ccaa5a39c6a4275027ce00468644d7d9d6dfe603df755e2c9,
+reports7fbe3c53b118f450cf962bf5e755b9674cca3ebd280b064ae2e5e012e796ca42,
+log67272ae8d2e845ffcbf8a71d120bf467017bc1d4487497e5523cffefd4da23df.
+Apple remains running; expected5,114, total17,673. Audit only after success with corrected
+.work/space-original-covered-hint-2026-11-12/hosted-audit.py apple hosted-43236203251. Do not redispatch.
+The later late-key slice changes only Android proof and Group tests; hosted control scope stays ab513ace.
 
 ## Other CI and phone
 

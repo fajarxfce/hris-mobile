@@ -75,6 +75,12 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                 staged.put("sdkIncomingHints", probe.complete(staged.getJSONObject("events")))
                 incomingHints = null
             }
+            if (files.fixture.optBoolean("incomingLateKeys", false)) {
+                requireNotNull(peer.nativeClient.getRoom(files.roomId)).use { it.discardRoomKey() }
+                val eventId = send(peer, evidence.lateKeyContent())
+                // Source sync is deliberately deferred until an application receipt reply is held.
+                files.write("original-late-key-staged", checkpoint().put("eventId", eventId))
+            }
             peer.closeProofRuntime()
             peer = null
             source.closeProofRuntime()
@@ -177,6 +183,10 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
     }
 
     private suspend fun adopted() {
+        if (files.fixture.optBoolean("incomingLateKeys", false)) {
+            adoptedWithLateKeys()
+            return
+        }
         if (files.fixture.optBoolean("incomingSources", false)) {
             adoptedWithSources()
             return
@@ -219,6 +229,58 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                     primary,
                     listOf({ lease?.close()?.let { expect(it) } }, { app.close() }),
                 )
+            }
+        files.write("original-events", result.put("runtimeReleased", true))
+    }
+
+    private suspend fun adoptedWithLateKeys() {
+        val ready = files.read("original-ready", 16_384)
+        val group = files.read("original-group", 16_384)
+        val app =
+            HrisWorkerProofContainer(
+                context,
+                sender.currentOwner,
+                files.conversationId,
+                files.fixture.getJSONObject("sender").getString("hrisAccessToken"),
+                sender.repository,
+                http,
+            )
+        val sources = app.incomingLateKeys(files.roomId)
+        var parent: HrisSpaceRecoveryProofHost? = null
+        var primary: Exception? = null
+        val result =
+            try {
+                app.activate()
+                val seed = app.spaceRecoverySeed(sender, ready, group)
+                seed.prepare()
+                parent = app.spaceRecovery(seed, sources::collect)
+                parent.start()
+                val proof = sources.receivePreparedKey(seed)
+                files.write("original-late-key-ready", checkpoint().put("lateKeys", proof))
+                check(waitFor("original-late-key-observe").toString() == "{\"ready\":true}")
+                val started = android.os.SystemClock.elapsedRealtime()
+                delay(30_000)
+                sources.verifyQuiet(seed.owner, proof.getJSONObject("retained"))
+                val observedMillis = android.os.SystemClock.elapsedRealtime() - started
+                check(observedMillis >= 30_000)
+                files.write(
+                    "original-late-key-quiet",
+                    checkpoint().put("observedMillis", observedMillis),
+                )
+                check(waitFor("original-late-key-finish").toString() == "{\"ready\":true}")
+                parent.close()
+                parent = null
+                sources.verifyStopped()
+                checkpoint()
+                    .put("lateKeys", proof)
+                    .put("quietMillis", observedMillis)
+                    .put("processCollectorJoined", true)
+            } catch (failure: Exception) {
+                primary = failure
+                throw failure
+            } finally {
+                sources.release()
+                closeHrisProofResources(primary, listOf({ parent?.close() }, { app.close() }))
             }
         files.write("original-events", result.put("runtimeReleased", true))
     }
@@ -548,6 +610,10 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
     }
 
     private suspend fun reopened() {
+        if (files.fixture.optBoolean("incomingLateKeys", false)) {
+            reopenedLateKeys()
+            return
+        }
         val staged = files.read("original-staged", 16_384)
         val adopted = files.read("original-events", 16_384)
         val group = files.read("original-group", 16_384)
@@ -628,6 +694,54 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                             )
                         }
                     }
+            } catch (failure: Exception) {
+                primary = failure
+                throw failure
+            } finally {
+                closeHrisProofResources(primary, listOf({ app.close() }))
+            }
+        files.write("original-local", result.put("databaseReleased", true))
+    }
+
+    private suspend fun reopenedLateKeys() {
+        val adopted = files.read("original-events", 16_384)
+        val group = files.read("original-group", 16_384)
+        check(adopted.getInt("processId") != Process.myPid())
+        val original = sender.currentOwner
+        val owner =
+            CollaborationSpaceOwner(
+                CollaborationNativeParent(
+                    original.sessionId,
+                    original.audience,
+                    original.accountId,
+                    original.nativeSessionId,
+                ),
+                group.getString("spaceId"),
+            )
+        val app =
+            HrisWorkerProofContainer(
+                context,
+                original,
+                files.conversationId,
+                files.fixture.getJSONObject("sender").getString("hrisAccessToken"),
+                sender.repository,
+                http,
+            )
+        var primary: Exception? = null
+        val result =
+            try {
+                app.activate()
+                val runtime = sender.repository as CollaborationSpaceRuntimeRepository
+                val device = group.getString("deviceId")
+                val operation = group.getString("registrationId")
+                check(!expect(runtime.isSpaceOpen(owner, device, operation)))
+                val retained = app.incomingLateKeys(files.roomId).readStored(owner)
+                check(
+                    retained.toString() ==
+                        adopted.getJSONObject("lateKeys").getJSONObject("retained").toString()
+                )
+                check(!expect(runtime.isSpaceOpen(owner, device, operation)))
+                checkpoint().put("retained", retained).put("runtimeNeverOpened", true)
             } catch (failure: Exception) {
                 primary = failure
                 throw failure

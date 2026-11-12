@@ -20,6 +20,8 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
 
     fun peerContent() = textContent(files.body + "-peer", peerLogicalId)
 
+    fun lateKeyContent() = textContent(files.body + "-late-key", canonical("lateLogicalId"))
+
     fun editContent(target: String, latest: Boolean): String {
         val body = files.body + if (latest) "-latest" else "-first"
         val operation = if (latest) latestEditId else firstEditId

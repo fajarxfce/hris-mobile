@@ -210,6 +210,8 @@ internal class HrisWorkerProofContainer(
 
     fun incomingSources() = HrisSpaceIncomingSourcesProofHost(container.koin)
 
+    fun incomingLateKeys(roomId: String) = HrisSpaceLateKeyProofHost(container.koin, roomId)
+
     suspend fun incomingReceipt(owner: CollaborationSpaceOwner) =
         expect(
                 container.koin

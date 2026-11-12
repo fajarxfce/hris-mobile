@@ -34,5 +34,6 @@ validators. Own every lease, collector, barrier and native task; release them on
 and retain failed isolated userdata. Do not use the user's phone, Bima's retained stores,
 synthetic key callbacks, duplicate key imports or changed production deadlines as proof.
 
-This is pending implementation after the current full validation and commit. Live Group
-rollout and native Apple SDK8 acceptance remain separate work.
+The eight-case suite and full Mobile gate now accept this scenario; see [native late-key evidence](collaboration-native-late-keys.md).
+The quiet-period check distinguishes bounded10-second cursor long polls from repeated business
+requests. Live Group rollout and native Apple SDK8 acceptance remain separate work.
