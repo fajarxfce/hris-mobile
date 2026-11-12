@@ -8,7 +8,13 @@ repositories/policies, never other usecases; repositories map datasource results
 ## Active Original historical completion implementation
 
 The next reviewed11-file draft was APPLIED by21398REAPED at00:25:47UTC12Nov. It is UNCOMMITTED
-and under validation. Format65268 REAPED PASS36.488s; focused1/98754 RUNNING. Workspace
+and under validation. Format65268 REAPED PASS36.488s. focused1/98754 REAPED FAILED117.099s before tests:
+three new AwaitDecryption fixtures omitted their required reason. Explicit UnableToDecrypt fixed it.
+Format3950 REAPED PASS34.919s; focused2/65032 REAPED FAILED115.461s/119cases/1failure:
+a new concurrent-request fixture set pendingRetryRequired without its required cursor/boundary.
+The existing policy correctly rejected it. Fixture now supplies both and asserts structural validity.
+Production/assertions and all case IDs preserved; both failed candidates/reviews archived.
+Format30635 REAPED PASS35.360s; focused3/39306 is RUNNING. Workspace
 .work/original-key-reference-completion-2026-11-11; source baseline6c40ccef1361564c706e10243dc183f18088bf5e,
 13,358 cases/5,050 inputs. prepare-next-original-key-completion.py and configure-next-original-key-completion.py
 HAVE EXECUTED; do not rerun old configure over the focused-coverage refinement.
@@ -21,8 +27,8 @@ Focused coverage now explicitly includes the changed29 page-acquisition cases al
 Old330 prediction is superseded only for focused selection; full13,422 and hosted16,028 unchanged.
 Expected/run/freeze/accept/dispatch/publisher scripts are prepared in the new workspace. Publication
 requires reviews for any future failed attempts. No native/primary/global activation. Early source architecture check48154 REAPED PASS; this is not compilation or final acceptance.
-Frozen candidate5,056inputs/d7847851b4ec12648c4f2061c509ea63b14fc09aad17f8418620c02d082f8b90.
-Starter68417 is now reaped and accepted;98754 is the only compiler. Keep working through the PRD.
+Frozen candidate5,056inputs/e89a643ad7cd2611c512ee18f2e2dedc1545ca82d44394a20544e9a73f7f68fd.
+Starter68417 is reaped and accepted;39306 is the only compiler. Keep working through the PRD.
 
 ## Local recovery content and browser reporting accepted
 
@@ -98,9 +104,12 @@ primary completion20/policy9, recovery storage56, metadata18 and graph2 controls
 Read next-original-key-completion-review.md/contract. Guarded prepare/configure HAVE EXECUTED; publisher copied/prepared, not executed.
 Original generators/snippets and old configure are STALE after the focused-coverage refinement. Nextworkspace original-key-reference-completion-2026-11-11:
 5,056 inputs,13,422local,195+193focused,16,028hosted=11,400portable+4,628Apple. Preserve Karma inputs
-and conditional full report refresh. Then Space/Original-alias projection:15 partial unreviewed/
+and conditional full report refresh. Then Space/Original-alias projection:15 statically reviewed/
 uncompiled draft files (19 reader+34 acquisition+35 completion cases, fixtures/policies/page batch,
-three owners, DI/both-order graph). No source applied. Draft primary fixture rejects new historical
+three owners, DI/both-order graph). No source applied. Guarded prepare-space-key-projection.py/publish-space-key-projection.py are
+PREPARED, NOT EXECUTED. Planned next workspace space-key-page-projection-2026-11-12,
+5,067inputs/13,598local,484focused,16,292hosted. Both known Original fixture defects are corrected
+in the Space draft. Four existing-file hashes guard application. Draft primary fixture rejects new historical
 dependency calls to preserve existing transport/native-alias controls. Read next-space-key-page-state.json
 and next-space-key-page-projection-review.md before review/application. Actual registered physical
 provenance remains distinct from logical/history/provider coordinates. Global policy already separates moreHistoryPages
