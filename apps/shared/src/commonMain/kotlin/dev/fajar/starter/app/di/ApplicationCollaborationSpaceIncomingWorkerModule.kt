@@ -1,5 +1,6 @@
 package dev.fajar.starter.app.di
 
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationIncomingSources
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationIncomingStartup
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.work.CollaborationSpaceHistoryRecoveryService
@@ -17,13 +18,28 @@ internal fun applicationCollaborationSpaceIncomingWorkerModule() = module {
         applicationCollaborationSpaceHistoryRecoveryServiceModule(),
     )
     single {
+        val startup = inject<ObserveCollaborationSpaceIncomingStartup>()
+        val publication = inject<ObserveCollaborationSpaceRuntimePublication>()
+        val keys = inject<RetainCollaborationSpaceRoomKeys>()
+        val sync = inject<RetainCollaborationSpaceSyncBatches>()
+        ApplicationCollaborationIncomingSources(
+            observeStartup = { startup.value(it) },
+            observePublication = { publication.value(it) },
+            retainKeys = { keys.value.observe(it) },
+            retainSync = { sync.value.observe(it) },
+            build = get(),
+        )
+    }
+    single {
         val parent = inject<ApplicationCollaborationLifetime>()
+        val incoming = inject<ApplicationCollaborationIncomingSources>()
         val observe = inject<ObserveCollaborationSpaceIncomingStartup>()
         val request = inject<RequestCollaborationSpaceIncomingScan>()
         ApplicationCollaborationIncomingStartup(
             states = lazy { parent.value.state },
             observe = { observe.value(it) },
             request = { access, generation, reason -> request.value(access, generation, reason) },
+            onForegroundEntry = { incoming.value.foregroundEntered() },
             build = get(),
         )
     }

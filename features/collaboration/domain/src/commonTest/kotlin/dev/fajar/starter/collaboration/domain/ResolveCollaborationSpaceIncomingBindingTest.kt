@@ -10,6 +10,64 @@ import kotlinx.coroutines.test.*
 @OptIn(ExperimentalCoroutinesApi::class)
 class ResolveCollaborationSpaceIncomingBindingTest {
     @Test
+    fun lateOriginalMetadataStillGetsPrimaryWorkAfterHistorySweepCompleted() = runTest {
+        val f = SpaceIncomingPhysicalResolutionFixture()
+        val previous = assertNotNull(f.request.snapshot)
+        val history =
+            CollaborationSpaceHistoryRecovery(
+                f.id(790),
+                revision = 1,
+                unresolved = true,
+                complete = true,
+            )
+        f.request.snapshot = previous.copy(demand = previous.demand.copy(historyRecovery = history))
+        f.base.hooks["write"] = {
+            assertEquals(assertNotNull(f.base.retained).original, f.originalCanonical)
+            assertEquals(f.originalCanonical, f.originalIndex)
+            assertEquals(history, assertNotNull(f.request.snapshot).demand.historyRecovery)
+        }
+        assertEquals(
+            AppResult.Success(CollaborationSpaceIncomingBindingResolution.Queued),
+            f.resolve(),
+        )
+        val retained = assertNotNull(f.request.snapshot).demand
+        assertEquals(history, retained.historyRecovery)
+        assertEquals(
+            CollaborationSpaceIncomingTarget.Original(f.originalPosition),
+            retained.rooms.single().target,
+        )
+        assertEquals(CollaborationSpaceIncomingPhase.Latest, retained.rooms.single().phase)
+        assertEquals(f.physical.generation, retained.rooms.single().generation)
+        assertTrue(retained.physicalRooms.isEmpty())
+        assertEquals(1, f.originalMetadataWrites.size)
+    }
+
+    @Test
+    fun latePublishedPhysicalHintStillGetsPrimaryWorkAfterHistorySweepCompleted() = runTest {
+        val f = SpaceIncomingPhysicalResolutionFixture()
+        val binding = assertNotNull(f.base.retained)
+        f.base.retained =
+            binding.copy(
+                room =
+                    binding.room.copy(origin = CollaborationSpaceRoomOrigin.SPACE, original = null),
+                original = null,
+            )
+        val previous = assertNotNull(f.request.snapshot)
+        val history = CollaborationSpaceHistoryRecovery(f.id(791), revision = 1, complete = true)
+        f.request.snapshot = previous.copy(demand = previous.demand.copy(historyRecovery = history))
+        assertEquals(
+            AppResult.Success(CollaborationSpaceIncomingBindingResolution.Queued),
+            f.resolve(),
+        )
+        val retained = assertNotNull(f.request.snapshot).demand
+        assertEquals(history, retained.historyRecovery)
+        assertEquals(CollaborationSpaceIncomingPhase.Latest, retained.rooms.single().phase)
+        assertEquals(f.physical.generation, retained.rooms.single().generation)
+        assertTrue(retained.physicalRooms.isEmpty())
+        assertTrue(f.originalMetadataWrites.isEmpty())
+    }
+
+    @Test
     fun retainedLegacyBindingConvertsLocallyWithoutAnotherWakeOrTransport() = runTest {
         val f = SpaceIncomingPhysicalResolutionFixture()
         val before = assertNotNull(f.request.snapshot).demand

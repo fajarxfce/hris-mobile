@@ -24,6 +24,7 @@ class ApplicationCollaborationIncomingStartup(
         ) -> AppResult<Boolean>,
     private val build: AppBuild,
     private val generation: () -> String = { Uuid.random().toString() },
+    private val onForegroundEntry: () -> Unit = {},
 ) {
     private val foreground = Mutex()
     // Only foreground's mutex owner reads/writes this bounded, credential-free process capture.
@@ -35,6 +36,7 @@ class ApplicationCollaborationIncomingStartup(
             if (build.platform !in setOf(AppPlatform.Android, AppPlatform.Ios)) return@launch
             foreground.withLock {
                 try {
+                    onForegroundEntry()
                     states.value
                         .map { it.recoveryParent() }
                         .distinctUntilChanged()

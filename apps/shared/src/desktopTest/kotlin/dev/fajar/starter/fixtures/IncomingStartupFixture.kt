@@ -29,6 +29,7 @@ internal class IncomingStartupFixture(
     val reasons = mutableListOf<CollaborationSpaceIncomingScanReason>()
     val parents = mutableListOf<CollaborationNativeParent>()
     var subscriptions = 0
+    var foregroundEntries = 0
     var ids = 0
     var beforeObserve: () -> Unit = {}
     var request: suspend () -> AppResult<Boolean> = { AppResult.Success(true) }
@@ -54,5 +55,6 @@ internal class IncomingStartupFixture(
             },
             build = base.build.copy(platform = platform),
             generation = { recoveryId(900 + ++ids) },
+            onForegroundEntry = { foregroundEntries++ },
         )
 }

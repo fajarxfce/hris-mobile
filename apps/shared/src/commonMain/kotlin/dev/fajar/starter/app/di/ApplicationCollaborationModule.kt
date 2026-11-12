@@ -1,5 +1,6 @@
 package dev.fajar.starter.app.di
 
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationIncomingSources
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSdkInventoryRepository
@@ -35,6 +36,7 @@ internal fun applicationCollaborationModule(
         runtime(get(), get(named(dev.fajar.starter.network.HttpClients.Public)))
     }
     single {
+            val incoming = inject<ApplicationCollaborationIncomingSources>()
             val push = inject<ObserveNativePushStatus>()
             val activate = inject<ActivateCollaborationDevice>()
             val readiness = inject<QueueCollaborationReadinessSignal>()
@@ -51,6 +53,7 @@ internal fun applicationCollaborationModule(
                 { activate.value(it) },
                 observeReadiness = { readiness.value.observe() },
                 observeSpaceReadiness = { spaceReadiness.value.observe() },
+                collectSpaceIncoming = { incoming.value.collect(it) },
                 requestSpaceRecovery = { spaceRecovery.value() },
                 observeCredentialRecovery = { credentialRecovery.value(it) },
                 maintainSession = { tokens.value.maintain(it) },

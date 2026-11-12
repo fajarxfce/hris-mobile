@@ -32,6 +32,8 @@ class ApplicationCollaborationLifetime(
     private val maintainSession: (String) -> Flow<AppResult<SessionTokens?>> = { emptyFlow() },
     private val observeSpaceReadiness: () -> Flow<AppResult<Boolean>> = { emptyFlow() },
     private val requestSpaceRecovery: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) },
+    private val collectSpaceIncoming: suspend (StateFlow<ApplicationCollaborationState>) -> Unit =
+        {},
 ) : AutoCloseable {
     private val lifetime = SupervisorJob()
     private val scope = CoroutineScope(lifetime + dispatcher)
@@ -60,6 +62,20 @@ class ApplicationCollaborationLifetime(
                 // Session acquisition retains its own durable refresh; no host retry timer.
             }
         }
+
+    /** Installed incoming sources stay observed while this process owns the native runtime. */
+    private val incomingSourcesSubscription = lazy {
+        scope.launch(start = CoroutineStart.UNDISPATCHED) {
+            if (build.platform !in setOf(AppPlatform.Android, AppPlatform.Ios)) return@launch
+            try {
+                collectSpaceIncoming(state)
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                /* Durable native/source state survives an ended observation. */
+            }
+        }
+    }
 
     /** Lazy creation subscribes undispatched; the application lifetime owns cancellation. */
     private val spaceReadinessSubscription = lazy {
@@ -101,6 +117,7 @@ class ApplicationCollaborationLifetime(
     fun start() {
         if (!started.compareAndSet(false, true)) return
         sessionMaintenance.start()
+        incomingSourcesSubscription.value
         spaceReadinessSubscription.value
         readinessSubscription.value
 

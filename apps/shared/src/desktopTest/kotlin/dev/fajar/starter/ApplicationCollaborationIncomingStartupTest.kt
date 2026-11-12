@@ -14,6 +14,33 @@ import kotlinx.coroutines.test.*
 
 class ApplicationCollaborationIncomingStartupTest {
     @Test
+    fun eachSerialForegroundOwnerSignalsOnceBeforeLocalObservation() = runTest {
+        val f = IncomingStartupFixture(testScheduler)
+        f.beforeObserve = { assertEquals(f.subscriptions + 1, f.foregroundEntries) }
+        val first = f.startup.start(backgroundScope)
+        f.startup.start(backgroundScope)
+        runCurrent()
+        assertEquals(1, f.foregroundEntries)
+        assertEquals(1, f.subscriptions)
+        f.beforeObserve = { assertEquals(2, f.foregroundEntries) }
+        first.cancelAndJoin()
+        runCurrent()
+        assertEquals(2, f.foregroundEntries)
+        assertEquals(1, f.subscriptions)
+    }
+
+    @Test
+    fun foregroundEntrySignalsEvenWhileParentIsPending() = runTest {
+        val f = IncomingStartupFixture(testScheduler)
+        f.base.states.value = ApplicationCollaborationState.Pending
+        f.startup.start(backgroundScope)
+        runCurrent()
+        assertEquals(1, f.foregroundEntries)
+        assertEquals(0, f.subscriptions)
+        assertTrue(f.requests.isEmpty())
+    }
+
+    @Test
     fun foregroundEntryRequestsOnceWithoutEagerBackgroundObservation() = runTest {
         val f = IncomingStartupFixture(testScheduler)
         assertFalse(f.states.isInitialized())

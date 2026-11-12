@@ -1,6 +1,7 @@
 package dev.fajar.starter
 
 import androidx.lifecycle.ViewModelStore
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationIncomingSources
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationIncomingStartup
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.createAppContainer
@@ -343,6 +344,10 @@ class CollaborationBindingsTest {
                 )
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceIncomingStartup>())
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceRuntimePublication>())
+                assertSame(
+                    container.koin.get<ApplicationCollaborationIncomingSources>(),
+                    container.koin.get<ApplicationCollaborationIncomingSources>(),
+                )
                 assertNotNull(container.koin.get<RetainCollaborationSpaceRoomInventory>())
                 assertNotNull(container.koin.get<DeferCollaborationSpaceInventory>())
                 assertSame(

@@ -809,6 +809,77 @@ class ApplicationCollaborationLifetimeTest {
         }
     }
 
+    @Test
+    fun incomingSourcesStartOnceWithTheSameProcessState() = runBlocking {
+        withFixture { f ->
+            var starts = 0
+            var stops = 0
+            f.incomingSources = { state ->
+                assertSame(f.lifetime.state, state)
+                starts++
+                try {
+                    awaitCancellation()
+                } finally {
+                    stops++
+                }
+            }
+            assertEquals(0, starts)
+            f.lifetime.start()
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            assertEquals(1, starts)
+            f.lifetime.close()
+            f.scheduler.runCurrent()
+            assertEquals(1, stops)
+        }
+    }
+
+    @Test
+    fun processJoinWaitsForIncomingSourceCleanup() = runBlocking {
+        withFixture { f ->
+            val release = f.gate()
+            var cleanup = false
+            f.incomingSources = {
+                try {
+                    awaitCancellation()
+                } finally {
+                    withContext(NonCancellable) {
+                        release.await()
+                        cleanup = true
+                    }
+                }
+            }
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            val closing = async(StandardTestDispatcher(f.scheduler)) { f.lifetime.closeAndJoin() }
+            f.scheduler.runCurrent()
+            assertFalse(closing.isCompleted)
+            assertFalse(cleanup)
+            release.complete(Unit)
+            f.scheduler.runCurrent()
+            closing.await()
+            assertTrue(cleanup)
+        }
+    }
+
+    @Test
+    fun failedIncomingObservationCannotStopOrRestartNativeOwnership() = runBlocking {
+        withFixture { f ->
+            var starts = 0
+            f.incomingSources = {
+                starts++
+                error("fixture incoming observation")
+            }
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            assertEquals(1, starts)
+            assertFalse(f.lifetime.state.value is ApplicationCollaborationState.Stopped)
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            assertEquals(1, starts)
+        }
+    }
+
     private suspend fun withFixture(block: suspend (LifetimeFixture) -> Unit) {
         val app = CollaborationWorkerFixture()
         var fixture: LifetimeFixture? = null
@@ -902,6 +973,7 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, val selected:
     val activated = mutableListOf<CollaborationOwner>()
     var readiness: () -> Flow<AppResult<Boolean>> = { emptyFlow() }
     var spaceReadiness: () -> Flow<AppResult<Boolean>> = { emptyFlow() }
+    var incomingSources: suspend (StateFlow<ApplicationCollaborationState>) -> Unit = {}
     var spaceRecoveryRequests = 0
     var onSpaceRecovery: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) }
     var maintainSession:
@@ -950,6 +1022,7 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, val selected:
             StandardTestDispatcher(scheduler),
             observeReadiness = { readiness() },
             observeSpaceReadiness = { spaceReadiness() },
+            collectSpaceIncoming = { incomingSources(it) },
             requestSpaceRecovery = {
                 spaceRecoveryRequests++
                 onSpaceRecovery()

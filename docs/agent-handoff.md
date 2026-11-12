@@ -1,62 +1,70 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 08:36 UTC. Continue the PRD and push every commit. All 54 groups OPEN.
+Updated 12 November 2026, 08:48 UTC. Continue the PRD and push every commit. All 54 groups OPEN.
 No subagents. One compiler OR emulator. Follow AGENTS.md and clean layer boundaries.
-Phone install-only, announce every installation; never launch or drive its UI.
+Phone install-only; announce installations and never launch or drive the phone UI.
 
-## Current: process-owned incoming sources under full validation
+## Process-owned incoming sources accepted locally
 
 Workspace `.work/space-application-sources-2026-11-12`, baseline
-`cef427683f8167436faa7d8bec3f523ae7a16453`. 13 files APPLIED, not accepted/committed;
-5,130 inputs, manifest `2cb91e7d99aa490f59289e984f94158b01e9bd40c6ba649a72664165575113db`.
-Format1/69985 REAPED,36.452s. Focused1/27621 REAPED,303 cases/203.674s.
-Browser1/8337 REAPED,192 cases/92.412s. Focused audit495 accepted inline exit0.
-Full1/56719 ACTIVE; no other compiler/emulator. Expected14,497 local/17,552 hosted.
-Publisher prepared, NOT executed. Accepted-handoff writer still required. Hosted plan UNDISPATCHED.
-Preparer executed; never rerun. Its first preflight failed on two existing control-class names before
-source application; partial preparation archived under the runtime-publication workspace.
-No test failure in the current source so far. Preserve failed candidates before any correction.
+`cef427683f8167436faa7d8bec3f523ae7a16453`. 13 files/5,130 inputs, manifest
+`2cb91e7d99aa490f59289e984f94158b01e9bd40c6ba649a72664165575113db`.
+Format69985 REAPED/36.452s; focused27621 REAPED303/203.674s; browser8337 REAPED192/92.412s.
+495 focused accepted. Full1/56719 REAPED420.609s, build successful. Initial audit41002 rejected
+318 presentation cases restored from cache because its conservative closure includes the changed
+domain test file. Original run/audit failure preserved. Only those318 cases were rerun in
+cached-revalidation-1/29416 REAPED41.091s. Audit29171 REAPED verifies separate source-matched
+archive provenance, prior IDs and dependency closures.14,497 local=12,459 fresh+2,038 unchanged.
+No Kotlin/test failure or production correction in this stage. Read measurement for exact hashes.
+Publisher EXECUTED. Commit/push accepted source/evidence, then dispatch-hosted.py ONCE.
+Hosted plan remains UNDISPATCHED, expected17,552=12,475 portable+5,077 Apple.
 
 27 new app cases (22 source owner,3 lifetime,2 foreground) plus2 common late-metadata cases.
-ApplicationCollaborationLifetime owns the collector. Exact native publication selects the child;
-root/account/instance changes cancel AND join old children. Key/sync failures are independent.
-Foreground entry restarts one finite pass; no retry timer, additional SDK/client/sync acquisition,
-native close ownership or UI dependency. Diagnostics contain categories only. CI selects the new
-application class explicitly. Metadata audit reviewed all canonical writers, primary conversion
-and confirmed key-wait demotion; newly discovered primary work survives an already completed sweep.
-SDK8 already emits registration reconciliation and imports notify the same stream. No schema10,
-synthetic startup receipt, separate startup request or broad encryption-init barrier is needed.
+ApplicationCollaborationLifetime owns one process collector. Exact native publication selects key
+and sync children; root/account/instance changes cancel AND join the previous children. Failures
+are independent; foreground entry starts one finite pass without a retry timer. No new SDK/client,
+sync acquisition, native close handle or ViewModel dependency. Category-only diagnostics deduplicate
+repeated sync failures. CI explicitly selects the new app class. Canonical metadata precedes primary
+conversion, and late physical hints survive completed history sweeps; unresolved primary work gets
+confirmed fresh recovery demand. SDK8 already emits initial reconciliation and import notifications.
+Source wiring is enabled; no live deployment or native-runtime acceptance is claimed.
 
-## Accepted runtime publication and hosted evidence
+## Next: actual native callback through the application owner
 
-Runtime publication source cef42768 / Group cf66781b pushed (81544/54467 REAPED).
-11 files/5,127 inputs, manifest b4c0b77605df85d4ad73c8a6c56a632b2d2d1195f0f649444ad4cb54d2eb0456.
-Full1/89532 completed exit0/524.549s; final reap output lost at compaction, closed session/result
-verified. Audit95664 REAPED.14,466 local=12,428 fresh+2,038 verified unchanged;226 focused.
-CI43182776077 dispatched ONCE08:25:10.618006UTC (11348 REAPED); hosted state exists;
-expected17,519=12,444 portable+5,075 Apple. No redispatch.
-Consumer66f537a4 CI43176939497: portable12,407 accepted (78231 REAPED), Apple pending;
-expected17,470. Targetedf969fd73 CI43172811544 FULL17,314 audited (portable57960/Apple2467 REAPED).
-Binding43168158361 FULL17,170 and lifecycle43165090113 FULL17,085 are audited.
-Read source-specific workspace audit files; green workflow status alone is not acceptance.
+`native-draft` contains4 Mobile files and `native-group-draft` contains3 Group files, all UNAPPLIED,
+UNREVIEWED and Kotlin UNCOMPILED. Private Python protocol27 cases passed0.003s (4 new).
+Read next-native-state.json/design.md. Partial draft generators already ran; do not rerun them.
+The existing HrisSpaceRecoveryProofHost replaces ApplicationCollaborationLifetime and omits the
+incoming delegate. The draft adds an optional delegate for the new fixture while preserving all
+old variants. New host uses actual application owner, native callbacks and encrypted repository;
+one write is held, then committed while its response is lost. ACK independently checks the exact
+durable receipt. Two foreground resumes must keep one write/ACK/native instance. Separate offline
+process reopening compares the receipt digest and unchanged messages without SDK acquisition.
 
-## Next: native incoming-source proof and remaining PRD
+Review DI resolution order, race/teardown paths, bounded write gate and strict Group/Python proof.
+No native preparer yet. Compile proof/server fixtures with no emulator, then run isolated fictional
+fixtures on2560MiB2core emulator with the precompiled768MiB harness. No phone UI, live backend
+mutation, protected message resend or SDK rebuild. This draft does NOT yet prove late keys during
+an app write, changed accounts, long quiet request bounds or Apple native callbacks. Those and the
+remaining PRD work stay open. Protocol fakes/Apple compilation are not native SDK acceptance.
 
-Finish full validation, audit source/case retention, publish evidence, commit/push and dispatch once.
-Then exercise actual SDK8 key registration through the process-owned consumer and encrypted storage.
-The existing HrisSpaceRecoveryProofHost replaces ApplicationCollaborationLifetime and currently
-omits the new incoming delegate: native proof must wire it explicitly or use the production module.
-A raw SDK callback test alone is not application activation evidence. Extend isolated fictional
-fixtures without resending any protected demo message. Measure initial stored-key reconciliation,
-retained receipt before ACK, lost write reply, foreground resume without new registration, exact
-publication replacement, finite request counts, late keys and offline/process reopening. Reuse
-real SDK/storage and bound fixture failure injections; do not label fake callbacks native proof.
-Native plan/draft is still pending implementation. Apple native key adapter and acceptance remain
-open. No live deployment or new release was performed for these foundation changes.
+## Hosted evidence
+
+Runtime publication cef42768 / Group cf66781b pushed81544/54467 REAPED.
+CI43182776077 was dispatched ONCE08:25:10.618006UTC (11348 REAPED), expected17,519.
+Apple job131062567285 failed BEFORE compilation/tests: Gradle could not resolve Kotlin MPP2.3.21
+in the pinned inspector included build. Log SHA93dfa9a1a736f49c02f0403bb5ef9f1c49ff981d6f8a8b610f36b2954737fc30.
+Workflow/catalog/verification metadata match accepted consumer66f537a4; underlying download cause
+is not logged. Failure review saved. Portable is pending. Do not blindly redispatch; after the run
+finishes, one retry of the failed job is justified by unchanged inputs and adjacent successful run.
+Consumer43176939497 FULL17,470 audited: portable78231 / Apple57691 REAPED.
+Targeted43172811544 FULL17,314 audited: portable57960 / Apple2467 REAPED.
+Binding43168158361 FULL17,170 and lifecycle43165090113 FULL17,085 audited. Source-specific audit
+files remain authoritative; a green workflow alone is not acceptance.
 
 Phone36696 REAPED08:23:43.714411UTC,20.020610s timeout; next>=08:57:23.735021UTC.
-No install. Validated release89 remains ready. Do not repeat availability questions.
-[Previous checkpoint](agent-handoff-history-through-durable-key-consumer-2026-11-12.md).
+No install. Validated release89 remains ready. No repeated availability question.
+[Previous checkpoint](agent-handoff-history-through-runtime-publication-2026-11-12.md).
 
 ## Protected environment and prior evidence
 

@@ -1,0 +1,100 @@
+{
+  "recordedAt": "2026-11-12T08:47:21.158978+00:00",
+  "sourceBaseline": "cef427683f8167436faa7d8bec3f523ae7a16453",
+  "sourceFiles": 5130,
+  "changedSourceFiles": 13,
+  "sourceManifestSha256": "2cb91e7d99aa490f59289e984f94158b01e9bd40c6ba649a72664165575113db",
+  "focused": {
+    "tests": 495,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "full": {
+    "validated": 14497,
+    "fresh": {
+      "tests": 12459,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 420.609,
+  "mainFreshCounts": {
+    "tests": 12141,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "supplementalRuns": [
+    {
+      "run": "cached-revalidation-1",
+      "sourceManifestSha256": "2cb91e7d99aa490f59289e984f94158b01e9bd40c6ba649a72664165575113db",
+      "startedAt": "2026-11-12T08:44:55.089096+00:00",
+      "elapsedSeconds": 41.091,
+      "sourceFiles": 5130,
+      "freshCounts": {
+        "tests": 318,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "initScriptSha256": "14f82ee5bf529e8c183001bb9d45e2f514f5a124356d86398b70616867c1b9b3"
+    }
+  ],
+  "preservedAuditFailure": {
+    "session": 41002,
+    "sessionReaped": true,
+    "exitCode": 1,
+    "fullBuildExitCode": 0,
+    "reason": "A presentation test task reused a cached report whose source closure includes the changed domain test file. Conservative retention audit rejected it.",
+    "repair": "Force only the cached presentation desktop task and independently audit the supplemental report against the same frozen source.",
+    "cachedCounts": {
+      "tests": 318,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152227098,
+    "sha256": "14051741c4f583ebc04c12deebc986b20f5f039d1542b30477c19aee10950d2c"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "applicationIncomingSourcesAccepted": true,
+  "applicationCollectorWiringEnabled": true,
+  "newAppCases": 27,
+  "newDomainCasesPerTarget": 2,
+  "oneProcessOwner": true,
+  "oldChildrenCancelledAndJoinedBeforeReplacement": true,
+  "actualPublicationRequired": true,
+  "foregroundResumeHasNoRetryTimer": true,
+  "independentKeyAndSyncFailures": true,
+  "noNativeAcquisitionInApplicationOwner": true,
+  "nativeListenerDisposalOwnedByRuntime": true,
+  "nativeInitialReconciliationReused": true,
+  "noSyntheticStartupSchemaOrRequest": true,
+  "lateMetadataGetsPrimaryWorkAfterCompletedSweep": true,
+  "metadataAudit": [
+    "13 private reviewed files, including CI selecting the new application class. Do not rerun partial generators.",
+    "22 owner +3 lifetime +2 foreground cases; 2 common late metadata/hint cases.",
+    "Metadata review: resolver confirms Original canonical/index or Published canonical before physical-to-primary conversion. Late primary work does not depend on the active history cursor.",
+    "Demote Original/Published use cases verify metadata/history/EOF, then atomically remove primary and request fresh All recovery with wake.",
+    "Conversation open alone publishes metadata but no acquired history; room binding retains recovery wake; existing recovery worker syncs runtime before work.",
+    "SDK8 initial reconciliation plus import-store notifications cover startup/restore through the exact durable receipt. No new schema/startup request.",
+    "Application owns process/foreground lifecycle only; use cases own admission, storage, retries and ACK. No SDK acquisition or native disposal from this owner.",
+    "Native validation and Apple native key adapter remain outstanding."
+  ],
+  "nativeSdkExecution": false,
+  "appleNativeAdapterImplemented": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "starterPortRequired": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [],
+  "failureReviews": {},
+  "preparationFailure": "Archived pre-application preflight: two selected control-class names corrected to their existing names; zero source edits/tests at failure."
+}
