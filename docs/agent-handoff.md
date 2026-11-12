@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 19:37 UTC. Continue beyond checkpoints; push every commit.
+Updated 12 November 2026, 19:43 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -8,7 +8,15 @@ is waived; native Apple/call/push behavior is not accepted merely by compilation
 
 ## Current next implementation
 
-Canonical local Space thread history is ACCEPTED in Mobile
+ACTIVE: .work/company-thread-publication-2026-11-12, base Mobileed4e61f5 / Group6c34ecbd.
+One new Company slow-consumer regression is the only source change; production is untouched.
+Formatter1/8189 REAPED PASS35.369s. Red1/52219 ACTIVE from19:42UTC; expect16 cases with the
+new denial-buffering case failing. Reap before edits/new compiler/emulator. Frozen5161inputs/
+e82199b1009c8ba034cf0aee75d1720fd3257111d06266ebf9bd1173211a1f8d.
+Preserve exact failing candidate before a demonstrated fix. Do not mark the work complete here.
+
+
+Canonical local Space thread history is ACCEPTED and pushed as Mobileed4e61f5 / Group6c34ecbd in Mobile
 .work/space-thread-history-routing-2026-11-12. Read docs/collaboration-space-thread-history.md.
 13 changed inputs add typed physical location and one owned observation use case, data DI and
 actual encrypted storage integration. Original Company coordinates remain under Group admission;
@@ -20,7 +28,7 @@ Inputs5161/cd6f263a89da0b2a974501b099286b8884a66c7d19b2de2b9680cdc74165f35f.
 Report manifest61c2a871b3500217b05c5b2fbc35c1d5d168a5e5c84734f441cf283dd14161eb.
 Immutable full-1/accepted-proof.apk152443503B/
 0bbdd271e6bdb09064d27e720d11a51479a4a124b0072765b3e33adb843435f6; SDK8 native unchanged.
-No new native suite or phone claim. No compiler/emulator remains active. Do not rerun accepted gates.
+No new native suite or phone claim. Canonical-history gates are finished; the Company compiler above is active. Do not rerun accepted canonical gates.
 
 Preserve failed-test-compile-1, failed-publication-boundary-1 and full-1/failed-auditor-1.py.
 The exact slow-consumer test demonstrated an extra outer buffer holding a page outside cancellation;
@@ -69,18 +77,21 @@ Shared registry43266580439 on ddf65dbe485aff6f2ef74d22469a723892d04d93 is FULLY 
 Both artifact digests/CRC/reports/logs audited. Apple5135 does not include the four Swift SDK tests.
 See measurements/collaboration-runtime-registry-platforms-2026-11-12.json. Do not poll/rerun it.
 
-Inventory43273697021 on dd405660a3ea920a4f27781f006d83b7b7fd636a is IN_PROGRESS.
-Portable131394617779 is accepted12,604 (auditor13912 REAPED). Chrome156→157 changed only the
-launcher suffix on5,601 prior browser cases; exact methods/classes/platforms preserved. Failed auditor
-and audit-correction.json retained. Do not repeat portable. Apple131394617992 still runs; expect5,148 including
-exact13 inventory methods. After each successful job run Mobile
-`.work/apple-sdk-inventory-2026-11-12/hosted-audit.py portable|apple hosted-43273697021`.
+Inventory43273697021 ondd405660a3ea920a4f27781f006d83b7b7fd636a is FULLY ACCEPTED:
+12,604portable +5,148native iOS =17,752. Appleauditor86983 REAPED PASS, all13inventory methods,
+original case IDs, full host build and push fields verified. Appleartifact13977676010/812817B/
+be8a2d32057e1bdd8cffd494957572f8e709fd673a33f95def7608c830e6f9f6;
+reportefc3139e3e11249eca18cc3e0ad7c81dea534e35d9235bcb1c164bb194e36b27;
+loge91af91423786ab3bfabc2351a7092696633806add4044c676bc337ee28b3f50.
+Portableauditor13912 accepted12,604; Chrome156→157 changed only launcher suffix on5,601 old
+cases. Failed auditor/audit-correction retained. Both compact measurements updated. Do not rerun.
 
-Store43279731370 on836ac52575daf1747aac1cf94a6768a80998023f is PENDING behind inventory.
+Store43279731370 on836ac52575daf1747aac1cf94a6768a80998023f has STARTED.
+Portable131439574875 and Apple131439575160 are running; latest19:42UTC.
 Dispatch89306 REAPED; expect12,604portable and5,156Apple (prior13 inventory +8 store methods).
 Run `.work/apple-sdk-store-2026-11-12/hosted-audit.py portable|apple hosted-43279731370` only
-after each job succeeds. Auditor is prepared/syntax checked, not executed. DO NOT dispatch another
-same-branch control run before store starts: GitHub would replace that pending run.
+after each job succeeds. Auditor is prepared/syntax checked, not executed. A later same-branch run
+can now queue; finish the Company fix before choosing its exact head. Do not dispatch multiple pending runs.
 Inventory and store local main ARM64/metadata, all21 native-test method compilation and full
 `:check` pass. Linux executed0 Apple cases. Both adapters require a pre-provisioned private,
 backup-excluded root; store creation and existing-only access remain separate. No product binding.

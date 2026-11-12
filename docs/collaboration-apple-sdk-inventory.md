@@ -41,10 +41,12 @@ and the shared repository's protected-read lifetime. Their native execution is a
 separate gate from Linux compilation. Main iOS ARM64 and metadata compilation, all13 simulator-test methods, format,
 architecture, static checks and full `:check` pass locally. The full check reuses
 14,626 exact unchanged platform reports; it executes no new test locally. Native
-execution of the13 new Apple cases remains pending. The first compile-only failure was a missing import of the native
+execution is now accepted on exact dd405660: hosted run43273697021 passed12,604 portable
+and5,148 native iOS cases, including all13 inventory methods. Artifact digest, ZIP CRC,
+prior case identities, report manifest and host build log were audited. The first compile-only failure was a missing import of the native
 `kotlinx.coroutines.IO` extension; its source and diagnostic are retained privately.
 
 Workspace: `.work/apple-sdk-inventory-2026-11-12`. SDK8 native Swift/Mach-O acceptance,
-full existing-store acquisition, local identity reading, private-root composition,
+the separate existing-store acquisition hosted gate, local identity reading, private-root composition,
 and production Apple runtime binding remain separate work. Android release 91 and
 its accepted inputs are unchanged; this adapter is not included in that APK.
