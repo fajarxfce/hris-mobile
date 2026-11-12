@@ -1,10 +1,10 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 16:06 UTC. Continue implementation beyond checkpoints and push every commit.
+Updated 12 November 2026, 16:37 UTC. Continue implementation beyond checkpoints and push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One compiler OR emulator. Phone install-only:
 announce and select serial; never launch/drive UI, reset data or uninstall. ADB availability question is pending after a fresh connection timeout.
 
-## Native late-key worker recovery accepted; full check running
+## Native late-key worker recovery fully validated
 
 Workspace .work/space-late-key-recovery-native-2026-11-12 in Mobile and Group.
 Five Mobile proof files and four Group test/driver files; no production change.
@@ -29,17 +29,30 @@ server traffic pass. New case total18 native/33 Matrix,5 encrypted sends,7sync,4
 Fixture scheduler invokes the actual registered task; automatic OS relaunch and new collector
 concurrency remain separate. No new phone release is needed for these proof-only changes.
 
-Mobile full1/61257 started16:03:29UTC and is RUNNING; sources must remain unchanged. It uses version90
-and is recompiling desktop targets. Reap before another compiler/emulator. After success:
-python3 .work/space-late-key-recovery-native-2026-11-12/accept-full.py full-1
-python3 .work/space-late-key-recovery-native-2026-11-12/write-evidence.py
-Then update this handoff/contract to the actual full result and push. The baseline is ONLY the
-previous full-accepted14581 verified reports; unaccepted leftover reports were excluded during
-preparation. Nine-case native/proof/source artifacts are already accepted; do not rerun them absent
-a new change/failure. Phone90 remains accepted but uninstalled; availability question still pending.
-Next inspect native AppleSDK8 binding/package execution before a production Apple adapter. The
-current Swift proof pins upstream26.10.27 and the app still selects an unavailable runtime on Apple;
-common-host CI success is not native chat support. Do not rebuild/mutate protected SDK forks.
+Mobile full1/61257 REAPED FAILED after1295.276s:14,339 fresh cases, one Mocha10-second
+browser timeout in BrowserCollaborationIncomingHistoryLocatorStorageTest.
+removingTheCursorRowDoesNotRestartTheRemainingPage. No data assertion failed. Preserved exact
+source/report as failed-full-candidate-1. locator-browser-1 completed28/0 in37.265s with identical
+case IDs/source/deadline; no active process remains from that run. Root cause is unconfirmed.
+Full2/17129 REAPED PASS136.927s, full unfiltered tasks and original deadlines. No source/timeout
+or assertion change. Auditor39114 REAPED PASS:14,581 =2,385 fresh +11,975 individually passing
+source-current reports +221 unchanged dependency-verified. Failed full-1 XML is excluded. All prior
+case identities retained, no replacement/removal. Report manifest
+ d77fd0f2c2290ec66e1a66fb53b9efdcd1cb0d0e1cb3a5b4949186f3d12df5ef.
+Full check, Android host/release compile/lint, Wasm, iOS metadata, proof and static gates pass;
+proof APK, Mobile sources and Inspector inputs unchanged. Full evidence and contract now updated.
+Nine-case native/proof/source gates remain accepted; do not rerun absent new changes or failures.
+Phone90 remains accepted but uninstalled: connect13358 REAPED timeout12s, pending availability
+question. Never reinstall89, launch/drive/reset/uninstall the user's phone.
+
+Next: exact SDK8 Apple framework and native proof. Read-only local draft is at
+.work/sdk8-apple-planning-2026-11-12; not yet tracked/built/dispatched. The current Swift proof pins
+upstream26.10.27 and the app selects unavailable Apple Matrix runtime. Prepare a separate owned
+checkout, same immutable nine SDK8 Rust patches plus narrowly hashed Swift build-tool patch:
+replace explicit rustup stable calls with cargo build --locked under pinned RUSTUP_TOOLCHAIN1.96.0.
+Build real macOS/iOS/device/simulator slices and verify exported methods, encrypted-store continuity
+and listener disposal before production bridge adoption. Common-host CI is not native chat support.
+Do not mutate/rebuild protected SDK forks or published Android assets. All54 PRD groups stay OPEN.
 
 ## Accepted: canonical Original covered hints
 

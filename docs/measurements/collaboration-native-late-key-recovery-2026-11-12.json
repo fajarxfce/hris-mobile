@@ -1,10 +1,7 @@
 {
   "date": "2026-11-12",
-  "scope": "Native late-key worker recovery after process reopening",
-  "nativeAccepted": true,
-  "fullSourceCheckStatus": "running",
-  "fullSourceCheckSession": 61257,
-  "sourceManifestSha256": "887a2915efd183103f4b3332f93f8493f34811f54583e93dee5ab3e9775a5e44",
+  "scope": "Registered incoming worker consumes retained real late-key generations after process reopening",
+  "mobileSourceManifestSha256": "887a2915efd183103f4b3332f93f8493f34811f54583e93dee5ab3e9775a5e44",
   "groupSourceManifestSha256": "9b8904cafd1425e9c7e7d146e36a49d30c47b7fdff9a9384de8d28cae1552d38",
   "proofApk": {
     "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
@@ -13,6 +10,19 @@
   },
   "sdk": "26.10.23-hris.8",
   "nativeLibrarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+  "local": {
+    "validatedTests": 14581,
+    "freshCounts": {
+      "tests": 2385,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "validatedReusedTests": 221,
+    "sourceMatchedPriorTests": 11975,
+    "reportManifestSha256": "d77fd0f2c2290ec66e1a66fb53b9efdcd1cb0d0e1cb3a5b4949186f3d12df5ef",
+    "elapsedSeconds": 136.927
+  },
   "native": {
     "tests": 9,
     "counts": {
@@ -41,21 +51,12 @@
     ],
     "resultSha256": "e99355bd87b9971bffe1acb576d2a1aadc88fc9d5e18143796623043eab2721b"
   },
-  "proofUnitTests": 21,
-  "protocol": {
-    "tests": 65,
-    "failures": 0,
-    "errors": 0,
-    "skipped": 0,
-    "logSha256": "19935cedd920864e241bfe15df6c8b7950c60f4d5d6aff2dc9e8d01fe4db987e"
-  },
   "lateRecovery": {
     "messages": 2,
     "pendingReferences": 0,
-    "receiptPreserved": true,
     "recoveryComplete": true,
-    "offlineBeforeAndAfterRecovery": true,
-    "offlineCountersUnchanged": true,
+    "retainedReceiptPreserved": true,
+    "quietMillis": 30009,
     "native": {
       "requests": 18,
       "registration": 1,
@@ -68,11 +69,34 @@
       "secretStorage": 4,
       "providerPage": 2
     },
-    "quietMillis": 30009
+    "registeredTaskUsed": true,
+    "twoGenerationTurnBound": 8,
+    "repeatTurnUnchanged": true,
+    "companyOriginalEditRedactionPreserved": true,
+    "noSpaceContentRelabeling": true,
+    "offlineRetainedBeforeRecovery": true,
+    "offlineRevisionAndContentUnchangedAfterRecovery": true,
+    "offlineServerCountersUnchanged": true,
+    "originalJournalUnchanged": true
   },
+  "protocolTests": 65,
+  "protocolLogSha256": "19935cedd920864e241bfe15df6c8b7950c60f4d5d6aff2dc9e8d01fe4db987e",
+  "proofUnitTests": 21,
+  "freshEmulatorRamMiB": 2560,
+  "cores": 2,
+  "emulatorStopped": true,
+  "compilerOverlap": false,
   "phoneTouched": false,
-  "productionChanged": false,
-  "liveGroupChanged": false,
-  "automaticWorkManagerRestartProven": false,
-  "nativeAppleSdk8Proven": false
+  "productionCodeChanged": false,
+  "failureProvenance": [
+    "full-1 stopped after one browser Mocha10000ms timeout in removingTheCursorRowDoesNotRestartTheRemainingPage; no data assertion failed. Unchanged isolated28 cases and unfiltered full-2 passed at the original timeout. Cause remains unconfirmed; failed-full-candidate-1 and exact XML preserved.",
+    "full-2 accepts2385 fresh cases,11975 individually passing source-current cases and221 unchanged dependency-verified cases. Failed full-1 XML is excluded; all14581 prior identities are retained. No timeout, source or assertion changed after the timeout.",
+    "proof-1 stopped at Detekt LongMethod before proof compilation; payload assertions moved to the existing evidence owner, with all assertions preserved; failed-static-candidate-1 retained.",
+    "suite-1 port reservation failed with EADDRINUSE before emulator/test startup. Follow-up found no5562/5563 sockets, device or owned heavy process; the transient occupant was not captured. suite-2 uses identical inputs."
+  ],
+  "limits": [
+    "The actual registered task is invoked by the fixture OS scheduler; automatic WorkManager relaunch is not claimed.",
+    "After prior real application key retention and offline reopen, the recovery phase isolates the existing receipt from newly attached source collectors.",
+    "No signed-in phone runtime, chat latency, native AppleSDK8 execution or live Group rollout is claimed; all54 PRD groups remain open."
+  ]
 }

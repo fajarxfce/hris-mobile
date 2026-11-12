@@ -17,12 +17,15 @@ additional server traffic, then release all storage/resources.
 
 All nine native cases pass, retaining the original eight case identities and their assertions.
 The new single case also passes independently. There are21 proof unit tests and65 driver tests.
-Full Mobile validation is still running; its result is not claimed here yet. No production
+Full Mobile validation accepts14,581 cases with all prior identities preserved. No production
 policy, retry timer, SDK artifact, live schema or feature flag changes. The first static gate
 rejected a long fixture method; pure payload assertions now belong to the existing evidence
 class, while the host owns repository reads. All assertions remain. The first suite launch
 failed port reservation before starting an emulator; later availability allowed the identical
-source/APK to run. Failed snapshots and launch evidence are preserved.
+source/APK to run. The first full check hit one browser10-second timeout. The unchanged
+28-case diagnostic and subsequent unfiltered full check passed with the original deadline.
+The timeout cause remains unconfirmed. Each reused report was independently validated against
+its exact sources; the failed report is excluded. Failed snapshots and launch evidence remain.
 
 This verifies the actual registered task through a fixture OS scheduler. It does not prove
 automatic WorkManager relaunch, signed-in phone behavior, chat latency, native AppleSDK8,
