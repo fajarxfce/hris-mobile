@@ -1,8 +1,43 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 11:48 UTC. Continue the PRD and push every commit. All 54 groups OPEN.
+Updated 12 November 2026, 12:05 UTC. Continue the PRD and push every commit. All 54 groups OPEN.
 No subagents. One compiler OR emulator. Phone install-only: announce, explicit serial, never launch
 or drive the phone UI, reset app data or uninstall. Continue working beyond checkpoints.
+
+## Active: registered-source discovery coalescing
+
+Mobile has13 uncommitted source/test files under active validation. Workspace
+.work/space-incoming-discovery-coalescing-2026-11-12; baseline Mobile1d34a6ba (native fixtures)
+and Group7b4a18d6 are committed/pushed; pushes49977/47874 REAPED. No production diagnostics remain.
+Current5133-input manifest307b04ec4d903a0d34e1fb917f36d0efaf482936cdce089860f6c13f57ba1b5e.
+
+Local discovery now matches canonical/physical work only through the current parent's registered
+legacy identity and exact Company. The use case receives the owning parent, fences registration
+before/after the queue write, and does not open native transport. The worker only passes its already
+known owner; data DI provides the existing registration repository. One pure policy is shared by
+allocation and planning. Inventory strengthens unresolved Joined physical work with a new unknown-head
+generation, retaining FIFO/retry/source. Left and independent logical work remain untouched. Later
+known-head sync cannot weaken the unresolved catch-up. No schema/timer/turn-bound change.
+
+Format1/18022 REAPED37.434s. Focused1/63563 REAPED FAILED114/1 in154.651s: the new Original fixture
+omitted its mandatory retained source. Archived before correction; production validation was preserved.
+Format2/20284 REAPED35.044s; focused2/63892 REAPED180/0 in244.491s. Further source review found that
+matching any retained physical source could suppress discovery for a current device; reviewed-candidate-2
+preserves that passing but insufficient candidate. Current registration fencing and four regressions
+address that boundary. Format3/3938 REAPED35.286s; two subsequent one-line review corrections preserve
+local admission and the worker fixture's owner type. Focused3/61734 REAPED184/0 in278.051s; strict audit
+accepted all180 predecessor IDs plus4. Format/architecture/detekt passed; all5133 sources unchanged.
+
+Proof1/session5179 ACTIVE, building the normal x86 SDK8 proof APK and21 proof unit tests. ONE compiler
+only; no emulator or phone interaction. Reap it, verify source/library hashes and archive accepted APK.
+Then Group native-config must select mobileWorkspace=.work/space-incoming-discovery-coalescing-2026-11-12,
+mobilePhase=proof-1,groupPhase=source-1 before native.py worker-5. Its private runner now accepts that
+workspace field; current config still selects old proof4. Do not run with stale APK or during compilation.
+Keep the existing four-turn/content/empty-repeat/covered-hint checks unchanged. Native worker acceptance
+and full :check/platform gates remain OPEN; after the actual native result resolve any next root cause,
+then finish full checks and commit/push production. No phone release is built from this candidate yet.
+Two reviewed InventoryRetention test method renames are in test-case-id-replacements.json; do not lose
+other predecessor IDs. Current focused evidence: measurements/collaboration-space-incoming-discovery-focus-2026-11-12.json.
 
 ## Current: duplicate incoming discovery
 
@@ -34,24 +69,15 @@ Worker4 temporary category observations confirm Binding_WaitingForPrevious then 
 space_incoming_binding_pending. Inventory failure was NOT observed; source inspection identifies
 WaitingForRoom as the likely structural wait. Do not call a finite-bound failure an infinite loop.
 
-Next production design under review (NOT implemented): local binding discovery currently deduplicates
-Published IDs only, ignoring matching Original/physical work. Coalesce duplicate discovery through
-one named pure policy shared by the use case and scan planner. Inventory may strengthen an unprocessed
-Joined physical request to a fresh unknown-head generation while preserving FIFO/retry/source and
-invalidating stale results; confirm independent hints and membership changes cannot be lost. Avoid
-schema/timer changes without evidence. Existing metadata/source/ownership, CAS and postwrite readback
-must remain. Do not raise worker bounds, drop queued work, or relax content/no-op assertions.
-
-After correction run focused policy/worker regressions, required full checks, then one fresh actual
-native worker run. Preserve failed candidates/results/userdata. The final covered-hint assertion may
-expose a separate mismatch: QueueCollaborationSpaceIncomingRoom checks Space history while canonical
-content is in Company history. Source review only so far; see covered-hint-review.md. Never add duplicate
-Space content to make that pass. Exact Group turns2/Matrix31/native14 expectations remain pending
+The previous source-only design review has been implemented as the active13-file candidate above.
+The separate covered-hint hypothesis remains unproven natively: QueueCollaborationSpaceIncomingRoom
+checks Space history while canonical content is in Company history. Never create duplicate Space
+facts or relax the final no-op assertion. Exact Group turns2/Matrix31/native14 expectations still need
 actual final trace review; do not fit request assertions to a total.
 
 Read prior detailed evidence in [archived handoff](agent-handoff-history-through-original-worker-diagnostics-2026-11-12.md).
 Cold clone attempts failed to recover fixture input; immediate same-boot inspection is now the diagnostic
-route. Original failed images are preserved. No active compiler/emulator at this checkpoint.
+route. Original failed images are preserved. Proof compiler5179 is active; no emulator at this checkpoint.
 
 ## Accepted native receipt/source proof
 

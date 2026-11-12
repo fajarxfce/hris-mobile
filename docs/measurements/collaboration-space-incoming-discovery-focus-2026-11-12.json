@@ -1,0 +1,32 @@
+{
+  "accepted": true,
+  "phase": "focused-3",
+  "tests": 184,
+  "elapsedSeconds": 278.051,
+  "predecessorCaseIdsPreserved": true,
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "sourceManifestSha256": "307b04ec4d903a0d34e1fb917f36d0efaf482936cdce089860f6c13f57ba1b5e",
+  "reportManifestSha256": "95fe7aa8e53603aed7d94687169e19952e101c59fe2071079f3c186f5f339137",
+  "countsByClass": {
+    "CollaborationSpaceIncomingDiscoveryPolicyTest": 8,
+    "CollaborationSpaceIncomingPhysicalResolutionTest": 10,
+    "CollaborationSpaceIncomingScanPolicyTest": 14,
+    "CollaborationSpaceInventoryRetentionPolicyTest": 20,
+    "DiscoverCollaborationSpaceIncomingRoomsTest": 15,
+    "RetainCollaborationSpaceRoomInventoryTest": 28,
+    "CollaborationSpaceIncomingBatchPolicyTest": 23,
+    "CollaborationSpaceIncomingWorkerTest": 21,
+    "CollaborationSpaceIncomingPhysicalWorkerTest": 13,
+    "CollaborationSpaceInventoryWorkerTest": 16,
+    "CollaborationSpaceIncomingAliasWorkerTest": 8,
+    "CollaborationSpaceIncomingFairnessTest": 8
+  },
+  "productionCommitted": false,
+  "fullChecksAccepted": false,
+  "nativeWorkerAccepted": false,
+  "phoneTouched": false,
+  "sourceFiles": 5133,
+  "changedFiles": 13,
+  "workspace": ".work/space-incoming-discovery-coalescing-2026-11-12"
+}
