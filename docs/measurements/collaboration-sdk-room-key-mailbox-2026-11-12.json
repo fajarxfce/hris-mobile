@@ -60,5 +60,95 @@
   "starterPortRequired": false,
   "all54PrdGroupsRemainOpen": true,
   "preservedFailedRuns": [],
-  "failureReviews": {}
+  "failureReviews": {},
+  "hostedPortable": {
+    "sourceCommit": "a65151c0d26583c31b647fddb276318f5cfc8969",
+    "runId": 43161963820,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43161963820",
+    "jobId": 130995033384,
+    "artifactId": 13919832421,
+    "bytes": 3991026,
+    "sha256": "c2f7029ea1f65c8abd12b35862b780dd4ae671e698bf7a92237d1ce417c740b9",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreserved": true,
+    "counts": {
+      "desktopTest": 5784,
+      "testAndroidHostTest": 873,
+      "wasmJsBrowserTest": 5417
+    },
+    "reportManifestSha256": "bf4abebfb6a1a3da9aa244fcbe098f4c9f2f725a95ccb22d273f1515ff3b5851",
+    "jobLogSha256": "a55f4505b1aded3b351fb8b24bfc55c23e00b09c44c35195b1fa9a7cbe932e80",
+    "steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check out verified network inspector",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-java@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run gradle/actions/setup-gradle@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run android-actions/setup-android@v3",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-node@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check setup transport and ownership",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check application bindings and platform compilation",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/upload-artifact@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/setup-node@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run gradle/actions/setup-gradle@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/setup-java@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Check out verified network inspector",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "conclusion": "success"
+      }
+    ],
+    "auditSession": 87772,
+    "auditSessionReaped": true
+  }
 }

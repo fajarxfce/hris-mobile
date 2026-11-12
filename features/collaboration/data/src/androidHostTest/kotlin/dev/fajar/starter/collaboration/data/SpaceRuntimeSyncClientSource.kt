@@ -13,6 +13,18 @@ internal class SpaceRuntimeSyncClientSource(
     val registrations: PendingRuntimeClientSource = PendingRuntimeClientSource(),
 ) : AndroidCollaborationClientSource by registrations {
     val entered = CompletableDeferred<Unit>()
+    var keyListener: RoomKeyChangesListener? = null
+    val keySubscriptionEntered = CompletableDeferred<Unit>()
+    var beforeKeySubscribe: suspend () -> Unit = {}
+    var keySubscriptionAvailable = true
+    private val keyRegistrations = AtomicInteger()
+    val keySubscriptions
+        get() = keyRegistrations.get()
+
+    private val keyReleases = AtomicInteger()
+    val keyCloses
+        get() = keyReleases.get()
+
     val responses = Channel<SyncResponseV2>(Channel.UNLIMITED)
     var readRooms: () -> List<Room> = { error("No room inventory read expected") }
     private val inventoryAttempts = AtomicInteger()
@@ -52,6 +64,25 @@ internal class SpaceRuntimeSyncClientSource(
 
             override fun encryption(): Encryption =
                 object : Encryption(NoHandle) {
+                    override suspend fun subscribeToRoomKeyChanges(
+                        listener: RoomKeyChangesListener
+                    ): TaskHandle? {
+                        keyRegistrations.incrementAndGet()
+                        keyListener = listener
+                        keySubscriptionEntered.complete(Unit)
+                        beforeKeySubscribe()
+                        if (!keySubscriptionAvailable) return null
+                        return object : TaskHandle(NoHandle) {
+                            override fun cancel() = Unit
+
+                            override fun isFinished() = true
+
+                            override fun close() {
+                                keyReleases.incrementAndGet()
+                            }
+                        }
+                    }
+
                     override suspend fun waitForE2eeInitializationTasks() = Unit
 
                     override fun close() = Unit

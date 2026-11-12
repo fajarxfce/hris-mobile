@@ -1,5 +1,60 @@
 # Agent continuation — communications long run
 
+Updated 12 November 2026, 06:26 UTC.
+Continue authorized PRD work and per-commit pushes. All54PRD groups OPEN. No subagents.
+One compiler OR emulator. Follow AGENTS.md and clean layer boundaries. Phone install-only.
+
+## Source-bound room-key repository accepted locally
+
+Workspace .work/space-room-key-binding-2026-11-12, baselinea55e83de25d75e92f3bafb92c6fffe67429e9eaf.
+Thirteen files,5,116inputs/19874f69749ad1d57071a7b8eeca30e8b8acbbecdaf5fa37302e6106c339905e. Fullfull-1/37794
+REAPED PASS525.126s; audit13738 REAPED.14,227=12189fresh+
+2038verified unchanged. Focused97JVM+91browser=188,Android93. Added12domain,
+10common data,9Android repository cases; existing16adoption controls remain. All prior IDs retained.
+See measurement for preserved failures/fixes if any. ProofAPK152206644B/4ec59400c13002771e6a164ea6b2cc943a6453709bcdfc90652a0ab9ac832722.
+
+Typed batches capture runtime/source/receipt and bounded copied room IDs. Raw malformed/lost data
+retains reconciliation. Runtime repository maps under its exact registry and credential state;
+reads never register or ACK. Explicit start reuses the installed parent. ACK only consumes the
+matching receipt; foreign or retired runtime/source cannot consume a successor. Unsupported hosts
+return Unavailable. DI resolves the existing runtime owner. Actual repository tests use fake SDK
+handles, not native execution. Shared fixture is now internal; no old cases removed.
+
+Publisher/writer EXECUTED. Push source/evidence before dispatch-hosted.py ONCE; expected17,170=
+12,205portable+4,965Apple. Inspect prior dispatch-attempt before retry. Previous lifecycle/mailbox/
+worker audits are source-specific; read their hosted state/artifacts, do not redispatch blindly.
+
+## Next: durable intent and admitted activation
+
+No production registration, key/source/restore collector, persistent key intent, or ACK-after-storage
+is enabled by this stage. Read .work/sdk-room-key-lifecycle-2026-11-12/next-room-key-retention-review.md.
+Own root/session/registered-original-source admission in a use case. Retain exact bounded receipt
+evidence before ACK, including uncertain writes and worker progress; do not mint new requests on
+every retry. Preserve another same-room callback occurrence. Failed/cancelled writes keep the raw
+receipt and need a bounded explicit retry owner. Known-room targeting needs local metadata discovery;
+overflow/loss/unknown mapping/source/restore need bounded account reconciliation. Publish metadata
+before demand, including new unresolved history behind an active cursor. Maintain90s worker fairness.
+
+SDK source trace verifies restoreSession creates OlmMachine before asynchronous E2EE initialization.
+Subscribe after restore without waiting for network/backup setup. A null native subscription remains
+unavailable; repeated readers/callers must not retry acquisition in a loop.
+Native Apple adapter/execution remain separate from Kotlin/Swift compilation. MainSDK8; release89SDK6.
+
+Phone56346 REAPED06:08:10.989862UTC,20.015288s timeout. Next retry>=06:41:31.005228UTC.
+Release89 remains install-only. Announce
+each actual installation and use explicit10.77.77.3:5555. Never launch/drive/reset/uninstall phone UI.
+No live deployment or Starter policy port. Preserve protected SDK, Inspector and live environments.
+
+Next-targeted-history-draft contains4UNAPPLIED/UNCOMPILED files, including20domain cases.
+Do not apply before codec, independently verified filtered completion and worker service are coherent.
+No preparer exists; reviewComplete=false. Read next-targeted-history-state.json and design notes.
+Mailbox43161963820 portable12,074 accepted, Apple pending. Lifecycle43165090113 pending.
+Worker43158504066 FULL16,936 and global43155076441 FULL16,862 accepted.
+
+## Prior checkpoint and protected/live state
+
+# Agent continuation — communications long run
+
 Updated 12 November 2026, 06:03 UTC. Continue PRD work and push every commit.
 No subagents. One compiler OR emulator. All54PRD groups OPEN. Phone install-only; never drive UI.
 

@@ -573,7 +573,7 @@ class AndroidSpaceRuntimeAdoptionTest {
     }
 }
 
-private class SpaceAdoptionStorageFixture(
+internal class SpaceAdoptionStorageFixture(
     val data: SdkAdoptionFixture,
     rawIdentity: CollaborationSdkIdentityData,
     expectedIdentity: CollaborationLocalDeviceIdentity,

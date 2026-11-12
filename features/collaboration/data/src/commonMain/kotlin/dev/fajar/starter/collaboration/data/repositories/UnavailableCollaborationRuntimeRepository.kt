@@ -14,6 +14,7 @@ class UnavailableCollaborationRuntimeRepository :
     CollaborationSpaceRuntimeRepository,
     CollaborationSpaceMessageQueueRepository,
     CollaborationSpaceSyncRepository,
+    CollaborationSpaceRoomKeyRepository,
     CollaborationSpaceRoomInventoryRepository,
     CollaborationSpacePusherRepository,
     CollaborationSpaceOriginalHistoryRepository,
@@ -84,6 +85,26 @@ class UnavailableCollaborationRuntimeRepository :
         afterRoomId: String?,
         limit: Int,
     ): AppResult<CollaborationSpaceRoomInventoryPage> {
+        currentCoroutineContext().ensureActive()
+        return unavailable()
+    }
+
+    override suspend fun startKeyObservation(
+        runtime: CollaborationSpaceRuntimeReady,
+        source: CollaborationSpaceIncomingSource,
+    ): AppResult<Unit> {
+        currentCoroutineContext().ensureActive()
+        return unavailable()
+    }
+
+    override fun observeKeys(
+        runtime: CollaborationSpaceRuntimeReady,
+        source: CollaborationSpaceIncomingSource,
+    ): Flow<AppResult<CollaborationSpaceRoomKeyBatch>> = flow { emit(unavailable()) }
+
+    override suspend fun acknowledgeKeys(
+        batch: CollaborationSpaceRoomKeyBatch
+    ): AppResult<Boolean> {
         currentCoroutineContext().ensureActive()
         return unavailable()
     }

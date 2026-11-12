@@ -67,10 +67,26 @@ class CollaborationBindingsTest {
                     CollaborationLocalDeviceIdentityRepository,
                     CollaborationSpaceRuntimeRepository,
                     CollaborationSpaceSyncRepository,
+                    CollaborationSpaceRoomKeyRepository,
                     CollaborationSpaceRoomInventoryRepository,
                     CollaborationEventRepository,
                     CollaborationSpaceEventRepository,
                     CollaborationSpaceProviderHistoryRepository {
+                    override suspend fun startKeyObservation(
+                        runtime: CollaborationSpaceRuntimeReady,
+                        source: CollaborationSpaceIncomingSource,
+                    ): AppResult<Unit> = error("Binding check must not register native keys")
+
+                    override fun observeKeys(
+                        runtime: CollaborationSpaceRuntimeReady,
+                        source: CollaborationSpaceIncomingSource,
+                    ): kotlinx.coroutines.flow.Flow<AppResult<CollaborationSpaceRoomKeyBatch>> =
+                        error("Binding check must not observe native keys")
+
+                    override suspend fun acknowledgeKeys(
+                        batch: CollaborationSpaceRoomKeyBatch
+                    ): AppResult<Boolean> = error("Binding check must not acknowledge native keys")
+
                     override suspend fun readInventory(
                         runtime: CollaborationSpaceRuntimeReady,
                         source: CollaborationSpaceIncomingSource,
@@ -340,6 +356,7 @@ class CollaborationBindingsTest {
                 assertSame(runtime, container.koin.get<CollaborationRuntimeRepository>())
                 assertSame(runtime, container.koin.get<CollaborationSpaceRuntimeRepository>())
                 assertSame<Any>(runtime, container.koin.get<CollaborationSpaceSyncRepository>())
+                assertSame<Any>(runtime, container.koin.get<CollaborationSpaceRoomKeyRepository>())
                 assertSame<Any>(
                     runtime,
                     container.koin.get<CollaborationSpaceRoomInventoryRepository>(),

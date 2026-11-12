@@ -1,0 +1,73 @@
+{
+  "recordedAt": "2026-11-12T06:26:11.715569+00:00",
+  "sourceBaseline": "a55e83de25d75e92f3bafb92c6fffe67429e9eaf",
+  "sourceFiles": 5116,
+  "changedSourceFiles": 13,
+  "sourceManifestSha256": "19874f69749ad1d57071a7b8eeca30e8b8acbbecdaf5fa37302e6106c339905e",
+  "focused": {
+    "tests": 188,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused-1",
+  "focusedBrowserRun": "browser-1",
+  "androidHost": {
+    "tests": 93,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "androidHostRun": "android-1",
+  "full": {
+    "validated": 14227,
+    "fresh": {
+      "tests": 12189,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 525.126,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152206644,
+    "sha256": "4ec59400c13002771e6a164ea6b2cc943a6453709bcdfc90652a0ab9ac832722"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "roomKeyBindingAccepted": true,
+  "newCommonDomainCasesPerTarget": 12,
+  "newCommonDataCasesPerTarget": 10,
+  "newAndroidRepositoryCases": 9,
+  "exactRuntimeSourceReceiptMapping": true,
+  "copiedBoundedDomainHints": true,
+  "malformedRawLocatorsRetainReconciliation": true,
+  "observationNeverRegistersOrAcknowledges": true,
+  "retiredRuntimeEndsObservation": true,
+  "foreignRuntimeAndSourceCannotAcknowledge": true,
+  "staleReceiptCannotConsumeSuccessor": true,
+  "explicitUnavailableOnUnsupportedHosts": true,
+  "diUsesExistingRuntimeOwner": true,
+  "durableConsumerImplemented": false,
+  "productionRegistrationEnabled": false,
+  "nativeSdkExecution": false,
+  "appleNativeAdapterImplemented": false,
+  "originalProducerEnabled": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "starterPortRequired": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [],
+  "failureReviews": {},
+  "preFreezeReview": {
+    "reason": "Actual repository start revalidates the registry after pending native acquisition; verify retirement during that await at the repository boundary as well as lower owner tests.",
+    "newAndroidRepositoryCases": 9,
+    "oldCaseIdsRemoved": false,
+    "sourceLogicChanged": false,
+    "firstFormatRun": "format-1",
+    "firstFormatSession": 32529,
+    "firstFormatReaped": true
+  }
+}

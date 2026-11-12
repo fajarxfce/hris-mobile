@@ -3,13 +3,17 @@ package dev.fajar.starter.collaboration.data.repositories
 import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
 import dev.fajar.starter.collaboration.data.api.CollaborationPusherApi
 import dev.fajar.starter.collaboration.data.datasources.*
+import dev.fajar.starter.collaboration.data.dto.SdkRoomKeyBatch
 import dev.fajar.starter.collaboration.data.dto.SdkSyncBatch
 import dev.fajar.starter.collaboration.data.mappers.collaborationSdkAcquisitionFailure
 import dev.fajar.starter.collaboration.data.mappers.toLocalDeviceIdentity
+import dev.fajar.starter.collaboration.data.mappers.toSpaceRoomKeyBatch
 import dev.fajar.starter.collaboration.data.mappers.toSpaceSyncBatch
 import dev.fajar.starter.collaboration.data.sdk.*
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.captureCollaborationSpaceRoomKeyBatch
 import dev.fajar.starter.collaboration.domain.policies.collaborationGatewayMatchesCommand
+import dev.fajar.starter.collaboration.domain.policies.collaborationRecoveryFailure
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationEventId
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationMessageId
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationSpaceSetupRecord
@@ -47,6 +51,7 @@ class AndroidCollaborationRuntimeRepository(
     CollaborationSpaceRuntimeRepository,
     CollaborationSpaceMessageQueueRepository,
     CollaborationSpaceSyncRepository,
+    CollaborationSpaceRoomKeyRepository,
     CollaborationSpaceRoomInventoryRepository,
     CollaborationSpacePusherRepository,
     CollaborationSpaceOriginalHistoryRepository,
@@ -322,6 +327,83 @@ class AndroidCollaborationRuntimeRepository(
                 collaborationSdkAcquisitionFailure(result, handoverPending().failure)
             )
         return result
+    }
+
+    override suspend fun startKeyObservation(
+        runtime: CollaborationSpaceRuntimeReady,
+        source: CollaborationSpaceIncomingSource,
+    ): AppResult<Unit> {
+        currentCoroutineContext().ensureActive()
+        val lease =
+            registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)
+                ?: return handoverPending()
+        if (lease.incomingSource != source) return handoverPending()
+        val result = lease.startRoomKeyObservation()
+        currentCoroutineContext().ensureActive()
+        lease.credentialFailures.value?.let {
+            return AppResult.Failed(collaborationSdkAcquisitionFailure(result, it))
+        }
+        if (registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId) !== lease)
+            return AppResult.Failed(
+                collaborationSdkAcquisitionFailure(result, handoverPending().failure)
+            )
+        return result
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun observeKeys(
+        runtime: CollaborationSpaceRuntimeReady,
+        source: CollaborationSpaceIncomingSource,
+    ): Flow<AppResult<CollaborationSpaceRoomKeyBatch>> = flow {
+        val lease = registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)
+        if (lease == null || lease.incomingSource != source) {
+            emit(handoverPending())
+            return@flow
+        }
+        val batches =
+            lease
+                .observeRoomKeys()
+                .map<SdkRoomKeyBatch, SdkRoomKeyBatch?> { it }
+                .onStart { emit(null) }
+                .onCompletion { cause -> if (cause == null) emit(null) }
+        emitAll(
+            combine(batches, registry.handoverChanges, lease.credentialFailures) { batch, _, failure
+                    ->
+                    when {
+                        failure != null -> AppResult.Failed(failure)
+                        registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId) !==
+                            lease -> handoverPending()
+                        batch == null -> null
+                        else -> batch.toSpaceRoomKeyBatch(runtime, source)
+                    }
+                }
+                .distinctUntilChanged()
+                .transformWhile { result ->
+                    if (result != null) emit(result)
+                    result !is AppResult.Failed
+                }
+        )
+    }
+
+    override suspend fun acknowledgeKeys(
+        batch: CollaborationSpaceRoomKeyBatch
+    ): AppResult<Boolean> {
+        currentCoroutineContext().ensureActive()
+        val captured =
+            captureCollaborationSpaceRoomKeyBatch(batch)
+                ?: return collaborationRecoveryFailure(
+                    "client.collaboration_invalid_room_key_batch",
+                    FailureKind.Validation,
+                )
+        val runtime = captured.runtime
+        val lease =
+            registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)
+                ?: return handoverPending()
+        if (lease.incomingSource != captured.source) return handoverPending()
+        lease.credentialFailures.value?.let {
+            return AppResult.Failed(it)
+        }
+        return AppResult.Success(lease.acknowledgeRoomKeys(captured.receiptId))
     }
 
     override fun incomingSource(
