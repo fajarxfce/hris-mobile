@@ -1,5 +1,17 @@
 # Template updates
 
+## Kotlin browser reporting — port complete
+
+[Starter badfc0d](https://github.com/fajarxfce/compose-fluent-starter/commit/badfc0d)
+ports Mobile's four generic reporter and regression files. The convention merges
+module settings with the shared Kotlin reporter and retains proper line framing.
+Independent validation passes 906 fresh cases (475 desktop, 425 browser, six build
+logic), preserving all 358 prior case identities. Three Android builds, lint,
+production Web, iOS metadata and quality checks pass. Eight Node regressions run
+through the existing Python tool checks. No HRIS business policy is copied.
+[Evidence](https://github.com/fajarxfce/compose-fluent-starter/blob/badfc0d/docs/measurements/karma-line-reporter-port-2026-11-11.json).
+
+
 
 ## Session maintenance and worker triggers — port complete
 

@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 00:18 UTC.
+Updated 12 November 2026, 00:51 UTC.
 The full PRD, per-commit pushes and validated phone updates are authorized. All54 groups remain
 OPEN; keep working beyond this gate. No subagents. Read AGENTS.md/architecture. Usecases coordinate
 repositories/policies, never other usecases; repositories map datasource results; ViewModels own UI.
@@ -8,7 +8,7 @@ repositories/policies, never other usecases; repositories map datasource results
 ## Active Original historical completion implementation
 
 The next reviewed11-file draft was APPLIED by21398REAPED at00:25:47UTC12Nov. It is UNCOMMITTED
-and UNTESTED, awaiting the existing Starter compiler before formatting/validation. Workspace
+and UNTESTED, ready for formatting/validation after Starter acceptance. Workspace
 .work/original-key-reference-completion-2026-11-11; source baseline6c40ccef1361564c706e10243dc183f18088bf5e,
 13,358 cases/5,050 inputs. prepare-next-original-key-completion.py and configure-next-original-key-completion.py
 HAVE EXECUTED; do not rerun old configure over the focused-coverage refinement.
@@ -21,7 +21,7 @@ Focused coverage now explicitly includes the changed29 page-acquisition cases al
 Old330 prediction is superseded only for focused selection; full13,422 and hosted16,028 unchanged.
 Expected/run/freeze/accept/dispatch/publisher scripts are prepared in the new workspace. Publication
 requires reviews for any future failed attempts. No native/primary/global activation. Early source architecture check48154 REAPED PASS; this is not compilation or final acceptance.
-Format/compiled tests only after Starter68417 is reaped; do not start a second compiler. Keep working through the PRD.
+Starter68417 is now reaped and accepted; proceed with one Mobile compiler. Keep working through the PRD.
 
 ## Local recovery content and browser reporting accepted
 
@@ -76,14 +76,12 @@ It is IN PROGRESS, not audited. hosted-plan.json has the run ID; never dispatch 
 
 ## Next implementation and generic port
 
-Required Starter reporter port is APPLIED and under independent validation:
-compose-fluent-starter/.work/karma-line-reporter-port-2026-11-11. Four exact generic files from
-Mobilee4650f88; Starterbase70cf5ef. check-full1/68417 RUNNING since00:20UTC12Nov,2GiB/one worker,
-root+all44 KMP browser modules+three Android builds/lint+production Web+iOS metadata+quality.
-Read result.json before restarting; one compiler only. accept.py preserves358 prior IDs and checks
-actual module config/task order. publish.py PREPARED NOT EXECUTED. Prepared manifest690773f7 and
-acceptedcf23e510 are separately labelled; the four generic file hashes match both. No HRIS/UI test
-port. Finish Starter acceptance/commit/push and record it here before next Mobile compilation.
+Required Starter reporter port is ACCEPTED and pushed as badfc0d (push21019 REAPED).
+check-full1/68417 REAPED PASS1,689.783s:906 fresh cases (475desktop/425browser/6buildlogic),
+all358 prior IDs preserved,1,064 unchanged inputs/2fa04acd2476407455a24f69a56aa98b51c2e154cd7e753fd524e8cbb95992e3.
+All44 KMP browser targets selected; Android three builds/lint, production web, iOS metadata,
+quality and Node8 regressions pass. accept.py and publish.py HAVE EXECUTED. Four generic source
+files match Mobilee4650f88. No HRIS policy/test copied. Mobile compilation can now proceed.
 
 Next11-file next-original-key-completion-draft is REVIEWED and now APPLIED/UNTESTED(5existing/6new); see the active section.
 Dedicated CompleteCollaborationSpaceOriginalKeyReferences admits current local Company/source/
