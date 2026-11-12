@@ -12,7 +12,9 @@ Twelve files: ten new domain policy/entity/test/fixture files and two existing D
 5,082 inputs/6381702b3d1e979b12d360ade21cbdc46b13bc6f05547c6f442ab994a8cf855f.
 Expected13,810full local,306JVM+304browser focused;68new common cases (visit20,demotion9,
 admitted Original operation27,write confirmation12). Format1/83357 REAPED PASS36.931s.
-Focused1/48088 RUNNING; reap before browser/full. Only this compiler is active, no emulator.
+Focused1/48088 REAPED PASS422.144s/306cases; browser1/93072 REAPED PASS156.582s/304cases.
+Focused acceptance610 verified. Full1/59452 RUNNING with the frozen12-file source; do not mutate
+source until reaped and audited. Only this compiler is active; no emulator.
 
 The preliminary .work/history-recovery-visit-policies-2026-11-12 gate passed225JVM+223browser
 (78486REAPED400.427s,27527REAPED145.230s). Its separate full gate/commit/CI was folded into this
@@ -32,14 +34,31 @@ The worker still must serialize provider writes; Space transfer, source/restore 
 completion, deferral, application sequencing and loss-aware/drained native listeners remain work.
 All54PRD groups OPEN; no producer activation or claim of full account snapshot coverage.
 
-Combined publisher is prepared, NOT EXECUTED. Need accepted handoff writer and final review, then
-one full gate/atomic feature commit. Hosted plan refvalidation/incoming-key-wait-transfer-20261112
+Combined publisher and accepted handoff writer are prepared, NOT EXECUTED. Finish/audit the one
+full gate before publishing and committing the atomic feature scope. Hosted plan refvalidation/incoming-key-wait-transfer-20261112
 is UNDISPATCHED; expected16,610=11,788portable+4,822Apple, compared with reader43143623927.
 Do not execute superseded .work/.../prepare-original-transfer.py or publish policy-only acceptance.
 
 Space projection hosted43136996756 fully audited16,292=11,576portable+4,716Apple. Apple audit89901
 REAPED; unsigned host/16Swift checks passed, native MatrixSDK8 Apple runtime unproved. Source
-availability43139532066 Apple host and reader43143623927 CI remain in progress; inspect artifacts.
+availability43139532066 now fully audited16,334=11,604portable+4,730Apple, audit82426REAPED.
+Reader43143623927 CI remains in progress; inspect artifacts before accepting it.
+
+## Next private Space transfer and worker activation review
+
+Current workspace next-space-transfer-draft has five UNREVIEWED/UNCOMPILED/UNAPPLIED files:
+Space owner, fixture/26common cases, DI and existing graph coverage. Source-bound/current physical
+provider identity is checked while preserving Published Space/alias coordinates. Verify every
+fixture and production boundary before preparing its gate. No separate Space source has been applied.
+
+Read next-application-history-service-review.md in the current workspace. Worker process() currently
+adopts only for primary/inventory work; continueOrFinish() ignores history then resumes when Finish
+refuses an active record. Activating producers before selection/service changes would create empty
+wake loops. Include eligible versus deferred history in adoption/continuation; completed waiting
+history sleeps until a fresh real event. Reserve bounded history service alongside inventory before
+primary work consumes90s. Connect finite primary demotion only with a functioning global service.
+Global completion/deferral and source/restore publication coverage remain required; do not treat
+page equality as an account-wide snapshot or use a mutating key reader for neutral confirmation.
 
 ## Bounded account history turn reading accepted
 
@@ -116,7 +135,7 @@ do not establish native Matrix SDK8 Apple runtime.
 
 ## Device and protected state
 
-Phone10.77.77.3:5555 timeout78880REAPED02:43:56UTC12Nov/20.020s; no install. Retry no earlier03:17UTC12Nov.
+Phone10.77.77.3:5555 timeout32732REAPED03:17:46UTC12Nov/20.021s; no install. Retry no earlier03:51UTC12Nov.
 Release89 SDK6 ready: `.work/release-phone-2026-11-10-build89/install.py --install-only`. Announce
 before installing. Explicit serial/signature/hash guards; **never launch, drive, reset or uninstall
 on the employee's phone**. APK123809167B/4c790d2314f53c37bfdc3108ac4b801ab33aa9fc177904001fd16793fd0ef52d.

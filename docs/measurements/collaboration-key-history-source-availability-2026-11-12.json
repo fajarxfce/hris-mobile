@@ -70,8 +70,8 @@
     "expectedPortable": 11604,
     "expectedApple": 4730,
     "expectedTotal": 16334,
-    "status": "in_progress",
-    "artifactsAudited": false,
+    "status": "completed",
+    "artifactsAudited": true,
     "portableAccepted": true,
     "portableAudit": {
       "sourceCommit": "20957650ba9c7bb8f6448025f189c0bf2915cbb5",
@@ -92,6 +92,29 @@
       "jobLogSha256": "7f3125f96168c941db215ad933c0738364dfd06194138a260352aab199890833"
     },
     "portableAuditProcessFinished": true,
-    "portableAuditSessionObservation": "Completed audit artifact verified; session identifier not retained across context boundary. No audit process remains."
+    "portableAuditSessionObservation": "Completed audit artifact verified; session identifier not retained across context boundary. No audit process remains.",
+    "appleAccepted": true,
+    "appleAuditSession": 82426,
+    "appleAuditReaped": true,
+    "appleAudit": {
+      "sourceCommit": "20957650ba9c7bb8f6448025f189c0bf2915cbb5",
+      "runId": 43139532066,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43139532066",
+      "jobId": 130922873802,
+      "artifactId": 13911517690,
+      "bytes": 765309,
+      "sha256": "b564cc97197646eceb7a4ae5912cf2ebcf8dfcde58f3ef0ea71987acf9b77c66",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreserved": true,
+      "counts": {
+        "iosSimulatorArm64Test": 4730
+      },
+      "reportManifestSha256": "fcb0b4d475c1500111992246d733b251223602a019a9c452fdea3dcc1c82efc6",
+      "jobLogSha256": "9ca84e6c5c03de369048ed526394ac66696add8a040af93b8dc5720667f177b6"
+    },
+    "acceptedTotal": 16334,
+    "unsignedAppleHostPassed": true,
+    "swiftPushChecks": 16,
+    "nativeAppleSdk8Executed": false
   }
 }
