@@ -1,8 +1,32 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 17:52 UTC. Continue implementation beyond checkpoints and push every commit.
+Updated 12 November 2026, 18:01 UTC. Continue implementation beyond checkpoints and push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One compiler OR emulator. Phone install-only:
 announce and select serial; never launch/drive UI, reset data or uninstall. ADB availability question is pending after a fresh connection timeout.
+
+## Apple SDK store acquisition locally accepted; preserve pending inventory CI
+
+Mobile .work/apple-sdk-store-2026-11-12 adds AppleCollaborationSdkStoreSource and8 Apple tests,
+extending the existing native directory owner; only3 Apple source/test paths differ from inventory.
+Source5,149 inputs/16e2108e8e6d7abd0949cd3a57ccf342bdcf45ea5ce299500d1bbf007156de1a.
+Caller provisions a private backup-excluded root. Only acquire creates scoped directories/owner.lock,
+with0700/0600 requests. Existing acquisition requires original DB pair/cache/lock and never repairs.
+Both modes reject redirected DB/WAL/SHM entries. SDK clients/credentials remain untouched; bounded
+entry inspection, the shared native lock, cancellation and idempotent cleanup retain ownership.
+Format1/86139 REAPED PASS35.550s. Validate1/12083 REAPED PASS123.948s: format/architecture/detekt,
+actual ARM64 and iOS metadata compile, compileTestKotlinIosSimulatorArm64 (8new +13unchanged
+inventory methods), full :check. Zero new tests execute on Linux. Strict audit retains exact14,626
+unaffected platform report hashes; Inspector sources and accepted proof APK remain identical.
+No native Apple OS execution, product binding or new phone APK is claimed. Git contract and compact
+measurement are collaboration-apple-sdk-store.md and measurements/collaboration-apple-sdk-store-2026-11-12.json.
+No compiler/emulator is active. Push this implementation and record its exact commit for later CI.
+DO NOT dispatch another same-branch control run while inventory43273697021 is pending: GitHub would
+replace that pending proof. Once inventory starts, queue the store commit with expected12,604portable
+and5,156Apple (prior5,135 +13inventory +8store), retain exact21 Apple method IDs and prior report IDs.
+Shared registry43266580439 Apple remains in progress; portable is already accepted. Native SDK8
+Intel43267867675 remains building separately. Do not conflate these with the four Swift native cases.
+Phone connect1855 REAPED timeout12s at17:59UTC. Release91 accepted/uninstalled; no new install attempt.
+The existing availability/IP question is pending. Continue work, push every commit, live Group OFF.
 
 ## Apple existing inventory locally compiled; native acceptance is next
 
@@ -34,7 +58,7 @@ Native Apple execution is NOT yet claimed. Shared registry
 CI43266580439 Apple job131351645845 remains in progress; its portable audit is already accepted.
 The new workflow must queue behind it without cancellation. Intel native SDK8 CI43267867675 is
 still building; on success use Mobile .work/sdk8-apple-planning-2026-11-12/audit-hosted.py to verify
-its exact four Swift contracts, package/proof digests, source manifest and five native slices.
+its exact four Swift contracts, package/proof digests, source manifest and five architectures across three native slices.
 That read-only auditor is syntax checked but has NOT run. No SDK publication/product activation.
 Release91 remains accepted and uninstalled after connect59791 timeout. The availability question
 is pending; announce and use --install-only after connection. Never drive the phone UI.

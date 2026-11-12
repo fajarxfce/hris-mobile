@@ -1,5 +1,7 @@
 # Architecture
 
+[Apple SDK store acquisition](collaboration-apple-sdk-store.md) shares the original native owner with inventory and keeps explicit creation separate from existing-only reads.
+
 [Existing Apple SDK inventory](collaboration-apple-sdk-inventory.md) reads original file facts under an exclusive native directory lock and reuses the shared repository and admission policy. Native execution and product binding remain separate gates.
 
 [Original covered hints](collaboration-original-covered-hints.md) use exact registered Company/device history to suppress completed work without copying it into Space storage.

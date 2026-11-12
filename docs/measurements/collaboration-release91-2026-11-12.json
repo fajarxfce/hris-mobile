@@ -40,7 +40,7 @@
     "strippedNativeMatchesVerifiedSdk": true
   },
   "phoneConnection": {
-    "checkedAt": "2026-11-12T17:37:39.956614+00:00",
+    "checkedAt": "2026-11-12T17:59:38.816673+00:00",
     "serial": "10.77.77.3:5555",
     "installed": false,
     "availabilityQuestionPending": true,

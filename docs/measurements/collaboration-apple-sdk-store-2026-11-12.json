@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-12",
+  "scope": "Apple SDK store acquisition sharing native ownership with existing inventory",
+  "sourceFiles": 5149,
+  "sourceManifestSha256": "16e2108e8e6d7abd0949cd3a57ccf342bdcf45ea5ce299500d1bbf007156de1a",
+  "changedPaths": [
+    "features/collaboration/data/src/iosMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AppleCollaborationSdkStoreSource.kt",
+    "features/collaboration/data/src/iosMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AppleSdkDirectoryLock.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSdkStoreTest.kt"
+  ],
+  "onlyAppleSourceAndTestsChanged": true,
+  "mainIosArm64AndMetadataCompiled": true,
+  "iosSimulatorArm64TestsCompiled": {
+    "newStoreTests": 8,
+    "unchangedInventoryTests": 13
+  },
+  "nativeAppleTestsExecutedLocally": false,
+  "fullCheck": {
+    "passed": true,
+    "elapsedSeconds": 123.948,
+    "freshTests": 0,
+    "unchangedPlatformTestsFromAcceptedBaseline": 14626,
+    "baselineReportManifestSha256": "45a43d45b883b1a85916bf72ac21c677aa01ab4fc52effc38093ecacf8826d54",
+    "exactReportDigestsRetained": true
+  },
+  "staticChecksPassed": true,
+  "proofApkUnchangedSha256": "dd2568e9aa6a55b7da571383ef31c1f1d055bd63b30c77f849e5e8e5152e16a0",
+  "phoneTouched": false,
+  "productionAppleRuntimeEnabled": false,
+  "hostedNativeAcceptance": "not dispatched while previous inventory run waits; preserve that pending run",
+  "limits": [
+    "Only acquire creates scoped directories and owner.lock below a pre-provisioned private root. No credential or SDK client construction.",
+    "Twenty-one Apple store/inventory methods compile but have not executed locally; hosted OS tests remain required.",
+    "No claim that unchanged Android/JVM/browser/proof tests reran; no new phone build needed for Apple-only changes."
+  ]
+}
