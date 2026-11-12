@@ -1,93 +1,83 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 01:23 UTC.
-The user authorized the complete PRD, per-commit pushes and validated install-only phone updates.
-All 54 groups remain OPEN. Keep working beyond this gate. No subagents. Read AGENTS.md and architecture.
-Usecases own repository orchestration/policy; repositories map their datasources; ViewModels own UI.
+Updated 12 November 2026, 01:48 UTC.
+The complete communications PRD, pushes for every commit and validated phone installations remain
+authorized. All 54 groups remain OPEN; keep working. No subagents. Follow AGENTS.md/architecture.
+Usecases coordinate repositories and policy, never other usecases. Repositories own datasource
+mapping; ViewModels own UI. Phone use is explicit-serial, announced, install-only.
 
-## Original historical page completion accepted
+## Space historical page projection accepted
 
-Workspace .work/original-key-reference-completion-2026-11-11; baseline 6c40ccef1361564c706e10243dc183f18088bf5e,
-13,358 cases and 5,050 inputs. Eleven changed files (five existing, six new), 32 new common cases.
-Final 5,056 inputs / e89a643ad7cd2611c512ee18f2e2dedc1545ca82d44394a20544e9a73f7f68fd.
-Full full-1 / 85112 REAPED PASS 586.307 seconds;
-audit 97369 REAPED. 13,422 = 11384 fresh + 2038 verified unchanged.
-Focused focused-3 / browser-1 pass 195 JVM + 193 browser = 388 cases.
-The initial 330 prediction was extended by the changed 29-case page-acquisition contract on both targets;
-full/hosted counts did not change. All prior case identities and dependency closures remain verified.
-Proof APK 152145329 bytes / a19d962181aa7769b63102af9455d05993b3f225bae57119c77936f49713e525; no phone or native runtime claim.
-Failed attempt reviews retained: focused-1, focused-2. Exact details remain in the measurement.
+Workspace .work/space-key-page-projection-2026-11-12. Source baseline e4bfc84c981e7321b8fdaad36443ca7d25578c60,
+13,422 cases / 5,056 inputs. Fifteen source files: four existing, eleven new. Eighty-eight new
+common cases (reader19/acquisition34/completion35). Final 5,067 inputs/2dd3b692d1bb649fe572317bd69dd1f4de4aff0fe98ff004843e094d055e0b91.
+Full full-1/50055 REAPED PASS 585.388 seconds;
+audit 17826 REAPED. 13,598 = 11560 fresh +
+2038 verified unchanged. Focused focused-1 and browser-1
+pass 243 JVM + 241 browser = 484. Old IDs and unchanged dependency closures are verified.
+Proof APK 152159725 bytes/c336edc7a737c0821c0f9da034f77789030042af85194c50264baa1cb15fe8c7; no phone/native execution claim.
+Failed attempts retained: none; exact reviews remain in the measurement.
 
-CompleteCollaborationSpaceOriginalKeyReferences admits current account/session/source, Company metadata
-and registration around ONE existing recovery.complete operation. A dedicated OriginalKeyPageBatch
-binds acquired results to the exact captured references. Primary/explicit-ID APIs keep their contracts.
-Shared resolution policy preserves old primary semantics. False, uncertain, cancelled or stale replies
-cannot acknowledge the page. A successful receipt names only the attempted generation/counts/cursor;
-it cannot complete a whole-account pass or a newer request. Local lifetime is five seconds; ordinary
-credential expiry does not hide owned local work. No new SDK/primary/global I/O, timer or collector.
+The reader confirms one retained Space recovery request and reads at most sixteen references.
+Historical traversal/provider devices remain distinct from the current registered physical SDK.
+Original room aliases keep Space storage scope. The acquisition overload reuses exact local facts
+before native reads; shared targets are deduplicated and captured source order remains. Primary
+transport behavior and its different native-session alias remain covered by all 25 prior cases.
+Completion binds outcomes to the exact captured page and invokes the existing Space transaction
+once. False/unknown/cancelled/stale replies cannot acknowledge work. No Company fallback,
+transport/key probe, hidden retry, global receipt, collector or application activation was added.
 
-prepare/configure HAVE EXECUTED; never rerun old configure over the focused-coverage refinement.
-Publish and accepted writer HAVE EXECUTED. Mobile e6f3aa05/source push40445 REAPED;
-Group00e0e8aa/push39003 REAPED. Hosted43133923106 dispatched ONCE by60493 REAPED on
-2026-11-12T01:21:11UTC; ref validation/original-key-reference-completion-20261111.
-Expected16,028=11,400portable+4,628Apple. IN PROGRESS, not audited. hosted-plan.json and
-hosted-43133923106/state.json have exact source/run; never redispatch.
+The guarded preparation, publisher and this writer HAVE EXECUTED. Commit/push source and evidence,
+then dispatch ONCE using this workspace's dispatch-hosted.py. Expected 16,292 = 11,576 portable +
+4,716 Apple. Inspect any existing dispatch-attempt file and hosted-plan before repeating an action.
 
-## Next Space implementation
+## Next: serve bounded account recovery before enabling key producers
 
-The reviewed15-file Space draft was APPLIED successfully after all Original gates/push/dispatch.
-Workspace .work/space-key-page-projection-2026-11-12; baselinee4bfc84c981e7321b8fdaad36443ca7d25578c60,
-13,422cases/5,056inputs. prepare-space-key-projection.py HAS EXECUTED; do not rerun it.
-Fifteen source files (four existing/eleven new) remain UNCOMMITTED/UNTESTED. Format1/26869 is
-REAPED PASS37.580s. Candidate5,067inputs/2dd3b692d1bb649fe572317bd69dd1f4de4aff0fe98ff004843e094d055e0b91.
-Focused1/42704 REAPED PASS424.376s/243cases, including iOS/Wasm metadata.
-Browser1/58090 REAPED PASS156.785s/241cases. Focused audit accepts484 cases and all old IDs.
-Full1/50055 RUNNING, the only compiler; expected13,598. Read result before another operation.
-Expected5,067inputs,13,598local,484focused(243JVM/241browser),16,292hosted(11,576portable/4,716Apple).
-Reader19/acquisition34/completion35 new common cases preserve primary25, loader26, reference12,
-policy8, storage56/26 and both graph controls. Both known Original fixture defects are corrected.
-Guarded run/freeze/accept/publish/hosted/accepted-handoff scripts are prepared in the new workspace.
-No global service/producer activation. All54groups remainOPEN.
+Account metadata reads, schema7 recovery state, both admitted history readers/content/completion
+owners now exist. The global service/selection and unavailable-source classification remain.
+Read .work/original-local-key-page-content-2026-11-11/next-global-recovery-review.md; it is a
+design under review, not applied source. Six files (four production/two existing test suites) are drafted at this workspace's
+next-source-availability-draft (state next-source-availability-state.json). They add typed
+SourceUnavailable after a stable final registration check for another Company/current source and
+an account-owned Space locator overload that preserves its actual Space ID. They are statically REVIEWED, UNAPPLIED and UNCOMPILED. Fourteen new common cases are drafted (6 Company/8 Space), preserving
+all 50 previous loader IDs. Two existing Company mismatch assertions intentionally expect typed
+SourceUnavailable with a final registration read. The ownership, failure/cancellation/deadline and foreign-Space coverage has been reviewed;
+verify the six existing-file guards against this accepted baseline before application.
+prepare-source-availability.py, publish-source-availability.py and write-source-availability-handoff.py
+are PREPARED NOT EXECUTED. Expected future source
+inputs remain5,067; local13,626 and hosted16,334 if no other delta. Never map generic Conflict/Unavailable failures wholesale. One metadata row per turn bounds work to at most sixteen
+historical events. Internal-only rows must still advance metadata cursor. Validate current root,
+account/source/registration and exact metadata coverage around I/O and compare-and-set.
 
-Preserve logical Space and Original-alias storage scope, historical traversal/provider identity and
-actual current registered physical provenance. Acquisition reuses scoped local facts before native
-reads; primary transport admission stays intact. The primary fixture throws if the new historical
-dependencies are used. Completion uses only the Space recovery.complete overload. DI/graph drafts
-include the now-accepted Original completion graph; do not replace it with an earlier version.
-Six source-availability files (four production/two test suites) are statically REVIEWED,
-UNAPPLIED and UNCOMPILED in the active Space workspace's next-source-availability-draft.
-Read next-source-availability-state.json/contract/review. Fourteen new common cases (6Company/
-8Space), all50 old loader IDs retained; two Company mismatch expectations intentionally refine
-Conflict to SourceUnavailable with a final registration read and no foreign metadata read.
-A typed account Space locator preserves actual spaceId. Generic failures, missing registration,
-source changes, denials, cancellation and deadlines remain failures. prepare-source-availability.py,
-publish-source-availability.py and write-source-availability-handoff.py are PREPARED NOT EXECUTED.
-Expectednext6existingfiles/5,067inputs,314focused,13,626local,16,334hosted. Apply only after the
-active Space stage is accepted, committed, pushed and dispatched. No worker/producer activation.
-The global-design notes also require confirming local status after completing an older generation;
-a null receipt cursor may have promoted the requested generation and cannot mean global EOF.
-Then finish bounded global recovery service, unavailable-source outcomes, atomic primary EOF demotion
-with request/wake, loss-aware key receipts and listener ownership/drain, and 64-room liveness before
-activating producers. Existing global policy separates more pages from unresolved content and sleeps
-after a finite waiting pass; missing keys must never restart a secret-storage/transport polling loop.
+ReadCollaborationSpaceIncomingDemand does not yet serve historyRecovery, while Finish already
+refuses an active record. Enabling a producer first would retain unserviceable work. A page's
+completion receipt identifies its attempted generation only. A null cursor may have promoted a
+newer local generation: confirm local status for the captured global generation before advancing
+global progress. Pending requires another same-generation metadata round; unresolved alone sleeps
+after a finite pass. Preserve newer requests and unrelated primary demand through CAS/readback.
+
+Next requirements: explicit unavailable-source outcomes, bounded account service, atomic primary
+EOF demotion with recovery request/wake, loss-aware key occurrence receipts, listener cancellation
+and isFinished drain (including late acquisition), and 64-room liveness before activation.
+Repeated equal key callback room lists may be different occurrences; no distinctUntilChanged or
+loss-unaware SharedFlow drop. A permanent listener must not consume transient native child slots.
+Operational failures, waiting for keys and authorization changes require distinct policies.
 
 ## Previous validation and generic port
 
-Mobile e4650f882e71708100feebaf900834353bb5a128 accepted all 13,358 fresh cases on
-cf23e510352c001c8d6c008550576f2e7a00fc0920ba22b50d0648f30084cc8a. Preserve three failed full attempts:
-upstream missing reporter LF, introduced module-config omission, and the existing AppFlow readiness race.
-All were investigated; assertions/timeouts were not weakened. The Node evidence publisher's Spec/TAP
-format mismatch was separately corrected without rerunning or changing successful results.
-Hosted43126523314 COMPLETE/audited15,932=11,336portable+4,596Apple. Audits64714/52644 REAPED.
-All prior IDs/digests preserved; measurement owns exact hashes. Apple shared tests/unsigned host
-pass, without a native Matrix Apple claim. Do not redispatch.
-Starter badfc0d (push21019 REAPED) ports four generic reporter files and passed 906 fresh cases, preserving all
-358 prior IDs and all 44 browser task selections. Its measurement owns source/commit/build details.
-No HRIS policy or document UI case was ported. No repeat Starter gate without another generic delta.
+Original completion accepted 13,422 local cases on e89a643ad7cd2611c512ee18f2e2dedc1545ca82d44394a20544e9a73f7f68fd.
+Its 388 focused cases preserved old controls. Both new-fixture failures remain recorded: omitted
+AwaitDecryption reason, and an incoherent primary retry flag lacking cursor/boundary. Production
+policy was not weakened. Hosted state: in_progress.
+Audit the actual prior run/artifacts before accepting the new hosted delta; no blind redispatch.
 
-[Prior full ledger](https://github.com/fajarxfce/hris-mobile/blob/0eeefa7b/docs/agent-handoff.md) retains
-older source, hosted and failed-attempt evidence. The account startup failure remains unaccepted;
-shared Apple tests do not establish native Matrix SDK8 Apple behavior. Current measurements are authoritative.
+Earlier local-content source e4650f88 accepted 13,358 fresh cases. Its full failures, final reporter
+module merge, Node8 regressions and AppFlow readiness correction remain in checked-in evidence.
+Starter badfc0d independently accepted 906 fresh cases and all 358 prior IDs; all 44 browser
+targets, Android builds/lint, production Web, iOS metadata and quality passed. This Space change
+is HRIS policy and needs no Starter port or repeated Starter compiler.
+Account CI startup failure remains unaccepted. Shared Apple tests do not prove native Matrix
+SDK8 Apple runtime. Earlier source/native/hosted details remain in the checked-in measurement chain.
 
 ## Device and protected state
 

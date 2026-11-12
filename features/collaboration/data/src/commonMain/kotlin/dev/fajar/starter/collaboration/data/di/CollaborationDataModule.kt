@@ -659,6 +659,8 @@ class CollaborationDataModule {
         history: CollaborationSpaceHistoryRepository,
         edits: CollaborationSpaceMessageEditRepository,
         directory: CollaborationSpaceDirectoryRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        sync: CollaborationSpaceSyncRepository,
         sessions: SessionRepository,
         server: IdentityServer,
         build: AppBuild,
@@ -671,6 +673,8 @@ class CollaborationDataModule {
             history,
             edits,
             directory,
+            registrations,
+            sync,
             sessions,
             server,
             build,
@@ -946,6 +950,52 @@ class CollaborationDataModule {
             directory,
             sessions,
             server,
+            sync,
+        )
+
+    @Factory
+    fun completeSpaceKeyReferences(
+        bindings: CollaborationSpaceRoomBindingRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        recovery: CollaborationHistoryRecoveryRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        sync: CollaborationSpaceSyncRepository,
+    ) =
+        CompleteCollaborationSpaceKeyReferences(
+            bindings,
+            registrations,
+            recovery,
+            directory,
+            sessions,
+            server,
+            build,
+            sync,
+        )
+
+    @Factory
+    fun readSpaceKeyReferences(
+        bindings: CollaborationSpaceRoomBindingRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        history: CollaborationSpaceHistoryTraversalRepository,
+        recovery: CollaborationHistoryRecoveryRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        sync: CollaborationSpaceSyncRepository,
+    ) =
+        ReadCollaborationSpaceKeyReferences(
+            bindings,
+            registrations,
+            history,
+            recovery,
+            directory,
+            sessions,
+            server,
+            build,
             sync,
         )
 

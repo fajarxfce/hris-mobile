@@ -126,6 +126,52 @@ internal class SpaceIncomingFixture {
                 return editResponse
             }
         }
+    private val registrations =
+        object : CollaborationSpaceRegistrationCommandRepository {
+            override fun observeAll(
+                access: CollaborationSpaceLocalAccess
+            ): Flow<AppResult<List<CollaborationSpaceRegistrationRecord>>> =
+                error("Primary input uses its transport admission")
+
+            override fun observe(
+                access: CollaborationSpaceLocalAccess,
+                nativeSessionId: String,
+            ): Flow<AppResult<CollaborationSpaceRegistrationRecord?>> =
+                error("No historical registration observation")
+
+            override suspend fun current(
+                access: CollaborationSpaceLocalAccess,
+                nativeSessionId: String,
+            ): AppResult<CollaborationSpaceRegistrationRecord?> =
+                error("Primary input does not borrow historical registration")
+
+            override suspend fun insert(
+                access: CollaborationSpaceLocalAccess,
+                command: CollaborationSpaceRegistrationCommand,
+            ): AppResult<CollaborationSetupInsertion> = error("No setup")
+
+            override suspend fun update(
+                access: CollaborationSpaceLocalAccess,
+                expected: CollaborationSpaceRegistrationRecord,
+                outcome: CollaborationSpaceRegistrationOutcome,
+                attempts: Int,
+            ): AppResult<Boolean> = error("No setup")
+        }
+    private val sync =
+        object : CollaborationSpaceSyncRepository {
+            override suspend fun synchronize(
+                runtime: CollaborationSpaceRuntimeReady
+            ): AppResult<Unit> = error("No synchronization")
+
+            override fun incomingSource(
+                runtime: CollaborationSpaceRuntimeReady
+            ): CollaborationSpaceIncomingSource? =
+                error("Primary input does not borrow a historical source")
+
+            override fun observeBatches(
+                runtime: CollaborationSpaceRuntimeReady
+            ): Flow<AppResult<CollaborationSpaceSyncBatch>> = error("No sync listener")
+        }
     val acquire =
         AcquireCollaborationSpaceEvents(
             base.bindings,
@@ -135,6 +181,8 @@ internal class SpaceIncomingFixture {
             history,
             edits,
             base.directory.directory,
+            registrations,
+            sync,
             native.setup.sessions,
             native.server,
             AppBuild(AppPlatform.Android, 5, "test", null),

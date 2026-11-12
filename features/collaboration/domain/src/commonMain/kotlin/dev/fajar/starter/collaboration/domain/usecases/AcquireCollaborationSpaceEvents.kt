@@ -20,6 +20,8 @@ class AcquireCollaborationSpaceEvents(
     private val history: CollaborationSpaceHistoryRepository,
     private val edits: CollaborationSpaceMessageEditRepository,
     private val directory: CollaborationSpaceDirectoryRepository,
+    private val registrations: CollaborationSpaceRegistrationCommandRepository,
+    private val sync: CollaborationSpaceSyncRepository,
     private val sessions: SessionRepository,
     private val server: IdentityServer,
     private val build: AppBuild,
@@ -43,17 +45,62 @@ class AcquireCollaborationSpaceEvents(
                 captured.any { !validCollaborationEventId(it) }
         )
             return incomingFailure("invalid_request", FailureKind.Validation)
-        return Acquisition(runtime, conversation, captured).run()
+        return when (
+            val result =
+                Acquisition(runtime, SpaceEventOrigin.Incoming(conversation), captured).run()
+        ) {
+            is AppResult.Failed -> result
+            is AppResult.Success ->
+                AppResult.Success(
+                    CollaborationSpaceIncomingBatch(
+                        runtime,
+                        conversation.id,
+                        result.value.roomId,
+                        result.value.items,
+                        requireNotNull(result.value.provider),
+                    )
+                )
+        }
+    }
+
+    /** Captured historical references retain Space ownership, including Original room aliases. */
+    suspend operator fun invoke(
+        runtime: CollaborationSpaceRuntimeReady,
+        history: CollaborationSpaceKeyHistory,
+        references: CollaborationHistoryReferences,
+    ): AppResult<CollaborationSpaceKeyPageBatch> {
+        currentCoroutineContext().ensureActive()
+        if (references.events.size > 16)
+            return incomingFailure("invalid_request", FailureKind.Validation)
+        val captured = references.copy(events = references.events.toList())
+        if (!validCollaborationSpaceKeyHistoryReferences(runtime, history, captured))
+            return incomingFailure("invalid_request", FailureKind.Validation)
+        return when (
+            val result =
+                Acquisition(
+                        runtime,
+                        SpaceEventOrigin.KeyHistory(history, captured),
+                        captured.events.map { it.event.eventId },
+                    )
+                    .run()
+        ) {
+            is AppResult.Failed -> result
+            is AppResult.Success ->
+                AppResult.Success(
+                    CollaborationSpaceKeyPageBatch(runtime, history, captured, result.value.items)
+                )
+        }
     }
 
     /** Mutable admission, raw snapshots and retention plans never outlive this invocation. */
     private inner class Acquisition(
         val runtime: CollaborationSpaceRuntimeReady,
-        val conversation: CollaborationSpaceConversation,
+        val origin: SpaceEventOrigin,
         val ids: List<String>,
     ) {
         val owner = runtime.owner
         val access = owner.localDirectoryAccess()
+        val conversation = origin.conversation
         val requestedAt = clock.now()
         val started = timeSource.markNow()
         var nativeDeadline: Instant? = null
@@ -62,13 +109,22 @@ class AcquireCollaborationSpaceEvents(
         var observed: CollaborationSpaceDirectTransport? = null
         var transportStarted: TimeMark? = null
         var physicalIdentity: Pair<CollaborationOwner, String>? = null
+        var registered: CollaborationSpaceRegistrationRecord? = null
         val acquired = mutableMapOf<String, CollaborationAcquiredEvent>()
         val plans = linkedMapOf<String, CollaborationIncomingHistoryPlan>()
+        val retainedOutcomes = mutableMapOf<String, CollaborationIncomingHistoryOutcome>()
 
-        suspend fun run(): AppResult<CollaborationSpaceIncomingBatch> {
+        suspend fun run(): AppResult<AcquiredContent> {
             try {
-                return withTimeoutOrNull(15_000) { retain() }
-                    ?: failed(incomingFailure("timeout", FailureKind.Timeout).failure)
+                return withTimeoutOrNull(15_000) {
+                    if (origin is SpaceEventOrigin.KeyHistory) {
+                        admission().let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+                        val registration = readRegistration()
+                        if (registration is AppResult.Failed) return@withTimeoutOrNull registration
+                        registered = (registration as AppResult.Success).value
+                    }
+                    retain()
+                } ?: failed(incomingFailure("timeout", FailureKind.Timeout).failure)
             } finally {
                 if (restriction != null)
                     withContext(NonCancellable) {
@@ -86,13 +142,16 @@ class AcquireCollaborationSpaceEvents(
                 (loaded as AppResult.Success).value ?: return incomingFailure("binding_missing")
             if (
                 !validCollaborationSpaceRoomBinding(access, binding) ||
-                    binding.conversation != conversation.localMetadata()
+                    binding.conversation != conversation ||
+                    (origin is SpaceEventOrigin.KeyHistory && binding != origin.history.binding)
             )
                 return incomingFailure("binding_changed")
             retained = binding
             current().let { if (it is AppResult.Failed) return it }
+            if (origin is SpaceEventOrigin.KeyHistory) return AppResult.Success(Unit)
+            val incoming = (origin as SpaceEventOrigin.Incoming).value
             transportStarted = timeSource.markNow()
-            val received = transport.read(conversation)
+            val received = transport.read(incoming)
             restrict(received, conversationControl = true)
             current().let { if (it is AppResult.Failed) return it }
             if (received is AppResult.Failed) return failed(received.failure)
@@ -103,7 +162,7 @@ class AcquireCollaborationSpaceEvents(
                 } ?: return incomingFailure("unsupported_platform", FailureKind.Unavailable)
             if (
                 !validCollaborationSpaceDirectTransport(value) ||
-                    value.conversation != conversation ||
+                    value.conversation != incoming ||
                     value.room != binding.room ||
                     value.device.id != runtime.deviceId ||
                     value.device.origin != CollaborationSpaceDeviceOrigin.LEGACY ||
@@ -114,28 +173,42 @@ class AcquireCollaborationSpaceEvents(
             return current()
         }
 
-        suspend fun retain(): AppResult<CollaborationSpaceIncomingBatch> {
+        suspend fun retain(): AppResult<AcquiredContent> {
             prepare().let { if (it is AppResult.Failed) return it }
             val binding = requireNotNull(retained)
             for (id in ids) {
-                val read = readEvent(id)
+                val local = retainedReference(id)
+                if (local is AppResult.Failed) return local
+                val outcome = (local as AppResult.Success).value
+                if (outcome != null) {
+                    retainedOutcomes[id] = outcome
+                    continue
+                }
+                val read =
+                    if (origin is SpaceEventOrigin.KeyHistory)
+                        acquired[id]?.let { AppResult.Success(it) } ?: readEvent(id)
+                    else readEvent(id)
                 if (read is AppResult.Failed) return read
                 val planned = plan((read as AppResult.Success).value)
                 if (planned is AppResult.Failed) return planned
                 plans[id] = (planned as AppResult.Success).value
             }
             val originals =
-                plans.values.flatMap {
-                    when (it) {
-                        is CollaborationIncomingHistoryPlan.Retain -> it.originals
-                        is CollaborationIncomingHistoryPlan.MissingOriginal -> listOf(it.tombstone)
-                        else -> emptyList()
+                plans.values
+                    .flatMap {
+                        when (it) {
+                            is CollaborationIncomingHistoryPlan.Retain -> it.originals
+                            is CollaborationIncomingHistoryPlan.MissingOriginal ->
+                                listOf(it.tombstone)
+                            else -> emptyList()
+                        }
                     }
-                }
+                    .let { if (origin is SpaceEventOrigin.KeyHistory) it.distinct() else it }
             val replacements =
-                plans.values.filterIsInstance<CollaborationIncomingHistoryPlan.Retain>().flatMap {
-                    it.replacements
-                }
+                plans.values
+                    .filterIsInstance<CollaborationIncomingHistoryPlan.Retain>()
+                    .flatMap { it.replacements }
+                    .let { if (origin is SpaceEventOrigin.KeyHistory) it.distinct() else it }
             if (originals.size > 16 || replacements.size > 16) return incomingFailure("bounds")
             if (originals.isNotEmpty()) {
                 val saved = checked {
@@ -153,20 +226,48 @@ class AcquireCollaborationSpaceEvents(
             }
             val latest = current()
             if (latest is AppResult.Failed) return latest
-            val identity = requireNotNull(physicalIdentity)
             return AppResult.Success(
-                CollaborationSpaceIncomingBatch(
-                    runtime,
-                    conversation.id,
+                AcquiredContent(
                     binding.room.roomId,
-                    plans.map { (id, plan) ->
+                    ids.map { id ->
                         CollaborationIncomingHistoryResult(
                             id,
-                            collaborationIncomingHistoryOutcome(plan),
+                            retainedOutcomes[id]
+                                ?: collaborationIncomingHistoryOutcome(plans.getValue(id)),
                         )
                     },
-                    CollaborationHistoryProviderIdentity(identity.first.companyId, identity.second),
+                    physicalIdentity?.let {
+                        CollaborationHistoryProviderIdentity(it.first.companyId, it.second)
+                    },
                 )
+            )
+        }
+
+        suspend fun retainedReference(id: String): AppResult<CollaborationIncomingHistoryOutcome?> {
+            val page =
+                (origin as? SpaceEventOrigin.KeyHistory)?.references
+                    ?: return AppResult.Success(null)
+            val reference = page.events.single { it.event.eventId == id }
+            val roomId = requireNotNull(retained).room.roomId
+            val found = checked { history.getEventFact(access, conversation.id, roomId, id) }
+            if (found is AppResult.Failed) return found
+            val fact = (found as AppResult.Success).value
+            if (fact != null) {
+                if (!matchesCollaborationRetainedOriginal(reference.event, fact))
+                    return incomingFailure("local_original_changed")
+                return AppResult.Success(
+                    CollaborationIncomingHistoryOutcome.Retained(listOf(id), emptyList())
+                )
+            }
+            val foundEdit = checked {
+                edits.getReplacementFact(access, conversation.id, roomId, id)
+            }
+            if (foundEdit is AppResult.Failed) return foundEdit
+            val edit = (foundEdit as AppResult.Success).value ?: return AppResult.Success(null)
+            if (!matchesCollaborationRetainedReplacement(reference.event, edit))
+                return incomingFailure("local_replacement_changed")
+            return AppResult.Success(
+                CollaborationIncomingHistoryOutcome.Retained(emptyList(), listOf(id))
             )
         }
 
@@ -222,16 +323,41 @@ class AcquireCollaborationSpaceEvents(
             val read = checked(remote = true) { events.read(runtime, binding.room.roomId, id) }
             if (read is AppResult.Failed) return read
             val value = (read as AppResult.Success).value
+            val valid =
+                when (origin) {
+                    is SpaceEventOrigin.Incoming ->
+                        validCollaborationSpaceIncomingSnapshot(
+                            runtime,
+                            binding,
+                            requireNotNull(observed),
+                            value,
+                            id,
+                        )
+                    is SpaceEventOrigin.KeyHistory ->
+                        validCollaborationSpaceKeyHistorySnapshot(
+                            runtime,
+                            origin.history,
+                            requireNotNull(registered),
+                            requireNotNull(
+                                CollaborationNativePlatform.entries.firstOrNull {
+                                    it.name == build.platform.name.uppercase()
+                                }
+                            ),
+                            value,
+                            id,
+                        )
+                }
+            if (!valid) return incomingFailure("event_owner_changed")
+            val reference =
+                (origin as? SpaceEventOrigin.KeyHistory)?.references?.events?.singleOrNull {
+                    it.event.eventId == id
+                }
             if (
-                !validCollaborationSpaceIncomingSnapshot(
-                    runtime,
-                    binding,
-                    requireNotNull(observed),
-                    value,
-                    id,
-                )
+                reference != null &&
+                    (value.physical.event.sender != reference.event.sender ||
+                        value.physical.event.timestamp != reference.event.timestamp)
             )
-                return incomingFailure("event_owner_changed")
+                return incomingFailure("event_source_changed")
             val identity = value.physical.owner to value.physical.deviceId
             if (physicalIdentity != null && physicalIdentity != identity)
                 return incomingFailure("event_owner_changed")
@@ -257,6 +383,11 @@ class AcquireCollaborationSpaceEvents(
             if (gate is AppResult.Failed) return gate
             if (!validCollaborationSpaceDirectoryAdmission((gate as AppResult.Success).value))
                 return incomingFailure("invalid_admission")
+            if (
+                origin is SpaceEventOrigin.KeyHistory &&
+                    sync.incomingSource(runtime) != origin.history.source
+            )
+                return incomingFailure("source_changed", FailureKind.Unavailable)
             val expiry =
                 Instant.fromEpochMilliseconds(
                     (parent as AppResult.Success).value.binding.expiresAtEpochMillis
@@ -285,7 +416,7 @@ class AcquireCollaborationSpaceEvents(
 
         suspend fun current(): AppResult<Unit> {
             admission().let { if (it is AppResult.Failed) return it }
-            val expected = retained
+            val expected = retained ?: (origin as? SpaceEventOrigin.KeyHistory)?.history?.binding
             if (expected != null) {
                 val binding = bindings.getByConversation(access, conversation.id)
                 admission().let { if (it is AppResult.Failed) return it }
@@ -298,7 +429,37 @@ class AcquireCollaborationSpaceEvents(
             admission().let { if (it is AppResult.Failed) return it }
             if (open is AppResult.Failed) return failed(open.failure)
             if (!(open as AppResult.Success).value) return incomingFailure("runtime_changed")
+            if (origin is SpaceEventOrigin.KeyHistory) {
+                val registration = readRegistration()
+                if (registration is AppResult.Failed) return registration
+                if ((registration as AppResult.Success).value != registered)
+                    return incomingFailure("registration_changed")
+            }
             return AppResult.Success(Unit)
+        }
+
+        suspend fun readRegistration(): AppResult<CollaborationSpaceRegistrationRecord> {
+            val keyHistory = (origin as SpaceEventOrigin.KeyHistory).history
+            val loaded = registrations.current(access, owner.parent.nativeSessionId)
+            admission().let { if (it is AppResult.Failed) return it }
+            if (loaded is AppResult.Failed) return loaded
+            val value =
+                (loaded as AppResult.Success).value
+                    ?: return incomingFailure("registration_changed")
+            val platform =
+                CollaborationNativePlatform.entries.firstOrNull {
+                    it.name == build.platform.name.uppercase()
+                } ?: return incomingFailure("unsupported_platform", FailureKind.Unavailable)
+            if (
+                registeredCollaborationSpaceOriginalIncomingSdk(
+                    runtime,
+                    keyHistory.source,
+                    value,
+                    platform,
+                ) == null || value.command.provider.serverName != keyHistory.binding.room.serverName
+            )
+                return incomingFailure("registration_changed")
+            return AppResult.Success(value)
         }
 
         suspend fun <T> checked(
@@ -331,6 +492,27 @@ class AcquireCollaborationSpaceEvents(
 
         fun failed(value: Failure) = AppResult.Failed(restriction ?: value)
     }
+
+    private sealed interface SpaceEventOrigin {
+        val conversation: CollaborationSpaceConversationMetadata
+
+        data class Incoming(val value: CollaborationSpaceConversation) : SpaceEventOrigin {
+            override val conversation = value.localMetadata()
+        }
+
+        data class KeyHistory(
+            val history: CollaborationSpaceKeyHistory,
+            val references: CollaborationHistoryReferences,
+        ) : SpaceEventOrigin {
+            override val conversation = history.binding.conversation
+        }
+    }
+
+    private data class AcquiredContent(
+        val roomId: String,
+        val items: List<CollaborationIncomingHistoryResult>,
+        val provider: CollaborationHistoryProviderIdentity?,
+    )
 }
 
 private fun incomingFailure(reason: String, kind: FailureKind = FailureKind.Conflict) =
