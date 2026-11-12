@@ -48,7 +48,10 @@ New factory requested an unregistered Clock; production tracing found the existi
 binding resolver had the same latent dependency. Both data factories now supply Clock.System,
 keeping domain clock injection. Existing graph now explicitly resolves both. No fake clock binding
 or removed assertion. Candidate2 and failure-reviews.json preserve the old source/result.
-Format3/42272 RUNNING; full/browser acceptance still pending.
+Format3/42272 REAPED PASS35.943s. Candidate5,072inputs/
+0b1ed4ddb3e72dfdf446cd69696fed7cc88ace4568d1fc9a755ccbaf698c67b0.
+Focused3/13983 REAPED PASS324.170s/158cases, including graph/Apple/Wasm compilation.
+Browser1/45358 RUNNING, expected156; full acceptance remains pending.
 Expected158JVM+156browser=314, local13,674, hosted16,406.
 Eight uncommitted source files (five new/three existing),24 common tests. Existing advance/defer
 shares the identity predicate while preserving its original mutation revision ceiling.
@@ -107,7 +110,8 @@ outside the eight transient native children. No new consumer, listener or live s
 
 Space projection hosted43136996756 portable accepted11,576 with audit36779 REAPED.
 All prior IDs/artifact/report/log hashes verified; Apple remains in progress. Its checked-in
-measurement retains exact evidence. Original43133923106 is building its iOS host.
+measurement retains exact evidence. Original43133923106 is COMPLETE/audited16,028=11,400portable+4,628Apple.
+Audits84983/5556 REAPED; exact hashes in its measurement. No native Matrix SDK8 Apple claim.
 
 Space page projection accepted13,598 local and484 focused cases; prior hosted state is
 in_progress. Verify actual artifacts before accepting
