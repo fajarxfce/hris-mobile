@@ -21,13 +21,28 @@
   "artifactAuditSha256": "857cc9ecd09d604b89850fefb038db718bc823810073a2d7caa70378d4db7998",
   "sdkAuditSha256": "7cdd5d172c67341811a42a5f76c4e9e3a522f615c8c66820de37f324501bd2c7",
   "nativeAuditSha256": "087049c5c23815e39f7748c41351a29a01c3d5057a3958fa7db9b25529fdf5e6",
-  "phoneInstalled": false,
+  "phoneInstalled": true,
   "phoneUiTouched": false,
   "limitations": [
     "The actual SDK proof uses a dedicated x86_64 host, not this ARM64 product APK.",
-    "No product89 emulator startup, retained-account upgrade or phone runtime claim yet.",
+    "Install-only upgrade is confirmed by APK SHA-256 and preserved existing identity; no phone UI/runtime check was performed.",
     "History hosted42835309631 is separate and still running. Native Apple Matrix runtime remains unimplemented.",
     "Live API/worker90163c32 uses schema116.4 with Group features disabled; all54 PRD groups remain open."
   ],
-  "phonePreflight": "ADB30354 timeout15s, REAPED; no installation attempted."
+  "phonePreflight": "ADB30354 timeout15s, REAPED; no installation attempted.",
+  "installation": {
+    "startedAt": "2026-11-12T09:10:48.391148+00:00",
+    "confirmed": true,
+    "serial": "10.77.77.3:5555",
+    "phoneUiTouched": false,
+    "freshInstall": false,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "versionCode": 89,
+    "installedSha256": "4c790d2314f53c37bfdc3108ac4b801ab33aa9fc177904001fd16793fd0ef52d",
+    "installedBytesMatch": true,
+    "verificationMethod": "Device SHA-256 equals validated local APK",
+    "existingIdentityPreserved": true,
+    "elapsedSeconds": 27.683
+  }
 }

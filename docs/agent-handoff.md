@@ -1,8 +1,33 @@
 # Agent continuation — communications long run
 
-Updated 12 November 2026, 09:04 UTC. Continue the PRD and push every commit. All 54 groups OPEN.
+Updated 12 November 2026, 09:23 UTC. Continue the PRD and push every commit. All 54 groups OPEN.
 No subagents. One compiler OR emulator. Follow AGENTS.md and clean layer boundaries.
 Phone install-only; announce installations and never launch or drive the phone UI.
+
+## Native result and phone update — 12 November 2026, 09:23 UTC
+
+Release89 installed09:10:48.391148UTC in27.683s; session65584 REAPED. Explicit phone
+10.77.77.3:5555, install-only upgrade. Device APK SHA-256 equals validated
+4c790d2314f53c37bfdc3108ac4b801ab33aa9fc177904001fd16793fd0ef52d. Existing identity preserved;
+no launch, UI driving, uninstall or data reset. This delivered APK is SDK6, NOT current SDK8 proof.
+
+Native1/67430 REAPED FAILED after224.323s:7 cases/5 reported failures. Two old controls passed;
+one old registered incoming worker failed with IncomingDeferred; the remaining4 cases DID NOT START
+because the harness protected the failed proof package. Keep its userdata and private fixture
+22b3bedb-d717-4c34-bf90-c95d48ed8385. Its two503 collaboration_recipients_changed responses occurred
+BEFORE trace.arm and do not establish the worker failure cause. No provider acquisition followed.
+Static investigation: old fixture omits process incoming collection while the current LEGACY alias
+resolver requires an actually retained sync source. Runtime confirmation still pending; do not
+weaken request budgets or blame startup503. All production inputs remain unchanged.
+
+Fresh isolated diagnostic1/68248 REAPED PASS1 case146.658s, boot33.58s, same APK/source manifests.
+This independently reaches the NEW process receipt case: actual native initial callback, encrypted
+write with lost reply, durable receipt before native ACK,2 foreground resumes with1 receipt write
+and1 ACK, process collector joined and exact receipt digest after offline process reopening.
+Matrix32 requests (4 encrypted sends/3 sync/2 secret storage/2 provider pages); native13
+(1 registration/1 bootstrap replay/4 direct transport). No compilation during emulator, phone untouched,
+emulator stopped. This is a partial native result, not acceptance of the7-case suite. Independent
+native publisher/audit remains to be implemented. Workspace state records both reaped sessions.
 
 ## Current: native process-source validation
 
