@@ -13,6 +13,27 @@ internal class IndexedDbReplicaStore(
     private val changes: MutableSharedFlow<Unit>,
     private val database: suspend () -> JsAny,
 ) : ReplicaStore {
+    override suspend fun changedDocuments(
+        scope: ReplicaScope,
+        partition: String,
+        cursor: ReplicaChangeCursor?,
+        limit: Int,
+    ): ReplicaChangePage {
+        validateReplicaChangePage(scope, partition, cursor, limit)
+        currentCoroutineContext().ensureActive()
+        return Json.decodeFromString(
+            replicaChangedDocuments(
+                    database(),
+                    Json.encodeToString(scope),
+                    partition,
+                    Json.encodeToString(cursor),
+                    limit,
+                )
+                .await<JsString>()
+                .toString()
+        )
+    }
+
     override suspend fun containsRecords(partitionPrefix: String): Boolean {
         require(partitionPrefix.length in 1..160 && partitionPrefix.all { it in '!'..'~' })
         return containsReplicaRecords(database(), partitionPrefix).await<JsBoolean>().toBoolean()

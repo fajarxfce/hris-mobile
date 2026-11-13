@@ -1,9 +1,42 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 23:35 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 23:46 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Incremental local replica pages locally accepted
+
+Mobile .work/replica-local-change-pages-2026-11-13 is accepted:21 generic source/schema/test paths,
+12 shared storage methods and3 actual migration methods (SQLite13, browser12 and browser7).
+Focused176/browser171/full16868 (6358 fresh /10510 unchanged)
+retain all16841 prior identities plus27 executions. Source5450/
+691f01044d496ace57007b503c67817bc0e65e5e431f62b6e56b9fae9a93570d; reportsa3d8b8b2d7a8d7df309de892268fa55674bc789ee80df5ddd8ddf8511200ecd6.
+Finite indexed changes include tombstones and keep local revision independent of caller version.
+Captured windows defer newer overwrites; exact replay/checkpoint-only writes create no row delta.
+Published ownership, staging, replacement, cancellation, competing writers and old-data migrations
+are covered. The cursor marks raw progress, not confirmed inbox publication. No consumer is active.
+Schema generation23295 is REAPED0 but is not test evidence: its initial input capture preceded
+completion of apply76168. Fixed-source focused/full validation above owns source acceptance.
+One existing unchanged expect-object warning was explicitly matched to its prior accepted log.
+
+Next port these21 exact generic paths to Starter after Mobile push; independent Starter1049 is
+expected from1022+27. Preserve Inspector742a2d1c. Then add authenticated Group/actual-Company history
+change readers and durable finite progress under existing incoming/repair ownership. Twelve formatted UNAPPLIED drafts now exist in .work/history-local-change-enumeration-2026-11-13,
+including15 shared storage test methods and two same-instance DI assertions. They add exact stable
+source cursor ownership and one captured authenticated page through existing Group/Company repos.
+Final review, compile and execution remain; do not apply during Starter verification. Raw rows
+include aliases, edit evidence, revisions and hiding rules: no trusting tags or message IDs before
+codec authentication. Null auxiliary revision tombstones receive structural checks only, never a
+false cryptographic authentication claim. Publish/handoff before completing raw windows or incoming references.
+Admitted history publisher2fd40461 is locally accepted but not integrated into owners. Previously
+retained incoming facts must also reach the index; Company content may predate canonical binding.
+Do not infer Company identity from matching UUIDs or add another polling queue/per-room observer.
+
+Actual new Apple execution remains outstanding. Control43517312645 is FAILED overall (Apple162/1,
+portable14505 independently accepted). Preserve its fixture failure and automatic-filter limitation
+below; do not recreate the blocked gate-script payload. Phone92 remains installed; live GroupOFF.
+All54 PRD groups remain open. Continue beyond checkpoints and push every commit.
 
 ## Admitted history inbox publication locally accepted
 
@@ -37,31 +70,7 @@ class/method/platform identity retained, raw full-name identity false. Two rejec
 archived. This does not make the Apple job or whole run accepted.
 Accepted43498640097 remains20459/6100 actual Apple and excludes all later HRIS increments.
 
-Current .work/replica-local-change-pages-2026-11-13 has21 APPLIED paths. Corrected source5450/
-691f01044d496ace57007b503c67817bc0e65e5e431f62b6e56b9fae9a93570d. Original full-1/session78785
-is REAPED FAILED:6358 fresh/4 failures. Three pagination cases rejected an extra sealed type field
-inside concrete Within JSON; the existing browser9 archive fixture lacked replica stores. The
-producer now emits the concrete next schema, and the frozen predecessor fixture is complete with
-retained replica assertions. No decoder validation was relaxed and all method identities remain.
-Original failing source files were recovered and checked against their exact recorded hashes.
-Browser171/session9418 is REAPED/ACCEPTED,95.468s:157 old+14 new, all4 failures now pass. The only
-two changes since focused176 are browser main/test files; all non-browser inputs were verified
-byte-identical and the original focused source/result hashes remain explicit. Full-2/session82528
-is RUNNING; do not mutate its source. Reap then accept-full.py full-2, record and commit/push.
-Record/commit scripts are PREPARED, not used. See measurements/replica-change-browser-correction-2026-11-13.json.
-Generation-only23295 was not test evidence; retain its source capture caveat in state.json.
-
-Starter .work/replica-local-change-pages-port-2026-11-13 has4 PREPARED scripts, source unapplied.
-Wait for complete Mobile acceptance/push, then apply/reap and check1049 independently. All21 old
-file values match, including absent schema14; Inspector742a2d1c stays pinned. Do not repeat176.
-
-Next .work/history-local-change-enumeration-2026-11-13 has12 reviewed/formatted UNAPPLIED paths,
-15 shared storage method drafts and same-instance DI checks. Existing Group/actual Company repos
-map one bounded authenticated page with stable account/source cursor identity. Null auxiliary
-revision tombstones receive structural checks only; no cryptographic authentication is claimed.
-Focused55/full16898 gates are prepared, not run; apply requires accepted/pushed Starter1049 first.
-No data/owner/UI activation or test execution is claimed. Durable progress and admitted incoming/
-repair integration still require work; raw exhaustion never proves publication or completion.
+Incremental raw storage is now locally accepted as recorded above. Continue the pending Starter port and authenticated history reader from the current opening; do not rerun historical apply/check scripts.
 
 Read owner-integration-review.md for actual worker/use-case boundaries.
 Continue owner integration: already-materialized incoming references still need index publication

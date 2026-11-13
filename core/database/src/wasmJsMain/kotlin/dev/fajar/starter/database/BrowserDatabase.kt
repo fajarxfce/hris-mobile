@@ -104,7 +104,7 @@ private class IndexedDbInboxStore(
 
 @JsFun(
     """(name) => new Promise((resolve, reject) => {
-    const request = indexedDB.open(name, 12);
+    const request = indexedDB.open(name, 13);
     let settled = false;
     request.onupgradeneeded = event => {
         const db = request.result;
@@ -146,7 +146,7 @@ private class IndexedDbInboxStore(
                         const row = rows.result;
                         if (!row) { db.deleteObjectStore(previous.name); return; }
                         const {sessionId, ...record} = row.value;
-                        store.put({...record, ownerKey:''});
+                        store.put({...record, ownerKey:'', changedAtRevision:0});
                         row.continue();
                     };
                 }
@@ -154,6 +154,17 @@ private class IndexedDbInboxStore(
         }
         if (event.oldVersion < 9) {
             request.transaction.objectStore('replica_documents').createIndex('tagged', 'tagKeys', {multiEntry:true, unique:true});
+        }
+        if (event.oldVersion < 13) {
+            const records = request.transaction.objectStore('replica_documents');
+            records.createIndex('changed', ['ownerKey', 'partition', 'generation', 'changedAtRevision', 'id']);
+            const pending = records.openCursor();
+            pending.onsuccess = () => {
+                const row = pending.result;
+                if (!row) return;
+                row.update({...row.value, changedAtRevision:0});
+                row.continue();
+            };
         }
         if (event.oldVersion < 4) {
             db.createObjectStore('transfers', {keyPath: 'id'});

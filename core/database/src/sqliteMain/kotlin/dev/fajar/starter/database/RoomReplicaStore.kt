@@ -8,6 +8,17 @@ import kotlinx.coroutines.flow.map
 internal class RoomReplicaStore(private val database: StarterDatabase) : ReplicaStore {
     private val dao = database.replicaDao()
 
+    override suspend fun changedDocuments(
+        scope: ReplicaScope,
+        partition: String,
+        cursor: ReplicaChangeCursor?,
+        limit: Int,
+    ): ReplicaChangePage {
+        validateReplicaChangePage(scope, partition, cursor, limit)
+        currentCoroutineContext().ensureActive()
+        return dao.changedDocuments(scope, partition, cursor, limit)
+    }
+
     override suspend fun containsRecords(partitionPrefix: String): Boolean {
         require(partitionPrefix.length in 1..160 && partitionPrefix.all { it in '!'..'~' })
         return dao.containsRecords(partitionPrefix)

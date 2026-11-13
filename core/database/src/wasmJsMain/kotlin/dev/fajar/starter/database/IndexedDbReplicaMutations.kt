@@ -36,7 +36,7 @@ import kotlin.js.Promise
                 const {generation, checkpoint} = m.snapshot;
                 generations.put({ownerKey, partition, generation, revision:0, checkpoint});
                 for (const item of m.snapshot.documents) {
-                    documents.put({...item, ownerKey, partition, generation, visibleSort:item.payload == null ? undefined : item.sortKey,
+                    documents.put({...item, ownerKey, partition, generation, changedAtRevision:0, visibleSort:item.payload == null ? undefined : item.sortKey,
                         tagKeys:item.payload == null ? [] : (item.tags ?? []).map(tag => [ownerKey, partition, generation, tag, item.sortKey])});
                 }
                 heads.put({ownerKey, partition, activeGeneration:generation, stagingGeneration:null});
@@ -63,7 +63,9 @@ import kotlin.js.Promise
             previous.onsuccess = () => {
                 const old = previous.result;
                 if (!old || (old.version <= item.version && !(old.version === item.version && old.payload == null && item.payload != null))) {
-                    documents.put({...item, ownerKey, partition, generation, visibleSort:item.payload == null ? undefined : item.sortKey,
+                    const unchanged = old && old.version === item.version && old.sortKey === item.sortKey && old.payload === item.payload &&
+                        JSON.stringify([...(old.tags ?? [])].sort()) === JSON.stringify([...(item.tags ?? [])].sort());
+                    if (!unchanged) documents.put({...item, ownerKey, partition, generation, changedAtRevision:m.expectedRevision + 1, visibleSort:item.payload == null ? undefined : item.sortKey,
                         tagKeys:item.payload == null ? [] : (item.tags ?? []).map(tag => [ownerKey, partition, generation, tag, item.sortKey])});
                 }
                 nextDocument(position + 1);

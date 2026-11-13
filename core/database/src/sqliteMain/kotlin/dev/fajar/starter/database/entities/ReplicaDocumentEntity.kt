@@ -17,7 +17,11 @@ import androidx.room.Index
                 onDelete = ForeignKey.CASCADE,
             )
         ],
-    indices = [Index(value = ["ownerKey", "partition", "generation", "sortKey"], unique = true)],
+    indices =
+        [
+            Index(value = ["ownerKey", "partition", "generation", "sortKey"], unique = true),
+            Index(value = ["ownerKey", "partition", "generation", "changedAtRevision", "id"]),
+        ],
 )
 data class ReplicaDocumentEntity(
     val ownerKey: String,
@@ -28,4 +32,5 @@ data class ReplicaDocumentEntity(
     val sortKey: String,
     val payload: String?,
     @ColumnInfo(defaultValue = "'[]'") val tags: String = "[]",
+    @ColumnInfo(defaultValue = "0") val changedAtRevision: Long = 0,
 )

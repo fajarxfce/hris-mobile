@@ -99,6 +99,24 @@ class BrowserCommandArchiveTest {
         seedArchiveDatabase(namespace + ".database").await<JsAny?>()
         val database = createAppDatabase(namespace)
         try {
+            val migrated =
+                assertIs<ReplicaChangePage.Items>(
+                    database.replicas.changedDocuments(
+                        ReplicaScope(scope.sessionId, scope.accountKey),
+                        "retained",
+                    )
+                )
+            assertEquals("sealed-checkpoint", migrated.checkpoint.payload)
+            assertEquals(7L, migrated.checkpoint.revision)
+            assertEquals(
+                listOf(
+                    ReplicaChangedDocument(
+                        ReplicaDocument("message", 5, "01", "sealed-message", setOf("visible")),
+                        0,
+                    )
+                ),
+                migrated.records,
+            )
             assertEquals(original, database.commands.get(scope, original.partition, original.id))
             assertNull(database.commands.archived(scope, original.partition, original.id))
             assertTrue(database.commands.archive(scope, original, "sealed-proof"))
@@ -144,6 +162,24 @@ private external fun deleteArchiveDatabase(name: String): Promise<JsAny?>
     const request = indexedDB.open(name, 9);
     request.onupgradeneeded = () => {
         const db = request.result;
+        // Complete schema9: later migrations operate on the real predecessor, not a command-only shell.
+        db.createObjectStore('dashboard');
+        db.createObjectStore('inbox', {keyPath:'id'});
+        db.createObjectStore('activity_preferences', {keyPath:'activityId'});
+        db.createObjectStore('dashboard_outbox', {keyPath:'sequence', autoIncrement:true}).createIndex('operationId', 'operationId', {unique:true});
+        db.createObjectStore('transfers', {keyPath:'id'});
+        db.createObjectStore('transfer_chunks', {keyPath:['transferId', 'offset']});
+        db.createObjectStore('durable_blobs', {keyPath:['accountKey', 'partition', 'id']});
+        db.createObjectStore('durable_blob_chunks', {keyPath:['accountKey', 'partition', 'id', 'offset']});
+        const heads = db.createObjectStore('replica_heads', {keyPath:['ownerKey', 'partition']});
+        const generations = db.createObjectStore('replica_generations', {keyPath:['ownerKey', 'partition', 'generation']});
+        const documents = db.createObjectStore('replica_documents', {keyPath:['ownerKey', 'partition', 'generation', 'id']});
+        documents.createIndex('ordered', ['ownerKey', 'partition', 'generation', 'sortKey'], {unique:true});
+        documents.createIndex('visible', ['ownerKey', 'partition', 'generation', 'visibleSort']);
+        documents.createIndex('tagged', 'tagKeys', {multiEntry:true, unique:true});
+        heads.put({ownerKey:'account', partition:'retained', activeGeneration:'original', stagingGeneration:null});
+        generations.put({ownerKey:'account', partition:'retained', generation:'original', revision:7, checkpoint:'sealed-checkpoint'});
+        documents.put({ownerKey:'account', partition:'retained', generation:'original', id:'message', version:5, sortKey:'01', visibleSort:'01', payload:'sealed-message', tags:['visible'], tagKeys:[['account', 'retained', 'original', 'visible', '01']]});
         const scopes = db.createObjectStore('account_scope');
         scopes.put('session', 'current'); scopes.put('account', 'command-account');
         const commands = db.createObjectStore('durable_commands', {keyPath:['accountKey', 'partition', 'id']});

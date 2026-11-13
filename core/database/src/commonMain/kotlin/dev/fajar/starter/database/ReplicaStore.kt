@@ -4,6 +4,20 @@ import kotlinx.coroutines.flow.Flow
 
 /** Raw encrypted replication storage. Callers own sync policy, encryption, and DTO mapping. */
 interface ReplicaStore {
+    /**
+     * Read one bounded page ordered by the storage-owned change revision and record ID, including
+     * tombstones. Null cursor captures all currently published records; After starts a new interval
+     * and Within continues its fixed upper bound. Scope/checkpoint/records share one read
+     * transaction, staging is ignored, and no key or missing partition is created. Cursor scope is
+     * exact; a replacement session cannot reuse an old raw handle implicitly.
+     */
+    suspend fun changedDocuments(
+        scope: ReplicaScope,
+        partition: String,
+        cursor: ReplicaChangeCursor? = null,
+        limit: Int = 50,
+    ): ReplicaChangePage
+
     /** Checks retained generations, including inactive accounts, before creating a content key. */
     suspend fun containsRecords(partitionPrefix: String): Boolean
 

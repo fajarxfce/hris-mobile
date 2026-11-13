@@ -39,7 +39,7 @@ import dev.fajar.starter.database.entities.InboxEntity
             BlobEntity::class,
             BlobChunkEntity::class,
         ],
-    version = 13,
+    version = 14,
     exportSchema = true,
     autoMigrations =
         [
@@ -54,6 +54,7 @@ import dev.fajar.starter.database.entities.InboxEntity
             AutoMigration(from = 10, to = 11),
             AutoMigration(from = 11, to = 12),
             AutoMigration(from = 12, to = 13),
+            AutoMigration(from = 13, to = 14),
         ],
 )
 @ConstructedBy(StarterDatabaseConstructor::class)

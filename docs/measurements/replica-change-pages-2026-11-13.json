@@ -1,0 +1,227 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "core/database/schemas/dev.fajar.starter.database.StarterDatabase/14.json",
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/ReplicaChangeBounds.kt",
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/ReplicaChanges.kt",
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/ReplicaStore.kt",
+    "core/database/src/commonTest/kotlin/dev/fajar/starter/database/ReplicaChangesContract.kt",
+    "core/database/src/commonTest/kotlin/dev/fajar/starter/database/ReplicaChangesMigrationContract.kt",
+    "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/ReplicaChangesMigrationTest.kt",
+    "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/ReplicaChangesTest.kt",
+    "core/database/src/iosTest/kotlin/dev/fajar/starter/database/AppleReplicaChangesTest.kt",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/RoomReplicaStore.kt",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/StarterDatabase.kt",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/dao/ReplicaDao.kt",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/entities/ReplicaDocumentEntity.kt",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/BrowserDatabase.kt",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbReplicaChanges.kt",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbReplicaMutations.kt",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbReplicaStore.kt",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserCommandArchiveTest.kt",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserReplicaChangesMigrationTest.kt",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserReplicaChangesTest.kt",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/ReplicaChangesMigrationFixture.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 176,
+    "elapsedSeconds": 339.565,
+    "sourceFiles": 5450,
+    "sourceManifestSha256": "4e12e2e90915314892ca57e4900af35a77dba57128f59fbc4606f9d2ef909c61",
+    "resultSha256": "88a8361700c0aaeb3542cb5647e8fdf9be819e1797a1b642a6fb55986a422ab2",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "BlobStoreTest": 10,
+      "CommandArchiveMigrationTest": 3,
+      "CommandArchiveMutationsTest": 15,
+      "CommandBatchTest": 6,
+      "CommandHandoffTest": 9,
+      "CommandInsertMutationsTest": 17,
+      "CommandPreventionTest": 2,
+      "CommandStoreTest": 16,
+      "CommandWakeTest": 13,
+      "DashboardStoreTest": 3,
+      "DeviceRecordMigrationTest": 1,
+      "DeviceRecordStoreTest": 8,
+      "InboxStoreTest": 1,
+      "ReplicaChangesMigrationTest": 1,
+      "ReplicaChangesTest": 12,
+      "ReplicaChecksTest": 13,
+      "ReplicaIndexMigrationTest": 1,
+      "ReplicaMutationsTest": 14,
+      "ReplicaOwnershipMigrationTest": 1,
+      "ReplicaStagingTest": 5,
+      "ReplicaStoreTest": 3,
+      "ReplicaWakeTest": 11,
+      "TransferStoreTest": 1,
+      "WorkWakeMigrationTest": 1,
+      "WorkWakeStoreTest": 6,
+      "BlobMigrationTest": 1
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T23:34:25.876111+00:00",
+    "elapsedSeconds": 620.731,
+    "sourceFiles": 5450,
+    "freshCounts": {
+      "tests": 6358,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 154648739,
+      "sha256": "5d0752916431bfd6e5913882a0ed0183154b5986ee17c59cfa6a26cdcd1dbe3a"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16868,
+    "newCases": 27,
+    "freshTests": 6358,
+    "reusedUnaffectedTests": 10510,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "691f01044d496ace57007b503c67817bc0e65e5e431f62b6e56b9fae9a93570d",
+    "reportManifestSha256": "a3d8b8b2d7a8d7df309de892268fa55674bc789ee80df5ddd8ddf8511200ecd6",
+    "nativeClaim": "Bounded local replica changes including tombstones;12 shared storage methods and3 migrations. Consumers, Starter parity and actual new Apple execution remain separate."
+  },
+  "focusedAttempts": [
+    {
+      "directory": "focused-1",
+      "exitCode": 0,
+      "freshCounts": {
+        "tests": 176,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "88a8361700c0aaeb3542cb5647e8fdf9be819e1797a1b642a6fb55986a422ab2"
+    }
+  ],
+  "compilerWarningReview": {
+    "baselineLog": ".work/command-insert-projection-2026-11-13/full-1/stdout.log",
+    "baselineLogSha256": "2d93c12c3f78f9c469d36c98c683f847e64ed91dd4af4370f96e5f6f56af567c",
+    "baselineWarning": "w: file:///home/fajar/hris/hris-mobile/core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/StarterDatabase.kt:81:1 'expect'/'actual' classes (including interfaces, objects, annotations, enums, and 'actual' typealiases) are in Beta. Consider using the '-Xexpect-actual-classes' flag to suppress this warning. Also see: https://youtrack.jetbrains.com/issue/KT-61573",
+    "allowedWarning": "w: file:///home/fajar/hris/hris-mobile/core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/StarterDatabase.kt:82:1 'expect'/'actual' classes (including interfaces, objects, annotations, enums, and 'actual' typealiases) are in Beta. Consider using the '-Xexpect-actual-classes' flag to suppress this warning. Also see: https://youtrack.jetbrains.com/issue/KT-61573",
+    "reason": "Unchanged existing expect object declaration; migration entry shifts it by one line. No new warning category or suppression."
+  },
+  "queryPlanReview": {
+    "version": "3.54.0",
+    "query": "SELECT * FROM replica_documents WHERE ownerKey = ? AND partition = ? AND generation = ? AND (changedAtRevision, id) > (?, ?) AND changedAtRevision <= ? ORDER BY changedAtRevision, id LIMIT ?",
+    "plan": [
+      [
+        5,
+        0,
+        49,
+        "SEARCH replica_documents USING INDEX index_replica_documents_ownerKey_partition_generation_changedAtRevision_id (ownerKey=? AND partition=? AND generation=? AND (changedAtRevision,id)>(?,?) AND changedAtRevision<?)"
+      ]
+    ],
+    "scope": "System SQLite in-memory proposed schema; actual Room migration/runtime untested."
+  },
+  "schemaGeneration": {
+    "session": 23295,
+    "exitCode": 0,
+    "acceptedAsTest": false,
+    "sourceCapture": "Generation-only run captured baseline before asynchronous apply finished; source drift retained. No test acceptance from this run. Fixed-source capture and focused/full validation follow."
+  },
+  "newSharedStorageMethods": 12,
+  "newMigrationMethods": 3,
+  "actualNewAppleExecution": false,
+  "browser": {
+    "accepted": true,
+    "tests": 171,
+    "oldCases": 157,
+    "newCases": 14,
+    "fixedFailureCases": 4,
+    "failedCaseIdsRetained": true,
+    "elapsedSeconds": 95.468,
+    "sourceManifestSha256": "691f01044d496ace57007b503c67817bc0e65e5e431f62b6e56b9fae9a93570d",
+    "resultSha256": "d49b939ca04e3669a8e967ff5b9e0ba99348962eac9f7bcc21011f0c5feec294",
+    "focusedUnchangedNonBrowserInputsVerified": true,
+    "focusedOriginal": {
+      "accepted": true,
+      "tests": 176,
+      "elapsedSeconds": 339.565,
+      "sourceFiles": 5450,
+      "sourceManifestSha256": "4e12e2e90915314892ca57e4900af35a77dba57128f59fbc4606f9d2ef909c61",
+      "resultSha256": "88a8361700c0aaeb3542cb5647e8fdf9be819e1797a1b642a6fb55986a422ab2",
+      "classes": {
+        "CollaborationBindingsTest": 2,
+        "BlobStoreTest": 10,
+        "CommandArchiveMigrationTest": 3,
+        "CommandArchiveMutationsTest": 15,
+        "CommandBatchTest": 6,
+        "CommandHandoffTest": 9,
+        "CommandInsertMutationsTest": 17,
+        "CommandPreventionTest": 2,
+        "CommandStoreTest": 16,
+        "CommandWakeTest": 13,
+        "DashboardStoreTest": 3,
+        "DeviceRecordMigrationTest": 1,
+        "DeviceRecordStoreTest": 8,
+        "InboxStoreTest": 1,
+        "ReplicaChangesMigrationTest": 1,
+        "ReplicaChangesTest": 12,
+        "ReplicaChecksTest": 13,
+        "ReplicaIndexMigrationTest": 1,
+        "ReplicaMutationsTest": 14,
+        "ReplicaOwnershipMigrationTest": 1,
+        "ReplicaStagingTest": 5,
+        "ReplicaStoreTest": 3,
+        "ReplicaWakeTest": 11,
+        "TransferStoreTest": 1,
+        "WorkWakeMigrationTest": 1,
+        "WorkWakeStoreTest": 6,
+        "BlobMigrationTest": 1
+      },
+      "priorCaseIdsRetained": true
+    },
+    "changedOnlyBrowserPaths": [
+      "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbReplicaChanges.kt",
+      "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserCommandArchiveTest.kt"
+    ],
+    "actualNewAppleExecution": false
+  },
+  "browserFailureReview": {
+    "failedAttempt": "full-1",
+    "exitCode": 1,
+    "failureCount": 4,
+    "rootCauses": [
+      "Browser JSON next has concrete Within type and must omit sealed discriminator; input cursor remains sealed and keeps its discriminator.",
+      "Existing schema9 archive fixture omitted all replica stores; production predecessor schema includes them. Complete frozen fixture and assert migrated replica bytes."
+    ],
+    "productionValidationRelaxed": false
+  },
+  "fullAttempts": [
+    {
+      "directory": "full-1",
+      "exitCode": 1,
+      "freshCounts": {
+        "tests": 6358,
+        "failures": 4,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "948b78a41142c9d49ca585048b4bd7619a99a7cc17804e27d9cba49311fecdff"
+    },
+    {
+      "directory": "full-2",
+      "exitCode": 0,
+      "freshCounts": {
+        "tests": 6358,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "355e91b9ee5e61e315d7d4852ae62fb561929953e83e3c012a4a1f76bb0b76ee"
+    }
+  ],
+  "requiresStarterPort": true,
+  "consumerActivated": false,
+  "phoneInstalled": false,
+  "installedPhoneBuild": 92,
+  "liveChanged": false
+}

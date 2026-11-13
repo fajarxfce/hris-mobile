@@ -1,7 +1,7 @@
 # Indexed local replica change pages — prerequisite review
 
 Purpose: bounded incremental local history/index backfill under existing account/Group ownership.
-This is storage-only infrastructure; no new polling owner or transport endpoint. No source applied.
+This is storage-only infrastructure; no new polling owner or transport endpoint. The raw capability is locally accepted; HRIS consumers and ownership remain pending.
 
 Current ReplicaDocument.version is supplied by callers, independent of ReplicaCheckpoint.revision.
 validateReplicaBatch allows any nonnegative document version; equal-version payload changes are
@@ -9,7 +9,7 @@ valid. Sorting a change feed by document.version would miss valid writes. Raw SQ
 retain tombstones, but tag queries exclude their empty tags. A visible history window also excludes
 locally hidden originals. Neither existing query is a complete incremental history change feed.
 
-Proposal: retain an internal local changedAtRevision on each raw record, independently of the
+The accepted implementation retains an internal local changedAtRevision on each raw record, independently of the
 unchanged public/source version. It is assigned atomically with the generation checkpoint:0 on
 replacement, expectedRevision+1 on an effective commit update. Unchanged exact raw records retain
 their earlier change position; ignored older versions cannot create a change. SQLite and IndexedDB
@@ -25,7 +25,7 @@ cannot hide or advance the active generation. Empty delta after a checkpoint-onl
 empty. The caller persists an After cursor only after confirming its derived publication/handoff.
 
 Migration: SQLite13->14 adds changedAtRevision default0 and a compound index. IndexedDB12->13
-backfills this field to0 through its upgrade cursor before creating/querying the index. Existing
+backfills this field to0 in the same version-change transaction as index creation. Existing
 ciphertext, payload versions, tags, original sort order and keys remain byte-identical. Initial
 scan includes revision0 so migrated records cannot be skipped. A field/default/index migration
 requires actual old-database preservation coverage, not only fresh database tests.
@@ -41,13 +41,8 @@ backfill policy, durable progress, work priority and app lifecycle. Consumers au
 content and source coordinates; the raw change position is not a provider receipt or chat order.
 This reusable capability must be proven in Mobile and ported with tests/migrations to Starter.
 Apple fixture correction and its blocked gate-script attempt are separate; do not reproduce that
-blocked payload. No new changes may enter the active producer compiler until it is reaped.
+blocked payload. Do not change inputs of an active verification process.
 
-Current draft:15 unapplied files,12 shared storage methods with Desktop/Apple/browser wrappers.
-Standalone formatting and browser-read syntax check only; no compilation or behavior execution.
-SQLite14 schema output and old-database migration tests remain mandatory before application.
+Current raw storage acceptance:21 paths, focused176, browser171 and full16868. The initial full run failed4 browser cases; concrete cursor JSON and a complete browser9 predecessor fixture corrected them. All original cases and failed identities remain. Focused non-browser inputs are byte-identical across the two browser-only fixes. See replica-change-pages.md and its exact-source measurement. Independent Starter1049 remains required before the next HRIS source increment.
 
-
-## Current validation — 13 November 2026
-
-Twenty raw code/schema/test paths are applied in Mobile. New SQLite storage12 andmigration1 reports pass; focused176/session52335 still runs. Browser12/7 migrations, full16868 andindependent Starter1049 remain. No history owner, UI or device change is activated. Starter port scripts are prepared only. See current agent handoff for exact source and generation-only capture caveat.
+The authenticated history reader has12 reviewed/formatted unapplied drafts and15 shared storage methods. Its focused55/full16898 gates have not run. Admitted local access, durable progress, existing incoming/repair integration and UI activation remain pending.

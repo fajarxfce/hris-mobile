@@ -85,6 +85,75 @@ abstract class ReplicaDao {
         limit: Int,
     ): List<ReplicaDocumentEntity>
 
+    @Query(
+        "SELECT * FROM replica_documents WHERE ownerKey = :ownerKey AND partition = :partition AND generation = :generation AND (changedAtRevision, id) > (:afterRevision, :afterId) AND changedAtRevision <= :upper ORDER BY changedAtRevision, id LIMIT :limit"
+    )
+    protected abstract suspend fun changedRecords(
+        ownerKey: String,
+        partition: String,
+        generation: String,
+        upper: Long,
+        afterRevision: Long,
+        afterId: String,
+        limit: Int,
+    ): List<ReplicaDocumentEntity>
+
+    @Transaction
+    open suspend fun changedDocuments(
+        scope: ReplicaScope,
+        partition: String,
+        cursor: ReplicaChangeCursor?,
+        limit: Int,
+    ): ReplicaChangePage {
+        val checkpoint =
+            checkpoint(scope, partition, publishedOnly = true)
+                ?: return if (cursor == null) ReplicaChangePage.Absent
+                else ReplicaChangePage.Restart
+        val window =
+            when (cursor) {
+                null -> ReplicaChangeWindow(checkpoint.handle, null, checkpoint.revision)
+                is ReplicaChangeCursor.After -> {
+                    if (cursor.handle != checkpoint.handle || cursor.revision > checkpoint.revision)
+                        return ReplicaChangePage.Restart
+                    ReplicaChangeWindow(checkpoint.handle, cursor.revision, checkpoint.revision)
+                }
+                is ReplicaChangeCursor.Within -> {
+                    if (
+                        cursor.window.handle != checkpoint.handle ||
+                            cursor.window.throughRevision > checkpoint.revision
+                    )
+                        return ReplicaChangePage.Restart
+                    cursor.window
+                }
+            }
+        val position = (cursor as? ReplicaChangeCursor.Within)?.position
+        val rows =
+            changedRecords(
+                scope.accountKey.orEmpty(),
+                partition,
+                checkpoint.handle.generation,
+                window.throughRevision,
+                position?.revision ?: (window.afterRevision ?: -1),
+                position?.id ?: "\u007f",
+                limit + 1,
+            )
+        val selected = rows.take(limit)
+        val next =
+            if (rows.size > limit) {
+                val last = selected.last()
+                ReplicaChangeCursor.Within(
+                    window,
+                    ReplicaChangePosition(last.changedAtRevision, last.id),
+                )
+            } else null
+        return ReplicaChangePage.Items(
+            checkpoint,
+            window,
+            selected.map { ReplicaChangedDocument(it.toReplicaDocument(), it.changedAtRevision) },
+            next,
+        )
+    }
+
     @Upsert protected abstract suspend fun write(head: ReplicaHeadEntity)
 
     @Query("SELECT * FROM work_wakes WHERE `key` = :key")
@@ -427,6 +496,7 @@ abstract class ReplicaDao {
                             document.payload != null))
             )
                 continue
+            if (previous?.toReplicaDocument() == document) continue
             val row =
                 ReplicaDocumentEntity(
                     ownerKey,
@@ -437,6 +507,7 @@ abstract class ReplicaDao {
                     document.sortKey,
                     document.payload,
                     Json.encodeToString(document.tags.sorted()),
+                    changedAtRevision = expectedRevision + 1,
                 )
             deleteTags(ownerKey, handle.partition, handle.generation, document.id)
             if (previous == null) insert(row) else update(row)
