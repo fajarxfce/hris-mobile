@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 23:13 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 23:35 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -37,24 +37,31 @@ class/method/platform identity retained, raw full-name identity false. Two rejec
 archived. This does not make the Apple job or whole run accepted.
 Accepted43498640097 remains20459/6100 actual Apple and excludes all later HRIS increments.
 
-Current .work/replica-local-change-pages-2026-11-13 has20 APPLIED paths, including generated
-schema14. Fixed-source5450/4e12e2e90915314892ca57e4900af35a77dba57128f59fbc4606f9d2ef909c61.
-Focused176/session52335 is RUNNING: the12 new SQLite storage methods andSQLite13 migration already
-pass, but the full focused/app/Apple compilation result remains pending. Browser12/7 migrations
-andfull16868 remain required. No consumer or product activation. Reap52335 then accept-focused;
-run/accept full and commit/push source/evidence. Prepared record/commit scripts are NOT USED.
-Generation-only23295 REAPED0 captured inputs before asynchronous apply76168 completed; preserve
-its source-drift result and do not call it test evidence. Fixed-source checks own acceptance.
-The sole existing expect-object warning was matched to the prior accepted log with a one-line
-location shift. No suppression was added. Query planning used system SQLite only; actual source
-and old-database tests own behavior acceptance.
+Current .work/replica-local-change-pages-2026-11-13 has21 APPLIED paths. Corrected source5450/
+691f01044d496ace57007b503c67817bc0e65e5e431f62b6e56b9fae9a93570d. Original full-1/session78785
+is REAPED FAILED:6358 fresh/4 failures. Three pagination cases rejected an extra sealed type field
+inside concrete Within JSON; the existing browser9 archive fixture lacked replica stores. The
+producer now emits the concrete next schema, and the frozen predecessor fixture is complete with
+retained replica assertions. No decoder validation was relaxed and all method identities remain.
+Original failing source files were recovered and checked against their exact recorded hashes.
+Browser171/session9418 is REAPED/ACCEPTED,95.468s:157 old+14 new, all4 failures now pass. The only
+two changes since focused176 are browser main/test files; all non-browser inputs were verified
+byte-identical and the original focused source/result hashes remain explicit. Full-2/session82528
+is RUNNING; do not mutate its source. Reap then accept-full.py full-2, record and commit/push.
+Record/commit scripts are PREPARED, not used. See measurements/replica-change-browser-correction-2026-11-13.json.
+Generation-only23295 was not test evidence; retain its source capture caveat in state.json.
 
-Starter .work/replica-local-change-pages-port-2026-11-13 has3 PREPARED scripts, no source applied.
-Wait for complete Mobile acceptance andpush; then apply/reap andcheck1049 (1022+27) independently.
-All20 predecessor files match, including absent schema14; Inspector742a2d1c remains pinned.
-Next HRIS integration needs authenticated source-reference mapping anddurable finite progress.
-Do not mark raw-window exhaustion as index publication or complete incoming references early.
-See collaboration-space-inbox-incremental-history-plan.md for the concrete source boundaries.
+Starter .work/replica-local-change-pages-port-2026-11-13 has4 PREPARED scripts, source unapplied.
+Wait for complete Mobile acceptance/push, then apply/reap and check1049 independently. All21 old
+file values match, including absent schema14; Inspector742a2d1c stays pinned. Do not repeat176.
+
+Next .work/history-local-change-enumeration-2026-11-13 has12 reviewed/formatted UNAPPLIED paths,
+15 shared storage method drafts and same-instance DI checks. Existing Group/actual Company repos
+map one bounded authenticated page with stable account/source cursor identity. Null auxiliary
+revision tombstones receive structural checks only; no cryptographic authentication is claimed.
+Focused55/full16898 gates are prepared, not run; apply requires accepted/pushed Starter1049 first.
+No data/owner/UI activation or test execution is claimed. Durable progress and admitted incoming/
+repair integration still require work; raw exhaustion never proves publication or completion.
 
 Read owner-integration-review.md for actual worker/use-case boundaries.
 Continue owner integration: already-materialized incoming references still need index publication
