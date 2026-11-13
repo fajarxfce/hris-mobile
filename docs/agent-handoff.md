@@ -1,10 +1,30 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 04:12 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 04:30 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
 is waived; native Apple/call/push behavior is not accepted merely by compilation.
+
+## Native Apple cleanup investigation
+
+Completed native run43349484661/job131636790768 FAILED at6cc04d1f after7949.472s.
+All five Rust architectures/exports and the eight crate probes passed; the previous Swift
+linker failure is resolved. Four actual Swift cases ran, three passed. Passphrase continuity
+reported Cocoa513/POSIX EPERM removing its temporary UUID directory, at deferred cleanup.
+No XML was written; neither iOS link ran. Preserve the complete artifact14009837009,
+297344994B/1fd951cc4f0c71adcbf4f1914d31f191ecb8c6dfcc1ac40a86eb0d8474d094ca and logs.
+Collector26681 REAPED; all recorded files/digests/CRC verified. Root cause still pending.
+
+Isolated2ff1b2769f84524a9c7bbef52318e7521a429e7a is pushed80182 REAPED. It adds bounded,
+metadata-only fixture phase diagnostics and explicit cleanup failure; no assertion is
+removed. A completed-framework recheck verifies exact run/job/commit/artifact, package
+files, architectures and exports before Swift/links, without rebuilding or publishing Rust.
+20 builder +9 recheck guards pass locally; actual49 package/proof files verified.
+Exactly one recheck43365790802/job131689776366 is ACTIVE on2ff1b276; dispatch41083 REAPED,
+identification75555 REAPED. The checkout/build Rust steps are intentionally skipped.
+Workspace Mobile.work/sdk8-apple-proof-cleanup-2026-11-13. No native acceptance yet.
+Do not dispatch another run or use the old success-only auditor for this changed proof.
 
 ## Active Group page integration
 
@@ -21,12 +41,13 @@ failed-test-synchronization-2 (focused2/69074, 97 tests/4 failures, 215.347s).
 The latter exposed two assertions before queued events, an invalid denial fixture and a
 placeholder-vs-editable-text assertion. Original requirements remain. Review also found and
 fixed the actual copy lifetime gaps; a new desktop test exercises the real Content lifecycle.
-Format3/20855 REAPED PASS34.565s. Focused3/3736 is ACTIVE, expected100.
+Format3/20855 REAPED PASS34.565s. Focused3/3736 REAPED PASS100/394.093s.
+Strict focused audit and all three screenshot geometry reviews passed; full-1/68372 is ACTIVE.
 Source5243/d65c490eab7bb1c9ccf53bd5555f1bc43860c4deab960632dc6c0404bcb79148.
 Do not change application/library inputs while the compiler runs.
-Next: reap focused3, audit exact cases, then record and individually inspect the three fresh
-screenshots. Full expects15489: all15443 prior IDs +38 shared JVM/browser +8 desktop UI.
-No screenshot, Android IME or transition acceptance is claimed yet.
+Next: reap full-1/68372 and audit exact case identities. Full expects15489:
+all15443 prior IDs +38 shared JVM/browser +8 desktop UI. The source fingerprint is frozen.
+Screenshot geometry is accepted; actual Android IME and transition measurements remain pending.
 
 Control43359439624 is FULLY ACCEPTED at exactfc45116481b6e9a03f1e377bf4a4e11e4e803c74:
 18560=13132 portable (6295desktop/960Android host/5877browser) +5428 actual Apple.
@@ -34,7 +55,7 @@ Auditors35285/80173 REAPED; archived artifacts, digests, ZIP CRC and prior case 
 The70 observation/progress/presentation methods actually ran on Apple; iOS host and push
 routing passed. Later row21 and page19 still need Apple. After page acceptance and push,
 one follow-up expects13220portable+5468Apple=18688. Do not rerun this completed control.
-Separate Matrix Swift contracts remain active under43349484661/job131636790768.
+Separate Matrix Swift recheck is active under43365790802/job131689776366; see above.
 
 Release92 is INSTALLED on10.77.77.3:5555,13Nov04:11UTC; installer99895 REAPED25.071s.
 Device APK SHA matches the accepted ARM artifact, package identity/data retained. No phone
@@ -54,7 +75,7 @@ Actual Apple execution of the 21 row methods is pending; Linux executed none.
 The previous 70 observation/progress/presentation methods passed actual Apple under control:
 43359439624, exact fc45116481b6e9a03f1e377bf4a4e11e4e803c74,
 portable job 131669195141 and Apple job 131669194858, both fully audited. Do not rerun.
-Separate actual Matrix Swift contracts remain under 43349484661 / 131636790768.
+Separate actual Matrix Swift recheck remains under 43365790802 / 131689776366.
 
 Next: push this acceptance, then concrete Group page/route, shared composer visuals and
 contextual actions; measure first frame and keyboard positioning before performance claims.
@@ -495,8 +516,8 @@ uses crate.crate.hash-cgu.N.rcgu.o; partial SQLite merging separates hidden same
 The isolated build-only correction6cc04d1f7c92dd60923c8d291e978e6d8a42728a is pushed53263 REAPED.
 Its actual selector tests reproduce3 failures with the old function and pass8 after correction;
 20 Python guards pass. SQLite localization, SDK source pins and Android artifacts are unchanged.
-Exactly one new native run43349484661/job131636790768 is ACTIVE; dispatch56942 and
-identification17353 REAPED. Mobile.work/sdk8-apple-crate-units-2026-11-13 has the failure,
+Native run43349484661/job131636790768 FAILED; its replacement investigation is above.
+Dispatch56942 and identification17353 are REAPED. Mobile.work/sdk8-apple-crate-units-2026-11-13 has the failure,
 local acceptance and success-only auditor pinned to the new head/job, including exact8 probe
 methods/source/binary hashes. Do not dispatch duplicates or use the older auditor for this run.
 All five exports, four Swift contracts and both iOS links remain required. No publication or
