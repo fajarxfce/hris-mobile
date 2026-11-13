@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 22:14 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 22:25 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -18,11 +18,10 @@ The first focused41 source was rejected for a redundant safe call; corrected foc
 Apply/check/record scripts are USED. No projection owner, graph, phone or live change is active.
 
 Next .work/space-inbox-history-projection-2026-11-13 has3 APPLIED reviewed paths and16 shared
-methods. Apply30542 is REAPED0; focused57/session99198 is RUNNING. Source5434/
-df3dc9066d8a332fa464db8a66e1b66648d70283eff0295e65f2302505b578db.
-Do not alter active inputs until99198 is reaped. Then accept-focused.py focused-1, run/reap
-full16797, accept-full.py full-1, record, commit/push Mobile then Group. Record/commit scripts
-are PREPARED NOT RUN. The proposal preserves actual physical identity, drafts, original position,
+methods. Apply30542 is REAPED0; focused57/session99198 is REAPED and ACCEPTED,401.381s.
+Source5434/df3dc9066d8a332fa464db8a66e1b66648d70283eff0295e65f2302505b578db.
+Full16797/session3347 is RUNNING; do not alter its source inputs. Reap, accept-full.py full-1,
+record, commit/push Mobile then Group. Record/commit scripts are PREPARED NOT RUN. The proposal preserves actual physical identity, drafts, original position,
 pending edits and confirmed delivery, with explicit unresolved work and17th-candidate fallback.
 Admitted source/owner integration remains separate and unactivated.
 
@@ -56,12 +55,17 @@ only (20459/6100 Apple), excluding these later HRIS increments; inspect its audi
 redispatch. Bundle later exact-source hosted validation.
 
 Further .work/space-inbox-history-admission-2026-11-13 contains6 UNAPPLIED and NOT YET REVIEWED
-drafts: admitted producer/result,20 behavior methods and repository fixture, owning data factory,
+drafts: admitted producer/result,22 behavior methods and repository fixture, owning data factory,
 and existing graph resolution assertion. No compiler/tests/gates have run for it. It must follow
 accepted/pushed57/16797 projection source. Review canonical snapshots and pending/successor proof,
 mutable lists, finite source/index contention, denial/account changes, cancellation and incomplete
 reference handoff. More race coverage and gated application scripts are required; this is not
 owner/backfill or product activation. Read its current state/review before further source work.
+Review found a missing-command-proof duplicate-anchor risk in the unapplied producer. It now
+queries all possible physical/Group/Company anchors in at most two32-key reads under the SAME
+index generation. A retained unproven original remains unresolved rather than allocating a
+second History row. Two new draft regressions cover both original namespaces and16 legacy
+originals/48 keys, including changes between batches. Gates now expect40/16841. No gate run yet.
 
 Main native Apple SDK8 activation is separate. Phone92 stays installed; live GroupOFF. All54 PRD groups remain open. Continue beyond
 checkpoints, push every commit and preserve the accepted source/artifact evidence.
