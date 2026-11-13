@@ -87,6 +87,7 @@ internal data class InboxActivityDto(
     val source: InboxSourceDto,
     val position: InboxPositionDto,
     val preview: InboxPreviewDto?,
+    val pendingEdit: InboxPendingEditDto? = null,
 ) {
     constructor(
         value: CollaborationSpaceInboxActivity
@@ -94,10 +95,16 @@ internal data class InboxActivityDto(
         InboxSourceDto(value.source),
         InboxPositionDto(value.position),
         value.preview?.let(::InboxPreviewDto),
+        value.pendingEdit?.let(::InboxPendingEditDto),
     )
 
     fun domain() =
-        CollaborationSpaceInboxActivity(source.domain(), position.domain(), preview?.domain())
+        CollaborationSpaceInboxActivity(
+            source.domain(),
+            position.domain(),
+            preview?.domain(),
+            pendingEdit?.domain(),
+        )
 }
 
 @Serializable

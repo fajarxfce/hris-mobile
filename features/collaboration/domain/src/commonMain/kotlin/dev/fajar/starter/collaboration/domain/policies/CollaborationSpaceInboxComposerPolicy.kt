@@ -20,7 +20,7 @@ fun captureCollaborationSpaceInboxComposerAnchor(
             (version == null && values.isNotEmpty()) ||
             values.any {
                 it.source != CollaborationSpaceInboxSource.GroupOriginal(submissionId) ||
-                    !validCollaborationSpaceInboxActivity(it) ||
+                    !validCollaborationSpaceInboxActivity(it, version?.revision ?: 0L) ||
                     it.position.ordinal > (version?.lastOrdinal ?: 0)
             }
     )
@@ -53,7 +53,7 @@ fun collaborationSpaceInboxComposerPublication(
         actualAnchors.size > 1 ||
             actualAnchors.any {
                 it.source != source ||
-                    !validCollaborationSpaceInboxActivity(it) ||
+                    !validCollaborationSpaceInboxActivity(it, owned.version?.revision ?: 0L) ||
                     it.position.ordinal > (owned.version?.lastOrdinal ?: 0)
             } ||
             (actualAnchors.isNotEmpty() && owned.entry == null) ||

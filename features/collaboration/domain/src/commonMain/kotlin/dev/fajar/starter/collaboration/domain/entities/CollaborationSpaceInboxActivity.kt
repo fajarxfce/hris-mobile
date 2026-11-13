@@ -46,6 +46,7 @@ data class CollaborationSpaceInboxActivity(
     val source: CollaborationSpaceInboxSource,
     val position: CollaborationSpaceInboxPosition,
     val preview: CollaborationSpaceInboxPreview?,
+    val pendingEdit: CollaborationSpaceInboxPendingEdit? = null,
 ) {
     override fun toString() = "CollaborationSpaceInboxActivity([redacted])"
 }

@@ -1,0 +1,78 @@
+{
+  "rejectedFocusedAttempt": {
+    "directory": "focused-1",
+    "session": 53119,
+    "assertionsPassed": 37,
+    "accepted": false,
+    "reason": "Shadowed raw fixture read history instead of inbox; redundant assertion warning. Corrected and rerun in focused-2."
+  },
+  "acceptedLocally": true,
+  "changedPaths": [
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/inbox/CollaborationSpaceInboxCodec.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/inbox/CollaborationSpaceInboxDto.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/inbox/CollaborationSpaceInboxPendingEditDto.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxPendingEditStorageContract.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxPendingEditStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceInboxPendingEditStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceInboxPendingEditStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxActivity.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxPendingEdit.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxComposerPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxDraftPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxPendingEditPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxPolicy.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxPendingEditPolicyTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 37,
+    "elapsedSeconds": 212.223,
+    "sourceFiles": 5404,
+    "sourceManifestSha256": "daca364f1ace2e10a9fdb6992c0f78e72816a12d3dc5eecf8c5945334db2f5ef",
+    "resultSha256": "f007c7daeecdd2ddb93957314ea74c8776d79318ca787a285b16c0886de24441",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceInboxPendingEditStorageTest": 8,
+      "CollaborationSpaceInboxStorageTest": 15,
+      "SpaceInboxPendingEditPolicyTest": 12
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T19:27:34.772859+00:00",
+    "elapsedSeconds": 951.7,
+    "sourceFiles": 5404,
+    "freshCounts": {
+      "tests": 14465,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 154575619,
+      "sha256": "a152952c373cac5cd5ca860c5812d8cb6ba6cc90db6550c1ce68fa5634164e9b"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16587,
+    "newCases": 40,
+    "freshTests": 14465,
+    "reusedUnaffectedTests": 2122,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "daca364f1ace2e10a9fdb6992c0f78e72816a12d3dc5eecf8c5945334db2f5ef",
+    "reportManifestSha256": "7d218cd2dac8a32d912a1e2abe5f2e6a71297df98fcd31bab8c8950884f855d3",
+    "nativeClaim": "Explicit pending-edit provenance in the encrypted inbox; 12 pure and eight actual-storage shared methods. Atomic authoring/outcome policy, actual Apple and product activation remain separate."
+  },
+  "newSharedMethods": 20,
+  "bodyFreePendingEditPointer": true,
+  "originalPlacementPreserved": true,
+  "oldPayloadReadsPreserved": true,
+  "actualNewAppleExecution": false,
+  "atomicEditAuthoringActivated": false,
+  "productGraphActivated": false,
+  "phoneInstalled": false,
+  "installedPhoneBuild": 92,
+  "liveChanged": false
+}

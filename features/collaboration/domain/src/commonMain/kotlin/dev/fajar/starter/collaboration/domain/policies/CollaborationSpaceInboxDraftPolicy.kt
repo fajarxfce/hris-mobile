@@ -19,7 +19,7 @@ fun captureCollaborationSpaceInboxConversation(
                     version.lastOrdinal !in 0..COLLABORATION_SPACE_INBOX_MAX_ORDER)) ||
             candidates.size > 33 ||
             candidates.any {
-                !validCollaborationSpaceInboxActivity(it) ||
+                !validCollaborationSpaceInboxActivity(it, version?.revision ?: 0L) ||
                     it.preview == null ||
                     it.position.ordinal > lastOrdinal
             } ||

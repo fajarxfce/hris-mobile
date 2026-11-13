@@ -99,6 +99,9 @@ internal class CollaborationSpaceInboxCodec(
                 document.tags == expected.third
         )
         require(value.repair == null || value.repair.insertedAtRevision <= document.version)
+        for (activity in listOfNotNull(value.activity, value.entry?.newest)) {
+            require(validCollaborationSpaceInboxActivity(activity.domain(), document.version))
+        }
         return value
     }
 
@@ -165,6 +168,22 @@ internal class CollaborationSpaceInboxCodec(
             require(old == null || old.conversationId == value.conversationId)
             if (old?.entry != null) require(value.entry?.createdAt == old.entry.createdAt)
             if (old?.activity != null) require(value.activity?.position == old.activity.position)
+            value.activity?.pendingEdit?.let { pending ->
+                val previousEdit = old?.activity?.pendingEdit
+                if (previousEdit?.source == pending.source) {
+                    require(pending == previousEdit)
+                    val previousPreview = requireNotNull(requireNotNull(old).activity).preview
+                    val preview = requireNotNull(value.activity).preview
+                    when (previousPreview?.kind) {
+                        null -> require(preview == null)
+                        "DELETED" -> require(preview == null || preview.kind == "DELETED")
+                        "TEXT" ->
+                            if (preview?.kind == "TEXT")
+                                require(preview.text == previousPreview.text)
+                        else -> error("Invalid pending edit preview")
+                    }
+                } else require(pending.publishedAtRevision == revision)
+            }
             if (value.activity != null && old == null) allocated += value.activity.position.ordinal
             if (value.draft != null && value.draft != old?.draft) {
                 require(

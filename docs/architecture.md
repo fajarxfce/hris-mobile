@@ -1,5 +1,7 @@
 # Architecture
 
+[Pending inbox edit provenance](collaboration-space-inbox-edit-provenance.md) retains actual replacement identity without moving the original preview anchor.
+
 [Canonical inbox history identity](collaboration-space-inbox-history-source.md) preserves actual source namespaces and explicit original ambiguity.
 
 [Company history inbox source](collaboration-company-history-inbox-source.md) preserves actual Company coordinates while publishing to a canonical Group inbox.

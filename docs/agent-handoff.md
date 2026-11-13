@@ -1,72 +1,60 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 19:16 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 19:43 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Canonical inbox source identity locally accepted
+## Pending edit provenance locally accepted
 
-Mobile .work/space-inbox-history-source-policy-2026-11-13 is accepted: three domain/test files,
-26 shared methods; focused46/full16547 (14425 fresh / 2122 exact unchanged).
-All 16,495 preceding identities remain plus52 JVM/browser executions. Source 5396/
-35ffe4ff05af6d56986f7a173a62960534d0ed3b7deeaf7247acdd5e66137c8f; reports 12a59f595bffc967b212a8814f52076b13fef1be9e623e879dd6ddcd85306c77.
-Canonical snapshots preserve full aliases and exact Company/Group coordinates. Source selection
-uses successful exact active/archive command reads and keeps ambiguous or unproved originals
-explicitly unresolved. It allocates no anchor, changes no command and owns no retry or I/O.
-Three drafts are already applied/accepted; do not rerun preparation/application scripts.
+Mobile .work/space-inbox-edit-provenance-2026-11-13 is accepted:14 source/test paths,
+20 shared methods (12 pure/8 actual storage); focused37/full16587 (14465 fresh /
+2122 exact unchanged). All16547 prior identities remain plus40 JVM/browser executions.
+Source5404/daca364f1ace2e10a9fdb6992c0f78e72816a12d3dc5eecf8c5945334db2f5ef; reports 7d218cd2dac8a32d912a1e2abe5f2e6a71297df98fcd31bab8c8950884f855d3.
+The optional body-free pointer retains actual replacement command/target, creation time and first
+index revision. It does not allocate a placement ordinal or move originals/drafts. Same-operation
+provenance and optimistic text remain immutable while retained; old payloads still read. This is
+storage support, not atomic edit authoring or proof of provider success. Preparation/application
+scripts are already used. No product graph, phone update or live service change is active here.
 
-Current .work/space-inbox-edit-provenance-2026-11-13 has14 APPLIED source/test paths.
-Focused2/session28154 REAPED PASS37 in212.223s on source5404/
-daca364f1ace2e10a9fdb6992c0f78e72816a12d3dc5eecf8c5945334db2f5ef. First focused53119 is
-REAPED but REJECTED despite37 passing assertions: a shadowed fixture read history instead of
-inbox bytes; one redundant assertion warned. Both are corrected and focused2 accepted. Preserve
-that first attempt as rejected evidence. Full16587/session89667 is RUNNING, not accepted.
-Reap full, run accept-full.py full-1, then record/commit/push before applying later changes.
+Next .work/command-insert-projection-2026-11-13 has9 reviewed source/test drafts: raw
+insertAndMutate plus15 shared methods and2 SQLite fault injections. Its gates are prepared for
+focused47/full16619, but apply.py is NOT used and no Kotlin/runtime validation is claimed.
+All five source bases match Starter; after Mobile proof, port all9 generic files/tests there.
+Read review.md, apply only after this accepted source is committed/pushed, then format/capture/test.
+No next raw source has been applied during this full gate.
 
-Next .work/command-insert-projection-2026-11-13 has nine reviewed source/test DRAFTS ONLY:
-five generic core database changes,15 shared cases and two SQLite fault injections. Gate scripts
-are prepared for focused47/full16619, not run. Node syntax-check passed, not Kotlin/runtime proof.
-Draft insertAndMutate retains one actual command, prepared source/index mutations and a fresh
-wake in one transaction. Active/archive replay never rewrites a projection or renews a wake;
-source/index/wake/resource/capacity conflicts must retain nothing. Existing raw mutation/archival
-uses the same browser transaction. All five base files match Starter byte-for-byte. After Mobile
-validation, port nine generic files and tests to Starter; no HRIS policy belongs in that port.
-Preparation scripts are already used; apply.py is NOT used. Read review.md before application.
-Actual edit authoring still needs authenticated immutable handoff origin in the command so an
-old single-ledger command cannot be mistaken for joint publication. A later pending edit can
-replace the current inbox pointer, so replay cannot infer original handoff from that pointer.
-No repository/authoring/use-case/graph activation is included in these raw drafts yet.
+The following .work/space-edit-inbox-authoring-2026-11-13 has8 source DRAFTS ONLY, no tests or
+use-case admission: optional immutable Group intent inboxOrigin, DTO/shape policy, publication
+contract and same-instance command/history/index transaction. Ordinary insert rejects marked
+intents; marked replay cannot overwrite a later pending edit. Source/key preparation precedes
+new command key creation. It supports Group-authored edits over Group or actual Company history,
+not legacy Company authoring. review.md records unresolved admission/outcome/lifetime work.
+Do not apply before the raw primitive and meaningful source/replay/restart tests are accepted.
 
-The optional pending-edit pointer retains actual Group/Company command coordinates, exact
-original target, local creation time and first index publication revision. It carries no second
-body and allocates no placement ordinal. Same-operation metadata/text stays immutable; receipt
-changes keep the pointer. Stored/captured revisions reject future provenance. Hidden/deleted
-previews cannot revive while retaining a stamp. Old payloads without the field still decode.
-Tests cover maximal text with an independent draft, replay, receipt updates, stale/consecutive
-edits, hiding/deletion and cancellation after commit. These changes are NOT yet validated.
-Atomic edit-command/index authoring and outcome release remain required; raw pointer removal is
-not proof of provider application/rejection/supersession. No use case, UI, graph or live rollout.
+Then implement actual admitted edit authoring and source-bound outcome release.
+Keep immutable command intent, exact original target, source and index revisions together; do
+not first insert a command and best-effort update the preview afterward. Exact retained command
+replay must not replace a newer pending edit. Raw pointer removal is not an accepted outcome:
+provider application/rejection/supersession needs actual evidence; command ACK alone is insufficient.
+Legacy QueueCollaborationEdit currently lacks joint canonical index publication. Existing command,
+source-check and replica mutation primitives should be reused rather than adding generic helpers.
 
-Then implement admitted history preview publication in existing incoming owners. Use the same
-binding-selected source as ObserveCollaborationSpaceThread; Group recovery copies of LEGACY rooms
-cannot overwrite actual Company hiding/edits. Keep Group/Company command identity independent from
-physical source. Unresolved identity must retain durable work without busy retries or claiming
-projection completion. Use current index/source checks, at most17 candidates for a16-original
-batch and immutable anchor positions. Preserve drafts, existing SENT/failures and pending edits.
+Then complete bounded history preview publication in the existing incoming owners. Canonical
+source follows ObserveCollaborationSpaceThread: Group for SPACE, actual Company for LEGACY.
+Never publish both physical copies or relabel retained anchors. Source identity policies pass
+focused46/full16547 and keep unproved/ambiguous sources explicit. Unresolved must retain durable
+local work instead of entering the ordinary30..300s incoming retry path. Preserve original anchor
+identity through redaction, monotonic SENT/failure state, pending edit content and independent
+drafts. At most16 originals need17 visible fallback candidates. Company content can precede
+binding, so finite catalog/history backfill and restart coverage remain before activation.
 
-AcquireCollaborationSpaceEvents owns Group retention; AcquireCollaborationSpaceOriginalEvents owns
-Company retention. Required projection belongs in completion even when key-history references were
-already retained. Company content can predate binding; finite catalog/history backfill and restart
-coverage are still required. No UC-to-UC/Repo-to-Repo calls, per-room permanent stream or VM policy.
-Read docs/collaboration-space-inbox-index-plan.md and .work/space-inbox-history-source-policy-2026-11-13/review.md.
-
-Control 43486239620 at 7fedb33ef8c215838dcee9fbc915af25d862f5e1 has portable14,235 accepted (audit44615 REAPED); Apple is pending. Do not redispatch.
-It covers snapshot17 + conditional publication16 + original association18 + Company source8,
-59 new shared methods (expected20,274 total/6,039 Apple), and EXCLUDES these later26 source-policy
-methods. Keep exact control artifacts and do not confuse Apple compilation with execution.
-Starter source595d025/local990 and shared Apple link77b0788 remain accepted; policy stays in HRIS.
-Phone release92 remains installed; live Group OFF. Push every commit and continue beyond checkpoints.
+Control43486239620 at7fedb33ef8c215838dcee9fbc915af25d862f5e1 is active; audit existing jobs without redispatching.
+It covers59 earlier snapshot/publication/association/Company shared methods and EXCLUDES later26
+canonical-source +20 pending-edit methods. A later exact-source control must retain prior IDs and
+cover these46 methods. Main native Apple SDK8 activation is still separate from shared testing.
+Starter source595d025/local990 and shared Apple link77b0788 remain accepted; no generic port here.
+Phone release92 stays installed; live Group OFF. Push every commit and continue beyond checkpoints.
 
 ## Accepted source and existing hosted controls
 

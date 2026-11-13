@@ -31,14 +31,27 @@ fun validCollaborationSpaceInboxSource(value: CollaborationSpaceInboxSource): Bo
                 validCollaborationEventId(value.eventId)
     }
 
-fun validCollaborationSpaceInboxActivity(value: CollaborationSpaceInboxActivity): Boolean {
+fun validCollaborationSpaceInboxActivity(
+    value: CollaborationSpaceInboxActivity,
+    revision: Long = COLLABORATION_SPACE_INBOX_MAX_ORDER,
+): Boolean {
     if (
         !validCollaborationSpaceInboxSource(value.source) ||
             !validCollaborationSpaceInboxPosition(value.position) ||
-            value.position.ordinal == 0L
+            value.position.ordinal == 0L ||
+            revision !in 0..COLLABORATION_SPACE_INBOX_MAX_ORDER ||
+            (value.pendingEdit != null &&
+                (!validCollaborationSpaceInboxPendingEdit(value.pendingEdit, value.source) ||
+                    value.pendingEdit.publishedAtRevision > revision))
     )
         return false
     val preview = value.preview ?: return true
+    if (
+        value.pendingEdit != null &&
+            preview.kind !in
+                listOf(CollaborationSpaceInboxContent.TEXT, CollaborationSpaceInboxContent.DELETED)
+    )
+        return false
     return preview.timestamp in 0..COLLABORATION_SPACE_INBOX_MAX_ORDER &&
         (if (preview.kind == CollaborationSpaceInboxContent.TEXT)
             preview.text != null && validCollaborationText(preview.text)
@@ -87,6 +100,7 @@ fun collaborationSpaceInboxEntry(
 fun validCollaborationSpaceInboxPublication(value: CollaborationSpaceInboxPublication): Boolean {
     if (!validCollaborationSpaceInboxRepairChange(value)) return false
     val expected = value.expected
+    val publicationRevision = (expected?.revision ?: -1L) + 1L
     if (
         expected != null &&
             (!validCollaborationMessageId(expected.generation) ||
@@ -102,7 +116,8 @@ fun validCollaborationSpaceInboxPublication(value: CollaborationSpaceInboxPublic
     if (
         value.activities.map { it.source }.distinct().size != value.activities.size ||
             value.activities.any {
-                !validCollaborationSpaceInboxActivity(it) || it.position.ordinal > value.lastOrdinal
+                !validCollaborationSpaceInboxActivity(it, publicationRevision) ||
+                    it.position.ordinal > value.lastOrdinal
             }
     )
         return false
@@ -123,7 +138,7 @@ fun validCollaborationSpaceInboxPublication(value: CollaborationSpaceInboxPublic
         return false
     if (
         entry.newest != null &&
-            (!validCollaborationSpaceInboxActivity(entry.newest) ||
+            (!validCollaborationSpaceInboxActivity(entry.newest, publicationRevision) ||
                 entry.newest.preview == null ||
                 entry.newest.position.ordinal > value.lastOrdinal)
     )
