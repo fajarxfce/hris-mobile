@@ -1,80 +1,55 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 22:25 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 22:40 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Inbox edit outcome policy locally accepted
+## Bounded history inbox projection locally accepted
 
-Mobile .work/space-inbox-edit-outcome-policy-2026-11-13 is accepted:5 source/test paths,23 shared
-methods. Focused41/full16765 (14611 fresh /2154 unchanged) retain
-all16719 prior IDs plus46 executions. Source5431/cb7ec3ea93f37a0aa646c40b77e812fdb509a2ea46a9de0aba648b45a39f211f;
-reports2425e7fe385360c05b953675afacea36d1c7b01b25bf1fe09e5e77a6696e9a37. Exact pending command/provider facts admit observed/rejected
-outcomes; one authenticated later completion may supersede an older edit. Both applicable
-namespaces and physical room must match; local/provider clocks are never compared.
-The first focused41 source was rejected for a redundant safe call; corrected focused2 passes
-205.481s. Exact rejected source/candidate files and acceptance-rejection.json remain archived.
-Apply/check/record scripts are USED. No projection owner, graph, phone or live change is active.
+Mobile .work/space-inbox-history-projection-2026-11-13 is locally accepted:3 paths,16 shared
+methods. Focused57/full16797 (14643 fresh /2154 unchanged)
+retain all16765 prior identities plus32 executions. Source5434/
+df3dc9066d8a332fa464db8a66e1b66648d70283eff0295e65f2302505b578db; reports1cb5c419de4f3c81bb731e8bd3d1b2b538386849e527979c87153ccfe5479d9e.
+At most16 coherent originals update canonical history projections while physical anchors,
+position/time, drafts, pending edit text and confirmed delivery remain stable. Exact edit
+clearance cannot clear a newer pointer. Hidden/deleted originals retain their anchors;
+17th-candidate fallback survives16 hidden updates. Unknown new originals remain explicit
+unresolved work. No proposal means no allocation, never permission to complete incoming work.
+Apply/check/record scripts are USED. No source/owner graph, UI, native or phone change is active.
 
-Next .work/space-inbox-history-projection-2026-11-13 has3 APPLIED reviewed paths and16 shared
-methods. Apply30542 is REAPED0; focused57/session99198 is REAPED and ACCEPTED,401.381s.
-Source5434/df3dc9066d8a332fa464db8a66e1b66648d70283eff0295e65f2302505b578db.
-Full16797/session3347 is RUNNING; do not alter its source inputs. Reap, accept-full.py full-1,
-record, commit/push Mobile then Group. Record/commit scripts are PREPARED NOT RUN. The proposal preserves actual physical identity, drafts, original position,
-pending edits and confirmed delivery, with explicit unresolved work and17th-candidate fallback.
-Admitted source/owner integration remains separate and unactivated.
+Next implement the admitted source producer: current account/Group checks and canonical binding,
+exact pending command reads, coherent original/operation snapshots, BOTH successor completions,
+complete bounded anchor/candidate reads and publication conditional on source/index versions.
+Preserve latched denial and cancellation. Do not bypass materialized references before inbox
+publication. Unknown originals require durable handoff under existing incoming/repair ownership;
+keep future message processing independent without another polling queue or per-room observer.
+Finite catalog/binding backfill must cover Company history predating binding and process restart.
+Thread optimistic editing and list/graph activation need actual integration tests and UI evidence.
 
-Exact accepted outcome source7aad7abc235278cf8f6340f74bed5e71479d74ef was dispatched once:
-https://github.com/fajarxfce/hris-mobile/actions/runs/43517312645 . Expected20678 total =14505
-portable (6922 desktop/960 Android host/6623 browser) +6173 Apple;73 new shared methods from
-atomic edit storage17/admission17/coherent snapshot16/outcome23. It EXCLUDES the active16-method
-projection and unreviewed producer. Applejob132202447560 FAILED:162 tests/1 failure, remaining suites and app host never ran.
-Portablejob132202448103 is still running; audit it independently when complete. Dispatch62537 and
-failure capture40727 are REAPED. Failure artifact14081493388/27941 bytes/cc93c8d5522bd2fa256763cc1967c0de7e7f4f836239713dd9f8dc73fb1a30bc.
-Failure is SQLite5/database locked in existing archive test DROP TRIGGER while Room remained open;
-see measurements/collaboration-inbox-edit-apple-failure-2026-11-13.json. Do not accept/rerun this
-source blindly. .work/sqlite-fault-fixture-ownership-2026-11-13 contains3 formatted UNAPPLIED
-test-only fixes: owned Room callback setup, close before teardown, typed injected-fault marker,
-and reopened rollback confirmation. Review/validate after admitted history producer and port
-these generic tests to Starter; then dispatch a new exact-source control. Main SDK8 Apple app
-activation remains separate.
+Outcome source7aad7abc control43517312645 FAILED Apple at an existing core archive rollback test:
+162 tests/1 failure, remaining Apple suites and iOS app host did not run. Failure was SQLite5
+(database locked) in test DROP TRIGGER while Room remained active; the raw failure artifacts and
+stack are retained in hosted-control/apple-failure-review.json. Portable job status still needs
+its independent audit. Never call this complete or rerun without reviewing the source correction.
+The unapplied test-only .work/sqlite-fault-fixture-ownership-2026-11-13 has3 drafts: owned Room
+callback trigger setup, close before external teardown, exact SQLite fault markers and reopened
+rollback checks. Validate after the admitted producer; then port generic tests to Starter and
+run a new exact-source hosted control. Do not change active compiler inputs.
+This earlier hosted run EXCLUDES these16 projection methods. Accepted43498640097/coreb4a3a89d remains20459/6100 Apple.
+Generic Startercaf8103 retains independent1022 and linked15 shared Apple methods; no new port.
+Further .work/space-inbox-history-admission-2026-11-13 contains6 reviewed, formatted UNAPPLIED
+paths: admitted producer/result,22 behavior methods and fixture, owning data factory and assembled
+graph assertion. Exact draft hashes and focused40/full16841 gates are ready; no gate has run yet.
+It must follow accepted/pushed57/16797 projection. Review caught retained original anchors whose
+command proof was absent: all possible physical/Group/Company identities now use at most two
+32-key reads (maximum48 keys) under one index version; unproven retained originals remain
+unresolved rather than becoming duplicate History rows. Both namespaces and inter-batch revision
+changes have regressions. Read current review/state before applying and preserve exact hashes.
+Incoming/backfill ownership and product activation remain separate unfinished work.
 
-Read .work/space-inbox-edit-outcome-policy-2026-11-13/next-owner-review.md and the inbox index plan.
-Next implement bounded history publication (at most16 changed originals/17 fallback candidates),
-current access and canonical Group/actual Company source admission. Preserve existing physical
-anchors through proof changes, draft independence, pending edit text and SENT/FAILED evidence.
-Use exact command reads plus coherent operation snapshots and BOTH applicable successor lookups.
-A newer edit changes index revision; eligibility/redaction changes history revision. Condition
-publication on both, keeping bounded retries distinct from operational failure and denied access.
-
-An already materialized incoming reference STILL needs projection completion. Actual Company
-content can predate binding, requiring finite catalog/binding backfill and restart coverage.
-Unresolved work needs durable handoff under existing ownership without blocking future messages
-or entering ordinary30..300second incoming retry. Do not create a permanent observer per room,
-a second queue, VM business helper or claim original-command seeding covers all history.
-Finish admitted producer/owner integration before list/graph activation and actual UI acceptance.
-
-Coherent snapshot baseline16719 and admitted edit baseline16687 remain accepted. Generic coreb4a3a89d
-passes16619 and Starterd7b6f839 passes independent1022. Control43498640097 covers that earlier core
-only (20459/6100 Apple), excluding these later HRIS increments; inspect its audited state without
-redispatch. Bundle later exact-source hosted validation.
-
-Further .work/space-inbox-history-admission-2026-11-13 contains6 reviewed formatted UNAPPLIED
-drafts: admitted producer/result,22 behavior methods and repository fixture, owning data factory,
-and existing graph resolution assertion. No compiler/tests/gates have run for it. It must follow
-accepted/pushed57/16797 projection source. Review canonical snapshots and pending/successor proof,
-mutable lists, finite source/index contention, denial/account changes, cancellation and incomplete
-reference handoff. Gated application scripts and22 method identities are prepared; this is not
-owner/backfill or product activation. Read its current state/review before further source work.
-Review found a missing-command-proof duplicate-anchor risk in the unapplied producer. It now
-queries all possible physical/Group/Company anchors in at most two32-key reads under the SAME
-index generation. A retained unproven original remains unresolved rather than allocating a
-second History row. Two new draft regressions cover both original namespaces and16 legacy
-originals/48 keys, including changes between batches. Gates now expect40/16841. No gate run yet.
-
-Main native Apple SDK8 activation is separate. Phone92 stays installed; live GroupOFF. All54 PRD groups remain open. Continue beyond
-checkpoints, push every commit and preserve the accepted source/artifact evidence.
+Main native Apple SDK8 app activation is separate. Phone92 stays installed, live GroupOFF.
+All54 PRD acceptance groups remain open. Continue beyond checkpoints and push every commit.
 
 ## Accepted source and existing hosted controls
 

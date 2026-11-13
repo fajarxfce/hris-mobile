@@ -1,0 +1,74 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistoryUpdate.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistoryProjectionPolicy.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistoryProjectionTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 57,
+    "elapsedSeconds": 401.381,
+    "sourceFiles": 5434,
+    "sourceManifestSha256": "df3dc9066d8a332fa464db8a66e1b66648d70283eff0295e65f2302505b578db",
+    "resultSha256": "b2dbb8c113219434670ee0c5a78c44e42002ce8d0f363c8cb1d610c9be30ea56",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationHistoryEditSnapshotStorageTest": 16,
+      "SpaceInboxEditOutcomePolicyTest": 15,
+      "SpaceInboxEditSupersessionPolicyTest": 8,
+      "SpaceInboxHistoryProjectionTest": 16
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T22:23:52.687554+00:00",
+    "elapsedSeconds": 953.017,
+    "sourceFiles": 5434,
+    "freshCounts": {
+      "tests": 14643,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 154624408,
+      "sha256": "a29052f2d0f574831aadf49270cf31e367b28e07e4678209912aa8a76910c3ba"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16797,
+    "newCases": 32,
+    "freshTests": 14643,
+    "reusedUnaffectedTests": 2154,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "df3dc9066d8a332fa464db8a66e1b66648d70283eff0295e65f2302505b578db",
+    "reportManifestSha256": "1cb5c419de4f3c81bb731e8bd3d1b2b538386849e527979c87153ccfe5479d9e",
+    "nativeClaim": "Bounded history/inbox proposal;16 shared pure policy methods. Admitted incoming/backfill owner and product activation remain open."
+  },
+  "focusedAttempts": [
+    {
+      "directory": "focused-1",
+      "exitCode": 0,
+      "freshCounts": {
+        "tests": 57,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "b2dbb8c113219434670ee0c5a78c44e42002ce8d0f363c8cb1d610c9be30ea56",
+      "sourceManifestSha256": "df3dc9066d8a332fa464db8a66e1b66648d70283eff0295e65f2302505b578db"
+    }
+  ],
+  "newSharedMethods": 16,
+  "actualNewAppleExecution": false,
+  "requiresStarterPort": false,
+  "boundedHistoryProjectionAvailable": true,
+  "providerOutcomeReconciliationActivated": false,
+  "productGraphActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false
+}

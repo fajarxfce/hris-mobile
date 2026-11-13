@@ -291,3 +291,7 @@ Existing canonical Group/Company snapshots retain bounded exact replacement oper
 ## Exact edit outcome policy
 
 Pending replacements and authenticated local successors have pure Group/Company admission policies. Focused41/full16765 pass. Admitted publication, incoming/backfill ownership and product activation remain; see `docs/collaboration-space-inbox-edit-outcomes.md`.
+
+## Bounded history proposal
+
+Pure policy now prepares up to16 original changes with17th-candidate fallback, retained physical identity, drafts and exact pending edit clearance. Focused57/full16797 pass. Admitted source/owner and product activation remain; see `docs/collaboration-space-inbox-history-projection.md`.
