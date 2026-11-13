@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 22:43 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 22:57 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -39,13 +39,22 @@ run a new exact-source hosted control. Do not change active compiler inputs.
 This earlier hosted run EXCLUDES these16 projection methods. Accepted43498640097/coreb4a3a89d remains20459/6100 Apple.
 Generic Startercaf8103 retains independent1022 and linked15 shared Apple methods; no new port.
 Current .work/space-inbox-history-admission-2026-11-13 has6 APPLIED reviewed paths and22
-behavior methods. Apply32725 REAPED0; focused40/session42257 RUNNING. Source5438/
+behavior methods. Apply32725 and focused40/session42257 are REAPED/ACCEPTED,406.749s. Source5438/
 92c4ecfac7019fa090c41f6735fe586f54f9cf0415c828562318a7311fe5180d.
-Do not mutate active inputs. Reap focused, accept-focused.py focused-1, then run/reap full16841,
-accept-full.py full-1, record and commit/push Mobile followed by Group. Record/commit scripts
+Full16841/session59728 is RUNNING. Do not mutate its inputs. Reap, accept-full.py full-1,
+record and commit/push Mobile followed by Group. Record/commit scripts
 are prepared, not run. Missing command proof cannot allocate duplicate History anchors; up to48
 physical/Group/Company keys use two32-key reads of one index generation. Review/state/hashes and
 owner-integration-review.md identify actual unresolved incoming/backfill boundaries.
+
+Next .work/replica-local-change-pages-2026-11-13 contains15 formatted UNAPPLIED drafts and12
+shared storage methods. Local change revision is independent from ReplicaDocument.version;
+coalesced indexed pages include tombstones and retain finite upper bounds across writes. SQLite
+13->14 and IndexedDB12->13 migrations are proposed; old payload/version/sort/tags stay intact.
+Standalone formatter78516 REAPED0 and browser-read syntax pass only. Actual behavior, generated
+SQLite schema14, old-database migration tests and final source review remain. Do not apply yet.
+See collaboration-space-inbox-incremental-history-plan.md for the concrete design and missing gates.
+This generic increment needs Mobile proof then Starter parity; no source/owner/UI activation.
 
 Control43517312645 remains FAILED overall: Apple162/1 at fixture teardown, no later Apple/app
 execution. Portable job132202448103 is independently ACCEPTED14505 (6922 desktop/960 Android host/
