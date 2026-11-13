@@ -21,6 +21,7 @@ data class CollaborationSpaceMessageIntent(
     val replyToEventId: String? = null,
     val forwarded: Boolean = false,
     val editTarget: CollaborationEditTarget? = null,
+    val inboxOrigin: CollaborationSpaceEditInboxOrigin? = null,
 ) {
     override fun toString() = "CollaborationSpaceMessageIntent([redacted])"
 }

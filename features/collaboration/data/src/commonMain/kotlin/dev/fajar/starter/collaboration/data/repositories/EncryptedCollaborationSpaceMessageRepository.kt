@@ -30,7 +30,8 @@ class EncryptedCollaborationSpaceMessageRepository(
 ) :
     CollaborationSpaceMessageRepository,
     CollaborationSpaceMessageCompletionRepository,
-    CollaborationSpaceMessageCancellationRepository {
+    CollaborationSpaceMessageCancellationRepository,
+    CollaborationSpaceEditPublicationRepository {
     private val keys = CollaborationSpaceCommandKeys(commands, cipher, credentials)
     private val historyKeys = CollaborationHistoryKeys(replicas, cipher, historyCredentials)
     private val insertions = Mutex()
@@ -93,6 +94,7 @@ class EncryptedCollaborationSpaceMessageRepository(
     ): AppResult<CollaborationMessageInsertion> {
         val result = safeStorageCall {
             require(validCollaborationSpaceMessageIntent(access, intent))
+            require(intent.inboxOrigin == null)
             val scope = spaceMessageScope(access)
             insertions.withLock {
                 val previous = lookup(access, intent.id)
@@ -156,6 +158,256 @@ class EncryptedCollaborationSpaceMessageRepository(
                             code = "client.collaboration_space_recovery_capacity",
                         )
                     )
+        }
+    }
+
+    override suspend fun readEditSource(
+        access: CollaborationSpaceLocalAccess,
+        source: CollaborationSpaceHistoryLocation,
+        eventId: String,
+    ): AppResult<CollaborationSpaceEditSourceSnapshot?> =
+        withContext(Dispatchers.Default) {
+            safeStorageCall {
+                require(validCollaborationEventId(eventId))
+                validateHistoryRoom(source.roomId)
+                val scope = spaceHistoryScope(access)
+                val partition =
+                    when (source) {
+                        is CollaborationSpaceHistoryLocation.Space -> {
+                            require(source.access == access)
+                            spaceHistoryPartition(access, source.conversationId)
+                        }
+                        is CollaborationSpaceHistoryLocation.Original -> {
+                            require(historyScope(source.access) == scope)
+                            historyPartition(source.access, source.conversationId)
+                        }
+                    }
+                val raw = replicas.checkpoint(scope, partition)
+                if (raw == null) {
+                    currentCoroutineContext().ensureActive()
+                    return@safeStorageCall if (replicas.checkpoint(scope, partition) == null)
+                        CollaborationSpaceEditSourceSnapshot(null, null, null)
+                    else null
+                }
+                if (!raw.published) return@safeStorageCall null
+                try {
+                    historyKeys.use { content, index ->
+                        val codec =
+                            when (source) {
+                                is CollaborationSpaceHistoryLocation.Space ->
+                                    CollaborationHistoryCodec(
+                                        source.access,
+                                        source.conversationId,
+                                        source.roomId,
+                                        cipher,
+                                        content,
+                                        index,
+                                    )
+                                is CollaborationSpaceHistoryLocation.Original ->
+                                    CollaborationHistoryCodec(
+                                        source.access,
+                                        source.conversationId,
+                                        source.roomId,
+                                        cipher,
+                                        content,
+                                        index,
+                                    )
+                            }
+                        codec.checkpoint(raw)
+                        val candidate =
+                            CollaborationEditTargetReader(replicas, raw, codec, source.roomId)
+                                .get(eventId)
+                        val original =
+                            CollaborationHistorySnapshotReader(replicas, raw, codec)
+                                .read(listOf(eventId))
+                                .single()
+                                .original
+                        currentCoroutineContext().ensureActive()
+                        if (replicas.checkpoint(scope, partition) == raw)
+                            CollaborationSpaceEditSourceSnapshot(
+                                raw.handle.generation + ":" + raw.revision,
+                                original,
+                                candidate,
+                            )
+                        else null
+                    }
+                } catch (_: CollaborationHistoryPreparationChanged) {
+                    currentCoroutineContext().ensureActive()
+                    null
+                }
+            }
+        }
+
+    override suspend fun publishEdit(
+        access: CollaborationSpaceLocalAccess,
+        intent: CollaborationSpaceMessageIntent,
+        source: CollaborationSpaceHistoryLocation,
+        sourceRevision: String,
+        publication: CollaborationSpaceInboxPublication,
+    ): AppResult<CollaborationSpaceEditPublicationResult> {
+        val captured = publication.copy(activities = publication.activities.toList())
+        return withContext(Dispatchers.Default) {
+            safeStorageCall {
+                require(validCollaborationSpaceEditPublication(access, intent, captured))
+                require(sourceRevision.length in 1..128)
+                require(source.roomId == requireNotNull(intent.editTarget).roomId)
+                val scope = spaceHistoryScope(access)
+                val sourcePartition =
+                    when (source) {
+                        is CollaborationSpaceHistoryLocation.Space -> {
+                            require(
+                                source.access == access &&
+                                    source.conversationId == intent.conversationId
+                            )
+                            spaceHistoryPartition(access, source.conversationId)
+                        }
+                        is CollaborationSpaceHistoryLocation.Original -> {
+                            require(historyScope(source.access) == scope)
+                            historyPartition(source.access, source.conversationId)
+                        }
+                    }
+                val historyOrigin =
+                    intent.inboxOrigin?.activity as? CollaborationSpaceInboxSource.History
+                if (historyOrigin != null) {
+                    require(
+                        historyOrigin.companyId ==
+                            (source as? CollaborationSpaceHistoryLocation.Original)
+                                ?.access
+                                ?.companyId
+                    )
+                    require(
+                        historyOrigin.conversationId == source.conversationId &&
+                            historyOrigin.roomId == source.roomId
+                    )
+                }
+                insertions.withLock {
+                    val retained = decodeLookup(access, intent.id, lookup(access, intent.id))
+                    if (retained != null) {
+                        require(retained.intent == intent && retained.intent.inboxOrigin != null)
+                        return@withLock CollaborationSpaceEditPublicationResult.RETAINED
+                    }
+                    val mutations =
+                        encryptEditProjection(
+                            access,
+                            source,
+                            sourcePartition,
+                            sourceRevision,
+                            captured,
+                        ) ?: return@withLock CollaborationSpaceEditPublicationResult.CHANGED
+                    keys.use(create = true) { commandKey ->
+                        val commandCodec =
+                            CollaborationSpaceMessageCodec(access, cipher, commandKey)
+                        val raw =
+                            CommandRecord(
+                                spaceMessagePartition(access),
+                                intent.id,
+                                intent.id,
+                                intent.orderKey(),
+                                commandCodec.request(intent),
+                                commandCodec.state(
+                                    intent.id,
+                                    0,
+                                    CollaborationMessageState.Queued.toDto(),
+                                ),
+                            )
+                        val wake =
+                            WorkWakeRequest(
+                                CollaborationSpaceRecoveryWake.WORK_KEY,
+                                Uuid.random().toString(),
+                                SPACE_RECOVERY_WAKE_MAX_KEYS,
+                            )
+                        currentCoroutineContext().ensureActive()
+                        when (
+                            commands.insertAndMutate(
+                                spaceMessageScope(access),
+                                raw,
+                                mutations,
+                                wake,
+                            )
+                        ) {
+                            CommandInsertResult.Stored ->
+                                CollaborationSpaceEditPublicationResult.STORED
+                            // The raw replay compares the complete immutable request, including
+                            // origin.
+                            CommandInsertResult.AlreadyStored ->
+                                CollaborationSpaceEditPublicationResult.RETAINED
+                            CommandInsertResult.ScopeChanged ->
+                                CollaborationSpaceEditPublicationResult.SCOPE_CHANGED
+                            CommandInsertResult.CapacityExceeded ->
+                                CollaborationSpaceEditPublicationResult.CAPACITY_EXCEEDED
+                            CommandInsertResult.ResourceOccupied ->
+                                error("Edit resource identity mismatch")
+                            null -> CollaborationSpaceEditPublicationResult.CHANGED
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /** Acquire and encrypt one checked projection without touching the command ledger. */
+    private suspend fun encryptEditProjection(
+        access: CollaborationSpaceLocalAccess,
+        source: CollaborationSpaceHistoryLocation,
+        sourcePartition: String,
+        sourceRevision: String,
+        captured: CollaborationSpaceInboxPublication,
+    ): List<ReplicaMutation>? {
+        val scope = spaceHistoryScope(access)
+        val conversationId = captured.entry.conversationId
+        val rawSource = replicas.checkpoint(scope, sourcePartition) ?: return null
+        if (
+            !rawSource.published ||
+                rawSource.handle.generation + ":" + rawSource.revision != sourceRevision
+        )
+            return null
+        return historyKeys.use { content, index ->
+            val historyCodec =
+                when (source) {
+                    is CollaborationSpaceHistoryLocation.Space ->
+                        CollaborationHistoryCodec(
+                            source.access,
+                            source.conversationId,
+                            source.roomId,
+                            cipher,
+                            content,
+                            index,
+                        )
+                    is CollaborationSpaceHistoryLocation.Original ->
+                        CollaborationHistoryCodec(
+                            source.access,
+                            source.conversationId,
+                            source.roomId,
+                            cipher,
+                            content,
+                            index,
+                        )
+                }
+            historyCodec.checkpoint(rawSource)
+            val codec = CollaborationSpaceInboxCodec(access, cipher, content, index)
+            val partition = spaceInboxPartition(access)
+            val current = replicas.checkpoint(scope, partition)
+            if (
+                current?.published == false ||
+                    current?.let { codec.version(it) } != captured.expected
+            )
+                return@use null
+            val ids =
+                buildList {
+                        add(codec.id("entry", conversationId))
+                        add(codec.id("draft", conversationId))
+                        captured.entry.newest?.let {
+                            add(codec.id("activity", conversationId, it.source))
+                        }
+                        captured.activities.forEach {
+                            add(codec.id("activity", conversationId, it.source))
+                        }
+                    }
+                    .distinct()
+            val documents = replicas.workingDocuments(scope, partition, ids)
+            if (documents.checkpoint != current) return@use null
+            val mutation = codec.mutation(current, documents.documents, captured) ?: return@use null
+            listOf(ReplicaMutation.Check(sourcePartition, rawSource), mutation)
         }
     }
 

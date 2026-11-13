@@ -24,7 +24,8 @@ fun validCollaborationSpaceMessageIntentContent(intent: CollaborationSpaceMessag
             !validCollaborationSpaceConversationId(intent.conversationId) ||
             intent.createdAt.toEpochMilliseconds() !in 0 until 253_402_300_800_000L ||
             !validCollaborationText(intent.text) ||
-            intent.replyToEventId?.let(::validCollaborationReplyEventId) == false
+            intent.replyToEventId?.let(::validCollaborationReplyEventId) == false ||
+            !validCollaborationSpaceEditInboxOrigin(intent)
     )
         return false
     val target = intent.editTarget ?: return true

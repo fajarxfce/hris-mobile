@@ -1,79 +1,44 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 20:30 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 20:48 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Atomic command and checked projection insertion locally accepted
+## Atomic edit publication locally accepted
 
-Mobile .work/command-insert-projection-2026-11-13 is accepted:9 source/test paths,
-15 shared methods plus2 SQLite fault injections; focused47/full16619 (6265 fresh /
-10354 exact unchanged). All16587 prior identities remain plus32 executions.
-Source5408/ede5cc85977f2c0c9826da2573c2f97b6118dadf4008052b67a543deca491089; reports 79da912a72de2c9a8ea0f792b5657e7d00fd53c56c822d6075f6d3be5fa20955.
-insertAndMutate retains an actual command, prepared source/index changes and wake atomically.
-Replay never overwrites a later projection or renews completed work; conflicts roll back all.
-The existing browser mutation transaction remains shared with standalone and archive writes.
-Preparation/application scripts are used. No product graph, phone update or live change.
+Mobile .work/space-edit-inbox-authoring-2026-11-13 is accepted:13 source/test paths,
+17 shared methods plus same-instance app binding; focused27/full16653 (14499 fresh /
+2154 unchanged). All16619 prior IDs remain plus34 executions.
+Source5416/675d968b7df0fcd08dfc6ad7284399438ac4287404266a4a45340b299b2b45e9; reports55115ae2acaba451c03f88cc03a7be298c18d447a0c7e100e3ab59174cc7f00e.
+Actual Group edit command, canonical history check, optimistic original preview and wake now
+share one transaction. Exact marked replay preserves newer work; old single-ledger commands do
+not prove publication. Coherent candidate/original reads preserve legacy aliases and source identity.
+Initial focused method-length and subsequent formatting failures are retained; acceptance follows
+their corrections. Apply/format/check scripts are USED. No graph, phone or live change is active.
 
-Current continuation: Mobile source b4a3a89d105f4f79032ced3c912c1d1f6a4a15d7 and Group evidence
-06a1e885f11afbd1b725bbdca86fa9b022332f37 are pushed. Full60029 REAPED0/891.065s;
-full16619 =6265 fresh +10354 unchanged, all16587 prior IDs plus32 new executions.
-Reports79da912a72de2c9a8ea0f792b5657e7d00fd53c56c822d6075f6d3be5fa20955.
-Core prepare-hosted.py and dispatch-hosted.py are USED. Control43498640097 at exactb4a3a89d
-is running (portable132138280906, Apple132138280191), NOT accepted. Expect20459 combined,
-6100 Apple,61 shared new methods plus2 desktop storage fault injections. Audit with hosted-audit.py;
-no repeat dispatch. Main native SDK8 activation is separate. Older43486239620 stays accepted.
+Next .work/space-edit-inbox-admission-2026-11-13 has seven UNAPPLIED drafts: request/prepared
+entities, source/ordering policy, QueueCollaborationSpaceEdit with a per-gesture Submission owner,
+fixture, seventeen behavioral tests, data-module constructor binding and app-resolution assertion.
+Gates are prepared for focused36/full16687 but have not run. Final review must confirm existing
+History anchors survive newly proven or ambiguous original-command associations without relabelling.
+Tests cover independent drafts, Group/Company sources, clock ordering, exact uncertain-write readback,
+denial, account replacement and joined cancellation. Inspect review.md and state before application;
+apply requires this accepted/pushed storage baseline and the free compiler slot. No product activation.
 
-Starter d7b6f839350c6dd7f91612f9a09ff15d6b43c33b is accepted and pushed. Nine generic files pass independent1022:
-544 fresh/478 unchanged, all990 prior IDs plus32. Full32098 REAPED0/441.531s. Source1082/
-2da12deeb63ab6fd4514539674ad694f7324a536a601c31dd7183c57466562a5; reports7b2474fb7f7800ed6393874e00cf5399dec2fafc19ce8a9f8a3f17a7e5a32645.
-Apply/accept/publish are USED; push12756 REAPED0. Inspector742a2d1c remains pinned. Do not rerun.
-This port is linked in the atomic-command measurement. Shared Apple evidence remains pending43498640097.
+Outcome reconciliation follows under the existing incoming/repair owners. Provider application,
+rejection or supersession needs authenticated evidence; ACK alone cannot clear optimistic content.
+Finish bounded history publication, finite backfill and list/graph activation while preserving
+canonical source, original positions, drafts, pending edits and durable unresolved work. No new
+per-room polling loop, ordinary incoming retry for unresolved facts or VM business helper.
 
-Next Mobile .work/space-edit-inbox-authoring-2026-11-13 has13 APPLIED source/test paths:8 source,
-17 shared storage methods,3 platform wrappers and same-instance app binding assertion. Apply64265
-and formatters10996/35934/68063 are REAPED0. First focused12549 failed LongMethod, second93780
-failed formatting; both REAPED1 with zero runtime tests. Their inputs/results remain preserved.
-The repository now reuses its exact active/archive decoder and owns encrypted projection acquisition
-in encryptEditProjection before command-key creation. No new repository or cross-repository call.
-Raw AlreadyStored authenticates the complete immutable encrypted request, including handoff marker.
-
-Third focused27/session14429 is RUNNING. Its17 new actual SQLite tests and2 app bindings have
-fresh passing XML at20:28/20:29UTC; platform compilation is still running. Do not accept yet.
-Source5416/675d968b7df0fcd08dfc6ad7284399438ac4287404266a4a45340b299b2b45e9.
-Reap14429, accept-focused.py focused-3, then run full16653, reap and accept-full.py. Neither full
-nor record-acceptance.py/commit.py has run. Both recording/commit scripts are prepared and guarded.
-The increment still does not admit a user's edit or activate the product graph. Do not reapply drafts.
-
-Its actual Group/Company history reads return candidate and original under one revision, including
-legacy earliest aliases without rewriting history. Joint publication authenticates source/index,
-marks immutable command handoff and retains command/preview/wake together. Exact active/archive
-replay preserves newer edits/drafts; ordinary insert rejects marked commands. Tests cover source
-and index races, key absence, lost reply/restart, cancellation, wrong namespace, account replacement,
-maximum UTF-8, hidden/redacted targets and archived replay. Runtime tests remain pending at this checkpoint.
-
-Admitted edit use-case and provider outcome release follow this storage increment. Reuse canonical
-binding/source policy, exact active/archive command reads and finite existing owners. Keep actor,
-reviewed text, hidden/redacted state, denial and source/index revision checks. Consecutive edits
-must preserve delivery order even after a backward clock adjustment; preview ordinal alone cannot
-order delivery. An uncertain response must read back the same gesture before recomputation.
-No new polling queue, incoming retry loop, repository chaining or VM business helpers. Read review.md.
-
-The follow-up .work/space-edit-inbox-admission-2026-11-13 has FIVE UNAPPLIED/unreviewed drafts:
-explicit request/prepared-write entities, pure source/order/projection policy, QueueCollaborationSpaceEdit,
-fixture and14 behavioral methods. No DI or validation yet. Its Submission owns denial and finite
-history/association/projection/commit stages for one gesture. Source admission and timestamp ordering
-have named pure policies. Verify formatted method sizes, snapshot scope, race/cancellation and exact
-source association before preparing gates. Tests include pending edit ordering, backwards clocks,
-lost replies, failed readback, independent drafts and editing older messages. Read review.md.
-No source from this follow-up workspace is applied; active source is the storage increment above.
-
-Then finish bounded history publication, finite backfill and actual list/graph activation under
-existing incoming ownership. Preserve canonical source selection, original positions, drafts,
-pending edits, denial state and durable unresolved work without ordinary incoming retry loops.
-Native main Apple SDK8 activation remains separate. Keep hosted exact-source artifacts and
-do not redispatch accepted controls. Phone92 remains installed; live Group OFF.
+Prior generic core b4a3a89d105f4f79032ced3c912c1d1f6a4a15d7 passes16619. Starter
+d7b6f839350c6dd7f91612f9a09ff15d6b43c33b independently passes1022; all9 files are exact,
+Inspector742a2d1c unchanged. Port and Mobile/Group links are pushed. No new Starter delta here.
+Control43498640097 covers that earlier exact core source (expected20459/6100 Apple), NOT this
+later17-method edit increment. Read its hosted-control state and audit once; never redispatch.
+Previous43486239620 remains accepted. Main native Apple SDK8 activation is still separate.
+Phone92 remains installed; live Group OFF. Continue beyond checkpoints and push every commit.
 
 ## Accepted source and existing hosted controls
 

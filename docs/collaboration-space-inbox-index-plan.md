@@ -275,3 +275,7 @@ activation. See `docs/collaboration-space-inbox-edit-provenance.md`.
 ## Atomic command insertion support
 
 Actual command, source guard, prepared projection and wake now share one transaction. Fifteen shared methods plus two SQLite fault injections pass focused47/full16619. Immutable handoff origin, admitted edit authoring/outcome release, bounded history publication and list/graph activation remain; see `docs/command-insert-projection.md`.
+
+## Atomic edit publication storage
+
+Same-instance Group command and canonical history/index transaction support passes focused27/full16653. Seventeen shared storage methods preserve marked replay, legacy payloads and actual Company source. Admitted user edit policy, provider outcome release and product activation remain; see `docs/collaboration-space-edit-inbox-publication.md`.

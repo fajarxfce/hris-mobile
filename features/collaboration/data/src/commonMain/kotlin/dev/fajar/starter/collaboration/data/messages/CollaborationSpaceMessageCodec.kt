@@ -49,6 +49,7 @@ internal data class SpaceMessageIntentDto(
     val replyToEventId: String? = null,
     val forwarded: Boolean = false,
     val editTarget: MessageEditTargetDto? = null,
+    val inboxOrigin: SpaceEditInboxOriginDto? = null,
 ) {
     override fun toString() = "SpaceMessageIntentDto([redacted])"
 }
@@ -69,6 +70,7 @@ internal fun CollaborationSpaceMessageIntent.toSpaceMessageDto(
         replyToEventId,
         forwarded,
         editTarget?.toMessageEditDto(),
+        inboxOrigin?.let(::SpaceEditInboxOriginDto),
     )
 }
 
@@ -85,6 +87,7 @@ internal fun SpaceMessageIntentDto.toSpaceMessageIntent(
             replyToEventId,
             forwarded,
             editTarget?.toDomain(),
+            inboxOrigin?.domain(),
         )
         .also { require(validCollaborationSpaceMessageIntent(access, it)) }
 }
