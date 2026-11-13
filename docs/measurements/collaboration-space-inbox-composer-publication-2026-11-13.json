@@ -1,0 +1,132 @@
+{
+  "accepted": true,
+  "sourceFiles": 5296,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/SpaceComposerCompletionOutboxFixture.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationSpaceComposerHandoffCodec.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationComposerOutboxRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceComposerIndexStorageContract.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceComposerStorageContract.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceComposerIndexStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceComposerIndexStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceComposerIndexStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxComposerPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceComposerOutboxRepository.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/SubmitCollaborationSpaceComposer.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceComposerCompletionOutboxFixture.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceComposerUseCaseFixture.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxComposerPublicationTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SubmitSpaceComposerInboxTest.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadFixture.kt"
+  ],
+  "sourceManifestSha256": "5ea1f487cba3a744b77cf5680871174689452897ddc060330f469bf1d5e53238",
+  "focused": {
+    "accepted": true,
+    "tests": 124,
+    "elapsedSeconds": 179.545,
+    "sourceFiles": 5296,
+    "sourceManifestSha256": "5ea1f487cba3a744b77cf5680871174689452897ddc060330f469bf1d5e53238",
+    "resultSha256": "55ad5d84a42ebb0602b04218d656a63c1bd83d1e448b1e1b3097be117114cab0",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "SpaceChatThreadRetentionTest": 4,
+      "SpaceChatThreadViewModelTest": 16,
+      "SpaceChatComposerEditingSessionTest": 4,
+      "SpaceChatComposerFocusTest": 1,
+      "CollaborationComposerOutboxStorageTest": 28,
+      "CollaborationSpaceComposerStorageTest": 13,
+      "CollaborationSpaceComposerIndexStorageTest": 9,
+      "EditCollaborationSpaceDraftTest": 10,
+      "EditSpaceDraftInboxTest": 8,
+      "SpaceInboxComposerPublicationTest": 7,
+      "SubmitCollaborationSpaceComposerTest": 14,
+      "SubmitSpaceComposerInboxTest": 8
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T09:24:11.495889+00:00",
+    "elapsedSeconds": 885.3,
+    "sourceFiles": 5296,
+    "freshCounts": {
+      "tests": 13671,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152539327,
+      "sha256": "a4c4dbb57431d9661319ff948284c4d78db24c55b99d4a9955489f578f1ee994"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 15737,
+    "newCases": 48,
+    "freshTests": 13671,
+    "reusedUnaffectedTests": 2066,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 109,
+    "excludedHistoricalCases": 642,
+    "sourceManifestSha256": "5ea1f487cba3a744b77cf5680871174689452897ddc060330f469bf1d5e53238",
+    "reportManifestSha256": "07efae891ef60861875316fafe3771e129abfdd76361d017cf96a8558b891509",
+    "nativeClaim": "Atomic Group composer/index publication; 24 new shared methods require actual Apple execution. Command/history progress, bounded repair and product list activation remain pending."
+  },
+  "newSharedMethods": 24,
+  "failedCandidates": [
+    {
+      "accepted": false,
+      "reason": "Detekt LongMethod rejected Group handoff after formatting: 188 lines, limit100. Split typed ciphertext mapping into its codec role; repository remains the raw I/O/transaction coordinator. Do not suppress the rule or move policy to a helper.",
+      "session": 98643,
+      "reaped": true,
+      "executedTests": 0
+    },
+    {
+      "accepted": false,
+      "reason": "Detekt rejected Submission.execute at103 lines against100; capture the repeated immutable Group original source once per operation. No retry/admission behavior or static limit changes.",
+      "session": 66351,
+      "reaped": true,
+      "executedTests": 0
+    },
+    {
+      "accepted": false,
+      "reason": "Detekt rejected Group handoff at105 lines after adding failed-commit readback. Keep raw commit and conditional outcome readback as one explicitly named repository operation; source acquisition/encryption planning stays in handoff and codec. No static limit or business requirement changes.",
+      "session": 38084,
+      "reaped": true,
+      "executedTests": 0
+    },
+    {
+      "focusedDirectory": "focused-4",
+      "focusedSession": 68608,
+      "focusedReaped": true,
+      "passedTests": 124,
+      "accepted": false,
+      "warnings": [
+        "w: file:///home/fajar/hris/hris-mobile/features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxComposerPublicationTest.kt:54:80 Unnecessary safe call on a non-null receiver of type 'CollaborationSpaceInboxActivity'.",
+        "w: file:///home/fajar/hris/hris-mobile/features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxComposerPublicationTest.kt:54:80 Unnecessary safe call on a non-null receiver of type 'CollaborationSpaceInboxActivity'."
+      ],
+      "cancelledFullDirectory": "full-1",
+      "cancelledFullSession": 56212,
+      "cancelledFullReaped": true,
+      "reason": "Candidate warning detected by the strict auditor. Full was mistakenly launched after the failed auditor, then stopped after 21.929 seconds with zero tests. Remove only the redundant safe call; preserve every assertion.",
+      "followup": "First replacement asserted exactly one matching expression, but two existed. No source write occurred. A format-only invocation completed unchanged. The replacement is now limited to the first, compiler-identified smart-cast occurrence."
+    }
+  ],
+  "rawFalseReadbackReview": {
+    "reason": "ReplicaStore.mutate returns false for both checkpoint/owner contention and wake rejection. One finite checkpoint readback distinguishes observable contention; unchanged or no-longer-owned empty snapshots preserve existing unproven Conflict failure through stable(). No raw false is success, no write retry is added in data.",
+    "existingRequirement": "Existing fullRecoveryWakeCapacityCannotPartiallyClearTheDraftOrStoreAnOriginal requires AppResult.Failed and is unchanged.",
+    "newUnacceptedAssertionCorrection": "New account replacement test originally expected CHANGED. Unowned empty snapshots cannot establish a changed checkpoint, so expect the unproven Conflict failure. Its assertions that source/index/wake are absent remain unchanged. Domain still checks account admission after the write.",
+    "scope": "No raw store API, schema, Boolean success contract or prior accepted test assertion changes."
+  },
+  "groupComposerProducerIntegrated": true,
+  "commandProgressIntegrated": false,
+  "historyProducerIntegrated": false,
+  "retainedRepairTraversalIntegrated": false,
+  "productGraphActivated": false,
+  "nativeAppleExecution": false,
+  "phoneInstalled": false,
+  "previousInstalledPhoneBuild": 92,
+  "liveChanged": false,
+  "genericStarterPortRequired": false,
+  "reason": "HRIS Group original/index publication and its ciphertext mapper; generic atomic storage is already ported to Starter."
+}

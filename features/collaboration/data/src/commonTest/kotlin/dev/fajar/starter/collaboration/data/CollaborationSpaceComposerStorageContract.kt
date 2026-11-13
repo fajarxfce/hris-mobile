@@ -78,11 +78,11 @@ abstract class CollaborationSpaceComposerStorageContract {
             assertNull(f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY))
             assertEquals(
                 AppResult.Success(CollaborationComposerHandoffResult.STORED),
-                f.outbox().handoff(local, group, null),
+                f.handoffSpaceComposer(local, group, null),
             )
             assertEquals(
                 AppResult.Success(CollaborationComposerHandoffResult.STORED),
-                f.outbox().handoff(other, second, null),
+                f.handoffSpaceComposer(other, second, null),
             )
             assertEquals(AppResult.Success(company), f.outbox().get(f.access, company.id))
             assertEquals(AppResult.Success(group), f.outbox().get(local, group.id))
@@ -98,25 +98,29 @@ abstract class CollaborationSpaceComposerStorageContract {
             val original = f.submission()
             val store =
                 object : ReplicaStore by f.database.replicas {
-                    override suspend fun replace(
+                    override suspend fun mutate(
                         scope: ReplicaScope,
-                        partition: String,
-                        expected: ReplicaCheckpoint?,
-                        snapshot: ReplicaSnapshot?,
+                        mutations: List<ReplicaMutation>,
                         wake: WorkWakeRequest?,
                     ): Boolean {
-                        assertEquals(2, assertNotNull(snapshot).documents.size)
+                        assertEquals(2, mutations.size)
+                        assertEquals(
+                            2,
+                            assertNotNull(
+                                    assertIs<ReplicaMutation.Replace>(mutations.first()).snapshot
+                                )
+                                .documents
+                                .size,
+                        )
                         assertEquals(
                             CollaborationSpaceRecoveryWake.WORK_KEY,
                             assertNotNull(wake).key,
                         )
-                        assertTrue(
-                            f.database.replicas.replace(scope, partition, expected, snapshot, wake)
-                        )
+                        assertTrue(f.database.replicas.mutate(scope, mutations, wake))
                         error("Simulated lost committed response")
                     }
                 }
-            assertIs<AppResult.Failed>(f.outbox(store).handoff(local, original, null))
+            assertIs<AppResult.Failed>(f.handoffSpaceComposer(local, original, null, store))
             assertEquals(AppResult.Success(original), f.outbox().get(local, original.id))
             assertEquals(
                 AppResult.Success(original.nextDraft),
@@ -132,7 +136,7 @@ abstract class CollaborationSpaceComposerStorageContract {
             )
             assertEquals(
                 AppResult.Success(CollaborationComposerHandoffResult.RETAINED),
-                f.outbox().handoff(local, original, null),
+                f.handoffSpaceComposer(local, original, null),
             )
             assertEquals(AppResult.Success(editing), f.drafts().get(local, f.conversation))
             assertEquals(wake.copy(pending = false), f.database.workWakes.get(wake.key))
@@ -150,7 +154,7 @@ abstract class CollaborationSpaceComposerStorageContract {
             repeat(32) {
                 assertNotNull(f.database.workWakes.request("occupied.$it", "generation", 32))
             }
-            assertIs<AppResult.Failed>(f.outbox().handoff(local, submission))
+            assertIs<AppResult.Failed>(f.handoffSpaceComposer(local, submission))
             assertEquals(
                 AppResult.Success(submission.original),
                 f.drafts().get(local, f.conversation),
@@ -165,14 +169,14 @@ abstract class CollaborationSpaceComposerStorageContract {
         val originals = (0 until 128).map { f.submission(it) }
         for (original in originals) assertEquals(
             AppResult.Success(CollaborationComposerHandoffResult.STORED),
-            f.outbox().handoff(local, original, null),
+            f.handoffSpaceComposer(local, original, null),
         )
         val next = f.submission(128)
         assertEquals(AppResult.Success(true), f.replaceSpaceDraft(local, null, next.original))
         val wake = f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY)
         assertEquals(
             AppResult.Success(CollaborationComposerHandoffResult.CAPACITY_EXCEEDED),
-            f.outbox().handoff(local, next),
+            f.handoffSpaceComposer(local, next),
         )
         assertEquals(
             AppResult.Success(next.original),
@@ -213,7 +217,7 @@ abstract class CollaborationSpaceComposerStorageContract {
         val original = f.submission()
         assertEquals(
             AppResult.Success(CollaborationComposerHandoffResult.STORED),
-            f.outbox().handoff(local, original, null),
+            f.handoffSpaceComposer(local, original, null),
         )
         val editing = original.nextDraft.copy(revision = historyId(1100), text = "New input")
         assertEquals(
@@ -245,14 +249,14 @@ abstract class CollaborationSpaceComposerStorageContract {
         val original = f.submission()
         assertEquals(
             AppResult.Success(CollaborationComposerHandoffResult.STORED),
-            f.outbox().handoff(local, original, null),
+            f.handoffSpaceComposer(local, original, null),
         )
         val key = f.keys.read()
         val before = f.raw(local)
         f.keys.write(null)
         assertIs<AppResult.Failed>(f.outbox().get(local, original.id))
         assertIs<AppResult.Failed>(
-            f.outbox().handoff(local.copy(spaceId = historyId(9500)), f.submission(1), null)
+            f.handoffSpaceComposer(local.copy(spaceId = historyId(9500)), f.submission(1), null)
         )
         assertNull(f.keys.read())
         assertEquals(before, f.raw(local))
@@ -270,9 +274,19 @@ abstract class CollaborationSpaceComposerStorageContract {
                 nextRevision = historyId(1201),
             )
         assertEquals(AppResult.Success(true), f.replaceSpaceDraft(local, null, first.original))
+        val firstProposal =
+            assertIs<AppResult.Success<CollaborationSpaceInboxPublication>>(
+                    f.prepareSpaceHandoff(local, first)
+                )
+                .value
+        val secondProposal =
+            assertIs<AppResult.Success<CollaborationSpaceInboxPublication>>(
+                    f.prepareSpaceHandoff(local, second)
+                )
+                .value
         val results = coroutineScope {
-            val one = async { f.outbox().handoff(local, first, first.original) }
-            val two = async { f.outbox().handoff(local, second, first.original) }
+            val one = async { f.outbox().handoff(local, first, first.original, firstProposal) }
+            val two = async { f.outbox().handoff(local, second, first.original, secondProposal) }
             listOf(one.await(), two.await())
         }
         assertEquals(
@@ -299,7 +313,7 @@ abstract class CollaborationSpaceComposerStorageContract {
         val original = f.submission()
         assertEquals(
             AppResult.Success(CollaborationComposerHandoffResult.STORED),
-            f.outbox().handoff(local, original, null),
+            f.handoffSpaceComposer(local, original, null),
         )
         val source = f.raw(local)
         val checkpoint = assertNotNull(source.checkpoint)
@@ -333,7 +347,7 @@ abstract class CollaborationSpaceComposerStorageContract {
         val local = f.space()
         val job = Job().also { it.cancel() }
         assertFailsWith<CancellationException> {
-            withContext(job) { f.outbox().handoff(local, f.submission(), null) }
+            withContext(job) { f.handoffSpaceComposer(local, f.submission(), null) }
         }
         assertEquals(AppResult.Success(null), f.drafts().get(local, f.conversation))
         assertNull(f.keys.read())
@@ -346,7 +360,7 @@ abstract class CollaborationSpaceComposerStorageContract {
         val original = f.submission()
         assertEquals(
             AppResult.Success(CollaborationComposerHandoffResult.STORED),
-            f.outbox().handoff(local, original, null),
+            f.handoffSpaceComposer(local, original, null),
         )
         val wake = f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY)
         val changed =
@@ -356,7 +370,7 @@ abstract class CollaborationSpaceComposerStorageContract {
             )
         assertEquals(
             AppResult.Success(CollaborationComposerHandoffResult.CHANGED),
-            f.outbox().handoff(local, changed, null),
+            f.handoffSpaceComposer(local, changed, null),
         )
         assertEquals(AppResult.Success(original), f.outbox().get(local, original.id))
         assertEquals(AppResult.Success(original.nextDraft), f.drafts().get(local, f.conversation))
@@ -368,7 +382,7 @@ abstract class CollaborationSpaceComposerStorageContract {
         val local = f.space()
         assertEquals(
             AppResult.Success(CollaborationComposerHandoffResult.STORED),
-            f.outbox().handoff(local, f.submission(), null),
+            f.handoffSpaceComposer(local, f.submission(), null),
         )
         val checkpoint = assertNotNull(f.raw(local).checkpoint)
         val mapped =
@@ -423,6 +437,62 @@ abstract class CollaborationSpaceComposerStorageContract {
                 draft,
             )
         return drafts().replace(access, expected, replacement, publication)
+    }
+
+    /** Existing source assertions now pass the required index proposal into the joint write. */
+    private suspend fun CollaborationHistoryFixture.handoffSpaceComposer(
+        local: CollaborationSpaceLocalAccess,
+        submission: CollaborationComposerSubmission,
+        expected: CollaborationDraft? = submission.original,
+        store: ReplicaStore = database.replicas,
+    ): AppResult<CollaborationComposerHandoffResult> {
+        val prepared = prepareSpaceHandoff(local, submission)
+        if (prepared is AppResult.Failed) return prepared
+        return outbox(store)
+            .handoff(local, submission, expected, (prepared as AppResult.Success).value)
+    }
+
+    private suspend fun CollaborationHistoryFixture.prepareSpaceHandoff(
+        local: CollaborationSpaceLocalAccess,
+        submission: CollaborationComposerSubmission,
+    ): AppResult<CollaborationSpaceInboxPublication> {
+        val index = EncryptedCollaborationSpaceInboxRepository(database.replicas, cipher, keys)
+        val read = index.conversation(local, submission.original.conversationId)
+        if (read is AppResult.Failed) return read
+        val current = (read as AppResult.Success).value
+        val anchors =
+            index.activities(
+                local,
+                submission.original.conversationId,
+                listOf(CollaborationSpaceInboxSource.GroupOriginal(submission.id)),
+            )
+        if (anchors is AppResult.Failed) return anchors
+        val prior = outbox().get(local, submission.id)
+        if (prior is AppResult.Failed) return prior
+        val retained = (prior as AppResult.Success).value != null
+        val editing = drafts().get(local, submission.original.conversationId)
+        if (editing is AppResult.Failed) return editing
+        val editor =
+            if (retained) assertNotNull((editing as AppResult.Success).value)
+            else submission.nextDraft
+        val canonical =
+            CollaborationSpaceConversationMetadata(
+                local.spaceId,
+                submission.original.conversationId,
+                local.accountId,
+                historyId(9003),
+                local.accountId,
+                Instant.fromEpochMilliseconds(current.entry?.createdAt ?: 0L),
+                0,
+            )
+        return collaborationSpaceInboxComposerPublication(
+            canonical,
+            current,
+            (anchors as AppResult.Success).value,
+            submission,
+            editor,
+            retained,
+        )
     }
 
     private fun CollaborationHistoryFixture.drafts() =

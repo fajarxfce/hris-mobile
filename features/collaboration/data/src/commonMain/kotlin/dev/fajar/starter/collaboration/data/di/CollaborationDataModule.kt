@@ -678,6 +678,8 @@ class CollaborationDataModule {
     @Factory
     fun submitSpaceComposer(
         outbox: CollaborationSpaceComposerOutboxRepository,
+        drafts: CollaborationSpaceDraftRepository,
+        inbox: CollaborationSpaceInboxRepository,
         messages: CollaborationSpaceMessageRepository,
         conversations: CollaborationSpaceConversationMetadataRepository,
         directory: CollaborationSpaceDirectoryRepository,
@@ -687,6 +689,8 @@ class CollaborationDataModule {
     ) =
         SubmitCollaborationSpaceComposer(
             outbox,
+            drafts,
+            inbox,
             messages,
             conversations,
             directory,

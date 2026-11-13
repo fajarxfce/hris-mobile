@@ -43,6 +43,7 @@ internal class SpaceComposerCompletionOutboxFixture(
                 access: CollaborationSpaceLocalAccess,
                 submission: CollaborationComposerSubmission,
                 expected: CollaborationDraft?,
+                inbox: CollaborationSpaceInboxPublication,
             ): AppResult<CollaborationComposerHandoffResult> =
                 error("Completion cannot change the editor")
 

@@ -10,13 +10,15 @@ interface CollaborationSpaceComposerOutboxRepository {
      * Atomically retain the original send and advance its exact editing slot. An exact replay
      * preserves any newer editor revision. The captured body may include unsaved edits; expected
      * identifies the stored slot being replaced, or its absence. At most 128 outstanding
-     * submissions per Group. A new handoff retains a fresh recovery wake in the same transaction;
-     * an exact replay never replaces that wake or a newer editing slot.
+     * submissions per Group. The source, editor, inbox components and new recovery wake share one
+     * transaction guarded by both source and index versions. A new handoff retains that wake; an
+     * exact replay never replaces that wake or a newer editing slot.
      */
     suspend fun handoff(
         access: CollaborationSpaceLocalAccess,
         submission: CollaborationComposerSubmission,
-        expected: CollaborationDraft? = submission.original,
+        expected: CollaborationDraft?,
+        inbox: CollaborationSpaceInboxPublication,
     ): AppResult<CollaborationComposerHandoffResult>
 
     suspend fun get(

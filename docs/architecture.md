@@ -1,5 +1,7 @@
 # Architecture
 
+[Atomic Group send publication](collaboration-space-inbox-composer-publication.md) retains original, editor, pending preview and wake under source/index versions.
+
 [Atomic Group draft publication](collaboration-space-inbox-draft-publication.md) commits editor and list preview together under source/index versions.
 
 [Persistent Group inbox activity](collaboration-space-inbox-index.md) stores globally ranked encrypted rows and independent draft/activity anchors for atomic source publication.

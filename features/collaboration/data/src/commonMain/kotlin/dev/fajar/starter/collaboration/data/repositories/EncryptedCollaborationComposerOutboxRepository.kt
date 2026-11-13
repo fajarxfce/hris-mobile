@@ -5,6 +5,7 @@ package dev.fajar.starter.collaboration.data.repositories
 import dev.fajar.starter.collaboration.data.drafts.*
 import dev.fajar.starter.collaboration.data.drafts.CollaborationComposerSubmissionCodec as SubmissionCodec
 import dev.fajar.starter.collaboration.data.history.*
+import dev.fajar.starter.collaboration.data.inbox.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.entities.CollaborationComposerHandoffResult as HandoffResult
 import dev.fajar.starter.collaboration.domain.policies.*
@@ -58,7 +59,120 @@ class EncryptedCollaborationComposerOutboxRepository(
         access: CollaborationSpaceLocalAccess,
         submission: CollaborationComposerSubmission,
         expected: CollaborationDraft?,
-    ) = handoff(CollaborationComposerCoordinates.Space(access), submission, expected)
+        inbox: CollaborationSpaceInboxPublication,
+    ): AppResult<HandoffResult> {
+        val proposal = inbox.copy(activities = inbox.activities.toList())
+        return measureAppResult(PerformanceOperation.CommandHandoff) {
+            withContext(Dispatchers.Default) {
+                safeStorageCall {
+                        require(validCollaborationComposerHandoff(submission, expected))
+                        require(validCollaborationSpaceInboxPublication(proposal))
+                        val conversation = submission.original.conversationId
+                        require(
+                            proposal.entry.conversationId == conversation && proposal.draft != null
+                        )
+                        require(
+                            proposal.activities.single().source ==
+                                CollaborationSpaceInboxSource.GroupOriginal(submission.id)
+                        )
+                        val coordinates = CollaborationComposerCoordinates.Space(access)
+                        val scope = coordinates.scope
+                        val partition = coordinates.partition
+                        val indexPartition = spaceInboxPartition(access)
+                        val captured =
+                            replicas.workingDocuments(
+                                scope,
+                                partition,
+                                listOf(conversation, submission.id),
+                            )
+                        val checkpoint = captured.checkpoint
+                        val index = replicas.checkpoint(scope, indexPartition)
+                        if (
+                            checkpoint?.published == false ||
+                                index?.published == false ||
+                                ((index == null) != (proposal.expected == null))
+                        )
+                            return@safeStorageCall HandoffResult.CHANGED
+                        keys.use(create = checkpoint == null) { key, indexKey ->
+                            val codec =
+                                CollaborationSpaceComposerHandoffCodec(
+                                    access,
+                                    cipher,
+                                    key,
+                                    indexKey,
+                                )
+                            val source =
+                                codec.source(captured, submission, expected, proposal)
+                                    ?: return@use HandoffResult.CHANGED
+                            val held =
+                                replicas.workingDocuments(
+                                    scope,
+                                    indexPartition,
+                                    codec.indexDocumentIds(submission, proposal),
+                                )
+                            if (held.checkpoint != index) return@use HandoffResult.CHANGED
+                            val projected =
+                                codec.index(held, submission, proposal, source.retained)
+                                    ?: return@use HandoffResult.CHANGED
+                            currentCoroutineContext().ensureActive()
+                            if (source.retained && projected.mutation == null) {
+                                return@use if (
+                                    replicas.checkpoint(scope, partition) == checkpoint &&
+                                        replicas.checkpoint(scope, indexPartition) == index
+                                )
+                                    HandoffResult.RETAINED
+                                else HandoffResult.CHANGED
+                            }
+                            if (!source.retained) {
+                                val pending =
+                                    replicas
+                                        .observeQueries(scope, partition, codec.outstandingQueries)
+                                        .first()
+                                if (pending.checkpoint != checkpoint)
+                                    return@use HandoffResult.CHANGED
+                                require(
+                                    pending.pages.size == 2 && pending.pages.all { it.size <= 129 }
+                                )
+                                if (pending.pages.sumOf { it.size } >= 128)
+                                    return@use HandoffResult.CAPACITY_EXCEEDED
+                            }
+                            publishGroupHandoff(
+                                access,
+                                source,
+                                projected,
+                                codec.mutations(source, projected, submission),
+                            )
+                        }
+                    }
+                    .stable()
+            }
+        }
+    }
+
+    /** One raw transaction and a finite readback; unchanged rejection keeps its failure. */
+    private suspend fun publishGroupHandoff(
+        access: CollaborationSpaceLocalAccess,
+        source: CollaborationSpaceComposerHandoffCodec.Source,
+        projected: CollaborationSpaceComposerHandoffCodec.Index,
+        mutations: List<ReplicaMutation>,
+    ): HandoffResult? {
+        val coordinates = CollaborationComposerCoordinates.Space(access)
+        val wake =
+            if (!source.retained)
+                WorkWakeRequest(
+                    CollaborationSpaceRecoveryWake.WORK_KEY,
+                    Uuid.random().toString(),
+                    SPACE_RECOVERY_WAKE_MAX_KEYS,
+                )
+            else null
+        val written = replicas.mutate(coordinates.scope, mutations, wake)
+        if (written) return if (!source.retained) HandoffResult.STORED else HandoffResult.RETAINED
+        val original = replicas.checkpoint(coordinates.scope, coordinates.partition)
+        val index = replicas.checkpoint(coordinates.scope, spaceInboxPartition(access))
+        return if (original != source.checkpoint || index != projected.checkpoint)
+            HandoffResult.CHANGED
+        else null
+    }
 
     override suspend fun get(access: CollaborationSpaceLocalAccess, id: String) =
         get(CollaborationComposerCoordinates.Space(access), id)

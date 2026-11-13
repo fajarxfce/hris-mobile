@@ -43,6 +43,13 @@ internal class SpaceComposerUseCaseFixture {
     var handoffFailureBeforeCommit: Failure? = null
     var forcedHandoff: CollaborationComposerHandoffResult? = null
     var inboxState = CollaborationSpaceInboxConversation(null, null, null, emptyList())
+    val inboxActivities =
+        linkedMapOf<CollaborationSpaceInboxSource, CollaborationSpaceInboxActivity>()
+    var activityReads = 0
+    var beforeActivityRead: suspend () -> Unit = {}
+    var activityFailure: Failure? = null
+    var forcedActivities: CollaborationSpaceInboxActivities? = null
+    var handoffAttempts = 0
     var inboxReads = 0
     var beforeInboxRead: suspend () -> Unit = {}
     var inboxFailure: Failure? = null
@@ -75,7 +82,25 @@ internal class SpaceComposerUseCaseFixture {
                 access: CollaborationSpaceLocalAccess,
                 conversationId: String,
                 sources: List<CollaborationSpaceInboxSource>,
-            ): AppResult<CollaborationSpaceInboxActivities> = error("No unrelated activity lookup")
+            ): AppResult<CollaborationSpaceInboxActivities> {
+                assertEquals(
+                    this@SpaceComposerUseCaseFixture.access.messageOwner(),
+                    access.messageOwner(),
+                )
+                assertEquals(original.conversationId, conversationId)
+                activityReads++
+                beforeActivityRead()
+                return activityFailure?.let { AppResult.Failed(it) }
+                    ?: AppResult.Success(
+                        forcedActivities
+                            ?: CollaborationSpaceInboxActivities(
+                                inboxState.version,
+                                (inboxActivities.values + inboxState.candidates)
+                                    .distinctBy { it.source }
+                                    .filter { it.source in sources },
+                            )
+                    )
+            }
 
             override suspend fun publish(
                 access: CollaborationSpaceLocalAccess,
@@ -157,7 +182,9 @@ internal class SpaceComposerUseCaseFixture {
                 access: CollaborationSpaceLocalAccess,
                 submission: CollaborationComposerSubmission,
                 expected: CollaborationDraft?,
+                inbox: CollaborationSpaceInboxPublication,
             ): AppResult<CollaborationComposerHandoffResult> {
+                handoffAttempts++
                 beforeHandoff()
                 handoffFailureBeforeCommit?.let {
                     return AppResult.Failed(it)
@@ -165,17 +192,48 @@ internal class SpaceComposerUseCaseFixture {
                 forcedHandoff?.let {
                     return AppResult.Success(it)
                 }
-                if (retained.containsKey(submission.id))
-                    return AppResult.Success(
-                        if (retained[submission.id] == submission)
-                            CollaborationComposerHandoffResult.RETAINED
-                        else CollaborationComposerHandoffResult.CHANGED
-                    )
-                if (editor != expected)
+                val previous = retained[submission.id]
+                if (
+                    (previous != null && previous != submission) ||
+                        (previous == null && editor != expected) ||
+                        inbox.expected != inboxState.version
+                )
                     return AppResult.Success(CollaborationComposerHandoffResult.CHANGED)
-                editor = submission.nextDraft
+                assertEquals(
+                    if (previous == null) submission.nextDraft else editor,
+                    inbox.draft?.value,
+                )
+                assertEquals(
+                    CollaborationSpaceInboxSource.GroupOriginal(submission.id),
+                    inbox.activities.single().source,
+                )
+                inboxState.candidates.forEach {
+                    if (it.source !in inboxActivities) inboxActivities[it.source] = it
+                }
+                inbox.activities.forEach { inboxActivities[it.source] = it }
+                val candidates =
+                    inboxActivities.values
+                        .filter { it.preview != null }
+                        .sortedWith { one, two ->
+                            dev.fajar.starter.collaboration.domain.policies
+                                .compareCollaborationSpaceInboxPositions(two.position, one.position)
+                        }
+                        .take(3)
+                inboxState =
+                    CollaborationSpaceInboxConversation(
+                        CollaborationSpaceInboxVersion(
+                            inboxState.version?.generation
+                                ?: "d3000000-0000-4000-8000-000000000001",
+                            (inboxState.version?.revision ?: -1) + 1,
+                            inbox.lastOrdinal,
+                        ),
+                        inbox.entry,
+                        inbox.draft,
+                        candidates,
+                    )
+                editor = inbox.draft?.value
                 retained[submission.id] = submission
-                handoffs += submission
+                if (previous == null) handoffs += submission
                 afterHandoff()
                 return handoffFailure?.let { AppResult.Failed(it) }
                     ?: AppResult.Success(CollaborationComposerHandoffResult.STORED)
@@ -215,6 +273,8 @@ internal class SpaceComposerUseCaseFixture {
     fun submit() =
         SubmitCollaborationSpaceComposer(
             outbox,
+            drafts,
+            inbox,
             base.messages,
             base.metadata,
             base.base.directory,

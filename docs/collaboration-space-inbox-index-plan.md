@@ -120,3 +120,9 @@ must remain exact. Actual21 Apple methods follow in the next native control.
 Group editor and index publication is locally accepted: 22 shared methods, 15,689 full
 executions. Composer handoff and command/history progress with bounded repair remain
 before product activation. The source draft scripts are historical and must not be rerun.
+
+## Composer producer accepted
+
+Original send, editor successor, pending preview and recovery wake now publish atomically.
+The 24 shared methods pass locally; full15737. Exact command/history progress, retained repair
+references and admitted list/graph activation remain. Applied preparation scripts are historical.

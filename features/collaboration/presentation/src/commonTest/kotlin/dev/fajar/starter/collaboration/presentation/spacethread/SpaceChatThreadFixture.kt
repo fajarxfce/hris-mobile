@@ -109,6 +109,8 @@ internal class SpaceChatThreadFixture {
                 expectedRevision: String?,
             ): AppResult<Boolean> = error("No admission mutation")
         }
+    val inboxActivities =
+        linkedMapOf<CollaborationSpaceInboxSource, CollaborationSpaceInboxActivity>()
     var inboxState = CollaborationSpaceInboxConversation(null, null, null, emptyList())
     val inbox =
         object : CollaborationSpaceInboxRepository {
@@ -132,7 +134,18 @@ internal class SpaceChatThreadFixture {
                 access: CollaborationSpaceLocalAccess,
                 conversationId: String,
                 sources: List<CollaborationSpaceInboxSource>,
-            ): AppResult<CollaborationSpaceInboxActivities> = error("No activity acquisition")
+            ): AppResult<CollaborationSpaceInboxActivities> {
+                assertEquals(this@SpaceChatThreadFixture.access, access)
+                assertEquals(this@SpaceChatThreadFixture.conversationId, conversationId)
+                return AppResult.Success(
+                    CollaborationSpaceInboxActivities(
+                        inboxState.version,
+                        (inboxActivities.values + inboxState.candidates)
+                            .distinctBy { it.source }
+                            .filter { it.source in sources },
+                    )
+                )
+            }
 
             override suspend fun publish(
                 access: CollaborationSpaceLocalAccess,
@@ -218,20 +231,54 @@ internal class SpaceChatThreadFixture {
                 access: CollaborationSpaceLocalAccess,
                 submission: CollaborationComposerSubmission,
                 expected: CollaborationDraft?,
+                inbox: CollaborationSpaceInboxPublication,
             ): AppResult<CollaborationComposerHandoffResult> {
                 assertEquals(this@SpaceChatThreadFixture.access, access)
                 beforeHandoff()
-                entries.value
-                    .firstOrNull { it.submission.id == submission.id }
-                    ?.let {
-                        assertEquals(it.submission, submission)
-                        return AppResult.Success(CollaborationComposerHandoffResult.RETAINED)
-                    }
-                if (draft.value != expected)
+                val previous =
+                    entries.value.firstOrNull { it.submission.id == submission.id }?.submission
+                if (
+                    (previous != null && previous != submission) ||
+                        (previous == null && draft.value != expected) ||
+                        inbox.expected != inboxState.version
+                )
                     return AppResult.Success(CollaborationComposerHandoffResult.CHANGED)
-                handoffs += submission
-                entries.value += CollaborationComposerOutboxEntry(submission, false)
-                draft.value = submission.nextDraft
+                assertEquals(
+                    if (previous == null) submission.nextDraft else draft.value,
+                    inbox.draft?.value,
+                )
+                assertEquals(
+                    CollaborationSpaceInboxSource.GroupOriginal(submission.id),
+                    inbox.activities.single().source,
+                )
+                inboxState.candidates.forEach {
+                    if (it.source !in inboxActivities) inboxActivities[it.source] = it
+                }
+                inbox.activities.forEach { inboxActivities[it.source] = it }
+                val candidates =
+                    inboxActivities.values
+                        .filter { it.preview != null }
+                        .sortedWith { one, two ->
+                            dev.fajar.starter.collaboration.domain.policies
+                                .compareCollaborationSpaceInboxPositions(two.position, one.position)
+                        }
+                        .take(3)
+                inboxState =
+                    CollaborationSpaceInboxConversation(
+                        CollaborationSpaceInboxVersion(
+                            inboxState.version?.generation ?: chatId(808),
+                            (inboxState.version?.revision ?: -1) + 1,
+                            inbox.lastOrdinal,
+                        ),
+                        inbox.entry,
+                        inbox.draft,
+                        candidates,
+                    )
+                if (previous == null) {
+                    handoffs += submission
+                    entries.value += CollaborationComposerOutboxEntry(submission, false)
+                    draft.value = submission.nextDraft
+                }
                 afterHandoff()
                 return AppResult.Success(CollaborationComposerHandoffResult.STORED)
             }
@@ -301,6 +348,8 @@ internal class SpaceChatThreadFixture {
             ),
             SubmitCollaborationSpaceComposer(
                 outbox,
+                drafts,
+                inbox,
                 content.commands,
                 content.metadata,
                 directory,
