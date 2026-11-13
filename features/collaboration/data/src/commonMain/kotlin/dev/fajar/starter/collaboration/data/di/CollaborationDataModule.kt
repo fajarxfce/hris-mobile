@@ -641,6 +641,15 @@ class CollaborationDataModule {
     ) = QueueCollaborationSpaceText(messages, conversations, directory, sessions, server, schedules)
 
     @Factory
+    fun observeSpaceComposer(
+        drafts: CollaborationSpaceDraftRepository,
+        outbox: CollaborationSpaceComposerOutboxRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ObserveCollaborationSpaceComposer(drafts, outbox, directory, sessions, server)
+
+    @Factory
     fun editSpaceDraft(
         drafts: CollaborationSpaceDraftRepository,
         conversations: CollaborationSpaceConversationMetadataRepository,

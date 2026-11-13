@@ -1,0 +1,87 @@
+{
+  "startedAt": "2026-11-13T02:03:33.001521+00:00",
+  "elapsedSeconds": 842.686,
+  "sourceFiles": 5210,
+  "freshCounts": {
+    "tests": 13012,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 153411460,
+    "sha256": "0e042bc2bdc7bee4b3276633a86f911e87764c01d678787432f235c2e460369d"
+  },
+  "fullyAccepted": true,
+  "validatedTests": 15050,
+  "newCases": 36,
+  "freshTests": 13012,
+  "reusedUnaffectedTests": 2038,
+  "priorCaseIdsPreserved": true,
+  "excludedHistoricalReports": 111,
+  "excludedHistoricalCases": 657,
+  "sourceManifestSha256": "589fec1490d68c1105ef4ca074a1f8c9d1ef21765970939d6c8de0a211b34a51",
+  "reportManifestSha256": "6ed8b499cdf8c3537b1137391d0fb769ab5fc76cbf167834913234c7d3605580",
+  "nativeClaim": "Local composer read workflow only; no SDK or worker orchestration change. The 18 new shared Apple methods require actual hosted execution. No Group UI, native latency or live deployment claim.",
+  "date": "2026-11-13",
+  "focused": {
+    "accepted": true,
+    "tests": 20,
+    "elapsedSeconds": 312.112,
+    "sourceFiles": 5210,
+    "sourceManifestSha256": "589fec1490d68c1105ef4ca074a1f8c9d1ef21765970939d6c8de0a211b34a51",
+    "resultSha256": "2838967b3493c596887bc1f943fbdeb102de7c96bc1cffa85eda4087f092b9cb",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "ObserveCollaborationSpaceComposerTest": 10,
+      "SpaceComposerObservationLifetimeTest": 8
+    },
+    "priorCaseIdsRetained": true
+  },
+  "sourcePaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceComposerSnapshot.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceComposer.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveCollaborationSpaceComposerTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceComposerObservationFixture.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceComposerObservationLifetimeTest.kt"
+  ],
+  "newSharedAppleMethods": 18,
+  "appleExecutionsLocally": 0,
+  "newNativeExecution": false,
+  "phoneInstalled": false,
+  "liveGroupDeployed": false,
+  "failedCandidate": {
+    "path": "failed-test-type-inference-1",
+    "focusedSession": "61969 REAPED",
+    "elapsedSeconds": 124.531,
+    "testsExecuted": 0,
+    "reason": "Two expected Success lists required explicit AppResult element types; assertions and application code unchanged."
+  },
+  "exactNewMethods": {
+    "ObserveCollaborationSpaceComposerTest": [
+      "expiredCredentialsAndNoSelectedCompanyKeepExactOwnedDraftAndSubmission",
+      "knownAbsenceKeepsAnEmptyDraftAndOutboxAsLocalFacts",
+      "heldOriginalsRemainVisibleAndOtherConversationsAreFiltered",
+      "malformedDraftCannotClaimAnotherConversationOrRevision",
+      "malformedOtherConversationAndDuplicateOriginalsCannotHideBehindFiltering",
+      "invalidRouteAndOwnerDoNotOpenLocalContentReaders",
+      "eachReadFailurePublishesBeforeTheOtherReadHasAnInitialResult",
+      "successWaitsForActualEditorAndOutboxWithoutFabricatingAbsence",
+      "equalLocalResultsAndTokenRotationDoNotRestartReadersOrRepublish",
+      "capturedEntriesAreDetachedBeforeSuspendedAdmission"
+    ],
+    "SpaceComposerObservationLifetimeTest": [
+      "accountSessionAudienceReplacementAndLogoutCancelBothOldContentReaders",
+      "denialCancelsPendingReadersAndFailedCleanupDoesNotReopenBeforeAdmittedObservation",
+      "invalidAdmissionOrFailedSessionNeverOpensDraftOrOutbox",
+      "accountReplacementDuringANonCancellableAdmissionReadCannotPublishCapturedContent",
+      "cancellationJoinsBothPendingReadersWithoutChangingOriginals",
+      "twoCollectorsOfTheSameFlowOwnIndependentDenialLatches",
+      "aSlowConsumerCannotReceiveQueuedOldContentAfterOwnerOrAdmissionReplacement",
+      "aFinishedFailedReaderNeedsAnExplicitNewSubscriptionToReadAgain"
+    ]
+  }
+}

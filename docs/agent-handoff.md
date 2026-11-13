@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 02:07 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 02:18 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -234,19 +234,31 @@ Dispatch4979 and identification19966 REAPED. No duplicate dispatch. The44 new sh
 methods still require the current Apple result. Preserve the unexecuted hosted preparation
 syntax candidate; it caused no source change or CI dispatch.
 
-IN PROGRESS: Mobile.work/space-composer-observation-2026-11-13, seven application paths.
-The independent local editor/outbox read is applied. Format2/98933 REAPED37.817s;
-focused2/37553 REAPED PASS20/312.112s and strict audit accepted. Source5210/
-589fec1490d68c1105ef4ca074a1f8c9d1ef21765970939d6c8de0a211b34a51.
-Full1/8599 is ACTIVE, expecting15,050 =15,014 retained +36 new JVM/browser cases.
-Keep application sources frozen until reaped/audited.18 new shared Apple methods are
-compiled locally, not executed. Preserve failed-test-type-inference-1: focused1/61969
-failed before any test at124.531s; two new expected lists needed explicit AppResult types.
-No production or assertion semantics changed for that correction.
+ACCEPTED: Mobile.work/space-composer-observation-2026-11-13, seven application paths.
+Independent local editor/outbox observation does not gate message history. Per-collector admission,
+current account checks, cancellation joins, coherent initial values and equal-value suppression
+remain read-only. The bounded whole outbox is detached/validated before room filtering.
 
-NEXT: apply the typed Group composer caller and canonical thread/list UI after full
-acceptance and push. Reuse the route-owned serial write actor with explicit Company
-and Group owners; never fabricate Company access. Measure first-frame/transition/IME behavior.
+Format2/98933 REAPED37.817s; focused2/37553 REAPED PASS20/312.112s;
+full1/8599 REAPED PASS842.686s. Both strict audits and record-acceptance.py pass.
+Full15,050 = 13012 fresh +2038 exact unchanged, all15,014 prior IDs retained
+with36 new JVM/browser executions. Source5210/589fec1490d68c1105ef4ca074a1f8c9d1ef21765970939d6c8de0a211b34a51;
+report6ed8b499cdf8c3537b1137391d0fb769ab5fc76cbf167834913234c7d3605580; immutable full-1/accepted-proof.apk153411460B/0e042bc2bdc7bee4b3276633a86f911e87764c01d678787432f235c2e460369d.
+18 new shared Apple methods require hosted execution; Linux0. No new native/phone/live Group/UI
+claim. Preserve failed-test-type-inference-1, focused1/61969,0 cases/124.531s; expected-list generic
+annotations corrected without production/assertion changes. Commit and push before new application.
+
+NEXT: Mobile.work/space-thread-presentation-2026-11-13 has11 UNAPPLIED drafts: typed Company/
+Group composer actor, Group thread ViewModel/state/events, DI and14 new common tests. These
+are not compiled or accepted. Review found a missing consumer prerequisite: active command
+inventory alone can miss a command already retired into terminal evidence. Add a bounded,
+Group-admitted per-original progress observer using the existing SpaceMessageRepository.observeRecord
+(active OR authenticated terminal lookup), then wire it to retained original UI snapshots.
+Do not infer completion from outbox absence or merge equal IDs across Company/Space namespaces.
+Do not apply the current ViewModel draft as finished: its provisional entries are not yet retired
+from exact visible progress, and cold outbox-to-command continuity still needs integration/tests.
+Reuse the route-owned serial actor; no fake Company access. Continue to real Group route/list UI
+and measured first-frame/transition/IME behavior after these checks; no checkpoint is task completion.
 One local compiler OR emulator. Follow the existing phone release handoff for install-only
 delivery, always with an announcement and explicit serial; never drive the user's phone UI.
 All54 acceptance groups remain OPEN; continue beyond this checkpoint.

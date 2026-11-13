@@ -1,5 +1,7 @@
 # Architecture
 
+[Organization composer observation](collaboration-space-composer-observation.md) keeps local editing independent from message history under current Group/account ownership.
+
 [Organization composer recovery](collaboration-space-composer-recovery.md) separates bounded local materialization from independently admitted native delivery and preserves pending work when keys are absent.
 
 [Organization composer actions](collaboration-space-composer-actions.md) coordinate current local admission and exact immutable editing/submission without a selected HR company or native runtime.

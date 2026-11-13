@@ -2,8 +2,7 @@
 
 Status: integration planning, 13 November 2026. Canonical unresolved/bound thread,
 indexed contacts and coherent local participants are accepted, followed by immutable
-submission and encrypted Group editor/outbox actions. Bounded recovery is undergoing
-final full/native validation. Group route/list UI activation and measured rendering
+submission and encrypted Group editor/outbox actions. Bounded recovery and independent local editor/outbox observation are accepted. Group route/list UI activation and measured rendering
 remain pending; no additional PRD acceptance group is closed by these prerequisites.
 
 ## Product interaction
@@ -67,13 +66,12 @@ must not initiate data acquisition.
 QueueCollaborationSpaceText now accepts the caller's complete immutable intent. Group
 editing/submission actions and typed encrypted storage preserve the original ID, text,
 quote and captured timestamp across interrupted writes and renewed login. Bounded
-recovery separates retained submissions from pending native messages and is undergoing
-final validation; unavailable keys keep the wake with scheduler backoff.
+recovery separates retained submissions from pending native messages; unavailable keys keep the wake with scheduler backoff.
 
 The next read boundary observes the Group editor and retained outbox under local
 account/Group admission, independently of history so editing I/O does not gate message
-rendering. Its seven source drafts and 18 read/lifetime tests remain unapplied until
-recovery passes. Known read failures publish without waiting for an unrelated source;
+rendering. Its seven source paths and18 read/lifetime methods are accepted locally;
+18 actual hosted Apple executions remain required. Known read failures publish without waiting for an unrelated source;
 first success includes actual editor/outbox results. Held originals remain explicit.
 
 A concrete Group route owns a typed Group ViewModel and the existing serial composer
@@ -107,3 +105,15 @@ first success. Observed absence and failed metadata remain explicit; no provisio
 identity is fabricated. This preserves coherent initial publication. Bounded route warming
 and cold/warm first-frame measurements are still required before claiming immediate room
 rendering. See [participant evidence](collaboration-space-thread-participants.md).
+
+## Per-message progress before activating Group presentation
+
+The first typed Group ViewModel/actor draft exposed another continuity requirement:
+active command inventory can skip a command that reaches terminal storage before its next
+UI emission. The existing Group repository already offers an authenticated active-or-terminal
+`observeRecord` lookup. Add a bounded admitted observer for exact caller-retained original
+submissions, independent of editor/history reads, and validate the whole immutable intent.
+Outbox absence alone must preserve the original. Keep namespace in all identities; matching
+an arbitrary history UUID cannot establish Company-versus-Group ownership. The current11
+presentation drafts and14 new common methods remain uncompiled and need this integration
+before acceptance. This reuses the established Company approach with actual Group ownership.
