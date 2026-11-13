@@ -1,5 +1,7 @@
 # Architecture
 
+[Owned local catalog admission](collaboration-space-catalog-admission.md) keeps finite reads and version observation independent from credentials age while enforcing account/Group denial.
+
 [Local Group conversation catalog](collaboration-space-conversation-catalog.md) enumerates authenticated canonical pairs for a separate persistent activity index.
 
 [Group navigation ownership](collaboration-space-thread-navigation.md) retains bounded local rooms under explicit account/Group lifetime and retires obsolete page effects.

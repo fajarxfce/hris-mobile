@@ -1712,6 +1712,22 @@ class CollaborationDataModule {
         server: IdentityServer,
     ) = ObserveCollaborationSpaceDirectory(directory, sessions, server)
 
+    @Factory
+    fun readSpaceConversationCatalog(
+        catalog: CollaborationSpaceConversationCatalogRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpaceConversationCatalog(catalog, directory, sessions, server)
+
+    @Factory
+    fun observeSpaceConversationCatalog(
+        catalog: CollaborationSpaceConversationCatalogRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ObserveCollaborationSpaceConversationCatalog(catalog, directory, sessions, server)
+
     @Single
     fun refreshSpaceDirectory(
         directory: CollaborationSpaceDirectoryRepository,

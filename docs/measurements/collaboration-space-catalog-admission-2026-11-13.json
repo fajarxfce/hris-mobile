@@ -1,0 +1,91 @@
+{
+  "startedAt": "2026-11-13T06:15:25.545197+00:00",
+  "elapsedSeconds": 880.616,
+  "sourceFiles": 5263,
+  "freshCounts": {
+    "tests": 13537,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 153543901,
+    "sha256": "ab7283d1b5f0923a4ae5006810f0b6d9d0a024523b6ee3557a958fb22f98bf28"
+  },
+  "fullyAccepted": true,
+  "validatedTests": 15575,
+  "newCases": 34,
+  "freshTests": 13537,
+  "reusedUnaffectedTests": 2038,
+  "priorCaseIdsPreserved": true,
+  "excludedHistoricalReports": 109,
+  "excludedHistoricalCases": 642,
+  "sourceManifestSha256": "440dd76d6df79f42f87bc038dd0c8b8e403530201203519e09ec2290173b84a8",
+  "reportManifestSha256": "4d470c81dc9d0205e6b6881e1a6fab29d4cf337d6810a8af3f84b05a10865600",
+  "nativeClaim": "Owned local catalog admission and metadata observation; 17 new domain methods require actual Apple execution. No activity projection, API acquisition, native runtime or product rollout.",
+  "date": "2026-11-13",
+  "focused": {
+    "accepted": true,
+    "tests": 45,
+    "elapsedSeconds": 349.623,
+    "sourceFiles": 5263,
+    "sourceManifestSha256": "440dd76d6df79f42f87bc038dd0c8b8e403530201203519e09ec2290173b84a8",
+    "resultSha256": "43ac2c9cd1cf379d81c4f49846174b27566a952ef697a766ccbe8608a8e37e6d",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceConversationMetadataStorageTest": 14,
+      "CollaborationSpaceConversationCatalogStorageTest": 12,
+      "ObserveSpaceConversationCatalogTest": 8,
+      "ReadSpaceConversationCatalogTest": 9
+    },
+    "priorCaseIdsRetained": true
+  },
+  "sourcePaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceConversationCatalogPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceConversationCatalog.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceConversationCatalog.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceConversationCatalogTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadSpaceConversationCatalogTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceCatalogUseCaseFixture.kt"
+  ],
+  "newDomainMethods": 17,
+  "actualNewAppleTests": 0,
+  "productGraphActivated": false,
+  "activityIndexImplemented": false,
+  "nativeRuntimeChanged": false,
+  "failedCandidates": [
+    {
+      "directory": "failed-test-type-inference-1",
+      "run": "focused-1",
+      "session": "75064 REAPED",
+      "sourceManifestSha256": "1a48fa4455a50b2e0f2cd807bd552d6b204eee2a5f1be103ca146eaf02a23f37",
+      "reason": "Five collection assertions require explicit common element types; compilation stopped before tests. Preserve expected values and all 17 method identities."
+    }
+  ],
+  "methods": {
+    "ReadSpaceConversationCatalogTest": [
+      "ownedCatalogIgnoresCredentialAgeAndSelectedCompanyWithoutAcquisition",
+      "confirmedDenialAndMalformedRequestsNeverReadTheCatalog",
+      "accountSessionAndAudienceReplacementAtReadReturnDiscardCapturedData",
+      "denialReceivedDuringReadWinsOverSuccessfulOrFailedCatalogResults",
+      "malformedOwnershipInventoryAndCursorResponsesCannotBePublished",
+      "emptyContinuationsAndGenerationRestartRemainExplicitWithoutLooping",
+      "publishedItemsDoNotAliasAMutableRepositoryList",
+      "cancellationDoesNotBecomeAbsenceOrRetryTheInventory",
+      "identityReplacementWhileAdmissionIsSuspendedStopsBeforeInventory"
+    ],
+    "ObserveSpaceConversationCatalogTest": [
+      "knownFinalDenialPublishesWithoutWaitingForAnotherSessionRead",
+      "offlineVersionAndTokenRotationKeepOneLocalSubscriptionWithoutScanning",
+      "replacingAccountSessionOrAudienceRetiresTheOwnedVersionReader",
+      "denialSurvivesFailedAdmissionAndOnlyAnAdmittedGateReopensVersions",
+      "aSlowConsumerCannotReceiveQueuedVersionsAfterRevocation",
+      "denialJoinsPendingVersionWorkWithoutStartingAReplacementRead",
+      "malformedVersionAndCompletedFailureDoNotBecomeEmptyOrAutomaticRetries",
+      "invalidOwnerAndMalformedAdmissionCannotOpenMetadataObservation"
+    ]
+  }
+}
