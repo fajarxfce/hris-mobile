@@ -9,6 +9,7 @@ import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.fixtures.RecoveryWorkerFixture
+import dev.fajar.starter.fixtures.SpaceComposerCompletionOutboxFixture
 import dev.fajar.starter.fixtures.SpaceRecoveryLocalStorageFixture
 import dev.fajar.starter.sync.domain.*
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
@@ -426,10 +427,244 @@ class CollaborationSpaceRecoveryWorkerTest {
         assertNull(f.wake)
     }
 
+    @Test
+    fun localComposerPassPrecedesNativeDeviceAdoptionAndSync() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.beforeComposer = { assertEquals(0, f.deviceReads + f.adoptions + f.syncs) }
+        f.beforeDevice = { assertEquals(1, f.composerPasses) }
+        f.beforeAdopt = { assertEquals(1, f.composerPasses) }
+        assertEquals(SyncResult.Complete, f.worker())
+        assertEquals(1, f.composerPasses)
+        assertEquals(1, f.deviceReads)
+    }
+
+    @Test
+    fun missingPublishedNativeParentDoesNotPreventTheLocalComposerPass() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.base.states.value = dev.fajar.starter.app.bootstrap.ApplicationCollaborationState.Pending
+        assertIs<SyncResult.Retry>(f.worker())
+        assertEquals(1, f.composerPasses)
+        assertEquals(0, f.deviceReads + f.adoptions + f.syncs)
+        assertNotNull(f.wake)
+    }
+
+    @Test
+    fun localComposerDenialStopsNativeWorkWithoutDiscardingTheWake() = runTest {
+        for (kind in
+            listOf(
+                FailureKind.Unauthorized,
+                FailureKind.AccessDenied,
+                FailureKind.Validation,
+                FailureKind.Conflict,
+            )) {
+            val f = Fixture(testScheduler, count = 0)
+            val old = f.wake
+            val failure = Failure(kind, "Local admission failed")
+            f.composerResult = AppResult.Failed(failure)
+            assertEquals(SyncResult.Blocked(failure), f.worker())
+            assertEquals(1, f.composerPasses)
+            assertEquals(0, f.deviceReads + f.adoptions + f.syncs)
+            assertEquals(old, f.wake)
+            assertTrue(f.scheduled.isEmpty())
+        }
+    }
+
+    @Test
+    fun composerQueueCapacityFailureStillDrainsExistingMessagesBeforeBackingOff() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.enablePendingDelivery()
+        val queued = f.pending(0)
+        val original =
+            CollaborationComposerSubmission(
+                CollaborationDraft(id(201), id(202), "Retained original", f.base.clock.now()),
+                id(203),
+                f.base.clock.now(),
+            )
+        f.composers.submissions[original.id] = original
+        val failure =
+            Failure(
+                FailureKind.Storage,
+                "Command capacity reached",
+                code = "client.command_queue_full",
+            )
+        f.composerResult = AppResult.Failed(failure)
+        val wake = f.wake
+        assertEquals(SyncResult.Retry(failure), f.worker())
+        assertEquals(listOf(queued.intent.conversationId), f.delivered)
+        val sent = f.local.records.getValue(queued.intent.id)
+        assertEquals(queued.intent, sent.intent)
+        assertIs<CollaborationMessageState.Sent>(sent.state)
+        assertEquals(original, f.composers.submissions[original.id])
+        assertEquals(wake, f.wake)
+        assertEquals(0, f.acknowledgments)
+        assertTrue(f.scheduled.isEmpty())
+        f.composers.submissions.clear()
+        f.composerResult = AppResult.Success(CollaborationSpaceComposerRecovery(false, false))
+        assertEquals(SyncResult.Complete, f.worker())
+        assertNull(f.wake)
+        assertEquals(listOf(queued.intent.conversationId), f.delivered)
+    }
+
+    @Test
+    fun failedComposerPassUsesBackoffWhenTheNativeSweepYields() = runTest {
+        val f = Fixture(testScheduler, count = 8)
+        val failure = Failure(FailureKind.Timeout, "Local pass timed out")
+        f.composerResult = AppResult.Failed(failure)
+        val wake = f.wake
+        assertEquals(SyncResult.Retry(failure), f.worker())
+        assertTrue(f.delivered.isNotEmpty())
+        assertEquals(wake, f.wake)
+        assertEquals(0, f.acknowledgments)
+        assertTrue(f.scheduled.isEmpty())
+    }
+
+    @Test
+    fun authoritativeEmptyCompletionCanDischargeARecoveredLocalFailure() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.composerResult = AppResult.Failed(Failure(FailureKind.Storage, "Lost local response"))
+        assertEquals(SyncResult.Complete, f.worker())
+        assertEquals(1, f.deviceReads)
+        assertEquals(1, f.acknowledgments)
+        assertNull(f.wake)
+        assertTrue(f.scheduled.isEmpty())
+    }
+
+    @Test
+    fun missingNativeOriginalRetainsFailedLocalWorkWithoutImmediateRescheduling() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        val failure = Failure(FailureKind.Storage, "Local publication failed")
+        f.composerResult = AppResult.Failed(failure)
+        f.original = null
+        val wake = f.wake
+        assertEquals(SyncResult.Retry(failure), f.worker())
+        assertEquals(1, f.deviceReads)
+        assertEquals(wake, f.wake)
+        assertEquals(0, f.acknowledgments + f.adoptions + f.syncs)
+        assertTrue(f.scheduled.isEmpty())
+    }
+
+    @Test
+    fun cancellationDuringLocalMaterializationReleasesTheProcessorBeforeNativeWork() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        val entered = CompletableDeferred<Unit>()
+        f.beforeComposer = {
+            entered.complete(Unit)
+            awaitCancellation()
+        }
+        val work = async { f.worker() }
+        entered.await()
+        work.cancelAndJoin()
+        assertTrue(work.isCancelled)
+        assertEquals(0, f.deviceReads + f.adoptions + f.syncs)
+        assertNotNull(f.wake)
+        f.beforeComposer = {}
+        assertEquals(SyncResult.Complete, f.worker())
+        assertEquals(2, f.composerPasses)
+    }
+
+    @Test
+    fun pendingComposerKeepsTheWakeUntilALaterBoundedPassDrainsIt() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        val original =
+            CollaborationComposerSubmission(
+                CollaborationDraft(id(201), id(202), "Pending original", f.base.clock.now()),
+                id(203),
+                f.base.clock.now(),
+            )
+        f.composers.submissions[original.id] = original
+        f.composerResult = AppResult.Success(CollaborationSpaceComposerRecovery(true, false))
+        assertEquals(SyncResult.Complete, f.worker())
+        assertNotNull(f.wake)
+        assertEquals(0, f.acknowledgments)
+        assertEquals(original, f.composers.submissions[original.id])
+        assertEquals(listOf(CollaborationSpaceRecoveryWake.WORK_KEY), f.scheduled)
+        f.composers.submissions.clear()
+        f.composerResult = AppResult.Success(CollaborationSpaceComposerRecovery(false, false))
+        assertEquals(SyncResult.Complete, f.worker())
+        assertNull(f.wake)
+        assertEquals(1, f.acknowledgments)
+    }
+
+    @Test
+    fun missingNativeOriginalCannotAcknowledgePendingLocalComposerWork() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        val old = f.wake
+        f.original = null
+        f.composerResult = AppResult.Success(CollaborationSpaceComposerRecovery(true, false))
+        assertIs<SyncResult.Retry>(f.worker())
+        assertEquals(old, f.wake)
+        assertEquals(0, f.acknowledgments + f.adoptions + f.syncs)
+        assertTrue(f.scheduled.isEmpty())
+    }
+
+    @Test
+    fun missingNativeOriginalKeepsMaterializedMessagesPendingWithoutImmediateSelfWake() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        val queued = f.pending(0)
+        f.original = null
+        f.composerResult = AppResult.Success(CollaborationSpaceComposerRecovery(false, true))
+        val wake = f.wake
+        assertIs<SyncResult.Retry>(f.worker())
+        assertEquals(wake, f.wake)
+        assertEquals(queued, f.local.records[queued.intent.id])
+        assertEquals(0, f.acknowledgments + f.adoptions + f.syncs)
+        assertTrue(f.scheduled.isEmpty() && f.delivered.isEmpty())
+    }
+
+    @Test
+    fun aConcurrentHandoffCannotBeAcknowledgedByAnEarlierLocalPassWithoutANativeDevice() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.original = null
+        val newer = CollaborationSpaceRecoveryWake(id(900))
+        val original =
+            CollaborationComposerSubmission(
+                CollaborationDraft(id(201), id(202), "Concurrent handoff", f.base.clock.now()),
+                id(203),
+                f.base.clock.now(),
+            )
+        f.beforeComposer = {
+            f.composers.submissions[original.id] = original
+            f.wake = newer
+        }
+        assertEquals(SyncResult.Complete, f.worker())
+        assertEquals(newer, f.wake)
+        assertEquals(original, f.composers.submissions[original.id])
+        assertEquals(0, f.acknowledgments)
+        assertEquals(listOf(CollaborationSpaceRecoveryWake.WORK_KEY), f.scheduled)
+    }
+
+    @Test
+    fun workAppearingAfterAnAbsentWakeSnapshotRemainsPendingWithoutASelfWake() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.wake = null
+        val newer = CollaborationSpaceRecoveryWake(id(900))
+        val original =
+            CollaborationComposerSubmission(
+                CollaborationDraft(id(201), id(202), "Concurrent handoff", f.base.clock.now()),
+                id(203),
+                f.base.clock.now(),
+            )
+        f.beforeComposer = {
+            f.composers.submissions[original.id] = original
+            f.wake = newer
+        }
+        f.composerResult = AppResult.Success(CollaborationSpaceComposerRecovery(true, false))
+        assertIs<SyncResult.Retry>(f.worker())
+        assertEquals(newer, f.wake)
+        assertEquals(original, f.composers.submissions[original.id])
+        assertEquals(0, f.acknowledgments + f.deviceReads + f.adoptions + f.syncs)
+        assertTrue(f.scheduled.isEmpty())
+    }
+
     private class Fixture(scheduler: TestCoroutineScheduler, val count: Int = 8) {
         val base = RecoveryWorkerFixture(scheduler, count = 0)
         val owner = CollaborationSpaceOwner(base.parent, id(100))
         val local = SpaceRecoveryLocalStorageFixture(owner)
+        val composers = SpaceComposerCompletionOutboxFixture(owner.localDirectoryAccess())
+        var composerPasses = 0
+        var beforeComposer: suspend () -> Unit = {}
+        var composerResult: AppResult<CollaborationSpaceComposerRecovery> =
+            AppResult.Success(CollaborationSpaceComposerRecovery(false, false))
         var original: CollaborationSpaceRecoveryDevice? =
             CollaborationSpaceRecoveryDevice(owner, id(101), id(102))
         val runtime = CollaborationSpaceRuntimeReady(owner, id(103), id(102))
@@ -587,6 +822,11 @@ class CollaborationSpaceRecoveryWorkerTest {
                 readWake = ReadCollaborationSpaceRecoveryWake(wakes),
                 completeWake = CompleteCollaborationSpaceRecoveryWake(wakes),
                 resume = lazy { ResumeCollaborationSpaceRecovery(wakes, schedules) },
+                recoverComposer = {
+                    composerPasses++
+                    beforeComposer()
+                    composerResult
+                },
                 device = {
                     assertEquals(base.parent, it)
                     deviceReads++
@@ -623,6 +863,7 @@ class CollaborationSpaceRecoveryWorkerTest {
                         checkpoints,
                         inventory,
                         local.messages,
+                        composers.repository,
                         local.directory,
                         base.sessions,
                         base.server,

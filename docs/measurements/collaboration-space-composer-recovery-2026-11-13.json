@@ -1,0 +1,156 @@
+{
+  "date": "2026-11-13",
+  "scope": "Bounded Group composer recovery with distinct retained submissions and pending native messages",
+  "baseCommit": "ce1750b8bf5f1622e1f8f70eddb69bacaf587876",
+  "sourceFiles": 5205,
+  "sourceManifestSha256": "7ddaa7f570beab8d7d697f015a7ec32c4cc2f7508b30debbae0d9e0e08860af1",
+  "changedSources": {
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationCollaborationSpaceWorkerModule.kt": "cb3c7afe390bdea22ae92e98baa847687258990b91d2f582ef39b425af91aaf9",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationSpaceRecoveryWorker.kt": "e09a6c7791dca1d89fa4bec772a85014307ea757ef5f2eb297bc4bc6f6d7db5d",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "cf8bd5e294782ffe88acc88550fb2e244c33abe60333ad652c3c9bb8564dd9d9",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationSpaceRecoveryWorkerTest.kt": "e4a16e3fd17c50321286f62de1f874013b000bd2d996b6fa57c3827f53477492",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/SpaceComposerCompletionOutboxFixture.kt": "2f89cc853113e4ea3a76cc21b95a62b7caa106d2c48430930cff8dd02f86221a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "34fa7eff459ba43200df51c15928d189b858b6cd3fea8ce4493220e98b973904",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationComposerCoordinates.kt": "00ce5816ca803e60b2dc7928fff9bd83f5da1f3d5374f60540036d3c8b6bca04",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationComposerRecoveryCursorCodec.kt": "8df8c591802d62ccd5e305821fbb7e3a04c48e59db26d32a231b4a14c406be83",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationComposerRecoveryCursorRepository.kt": "434316183da34263d86327018b1beb49dabe68dd9f8b7ef3370c93efe22b234f",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationComposerRecoveryCoordinatesTest.kt": "3599f1b7e35f7b573ca9207c2de8e635ef9e946d09917557c7651c267313bf67",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceComposerCursorStorageContract.kt": "c340bbda66917d01c804ec77849deff7aef1dfe633c84f83cce8fd51f5aac0b6",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceComposerCursorStorageTest.kt": "3fa9c8b564e189a1e046a718b3073863962f0df7fbb3cb6d1524cdc22ab9b590",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceComposerCursorStorageTest.kt": "5f732c230aa7dc56e6c09e07333f5c3defc24ea1f65d492220ede8de9e46b628",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceComposerCursorStorageTest.kt": "9263581e0b59eca10cc684d5432233ebd9c6dd40038d1e86947faeced4c2cffa",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceComposerRecovery.kt": "cb6cba7eb147aca34cbaeadfec3fdbbd2ee048e1599834708747aa289fc27f3d",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceComposerPolicy.kt": "005e7d2985419bc31155a060578ff4df1a80af8aa82ac67815226e9e59b95ad4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceComposerRecoveryCursorRepository.kt": "972bfab6d070c2e581fffd23716d05302393a4293f528f39cab387fa98a3882c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/FinishCollaborationSpaceRecovery.kt": "497deb0b5b7808e64bbdf67f25943c9cb07745a3a9dc1f4cfd31c975aada1df1",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RecoverCollaborationSpaceComposer.kt": "4ed3b29dcfb83178e0d4f2dfb6f73e8a8ad480f29b84bdadae25754adb6499b0",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceRecoveryProgressTest.kt": "27b31033dcfbc0c5619d617db99cc0d1c09877f86a5e5d442c2c7d37cccddb01",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/FinishCollaborationSpaceRecoveryTest.kt": "50f48146b70147bf06cadb2132f43fd83b34c77382cb341be51c48443504f693",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/RecoverCollaborationSpaceComposerTest.kt": "fab354f68024959f943b8f6421eeff9aaceb76baf3e86d74bbb4f7bad7f6a4ac",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceComposerCompletionOutboxFixture.kt": "33df8a4450dbd048ae63a30090eb38793e05cad781463dea18885d26b4c266b6",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceComposerRecoveryFixture.kt": "3f9ffad5759df63d1efe5f6a59f526c1652aee334654508b2850ff226568d0e7",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceComposerRecoveryLifetimeTest.kt": "7735a0508ed8da312da64618a7c873edb091cc1e778e652aa2e4b1cfc540a402",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceComposerRecoveryPendingTest.kt": "bc0380ea5be20d8c72df2cb89bf5048a1140fbc499aa3a1ed3e7c4d7df719345"
+  },
+  "focused": {
+    "accepted": true,
+    "tests": 169,
+    "elapsedSeconds": 384.667,
+    "sourceFiles": 5205,
+    "sourceManifestSha256": "7ddaa7f570beab8d7d697f015a7ec32c4cc2f7508b30debbae0d9e0e08860af1",
+    "resultSha256": "44ffa505a652c8b7bd24b92d35065ec76a2be0f25459047bd2705b321b83ecfa",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceRecoveryWorkerTest": 38,
+      "CollaborationComposerOutboxStorageTest": 28,
+      "CollaborationComposerRecoveryCoordinatesTest": 2,
+      "CollaborationSpaceComposerCursorStorageTest": 8,
+      "CollaborationSpaceComposerStorageTest": 13,
+      "CollaborationComposerCoordinatesTest": 3,
+      "FinishCollaborationSpaceRecoveryTest": 21,
+      "RecoverCollaborationSpaceComposerTest": 12,
+      "SpaceComposerRecoveryLifetimeTest": 10,
+      "SpaceComposerRecoveryPendingTest": 6,
+      "CollaborationSpaceRecoveryProgressTest": 26
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T01:25:49.689726+00:00",
+    "elapsedSeconds": 803.873,
+    "sourceFiles": 5205,
+    "freshCounts": {
+      "tests": 12976,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152482024,
+      "sha256": "3a0575035f1e1f6fefef9a04e2290c284c0d72d943027be8a588967432763cbc"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 15014,
+    "newCases": 103,
+    "freshTests": 12976,
+    "reusedUnaffectedTests": 2038,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 111,
+    "excludedHistoricalCases": 657,
+    "sourceManifestSha256": "7ddaa7f570beab8d7d697f015a7ec32c4cc2f7508b30debbae0d9e0e08860af1",
+    "reportManifestSha256": "0425cadf28188d24529c64ccf44d0ec74d35aac8b9dd4680f95fa901f7d6f1c5",
+    "nativeClaim": "Worker orchestration changed. Current-source affected native delivery scenarios remain required; the new44 shared Apple methods require hosted execution. No Group UI or live deployment claim."
+  },
+  "fullAuditSha256": "09d2ce77e1bb1cd570f0c01466c2a34d37a95b0d894c49561dad80f34bc1ecff",
+  "native": {
+    "accepted": true,
+    "tests": 2,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "startedAt": "2026-11-13T01:39:52.430409+00:00",
+    "elapsedSeconds": 163.257,
+    "bootSeconds": 30.406,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "phoneTouched": false,
+    "emulatorStopped": true,
+    "noCompilationDuringEmulator": true,
+    "sdk": "26.10.23-hris.8",
+    "apkSha256": "3a0575035f1e1f6fefef9a04e2290c284c0d72d943027be8a588967432763cbc",
+    "nativeLibrarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+    "mobileSourceManifestSha256": "7ddaa7f570beab8d7d697f015a7ec32c4cc2f7508b30debbae0d9e0e08860af1",
+    "groupSourceManifestSha256": "7e4c32bb578f148fcbd21c62a8302436bcf1abfb534fc0b561aab9510642b300",
+    "resultSha256": "109e456b250ef56f2c79af475a4e6d5ccf79fed3e60fe99966c1d1683081a72e",
+    "reportHashes": {
+      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": "1f7ce5f87bd58c4bac4df252fed2781c991d20d5d171a6b0cfe9fc4df7fc94f1"
+    },
+    "cases": [
+      "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.newSpaceOriginalSharesTheQueueWithoutChangingCompanyOwnershipAfterProcessDeath()",
+      "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.originalQueueSurvivesLostProjectionAndOfflineRecipientWithoutReplacement()"
+    ]
+  },
+  "nativeAuditSha256": "0207b4b609aac3c6aa2b318e1e88790a855bf83fdf837e22920048f867a7d6ee",
+  "newAppleMethodsToExecute": 44,
+  "appleCasesExecutedLocally": 0,
+  "phoneInstalledForThisIncrement": false,
+  "groupLiveDeployment": false,
+  "preservedFailures": [
+    {
+      "path": "failed-composer-capacity-review-1",
+      "phase": "focused-1",
+      "session": 58771,
+      "reaped": true,
+      "resultSha256": "5a8bb8e1f3a0d0761feeb43a647a06e3a36b340e5ffb67c958c64122b171fe8e",
+      "compilerFailure": "CollaborationBindingsTest assertSame requires explicit common Any type for two repository interfaces; 123 domain/data cases passed before app test compilation failed.",
+      "reviewFailure": "A transient composer queue-full/storage failure stopped native delivery, which must drain existing commands to permit later materialization. The new unaccepted test incorrectly asserted this starvation. Preserve prior 25 worker test identities unchanged; add independent-delivery and backoff coverage."
+    },
+    {
+      "path": "failed-native-pending-review-2",
+      "reviewFailure": "Outbox drainage did not prove message drainage; missing native originals could lose the wake or trigger immediate self-wake loops.",
+      "sourceManifestSha256": "570d8e0bb4bbc605af6f6a5fcc25258924dd0c341ae2b9808f0e992ea67dfa89",
+      "focusedPhase": "focused-2",
+      "focusedTests": 160,
+      "fullPhase": "full-1",
+      "fullSession": 40638,
+      "fullRunning": false,
+      "correctionDraft": "pending-native-review-draft",
+      "previousAcceptedWorkerIdsPreserved": 25,
+      "fullReaped": true,
+      "fullExitCode": 0,
+      "fullSeconds": 815.968,
+      "fullResultSha256": "5e19accb8bb2e8795f67c6d9eba6cc7cb70bf59ade4c1059cc25100b77d69fa0",
+      "fullFreshCounts": {
+        "tests": 12961,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "remaining": "Guarded Group editor/outbox observation and canonical thread/list UI; actual first-frame, transition and IME evidence. The two native cases cover existing queued delivery, not a new nonempty composer UI submission."
+}

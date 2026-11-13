@@ -107,6 +107,30 @@
       "auditSession": "90988 REAPED",
       "preservedFailedAudit": "failed-browser-runtime-audit-1"
     },
-    "appleStatus": "in progress; not yet accepted"
+    "apple": {
+      "sourceCommit": "ce1750b8bf5f1622e1f8f70eddb69bacaf587876",
+      "runId": 43338633598,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43338633598",
+      "jobId": 131601109334,
+      "artifactId": 14001841517,
+      "bytes": 855182,
+      "sha256": "948416af61095d3aba6abcbf1169f1d635a10c31ad76c8e41b6d10a709331cf7",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreservedExceptReviewedReplacements": true,
+      "reviewedReplacements": 0,
+      "browserRuntimeCaseSuffixChanges": 0,
+      "counts": {
+        "iosSimulatorArm64Test": 5314
+      },
+      "reportManifestSha256": "fa18897232a968aa96c4ecc31106144b35ca50b7dc508e071039c189609a1e72",
+      "jobLogSha256": "63c489ecfb6f40a21e39e446b2dd4903467b3ebed8ffb0ff4329ed605db8e609",
+      "fullAuditSha256": "187cfe6de49259a7b56648d4c4c27bff9ba43066ec7afde842efa5409b82b278",
+      "auditSession": "78391 REAPED",
+      "iosApplicationHostBuilt": true,
+      "pushEnvelopeRoutingPassed": true
+    },
+    "complete": true,
+    "totalTests": 18203,
+    "newSharedAppleMethodsExecutedSinceContact": 64
   }
 }

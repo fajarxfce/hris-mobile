@@ -20,6 +20,7 @@ class CollaborationSpaceRecoveryWorker(
     private val readWake: ReadCollaborationSpaceRecoveryWake,
     private val completeWake: CompleteCollaborationSpaceRecoveryWake,
     private val resume: Lazy<ResumeCollaborationSpaceRecovery>,
+    private val recoverComposer: suspend () -> AppResult<CollaborationSpaceComposerRecovery>,
     private val device:
         suspend (CollaborationNativeParent) -> AppResult<CollaborationSpaceRecoveryDevice?>,
     private val adopt:
@@ -63,8 +64,16 @@ class CollaborationSpaceRecoveryWorker(
         try {
             return withTimeoutOrNull(180.seconds) {
                 processing.withLock {
-                    withTimeoutOrNull(90.seconds) { currentParent(trigger) }
-                        ?: SyncResult.Retry(pending("timeout", FailureKind.Timeout))
+                    withTimeoutOrNull(90.seconds) {
+                        // Only this captured generation may be completed by the following pass.
+                        val wake =
+                            if (trigger == SyncTrigger.Scheduled) ensureWake() else readWake()
+                        val local = recoverComposer()
+                        if (local is AppResult.Failed && failed(local) is SyncResult.Blocked)
+                            failed(local)
+                        else if (wake is AppResult.Failed) failed(wake)
+                        else currentParent((wake as AppResult.Success).value, local)
+                    } ?: SyncResult.Retry(pending("timeout", FailureKind.Timeout))
                 }
             } ?: SyncResult.Retry(pending("timeout", FailureKind.Timeout))
         } finally {
@@ -72,7 +81,10 @@ class CollaborationSpaceRecoveryWorker(
         }
     }
 
-    private suspend fun currentParent(trigger: SyncTrigger): SyncResult {
+    private suspend fun currentParent(
+        wake: CollaborationSpaceRecoveryWake?,
+        composer: AppResult<CollaborationSpaceComposerRecovery>,
+    ): SyncResult {
         val published = states.value
         val current =
             withTimeoutOrNull(5.seconds) {
@@ -81,19 +93,35 @@ class CollaborationSpaceRecoveryWorker(
         val parent =
             current.recoveryParent()
                 ?: return SyncResult.Blocked(collaborationRecoveryParentChanged())
-        return withCollaborationRecoveryParent(published, parent) { process(parent, trigger) }
+        return withCollaborationRecoveryParent(published, parent) {
+            process(parent, wake, composer)
+        }
     }
 
     private suspend fun process(
         parent: CollaborationNativeParent,
-        trigger: SyncTrigger,
+        wake: CollaborationSpaceRecoveryWake?,
+        composer: AppResult<CollaborationSpaceComposerRecovery>,
     ): SyncResult {
-        val requested = if (trigger == SyncTrigger.Scheduled) ensureWake() else readWake()
-        if (requested is AppResult.Failed) return failed(requested)
-        val wake = (requested as AppResult.Success).value ?: return SyncResult.Complete
+        if (wake == null)
+            return when (composer) {
+                is AppResult.Failed -> failed(composer)
+                is AppResult.Success ->
+                    if (composer.value.pendingSubmissions || composer.value.pendingMessages)
+                        SyncResult.Retry(pending("wake_pending"))
+                    else SyncResult.Complete
+            }
         val local = device(parent)
         if (local is AppResult.Failed) return failed(local)
-        val original = (local as AppResult.Success).value ?: return acknowledge(wake)
+        val original =
+            (local as AppResult.Success).value
+                ?: return when (composer) {
+                    is AppResult.Failed -> failed(composer)
+                    is AppResult.Success ->
+                        if (composer.value.pendingSubmissions || composer.value.pendingMessages)
+                            SyncResult.Retry(pending("native_device_pending"))
+                        else acknowledge(wake)
+                }
         val adopted = adopt(original)
         if (adopted is AppResult.Failed) return failed(adopted)
         val runtime = (adopted as AppResult.Success).value
@@ -107,13 +135,15 @@ class CollaborationSpaceRecoveryWorker(
             if (begun is AppResult.Failed) return failed(begun)
             snapshot = (begun as AppResult.Success).value.snapshot
         }
-        return sweep(runtime, snapshot)
+        // Existing messages must drain even when the local command store is full.
+        return sweep(runtime, snapshot, composer as? AppResult.Failed)
     }
 
     /** Old claimed rooms resume first; fresh command work then precedes the remaining room scan. */
     private suspend fun sweep(
         runtime: CollaborationSpaceRuntimeReady,
         initial: CollaborationSpaceRecoverySnapshot,
+        composerFailure: AppResult.Failed?,
     ): SyncResult {
         var snapshot = initial
         repeat(4) {
@@ -135,7 +165,7 @@ class CollaborationSpaceRecoveryWorker(
                 if (snapshot.progress?.sweep?.messages?.reachedEnd == true) messageTurn = false
             }
             if (!messageTurn && snapshot.progress?.sweep?.reachedEnd == true)
-                return finish(snapshot)
+                return finish(snapshot, composerFailure)
             if (!messageTurn && snapshot.progress?.sweep?.pending == null) {
                 val next = page(snapshot)
                 if (next is AppResult.Failed) return failed(next)
@@ -164,8 +194,9 @@ class CollaborationSpaceRecoveryWorker(
             if (result is AppResult.Failed) return failed(result)
         }
         val progress = requireNotNull(snapshot.progress?.sweep)
-        return if (progress.reachedEnd && progress.messages?.reachedEnd == true) finish(snapshot)
-        else continuePending()
+        return if (progress.reachedEnd && progress.messages?.reachedEnd == true)
+            finish(snapshot, composerFailure)
+        else continuePending(composerFailure)
     }
 
     private suspend fun recoverMessage(
@@ -216,27 +247,35 @@ class CollaborationSpaceRecoveryWorker(
         else AppResult.Failed(pending("messages_pending"))
     }
 
-    private suspend fun finish(snapshot: CollaborationSpaceRecoverySnapshot): SyncResult {
+    private suspend fun finish(
+        snapshot: CollaborationSpaceRecoverySnapshot,
+        composerFailure: AppResult.Failed?,
+    ): SyncResult {
         val result = finishSweep(snapshot)
         if (result is AppResult.Failed) return failed(result)
         val updated = (result as AppResult.Success).value
         val wake = updated.completedWake
-        if (wake != null) return acknowledge(wake)
+        if (wake != null) return acknowledge(wake, composerFailure)
         return if (snapshot.progress?.sweep?.retryRequired == true)
             SyncResult.Retry(pending("sweep_pending"))
-        else continuePending()
+        else continuePending(composerFailure)
     }
 
-    private suspend fun acknowledge(wake: CollaborationSpaceRecoveryWake): SyncResult {
+    private suspend fun acknowledge(
+        wake: CollaborationSpaceRecoveryWake,
+        composerFailure: AppResult.Failed? = null,
+    ): SyncResult {
         val result = completeWake(wake)
         if (result is AppResult.Failed) return failed(result)
         val remaining = readWake()
         if (remaining is AppResult.Failed) return failed(remaining)
         return if ((remaining as AppResult.Success).value == null) SyncResult.Complete
-        else continuePending()
+        else continuePending(composerFailure)
     }
 
-    private suspend fun continuePending(): SyncResult {
+    private suspend fun continuePending(composerFailure: AppResult.Failed? = null): SyncResult {
+        // Failed local work uses scheduler backoff, never an immediate self-wake loop.
+        if (composerFailure != null) return failed(composerFailure)
         val scheduled = resume.value()
         if (scheduled is AppResult.Failed) return failed(scheduled)
         return SyncResult.Complete

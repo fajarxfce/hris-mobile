@@ -1,7 +1,6 @@
 package dev.fajar.starter.collaboration.data.drafts
 
 import dev.fajar.starter.collaboration.data.history.COLLABORATION_HISTORY_PREFIX
-import dev.fajar.starter.collaboration.data.history.historyScope
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.database.*
@@ -16,7 +15,7 @@ internal fun composerRecoveryPartition(access: CollaborationLocalAccess): String
 }
 
 internal class CollaborationComposerRecoveryCursorCodec(
-    private val access: CollaborationLocalAccess,
+    private val coordinates: CollaborationComposerCoordinates,
     private val cipher: ContentCipher,
     private val key: ByteArray,
 ) {
@@ -24,8 +23,8 @@ internal class CollaborationComposerRecoveryCursorCodec(
         require(
             raw.published &&
                 raw.revision == 0L &&
-                raw.handle.scope == historyScope(access) &&
-                raw.handle.partition == composerRecoveryPartition(access)
+                raw.handle.scope == coordinates.scope &&
+                raw.handle.partition == coordinates.recoveryPartition
         )
         require(validCollaborationMessageId(raw.handle.generation) && raw.payload.length in 1..2048)
         val bytes = cipher.decrypt(key, aad(raw.handle.generation), Base64.decode(raw.payload))
@@ -60,15 +59,5 @@ internal class CollaborationComposerRecoveryCursorCodec(
     }
 
     private fun aad(generation: String) =
-        Json.encodeToString(
-                listOf(
-                    "hris-collaboration-composer-recovery-cursor-v1",
-                    access.audience,
-                    access.accountId,
-                    access.companyId,
-                    generation,
-                    "0",
-                )
-            )
-            .encodeToByteArray()
+        Json.encodeToString(coordinates.recoveryFrame(generation)).encodeToByteArray()
 }

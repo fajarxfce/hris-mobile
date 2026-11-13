@@ -1,9 +1,10 @@
 # Organization chat presentation integration
 
-Status: implementation planning, 12 November 2026. Canonical unresolved/bound thread
-observation is accepted at a74526b7. Indexed local contact observation is being tested.
-This plan does not claim that the organization UI is already connected or that any
-additional PRD group is accepted.
+Status: integration planning, 13 November 2026. Canonical unresolved/bound thread,
+indexed contacts and coherent local participants are accepted, followed by immutable
+submission and encrypted Group editor/outbox actions. Bounded recovery is undergoing
+final full/native validation. Group route/list UI activation and measured rendering
+remain pending; no additional PRD acceptance group is closed by these prerequisites.
 
 ## Product interaction
 
@@ -49,7 +50,7 @@ Presentation must preserve those namespaces in row/action identities; equal UUID
 across them cannot select or delete one another. The original Company coordinate is
 physical provenance, while Group admission controls this organization thread.
 
-Recipient labels should read the exact published contact index currently under test.
+Recipient labels read the accepted exact published contact index.
 Retained registration.command.provider contains selected sender metadata and is a
 possible local source after bounded ownership/identity validation. Room origin and
 provider identity origin are independent: neither selected HR company nor room origin
@@ -63,13 +64,24 @@ owned prepared state, while account replacement/revocation clears it immediately
 Continue to bound idle rooms to three and release live work on route stop; animation
 must not initiate data acquisition.
 
-QueueCollaborationSpaceText currently creates createdAt after its guarded local reads
-and exposes an ID/text invocation. Organization composer work must preserve the same
-immutable submission ID, original text, reply target and submission time from optimistic
-presentation through persistence/retry. It also needs owned draft/process-loss recovery.
-Do not relabel queued timestamps or reuse Company draft storage under a fabricated
-company identifier. Review the existing Company durable composer contract before
-choosing the explicit Group storage/workflow changes.
+QueueCollaborationSpaceText now accepts the caller's complete immutable intent. Group
+editing/submission actions and typed encrypted storage preserve the original ID, text,
+quote and captured timestamp across interrupted writes and renewed login. Bounded
+recovery separates retained submissions from pending native messages and is undergoing
+final validation; unavailable keys keep the wake with scheduler backoff.
+
+The next read boundary observes the Group editor and retained outbox under local
+account/Group admission, independently of history so editing I/O does not gate message
+rendering. Its seven source drafts and 18 read/lifetime tests remain unapplied until
+recovery passes. Known read failures publish without waiting for an unrelated source;
+first success includes actual editor/outbox results. Held originals remain explicit.
+
+A concrete Group route owns a typed Group ViewModel and the existing serial composer
+actor's lifetime. Capture complete draft edits and send gestures before suspension. The
+actor coordinates UI writes and fences late callbacks; use cases own admission, exact
+replay and recovery. Shared visual components receive explicit rendering state and
+callbacks from their Company and Group callers. Group action identities retain their
+command namespace and canonical ownership throughout selection and contextual actions.
 
 ## Skill review and validation
 

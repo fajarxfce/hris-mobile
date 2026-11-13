@@ -579,6 +579,7 @@ class CollaborationSpaceRecoveryProgressTest {
                 repository,
                 inventory,
                 local.messages,
+                SpaceComposerCompletionOutboxFixture(owner.localDirectoryAccess()).repository,
                 local.directory,
                 setup.sessions,
                 server,

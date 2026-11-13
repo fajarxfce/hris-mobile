@@ -1,5 +1,7 @@
 # Architecture
 
+[Organization composer recovery](collaboration-space-composer-recovery.md) separates bounded local materialization from independently admitted native delivery and preserves pending work when keys are absent.
+
 [Organization composer actions](collaboration-space-composer-actions.md) coordinate current local admission and exact immutable editing/submission without a selected HR company or native runtime.
 
 [Organization composer storage](collaboration-space-composer-storage.md) shares encrypted draft/outbox I/O with explicit Group ownership and an atomic recovery wake.

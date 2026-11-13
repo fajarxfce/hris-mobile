@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 01:27 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 01:44 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -182,15 +182,21 @@ report3bc6455c4dfa96efe9cb2d756899bebd8f6c9b8ceb45bfd5143443d23d0dd98a; immutabl
 The24 shared Apple methods still need actual hosted execution. No new native, phone, live
 Group or measured UI claim. Commit/push before applying the next recovery increment.
 
-Composer action acceptance is pushed: Mobilece1750b8 / Group53ce34fd;
-pushes2023/74533 REAPED. One latest control43338633598 is running at exact
-ce1750b8bf5f1622e1f8f70eddb69bacaf587876, Apple131601109334 and portable131601109781.
-Dispatch65415 REAPED; do not dispatch a duplicate. Expected12,889 portable +5,314 Apple
-=18,203; strict prepared auditors preserve every previous identity and new storage methods.
-The separate SDK native candidate43327713661 remains active; no Matrix Apple runtime pass.
+Composer action acceptance is pushed: Mobilece1750b8 / Group53ce34fd.
+Control43338633598 is FULLY ACCEPTED at exactce1750b8bf5f1622e1f8f70eddb69bacaf587876:
+12,889 portable +5,314 Apple =18,203 tests. Portable auditor90988 and Apple78391 REAPED;
+all previous class/method identities remain.64 new shared Apple methods since the contact
+control actually executed, including participant, immutable send, composer storage/actions.
+Apple131601109334 also built the iOS host and passed push envelope routing.
+Artifact14001841517/855182B/948416af61095d3aba6abcbf1169f1d635a10c31ad76c8e41b6d10a709331cf7;
+reportsfa18897232a968aa96c4ecc31106144b35ca50b7dc508e071039c189609a1e72;
+log63c489ecfb6f40a21e39e446b2dd4903467b3ebed8ffb0ff4329ed605db8e609.
+Do not rerun either accepted job. Prepare one latest recovery control only after its final
+native acceptance and source push. The separate SDK candidate43327713661 remains active;
+shared Apple tests do not claim the four actual Matrix Swift contracts passed.
 
 Portable control43338633598/job131601109781 is ACCEPTED at exactce1750b8;
-auditor90988 REAPED:12,889=6168desktop+958Android+5763browser. Apple131601109334 remains active.
+auditor90988 REAPED:12,889=6168desktop+958Android+5763browser. Apple is accepted above.
 Artifact14000497284/4116000B/707933fd03836b410e9e46cf9420db7ff3366a8ba8db6e1a1a95df52135f14a6;
 reports2274e48a46e9aa3d47ed7314801345654f3bd48c3f3649fd88d87b5be9d8e666;
 log483a4c8cc2aa66a44f58134d431c3aa678e7690491785f377a8e700be67c7eb8.
@@ -198,73 +204,38 @@ Preserve failed-browser-runtime-audit-1/auditor37178: hosted Chrome changed156 t
 corrected strict auditor permits only that exact launcher suffix, preserving every class and
 method across historical5601, binding5678 and contact5699 browser cases, with zero test renames.
 No source/assertion change or CI rerun. Both original and corrected auditors/configs are retained.
-Do not rerun portable or dispatch another control while Apple is active.
+Do not rerun portable. The accepted Apple job is recorded above.
 
-ACTIVE: Mobile.work/space-composer-recovery-2026-11-13,26 applied source paths.
-Typed encrypted Group cursor storage reuses the existing repository with unchanged Company
-frames and an independent legacy ciphertext test. RecoverCollaborationSpaceComposer discovers
-the owned root and materializes at most eight exact originals before native prerequisites.
-It advances a durable cursor before each original, reads back immutable command facts, and
-retires only that original. Held entries remain available without automatic retries.
+ACCEPTED: Mobile.work/space-composer-recovery-2026-11-13,26 application paths.
+Local recovery precedes native prerequisites and attempts at most eight exact originals in a
+five-second pass. Typed encrypted cursor storage preserves Company frames and separates Group
+ownership. Current admission and full immutable command evidence guard exact retirement.
+Pending submissions and pending native messages are distinct facts. Missing native prerequisites
+retain their wake with backoff; transient local publication failure cannot starve existing
+native delivery or cause immediate self-wakes. Complete only current validated empty work.
 
-The application worker invokes this local pass before native-parent/device/adoption/sync.
-FinishCollaborationSpaceRecovery checks a bounded pending composer page before discharging
-its captured wake; the missing-native-original path also preserves known remaining work.
-Shared pure page validation and existing conditional wake completion prevent an empty or
-malformed read from hiding queued originals. No Group UI/live deployment is activated.
+Focused3 strict audit PASS169/384.667s; full2 strict audit PASS803.873s.
+Full15,014 = 12976 fresh +2038 exact unchanged cases,
+all14,911 prior IDs retained plus103 new executions. Source5205/7ddaa7f570beab8d7d697f015a7ec32c4cc2f7508b30debbae0d9e0e08860af1;
+reports0425cadf28188d24529c64ccf44d0ec74d35aac8b9dd4680f95fa901f7d6f1c5; immutable full-2/accepted-proof.apk152482024B/3a0575035f1e1f6fefef9a04e2290c284c0d72d943027be8a588967432763cbc.
+Original/Space native2 pass163.257s on that exact proof, SDK8, fresh2560MiB/two cores.
+Emulator stopped and no concurrent compilation. These two existing-queue scenarios do not
+prove a new nonempty composer UI send.44 new shared Apple methods require hosted execution.
 
-Format1/80320 passed35.953s. Focused1/58771 REAPED FAILED313.744s after123 passing
-cases: the new DI assertSame needed an explicit Any type for two repository interfaces.
-Code review also found that a local capacity/storage failure could starve existing native
-messages that must drain first. Preserve failed-composer-capacity-review-1, its exact24
-sources, old manifests/auditors and original focused result. No previous assertion weakened.
+Preserve failed-composer-capacity-review-1 (123 passing cases then DI assertion compilation
+failure; review also found native starvation) and failed-native-pending-review-2 (focused160
+passed but review found premature wake completion/immediate self-wake with absent native keys).
+Corrected tests preserve all25 previously accepted worker identities and original assertions.
+No source quality limits relaxed. No Group deployment, phone or UI performance claim.
+Commit/push this accepted increment before applying subsequent application changes.
 
-The corrected worker allows separately admitted native delivery after transient local
-failures, preserving failed originals with scheduler backoff instead of immediate self-wakes.
-Authority/validation failures still stop work; missing native originals cannot discharge a
-failed local pass. Only a current authoritative empty completion can acknowledge its wake.
-Four additional worker cases cover capacity drainage, finite yield, recovered empty state,
-and missing native originals. All25 previously accepted worker identities remain.
-
-Format2/49614 REAPED PASS35.381s. Frozen5203/
-570d8e0bb4bbc605af6f6a5fcc25258924dd0c341ae2b9808f0e992ea67dfa89.
-Focused2/59794 REAPED PASS160/187.122s, strict audit passes with all prior identities.
-Full1/40638 REAPED exit0/815.968s with12,961 fresh passing cases, but the candidate was
-REJECTED in review: empty composer storage could still leave queued native messages, losing
-their wake or immediately self-waking while keys were absent. Preserve failed-native-pending-review-2
-and immutable full-1/rejected-proof.apk152481620B/
-2035e39d0128b9c02171e43dedb66aeead0ffe57f9d14ca292d7c69281ea7e0d. No acceptance was recorded.
-
-Eight correction paths are now APPLIED,26 total. Recovery reports pendingSubmissions and
-pendingMessages separately after a bounded validated inventory, within the same five-second
-pass. Missing native prerequisites retain the wake with scheduler backoff for either kind.
-Capture the eligible wake BEFORE local reads, so a concurrent handoff's later generation can
-never be acknowledged by an earlier empty pass. Inventory absence/failure never proves idle.
-Six additional domain cases and three worker cases cover pending work and wake races. All25
-previously accepted worker test bodies remain identical, checked against ce1750b8;13 new worker
-cases are separate. No existing assertion or quality limit was relaxed.
-
-Format3/95627 REAPED PASS35.158s. Focused3/99144 REAPED PASS169/384.667s;
-strict focused audit passes and retains every prior identity. Full2/78490 ACTIVE.
-Frozen5205/7ddaa7f570beab8d7d697f015a7ec32c4cc2f7508b30debbae0d9e0e08860af1.
-Expected full2:15,014 (all14,911 prior IDs +103 new executions).44 new shared Apple methods
-still require hosted execution. Keep sources frozen until full2 is reaped. Then strict full
-audit and the affected native cases are required. prepare-native.py uses/freeze-checks full-2;
-record-acceptance.py requires exact focused169/full15,014/native2 audits and source/APK hashes.
-No full/native candidate acceptance, Group UI, measured latency or phone installation yet.
-
-NEXT DESIGN ONLY: Mobile.work/space-composer-observation-2026-11-13 has a local editor/outbox
-snapshot use case, fixture and18 draft tests (ten read/eight lifetime). Not applied or compiled. Its subscription
-stays independent of history rendering and owns current account/Group admission. Complete
-DI/application binding and strict audit preparation after recovery acceptance. Draft submissions
-now use the actual immutable ID from original.revision. Review all fixture ownership assertions.
-
-
-Continue canonical Group thread/list UI after recovery passes, reusing the route-owned serial
-composer actor and existing thread admission owner. Measure first-frame/transition behavior;
-do not imply latency improvements from source checks. All54 acceptance groups remain OPEN.
-Phone92 remains uninstalled. ADB18038 REAPED timeout01:12UTC13Nov; last WireGuard handshake
-12Nov10:32:22UTC. Always announce each install and use install-only; never drive phone UI.
+NEXT: Mobile.work/space-composer-observation-2026-11-13 remains DRAFT ONLY. Local editor and
+retained outbox observation belongs to one account/Group use case, independent of history
+rendering. Complete lifetime tests, DI and strict validation before applying the typed Group
+composer caller and canonical thread/list UI. Reuse the route-owned serial write actor; never
+fabricate a Company access for Group content. Measure first-frame/transition/IME behavior.
+One local compiler OR emulator. Follow the existing phone release handoff for install-only
+delivery, always with an announcement and explicit serial; never drive the user's phone UI.
 All54 acceptance groups remain OPEN; continue beyond this checkpoint.
 
 Hosted follow-up43312753298 on exact1f47eeddb833054ae2b3d52c20439e6d11518a02:

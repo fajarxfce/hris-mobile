@@ -199,10 +199,88 @@ class FinishCollaborationSpaceRecoveryTest {
         assertEquals(f.original, f.stored)
     }
 
+    @Test
+    fun retainedComposerPreventsCompletionAfterAnOtherwiseCleanSweep() = runTest {
+        val f = Fixture()
+        val original = f.pendingComposer()
+        val result = f.finish()
+        assertNull(result.completedWake)
+        assertEquals(CollaborationSpaceRecoverySweep(id(2)), result.snapshot.progress!!.sweep)
+        assertEquals(original, f.composer.submissions[original.id])
+        assertEquals(1, f.composer.reads)
+    }
+
+    @Test
+    fun heldOnlyOutboxDoesNotCreateAnAutomaticRecoveryLoop() = runTest {
+        val f = Fixture()
+        val original = f.pendingComposer()
+        f.composer.held += original.id
+        assertEquals(CollaborationSpaceRecoveryWake(id(2)), f.finish().completedWake)
+        assertEquals(original, f.composer.submissions[original.id])
+        assertEquals(1, f.composer.reads)
+    }
+
+    @Test
+    fun failedOutboxReadCannotDischargeTheCapturedWake() = runTest {
+        val f = Fixture()
+        f.composer.failure = f.failure
+        assertEquals(AppResult.Failed(f.failure), f.useCase(f.snapshot()))
+        assertEquals(0, f.writes)
+        assertEquals(f.original, f.stored)
+    }
+
+    @Test
+    fun accountLossOrDenialDuringOutboxReadStopsCompletion() = runTest {
+        for (denied in listOf(false, true)) {
+            val f = Fixture()
+            f.composer.beforePending = {
+                if (denied) f.base.directory.deny() else f.native.setup.session = null
+            }
+            val failure = assertIs<AppResult.Failed>(f.useCase(f.snapshot())).failure
+            assertEquals(
+                if (denied) FailureKind.AccessDenied else FailureKind.Unauthorized,
+                failure.kind,
+            )
+            assertEquals(0, f.writes)
+            assertEquals(f.original, f.stored)
+        }
+    }
+
+    @Test
+    fun malformedOutboxPageCannotBeTreatedAsACompletedQueue() = runTest {
+        for (oversized in listOf(false, true)) {
+            val f = Fixture()
+            val original = f.pendingComposer()
+            f.composer.response =
+                if (oversized) CollaborationComposerSubmissionPage(listOf(original, original), null)
+                else CollaborationComposerSubmissionPage(emptyList(), original.id)
+            assertIs<AppResult.Failed>(f.useCase(f.snapshot()))
+            assertEquals(0, f.writes)
+            assertEquals(f.original, f.stored)
+        }
+    }
+
+    @Test
+    fun cancellationDuringOutboxReadCannotPublishCompletion() = runTest {
+        val f = Fixture()
+        val entered = CompletableDeferred<Unit>()
+        f.composer.beforePending = {
+            entered.complete(Unit)
+            awaitCancellation()
+        }
+        val work = async { f.useCase(f.snapshot()) }
+        entered.await()
+        work.cancelAndJoin()
+        assertTrue(work.isCancelled)
+        assertEquals(0, f.writes)
+        assertEquals(f.original, f.stored)
+    }
+
     private class Fixture {
         val base = SpaceOriginalDeliveryFixture()
         val native = base.native
         val owner = base.queue.owner
+        val composer = SpaceComposerCompletionOutboxFixture(owner.localDirectoryAccess())
         val boundary =
             CollaborationSpaceRoomBindingBoundary(
                 owner.parent.audience,
@@ -271,6 +349,23 @@ class FinishCollaborationSpaceRecoveryTest {
                 ) = commandFlow?.invoke() ?: base.space.messages.observe(access, conversationId)
             }
 
+        fun pendingComposer(): CollaborationComposerSubmission {
+            val captured = base.queue.record.intent
+            val original =
+                CollaborationComposerSubmission(
+                    CollaborationDraft(
+                        base.model.conversation.id,
+                        id(201),
+                        captured.text,
+                        captured.createdAt,
+                    ),
+                    id(202),
+                    captured.createdAt,
+                )
+            composer.submissions[original.id] = original
+            return original
+        }
+
         fun pending(): CollaborationSpaceMessageRecord {
             val original = base.queue.record.intent
             val record =
@@ -294,6 +389,7 @@ class FinishCollaborationSpaceRecoveryTest {
                 repository,
                 inventory,
                 messages,
+                composer.repository,
                 base.directory.directory,
                 native.setup.sessions,
                 native.server,

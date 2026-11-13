@@ -8,6 +8,7 @@ import dev.fajar.starter.collaboration.domain.usecases.LoadCollaborationSpaceRec
 import dev.fajar.starter.collaboration.domain.usecases.PrepareCollaborationSpaceRoomBinding
 import dev.fajar.starter.collaboration.domain.usecases.ReadCollaborationSpacePendingMessages
 import dev.fajar.starter.collaboration.domain.usecases.ReadCollaborationSpaceRecoveryDemand
+import dev.fajar.starter.collaboration.domain.usecases.RecoverCollaborationSpaceComposer
 import dev.fajar.starter.collaboration.domain.usecases.StageCollaborationSpaceText
 import dev.fajar.starter.collaboration.domain.usecases.SynchronizeCollaborationSpaceDevice
 import dev.fajar.starter.sync.domain.SyncTask
@@ -26,12 +27,14 @@ internal fun applicationCollaborationSpaceWorkerModule() = module {
         val pending = inject<ReadCollaborationSpacePendingMessages>()
         val prepare = inject<PrepareCollaborationSpaceRoomBinding>()
         val stage = inject<StageCollaborationSpaceText>()
+        val composer = inject<RecoverCollaborationSpaceComposer>()
         CollaborationSpaceRecoveryWorker(
             states = lazy { parent.value.state },
             ensureWake = get(),
             readWake = get(),
             completeWake = get(),
             resume = inject(),
+            recoverComposer = { composer.value() },
             device = { device.value(it) },
             adopt = { adopt.value(it.owner, it.registrationId, it.operationId) },
             sync = { sync.value(it) },

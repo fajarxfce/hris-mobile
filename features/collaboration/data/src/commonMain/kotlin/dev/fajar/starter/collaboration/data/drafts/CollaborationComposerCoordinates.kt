@@ -11,9 +11,11 @@ internal sealed class CollaborationComposerCoordinates(
     private val ownerId: String,
     private val contentNamespace: String,
     private val outboxNamespace: String,
+    private val recoveryNamespace: String,
 ) {
     abstract val scope: ReplicaScope
     abstract val partition: String
+    abstract val recoveryPartition: String
 
     // Scope validation is lazy so acquisition stays inside the repository's safe I/O boundary.
     class Company(private val access: CollaborationLocalAccess) :
@@ -23,12 +25,16 @@ internal sealed class CollaborationComposerCoordinates(
             access.companyId,
             "hris-composer-content-v2",
             "hris-composer-outbox-v1",
+            "hris-collaboration-composer-recovery-cursor-v1",
         ) {
         override val scope
             get() = historyScope(access)
 
         override val partition
             get() = draftPartition(access)
+
+        override val recoveryPartition
+            get() = composerRecoveryPartition(access)
     }
 
     class Space(private val access: CollaborationSpaceLocalAccess) :
@@ -38,6 +44,7 @@ internal sealed class CollaborationComposerCoordinates(
             access.spaceId,
             "hris-space-composer-content-v1",
             "hris-space-composer-outbox-v1",
+            "hris-space-composer-recovery-cursor-v1",
         ) {
         override val scope
             get() = spaceHistoryScope(access)
@@ -46,6 +53,12 @@ internal sealed class CollaborationComposerCoordinates(
             get() {
                 spaceHistoryScope(access)
                 return COLLABORATION_HISTORY_PREFIX + "space-composer/v1/" + access.spaceId
+            }
+
+        override val recoveryPartition: String
+            get() {
+                spaceHistoryScope(access)
+                return COLLABORATION_HISTORY_PREFIX + "space-composer-recovery/v1/" + access.spaceId
             }
     }
 
@@ -73,6 +86,9 @@ internal sealed class CollaborationComposerCoordinates(
             id,
             revision.toString(),
         )
+
+    fun recoveryFrame(generation: String) =
+        listOf(recoveryNamespace, audience, accountId, ownerId, generation, "0")
 
     override fun toString() = "CollaborationComposerCoordinates([redacted])"
 }

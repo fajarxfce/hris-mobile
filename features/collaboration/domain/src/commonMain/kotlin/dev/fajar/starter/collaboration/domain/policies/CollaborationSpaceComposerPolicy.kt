@@ -34,3 +34,29 @@ fun collaborationSpaceComposerIntent(
         submission.original.text,
         submission.original.replyToEventId,
     )
+
+/** Validate and detach one bounded indexed page before orchestration reads its continuation. */
+fun captureCollaborationSpaceComposerPage(
+    access: CollaborationSpaceLocalAccess,
+    value: CollaborationComposerSubmissionPage,
+    after: String? = null,
+    limit: Int = 8,
+): CollaborationComposerSubmissionPage? {
+    if (limit !in 1..8 || (after != null && !validCollaborationMessageId(after))) return null
+    val originals = value.submissions.toList()
+    if (
+        originals.size > limit ||
+            originals.any {
+                !validCollaborationComposerSubmission(it) ||
+                    !validCollaborationSpaceMessageIntent(
+                        access,
+                        collaborationSpaceComposerIntent(access, it),
+                    ) ||
+                    (after != null && it.id <= after)
+            } ||
+            originals.map { it.id } != originals.map { it.id }.distinct().sorted() ||
+            (value.next != null && (originals.size != limit || value.next != originals.last().id))
+    )
+        return null
+    return value.copy(submissions = originals)
+}

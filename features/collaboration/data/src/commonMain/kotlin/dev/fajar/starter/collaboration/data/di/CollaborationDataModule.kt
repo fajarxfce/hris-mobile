@@ -670,6 +670,28 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun recoverSpaceComposer(
+        roots: CollaborationSpaceRootRepository,
+        outbox: CollaborationSpaceComposerOutboxRepository,
+        cursors: CollaborationSpaceComposerRecoveryCursorRepository,
+        messages: CollaborationSpaceMessageRepository,
+        conversations: CollaborationSpaceConversationMetadataRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) =
+        RecoverCollaborationSpaceComposer(
+            roots,
+            outbox,
+            cursors,
+            messages,
+            conversations,
+            directory,
+            sessions,
+            server,
+        )
+
+    @Factory
     fun observeSpaceMessages(
         messages: CollaborationSpaceMessageRepository,
         directory: CollaborationSpaceDirectoryRepository,
@@ -2422,10 +2444,20 @@ class CollaborationDataModule {
         progress: CollaborationSpaceRecoveryProgressRepository,
         inventory: CollaborationSpaceRoomBindingInventoryRepository,
         messages: CollaborationSpaceMessageRepository,
+        outbox: CollaborationSpaceComposerOutboxRepository,
         directory: CollaborationSpaceDirectoryRepository,
         sessions: SessionRepository,
         server: IdentityServer,
-    ) = FinishCollaborationSpaceRecovery(progress, inventory, messages, directory, sessions, server)
+    ) =
+        FinishCollaborationSpaceRecovery(
+            progress,
+            inventory,
+            messages,
+            outbox,
+            directory,
+            sessions,
+            server,
+        )
 
     @Factory
     fun loadSpaceRecoveryDevice(

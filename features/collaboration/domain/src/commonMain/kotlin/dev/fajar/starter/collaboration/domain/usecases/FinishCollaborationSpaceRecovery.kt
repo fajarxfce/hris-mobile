@@ -16,6 +16,7 @@ class FinishCollaborationSpaceRecovery(
     private val progress: CollaborationSpaceRecoveryProgressRepository,
     private val inventory: CollaborationSpaceRoomBindingInventoryRepository,
     private val messages: CollaborationSpaceMessageRepository,
+    private val outbox: CollaborationSpaceComposerOutboxRepository,
     private val directory: CollaborationSpaceDirectoryRepository,
     private val sessions: SessionRepository,
     private val server: IdentityServer,
@@ -88,28 +89,47 @@ class FinishCollaborationSpaceRecovery(
                         it.state !is CollaborationMessageState.Sent &&
                             it.state != CollaborationMessageState.Cancelled
                     }
-                val next =
+                var next =
                     if (hasPending || latest != old || page.hasNewerBindings) first
                     else (proposed as AppResult.Success).value
-                val result = checked { progress.replace(owner, previous, next) }
-                if (result is AppResult.Failed) return@withTimeoutOrNull result
-                val saved =
-                    (result as AppResult.Success).value
-                        ?: return@withTimeoutOrNull changedSpaceProgress()
-                if (!validCollaborationSpaceRecoveryProgress(owner, saved) || saved.sweep != next)
-                    return@withTimeoutOrNull changedSpaceProgress(FailureKind.Unexpected)
-                AppResult.Success(
-                    CollaborationSpaceRecoveryUpdate(
-                        snapshot.copy(progress = saved),
-                        if (next == null) CollaborationSpaceRecoveryWake(swept.wakeGeneration)
-                        else null,
-                    )
-                )
+                if (next == null) {
+                    val waiting = checked { outbox.pending(access, limit = 1) }
+                    if (waiting is AppResult.Failed) return@withTimeoutOrNull waiting
+                    val captured =
+                        captureCollaborationSpaceComposerPage(
+                            access,
+                            (waiting as AppResult.Success).value,
+                            limit = 1,
+                        ) ?: return@withTimeoutOrNull changedSpaceProgress()
+                    if (captured.submissions.isNotEmpty()) next = first
+                }
+                publish(next)
             }
                 ?: collaborationRecoveryFailure(
                     "client.collaboration_space_recovery_finish_timeout",
                     FailureKind.Timeout,
                 )
+
+        private suspend fun publish(
+            next: CollaborationSpaceRecoverySweep?
+        ): AppResult<CollaborationSpaceRecoveryUpdate> {
+            val previous = requireNotNull(snapshot.progress)
+            val result = checked { progress.replace(owner, previous, next) }
+            if (result is AppResult.Failed) return result
+            val saved = (result as AppResult.Success).value ?: return changedSpaceProgress()
+            if (!validCollaborationSpaceRecoveryProgress(owner, saved) || saved.sweep != next)
+                return changedSpaceProgress(FailureKind.Unexpected)
+            return AppResult.Success(
+                CollaborationSpaceRecoveryUpdate(
+                    snapshot.copy(progress = saved),
+                    if (next == null)
+                        CollaborationSpaceRecoveryWake(
+                            requireNotNull(previous.sweep).wakeGeneration
+                        )
+                    else null,
+                )
+            )
+        }
 
         suspend fun <T> checked(block: suspend () -> AppResult<T>): AppResult<T> {
             val before = admitted()
