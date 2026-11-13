@@ -1,5 +1,20 @@
 # Apple SDK build continuation
 
+Updated 13 November 2026, 05:07 UTC. Latest recheck43369039918/job131700250671
+at894947608d5b37ecf31bfee73e9e769ef2a1387c completed all five Swift cases successfully
+and cleaned fixture stores after process exit. The overall job FAILED only because
+SwiftPM6.1.2 did not write XCTest XML in its ordinary sequential mode; no iOS links ran.
+Collector66726 REAPED; complete artifact14010849442/290891562B/
+95c96d7bcff7f54691e89b7d9646b76d18c888e5993f64ba49d93d1e12af8833 verified.
+The next correction selects --parallel --num-workers 1 to retain sequential execution
+and produce the real XCTest report. 26 builder +9 recheck guards pass, including
+rejection of a successful child without a report. Old command is red. Commit/push,
+then dispatch exactly one completed-framework recheck. Five actual XML cases, cleanup
+and both iOS links remain mandatory. Current workspace is Mobile.work/
+sdk8-apple-xctest-report-2026-11-13. No Rust rebuild, SDK publication or activation.
+
+## Previous fixture lifetime investigation
+
 Updated 13 November 2026. The latest completed recheck43367060755/job131693869434
 atd34a62d4551359cd64b3e7031f294519d3f71cc0 FAILED: five actual Swift cases, four passed.
 Collector60072 REAPED; archive14010603799/290891897B/

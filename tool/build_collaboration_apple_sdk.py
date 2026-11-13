@@ -60,7 +60,10 @@ def run_swift_contracts(proof, output, jobs, env, log, record):
     fixtures.mkdir(mode=0o700, exist_ok=False)
     native_env = env | {"HRIS_SDK8_FIXTURE_ROOT": str(fixtures.resolve(strict=True))}
     try:
-        run(["swift", "test", "--jobs", str(jobs), "--xunit-output", str(output / "swift-tests.xml")],
+        # SwiftPM writes XCTest xUnit reports only through its parallel runner. One worker
+        # preserves sequential native execution while producing the actual runner's report.
+        run(["swift", "test", "--jobs", str(jobs), "--parallel", "--num-workers", "1",
+             "--xunit-output", str(output / "swift-tests.xml")],
             cwd=proof, env=native_env, log=log, timeout=1800)
         return verify_swift_tests(output / "swift-tests.xml")
     finally:

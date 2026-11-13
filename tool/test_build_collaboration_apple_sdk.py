@@ -29,6 +29,8 @@ class SwiftFixtureOwnershipTest(unittest.TestCase):
 
     def child(self, command, *, cwd, env, log, timeout):
         self.assertEqual(1800, timeout)
+        self.assertEqual(["swift", "test", "--jobs", "2", "--parallel", "--num-workers", "1",
+                          "--xunit-output", str(self.output / "swift-tests.xml")], command)
         self.assertEqual(self.output, cwd)
         root = Path(env["HRIS_SDK8_FIXTURE_ROOT"])
         self.assertTrue(root.is_dir())
@@ -67,6 +69,14 @@ class SwiftFixtureOwnershipTest(unittest.TestCase):
                 self.execute()
         self.assertFalse(self.record["fixtureCleanup"]["removed"])
         self.assertTrue((self.output / "swift-fixtures/retained-crypto.sqlite").exists())
+
+    def test_success_without_a_report_is_rejected_after_cleanup(self):
+        def child(*args, **kwargs):
+            self.child(*args, **kwargs)
+            (self.output / "swift-tests.xml").unlink()
+        with self.assertRaises(FileNotFoundError):
+            self.execute(child)
+        self.assertTrue(self.record["fixtureCleanup"]["removed"])
 
     def test_existing_or_redirected_root_is_never_reused_or_removed(self):
         root = self.output / "swift-fixtures"

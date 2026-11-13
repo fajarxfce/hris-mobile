@@ -1,0 +1,87 @@
+{
+  "date": "2026-11-13",
+  "previousRecheck": {
+    "collected": true,
+    "accepted": false,
+    "conclusion": "failure",
+    "runId": 43369039918,
+    "jobId": 131700250671,
+    "sourceCommit": "894947608d5b37ecf31bfee73e9e769ef2a1387c",
+    "artifactId": 14010849442,
+    "artifactBytes": 290891562,
+    "artifactSha256": "95c96d7bcff7f54691e89b7d9646b76d18c888e5993f64ba49d93d1e12af8833",
+    "githubDigestAndZipCrcVerified": true,
+    "frozenNativePackageAndExactProofFilesVerified": true,
+    "nativeRebuilt": false,
+    "nativeTests": null,
+    "fixtureCleanup": {
+      "afterSwiftProcessExit": true,
+      "removed": true
+    },
+    "jobLogSha256": "592fbd5e2e81cd233adfd7c52f44a8f41ce19cdc4b9d0c7ff6a0dc5b736a10ab",
+    "buildLogSha256": "3b4a09abd967efa5fc91d003b09049693c87b96042682cb9cf175372ccaa259f",
+    "elapsedSeconds": 197.107,
+    "published": false,
+    "productionAppleRuntimeEnabled": false
+  },
+  "actualSwiftCases": [
+    {
+      "class": "HrisCollaborationAppleProofTests.LocalCryptoProbeTests",
+      "method": "testNativeCryptoIdentitySurvivesReopenAndRejectsUnrelatedStoreKey",
+      "seconds": 0.08
+    },
+    {
+      "class": "HrisCollaborationAppleProofTests.SDK8NativeTests",
+      "method": "testExistingIdentityRejectsParentSymlinkWithoutChangingRetainedKeys",
+      "seconds": 1.825
+    },
+    {
+      "class": "HrisCollaborationAppleProofTests.SDK8NativeTests",
+      "method": "testMissingStoreReadDoesNotCreateFiles",
+      "seconds": 0.001
+    },
+    {
+      "class": "HrisCollaborationAppleProofTests.SDK8NativeTests",
+      "method": "testPassphraseIdentityReaderPreservesKeysAndRejectsAnUnrelatedPassphrase",
+      "seconds": 2.682
+    },
+    {
+      "class": "HrisCollaborationAppleProofTests.SDK8NativeTests",
+      "method": "testSDK8ListenerCancellationAndObserverCloseRetainNoListener",
+      "seconds": 1.63
+    }
+  ],
+  "actualSwiftCasesPassed": 5,
+  "fixtureCleanupPassed": true,
+  "reportAbsent": true,
+  "iosLinksExecuted": false,
+  "nativePackageAccepted": false,
+  "swiftpmSource": {
+    "url": "https://raw.githubusercontent.com/swiftlang/swift-package-manager/swift-6.1.2-RELEASE/Sources/Commands/SwiftTestCommand.swift",
+    "sha256": "407a3329735cd00ee5698a536c42343768be4819569a0775f5032d52676154e4"
+  },
+  "actualSwift": "6.1.2",
+  "actualXcode": "16.4",
+  "correction": "Use SwiftPM XCTest parallel runner with exactly one test worker, preserving sequential execution and obtaining its real xUnit report. Missing reports still fail; no synthesized report.",
+  "local": {
+    "accepted": true,
+    "builderGuardTests": 26,
+    "recheckGuardTests": 9,
+    "elapsedSeconds": 0.193,
+    "guardLogSha256": "eb88c162ca11998586e69b274d56d7a09142b66d3734aa0ec641f30b722b0b0a",
+    "sources": {
+      ".github/workflows/collaboration-apple-sdk.yml": "c9b32c67b83923c4c54c1df377b660aa76c651cf108651a3500e5b66523e040c",
+      "tool/collaboration-apple-sdk-proof/SDK8NativeTests.swift": "509a4045bf165dd304d6d6f301fd0ed32eb7d28cfb2b4b4f1d8d6edad53776f9",
+      "tool/recheck_collaboration_apple_sdk.py": "16f7879dd9174fae8cde7ad611009d9c37dfe611e87b15d91b41f950e262781d",
+      "tool/test_recheck_collaboration_apple_sdk.py": "cb913d24c35ff0ccf733ca5e7b34bde45e690d9ef9698336288c4f7102867199",
+      "tool/build_collaboration_apple_sdk.py": "e923e42be27d8d45499869b1086343cac1819be941f5e7e9b41c43b8038c456d",
+      "tool/test_build_collaboration_apple_sdk.py": "f6f5c43c6767c166eac4f49c8b25bf1bf32d21e6a9bea0de55c84720ab7ebc62"
+    },
+    "totalSwiftCasesExpected": 5,
+    "nativeExecutedLocally": 0,
+    "nativeAccepted": false,
+    "sdkManifestUnchanged": "4e3da541a7a4f9a22b631391b0f29cebdb723d43662d530bd7d454ebaeb6686a",
+    "oldRunnerRedLogSha256": "b504ee849e0ad2d925d03efd9455b5739b0efc4ab359bf5a23d2cdf55c86a6e9"
+  },
+  "published": false
+}

@@ -143,3 +143,22 @@ and all five native test identities remain. 25 builder and nine recheck Python g
 pass; five actual Swift cases and both iOS links still require the next hosted recheck.
 
 Evidence: [fixture ownership](measurements/collaboration-sdk8-apple-fixture-lifetime-2026-11-13.json).
+
+## Actual native success and missing XCTest report
+
+Recheck43369039918 at89494760 executed all five exact Swift cases successfully,
+including direct passphrase identity, unrelated-key refusal, parent-symlink refusal,
+missing-store noncreation and listener/observer lifetime. Process-owned fixture cleanup
+also passed. The job then failed because SwiftPM wrote no requested XCTest XML; neither
+iOS link ran. The native package is still unaccepted. The exact failed artifact and five
+individual case durations are retained in the measurement.
+
+The runner used Xcode16.4 / Swift6.1.2. Its matching SwiftPM source generates XCTest
+xUnit output only through ParallelTestRunner. The command now selects that runner with
+exactly one worker: native cases remain sequential. The old command fails the new local
+command assertion; 26 builder and nine recheck guards now pass. A successful process
+without its real report still fails acceptance after mandatory fixture cleanup. No report
+is synthesized and none of the five tests is removed. One new completed-framework
+recheck must pass its actual XML, fixture cleanup and both iOS links.
+
+Evidence: [XCTest report gate](measurements/collaboration-sdk8-apple-xctest-report-2026-11-13.json).
