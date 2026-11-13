@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 22:10 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 22:14 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -17,12 +17,23 @@ The first focused41 source was rejected for a redundant safe call; corrected foc
 205.481s. Exact rejected source/candidate files and acceptance-rejection.json remain archived.
 Apply/check/record scripts are USED. No projection owner, graph, phone or live change is active.
 
-The following .work/space-inbox-history-projection-2026-11-13 has3 REVIEWED UNAPPLIED paths,
-16 shared behavior-test drafts, and prepared focused57/full16797 apply/capture/accept scripts.
-Its bounded synchronous proposal retains physical identity, draft, position, delivery and pending
-text, with explicit unresolved originals and17th-candidate fallback. Not compiled or activated.
-Dispatch the exact accepted/pushed16765 hosted control first, then apply only with a free compiler.
-Projection record/commit scripts are prepared NOT RUN; admitted source/owner integration follows.
+Next .work/space-inbox-history-projection-2026-11-13 has3 APPLIED reviewed paths and16 shared
+methods. Apply30542 is REAPED0; focused57/session99198 is RUNNING. Source5434/
+df3dc9066d8a332fa464db8a66e1b66648d70283eff0295e65f2302505b578db.
+Do not alter active inputs until99198 is reaped. Then accept-focused.py focused-1, run/reap
+full16797, accept-full.py full-1, record, commit/push Mobile then Group. Record/commit scripts
+are PREPARED NOT RUN. The proposal preserves actual physical identity, drafts, original position,
+pending edits and confirmed delivery, with explicit unresolved work and17th-candidate fallback.
+Admitted source/owner integration remains separate and unactivated.
+
+Exact accepted outcome source7aad7abc235278cf8f6340f74bed5e71479d74ef was dispatched once:
+https://github.com/fajarxfce/hris-mobile/actions/runs/43517312645 . Expected20678 total =14505
+portable (6922 desktop/960 Android host/6623 browser) +6173 Apple;73 new shared methods from
+atomic edit storage17/admission17/coherent snapshot16/outcome23. It EXCLUDES the active16-method
+projection and unreviewed producer. Applejob132202447560/portablejob132202448103 are in progress.
+Dispatch62537 is REAPED0. Prepare/dispatch scripts USED; auditors PREPARED NOT RUN. Capture completed
+job artifacts, audit against accepted43498640097 and the retained failed43443248470 identities;
+never redispatch this source. Main native SDK8 Apple app activation is separate.
 
 Read .work/space-inbox-edit-outcome-policy-2026-11-13/next-owner-review.md and the inbox index plan.
 Next implement bounded history publication (at most16 changed originals/17 fallback candidates),
