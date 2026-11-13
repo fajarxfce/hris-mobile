@@ -1,57 +1,42 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 21:36 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 21:42 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Admitted offline editing locally accepted
+## Coherent history edit evidence locally accepted
 
-Mobile .work/space-edit-inbox-admission-2026-11-13 is accepted:7 paths,17 shared behavioral
-methods and app constructor resolution. Focused36/full16687 (14533 fresh /
-2154 unchanged) retain all16653 prior IDs plus34 executions.
-Source5421/472a223f6d613b8a043ee8b84dcfbc24ff9a283a66dcf6c84538aa860bf65467; reports124cc1cf215f792623094810f163510394a290623638867e3cd70fd260cfb009.
-Per-gesture admission owns latched denial, selected sender/canonical history and three bounded
-preparations. Exact readback handles lost responses; source/position/draft identity is retained.
-The first focused source is rejected for its compiler warning; corrected source follows below in
-measurement attempts. Apply/check/record scripts are USED. No graph, phone or live change.
+Mobile .work/space-history-edit-evidence-2026-11-13 is accepted:11 paths,16 shared actual Group/
+Company storage methods. Focused51/full16719 (14565 fresh /2154
+unchanged) preserve all16687 prior IDs plus32 executions. Source5426/
+87215fc372d77b538a29dd7d7947f593b7d92d77d631c550528a084e624c02da; reports627caeca3c0d0afa15f46e262dfbd7c97c59c34d32c63e26d6f841fe0910f3b9.
+Canonical original events and bounded exact operation evidence now share one source checkpoint.
+Absent operations remain explicit; changed revisions yield no mixed snapshot. Keys, physical
+namespaces,128alias completeness and joined cancellation are preserved. Default snapshots do no
+extra queries. Apply/record/check scripts are USED; no graph, phone or live change is active.
 
-Next .work/space-history-edit-evidence-2026-11-13 has11 APPLIED reviewed paths. Apply72007 is
-REAPED0; focused51/session24522 is REAPED PASS/accepted363.686s. Full16719/session53715 is RUNNING
-since21:25:40UTC. Source5426/87215fc372d77b538a29dd7d7947f593b7d92d77d631c550528a084e624c02da.
-Originals and bounded replacement operations share one Group/actual Company source checkpoint.
-Do not change active inputs until53715 is reaped; then accept-full.py full-1 and set fullReaped.
-Guarded record-acceptance.py/commit.py remain NOT RUN; Group document path was corrected to unique
-mobile-history-edit-snapshot.md. Reap and accept, record, commit Mobile/push, then Group/push.
+Next .work/space-inbox-edit-outcome-policy-2026-11-13 contains five REVIEWED UNAPPLIED pure policy/
+behavior-test drafts (23 methods at this checkpoint). They match actual pending Group/Company
+commands, immutable provenance, targets and provider sender/hash facts. Read current review/state;
+focused41/full16765 gates are prepared but NOT RUN. Authenticated newer-operation supersession
+uses both possible completion namespaces and local ordering; execute/review the actual tests. Policy outcomes do not manufacture receipts,
+retire commands or resurrect hidden/deleted previews. Then integrate finite existing incoming/repair
+owners, canonical bounded history publication, durable unresolved work and catalog/binding backfill.
+Do not create another timer, per-room observer or VM business helper.
 
-Follow-up .work/space-inbox-edit-outcome-policy-2026-11-13 has5 REVIEWED UNAPPLIED paths and23
-behavior-test drafts. Exact pending Group/Company/provider facts admit observed/rejected results;
-one authenticated later completion across both namespaces may supersede an older pending edit.
-Wrong-room proof and contradictory redaction were found during review and have regression drafts.
-Focused41/full16765, apply/capture/acceptance/commit scripts are prepared NOT RUN. Apply requires
-accepted/pushed16719 and a free compiler slot. Source/owner publication and product graph remain open.
-.work/space-inbox-history-projection-2026-11-13 now holds3 UNAPPLIED draft paths (two source,
-14 behavior-test methods). They are NOT compiled or accepted and need final source/test review.
-Drafts preserve original placement, physical anchors, pending text, hidden/deleted precedence and
-partial unresolved work. No producer, backfill, owner, thread/list integration or UI is activated.
-The batch proposal has a synchronous local lifetime; validation uses captured source/index facts.
-Review exact pending target/clearance, complete fallback, duplicate anchors and ordinal bounds.
+Prior admitted edits pass16687; atomic edit storage passes16653. Generic coreb4a3a89d passes16619
+and Starterd7b6f839 passes independent1022 with9 exact files. Control43498640097 covers the earlier
+core only (ACCEPTED20459/6100 Apple), excluding these later HRIS increments; read its audited state
+without redispatch. Bundle later exact-source hosted validation after these local increments.
+The following .work/space-inbox-history-projection-2026-11-13 has3 REVIEWED UNAPPLIED paths,
+16 shared behavior-test drafts, and prepared focused57/full16797 apply/capture/accept scripts.
+Its bounded synchronous proposal retains physical identity, draft, position, delivery and pending
+text, with explicit unresolved originals and17th-candidate fallback. Not compiled or activated.
+Dispatch the exact accepted/pushed16765 hosted control first, then apply only with a free compiler.
+Projection record/commit scripts are prepared NOT RUN; admitted source/owner integration follows.
 
-Read next-owner-review.md for bounded16original/17fallback publication, canonical source, durable
-unresolved handoff, retained-reference completion and finite catalog/binding backfill under existing
-owners. No new per-room observer, polling queue, VM helper or status guessed from an ACK.
-
-Future pure-policy prepare-hosted.py is PREPARED NOT RUN: expect73 new shared methods across
-atomic edit storage17, admission17, coherent snapshot16 and outcome23, total20678/6173 Apple,
-after all those local gates and exact pushed source. It must use accepted43498640097 as baseline;
-current dispatcher/auditors are USED and must not be redispatched. Main native SDK8 is separate.
-
-Prior atomic edit storage92158660 passes16653. Generic coreb4a3a89d passes16619 and Starter
-d7b6f839 passes independent1022 with9 exact files. Control43498640097 covers that earlier core
-(ACCEPTED20459/6100 Apple), EXCLUDING the two later17-method edit increments. Read its audited
-state; do not redispatch. Startercaf8103 links its15 byte-identical shared Apple methods;
-nine generic files and independent1022 remain unchanged. Main native Apple SDK8 is separate. Phone92 stays
-installed; live Group OFF. Finish bounded history publication/backfill and list/graph integration.
+Main native Apple SDK8 activation remains separate. Phone92 stays installed; live Group OFF.
 All54 PRD acceptance groups remain open. Push every commit and continue beyond checkpoints.
 
 ## Accepted source and existing hosted controls

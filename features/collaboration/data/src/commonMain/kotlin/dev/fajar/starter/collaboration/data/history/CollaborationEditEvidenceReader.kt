@@ -25,7 +25,8 @@ internal class CollaborationEditEvidenceReader(
                     listOf(ReplicaQuery(tag, limit = 129)),
                 )
                 .first()
-        require(page.checkpoint == checkpoint && page.pages.size == 1)
+        if (page.checkpoint != checkpoint) throw CollaborationHistoryPreparationChanged()
+        require(page.pages.size == 1)
         val values = page.pages.single()
         require(values.size <= 128) { "Replacement operation exceeds the bounded evidence window." }
         return values.map {

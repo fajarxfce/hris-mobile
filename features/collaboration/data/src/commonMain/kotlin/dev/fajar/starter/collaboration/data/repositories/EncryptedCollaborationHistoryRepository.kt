@@ -40,11 +40,19 @@ class EncryptedCollaborationHistoryRepository(
     override suspend fun snapshot(
         source: CollaborationSpaceHistoryLocation.Original,
         eventIds: List<String>,
+        editOperations: List<CollaborationHistoryEditOperation>,
     ) = safeStorageCall {
         val access = source.access
         val conversationId = source.conversationId
         val roomId = source.roomId
         val ids = eventIds.toList()
+        val operations = editOperations.toList()
+        require(operations.size <= 16 && operations.distinct() == operations)
+        require(
+            operations.all {
+                validCollaborationHistorySender(it.sender) && validCollaborationMessageId(it.id)
+            }
+        )
         require(ids.size in 1..16 && ids.distinct().size == ids.size)
         require(ids.all(::validCollaborationEventId))
         validateHistoryRoom(roomId)
@@ -57,6 +65,7 @@ class EncryptedCollaborationHistoryRepository(
                 CollaborationSpaceHistorySnapshot(
                     null,
                     ids.map { CollaborationSpaceHistorySnapshotEvent(it, null) },
+                    operations.map { CollaborationHistoryEditOperationEvidence(it, emptyList()) },
                 )
             else null
         }
@@ -64,11 +73,20 @@ class EncryptedCollaborationHistoryRepository(
             withKey(access, conversationId, roomId) { codec ->
                 codec.checkpoint(raw)
                 val events = CollaborationHistorySnapshotReader(replicas, raw, codec).read(ids)
+                val evidence = CollaborationEditEvidenceReader(replicas, raw, codec)
+                val replacements =
+                    operations.map {
+                        CollaborationHistoryEditOperationEvidence(
+                            it,
+                            evidence.operation(it.sender, it.id),
+                        )
+                    }
                 currentCoroutineContext().ensureActive()
                 if (replicas.checkpoint(scope, partition) == raw)
                     CollaborationSpaceHistorySnapshot(
                         raw.handle.generation + ":" + raw.revision,
                         events,
+                        replacements,
                     )
                 else null
             }

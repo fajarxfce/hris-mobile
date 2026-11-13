@@ -8,13 +8,16 @@ interface CollaborationSpaceHistorySnapshotRepository {
     /**
      * Resolve 1..16 distinct original/replacement event IDs under one source revision. Preserves
      * hidden/redacted originals and current edits. An absent partition needs no key. A null result
-     * means the source changed during acquisition; the caller owns bounded reobservation.
+     * means the source changed during acquisition; the caller owns bounded reobservation. Optional
+     * 0..16 distinct sender/operation queries retain all 0..128 replacement aliases each under that
+     * same checkpoint. Results preserve request order, including empty operations.
      */
     suspend fun snapshot(
         access: CollaborationSpaceLocalAccess,
         conversationId: String,
         roomId: String,
         eventIds: List<String>,
+        editOperations: List<CollaborationHistoryEditOperation> = emptyList(),
     ): AppResult<CollaborationSpaceHistorySnapshot?>
 
     /**

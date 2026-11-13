@@ -283,3 +283,7 @@ Same-instance Group command and canonical history/index transaction support pass
 ## Admitted offline editing
 
 One reviewed edit is admitted against canonical local history and atomically retained with its original inbox anchor. Focused36/full16687 pass. Provider outcome evidence, incoming/backfill ownership and product activation remain; see `docs/collaboration-space-edit-admission.md`.
+
+## Coherent edit evidence
+
+Existing canonical Group/Company snapshots retain bounded exact replacement operation evidence under the same source revision. Focused51/full16719 pass. Pure outcome policy, incoming/backfill ownership and product activation remain; see `docs/collaboration-history-edit-snapshot.md`.

@@ -1,5 +1,7 @@
 # Architecture
 
+[Coherent original and edit evidence](collaboration-history-edit-snapshot.md) shares one canonical authenticated source revision.
+
 [Admitted offline editing](collaboration-space-edit-admission.md) retains one reviewed gesture and stable preview under owned local facts.
 
 [Atomic edit preview publication](collaboration-space-edit-inbox-publication.md) keeps command, checked original preview and recovery wake together.

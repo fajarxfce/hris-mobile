@@ -6,6 +6,7 @@ package dev.fajar.starter.collaboration.domain.entities
 data class CollaborationSpaceHistorySnapshot(
     val revision: String?,
     val events: List<CollaborationSpaceHistorySnapshotEvent>,
+    val editOperations: List<CollaborationHistoryEditOperationEvidence> = emptyList(),
 ) {
     override fun toString() = "CollaborationSpaceHistorySnapshot([redacted])"
 }

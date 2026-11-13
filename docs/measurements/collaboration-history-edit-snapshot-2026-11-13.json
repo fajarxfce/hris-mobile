@@ -1,0 +1,82 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationEditEvidenceReader.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationHistoryRepository.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceHistoryRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationHistoryEditSnapshotStorageContract.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationHistoryEditSnapshotStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationHistoryEditSnapshotStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationHistoryEditSnapshotStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationHistoryEditOperation.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceHistorySnapshot.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationCompanyHistorySnapshotRepository.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceHistorySnapshotRepository.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 51,
+    "elapsedSeconds": 363.686,
+    "sourceFiles": 5426,
+    "sourceManifestSha256": "87215fc372d77b538a29dd7d7947f593b7d92d77d631c550528a084e624c02da",
+    "resultSha256": "579161bbe81b3c93b6f23a0d710ab29b696f677cade9ce4e016099bd8b035936",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationEditEvidenceStorageTest": 8,
+      "CollaborationHistoryEditSnapshotStorageTest": 16,
+      "CollaborationSpaceHistorySnapshotStorageTest": 17,
+      "CollaborationCompanyHistoryInboxStorageTest": 8
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T21:25:41.851297+00:00",
+    "elapsedSeconds": 1016.668,
+    "sourceFiles": 5426,
+    "freshCounts": {
+      "tests": 14565,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 154612266,
+      "sha256": "213b9f9d3a4366deecf1f29603b4ab6c659dee0535e9953e81108030cce7b365"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16719,
+    "newCases": 32,
+    "freshTests": 14565,
+    "reusedUnaffectedTests": 2154,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "87215fc372d77b538a29dd7d7947f593b7d92d77d631c550528a084e624c02da",
+    "reportManifestSha256": "627caeca3c0d0afa15f46e262dfbd7c97c59c34d32c63e26d6f841fe0910f3b9",
+    "nativeClaim": "Coherent original/replacement operation snapshots;16 shared actual Group/Company storage methods. Domain outcome admission, actual Apple and graph activation remain separate."
+  },
+  "focusedAttempts": [
+    {
+      "directory": "focused-1",
+      "exitCode": 0,
+      "freshCounts": {
+        "tests": 51,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "579161bbe81b3c93b6f23a0d710ab29b696f677cade9ce4e016099bd8b035936",
+      "sourceManifestSha256": "87215fc372d77b538a29dd7d7947f593b7d92d77d631c550528a084e624c02da"
+    }
+  ],
+  "newSharedMethods": 16,
+  "actualNewAppleExecution": false,
+  "requiresStarterPort": false,
+  "coherentOperationEvidenceAvailable": true,
+  "providerOutcomeReconciliationActivated": false,
+  "productGraphActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false
+}
