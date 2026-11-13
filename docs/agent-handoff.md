@@ -1,10 +1,44 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 11:29 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 12:01 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Admitted inbox repair actions locally accepted
+
+Mobile.work/space-inbox-repair-admission-2026-11-13 is accepted locally,14 source paths.
+Focused63; full15,909 = 13843 fresh + 2066 exact unchanged.
+All15,839 preceding IDs remain plus70 JVM/browser executions of35 new shared methods.
+Source 5331/943e5730b4a1e403177cf8bca0e30dcd64ef4de6276078d442e0a8c8869c551b.
+Report 19ad272ff2b6dedd317aa749642a83be022f187c0a9c391229619451fca9b282.
+Four new admitted actions read finite/exact references and read/change repair progress. The existing
+ObserveCollaborationSpaceMessages is strengthened in place, preserving its eight old tests; no
+second inbox-specific observer was added. Bounded inventories are detached and checked against
+current account/Group admission. Only null CAS contention retries (three attempts); operational
+failure stops, exact Request replay confirms uncertain writes, and pending-only completion is idle.
+Actual35 Apple methods remain pending alongside51 earlier methods. No repair worker, legacy seed,
+history producer, product Group graph or phone/live activation is included.
+
+Continue the finite account/Group worker and exact changed/retired original selection. Reuse the
+existing command observer; never observe index writes as command demand or open one stream per row.
+Preserve denial through failed retries, cancel/join old owners, retain one finite pass with one
+coalesced later demand, and keep unchanged visible rows while invisible index revisions advance.
+Review the verified fast-completion/snapshot-conflation gap in
+Mobile.work/space-inbox-repair-worker-2026-11-13/review.md before choosing the completion wake.
+Then implement bounded legacy references, incoming history and product list/Group integration,
+including pending edits and global clock ordering. The accepted preparation scripts are historical;
+do not reapply them. Push every commit and continue. Phone stays on92 until a visible validated update.
+
+The next raw transaction is prepared, not applied or tested, in
+Mobile.work/command-archive-replica-2026-11-13: CommandStore.archiveAndMutate copies one exact
+command to its immutable archive together with one or two prepared replica mutations. Exact
+archive replay must leave later replica progress untouched. Room uses one public writer
+transaction, including explicit invalidation after exit; IndexedDB uses one transaction across
+both existing store groups. No schema change is planned. Real rollback, competing writers,
+cancellation, replay, observation and reopening tests precede producer/worker integration and
+any generic Starter port. Domain completion still owns the prepared encrypted repair demand.
 
 ## Finite inbox repair metadata and exact lookup locally accepted
 
@@ -26,9 +60,9 @@ confirmed denial, cancel/join old owners and retain unchanged displayed rows dur
 Then seed legacy exact-command references, publish incoming history and integrate product list/Group
 navigation. Review pending edits and global clock ordering separately. The accepted increment's
 preparation/apply scripts are historical; do not rerun them. The design review remains in its workspace.
-Mobile.work/space-inbox-repair-admission-2026-11-13/review.md records the next admitted reader,
-checkpoint-action and observer contract: 14 prepared paths and35 shared methods, none applied or
-accepted yet. Reuse/strengthen ObserveCollaborationSpaceMessages; do not add a duplicate observer.
+The admitted reader/checkpoint/observer increment is now locally accepted above:14 source paths,
+35 shared methods, full15,909. Its preparation scripts are historical; do not reapply them.
+ObserveCollaborationSpaceMessages was strengthened in place, preserving all eight prior methods.
 Room and IndexedDB active-list snapshots can conflate a fast insert/completion/archive back to the
 same list, losing an unobserved original ID. Before worker integration, prove a durable completion
 wake for this case without polling. Review atomic archival plus the existing repair-progress

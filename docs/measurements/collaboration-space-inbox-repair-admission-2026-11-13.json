@@ -1,0 +1,103 @@
+{
+  "accepted": true,
+  "sourceFiles": 5331,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxRepairAdmissionPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ChangeCollaborationSpaceInboxRepairProgress.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceMessages.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceInboxRepair.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceInboxRepairProgress.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceInboxRepairs.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ChangeSpaceInboxRepairProgressTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceMessageInventoryTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadSpaceInboxRepairProgressTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadSpaceInboxRepairTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadSpaceInboxRepairsTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxRepairUseCaseFixture.kt"
+  ],
+  "sourceManifestSha256": "943e5730b4a1e403177cf8bca0e30dcd64ef4de6276078d442e0a8c8869c551b",
+  "focused": {
+    "accepted": true,
+    "tests": 63,
+    "elapsedSeconds": 317.519,
+    "sourceFiles": 5331,
+    "sourceManifestSha256": "943e5730b4a1e403177cf8bca0e30dcd64ef4de6276078d442e0a8c8869c551b",
+    "resultSha256": "a18ffb58062f770fce3db44b55751544d1e13e7af479865faabf61ec91ae3ac4",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "ObserveSpaceMessageInventoryTest": 5,
+      "ChangeSpaceInboxRepairProgressTest": 10,
+      "ObserveCollaborationSpaceMessagesTest": 8,
+      "ReadSpaceInboxRepairProgressTest": 5,
+      "ReadSpaceInboxRepairTest": 6,
+      "ReadSpaceInboxRepairsTest": 9,
+      "ReconcileSpaceInboxOriginalTest": 9,
+      "SpaceInboxRepairProgressPolicyTest": 9
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T11:45:23.583552+00:00",
+    "elapsedSeconds": 921.077,
+    "sourceFiles": 5331,
+    "freshCounts": {
+      "tests": 13843,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152563548,
+      "sha256": "85fba33757b6ffb932e0602e6d72d3e6b6f02c27341ded24d28936334d0f432d"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 15909,
+    "newCases": 70,
+    "freshTests": 13843,
+    "reusedUnaffectedTests": 2066,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 109,
+    "excludedHistoricalCases": 642,
+    "sourceManifestSha256": "943e5730b4a1e403177cf8bca0e30dcd64ef4de6276078d442e0a8c8869c551b",
+    "reportManifestSha256": "19ad272ff2b6dedd317aa749642a83be022f187c0a9c391229619451fca9b282",
+    "nativeClaim": "Admitted finite repair readers, checkpoint actions and one bounded command observer; 35 new shared methods need actual Apple execution. Worker, legacy seeding, history and product list integration remain pending."
+  },
+  "newSharedMethods": 35,
+  "admittedRepairActions": true,
+  "existingMessageObserverStrengthened": true,
+  "recoveryOwnerIntegrated": false,
+  "historyProducerIntegrated": false,
+  "productGraphActivated": false,
+  "nativeAppleExecution": false,
+  "phoneInstalled": false,
+  "previousInstalledPhoneBuild": 92,
+  "liveChanged": false,
+  "genericStarterPortRequired": false,
+  "failedCandidates": [
+    {
+      "accepted": false,
+      "reason": "Two expected result lists inferred a narrow Success/Failed type; specify the existing List<AppResult<List<CollaborationSpaceMessageRecord>>> assertion type. Preserve both expected values and the actual result list.",
+      "run": "focused-1",
+      "session": 46163,
+      "reaped": true,
+      "partialTests": 0,
+      "resultSha256": "9104623552c64a1d9871e385755f4393b630433412c9835b277f80e5e7e4d1a7",
+      "sourceManifestSha256": "6d0e5b4856d69af650b148abfdb247af388438c3acc74f7872bade90fb288c3a"
+    },
+    {
+      "accepted": false,
+      "reason": "Staging.before is a set of native transaction IDs, not Matrix event IDs. Replace the invalid event-shaped test value with a valid transaction ID and retain the snapshot-detachment assertion. Production validation is correct and unchanged.",
+      "run": "focused-2",
+      "session": 99504,
+      "reaped": true,
+      "partialTests": 61,
+      "failedTests": 1,
+      "passedTests": 60,
+      "resultSha256": "aa880b8891ebd27940bf2f5bf62e7eb97df20ecbdafb84a1c42811bc55119c46",
+      "sourceManifestSha256": "09bcde49f6ad77b011f7e43a75115a42e74d249dd7440dd1cdcaeef407209547"
+    }
+  ]
+}

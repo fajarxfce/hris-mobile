@@ -1,5 +1,7 @@
 # Architecture
 
+[Admitted inbox repair actions](collaboration-space-inbox-repair-admission.md) validate finite/exact local facts and strengthen the existing bounded message observer under current account/Group access.
+
 [Finite inbox repair checkpoints](collaboration-space-inbox-repair-checkpoint.md) retain captured progress and expose exact local reference lookup for the future admitted owner.
 
 [Exact inbox command progress](collaboration-space-inbox-command-progress.md) reconciles retained originals under local admission and bounded contention.

@@ -709,6 +709,38 @@ class CollaborationDataModule {
     ) = ReconcileCollaborationSpaceInboxOriginal(messages, inbox, directory, sessions, server)
 
     @Factory
+    fun readSpaceInboxRepairs(
+        repairs: CollaborationSpaceInboxRepairRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpaceInboxRepairs(repairs, directory, sessions, server)
+
+    @Factory
+    fun readSpaceInboxRepair(
+        repairs: CollaborationSpaceInboxRepairRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpaceInboxRepair(repairs, directory, sessions, server)
+
+    @Factory
+    fun readSpaceInboxRepairProgress(
+        progress: CollaborationSpaceInboxRepairProgressRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpaceInboxRepairProgress(progress, directory, sessions, server)
+
+    @Factory
+    fun changeSpaceInboxRepairProgress(
+        progress: CollaborationSpaceInboxRepairProgressRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ChangeCollaborationSpaceInboxRepairProgress(progress, directory, sessions, server)
+
+    @Factory
     fun recoverSpaceComposer(
         roots: CollaborationSpaceRootRepository,
         outbox: CollaborationSpaceComposerOutboxRepository,

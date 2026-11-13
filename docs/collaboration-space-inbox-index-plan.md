@@ -144,3 +144,9 @@ legacy seeding, history/list and product integration remain.
 One captured pass and one coalesced later demand now persist independently of visible index
 revisions. Exact original lookup uses one document. Twenty-one new shared methods pass locally,
 full15,839. Admitted owner, legacy seeding, history/list and product integration remain.
+
+## Admitted repair actions accepted
+
+Four admitted finite/exact read and checkpoint actions, plus the strengthened existing message
+observer, pass35 new shared methods and all prior identities, full15,909. The finite worker,
+legacy seeding, history/list and Group product integration remain.
