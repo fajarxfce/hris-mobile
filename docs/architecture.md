@@ -1,5 +1,7 @@
 # Architecture
 
+[Local Group conversation catalog](collaboration-space-conversation-catalog.md) enumerates authenticated canonical pairs for a separate persistent activity index.
+
 [Group navigation ownership](collaboration-space-thread-navigation.md) retains bounded local rooms under explicit account/Group lifetime and retires obsolete page effects.
 
 [Group page and actions](collaboration-space-thread-page.md) render typed rows while domain confirms local action admission and navigation owns platform effects.

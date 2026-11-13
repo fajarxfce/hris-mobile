@@ -65,6 +65,23 @@ internal class CollaborationSpaceConversationMetadataCodec(
         return seal(generation, "checkpoint", revision, Json.encodeToString(MetadataCheckpoint(1)))
     }
 
+    suspend fun catalogCursor(position: CollaborationSpaceConversationCatalogPosition): String {
+        validateCatalogPosition(position)
+        return seal("catalog", "cursor", 0, Json.encodeToString(position))
+    }
+
+    suspend fun catalogPosition(cursor: String): CollaborationSpaceConversationCatalogPosition =
+        Json.decodeFromString<CollaborationSpaceConversationCatalogPosition>(
+                open("catalog", "cursor", 0, cursor)
+            )
+            .also(::validateCatalogPosition)
+
+    private fun validateCatalogPosition(value: CollaborationSpaceConversationCatalogPosition) {
+        require(validCollaborationSpaceConversationId(value.generation))
+        require(value.revision in 0..9_007_199_254_740_991L)
+        require(value.after.matches(Regex("m-[0-9a-f]{64}")))
+    }
+
     suspend fun validate(raw: ReplicaCheckpoint) {
         require(raw.published && raw.handle.scope == spaceConversationMetadataScope(access))
         require(raw.handle.partition == spaceConversationMetadataPartition(access))

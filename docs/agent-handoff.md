@@ -1,25 +1,30 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 05:45 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 06:02 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
 
-## Active local catalog increment
+## Latest local catalog acceptance
 
-Mobile.work/space-conversation-catalog-2026-11-13 has9 uncommitted source paths.
-One finite published metadata reader plus version observation, without rewriting canonical
-indexes or reading message history. Cursor freezes insertion revision; authenticated pairs
-appear once, empty peer-only pages advance, later insertions request a subsequent pass.
-Focused2/session9913 is ACTIVE: actual storage26 passed; application binding and Apple test
-compilation remain in that run. One local compiler only. Do not edit application sources
-until reaped. Source5257/95fd1639a68ff1b9d1e2b1eef8157867b6f18cfbe4608c96f37ea9bc6a7d1a2e.
-Focused1/66772 REAPED26/3failed/180.953s: test raw() extension was shadowed by the existing
-history fixture member. The fixture is now rawCatalog(); every test identity/assertion is
-retained. Original failed source/results remain in failed-shadowed-fixture-1. Format33007
-REAPED35.699s. Focused expected28; full expected15541, not yet run. The catalog is inventory
-for a persistent activity index, not a user-visible recents list or product activation.
+Mobile.work/space-conversation-catalog-2026-11-13 is accepted locally,9 source paths.
+Focused28/session9913 REAPED255.877s. Full15541/session96127 REAPED:
+13503 fresh plus2038 exact unchanged; all15517 prior IDs retained.
+Source5257/95fd1639a68ff1b9d1e2b1eef8157867b6f18cfbe4608c96f37ea9bc6a7d1a2e.
+Report8203a44f24c822e99cce4845a3f810d67ea450333a323547ecc1a5f602b90b72. Twelve real storage methods pass on JVM/browser;
+their actual Apple execution is pending. Failed-shadowed-fixture-1 preserves the unchanged
+failed requirements and source. No product list/graph, activity index or native activation.
+
+Next: review/apply Mobile.work/space-catalog-admission-2026-11-13.
+It contains8 draft paths with17 domain methods, including DI checks. These drafts are NOT
+applied or compiled. Rebase their data/app DI edits against current sources before applying.
+After local admission acceptance, one combined hosted control can cover navigation13,
+catalog12 and admission17 new Apple methods; do not repeat accepted page run43366809238.
+The persistent activity-index requirements are in collaboration-space-inbox-index-plan.md.
+Apple local consumer is accepted on isolatedd21fdf34 (8 new Python guards;45 frozen files).
+SDK archive SHA966c198f042a092423ca7e5c55ca3dc69bf7d448ef8caf991c1b4e44d7e5b687;
+consumer86083 REAPED. Actual Swift/Kotlin bridge/application link still follow.
 
 ## Latest Group navigation acceptance
 

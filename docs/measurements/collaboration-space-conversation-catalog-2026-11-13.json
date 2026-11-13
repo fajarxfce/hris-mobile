@@ -1,0 +1,84 @@
+{
+  "startedAt": "2026-11-13T05:45:26.500830+00:00",
+  "elapsedSeconds": 934.726,
+  "sourceFiles": 5257,
+  "freshCounts": {
+    "tests": 13503,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 153536407,
+    "sha256": "d65c6f2ff876b9dd51ac0258225bc8035c4df4001ae8bb876bd675ce83d06764"
+  },
+  "fullyAccepted": true,
+  "validatedTests": 15541,
+  "newCases": 24,
+  "freshTests": 13503,
+  "reusedUnaffectedTests": 2038,
+  "priorCaseIdsPreserved": true,
+  "excludedHistoricalReports": 109,
+  "excludedHistoricalCases": 642,
+  "sourceManifestSha256": "95fd1639a68ff1b9d1e2b1eef8157867b6f18cfbe4608c96f37ea9bc6a7d1a2e",
+  "reportManifestSha256": "8203a44f24c822e99cce4845a3f810d67ea450333a323547ecc1a5f602b90b72",
+  "nativeClaim": "Bounded owned canonical metadata inventory; all 12 actual storage methods need hosted Apple execution. No activity projection, UI activation, native runtime or live rollout is claimed.",
+  "date": "2026-11-13",
+  "focused": {
+    "accepted": true,
+    "tests": 28,
+    "elapsedSeconds": 255.877,
+    "sourceFiles": 5257,
+    "sourceManifestSha256": "95fd1639a68ff1b9d1e2b1eef8157867b6f18cfbe4608c96f37ea9bc6a7d1a2e",
+    "resultSha256": "5688ca16991b08cbb578c132283faae65c10608085373f37c07817289423671a",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceConversationCatalogStorageTest": 12,
+      "CollaborationSpaceConversationMetadataStorageTest": 14
+    },
+    "priorCaseIdsRetained": true
+  },
+  "sourcePaths": [
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/identity/CollaborationSpaceConversationCatalogPosition.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/identity/CollaborationSpaceConversationMetadataCodec.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceConversationCatalogRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceConversationCatalogStorageContract.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceConversationCatalogStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceConversationCatalogStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceConversationCatalogStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceConversationCatalog.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceConversationCatalogRepository.kt"
+  ],
+  "newStorageMethods": 12,
+  "actualNewAppleTests": 0,
+  "productGraphActivated": false,
+  "activityIndexImplemented": false,
+  "nativeRuntimeChanged": false,
+  "failedCandidates": [
+    {
+      "run": "focused-1",
+      "session": "66772 REAPED",
+      "tests": 26,
+      "failed": 3,
+      "cause": "Test extension raw() was shadowed by the pre-existing history fixture member, reading the wrong partition. Rename only the fixture accessor, preserving all test method identities and assertions.",
+      "snapshot": "failed-shadowed-fixture-1"
+    }
+  ],
+  "methods": {
+    "CollaborationSpaceConversationCatalogStorageContract": [
+      "emptyInventoryAndVersionNeverCreateKeysOrWriteRecords",
+      "finiteCursorVisitsEveryCanonicalPairOnceIncludingEmptyPages",
+      "readsArePublishedBoundedAndNeverScanMessageHistory",
+      "insertsBehindTheCursorWaitForTheNextPassWithoutLosingOldPairs",
+      "cursorSurvivesRenewedLoginButRejectsAnotherGroupAccountOrServer",
+      "generationReplacementRequiresRestartInsteadOfAnEmptySuccessfulContinuation",
+      "versionObservesOnlyAuthenticatedPublishedFactsAndSuppressesEqualEmissions",
+      "damagedCiphertextOrMissingPeerCannotPublishPartialCatalog",
+      "missingKeysBadCursorsAndBoundsCannotCreateOrRewriteInventory",
+      "cancellationDuringPairReadEscapesWithoutPublishingOrChangingFacts",
+      "replacementDuringPairAuthenticationRetiresTheWholeCapturedPage",
+      "accountReplacementAtFinalPublicationCannotExposeTheCapturedRows"
+    ]
+  }
+}
