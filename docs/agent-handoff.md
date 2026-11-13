@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 19:49 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 19:55 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -17,28 +17,31 @@ provenance and optimistic text remain immutable while retained; old payloads sti
 storage support, not atomic edit authoring or proof of provider success. Preparation/application
 scripts are already used. No product graph, phone update or live service change is active here.
 
-Current .work/command-insert-projection-2026-11-13 has9 APPLIED source/test paths:
-five core database changes,15 shared methods and2 SQLite fault injections. Apply76475 and
-formatter54282 are REAPED PASS; formatted source5408/
-ede5cc85977f2c0c9826da2573c2f97b6118dadf4008052b67a543deca491089.
-Focused47/session54274 RUNNING; full16619 NOT started. No new runtime validation is claimed.
-Preparation/application/format scripts are used; actual source supersedes early draft formatting.
-Reap focused, run accept-focused.py focused-1, then full before acceptance/commit/Starter port.
+Current .work/command-insert-projection-2026-11-13 has9 APPLIED source/test paths.
+Apply76475 and formatter54282 are REAPED; focused47/session54274 REAPED PASS329.651s,
+including17 new actual SQLite cases,15 archive cases,13 source-guard cases and2 app bindings.
+Source5408/ede5cc85977f2c0c9826da2573c2f97b6118dadf4008052b67a543deca491089.
+Full16619/session60029 is RUNNING, not accepted. Reap, run accept-full.py full-1, then record
+and commit/push both repositories. Preparation/application/format scripts are already used.
 
-insertAndMutate retains one actual command, prepared source/index mutation and fresh wake in one
-raw transaction. Old active/archive replay preserves later projection/work. Source/index/wake,
-resource, identity, capacity or constraints must leave no partial publication. Existing browser
-standalone and archive operations share the updated transaction; their regression cases are in
-the focused/full gates. All five original source files matched Starter byte-for-byte. After Mobile
-acceptance, port nine generic source/test files into Starter with independent checks and its
-pinned Inspector. Actual edit authoring/outcome/list activation is still separate.
+The raw transaction retains actual command, checked projection and fresh wake together, while
+exact active/archive replay preserves later projection/work. No authoring or product graph is
+activated by it. After full acceptance, commit/push and prepare/dispatch one exact-source control
+with .work/command-insert-projection-2026-11-13/prepare-hosted.py. That preparer is NOT run; it
+requires accepted source and covers61 new shared methods (source26 + pending20 + storage15)
+and2 extra SQLite methods, expected20,459 combined/6,100 Apple. Keep accepted baseline43486239620.
 
-Control43486239620 is fully accepted:20,274 cases, including6,039 actual Apple and the iOS host.
-It excludes later canonical-source, pending-edit and command-insertion changes. Preserve artifacts; do not redispatch.
+Starter .work/command-insert-projection-port-2026-11-13 is PREPARED ONLY, sourceApplied=false.
+Its apply.py checks Mobile full16619, exact pushed source and a free heavy slot before copying
+nine generic files. Then check.py full-1, reap and accept.py (expected1022, all990 prior IDs plus
+17 desktop/15 browser). Five original source files match; preserve pinned Inspector742a2d1c.
+Neither Starter apply/check nor hosted prepare/dispatch has run. HRIS policy stays downstream.
 
 The following .work/space-edit-inbox-authoring-2026-11-13 has8 source DRAFTS ONLY, no tests or
 use-case admission: optional immutable Group intent inboxOrigin, DTO/shape policy, publication
-contract and same-instance command/history/index transaction. Ordinary insert rejects marked
+contract and same-instance command/history/index transaction. The contract also captures the
+exact edit candidate and full original under one authenticated source revision through existing
+readers; it never infers missing legacy firstAcceptedAt from one timestamp. Ordinary insert rejects marked
 intents; marked replay cannot overwrite a later pending edit. Source/key preparation precedes
 new command key creation. It supports Group-authored edits over Group or actual Company history,
 not legacy Company authoring. review.md records unresolved admission/outcome/lifetime work.
