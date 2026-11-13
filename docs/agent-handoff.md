@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 00:49 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 00:59 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -202,19 +202,32 @@ its captured wake; the missing-native-original path also preserves known remaini
 Shared pure page validation and existing conditional wake completion prevent an empty or
 malformed read from hiding queued originals. No Group UI/live deployment is activated.
 
-Format1/80320 REAPED PASS35.953s. Focused1/58771 ACTIVE, expected156 cases.
-Frozen5203/fa5b385695991bc07a20806ac56cdf3746f25cc76d8d28d98a4d5a03a44a80e3.
-Expected full14,995 = all14,911 prior IDs plus84 new executions:56 domain JVM/browser,
-16 cursor storage,6 protocol JVM/browser/Android and6 worker cases. The38 new shared Apple
+Format1/80320 passed35.953s. Focused1/58771 REAPED FAILED313.744s after123 passing
+cases: the new DI assertSame needed an explicit Any type for two repository interfaces.
+Code review also found that a local capacity/storage failure could starve existing native
+messages that must drain first. Preserve failed-composer-capacity-review-1, its exact24
+sources, old manifests/auditors and original focused result. No previous assertion weakened.
+
+The corrected worker allows separately admitted native delivery after transient local
+failures, preserving failed originals with scheduler backoff instead of immediate self-wakes.
+Authority/validation failures still stop work; missing native originals cannot discharge a
+failed local pass. Only a current authoritative empty completion can acknowledge its wake.
+Four additional worker cases cover capacity drainage, finite yield, recovered empty state,
+and missing native originals. All25 previously accepted worker identities remain.
+
+Format2/49614 REAPED PASS35.381s. Focused2/59794 ACTIVE, expected160 cases.
+Frozen5203/570d8e0bb4bbc605af6f6a5fcc25258924dd0c341ae2b9808f0e992ea67dfa89.
+Expected full14,999 = all14,911 prior IDs plus88 new executions:56 domain JVM/browser,
+16 cursor storage,6 protocol JVM/browser/Android and10 worker cases. The38 new shared Apple
 methods still require hosted execution. No focused/full/native acceptance claimed yet.
-Keep source frozen until the active compiler is reaped. Then full validation and affected
-Original/Space native delivery scenarios are required before acceptance/commit. Previous
-native scenarios used an earlier proof and are historical. One compiler OR emulator.
+Keep sources frozen until the compiler is reaped. Full checks and the affected Original/Space
+native delivery scenarios must pass before acceptance. Prior native runs remain historical.
+One compiler OR emulator; no Group UI/live deployment or phone latency claim.
 
 Continue canonical Group thread/list UI after recovery passes, reusing the route-owned serial
 composer actor and existing thread admission owner. Measure first-frame/transition behavior;
 do not imply latency improvements from source checks. All54 acceptance groups remain OPEN.
-Phone92 remains uninstalled. ADB50293 REAPED timeout00:38UTC13Nov; last WireGuard handshake
+Phone92 remains uninstalled. ADB7726 REAPED timeout00:56UTC13Nov; last WireGuard handshake
 12Nov10:32:22UTC. Always announce each install and use install-only; never drive phone UI.
 All54 acceptance groups remain OPEN; continue beyond this checkpoint.
 
