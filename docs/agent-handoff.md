@@ -1,10 +1,25 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 05:27 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 05:45 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Active local catalog increment
+
+Mobile.work/space-conversation-catalog-2026-11-13 has9 uncommitted source paths.
+One finite published metadata reader plus version observation, without rewriting canonical
+indexes or reading message history. Cursor freezes insertion revision; authenticated pairs
+appear once, empty peer-only pages advance, later insertions request a subsequent pass.
+Focused2/session9913 is ACTIVE: actual storage26 passed; application binding and Apple test
+compilation remain in that run. One local compiler only. Do not edit application sources
+until reaped. Source5257/95fd1639a68ff1b9d1e2b1eef8157867b6f18cfbe4608c96f37ea9bc6a7d1a2e.
+Focused1/66772 REAPED26/3failed/180.953s: test raw() extension was shadowed by the existing
+history fixture member. The fixture is now rawCatalog(); every test identity/assertion is
+retained. Original failed source/results remain in failed-shadowed-fixture-1. Format33007
+REAPED35.699s. Focused expected28; full expected15541, not yet run. The catalog is inventory
+for a persistent activity index, not a user-visible recents list or product activation.
 
 ## Latest Group navigation acceptance
 
@@ -17,7 +32,7 @@ Immutable proof152507383B/826acc09280b527ed4df7ac177f7e7a2d1134e5aacb3ec3262d2fa
 Strict focused/full audits and three screenshot reviews passed. Failed candidates and
 their unchanged requirements are retained in state.json and the measurement. No new
 native/phone acceptance, product Group graph or live rollout. Thirteen shared methods
-still need actual Apple execution; do not duplicate the active earlier control.
+still need actual Apple execution; the preceding page control is already accepted.
 
 Next: actual local conversation list and account/Group
 graph integration, including pending and draft previews; finish contextual mutations and
@@ -35,12 +50,12 @@ are accepted; do not repeat their local gates. Prior detailed evidence is in the
 
 ## Exact hosted controls
 
-Shared page/rows control43366809238 at549407f6: portable131693032344 is ACCEPTED13220,
-auditor12474 REAPED; Apple131693032072 is still ACTIVE. Workspace Mobile.work/space-thread-page-2026-11-13/hosted-control;
-expected18688 =13220 portable +5468 Apple. `hosted-audit.py` portable passed; Apple audit remains pending.
-The reviewed Chrome156→157 suffix preserves all5877 previous browser class/method IDs;
-5917 actual browser cases pass. No source method was renamed. It adds40 shared methods (21 rows +19 page/context) and8 desktop UI cases, retaining
-all previous case IDs. It does not cover the current navigation increment. Do not duplicate.
+Shared page/rows control43366809238 at549407f6 is FULLY ACCEPTED18688:
+portable131693032344/13220 and Apple131693032072/5468. Artifact and identity auditors
+12474 and57691 are REAPED. Actual40 new Apple methods, iOS host and16 push fields pass.
+Workspace Mobile.work/space-thread-page-2026-11-13/hosted-control retains both artifacts/logs.
+Do not duplicate this control. The next combined control follows local catalog acceptance
+and covers navigation13 plus catalog12 new Apple methods, alongside all preceding IDs.
 
 Previous control43359439624 atfc45116481b6e9a03f1e377bf4a4e11e4e803c74 is FULLY ACCEPTED:
 18560 =13132 portable +5428 actual Apple cases. Both artifact/identity audits passed;
@@ -54,7 +69,9 @@ cleanup passed, and both iOS device/simulator products linked. Recheck343.438s; 
 Artifact14011628218/290901638B/b8dfea189c802558ecc5c1b9f20354337375cb5d9d8342426933c3eaf2ece040.
 See docs/measurements/collaboration-sdk8-apple-native-2026-11-13.json. Native source remains
 isolated under fix/apple-sdk-build-budget-20261112. Do not duplicate the accepted job.
-Next: immutable Swift packaging/application consumption and actual Apple bridge; no release
+Swift packaging is accepted on isolated637f0aca (45 Python guards), runtime-only ZIP
++283386841B/SHA966c198f042a092423ca7e5c55ca3dc69bf7d448ef8caf991c1b4e44d7e5b687.
++No native rebuild or publication. Next: exact Swift consumption and actual Apple bridge; no release
 publication, product runtime activation, actual iPhone test or live Group rollout is claimed.
 All earlier failed candidates remain under their original Mobile.work paths.
 

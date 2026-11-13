@@ -1,0 +1,1722 @@
+{
+  "date": "2026-11-13",
+  "totalTests": 18688,
+  "actualNewAppleMethods": 40,
+  "portable": {
+    "pageBrowserRuntimeCaseSuffixChanges": 5917,
+    "pageBrowserRuntimeChange": {
+      "fromSuffix": "[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+      "toSuffix": "[wasmJs, browser, ChromeHeadless157.0.0.0, Linux0.0.0]",
+      "currentCases": 5917,
+      "immediatePriorCases": 5877,
+      "newMethodsExecutedInBrowser": 40,
+      "classAndMethodNamesUnchanged": true,
+      "actualArtifactSha256": "c5e47cbd2f488deeef70708c338dff8d2013c791a086b03b411c0a4ce9e995bb"
+    },
+    "composerActionBrowserRuntimeCaseSuffixChanges": 5763,
+    "recentBrowserRuntimeCaseSuffixChanges": {
+      "binding": 0,
+      "contact": 0
+    },
+    "sourceCommit": "549407f6aab1d718ff4edd726b5221a550227999",
+    "runId": 43366809238,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43366809238",
+    "jobId": 131693032344,
+    "artifactId": 14011926648,
+    "bytes": 4235304,
+    "sha256": "c5e47cbd2f488deeef70708c338dff8d2013c791a086b03b411c0a4ce9e995bb",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreservedExceptReviewedReplacements": true,
+    "reviewedReplacements": 0,
+    "browserRuntimeCaseSuffixChanges": 0,
+    "browserRuntimeChange": null,
+    "counts": {
+      "desktopTest": 6343,
+      "testAndroidHostTest": 960,
+      "wasmJsBrowserTest": 5917
+    },
+    "selected": [
+      {
+        "class": "CollaborationSpaceRoomBindingPreparationStorageTest",
+        "platform": "desktopTest",
+        "tests": 13
+      },
+      {
+        "class": "BrowserCollaborationSpaceRoomBindingPreparationStorageTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 13
+      },
+      {
+        "class": "CollaborationSpaceRoomBindingStorageTest",
+        "platform": "desktopTest",
+        "tests": 33
+      },
+      {
+        "class": "BrowserCollaborationSpaceRoomBindingStorageTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 33
+      },
+      {
+        "class": "CollaborationHistoryRecoveryStorageTest",
+        "platform": "desktopTest",
+        "tests": 56
+      },
+      {
+        "class": "BrowserCollaborationHistoryRecoveryStorageTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 56
+      },
+      {
+        "class": "ReadCollaborationSpaceOriginalIncomingReferencesTest",
+        "platform": "desktopTest",
+        "tests": 26
+      },
+      {
+        "class": "CompleteCollaborationSpaceOriginalIncomingReferencesTest",
+        "platform": "desktopTest",
+        "tests": 21
+      },
+      {
+        "class": "CompleteCollaborationSpaceOriginalIncomingRoomTest",
+        "platform": "desktopTest",
+        "tests": 24
+      },
+      {
+        "class": "CollaborationSpaceIncomingAliasPolicyTest",
+        "platform": "desktopTest",
+        "tests": 18
+      },
+      {
+        "class": "ResolveCollaborationSpaceIncomingAliasTest",
+        "platform": "desktopTest",
+        "tests": 25
+      },
+      {
+        "class": "CollaborationSpaceInventoryProgressPolicyTest",
+        "platform": "desktopTest",
+        "tests": 12
+      },
+      {
+        "class": "CollaborationSpaceInventoryRetentionPolicyTest",
+        "platform": "desktopTest",
+        "tests": 20
+      },
+      {
+        "class": "RetainCollaborationSpaceRoomInventoryTest",
+        "platform": "desktopTest",
+        "tests": 28
+      },
+      {
+        "class": "CollaborationSpaceInventoryRetryPolicyTest",
+        "platform": "desktopTest",
+        "tests": 11
+      },
+      {
+        "class": "CollaborationSpaceInventorySelectionTest",
+        "platform": "desktopTest",
+        "tests": 6
+      },
+      {
+        "class": "DeferCollaborationSpaceInventoryTest",
+        "platform": "desktopTest",
+        "tests": 21
+      },
+      {
+        "class": "CollaborationSpaceInventoryRequestPolicyTest",
+        "platform": "desktopTest",
+        "tests": 12
+      },
+      {
+        "class": "CollaborationSpaceInventoryRequestOwnerTest",
+        "platform": "desktopTest",
+        "tests": 8
+      },
+      {
+        "class": "CollaborationSpaceIncomingBatchPolicyTest",
+        "platform": "desktopTest",
+        "tests": 23
+      },
+      {
+        "class": "RetainCollaborationSpaceSyncBatchesTest",
+        "platform": "desktopTest",
+        "tests": 15
+      },
+      {
+        "class": "CollaborationSpaceIncomingSchedulingTest",
+        "platform": "desktopTest",
+        "tests": 19
+      },
+      {
+        "class": "CollaborationSpaceIncomingRetryTest",
+        "platform": "desktopTest",
+        "tests": 15
+      },
+      {
+        "class": "AdvanceCollaborationSpaceOriginalIncomingProviderTest",
+        "platform": "desktopTest",
+        "tests": 24
+      },
+      {
+        "class": "LoadCollaborationSpaceOriginalIncomingRoomTest",
+        "platform": "desktopTest",
+        "tests": 24
+      },
+      {
+        "class": "LoadCollaborationSpaceOriginalKeyHistoryTest",
+        "platform": "desktopTest",
+        "tests": 30
+      },
+      {
+        "class": "LoadCollaborationSpaceIncomingRoomTest",
+        "platform": "desktopTest",
+        "tests": 14
+      },
+      {
+        "class": "LoadCollaborationSpaceKeyHistoryTest",
+        "platform": "desktopTest",
+        "tests": 34
+      },
+      {
+        "class": "CollaborationIncomingHistoryPolicyTest",
+        "platform": "desktopTest",
+        "tests": 22
+      },
+      {
+        "class": "CollaborationHistoryRecoveryPolicyTest",
+        "platform": "desktopTest",
+        "tests": 10
+      },
+      {
+        "class": "CollaborationHistoryRecoveryTurnPolicyTest",
+        "platform": "desktopTest",
+        "tests": 20
+      },
+      {
+        "class": "CollaborationSpaceHistoryRecoveryPolicyTest",
+        "platform": "desktopTest",
+        "tests": 24
+      },
+      {
+        "class": "CollaborationSpaceIncomingWakeCompletionTest",
+        "platform": "desktopTest",
+        "tests": 19
+      },
+      {
+        "class": "AcquireCollaborationSpaceOriginalKeyHistoryEventsTest",
+        "platform": "desktopTest",
+        "tests": 26
+      },
+      {
+        "class": "AcquireCollaborationSpaceOriginalEventsTest",
+        "platform": "desktopTest",
+        "tests": 34
+      },
+      {
+        "class": "ReadCollaborationSpaceOriginalKeyReferencesTest",
+        "platform": "desktopTest",
+        "tests": 29
+      },
+      {
+        "class": "AcquireCollaborationSpaceOriginalKeyPageTest",
+        "platform": "desktopTest",
+        "tests": 29
+      },
+      {
+        "class": "CompleteCollaborationSpaceOriginalKeyReferencesTest",
+        "platform": "desktopTest",
+        "tests": 32
+      },
+      {
+        "class": "CollaborationSpaceOriginalIncomingReferencePolicyTest",
+        "platform": "desktopTest",
+        "tests": 9
+      },
+      {
+        "class": "ReadCollaborationSpaceKeyReferencesTest",
+        "platform": "desktopTest",
+        "tests": 19
+      },
+      {
+        "class": "AcquireCollaborationSpaceKeyPageTest",
+        "platform": "desktopTest",
+        "tests": 34
+      },
+      {
+        "class": "CompleteCollaborationSpaceKeyReferencesTest",
+        "platform": "desktopTest",
+        "tests": 35
+      },
+      {
+        "class": "AcquireCollaborationSpaceEventsTest",
+        "platform": "desktopTest",
+        "tests": 25
+      },
+      {
+        "class": "CollaborationSpaceIncomingReferencesTest",
+        "platform": "desktopTest",
+        "tests": 12
+      },
+      {
+        "class": "CollaborationSpaceIncomingReferencePolicyTest",
+        "platform": "desktopTest",
+        "tests": 8
+      },
+      {
+        "class": "ReadCollaborationSpaceHistoryRecoveryTurnTest",
+        "platform": "desktopTest",
+        "tests": 24
+      },
+      {
+        "class": "CollaborationHistoryRecoveryVisitPolicyTest",
+        "platform": "desktopTest",
+        "tests": 20
+      },
+      {
+        "class": "CollaborationSpaceIncomingKeyDemotionPolicyTest",
+        "platform": "desktopTest",
+        "tests": 9
+      },
+      {
+        "class": "DemoteCollaborationSpaceOriginalIncomingRoomTest",
+        "platform": "desktopTest",
+        "tests": 27
+      },
+      {
+        "class": "CollaborationSpaceIncomingKeyDemotionConfirmationTest",
+        "platform": "desktopTest",
+        "tests": 14
+      },
+      {
+        "class": "DemoteCollaborationSpaceIncomingRoomTest",
+        "platform": "desktopTest",
+        "tests": 26
+      },
+      {
+        "class": "CompleteCollaborationSpaceHistoryRecoveryTurnTest",
+        "platform": "desktopTest",
+        "tests": 43
+      },
+      {
+        "class": "DeferCollaborationSpaceHistoryRecoveryTurnTest",
+        "platform": "desktopTest",
+        "tests": 15
+      },
+      {
+        "class": "CollaborationSpaceHistoryRecoveryWritePolicyTest",
+        "platform": "desktopTest",
+        "tests": 15
+      },
+      {
+        "class": "CollaborationSpaceIncomingSelectionTest",
+        "platform": "desktopTest",
+        "tests": 18
+      },
+      {
+        "class": "CollaborationSpaceRoomKeyBatchPolicyTest",
+        "platform": "desktopTest",
+        "tests": 12
+      },
+      {
+        "class": "CollaborationSpaceHistoryTargetPolicyTest",
+        "platform": "desktopTest",
+        "tests": 22
+      },
+      {
+        "class": "CollaborationSpaceRoomKeyRetentionPolicyTest",
+        "platform": "desktopTest",
+        "tests": 18
+      },
+      {
+        "class": "RetainCollaborationSpaceRoomKeysTest",
+        "platform": "desktopTest",
+        "tests": 26
+      },
+      {
+        "class": "ObserveCollaborationSpaceRuntimePublicationTest",
+        "platform": "desktopTest",
+        "tests": 12
+      },
+      {
+        "class": "ObserveCollaborationSpaceIncomingStartupTest",
+        "platform": "desktopTest",
+        "tests": 10
+      },
+      {
+        "class": "AdoptCollaborationSpaceRuntimeTest",
+        "platform": "desktopTest",
+        "tests": 19
+      },
+      {
+        "class": "ResolveCollaborationSpaceIncomingBindingTest",
+        "platform": "desktopTest",
+        "tests": 23
+      },
+      {
+        "class": "SpaceRoomBindingPreparationTest",
+        "platform": "desktopTest",
+        "tests": 25
+      },
+      {
+        "class": "SpaceConversationOpenReplayTest",
+        "platform": "desktopTest",
+        "tests": 25
+      },
+      {
+        "class": "ReconcileCollaborationSpaceOriginalHistoryReferencesTest",
+        "platform": "desktopTest",
+        "tests": 24
+      },
+      {
+        "class": "CollaborationSpaceIncomingDiscoveryPolicyTest",
+        "platform": "desktopTest",
+        "tests": 9
+      },
+      {
+        "class": "CollaborationSpaceIncomingPhysicalResolutionTest",
+        "platform": "desktopTest",
+        "tests": 10
+      },
+      {
+        "class": "CollaborationSpaceIncomingScanPolicyTest",
+        "platform": "desktopTest",
+        "tests": 14
+      },
+      {
+        "class": "DiscoverCollaborationSpaceIncomingRoomsTest",
+        "platform": "desktopTest",
+        "tests": 15
+      },
+      {
+        "class": "QueueCollaborationSpaceIncomingRoomTest",
+        "platform": "desktopTest",
+        "tests": 21
+      },
+      {
+        "class": "QueueCollaborationOriginalIncomingRoomTest",
+        "platform": "desktopTest",
+        "tests": 13
+      },
+      {
+        "class": "ResolveCollaborationSpaceOriginalPhysicalBindingTest",
+        "platform": "desktopTest",
+        "tests": 22
+      },
+      {
+        "class": "CollaborationSpaceHistoryLocationTest",
+        "platform": "desktopTest",
+        "tests": 9
+      },
+      {
+        "class": "ObserveSpaceThreadHistoryRoutingTest",
+        "platform": "desktopTest",
+        "tests": 6
+      },
+      {
+        "class": "ObserveSpaceThreadHistoryAdmissionTest",
+        "platform": "desktopTest",
+        "tests": 8
+      },
+      {
+        "class": "SpaceThreadHistorySnapshotTest",
+        "platform": "desktopTest",
+        "tests": 4
+      },
+      {
+        "class": "ObserveCollaborationThreadTest",
+        "platform": "desktopTest",
+        "tests": 16
+      },
+      {
+        "class": "SpaceThreadCommandPolicyTest",
+        "platform": "desktopTest",
+        "tests": 6
+      },
+      {
+        "class": "ObserveSpaceThreadCommandsTest",
+        "platform": "desktopTest",
+        "tests": 6
+      },
+      {
+        "class": "SpaceThreadCommandLifetimeTest",
+        "platform": "desktopTest",
+        "tests": 4
+      },
+      {
+        "class": "ObserveUnresolvedSpaceThreadTest",
+        "platform": "desktopTest",
+        "tests": 7
+      },
+      {
+        "class": "UnresolvedSpaceThreadLifetimeTest",
+        "platform": "desktopTest",
+        "tests": 4
+      },
+      {
+        "class": "ObserveSpaceThreadParticipantsTest",
+        "platform": "desktopTest",
+        "tests": 6
+      },
+      {
+        "class": "SpaceThreadParticipantLifetimeTest",
+        "platform": "desktopTest",
+        "tests": 4
+      },
+      {
+        "class": "SpaceThreadParticipantPolicyTest",
+        "platform": "desktopTest",
+        "tests": 6
+      },
+      {
+        "class": "QueueCollaborationSpaceTextTest",
+        "platform": "desktopTest",
+        "tests": 15
+      },
+      {
+        "class": "QueueSpaceImmutableTextTest",
+        "platform": "desktopTest",
+        "tests": 6
+      },
+      {
+        "class": "EditCollaborationSpaceDraftTest",
+        "platform": "desktopTest",
+        "tests": 10
+      },
+      {
+        "class": "SubmitCollaborationSpaceComposerTest",
+        "platform": "desktopTest",
+        "tests": 14
+      },
+      {
+        "class": "RecoverCollaborationSpaceComposerTest",
+        "platform": "desktopTest",
+        "tests": 12
+      },
+      {
+        "class": "SpaceComposerRecoveryLifetimeTest",
+        "platform": "desktopTest",
+        "tests": 10
+      },
+      {
+        "class": "SpaceComposerRecoveryPendingTest",
+        "platform": "desktopTest",
+        "tests": 6
+      },
+      {
+        "class": "FinishCollaborationSpaceRecoveryTest",
+        "platform": "desktopTest",
+        "tests": 21
+      },
+      {
+        "class": "ObserveCollaborationSpaceComposerTest",
+        "platform": "desktopTest",
+        "tests": 10
+      },
+      {
+        "class": "SpaceComposerObservationLifetimeTest",
+        "platform": "desktopTest",
+        "tests": 8
+      },
+      {
+        "class": "ObserveSpaceComposerProgressTest",
+        "platform": "desktopTest",
+        "tests": 10
+      },
+      {
+        "class": "SpaceComposerProgressLifetimeTest",
+        "platform": "desktopTest",
+        "tests": 10
+      },
+      {
+        "class": "ReadCollaborationSpaceOriginalIncomingReferencesTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 26
+      },
+      {
+        "class": "CompleteCollaborationSpaceOriginalIncomingReferencesTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 21
+      },
+      {
+        "class": "CompleteCollaborationSpaceOriginalIncomingRoomTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 24
+      },
+      {
+        "class": "CollaborationSpaceIncomingAliasPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 18
+      },
+      {
+        "class": "ResolveCollaborationSpaceIncomingAliasTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 25
+      },
+      {
+        "class": "CollaborationSpaceInventoryProgressPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 12
+      },
+      {
+        "class": "CollaborationSpaceInventoryRetentionPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 20
+      },
+      {
+        "class": "RetainCollaborationSpaceRoomInventoryTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 28
+      },
+      {
+        "class": "CollaborationSpaceInventoryRetryPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 11
+      },
+      {
+        "class": "CollaborationSpaceInventorySelectionTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 6
+      },
+      {
+        "class": "DeferCollaborationSpaceInventoryTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 21
+      },
+      {
+        "class": "CollaborationSpaceInventoryRequestPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 12
+      },
+      {
+        "class": "CollaborationSpaceInventoryRequestOwnerTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 8
+      },
+      {
+        "class": "CollaborationSpaceIncomingBatchPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 23
+      },
+      {
+        "class": "RetainCollaborationSpaceSyncBatchesTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 15
+      },
+      {
+        "class": "CollaborationSpaceIncomingSchedulingTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 19
+      },
+      {
+        "class": "CollaborationSpaceIncomingRetryTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 15
+      },
+      {
+        "class": "AdvanceCollaborationSpaceOriginalIncomingProviderTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 24
+      },
+      {
+        "class": "LoadCollaborationSpaceOriginalIncomingRoomTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 24
+      },
+      {
+        "class": "LoadCollaborationSpaceOriginalKeyHistoryTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 30
+      },
+      {
+        "class": "LoadCollaborationSpaceIncomingRoomTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 14
+      },
+      {
+        "class": "LoadCollaborationSpaceKeyHistoryTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 34
+      },
+      {
+        "class": "CollaborationIncomingHistoryPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 22
+      },
+      {
+        "class": "CollaborationHistoryRecoveryPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 10
+      },
+      {
+        "class": "CollaborationHistoryRecoveryTurnPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 20
+      },
+      {
+        "class": "CollaborationSpaceHistoryRecoveryPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 24
+      },
+      {
+        "class": "CollaborationSpaceIncomingWakeCompletionTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 19
+      },
+      {
+        "class": "AcquireCollaborationSpaceOriginalKeyHistoryEventsTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 26
+      },
+      {
+        "class": "AcquireCollaborationSpaceOriginalEventsTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 34
+      },
+      {
+        "class": "ReadCollaborationSpaceOriginalKeyReferencesTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 29
+      },
+      {
+        "class": "AcquireCollaborationSpaceOriginalKeyPageTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 29
+      },
+      {
+        "class": "CompleteCollaborationSpaceOriginalKeyReferencesTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 32
+      },
+      {
+        "class": "CollaborationSpaceOriginalIncomingReferencePolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 9
+      },
+      {
+        "class": "ReadCollaborationSpaceKeyReferencesTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 19
+      },
+      {
+        "class": "AcquireCollaborationSpaceKeyPageTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 34
+      },
+      {
+        "class": "CompleteCollaborationSpaceKeyReferencesTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 35
+      },
+      {
+        "class": "AcquireCollaborationSpaceEventsTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 25
+      },
+      {
+        "class": "CollaborationSpaceIncomingReferencesTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 12
+      },
+      {
+        "class": "CollaborationSpaceIncomingReferencePolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 8
+      },
+      {
+        "class": "ReadCollaborationSpaceHistoryRecoveryTurnTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 24
+      },
+      {
+        "class": "CollaborationHistoryRecoveryVisitPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 20
+      },
+      {
+        "class": "CollaborationSpaceIncomingKeyDemotionPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 9
+      },
+      {
+        "class": "DemoteCollaborationSpaceOriginalIncomingRoomTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 27
+      },
+      {
+        "class": "CollaborationSpaceIncomingKeyDemotionConfirmationTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 14
+      },
+      {
+        "class": "DemoteCollaborationSpaceIncomingRoomTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 26
+      },
+      {
+        "class": "CompleteCollaborationSpaceHistoryRecoveryTurnTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 43
+      },
+      {
+        "class": "DeferCollaborationSpaceHistoryRecoveryTurnTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 15
+      },
+      {
+        "class": "CollaborationSpaceHistoryRecoveryWritePolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 15
+      },
+      {
+        "class": "CollaborationSpaceIncomingSelectionTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 18
+      },
+      {
+        "class": "CollaborationSpaceRoomKeyBatchPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 12
+      },
+      {
+        "class": "CollaborationSpaceHistoryTargetPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 22
+      },
+      {
+        "class": "CollaborationSpaceRoomKeyRetentionPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 18
+      },
+      {
+        "class": "RetainCollaborationSpaceRoomKeysTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 26
+      },
+      {
+        "class": "ObserveCollaborationSpaceRuntimePublicationTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 12
+      },
+      {
+        "class": "ObserveCollaborationSpaceIncomingStartupTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 10
+      },
+      {
+        "class": "AdoptCollaborationSpaceRuntimeTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 19
+      },
+      {
+        "class": "ResolveCollaborationSpaceIncomingBindingTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 23
+      },
+      {
+        "class": "SpaceRoomBindingPreparationTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 25
+      },
+      {
+        "class": "SpaceConversationOpenReplayTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 25
+      },
+      {
+        "class": "ReconcileCollaborationSpaceOriginalHistoryReferencesTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 24
+      },
+      {
+        "class": "CollaborationSpaceIncomingDiscoveryPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 9
+      },
+      {
+        "class": "CollaborationSpaceIncomingPhysicalResolutionTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 10
+      },
+      {
+        "class": "CollaborationSpaceIncomingScanPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 14
+      },
+      {
+        "class": "DiscoverCollaborationSpaceIncomingRoomsTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 15
+      },
+      {
+        "class": "QueueCollaborationSpaceIncomingRoomTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 21
+      },
+      {
+        "class": "QueueCollaborationOriginalIncomingRoomTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 13
+      },
+      {
+        "class": "ResolveCollaborationSpaceOriginalPhysicalBindingTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 22
+      },
+      {
+        "class": "CollaborationSpaceHistoryLocationTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 9
+      },
+      {
+        "class": "ObserveSpaceThreadHistoryRoutingTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 6
+      },
+      {
+        "class": "ObserveSpaceThreadHistoryAdmissionTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 8
+      },
+      {
+        "class": "SpaceThreadHistorySnapshotTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 4
+      },
+      {
+        "class": "ObserveCollaborationThreadTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 16
+      },
+      {
+        "class": "SpaceThreadCommandPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 6
+      },
+      {
+        "class": "ObserveSpaceThreadCommandsTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 6
+      },
+      {
+        "class": "SpaceThreadCommandLifetimeTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 4
+      },
+      {
+        "class": "ObserveUnresolvedSpaceThreadTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 7
+      },
+      {
+        "class": "UnresolvedSpaceThreadLifetimeTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 4
+      },
+      {
+        "class": "ObserveSpaceThreadParticipantsTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 6
+      },
+      {
+        "class": "SpaceThreadParticipantLifetimeTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 4
+      },
+      {
+        "class": "SpaceThreadParticipantPolicyTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 6
+      },
+      {
+        "class": "QueueCollaborationSpaceTextTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 15
+      },
+      {
+        "class": "QueueSpaceImmutableTextTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 6
+      },
+      {
+        "class": "EditCollaborationSpaceDraftTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 10
+      },
+      {
+        "class": "SubmitCollaborationSpaceComposerTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 14
+      },
+      {
+        "class": "RecoverCollaborationSpaceComposerTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 12
+      },
+      {
+        "class": "SpaceComposerRecoveryLifetimeTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 10
+      },
+      {
+        "class": "SpaceComposerRecoveryPendingTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 6
+      },
+      {
+        "class": "FinishCollaborationSpaceRecoveryTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 21
+      },
+      {
+        "class": "ObserveCollaborationSpaceComposerTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 10
+      },
+      {
+        "class": "SpaceComposerObservationLifetimeTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 8
+      },
+      {
+        "class": "ObserveSpaceComposerProgressTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 10
+      },
+      {
+        "class": "SpaceComposerProgressLifetimeTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 10
+      },
+      {
+        "class": "SpaceDirectoryStorageTest",
+        "platform": "desktopTest",
+        "tests": 17
+      },
+      {
+        "class": "SpaceDirectoryAdmissionStorageTest",
+        "platform": "desktopTest",
+        "tests": 8
+      },
+      {
+        "class": "SpaceDirectoryStorageTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 17
+      },
+      {
+        "class": "SpaceDirectoryAdmissionStorageTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 8
+      },
+      {
+        "class": "CollaborationSpaceComposerStorageTest",
+        "platform": "desktopTest",
+        "tests": 13
+      },
+      {
+        "class": "CollaborationSpaceRoomBindingPreparationStorageTest",
+        "platform": "desktopTest",
+        "tests": 13
+      },
+      {
+        "class": "CollaborationSpaceComposerCursorStorageTest",
+        "platform": "desktopTest",
+        "tests": 8
+      },
+      {
+        "class": "BrowserCollaborationSpaceComposerStorageTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 13
+      },
+      {
+        "class": "BrowserCollaborationSpaceRoomBindingPreparationStorageTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 13
+      },
+      {
+        "class": "BrowserCollaborationSpaceComposerCursorStorageTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 8
+      }
+    ],
+    "reportManifestSha256": "d71e33b80aeae7aa28484eb8b3515c14c1a4f4dd048eaade682f57997b0f385b",
+    "jobLogSha256": "442fb4a783fef3351bd45f5a1ce352bb869c63a03c703a36765d54e8246a41b0",
+    "steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check out verified network inspector",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-java@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run gradle/actions/setup-gradle@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run android-actions/setup-android@v3",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-node@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check setup transport and ownership",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check application bindings and platform compilation",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/upload-artifact@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/setup-node@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run gradle/actions/setup-gradle@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/setup-java@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Check out verified network inspector",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "apple": {
+    "pageBrowserRuntimeCaseSuffixChanges": 0,
+    "pageBrowserRuntimeChange": null,
+    "composerActionBrowserRuntimeCaseSuffixChanges": 0,
+    "recentBrowserRuntimeCaseSuffixChanges": {
+      "binding": 0,
+      "contact": 0
+    },
+    "sourceCommit": "549407f6aab1d718ff4edd726b5221a550227999",
+    "runId": 43366809238,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43366809238",
+    "jobId": 131693032072,
+    "artifactId": 14013193393,
+    "bytes": 877870,
+    "sha256": "9d0f9b17ccb0cabda102d4bb9e33d2ca2ca2e6dfcacf437cabed7e732c533941",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreservedExceptReviewedReplacements": true,
+    "reviewedReplacements": 0,
+    "browserRuntimeCaseSuffixChanges": 0,
+    "browserRuntimeChange": null,
+    "counts": {
+      "iosSimulatorArm64Test": 5468
+    },
+    "selected": [
+      {
+        "class": "AppleCollaborationSpaceRoomBindingPreparationStorageTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 13
+      },
+      {
+        "class": "AppleCollaborationSpaceRoomBindingStorageTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 33
+      },
+      {
+        "class": "AppleCollaborationHistoryRecoveryStorageTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 56
+      },
+      {
+        "class": "ReadCollaborationSpaceOriginalIncomingReferencesTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 26
+      },
+      {
+        "class": "CompleteCollaborationSpaceOriginalIncomingReferencesTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 21
+      },
+      {
+        "class": "CompleteCollaborationSpaceOriginalIncomingRoomTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 24
+      },
+      {
+        "class": "CollaborationSpaceIncomingAliasPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 18
+      },
+      {
+        "class": "ResolveCollaborationSpaceIncomingAliasTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 25
+      },
+      {
+        "class": "CollaborationSpaceInventoryProgressPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 12
+      },
+      {
+        "class": "CollaborationSpaceInventoryRetentionPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 20
+      },
+      {
+        "class": "RetainCollaborationSpaceRoomInventoryTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 28
+      },
+      {
+        "class": "CollaborationSpaceInventoryRetryPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 11
+      },
+      {
+        "class": "CollaborationSpaceInventorySelectionTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 6
+      },
+      {
+        "class": "DeferCollaborationSpaceInventoryTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 21
+      },
+      {
+        "class": "CollaborationSpaceInventoryRequestPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 12
+      },
+      {
+        "class": "CollaborationSpaceInventoryRequestOwnerTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 8
+      },
+      {
+        "class": "CollaborationSpaceIncomingBatchPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 23
+      },
+      {
+        "class": "RetainCollaborationSpaceSyncBatchesTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 15
+      },
+      {
+        "class": "CollaborationSpaceIncomingSchedulingTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 19
+      },
+      {
+        "class": "CollaborationSpaceIncomingRetryTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 15
+      },
+      {
+        "class": "AdvanceCollaborationSpaceOriginalIncomingProviderTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 24
+      },
+      {
+        "class": "LoadCollaborationSpaceOriginalIncomingRoomTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 24
+      },
+      {
+        "class": "LoadCollaborationSpaceOriginalKeyHistoryTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 30
+      },
+      {
+        "class": "LoadCollaborationSpaceIncomingRoomTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 14
+      },
+      {
+        "class": "LoadCollaborationSpaceKeyHistoryTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 34
+      },
+      {
+        "class": "CollaborationIncomingHistoryPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 22
+      },
+      {
+        "class": "CollaborationHistoryRecoveryPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 10
+      },
+      {
+        "class": "CollaborationHistoryRecoveryTurnPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 20
+      },
+      {
+        "class": "CollaborationSpaceHistoryRecoveryPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 24
+      },
+      {
+        "class": "CollaborationSpaceIncomingWakeCompletionTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 19
+      },
+      {
+        "class": "AcquireCollaborationSpaceOriginalKeyHistoryEventsTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 26
+      },
+      {
+        "class": "AcquireCollaborationSpaceOriginalEventsTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 34
+      },
+      {
+        "class": "ReadCollaborationSpaceOriginalKeyReferencesTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 29
+      },
+      {
+        "class": "AcquireCollaborationSpaceOriginalKeyPageTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 29
+      },
+      {
+        "class": "CompleteCollaborationSpaceOriginalKeyReferencesTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 32
+      },
+      {
+        "class": "CollaborationSpaceOriginalIncomingReferencePolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 9
+      },
+      {
+        "class": "ReadCollaborationSpaceKeyReferencesTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 19
+      },
+      {
+        "class": "AcquireCollaborationSpaceKeyPageTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 34
+      },
+      {
+        "class": "CompleteCollaborationSpaceKeyReferencesTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 35
+      },
+      {
+        "class": "AcquireCollaborationSpaceEventsTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 25
+      },
+      {
+        "class": "CollaborationSpaceIncomingReferencesTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 12
+      },
+      {
+        "class": "CollaborationSpaceIncomingReferencePolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 8
+      },
+      {
+        "class": "ReadCollaborationSpaceHistoryRecoveryTurnTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 24
+      },
+      {
+        "class": "CollaborationHistoryRecoveryVisitPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 20
+      },
+      {
+        "class": "CollaborationSpaceIncomingKeyDemotionPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 9
+      },
+      {
+        "class": "DemoteCollaborationSpaceOriginalIncomingRoomTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 27
+      },
+      {
+        "class": "CollaborationSpaceIncomingKeyDemotionConfirmationTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 14
+      },
+      {
+        "class": "DemoteCollaborationSpaceIncomingRoomTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 26
+      },
+      {
+        "class": "CompleteCollaborationSpaceHistoryRecoveryTurnTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 43
+      },
+      {
+        "class": "DeferCollaborationSpaceHistoryRecoveryTurnTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 15
+      },
+      {
+        "class": "CollaborationSpaceHistoryRecoveryWritePolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 15
+      },
+      {
+        "class": "CollaborationSpaceIncomingSelectionTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 18
+      },
+      {
+        "class": "CollaborationSpaceRoomKeyBatchPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 12
+      },
+      {
+        "class": "CollaborationSpaceHistoryTargetPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 22
+      },
+      {
+        "class": "CollaborationSpaceRoomKeyRetentionPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 18
+      },
+      {
+        "class": "RetainCollaborationSpaceRoomKeysTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 26
+      },
+      {
+        "class": "ObserveCollaborationSpaceRuntimePublicationTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 12
+      },
+      {
+        "class": "ObserveCollaborationSpaceIncomingStartupTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 10
+      },
+      {
+        "class": "AdoptCollaborationSpaceRuntimeTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 19
+      },
+      {
+        "class": "ResolveCollaborationSpaceIncomingBindingTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 23
+      },
+      {
+        "class": "SpaceRoomBindingPreparationTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 25
+      },
+      {
+        "class": "SpaceConversationOpenReplayTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 25
+      },
+      {
+        "class": "ReconcileCollaborationSpaceOriginalHistoryReferencesTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 24
+      },
+      {
+        "class": "CollaborationSpaceIncomingDiscoveryPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 9
+      },
+      {
+        "class": "CollaborationSpaceIncomingPhysicalResolutionTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 10
+      },
+      {
+        "class": "CollaborationSpaceIncomingScanPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 14
+      },
+      {
+        "class": "DiscoverCollaborationSpaceIncomingRoomsTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 15
+      },
+      {
+        "class": "QueueCollaborationSpaceIncomingRoomTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 21
+      },
+      {
+        "class": "QueueCollaborationOriginalIncomingRoomTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 13
+      },
+      {
+        "class": "ResolveCollaborationSpaceOriginalPhysicalBindingTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 22
+      },
+      {
+        "class": "CollaborationSpaceHistoryLocationTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 9
+      },
+      {
+        "class": "ObserveSpaceThreadHistoryRoutingTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 6
+      },
+      {
+        "class": "ObserveSpaceThreadHistoryAdmissionTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 8
+      },
+      {
+        "class": "SpaceThreadHistorySnapshotTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 4
+      },
+      {
+        "class": "ObserveCollaborationThreadTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 16
+      },
+      {
+        "class": "SpaceThreadCommandPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 6
+      },
+      {
+        "class": "ObserveSpaceThreadCommandsTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 6
+      },
+      {
+        "class": "SpaceThreadCommandLifetimeTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 4
+      },
+      {
+        "class": "ObserveUnresolvedSpaceThreadTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 7
+      },
+      {
+        "class": "UnresolvedSpaceThreadLifetimeTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 4
+      },
+      {
+        "class": "ObserveSpaceThreadParticipantsTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 6
+      },
+      {
+        "class": "SpaceThreadParticipantLifetimeTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 4
+      },
+      {
+        "class": "SpaceThreadParticipantPolicyTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 6
+      },
+      {
+        "class": "QueueCollaborationSpaceTextTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 15
+      },
+      {
+        "class": "QueueSpaceImmutableTextTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 6
+      },
+      {
+        "class": "EditCollaborationSpaceDraftTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 10
+      },
+      {
+        "class": "SubmitCollaborationSpaceComposerTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 14
+      },
+      {
+        "class": "RecoverCollaborationSpaceComposerTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 12
+      },
+      {
+        "class": "SpaceComposerRecoveryLifetimeTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 10
+      },
+      {
+        "class": "SpaceComposerRecoveryPendingTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 6
+      },
+      {
+        "class": "FinishCollaborationSpaceRecoveryTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 21
+      },
+      {
+        "class": "ObserveCollaborationSpaceComposerTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 10
+      },
+      {
+        "class": "SpaceComposerObservationLifetimeTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 8
+      },
+      {
+        "class": "ObserveSpaceComposerProgressTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 10
+      },
+      {
+        "class": "SpaceComposerProgressLifetimeTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 10
+      },
+      {
+        "class": "AppleCollaborationSdkInventoryTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 13
+      },
+      {
+        "class": "AppleCollaborationSdkStoreTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 8
+      },
+      {
+        "class": "AppleSpaceDirectoryStorageTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 17
+      },
+      {
+        "class": "AppleSpaceDirectoryAdmissionStorageTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 8
+      },
+      {
+        "class": "AppleCollaborationSpaceComposerStorageTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 13
+      },
+      {
+        "class": "AppleCollaborationSpaceRoomBindingPreparationStorageTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 13
+      },
+      {
+        "class": "AppleCollaborationSpaceComposerCursorStorageTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 8
+      }
+    ],
+    "reportManifestSha256": "93a910b35754188391a2210de2a1b4424227474ba45a56bef1208c0b1e48bc9f",
+    "jobLogSha256": "b67bfe7c8029e7b671e6f3ee47f36466268f037b99f0fc3a85bc621d6f1bbaac",
+    "steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check out verified network inspector",
+        "conclusion": "success"
+      },
+      {
+        "name": "Select Xcode 26.3",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-java@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run gradle/actions/setup-gradle@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Prepare public app-link test registrations",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check Apple push envelope routing",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check Apple setup adapter",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build iOS application host",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/upload-artifact@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run gradle/actions/setup-gradle@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/setup-java@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Check out verified network inspector",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "appleAuditSession": "57691 REAPED",
+  "portableAuditSession": "12474 REAPED",
+  "scope": "Accepted timeline rows and page/context actions; not later navigation or catalog",
+  "physicalIphoneTest": false,
+  "liveGroupDeployed": false
+}
