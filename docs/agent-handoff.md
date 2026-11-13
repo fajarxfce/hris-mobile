@@ -1,4 +1,17 @@
-# Apple SDK build budget continuation
+# Apple SDK build continuation
+
+Updated 13 November 2026. The latest completed recheck43367060755/job131693869434
+atd34a62d4551359cd64b3e7031f294519d3f71cc0 FAILED: five actual Swift cases, four passed.
+Collector60072 REAPED; archive14010603799/290891897B/
+72a96b8af7e4a2a7645e42152c498a03762fe19461be0dde624c939e8692d3c3 is fully verified.
+Mobile.work/sdk8-apple-fixture-lifetime-2026-11-13 owns the next correction: POSIX
+String paths and fixture cleanup after child-process exit, without changing SDK8 Rust.
+25 builder +9 recheck Python guards pass; five Swift cases and both iOS links remain
+required. Commit/push then dispatch one completed-framework recheck. Reuse the exact
+completed native package43349484661; do not rebuild/publish Rust or activate Apple.
+Current main Mobile navigation is independently under test; do not alter its sources.
+
+## Prior native investigation
 
 ## Isolated SDK8 Apple candidate — 13 November 2026, 02:03 UTC
 

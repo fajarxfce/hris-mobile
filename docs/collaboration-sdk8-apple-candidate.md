@@ -119,3 +119,27 @@ store, requires exact Unavailable refusal and verifies its original keys still r
 All four original contracts and assertions remain. Cleanup diagnostics and explicit failure
 remain enabled. The current gate requires all five cases and both iOS links; 20 builder and
 nine recheck guards pass locally. See [canonical-root evidence](measurements/collaboration-sdk8-apple-canonical-store-2026-11-13.json).
+
+## Canonical native paths and process-owned fixture cleanup
+
+Recheck43367060755 atd34a62d4 executed five Swift cases, four passing. The passphrase
+case again stopped before the successful existing-identity marker; its reported failure
+was a disappearing SQLite media WAL during cleanup. Foundation enumeration still showed
+the eight-character /private path mismatch after resolvingSymlinksInPath. The complete
+failed archive14010603799, digest and logs remain in the measurement record.
+
+The fixture now receives an explicitly owned root from the runner and validates its
+POSIX realpath spelling. Native calls use that String directly; they never round-trip
+through Foundation URL path normalization. The symlink-refusal case first requires a
+successful direct identity read, then verifies refusal and unchanged retained keys.
+
+Swift ARC releases a Client wrapper, while Rust SQLite pool teardown can finish later.
+Temporary stores therefore belong to the parent test process runner until the Swift
+child exits. Both successful and failed child runs must remove the private fixture root
+afterward; cleanup failure prevents acceptance. There is no sleep or retry around WAL
+deletions. Existing or redirected roots are rejected before starting the child, and
+cleanup never follows a fixture symlink to another directory. The original raw-key proof
+and all five native test identities remain. 25 builder and nine recheck Python guards
+pass; five actual Swift cases and both iOS links still require the next hosted recheck.
+
+Evidence: [fixture ownership](measurements/collaboration-sdk8-apple-fixture-lifetime-2026-11-13.json).

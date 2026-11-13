@@ -14,8 +14,86 @@ import xml.etree.ElementTree as ET
 
 from build_collaboration_apple_sdk import (
     PRIVATE_CRATE_TESTS, SLICE_ARCHITECTURES, SWIFT_TESTS, build, contained_file, load_manifest,
-    probe_private_symbol_crates, probe_symbol_reader, resolve_symbol_reader, verify_framework, verify_swift_tests,
+    probe_private_symbol_crates, probe_symbol_reader, resolve_symbol_reader, run_swift_contracts,
+    verify_framework, verify_swift_tests,
 )
+
+
+class SwiftFixtureOwnershipTest(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporary.cleanup)
+        self.output = Path(self.temporary.name)
+        self.record = {}
+        self.env = {"EXISTING": "preserved"}
+
+    def child(self, command, *, cwd, env, log, timeout):
+        self.assertEqual(1800, timeout)
+        self.assertEqual(self.output, cwd)
+        root = Path(env["HRIS_SDK8_FIXTURE_ROOT"])
+        self.assertTrue(root.is_dir())
+        self.assertEqual(root, root.resolve(strict=True))
+        self.assertEqual(0o700, root.stat().st_mode & 0o777)
+        self.assertNotIn("fixtureCleanup", self.record)
+        (root / "retained-crypto.sqlite").write_bytes(b"fictional")
+        suite = ET.Element("testsuite")
+        for name in sorted(SWIFT_TESTS):
+            ET.SubElement(suite, "testcase", name=name)
+        ET.ElementTree(suite).write(self.output / "swift-tests.xml")
+
+    def execute(self, child=None):
+        with patch("build_collaboration_apple_sdk.run", side_effect=child or self.child):
+            return run_swift_contracts(self.output, self.output, 2, self.env, io.StringIO(), self.record)
+
+    def test_cleanup_follows_successful_child_and_keeps_ambient_environment(self):
+        self.assertEqual(5, self.execute()["tests"])
+        self.assertFalse((self.output / "swift-fixtures").exists())
+        self.assertEqual({"EXISTING": "preserved"}, self.env)
+        self.assertEqual({"afterSwiftProcessExit": True, "removed": True}, self.record["fixtureCleanup"])
+
+    def test_failed_child_keeps_its_failure_after_fixture_cleanup(self):
+        def child(*args, **kwargs):
+            self.child(*args, **kwargs)
+            raise subprocess.CalledProcessError(3, args[0])
+        with self.assertRaises(subprocess.CalledProcessError) as caught:
+            self.execute(child)
+        self.assertEqual(3, caught.exception.returncode)
+        self.assertFalse((self.output / "swift-fixtures").exists())
+        self.assertTrue(self.record["fixtureCleanup"]["removed"])
+
+    def test_cleanup_failure_cannot_accept_successful_native_cases(self):
+        with patch("build_collaboration_apple_sdk.shutil.rmtree", side_effect=PermissionError("denied")):
+            with self.assertRaises(PermissionError):
+                self.execute()
+        self.assertFalse(self.record["fixtureCleanup"]["removed"])
+        self.assertTrue((self.output / "swift-fixtures/retained-crypto.sqlite").exists())
+
+    def test_existing_or_redirected_root_is_never_reused_or_removed(self):
+        root = self.output / "swift-fixtures"
+        root.mkdir()
+        (root / "retained").write_text("keep")
+        with patch("build_collaboration_apple_sdk.run") as child:
+            with self.assertRaises(FileExistsError):
+                run_swift_contracts(self.output, self.output, 2, self.env, io.StringIO(), self.record)
+            child.assert_not_called()
+        self.assertEqual("keep", (root / "retained").read_text())
+        root.rename(self.output / "outside")
+        root.symlink_to(self.output / "outside", target_is_directory=True)
+        with self.assertRaises(FileExistsError):
+            self.execute()
+        self.assertTrue(root.is_symlink())
+        self.assertEqual("keep", (self.output / "outside/retained").read_text())
+
+    def test_cleanup_does_not_follow_a_fixture_alias_to_another_directory(self):
+        outside = self.output / "outside"
+        outside.mkdir()
+        (outside / "retained").write_text("keep")
+        def child(*args, **kwargs):
+            self.child(*args, **kwargs)
+            (Path(kwargs["env"]["HRIS_SDK8_FIXTURE_ROOT"]) / "alias").symlink_to(outside, target_is_directory=True)
+        self.assertEqual(5, self.execute(child)["tests"])
+        self.assertEqual("keep", (outside / "retained").read_text())
+        self.assertFalse((self.output / "swift-fixtures").exists())
 
 
 class AppleSDKManifestTest(unittest.TestCase):

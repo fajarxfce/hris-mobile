@@ -54,6 +54,25 @@ def verify_swift_tests(report):
     return {"tests": len(cases), "failures": 0, "errors": 0, "skipped": 0, "reportSha256": sha(report)}
 
 
+def run_swift_contracts(proof, output, jobs, env, log, record):
+    """Own temporary stores until the Swift process and its native threads have exited."""
+    fixtures = output / "swift-fixtures"
+    fixtures.mkdir(mode=0o700, exist_ok=False)
+    native_env = env | {"HRIS_SDK8_FIXTURE_ROOT": str(fixtures.resolve(strict=True))}
+    try:
+        run(["swift", "test", "--jobs", str(jobs), "--xunit-output", str(output / "swift-tests.xml")],
+            cwd=proof, env=native_env, log=log, timeout=1800)
+        return verify_swift_tests(output / "swift-tests.xml")
+    finally:
+        record["fixtureCleanup"] = {"afterSwiftProcessExit": True, "removed": False}
+        shutil.rmtree(fixtures)
+        if fixtures.exists() or fixtures.is_symlink():
+            raise ValueError("Swift fixture root survived process-owned cleanup")
+        record["fixtureCleanup"]["removed"] = True
+        log.write("SDK8 fixture cleanup completed after Swift process exit\n")
+        log.flush()
+
+
 def load_manifest(patches):
     manifest = json.loads((patches / "apple-incoming-hints-build.json").read_text())
     base_path = patches / manifest["baseManifest"]
@@ -270,9 +289,7 @@ def build(args):
             shutil.copy2(extension / "SDK8NativeTests.swift", proof / "Tests/HrisCollaborationAppleProofTests/SDK8NativeTests.swift")
             record["proofFiles"] = {str(p.relative_to(proof)): sha(p)
                                     for p in sorted(proof.rglob("*")) if p.is_file()}
-            run(["swift", "test", "--jobs", str(base["jobs"]), "--xunit-output", str(out / "swift-tests.xml")],
-                cwd=proof, env=env, log=log, timeout=1800)
-            record["nativeTests"] = verify_swift_tests(out / "swift-tests.xml")
+            record["nativeTests"] = run_swift_contracts(proof, out, base["jobs"], env, log, record)
             for name, destination in (("device", "generic/platform=iOS"), ("simulator", "generic/platform=iOS Simulator")):
                 run(["xcodebuild", "-scheme", "HrisCollaborationAppleProof", "-destination", destination,
                      "-derivedDataPath", str(out / "derived" / name), "-jobs", str(base["jobs"]),

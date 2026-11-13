@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-13",
+  "previousFailedRecheck": {
+    "collected": true,
+    "accepted": false,
+    "conclusion": "failure",
+    "runId": 43367060755,
+    "jobId": 131693869434,
+    "sourceCommit": "d34a62d4551359cd64b3e7031f294519d3f71cc0",
+    "artifactId": 14010603799,
+    "artifactBytes": 290891897,
+    "artifactSha256": "72a96b8af7e4a2a7645e42152c498a03762fe19461be0dde624c939e8692d3c3",
+    "githubDigestAndZipCrcVerified": true,
+    "frozenNativePackageAndExactProofFilesVerified": true,
+    "nativeRebuilt": false,
+    "nativeTests": null,
+    "jobLogSha256": "6b14794c5fddafd54db564c46301dd90c256a3cf815eb087c330386c5fecf5ac",
+    "buildLogSha256": "c54f989b329c194e94590701cdf07029934e6ff07c86ea2bd7589b37098546a4",
+    "elapsedSeconds": 320.859,
+    "published": false,
+    "productionAppleRuntimeEnabled": false
+  },
+  "previousActualSwiftCases": 5,
+  "previousPassedSwiftCases": 4,
+  "observedFailure": "Passphrase continuity stopped before the existing-identity marker; cleanup reported a disappearing media WAL. Foundation enumeration still displayed an eight-character canonical-path prefix mismatch.",
+  "correction": "Pass POSIX canonical String paths directly into native I/O; parent runner owns fixture cleanup after the Swift child has exited, including failed tests. No transient file-removal retry.",
+  "allFiveNativeCaseIdentitiesRetained": true,
+  "parentSymlinkRefusalNowRequiresSuccessfulDirectReadFirst": true,
+  "originalRawKeyProofUnchanged": true,
+  "immutableNativePackageReused": true,
+  "local": {
+    "accepted": true,
+    "builderGuardTests": 25,
+    "recheckGuardTests": 9,
+    "elapsedSeconds": 0.199,
+    "guardLogSha256": "9e5ce05931cf3194c13cfd4d712a34ab6eee5ae2b8c7025b5877a436d668b6ac",
+    "sources": {
+      ".github/workflows/collaboration-apple-sdk.yml": "c9b32c67b83923c4c54c1df377b660aa76c651cf108651a3500e5b66523e040c",
+      "tool/collaboration-apple-sdk-proof/SDK8NativeTests.swift": "509a4045bf165dd304d6d6f301fd0ed32eb7d28cfb2b4b4f1d8d6edad53776f9",
+      "tool/recheck_collaboration_apple_sdk.py": "16f7879dd9174fae8cde7ad611009d9c37dfe611e87b15d91b41f950e262781d",
+      "tool/test_recheck_collaboration_apple_sdk.py": "cb913d24c35ff0ccf733ca5e7b34bde45e690d9ef9698336288c4f7102867199",
+      "tool/build_collaboration_apple_sdk.py": "e92669ece3a615108f0d1f44f568b00add0ba99d36f10652cc3325871dde2872",
+      "tool/test_build_collaboration_apple_sdk.py": "040f571a378769504623b300671b2802b85ddd745dd9813014237b3cf1f720b3"
+    },
+    "totalSwiftCasesExpected": 5,
+    "nativeExecutedLocally": 0,
+    "nativeAccepted": false,
+    "sdkManifestUnchanged": "4e3da541a7a4f9a22b631391b0f29cebdb723d43662d530bd7d454ebaeb6686a"
+  },
+  "nativeAccepted": false,
+  "published": false,
+  "productionAppleRuntimeEnabled": false
+}

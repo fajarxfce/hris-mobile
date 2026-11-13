@@ -1,11 +1,11 @@
 import Foundation
+import Darwin
 import MatrixRustSDK
 import XCTest
 
 final class SDK8NativeTests: XCTestCase {
     func testPassphraseIdentityReaderPreservesKeysAndRejectsAnUnrelatedPassphrase() async throws {
         let fixture = try SDK8StoreFixture()
-        defer { fixture.remove() }
         fixture.recordFiles("before-first-client")
         let first = try await fixture.fingerprint()
         fixture.recordFiles("after-first-client")
@@ -14,7 +14,7 @@ final class SDK8NativeTests: XCTestCase {
         XCTAssertEqual(first, restored)
         // Both clients have left their owning function before this blocking, local-only read.
         let identity = try readExistingCryptoIdentity(
-            databaseDirectory: fixture.directory.appendingPathComponent("store").path,
+            databaseDirectory: fixture.storePath,
             passphrase: fixture.passphrase
         )
         XCTAssertEqual(identity.userId, "@apple:proof.invalid")
@@ -24,7 +24,7 @@ final class SDK8NativeTests: XCTestCase {
         fixture.recordFiles("after-existing-identity-read")
         do {
             _ = try readExistingCryptoIdentity(
-                databaseDirectory: fixture.directory.appendingPathComponent("store").path,
+                databaseDirectory: fixture.storePath,
                 passphrase: UUID().uuidString
             )
             XCTFail("An unrelated passphrase opened the retained identity")
@@ -39,28 +39,28 @@ final class SDK8NativeTests: XCTestCase {
 
     func testMissingStoreReadDoesNotCreateFiles() async throws {
         let fixture = try SDK8StoreFixture()
-        defer { fixture.remove() }
-        XCTAssertTrue(try FileManager.default.contentsOfDirectory(atPath: fixture.directory.path).isEmpty)
+        XCTAssertTrue(try FileManager.default.contentsOfDirectory(atPath: fixture.directoryPath).isEmpty)
         do {
-            _ = try readExistingCryptoIdentity(databaseDirectory: fixture.directory.path, passphrase: fixture.passphrase)
+            _ = try readExistingCryptoIdentity(databaseDirectory: fixture.directoryPath, passphrase: fixture.passphrase)
             XCTFail("Missing store returned a fabricated identity")
         } catch {
             XCTAssertTrue(error is ExistingCryptoIdentityError)
         }
-        XCTAssertTrue(try FileManager.default.contentsOfDirectory(atPath: fixture.directory.path).isEmpty)
+        XCTAssertTrue(try FileManager.default.contentsOfDirectory(atPath: fixture.directoryPath).isEmpty)
     }
 
     func testExistingIdentityRejectsParentSymlinkWithoutChangingRetainedKeys() async throws {
         let fixture = try SDK8StoreFixture()
-        defer { fixture.remove() }
         let first = try await fixture.fingerprint()
-        let alias = fixture.directory.appendingPathComponent("alias")
+        let direct = try readExistingCryptoIdentity(databaseDirectory: fixture.storePath, passphrase: fixture.passphrase)
+        XCTAssertEqual(direct.ed25519Key, first)
+        let alias = fixture.directoryPath + "/alias"
         try FileManager.default.createSymbolicLink(
-            at: alias, withDestinationURL: fixture.directory.appendingPathComponent("store")
+            atPath: alias, withDestinationPath: fixture.storePath
         )
-        XCTAssertTrue(FileManager.default.fileExists(atPath: alias.appendingPathComponent("matrix-sdk-crypto.sqlite3").path))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: alias + "/matrix-sdk-crypto.sqlite3"))
         do {
-            _ = try readExistingCryptoIdentity(databaseDirectory: alias.path, passphrase: fixture.passphrase)
+            _ = try readExistingCryptoIdentity(databaseDirectory: alias, passphrase: fixture.passphrase)
             XCTFail("A redirected parent opened the retained identity")
         } catch {
             XCTAssertEqual(error as? ExistingCryptoIdentityError, .Unavailable)
@@ -71,7 +71,6 @@ final class SDK8NativeTests: XCTestCase {
 
     func testSDK8ListenerCancellationAndObserverCloseRetainNoListener() async throws {
         let fixture = try SDK8StoreFixture()
-        defer { fixture.remove() }
         try await fixture.exerciseOwnedSubscriptions()
         // A fresh client reopens the same encrypted store after all listener/client owners leave.
         let reopened = try await fixture.fingerprint()
@@ -79,37 +78,30 @@ final class SDK8NativeTests: XCTestCase {
     }
 }
 
-/// Owns only a temporary offline SDK store. No product account, token or device is used.
+/// Owns only a temporary offline SDK store. The parent runner removes it after process exit,
+/// when Rust's asynchronous SQLite pool teardown can no longer change WAL/SHM files.
 private struct SDK8StoreFixture {
-    let directory: URL
+    let directoryPath: String
+    var storePath: String { directoryPath + "/store" }
     let passphrase = UUID().uuidString + UUID().uuidString
 
     init() throws {
-        // macOS's system temporary URL can use /var -> /private/var. Resolve the OS-owned
-        // parent before creating our private leaf; retain the SDK's NOFOLLOW guard inside it.
-        directory = FileManager.default.temporaryDirectory.resolvingSymlinksInPath()
-            .appendingPathComponent(UUID().uuidString)
+        let root = try XCTUnwrap(ProcessInfo.processInfo.environment["HRIS_SDK8_FIXTURE_ROOT"])
+        let canonical = try XCTUnwrap(realpath(root, nil))
+        defer { free(canonical) }
+        // Keep the POSIX spelling as a String. Foundation may shorten /private/var to /var
+        // even after resolvingSymlinksInPath(), which the SDK's NOFOLLOW correctly rejects.
+        XCTAssertEqual(root, String(cString: canonical))
+        directoryPath = String(cString: canonical) + "/" + UUID().uuidString
         try FileManager.default.createDirectory(
-            at: directory, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700]
+            atPath: directoryPath, withIntermediateDirectories: false, attributes: [.posixPermissions: 0o700]
         )
-    }
-
-    func remove(file: StaticString = #filePath, line: UInt = #line) {
-        recordFiles("before-cleanup")
-        do {
-            try FileManager.default.removeItem(at: directory)
-            XCTAssertFalse(FileManager.default.fileExists(atPath: directory.path), file: file, line: line)
-            print("SDK8 fixture cleanup completed")
-        } catch {
-            recordFiles("cleanup-failed")
-            let failure = error as NSError
-            XCTFail("SDK8 fixture cleanup failed: \(failure.domain)/\(failure.code)", file: file, line: line)
-        }
     }
 
     /// File metadata only, inside this fictional fixture. Never print keys, tokens or file bodies.
     func recordFiles(_ phase: String) {
         let manager = FileManager.default
+        let directory = URL(fileURLWithPath: directoryPath, isDirectory: true)
         var files = [directory]
         if let contents = manager.enumerator(at: directory, includingPropertiesForKeys: nil) {
             for case let file as URL in contents {
@@ -121,7 +113,7 @@ private struct SDK8StoreFixture {
         for file in files {
             do {
                 let attributes = try manager.attributesOfItem(atPath: file.path)
-                let name = file == directory ? "." : String(file.path.dropFirst(directory.path.count + 1))
+                let name = file == directory ? "." : file.lastPathComponent
                 let mode = attributes[.posixPermissions] ?? "absent"
                 let immutable = attributes[.immutable] ?? "absent"
                 let appendOnly = attributes[.appendOnly] ?? "absent"
@@ -135,8 +127,8 @@ private struct SDK8StoreFixture {
 
     func client() async throws -> Client {
         let store = SqliteStoreBuilder(
-            dataPath: directory.appendingPathComponent("store").path,
-            cachePath: directory.appendingPathComponent("cache").path
+            dataPath: storePath,
+            cachePath: directoryPath + "/cache"
         ).passphrase(passphrase: passphrase)
         let client = try await ClientBuilder()
             .homeserverUrl(url: "http://127.0.0.1:9")

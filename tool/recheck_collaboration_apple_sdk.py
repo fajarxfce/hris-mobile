@@ -14,7 +14,7 @@ import subprocess
 import time
 import zipfile
 
-from build_collaboration_apple_sdk import load_manifest, resolve_symbol_reader, verify_framework, verify_swift_tests
+from build_collaboration_apple_sdk import load_manifest, resolve_symbol_reader, run_swift_contracts, verify_framework
 from build_collaboration_sdk import run, sha
 
 SOURCE_RUN = 43349484661
@@ -130,9 +130,7 @@ def recheck(output):
             record["slices"] = verify_framework(output / "sdk/bindings/apple/generated/MatrixSDKFFI.xcframework", base, reader)
             if record["slices"] != previous["slices"]:
                 raise ValueError("Completed native slices changed")
-            run(["swift", "test", "--jobs", str(base["jobs"]), "--xunit-output", str(output / "swift-tests.xml")],
-                cwd=proof, env=env, log=log, timeout=1800)
-            record["nativeTests"] = verify_swift_tests(output / "swift-tests.xml")
+            record["nativeTests"] = run_swift_contracts(proof, output, base["jobs"], env, log, record)
             for name, target in [("device", "generic/platform=iOS"), ("simulator", "generic/platform=iOS Simulator")]:
                 run(["xcodebuild", "-scheme", "HrisCollaborationAppleProof", "-destination", target,
                      "-derivedDataPath", str(output / "derived" / name), "-jobs", str(base["jobs"]),
