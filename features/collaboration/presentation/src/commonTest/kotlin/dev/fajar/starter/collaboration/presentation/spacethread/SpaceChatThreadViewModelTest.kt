@@ -80,6 +80,7 @@ class SpaceChatThreadViewModelTest {
             assertEquals("", vm.state.value.draft)
             val first = vm.state.value.provisional.single().original
             assertEquals("A", first.original.text)
+            assertEquals(listOf("A"), vm.state.value.rows.map { it.bubble.text })
             assertTrue(vm.state.value.canCompose)
             assertTrue(f.handoffs.isEmpty())
             vm.onEvent(SpaceChatThreadEvent.DraftChanged("B"))
@@ -90,6 +91,7 @@ class SpaceChatThreadViewModelTest {
             assertEquals(listOf("A", "B"), originals.map { it.original.text })
             assertTrue(originals[0].submittedAt < originals[1].submittedAt)
             assertEquals("Keep C", vm.state.value.draft)
+            assertEquals(listOf("B", "A"), vm.state.value.rows.map { it.bubble.text })
             release.complete(Unit)
             advanceUntilIdle()
             assertEquals(originals, f.handoffs)
@@ -270,9 +272,17 @@ class SpaceChatThreadViewModelTest {
             runCurrent()
             assertEquals(original, vm.state.value.messages.pending.single().original)
             assertNull(vm.state.value.messages.pending.single().record)
+            val before = vm.state.value.rows.single()
+            assertEquals(original.original.text, before.bubble.text)
             f.archived.value = listOf(f.sent(original))
             runCurrent()
             assertEquals(f.sent(original), vm.state.value.messages.pending.single().record)
+            assertEquals(before.identity, vm.state.value.rows.single().identity)
+            assertEquals(before.position, vm.state.value.rows.single().position)
+            assertEquals(
+                CollaborationMessageDelivery.SENT,
+                vm.state.value.rows.single().bubble.delivery,
+            )
             assertTrue(vm.state.value.provisional.isEmpty())
             assertEquals(1, f.recordReaders)
             assertEquals(0, f.schedules)

@@ -18,6 +18,7 @@ data class SpaceChatThreadState(
     val draftFailure: Failure? = null,
     val provisional: List<SpaceChatPendingSubmission> = emptyList(),
     val messages: SpaceChatComposerPresentation = SpaceChatComposerPresentation(),
+    val rows: List<SpaceChatMessageRow> = emptyList(),
     val progressFailure: Failure? = null,
     val projectionFailure: Failure? = null,
     val legacyPending: Boolean = false,

@@ -125,7 +125,7 @@ internal fun projectSpaceChatComposer(
 }
 
 /** Selects display status from exact local revisions; it never advances a durable command. */
-private fun selectSpaceComposerDisplayRecord(
+internal fun selectSpaceComposerDisplayRecord(
     access: CollaborationSpaceLocalAccess,
     intent: CollaborationSpaceMessageIntent,
     candidates: List<CollaborationSpaceMessageRecord>,

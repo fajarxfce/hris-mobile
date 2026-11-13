@@ -119,3 +119,11 @@ real Group ownership and preserves Company command namespaces. Its 32 new shared
 11 existing actor cases pass locally, including 279 presentation browser cases. Actual Apple
 execution of the 32 new methods remains pending.
 Actual Group route/list/page activation and rendering measurements follow that acceptance.
+
+## Accepted typed timeline rows
+
+The Group ViewModel now publishes typed rows with its composer continuity. Group and
+Original command namespaces remain distinct; exact provider/origin evidence joins history.
+Route-local placement stays stable across confirmation without changing real timestamps.
+21 new shared methods pass on JVM/browser; actual Apple execution remains pending. Concrete
+page/route activation, contextual actions and rendering/IME measurements are next.

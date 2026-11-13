@@ -1,5 +1,7 @@
 # Architecture
 
+[Group timeline rows](collaboration-space-thread-rows.md) preserve actual command namespaces and route-owned outgoing placement without changing delivery evidence.
+
 [Group thread state](collaboration-space-thread-presentation.md) keeps local history, editing and message progress independent under a route-owned typed composer.
 
 [Organization composer progress](collaboration-space-composer-progress.md) follows exact Group originals across active and terminal storage without restarting unchanged readers.

@@ -1,0 +1,92 @@
+{
+  "startedAt": "2026-11-13T03:41:45.186017+00:00",
+  "elapsedSeconds": 440.981,
+  "sourceFiles": 5231,
+  "freshCounts": {
+    "tests": 1631,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 154350387,
+    "sha256": "eaf723cec8cd80cb5cf62583f30d6e9ed2c0f5d1cc1fc4ac1f714145416c2fa5"
+  },
+  "fullyAccepted": true,
+  "validatedTests": 15443,
+  "newCases": 42,
+  "freshTests": 1631,
+  "reusedUnaffectedTests": 13812,
+  "priorCaseIdsPreserved": true,
+  "excludedHistoricalReports": 109,
+  "excludedHistoricalCases": 642,
+  "sourceManifestSha256": "cce02c64035fecc4137c167e467d83cc89043fa86b7aeaf49cf348d43b6e4d25",
+  "reportManifestSha256": "2d28c4bbd380510463fcc66dafaddaad4006aeb8cc5c38a3837e2fc135af544a",
+  "nativeClaim": "Typed Group row identity and stable pending placement; no SDK or worker orchestration change. The 21 new shared Apple methods require actual hosted execution. No Group UI, native latency or live deployment claim.",
+  "date": "2026-11-13",
+  "focused": {
+    "accepted": true,
+    "tests": 66,
+    "elapsedSeconds": 180.603,
+    "sourceFiles": 5231,
+    "sourceManifestSha256": "cce02c64035fecc4137c167e467d83cc89043fa86b7aeaf49cf348d43b6e4d25",
+    "resultSha256": "dd21e5e2bb866185738ebace23691f74e41ae1afc5f40bddfd7c1c9a3c4b9e3d",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "SpaceChatRowPositionTest": 6,
+      "SpaceChatThreadRowsTest": 15,
+      "SpaceChatThreadViewModelTest": 16,
+      "ChatComposerEditingSessionTest": 11,
+      "SpaceChatComposerEditingSessionTest": 4,
+      "SpaceChatComposerPresentationTest": 12
+    },
+    "priorCaseIdsRetained": true
+  },
+  "sourcePaths": [
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatComposerPresentation.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatHistoryRow.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatMessageRow.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatOutgoingMessage.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadRows.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadState.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadViewModel.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatRowPositionTest.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatRowsFixture.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadRowsTest.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadViewModelTest.kt"
+  ],
+  "newSharedMethods": 21,
+  "actualNewAppleExecutions": 0,
+  "uiRouteActivated": false,
+  "newNativeExecution": false,
+  "phoneInstalled": false,
+  "liveGroupDeployed": false,
+  "exactNewMethods": {
+    "SpaceChatThreadRowsTest": [
+      "aGestureRendersBeforeHistoryAndWithoutInventingACompanyCommand",
+      "ambiguousEvidenceAcrossBothCommandNamespacesIsNotArbitrarilySelected",
+      "anOriginalLedgerWithoutItsActualPhysicalHistoryLocationIsRejected",
+      "confirmedCancellationDoesNotResurrectFromAStaleQueuedInventory",
+      "duplicateHistoryAndOversizedGestureInventoriesFailWithoutTruncation",
+      "equalGroupAndOriginalUuidsRemainSeparateRowsAndActionIdentities",
+      "equalIdsWithoutExactRoomAliasSenderHashAndTextCannotMerge",
+      "exactHistoryKeepsTheCommandIdentityAndDisplayedOriginalTimestamp",
+      "heldAndUncertainGesturesRetainExactTextAndDistinctFailureIcons",
+      "hiddenHistoryCannotReappearThroughTheSeparatelyObservedCommand",
+      "knownSelfIdentitiesDetermineBubbleSideWithoutGuessingFromLogicalIds",
+      "missingIdentityKeepsReadableHistoryWithExplicitUnknownOwnership",
+      "originalHistoryConsumesOnlyItsExactOriginalCommandAndKeepsTheGroupGesture",
+      "previousRowsFromAnotherAccountCannotEnterTheReplacementProjection",
+      "redactionRetainsTheIdentityButRemovesTextReplyAndForwardedPresentation"
+    ],
+    "SpaceChatRowPositionTest": [
+      "aPendingGestureIsNewestEvenWhenTheDeviceClockIsBehindHistory",
+      "archivedOriginalsKeepTheSameKeysThroughIndependentHistoryPublications",
+      "everyConfirmedPrefixKeepsFourGesturesInTheirOriginalOrder",
+      "identicalSnapshotsProduceEqualRowsAndDoNotAdvancePlacement",
+      "keysRetainCanonicalOwnershipAndDoNotCollideThroughSeparatorCharacters",
+      "outOfOrderAcknowledgementsDoNotMoveTheStillPendingRows"
+    ]
+  }
+}

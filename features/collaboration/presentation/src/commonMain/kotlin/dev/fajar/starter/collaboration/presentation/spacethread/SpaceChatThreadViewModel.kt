@@ -199,7 +199,20 @@ class SpaceChatThreadViewModel(
             is AppResult.Failed -> updateState { it.copy(projectionFailure = projected.failure) }
             is AppResult.Success -> {
                 val messages = projected.value
-                updateState { it.copy(messages = messages, projectionFailure = null) }
+                val rendered =
+                    spaceChatThreadRows(
+                        access,
+                        conversationId,
+                        current.thread,
+                        messages,
+                        current.rows,
+                    )
+                if (rendered is AppResult.Failed) {
+                    updateState { it.copy(projectionFailure = rendered.failure) }
+                    return
+                }
+                val rows = (rendered as AppResult.Success).value
+                updateState { it.copy(messages = messages, rows = rows, projectionFailure = null) }
                 originals.value = messages.pending.map { it.original }.sortedBy { it.id }
                 // The immutable screen projection owns these exact rows before releasing the actor.
                 editor.visible(
