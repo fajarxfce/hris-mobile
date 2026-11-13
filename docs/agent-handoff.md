@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 01:44 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 01:54 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -227,12 +227,18 @@ failure; review also found native starvation) and failed-native-pending-review-2
 passed but review found premature wake completion/immediate self-wake with absent native keys).
 Corrected tests preserve all25 previously accepted worker identities and original assertions.
 No source quality limits relaxed. No Group deployment, phone or UI performance claim.
-Commit/push this accepted increment before applying subsequent application changes.
+Recovery acceptance is committed and pushed: Mobile90a2c298 / Group7ba58196; pushes64599/18925 REAPED.
+One exact-source control43347489951 is active on90a2c29845097b1845be7c11871c4fda61cffa38:
+portable131630257549 expects12,992 cases; Apple131630258093 expects5,358; combined18,350.
+Dispatch4979 and identification19966 REAPED. No duplicate dispatch. The44 new shared recovery
+methods still require the current Apple result. Preserve the unexecuted hosted preparation
+syntax candidate; it caused no source change or CI dispatch.
 
-NEXT: Mobile.work/space-composer-observation-2026-11-13 remains DRAFT ONLY. Local editor and
-retained outbox observation belongs to one account/Group use case, independent of history
-rendering. Complete lifetime tests, DI and strict validation before applying the typed Group
-composer caller and canonical thread/list UI. Reuse the route-owned serial write actor; never
+NEXT: Mobile.work/space-composer-observation-2026-11-13 has seven complete UNAPPLIED source drafts,
+including18 domain methods and DI, ready for prepare.py after this handoff is pushed. Local
+editor and retained outbox observation belongs to one account/Group use case, independent of
+history rendering. Format and validate focused20/full15,050 before accepting it and applying
+the typed Group composer caller and canonical thread/list UI. Reuse the route-owned serial write actor; never
 fabricate a Company access for Group content. Measure first-frame/transition/IME behavior.
 One local compiler OR emulator. Follow the existing phone release handoff for install-only
 delivery, always with an announcement and explicit serial; never drive the user's phone UI.
