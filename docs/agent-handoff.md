@@ -1,4 +1,17 @@
-# Apple SDK build continuation
+# Apple SDK native continuation
+
+Separate native Apple candidate43370071243/job131703523190 is FULLY ACCEPTED at
+ad96a35a8d4ea2f931476a906a4183fb6e1f3c5e. Collector4632 REAPED. Five exact actual Swift
+XML cases passed, all five frozen native architectures/exports match, process-owned fixture
+cleanup passed, and both iOS device/simulator products linked. Recheck343.438s; no Rust rebuild.
+Artifact14011628218/290901638B/b8dfea189c802558ecc5c1b9f20354337375cb5d9d8342426933c3eaf2ece040.
+See docs/measurements/collaboration-sdk8-apple-native-2026-11-13.json. Native source remains
+isolated under fix/apple-sdk-build-budget-20261112. Do not duplicate the accepted job.
+Next: immutable Swift packaging/application consumption and actual Apple bridge; no release
+publication, product runtime activation, actual iPhone test or live Group rollout is claimed.
+All earlier failed candidates remain under their original Mobile.work paths.
+
+## Prior investigation
 
 Updated 13 November 2026, 05:07 UTC. Latest recheck43369039918/job131700250671
 at894947608d5b37ecf31bfee73e9e769ef2a1387c completed all five Swift cases successfully
