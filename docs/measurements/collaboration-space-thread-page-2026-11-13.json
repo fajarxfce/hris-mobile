@@ -1,0 +1,185 @@
+{
+  "startedAt": "2026-11-13T04:17:04.959165+00:00",
+  "elapsedSeconds": 1084.304,
+  "sourceFiles": 5243,
+  "freshCounts": {
+    "tests": 13751,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152507383,
+    "sha256": "ab15aa70708c48a732ed8e027a2e7e744b93bc5d4a61cf24ffcb65462a7807c4"
+  },
+  "fullyAccepted": true,
+  "validatedTests": 15489,
+  "newCases": 46,
+  "freshTests": 13751,
+  "reusedUnaffectedTests": 1738,
+  "priorCaseIdsPreserved": true,
+  "excludedHistoricalReports": 109,
+  "excludedHistoricalCases": 642,
+  "sourceManifestSha256": "d65c490eab7bb1c9ccf53bd5555f1bc43860c4deab960632dc6c0404bcb79148",
+  "reportManifestSha256": "9991e7adfbb88944e591477dcb5804e754d207ebdf1e8ec549772b13931ca084",
+  "nativeClaim": "Group page, explicit local copy admission and shared composer; no SDK or worker orchestration change. The 19 new shared Apple methods require actual hosted execution. Plain Group UI checks are local; no actual Android IME/native latency or live deployment claim.",
+  "date": "2026-11-13",
+  "focused": {
+    "accepted": true,
+    "tests": 100,
+    "elapsedSeconds": 394.093,
+    "sourceFiles": 5243,
+    "sourceManifestSha256": "d65c490eab7bb1c9ccf53bd5555f1bc43860c4deab960632dc6c0404bcb79148",
+    "resultSha256": "6438d82b03dfa80e03210c16d8bd748aa32aa5947b5acbe3286313c82669d5a4",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "SpaceChatComposerFocusTest": 1,
+      "SpaceChatSelectionTest": 8,
+      "ChatComposerFocusTest": 1,
+      "ChatEditorLayoutTest": 3,
+      "ChatQuotedReplyLayoutTest": 3,
+      "SpaceChatContentLifetimeTest": 1,
+      "SpaceChatPageLayoutTest": 6,
+      "SpaceChatComposerPresentationTest": 12,
+      "SpaceChatRowPositionTest": 6,
+      "SpaceChatThreadRowsTest": 15,
+      "SpaceChatThreadViewModelTest": 16,
+      "ChatComposerEditingSessionTest": 11,
+      "SpaceChatComposerEditingSessionTest": 4,
+      "ReadCollaborationSpaceThreadContextTest": 11
+    },
+    "priorCaseIdsRetained": true
+  },
+  "sourcePaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceThreadContext.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadCollaborationSpaceThreadContextTest.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/SpaceChatThreadContent.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatSelection.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadEvent.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadState.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadViewModel.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/pages/SpaceChatComposer.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/pages/SpaceChatQuotePreview.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/pages/SpaceChatThreadPage.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatComposer.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatComposerInput.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatThreadPage.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatSelectionTest.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadFixture.kt",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/SpaceChatComposerFocusTest.kt",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/SpaceChatContentLifetimeTest.kt",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/SpaceChatPageLayoutTest.kt"
+  ],
+  "newSharedMethods": 19,
+  "newDesktopUiMethods": 8,
+  "actualNewAppleExecutions": 0,
+  "screenshots": {
+    "artifacts": [
+      {
+        "path": "features/collaboration/presentation/build/reports/screenshots/group-chat-selection-compact.png",
+        "copy": ".work/space-thread-page-2026-11-13/screenshots/group-chat-selection-compact.png",
+        "bytes": 21504,
+        "sha256": "2205e19f637a834b6aac2c4d046c0c35e916f6f28613620aa77a89f2b12ab352",
+        "width": 375,
+        "height": 780
+      },
+      {
+        "path": "features/collaboration/presentation/build/reports/screenshots/group-chat-selection-dark-large.png",
+        "copy": ".work/space-thread-page-2026-11-13/screenshots/group-chat-selection-dark-large.png",
+        "bytes": 38093,
+        "sha256": "417f10c0795b7de8a7bfe1fc824d37e247a042264d15fb7ffe562d81ce64c877",
+        "width": 375,
+        "height": 780
+      },
+      {
+        "path": "features/collaboration/presentation/build/reports/screenshots/group-chat-selection-landscape.png",
+        "copy": ".work/space-thread-page-2026-11-13/screenshots/group-chat-selection-landscape.png",
+        "bytes": 21158,
+        "sha256": "c14ffc3fc4ab8e0be3d627e9a2557b9987d621952fa874cadc0d27163bb5e0fe",
+        "width": 720,
+        "height": 375
+      }
+    ],
+    "recordingVerified": true,
+    "visuallyReviewed": true,
+    "claim": "Desktop Compose geometry only; not Android IME or native latency.",
+    "reviewedAt": "2026-11-13T04:17:22.853682+00:00",
+    "review": {
+      "compact": "375x780: contextual Back/count/Copy aligned; both selected rows and day label above the retained composer; no overlap.",
+      "darkLarge": "375x780 large text: header, wrapped message, metadata and multiline-capable input fit without clipping.",
+      "landscape": "720x375: rows remain above full-width composer and contextual actions; no overlap.",
+      "limitation": "Desktop geometry only. Existing unknown-sender caption is a follow-up copy review; these images do not establish cryptographic verification or real IME behavior."
+    }
+  },
+  "productRouteActivated": false,
+  "newNativeExecution": false,
+  "phoneInstalled": false,
+  "liveGroupDeployed": false,
+  "exactNewMethods": {
+    "ReadCollaborationSpaceThreadContextTest": [
+      "aPendingLocalReadHasAFiniteActionDeadline",
+      "cancellationDiscardsALateNonCooperativeMetadataResult",
+      "explicitRenewedAccessReopensTheSameOwnedContext",
+      "failedSessionReadDoesNotFallBackToPreviouslyKnownOwnership",
+      "invalidConversationIsRejectedBeforeAnyMetadataRead",
+      "knownDenialPreventsPrivateMetadataAcquisition",
+      "lateDenialOrAccountReplacementCannotPublishTheCapturedContext",
+      "metadataStorageFailureKeepsItsClassificationWithoutRetry",
+      "missingOrForeignMetadataDoesNotAuthorizeTheAction",
+      "ownedLocalContextDoesNotNeedSelectedCompanyOrUnexpiredCredentials",
+      "signOutDuringAdmissionPreventsPrivateMetadataAcquisition"
+    ],
+    "SpaceChatSelectionTest": [
+      "aCancelledOriginalCannotBeCopiedFromAnOlderSelectionSnapshot",
+      "aLateGroupDenialClearsTheScreenAndRejectsTheClipboardAction",
+      "copyingUsesMessageOrderAndConsumesTheConfirmedActionOnce",
+      "deliveryStatusMayAdvanceWhileTheCopiedTextAndIdentityStayExact",
+      "replyingUsesAnActualSentEventAndRetainsTheQuotedDraftLocally",
+      "selectionAcceptsOnlyVisibleTypedRowsAndBackClearsItBeforeLeaving",
+      "selectionIsBoundedAndDeselectingMakesSpaceForAnotherMessage",
+      "stoppedOrDisposedRoutesCannotFinishALateClipboardConfirmation"
+    ]
+  },
+  "exactNewUiMethods": {
+    "SpaceChatPageLayoutTest": [
+      "aNewMessageKeepsAnOlderViewportOnItsCurrentAnchor",
+      "alreadyReadRowsRemainVisibleWhileTheIndependentHistoryReadIsPending",
+      "compactRoomShowsMessagesWithLongPressActionsAndNoPermanentSelectionButton",
+      "darkLargeTextKeepsMessageAndSelectionActionsReachable",
+      "landscapeKeepsComposerAndSelectionWithinTheAvailableHeight",
+      "newestGestureAppearsAboveTheComposerInItsFirstConstrainedLayout"
+    ],
+    "SpaceChatComposerFocusTest": [
+      "consecutiveSendsKeepInputFocusWhileTheRealGroupUseCaseWaitsForLocalStorage"
+    ],
+    "SpaceChatContentLifetimeTest": [
+      "stoppingTheActualContentCancelsItsClipboardReadBeforeTheActionDeadline"
+    ]
+  },
+  "failedCandidates": [
+    {
+      "session": "18812 REAPED",
+      "tests": 0,
+      "elapsedSeconds": 118.474,
+      "sourceManifestSha256": "e888510e39545a899b09762ada19a8b8c0fda43e648b9f7ed85092e3ef6ede94",
+      "reason": "Two new context tests compared Success<nullable metadata> with a non-null context contract; Kotlin type inference rejected the expectations before any tests ran. Production compiled. Expected successful metadata is now explicitly required non-null; no assertion or admission rule removed.",
+      "path": "failed-nullable-context-1"
+    },
+    {
+      "session": "69074 REAPED",
+      "tests": 97,
+      "failures": 4,
+      "passed": 93,
+      "elapsedSeconds": 215.347,
+      "sourceManifestSha256": "3f958e2a1f399f56b2045ed83a83ff5803c98c488cc4af9a41ea759080d70e9b",
+      "reason": "Two selection tests asserted before queued MVI events ran; one denial fixture omitted the required revision; the focus test compared placeholder Text with EditableText. Correct synchronization and fixture/semantic assertions preserve the intended requirements. Review also found a disposed-model copy precheck and lifecycle-owned effect cancellation that require production fixes and a new route lifetime UI test.",
+      "path": "failed-test-synchronization-2"
+    }
+  ]
+}

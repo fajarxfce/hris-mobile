@@ -175,6 +175,15 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     ChatYou(Res.string.chat_you_en, Res.string.chat_you_id),
     ChatSelectedCount(Res.string.chat_selected_count_en, Res.string.chat_selected_count_id),
     ChatCopyMessages(Res.string.chat_copy_messages_en, Res.string.chat_copy_messages_id),
+    ChatDraftUnavailable(
+        Res.string.chat_draft_unavailable_en,
+        Res.string.chat_draft_unavailable_id,
+    ),
+    ChatCopyUnavailable(Res.string.chat_copy_unavailable_en, Res.string.chat_copy_unavailable_id),
+    ChatMessagesUnavailable(
+        Res.string.chat_messages_unavailable_en,
+        Res.string.chat_messages_unavailable_id,
+    ),
     ChatDeleteMessages(Res.string.chat_delete_messages_en, Res.string.chat_delete_messages_id),
     ChatDeleteForMe(Res.string.chat_delete_for_me_en, Res.string.chat_delete_for_me_id),
     ChatDeleteLocalExplanation(

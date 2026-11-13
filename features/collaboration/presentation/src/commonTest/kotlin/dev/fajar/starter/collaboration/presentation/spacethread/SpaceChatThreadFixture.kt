@@ -262,6 +262,12 @@ internal class SpaceChatThreadFixture {
                 base.server,
                 schedule,
             ),
+            ReadCollaborationSpaceThreadContext(
+                content.metadata,
+                directory,
+                base.sessions,
+                base.server,
+            ),
         )
 
     fun submission(index: Int = 1) =

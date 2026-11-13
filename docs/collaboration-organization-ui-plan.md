@@ -127,3 +127,11 @@ Original command namespaces remain distinct; exact provider/origin evidence join
 Route-local placement stays stable across confirmation without changing real timestamps.
 21 new shared methods pass on JVM/browser; actual Apple execution remains pending. Concrete
 page/route activation, contextual actions and rendering/IME measurements are next.
+
+## Accepted Group page and explicit actions
+
+The actual page/content now reuses bubble/day-divider/composer visuals with typed selection,
+copy and reply. Local action admission is a domain use case; the route owns clipboard, focus
+and first-layout anchoring. 100 focused cases and three reviewed desktop screenshots support
+this increment. Product graph/list activation, bounded warming, remaining mutation actions
+and actual Android IME/transition measurements still follow.

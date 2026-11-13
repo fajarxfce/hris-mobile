@@ -1097,4 +1097,7 @@
     <string name="chat_edit_send_failed_en">Changes not sent</string>
     <string name="chat_copy_failed_edits_en">Copy unapplied changes</string>
     <string name="chat_recipient_unavailable_en">The recipient cannot receive messages yet.</string>
+    <string name="chat_copy_unavailable_en">These messages could not be copied.</string>
+    <string name="chat_messages_unavailable_en">Messages are unavailable right now.</string>
+    <string name="chat_draft_unavailable_en">Your draft is unavailable right now.</string>
 </resources>

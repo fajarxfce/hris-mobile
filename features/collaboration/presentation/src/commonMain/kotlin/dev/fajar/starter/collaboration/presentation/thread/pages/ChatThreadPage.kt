@@ -246,7 +246,7 @@ fun ChatThreadPage(
 }
 
 @Composable
-private fun ChatDayDivider(date: LocalDate, today: LocalDate) {
+internal fun ChatDayDivider(date: LocalDate, today: LocalDate) {
     val resource = chatDayResource(date, today)
     Box(Modifier.fillMaxWidth().padding(vertical = 12.dp), contentAlignment = Alignment.Center) {
         AppText(

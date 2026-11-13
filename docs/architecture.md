@@ -1,5 +1,7 @@
 # Architecture
 
+[Group page and actions](collaboration-space-thread-page.md) render typed rows while domain confirms local action admission and navigation owns platform effects.
+
 [Group timeline rows](collaboration-space-thread-rows.md) preserve actual command namespaces and route-owned outgoing placement without changing delivery evidence.
 
 [Group thread state](collaboration-space-thread-presentation.md) keeps local history, editing and message progress independent under a route-owned typed composer.

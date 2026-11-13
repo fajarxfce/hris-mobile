@@ -1097,4 +1097,7 @@
     <string name="chat_edit_send_failed_id">Perubahan belum terkirim</string>
     <string name="chat_copy_failed_edits_id">Salin perubahan yang gagal</string>
     <string name="chat_recipient_unavailable_id">Penerima belum bisa menerima pesan.</string>
+    <string name="chat_copy_unavailable_id">Pesan belum bisa disalin.</string>
+    <string name="chat_messages_unavailable_id">Pesan belum bisa ditampilkan.</string>
+    <string name="chat_draft_unavailable_id">Draf belum bisa dibuka.</string>
 </resources>

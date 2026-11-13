@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 04:30 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 04:35 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -26,40 +26,28 @@ identification75555 REAPED. The checkout/build Rust steps are intentionally skip
 Workspace Mobile.work/sdk8-apple-proof-cleanup-2026-11-13. No native acceptance yet.
 Do not dispatch another run or use the old success-only auditor for this changed proof.
 
-## Active Group page integration
+## Latest Group page acceptance
 
-Mobile `.work/space-thread-page-2026-11-13` has 23 applied, uncommitted source paths.
-Application sources are authoritative; do not reapply stale draft copies. The page reuses
-actual bubble/day-divider/composer visuals, preserves typed Group/Original identities and
-adds contextual long-press selection/copy/reply. Domain confirms current local action
-admission; navigation owns effects, focus and first-layout anchoring. Copy effect collection
-now belongs to STARTED lifecycle and cancels on stop/new effects. A disposed ViewModel
-rejects confirmation before any local I/O. Product graph and live Group remain disabled.
+Mobile `.work/space-thread-page-2026-11-13` is accepted locally, 23 source paths.
+Group page/content, shared composer input, typed selection/copy/reply and fresh local action
+context are implemented. The product graph and live Group feature remain disabled.
+Focused 100 cases; full 15,489 = 13751 newly executed + 1738 exactly unchanged.
+All 15,443 previous IDs remain, plus 38 new JVM/browser executions and 8 desktop UI cases.
+Source 5243 / d65c490eab7bb1c9ccf53bd5555f1bc43860c4deab960632dc6c0404bcb79148.
+Report 9991e7adfbb88944e591477dcb5804e754d207ebdf1e8ec549772b13931ca084.
+Proof 152507383 bytes / ab15aa70708c48a732ed8e027a2e7e744b93bc5d4a61cf24ffcb65462a7807c4.
+Strict focused/full and screenshot recording/review checks passed. Preserve every failed
+candidate recorded in state.json. Session IDs and elapsed times are retained there and in
+compact evidence. No actual Android IME, native latency or phone installation is claimed.
 
-Preserve failed-nullable-context-1 (focused1/18812, 0 tests) and
-failed-test-synchronization-2 (focused2/69074, 97 tests/4 failures, 215.347s).
-The latter exposed two assertions before queued events, an invalid denial fixture and a
-placeholder-vs-editable-text assertion. Original requirements remain. Review also found and
-fixed the actual copy lifetime gaps; a new desktop test exercises the real Content lifecycle.
-Format3/20855 REAPED PASS34.565s. Focused3/3736 REAPED PASS100/394.093s.
-Strict focused audit and all three screenshot geometry reviews passed; full-1/68372 is ACTIVE.
-Source5243/d65c490eab7bb1c9ccf53bd5555f1bc43860c4deab960632dc6c0404bcb79148.
-Do not change application/library inputs while the compiler runs.
-Next: reap full-1/68372 and audit exact case identities. Full expects15489:
-all15443 prior IDs +38 shared JVM/browser +8 desktop UI. The source fingerprint is frozen.
-Screenshot geometry is accepted; actual Android IME and transition measurements remain pending.
-
-Control43359439624 is FULLY ACCEPTED at exactfc45116481b6e9a03f1e377bf4a4e11e4e803c74:
-18560=13132 portable (6295desktop/960Android host/5877browser) +5428 actual Apple.
-Auditors35285/80173 REAPED; archived artifacts, digests, ZIP CRC and prior case IDs verified.
-The70 observation/progress/presentation methods actually ran on Apple; iOS host and push
-routing passed. Later row21 and page19 still need Apple. After page acceptance and push,
-one follow-up expects13220portable+5468Apple=18688. Do not rerun this completed control.
-Separate Matrix Swift recheck is active under43365790802/job131689776366; see above.
-
-Release92 is INSTALLED on10.77.77.3:5555,13Nov04:11UTC; installer99895 REAPED25.071s.
-Device APK SHA matches the accepted ARM artifact, package identity/data retained. No phone
-UI was opened or driven. Do not repeat installation. Continue beyond checkpoints.
+Next: push this acceptance. The next single hosted follow-up adds 40 pending shared methods
+(21 rows + 19 page/context) and 8 desktop UI cases after the completed control 43359439624 (18,560 cases, both audits accepted).
+Expected portable 13,220 = 6,343 desktop + 960 Android host + 5,917 browser; Apple 5,468;
+combined 18,688. Do not duplicate an active control. Actual Matrix Swift contracts remain
+separate under 43365790802 / 131689776366 (completed-framework cleanup investigation). Continue bounded Group route warming, product
+list/graph integration, remaining contextual actions and actual Android IME/transition work.
+Release 92 was installed at 04:11 UTC; installer99895 REAPED, device SHA matched, data retained. Keep phone
+install-only with prior announcement and explicit serial; one local compiler OR emulator.
 
 ## Latest implementation checkpoint
 

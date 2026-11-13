@@ -1,30 +1,19 @@
 package dev.fajar.starter.collaboration.presentation.thread.pages
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.collaboration.presentation.thread.*
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.localization.*
-import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.Checkmark
 import io.github.composefluent.icons.regular.Dismiss
@@ -85,51 +74,20 @@ internal fun ChatComposer(
                     )
                 }
             }
-        Row(
-            Modifier.fillMaxWidth().padding(8.dp),
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ChatComposerInput(
+            text = text,
+            onTextChanged = {
+                onEvent(
+                    if (editing == null) ChatThreadEvent.DraftChanged(it)
+                    else ChatThreadEvent.EditChanged(it)
+                )
+            },
+            label = label,
+            enabled = if (editing == null) state.canCompose else state.canEditInput,
+            inputModifier = inputModifier.focusRequester(inputFocus),
+            readOnly = editing?.let { it.busy || it.locked } == true,
+            inputStateDescription = savingLabel.takeIf { editing == null && state.draftSaving },
         ) {
-            BasicTextField(
-                value = text,
-                onValueChange = {
-                    onEvent(
-                        if (editing == null) ChatThreadEvent.DraftChanged(it)
-                        else ChatThreadEvent.EditChanged(it)
-                    )
-                },
-                modifier =
-                    inputModifier
-                        .focusRequester(inputFocus)
-                        .weight(1f)
-                        .heightIn(min = 48.dp)
-                        .semantics {
-                            contentDescription = label
-                            if (editing == null && state.draftSaving) stateDescription = savingLabel
-                        },
-                enabled = if (editing == null) state.canCompose else state.canEditInput,
-                readOnly = editing?.let { it.busy || it.locked } == true,
-                singleLine = false,
-                maxLines = 6,
-                textStyle = FluentTheme.typography.body.copy(color = AppColors.text),
-                cursorBrush = SolidColor(AppColors.accent),
-                decorationBox = { input ->
-                    Box(
-                        Modifier.background(AppColors.surface, RoundedCornerShape(24.dp))
-                            .border(1.dp, AppColors.border, RoundedCornerShape(24.dp))
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        contentAlignment = Alignment.CenterStart,
-                    ) {
-                        if (text.isEmpty()) AppText(label, color = AppColors.muted)
-                        input()
-                    }
-                },
-                keyboardOptions =
-                    KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Sentences,
-                        imeAction = ImeAction.Default,
-                    ),
-            )
             AppIconButton(
                 if (editing == null) Icons.Regular.Send else Icons.Regular.Checkmark,
                 appString(

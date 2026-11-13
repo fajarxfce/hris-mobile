@@ -658,6 +658,14 @@ class CollaborationDataModule {
     ) = ObserveCollaborationSpaceComposerProgress(messages, directory, sessions, server)
 
     @Factory
+    fun readSpaceThreadContext(
+        conversations: CollaborationSpaceConversationMetadataRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpaceThreadContext(conversations, directory, sessions, server)
+
+    @Factory
     fun editSpaceDraft(
         drafts: CollaborationSpaceDraftRepository,
         conversations: CollaborationSpaceConversationMetadataRepository,

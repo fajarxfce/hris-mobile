@@ -24,6 +24,7 @@ class SpaceChatThreadViewModel(
     private val observeProgress: ObserveCollaborationSpaceComposerProgress,
     private val editDraft: EditCollaborationSpaceDraft,
     private val submitComposer: SubmitCollaborationSpaceComposer,
+    private val readContext: ReadCollaborationSpaceThreadContext,
 ) :
     MviViewModel<SpaceChatThreadState, SpaceChatThreadEvent, SpaceChatThreadEffect>(
         SpaceChatThreadState()
@@ -36,6 +37,8 @@ class SpaceChatThreadViewModel(
     private val originals = MutableStateFlow<List<CollaborationComposerSubmission>>(emptyList())
     private var progress = emptyList<CollaborationSpaceComposerMessageProgress>()
     private var departure: Job? = null
+    private var copySequence = 0L
+    private var pendingCopy: SpaceChatCopyRequest? = null
     private val editor =
         ChatComposerEditingSession<CollaborationSpaceLocalAccess>(
             viewModelScope,
@@ -65,6 +68,13 @@ class SpaceChatThreadViewModel(
         on<SpaceChatThreadEvent.SendRequested>(::onSendRequested)
         on<SpaceChatThreadEvent.DraftRetryRequested>(::onDraftRetryRequested)
         on<SpaceChatThreadEvent.BackRequested>(::onBackRequested)
+        on<SpaceChatThreadEvent.MessageSelected>(::onMessageSelected)
+        on<SpaceChatThreadEvent.SelectionCleared>(::onSelectionCleared)
+        on<SpaceChatThreadEvent.CopySelected>(::onCopySelected)
+        on<SpaceChatThreadEvent.ReplySelected>(::onReplySelected)
+        on<SpaceChatThreadEvent.ReplyCleared>(::onReplyCleared)
+        on<SpaceChatThreadEvent.ActionFailureDismissed>(::onActionFailureDismissed)
+        on<SpaceChatThreadEvent.LocalReadRetryRequested>(::onLocalReadRetryRequested)
     }
 
     private fun onPrepared(event: SpaceChatThreadEvent.Prepared) {
@@ -90,6 +100,7 @@ class SpaceChatThreadViewModel(
 
     private fun onStopped(event: SpaceChatThreadEvent.Stopped) {
         visible = false
+        pendingCopy = null
         // Retained routes keep their owned local readers to redact on logout or Group denial.
         // The bounded navigation store owns disposal; no transport work is started by this model.
     }
@@ -212,7 +223,14 @@ class SpaceChatThreadViewModel(
                     return
                 }
                 val rows = (rendered as AppResult.Success).value
-                updateState { it.copy(messages = messages, rows = rows, projectionFailure = null) }
+                updateState {
+                    it.copy(
+                        messages = messages,
+                        rows = rows,
+                        projectionFailure = null,
+                        selection = it.selection.intersect(rows.map { row -> row.identity }.toSet()),
+                    )
+                }
                 originals.value = messages.pending.map { it.original }.sortedBy { it.id }
                 // The immutable screen projection owns these exact rows before releasing the actor.
                 editor.visible(
@@ -256,7 +274,8 @@ class SpaceChatThreadViewModel(
     }
 
     private fun onSendRequested(event: SpaceChatThreadEvent.SendRequested) {
-        if (state.value.canSend) editor.send()
+        if (state.value.canSend && editor.send() != null)
+            viewModelScope.launch { emitEffect(SpaceChatThreadEffect.ScrollToNewest) }
     }
 
     private fun onDraftRetryRequested(event: SpaceChatThreadEvent.DraftRetryRequested) {
@@ -266,6 +285,10 @@ class SpaceChatThreadViewModel(
     }
 
     private fun onBackRequested(event: SpaceChatThreadEvent.BackRequested) {
+        if (state.value.selecting) {
+            onSelectionCleared(SpaceChatThreadEvent.SelectionCleared)
+            return
+        }
         if (departure?.isActive == true || state.value.leaving) return
         val captured = generation
         departure =
@@ -279,8 +302,121 @@ class SpaceChatThreadViewModel(
             }
     }
 
+    private fun onMessageSelected(event: SpaceChatThreadEvent.MessageSelected) {
+        val current = state.value
+        if (
+            !visible ||
+                current.leaving ||
+                current.restriction != null ||
+                current.projectionFailure != null ||
+                current.rows.none { it.identity == event.identity }
+        )
+            return
+        val selected = current.selection
+        when {
+            event.identity in selected ->
+                updateState {
+                    it.copy(selection = selected - event.identity, selectionLimitReached = false)
+                }
+            selected.size < SPACE_CHAT_SELECTION_LIMIT ->
+                updateState {
+                    it.copy(selection = selected + event.identity, selectionLimitReached = false)
+                }
+            else -> updateState { it.copy(selectionLimitReached = true) }
+        }
+    }
+
+    private fun onSelectionCleared(event: SpaceChatThreadEvent.SelectionCleared) {
+        updateState { it.copy(selection = emptySet(), selectionLimitReached = false) }
+    }
+
+    private fun onCopySelected(event: SpaceChatThreadEvent.CopySelected) {
+        val current = state.value
+        if (!visible || !current.canCopySelection) return
+        val selected = current.selectedRows.sortedBy { it.position }
+        val effect =
+            SpaceChatThreadEffect.CopyMessages(
+                ++copySequence,
+                selected.joinToString("\n\n") { requireNotNull(it.bubble.text) },
+            )
+        pendingCopy = SpaceChatCopyRequest(effect, selected, generation)
+        onSelectionCleared(SpaceChatThreadEvent.SelectionCleared)
+        viewModelScope.launch { emitEffect(effect) }
+    }
+
+    /** The route verifies local ownership immediately before its platform clipboard write. */
+    suspend fun confirmCopy(effect: SpaceChatThreadEffect.CopyMessages): Boolean {
+        val requested = pendingCopy ?: return false
+        if (
+            !viewModelScope.isActive ||
+                requested.effect != effect ||
+                !visible ||
+                state.value.leaving
+        )
+            return false
+        val context = readContext(access, conversationId)
+        currentCoroutineContext().ensureActive()
+        if (
+            !viewModelScope.isActive ||
+                pendingCopy != requested ||
+                requested.generation != generation ||
+                !visible ||
+                state.value.leaving
+        )
+            return false
+        pendingCopy = null
+        if (context is AppResult.Failed) {
+            if (collaborationSpaceDirectoryResponseClosesRead(context.failure))
+                restrict(context.failure)
+            else updateState { it.copy(actionFailure = context.failure) }
+            return false
+        }
+        val current = state.value
+        return current.restriction == null &&
+            current.projectionFailure == null &&
+            requested.rows.all { captured ->
+                current.rows.any {
+                    it.identity == captured.identity &&
+                        it.bubble.kind == captured.bubble.kind &&
+                        it.bubble.text == captured.bubble.text
+                }
+            }
+    }
+
+    private fun onReplySelected(event: SpaceChatThreadEvent.ReplySelected) {
+        val current = state.value
+        if (!visible || !current.canReplySelection) return
+        val target = current.selectedRows.single().bubble.eventId ?: return
+        onSelectionCleared(SpaceChatThreadEvent.SelectionCleared)
+        editor.change(replyToEventId = target, immediate = true)
+        viewModelScope.launch { emitEffect(SpaceChatThreadEffect.FocusComposer) }
+    }
+
+    private fun onReplyCleared(event: SpaceChatThreadEvent.ReplyCleared) {
+        if (state.value.canCompose) editor.change(replyToEventId = null, immediate = true)
+    }
+
+    private fun onLocalReadRetryRequested(event: SpaceChatThreadEvent.LocalReadRetryRequested) {
+        val current = state.value
+        if (!visible || current.leaving) return
+        if (current.projectionFailure != null) {
+            observeHistory()
+            observeEditing()
+            observeMessageProgress()
+            return
+        }
+        if (current.restriction != null || current.historyFailure != null) observeHistory()
+        if (current.restriction != null || current.composerReadFailure != null) observeEditing()
+        if (current.restriction != null || current.progressFailure != null) observeMessageProgress()
+    }
+
+    private fun onActionFailureDismissed(event: SpaceChatThreadEvent.ActionFailureDismissed) {
+        updateState { it.copy(actionFailure = null) }
+    }
+
     private fun restrict(failure: Failure) {
         generation++
+        pendingCopy = null
         historyObservation?.cancel()
         composerObservation?.cancel()
         progressObservation?.cancel()

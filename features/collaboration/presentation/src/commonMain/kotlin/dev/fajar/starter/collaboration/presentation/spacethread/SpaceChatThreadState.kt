@@ -23,9 +23,12 @@ data class SpaceChatThreadState(
     val projectionFailure: Failure? = null,
     val legacyPending: Boolean = false,
     val leaving: Boolean = false,
+    val selection: Set<SpaceChatMessageIdentity> = emptySet(),
+    val selectionLimitReached: Boolean = false,
+    val actionFailure: Failure? = null,
 ) {
     val canCompose
-        get() = draftReady && restriction == null && !legacyPending && !leaving
+        get() = draftReady && restriction == null && !legacyPending && !leaving && !selecting
 
     val canSend
         get() =
