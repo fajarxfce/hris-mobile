@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 22:40 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 22:43 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -38,15 +38,28 @@ rollback checks. Validate after the admitted producer; then port generic tests t
 run a new exact-source hosted control. Do not change active compiler inputs.
 This earlier hosted run EXCLUDES these16 projection methods. Accepted43498640097/coreb4a3a89d remains20459/6100 Apple.
 Generic Startercaf8103 retains independent1022 and linked15 shared Apple methods; no new port.
-Further .work/space-inbox-history-admission-2026-11-13 contains6 reviewed, formatted UNAPPLIED
-paths: admitted producer/result,22 behavior methods and fixture, owning data factory and assembled
-graph assertion. Exact draft hashes and focused40/full16841 gates are ready; no gate has run yet.
-It must follow accepted/pushed57/16797 projection. Review caught retained original anchors whose
-command proof was absent: all possible physical/Group/Company identities now use at most two
-32-key reads (maximum48 keys) under one index version; unproven retained originals remain
-unresolved rather than becoming duplicate History rows. Both namespaces and inter-batch revision
-changes have regressions. Read current review/state before applying and preserve exact hashes.
-Incoming/backfill ownership and product activation remain separate unfinished work.
+Current .work/space-inbox-history-admission-2026-11-13 has6 APPLIED reviewed paths and22
+behavior methods. Apply32725 REAPED0; focused40/session42257 RUNNING. Source5438/
+92c4ecfac7019fa090c41f6735fe586f54f9cf0415c828562318a7311fe5180d.
+Do not mutate active inputs. Reap focused, accept-focused.py focused-1, then run/reap full16841,
+accept-full.py full-1, record and commit/push Mobile followed by Group. Record/commit scripts
+are prepared, not run. Missing command proof cannot allocate duplicate History anchors; up to48
+physical/Group/Company keys use two32-key reads of one index generation. Review/state/hashes and
+owner-integration-review.md identify actual unresolved incoming/backfill boundaries.
+
+Control43517312645 remains FAILED overall: Apple162/1 at fixture teardown, no later Apple/app
+execution. Portable job132202448103 is independently ACCEPTED14505 (6922 desktop/960 Android host/
+6623 browser), audit5899 REAPED0. Artifact14082887492/4439234 bytes/
+e75e641629b1d0a65b36b52418125bb4de7febb64fb1ca45f239c3ac43825502. Two strict raw-identity audits
+were rejected before review: Chrome157-to156 suffix affected6550 accepted-baseline browser cases
+and6342 older failed-run cases. All class/method/platform identities were independently retained;
+raw full-name identity is explicitly false. See measurements/collaboration-inbox-edit-portable-2026-11-13.json.
+No cases were removed; original timing regressions pass. This excludes new projection/producer.
+
+Generic fixture correction still has3 reviewed unapplied files; no compile or execution. One
+attempt to prepare its gate script was blocked by the automatic content filter and did not
+execute. Do not reproduce that blocked payload. Existing admission verification is unrelated
+and continues. Preserve its current state and all failed hosted artifacts.
 
 Main native Apple SDK8 app activation is separate. Phone92 stays installed, live GroupOFF.
 All54 PRD acceptance groups remain open. Continue beyond checkpoints and push every commit.

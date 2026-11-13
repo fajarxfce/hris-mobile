@@ -1,0 +1,275 @@
+{
+  "accepted": true,
+  "sourceCommit": "7aad7abc235278cf8f6340f74bed5e71479d74ef",
+  "runId": 43517312645,
+  "jobId": 132202448103,
+  "counts": {
+    "desktopTest": 6922,
+    "testAndroidHostTest": 960,
+    "wasmJsBrowserTest": 6623
+  },
+  "previousFailedRunCaseIdsRetained": false,
+  "previousFailedRunMethodAndPlatformIdsRetained": true,
+  "previousFailedRunId": 43443248470,
+  "previousFailedRunCases": 13929,
+  "fixedTimingMethods": [
+    "thrownFailureFinishesTimingWithoutExceptionPayload",
+    "suspendedThrownErrorsFinishRoomAndWorkerStagesWithoutLosingTheirOutcome"
+  ],
+  "artifactId": 14082887492,
+  "artifactBytes": 4439234,
+  "artifactSha256": "e75e641629b1d0a65b36b52418125bb4de7febb64fb1ca45f239c3ac43825502",
+  "jobLogSha256": "13c28c0aa8212c0b4c407b0dc53bcb4476892e7bf48992c57694e120f28cc397",
+  "previousExactCaseIdsRetained": false,
+  "previousMethodAndPlatformIdsRetained": true,
+  "browserEngineReview": {
+    "reviewed": true,
+    "sourceCommit": "7aad7abc235278cf8f6340f74bed5e71479d74ef",
+    "runId": 43517312645,
+    "previousRun": 43498640097,
+    "oldSuffix": "[wasmJs, browser, ChromeHeadless157.0.0.0, Linux0.0.0]",
+    "newSuffix": "[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+    "previousBrowserCases": 6550,
+    "changedReports": 561,
+    "priorArtifactSha256": "ee63ed5baa0344f84a3e733fd89e0847d0eda315601b8f1a9882e13bb9315ca6",
+    "artifactSha256": "e75e641629b1d0a65b36b52418125bb4de7febb64fb1ca45f239c3ac43825502",
+    "onlyBrowserVersionSuffixChanged": true,
+    "allPreviousClassMethodPlatformIdsRetained": true,
+    "failedPreviousRun": 43443248470,
+    "failedPreviousArtifactSha256": "dfb44a9863409abc8b5e0ac9ddb1aad61d90c1a2674e65b2431a8f7e555cc83d",
+    "failedPreviousBrowserCases": 6342,
+    "failedPreviousChangedReports": 545,
+    "failedPreviousAllClassMethodPlatformIdsRetained": true
+  },
+  "newSharedMethods": 73,
+  "newDesktopStorageMethods": 0,
+  "actualNew": [
+    {
+      "platform": "desktopTest",
+      "clazz": "CollaborationSpaceEditInboxStorageTest",
+      "methods": [
+        "absentAndForeignSourcesDoNotCreateKeysOrReturnAnEditableTarget",
+        "accountReplacementBeforeTheJointWriteRetainsNothing",
+        "anotherHistoryPartitionCannotGuardThePreparedOriginal",
+        "archivedCancellationRetainsHandoffProofWithoutRewritingANewerPreview",
+        "cancellingTheCallerJoinsLateStorageAndKeepsTheCommittedEdit",
+        "changedSourceDuringCandidateAcquisitionReturnsNoMixedSnapshot",
+        "companyCandidateKeepsEarliestAliasWithoutRewritingLegacyHistory",
+        "companyHistoryKeepsItsNamespaceWhileTheEditIsAGroupCommand",
+        "groupEditRetainsCommandPreviewAndWakeAcrossReopen",
+        "hiddenCompanyOriginalKeepsFactsButCannotOfferAnEdit",
+        "indexChangeDuringInsertionPreservesNewTypingWithoutRetainingTheEdit",
+        "maximumEditTextAndIndependentDraftKeepTheirSeparateStorage",
+        "missingHistoryKeysNeverReplaceCiphertextOrCreateACommandKey",
+        "ordinaryInsertionCannotForgePublicationAndOldCommandsCannotProveIt",
+        "replyLossKeepsExactIntentAndDoesNotOverwriteNewTypingOnRetry",
+        "retainedReplayDoesNotReadObsoleteHistoryOrReplaceALaterEdit",
+        "sourceChangeDuringInsertionLeavesCommandAndPreviewAbsent"
+      ]
+    },
+    {
+      "platform": "desktopTest",
+      "clazz": "QueueCollaborationSpaceEditTest",
+      "methods": [
+        "aConcurrentOwnerOfTheSameGestureIsConfirmedBeforePreparingAnotherWrite",
+        "archivedReplayDoesNotReadHistoryReplaceANewerEditOrRenewWork",
+        "committedReplyLossIsConfirmedWithoutRepeatingTheWrite",
+        "deniedAccessAfterAReadNeverPublishesPrivateContent",
+        "editingAnOlderOriginalDoesNotDisplaceTheNewestConversationPreview",
+        "existingHistoryAnchorSurvivesNewOrUnprovenOriginalCommandEvidence",
+        "failedReadbackKeepsUncertainIntentForExactLaterRecovery",
+        "groupAndOriginalCompanyHistoryRetainTheSameGroupEditAndAnchor",
+        "hiddenRedactedStaleAndUnselectedTargetsNeverWrite",
+        "independentTypingSurvivesEditingAnotherMessage",
+        "lateCommittedWriteIsJoinedBeforeCancellationAndDoesNotSchedule",
+        "newGroupEditFollowsAnExistingCompanyEditOfTheSameOriginal",
+        "oldUnmarkedCommandCannotAcknowledgeAnUnpublishedPreview",
+        "repeatedlyChangingHistoryAndIndexEachStopAfterThreePreparations",
+        "replacedAccountDuringAReadCannotRetainTheFormerAccountsEdit",
+        "secondOfflineEditUsesPendingTextAndStaysOrderedAfterClockMovesBackward",
+        "storageFailureWithoutRetentionStopsAfterExactReadback"
+      ]
+    },
+    {
+      "platform": "desktopTest",
+      "clazz": "CollaborationHistoryEditSnapshotStorageTest",
+      "methods": [
+        "aChangedCheckpointBetweenOriginalsAndOperationsReturnsNoMixedSnapshot",
+        "aNewCheckpointAfterAnOperationQueryCannotPublishTheOlderRevision",
+        "absentSourcesReturnEveryRequestedEmptyOperationWithoutCreatingKeys",
+        "acceptedIneligibleAndRedactedReplacementsKeepTheirActualOutcomes",
+        "accountReplacementDuringTheOperationReadReturnsNoFormerAccountsContent",
+        "actualCompanyAndGroupNamespacesNeverBorrowTheOtherCopiesEvidence",
+        "allOneHundredTwentyEightAliasesRemainAvailableWithoutTruncation",
+        "anOperationFromAnotherSenderDoesNotReturnMatchingIdsFromTheRealAuthor",
+        "existingSnapshotsWithoutOperationQueriesPerformNoNewIndexRead",
+        "invalidAndOversizedOperationQueriesFailBeforeKeyAcquisition",
+        "missingHistoryKeysNeverReplaceRetainedCiphertextOrCreateNewKeys",
+        "operationQueriesCaptureMutableCallerInputsBeforeSuspending",
+        "originalsAndReplacementResultsRemainCoherentAcrossReopen",
+        "overflowingOneOperationIsAnExplicitFailureInsteadOfPartialEvidence",
+        "pendingCancellationJoinsTheLastReadWithoutReturningPrivateContent",
+        "sixteenDistinctOperationsRetainTheRequestedOrderAndExactIdentity"
+      ]
+    },
+    {
+      "platform": "desktopTest",
+      "clazz": "SpaceInboxEditOutcomePolicyTest",
+      "methods": [
+        "aDifferentOptimisticBodyCannotBeAcknowledgedThroughAnOlderCommand",
+        "aNewerPendingPointerCannotBeSettledByTheOlderOperationsFacts",
+        "actualProviderFactsDistinguishObservedRejectedAndRemovedReplacements",
+        "commandsFromAnotherOwnerOrConversationCannotSettleTheCurrentPreview",
+        "contradictoryRedactionFactsCannotComeFromOneAcceptedHistoryRevision",
+        "duplicateAndOverflowingAliasesAreNeverTreatedAsPartialSuccess",
+        "matchingVisibleTextAloneNeverSubstitutesForExactProviderFacts",
+        "mismatchedOperationSenderTargetHashAndOriginalAliasCannotSettleAnEdit",
+        "missingCommandsCannotEstablishAnOutcomeFromQueueAbsence",
+        "mixedAliasesRequireAnEligibleAliasOrEveryAliasToBeRedacted",
+        "oldUnmarkedGroupCommandsAndDifferentPublicationRevisionsDoNotProveTheOverlay",
+        "providerObservationNeverRestoresHiddenOrDeletedPreviewContent",
+        "sentCommandsWithoutReplacementEvidenceRemainAwaitingProvider",
+        "unrelatedOrMissingOriginalsCannotSettleTheReplacement",
+        "unstampedQueuedCommandsCannotBorrowProviderEvidence"
+      ]
+    },
+    {
+      "platform": "desktopTest",
+      "clazz": "SpaceInboxEditSupersessionPolicyTest",
+      "methods": [
+        "anOlderRevisionWithoutAVisibleReplacementCannotReleasePendingText",
+        "anUnconfirmedCommandIsNotACompletionEvenWhenItsTextIsVisible",
+        "anotherPhysicalRoomCannotSupersedeTheVisibleOriginal",
+        "differentVisibleContentOrUnobservedReceiptAliasesDoNotProveSupersession",
+        "equalOrEarlierLocalActionsCannotSupersedeALaterPendingEdit",
+        "foreignAccountsAndWrongExactLookupIdsFailWithoutChoosingAnotherNamespace",
+        "newerGroupAndCompanyCompletionsSupersedeEitherNamespaceWithoutProviderClockComparison",
+        "twoMatchingNamespacesOrNoCompletionCannotSelectASuccessor"
+      ]
+    },
+    {
+      "platform": "wasmJsBrowserTest",
+      "clazz": "BrowserCollaborationSpaceEditInboxStorageTest",
+      "methods": [
+        "absentAndForeignSourcesDoNotCreateKeysOrReturnAnEditableTarget",
+        "accountReplacementBeforeTheJointWriteRetainsNothing",
+        "anotherHistoryPartitionCannotGuardThePreparedOriginal",
+        "archivedCancellationRetainsHandoffProofWithoutRewritingANewerPreview",
+        "cancellingTheCallerJoinsLateStorageAndKeepsTheCommittedEdit",
+        "changedSourceDuringCandidateAcquisitionReturnsNoMixedSnapshot",
+        "companyCandidateKeepsEarliestAliasWithoutRewritingLegacyHistory",
+        "companyHistoryKeepsItsNamespaceWhileTheEditIsAGroupCommand",
+        "groupEditRetainsCommandPreviewAndWakeAcrossReopen",
+        "hiddenCompanyOriginalKeepsFactsButCannotOfferAnEdit",
+        "indexChangeDuringInsertionPreservesNewTypingWithoutRetainingTheEdit",
+        "maximumEditTextAndIndependentDraftKeepTheirSeparateStorage",
+        "missingHistoryKeysNeverReplaceCiphertextOrCreateACommandKey",
+        "ordinaryInsertionCannotForgePublicationAndOldCommandsCannotProveIt",
+        "replyLossKeepsExactIntentAndDoesNotOverwriteNewTypingOnRetry",
+        "retainedReplayDoesNotReadObsoleteHistoryOrReplaceALaterEdit",
+        "sourceChangeDuringInsertionLeavesCommandAndPreviewAbsent"
+      ]
+    },
+    {
+      "platform": "wasmJsBrowserTest",
+      "clazz": "QueueCollaborationSpaceEditTest",
+      "methods": [
+        "aConcurrentOwnerOfTheSameGestureIsConfirmedBeforePreparingAnotherWrite",
+        "archivedReplayDoesNotReadHistoryReplaceANewerEditOrRenewWork",
+        "committedReplyLossIsConfirmedWithoutRepeatingTheWrite",
+        "deniedAccessAfterAReadNeverPublishesPrivateContent",
+        "editingAnOlderOriginalDoesNotDisplaceTheNewestConversationPreview",
+        "existingHistoryAnchorSurvivesNewOrUnprovenOriginalCommandEvidence",
+        "failedReadbackKeepsUncertainIntentForExactLaterRecovery",
+        "groupAndOriginalCompanyHistoryRetainTheSameGroupEditAndAnchor",
+        "hiddenRedactedStaleAndUnselectedTargetsNeverWrite",
+        "independentTypingSurvivesEditingAnotherMessage",
+        "lateCommittedWriteIsJoinedBeforeCancellationAndDoesNotSchedule",
+        "newGroupEditFollowsAnExistingCompanyEditOfTheSameOriginal",
+        "oldUnmarkedCommandCannotAcknowledgeAnUnpublishedPreview",
+        "repeatedlyChangingHistoryAndIndexEachStopAfterThreePreparations",
+        "replacedAccountDuringAReadCannotRetainTheFormerAccountsEdit",
+        "secondOfflineEditUsesPendingTextAndStaysOrderedAfterClockMovesBackward",
+        "storageFailureWithoutRetentionStopsAfterExactReadback"
+      ]
+    },
+    {
+      "platform": "wasmJsBrowserTest",
+      "clazz": "BrowserCollaborationHistoryEditSnapshotStorageTest",
+      "methods": [
+        "aChangedCheckpointBetweenOriginalsAndOperationsReturnsNoMixedSnapshot",
+        "aNewCheckpointAfterAnOperationQueryCannotPublishTheOlderRevision",
+        "absentSourcesReturnEveryRequestedEmptyOperationWithoutCreatingKeys",
+        "acceptedIneligibleAndRedactedReplacementsKeepTheirActualOutcomes",
+        "accountReplacementDuringTheOperationReadReturnsNoFormerAccountsContent",
+        "actualCompanyAndGroupNamespacesNeverBorrowTheOtherCopiesEvidence",
+        "allOneHundredTwentyEightAliasesRemainAvailableWithoutTruncation",
+        "anOperationFromAnotherSenderDoesNotReturnMatchingIdsFromTheRealAuthor",
+        "existingSnapshotsWithoutOperationQueriesPerformNoNewIndexRead",
+        "invalidAndOversizedOperationQueriesFailBeforeKeyAcquisition",
+        "missingHistoryKeysNeverReplaceRetainedCiphertextOrCreateNewKeys",
+        "operationQueriesCaptureMutableCallerInputsBeforeSuspending",
+        "originalsAndReplacementResultsRemainCoherentAcrossReopen",
+        "overflowingOneOperationIsAnExplicitFailureInsteadOfPartialEvidence",
+        "pendingCancellationJoinsTheLastReadWithoutReturningPrivateContent",
+        "sixteenDistinctOperationsRetainTheRequestedOrderAndExactIdentity"
+      ]
+    },
+    {
+      "platform": "wasmJsBrowserTest",
+      "clazz": "SpaceInboxEditOutcomePolicyTest",
+      "methods": [
+        "aDifferentOptimisticBodyCannotBeAcknowledgedThroughAnOlderCommand",
+        "aNewerPendingPointerCannotBeSettledByTheOlderOperationsFacts",
+        "actualProviderFactsDistinguishObservedRejectedAndRemovedReplacements",
+        "commandsFromAnotherOwnerOrConversationCannotSettleTheCurrentPreview",
+        "contradictoryRedactionFactsCannotComeFromOneAcceptedHistoryRevision",
+        "duplicateAndOverflowingAliasesAreNeverTreatedAsPartialSuccess",
+        "matchingVisibleTextAloneNeverSubstitutesForExactProviderFacts",
+        "mismatchedOperationSenderTargetHashAndOriginalAliasCannotSettleAnEdit",
+        "missingCommandsCannotEstablishAnOutcomeFromQueueAbsence",
+        "mixedAliasesRequireAnEligibleAliasOrEveryAliasToBeRedacted",
+        "oldUnmarkedGroupCommandsAndDifferentPublicationRevisionsDoNotProveTheOverlay",
+        "providerObservationNeverRestoresHiddenOrDeletedPreviewContent",
+        "sentCommandsWithoutReplacementEvidenceRemainAwaitingProvider",
+        "unrelatedOrMissingOriginalsCannotSettleTheReplacement",
+        "unstampedQueuedCommandsCannotBorrowProviderEvidence"
+      ]
+    },
+    {
+      "platform": "wasmJsBrowserTest",
+      "clazz": "SpaceInboxEditSupersessionPolicyTest",
+      "methods": [
+        "anOlderRevisionWithoutAVisibleReplacementCannotReleasePendingText",
+        "anUnconfirmedCommandIsNotACompletionEvenWhenItsTextIsVisible",
+        "anotherPhysicalRoomCannotSupersedeTheVisibleOriginal",
+        "differentVisibleContentOrUnobservedReceiptAliasesDoNotProveSupersession",
+        "equalOrEarlierLocalActionsCannotSupersedeALaterPendingEdit",
+        "foreignAccountsAndWrongExactLookupIdsFailWithoutChoosingAnotherNamespace",
+        "newerGroupAndCompanyCompletionsSupersedeEitherNamespaceWithoutProviderClockComparison",
+        "twoMatchingNamespacesOrNoCompletionCannotSelectASuccessor"
+      ]
+    }
+  ],
+  "reportManifestSha256": "93080b94a69c0b80877e0e8b0bd592d4491acb5792cc55e1edb678fdc5325d41",
+  "fullyAccepted": false,
+  "appleFailed": true,
+  "rejectedAudits": [
+    {
+      "accepted": false,
+      "session": 53473,
+      "exitCode": 1,
+      "auditorSha256": "55ef475060348ec1d012e12f18e7415e28077eea5f156e29749fe9a82064a694",
+      "reason": "Strict raw test-name comparison rejected ChromeHeadless157 to156 suffix; all6550 original browser class/method/platform identities checked separately before adjusting this comparison."
+    },
+    {
+      "accepted": false,
+      "session": 8819,
+      "exitCode": 1,
+      "auditorSha256": "7ac1e1b322504021c2d7c83fd0102426087b251ff6f17a8734aa5e0697a31ffd",
+      "reason": "Same reviewed Chrome157 to156 drift also affects the separately retained failed43443248470 comparison; full method/class/platform identities independently confirmed before handling it."
+    }
+  ],
+  "browserEngineReviewSha256": "c457e2b6e92064301e1196b8a4762c537dc7ac76840d4b25090b321e957c4dc3",
+  "excludedLaterMethods": "Projection16 and admitted producer22 are not in this run."
+}
