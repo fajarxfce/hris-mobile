@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 21:23 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 21:36 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -17,11 +17,12 @@ The first focused source is rejected for its compiler warning; corrected source 
 measurement attempts. Apply/check/record scripts are USED. No graph, phone or live change.
 
 Next .work/space-history-edit-evidence-2026-11-13 has11 APPLIED reviewed paths. Apply72007 is
-REAPED0; focused51/session24522 is RUNNING. Source5426/87215fc372d77b538a29dd7d7947f593b7d92d77d631c550528a084e624c02da.
-Existing Group/actual Company snapshots gain optional bounded operation evidence under the SAME
-source revision;16 shared actual-storage methods and three platform wrappers are being checked.
-Do not change active inputs until24522 is reaped. Then accept-focused.py focused-1, run/reap full16719
-and accept-full.py full-1. Guarded record-acceptance.py/commit.py are prepared NOT RUN. Read state/review.
+REAPED0; focused51/session24522 is REAPED PASS/accepted363.686s. Full16719/session53715 is RUNNING
+since21:25:40UTC. Source5426/87215fc372d77b538a29dd7d7947f593b7d92d77d631c550528a084e624c02da.
+Originals and bounded replacement operations share one Group/actual Company source checkpoint.
+Do not change active inputs until53715 is reaped; then accept-full.py full-1 and set fullReaped.
+Guarded record-acceptance.py/commit.py remain NOT RUN; Group document path was corrected to unique
+mobile-history-edit-snapshot.md. Reap and accept, record, commit Mobile/push, then Group/push.
 
 Follow-up .work/space-inbox-edit-outcome-policy-2026-11-13 has5 REVIEWED UNAPPLIED paths and23
 behavior-test drafts. Exact pending Group/Company/provider facts admit observed/rejected results;
@@ -29,6 +30,13 @@ one authenticated later completion across both namespaces may supersede an older
 Wrong-room proof and contradictory redaction were found during review and have regression drafts.
 Focused41/full16765, apply/capture/acceptance/commit scripts are prepared NOT RUN. Apply requires
 accepted/pushed16719 and a free compiler slot. Source/owner publication and product graph remain open.
+.work/space-inbox-history-projection-2026-11-13 now holds3 UNAPPLIED draft paths (two source,
+14 behavior-test methods). They are NOT compiled or accepted and need final source/test review.
+Drafts preserve original placement, physical anchors, pending text, hidden/deleted precedence and
+partial unresolved work. No producer, backfill, owner, thread/list integration or UI is activated.
+The batch proposal has a synchronous local lifetime; validation uses captured source/index facts.
+Review exact pending target/clearance, complete fallback, duplicate anchors and ordinal bounds.
+
 Read next-owner-review.md for bounded16original/17fallback publication, canonical source, durable
 unresolved handoff, retained-reference completion and finite catalog/binding backfill under existing
 owners. No new per-room observer, polling queue, VM helper or status guessed from an ACK.
