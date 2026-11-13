@@ -1,5 +1,7 @@
 # Architecture
 
+[Finite inbox repair](collaboration-space-inbox-repair-worker.md) follows admitted command changes and durable demand under one explicit local account/Group lifetime.
+
 [Atomic terminal repair publication](collaboration-space-inbox-terminal-publication.md) retains fresh Group repair demand with exact command archival under independent content keys.
 
 [Atomic command archival](command-archive-replica.md) retains an exact terminal command and prepared replica mutations in one replay-safe database transaction.

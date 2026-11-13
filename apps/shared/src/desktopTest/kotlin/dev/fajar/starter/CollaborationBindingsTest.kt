@@ -406,6 +406,12 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<ReadCollaborationSpaceInboxRepair>())
                 assertNotNull(container.koin.get<ReadCollaborationSpaceInboxRepairProgress>())
                 assertNotNull(container.koin.get<ChangeCollaborationSpaceInboxRepairProgress>())
+                assertNotNull(container.koin.get<ObserveCollaborationSpaceInboxRepairDemand>())
+                assertNotNull(
+                    container.koin.get<
+                        dev.fajar.starter.app.work.CollaborationSpaceInboxRepairWorker
+                    >()
+                )
                 assertNotNull(container.koin.get<ReadCollaborationSpaceConversationCatalog>())
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceConversationCatalog>())
                 assertSame(possession, container.koin.get<CollaborationSdkPossessionRepository>())

@@ -1,10 +1,34 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 13:20 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 14:00 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Finite Group inbox repair worker locally accepted
+
+Mobile .work/space-inbox-repair-worker-2026-11-13 is accepted: 18 source/test paths.
+Focused 40; full 16,170 = 14074 fresh + 2096 exact unchanged.
+All 15,969 preceding identities remain plus 56 new shared JVM/browser executions, one actual SQLite
+application test and 144 existing app browser cases newly executed. Source 5348/
+ad2f4ee3c6052831e58eff99de68e402dc28cdf7c66f5a65080666c4264772c1; report 4aa5045e11a1faecbd5123cd5cc605f7f2d2fa9081d732c98de61862b481621a.
+The admitted demand observer ignores checkpoint-only writes. The finite worker targets changed or
+retired originals, preserves saved pages, stops after operational failure and acknowledges its own
+startup request. Real SQLite cancellation updates the pending inbox even when the worker receives
+equal empty command inventories, then survives reopening. No native send or product collector.
+
+Continue prepared Mobile .work/space-original-cancellation-2026-11-13: six unapplied paths,
+14 shared cases, expected focused 17/full 16,198. It admits exact queued-original cancellation,
+confirms archived replay before reading progress, bounds contention, and uses the actual SQLite
+worker proof. Review its draft and guarded apply script; it must follow these source commits.
+Then finish Group retirement, legacy references, incoming history and product ownership. Keep pending edit references and global clock
+ordering explicit. Do not reuse Company retirement as a Group caller. Actual Apple execution of
+the 15 terminal and 28 worker methods still needs a later source control. Control 43427620202
+at 42fd5d12 is audited and accepted: 19,362 cases, including 101 new Apple methods. Record
+its verified evidence after these source commits; do not redispatch. Starter 116627f links its
+15 exact shared Apple storage cases. Historical scripts are not re-applicable.
+Keep phone release 92 until a meaningful validated update, push every commit and continue.
 
 ## Group terminal repair publication locally accepted
 

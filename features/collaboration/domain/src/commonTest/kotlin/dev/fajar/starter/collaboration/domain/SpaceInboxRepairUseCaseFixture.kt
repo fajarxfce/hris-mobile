@@ -26,6 +26,15 @@ internal class SpaceInboxRepairUseCaseFixture {
     val page = CollaborationSpaceInboxRepairPage.Items(version, listOf(reference), null)
     val initial = CollaborationSpaceInboxRepairProgress(id(1), id(2), null, null)
     var stored: CollaborationSpaceInboxRepairProgress? = initial
+    val progressValues =
+        MutableStateFlow<AppResult<CollaborationSpaceInboxRepairProgress?>>(
+            AppResult.Success(initial)
+        )
+    var progressSource: () -> Flow<AppResult<CollaborationSpaceInboxRepairProgress?>> = {
+        progressValues
+    }
+    var progressObservations = 0
+    var progressStops = 0
     var checkpointReads = 0
     val replacements =
         mutableListOf<
@@ -54,6 +63,7 @@ internal class SpaceInboxRepairUseCaseFixture {
             if (stored != expected) AppResult.Success(null)
             else {
                 stored = next
+                progressValues.value = AppResult.Success(next)
                 AppResult.Success(next)
             }
         }
@@ -100,6 +110,16 @@ internal class SpaceInboxRepairUseCaseFixture {
         }
     val progress =
         object : CollaborationSpaceInboxRepairProgressRepository {
+            override fun observe(access: CollaborationSpaceLocalAccess) = flow {
+                check(access == this@SpaceInboxRepairUseCaseFixture.access)
+                progressObservations++
+                try {
+                    emitAll(progressSource())
+                } finally {
+                    progressStops++
+                }
+            }
+
             override suspend fun current(
                 access: CollaborationSpaceLocalAccess
             ): AppResult<CollaborationSpaceInboxRepairProgress?> {
@@ -148,6 +168,14 @@ internal class SpaceInboxRepairUseCaseFixture {
 
     fun change() =
         ChangeCollaborationSpaceInboxRepairProgress(
+            progress,
+            directory,
+            sessions,
+            base.native.server,
+        )
+
+    fun observeDemand() =
+        ObserveCollaborationSpaceInboxRepairDemand(
             progress,
             directory,
             sessions,

@@ -1,0 +1,112 @@
+{
+  "accepted": true,
+  "changedPaths": [
+    ".github/workflows/collaboration-control.yml",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationCollaborationSpaceInboxRepairModule.kt",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationSpaceInboxRepairWorker.kt",
+    "apps/shared/src/commonTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxRepairWorkerTest.kt",
+    "apps/shared/src/commonTest/kotlin/dev/fajar/starter/SpaceInboxRepairWorkerFixture.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxRepairIntegrationTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceInboxRepairProgressRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxRepairProgressStorageContract.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxRepairDemand.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxRepairDemandPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceInboxRepairProgressRepository.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceInboxRepairDemand.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceInboxRepairDemandTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxRepairDemandPolicyTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxRepairUseCaseFixture.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 40,
+    "elapsedSeconds": 126.361,
+    "sourceFiles": 5348,
+    "sourceManifestSha256": "ad2f4ee3c6052831e58eff99de68e402dc28cdf7c66f5a65080666c4264772c1",
+    "resultSha256": "82c11552ac9f99175ff558c015d928c7256f78bb42941623e4e610bd9bec3afd",
+    "classes": {
+      "CollaborationSpaceInboxRepairIntegrationTest": 1,
+      "CollaborationSpaceInboxRepairWorkerTest": 10,
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceInboxRepairProgressStorageTest": 13,
+      "ObserveSpaceInboxRepairDemandTest": 6,
+      "SpaceInboxRepairDemandPolicyTest": 8
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T13:44:10.304122+00:00",
+    "elapsedSeconds": 949.952,
+    "sourceFiles": 5348,
+    "freshCounts": {
+      "tests": 14074,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152571481,
+      "sha256": "c88282479a05f13f25e8944dc9ac4a13b7fc60b58a1eebcd2f4ee4940c6f3d46"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16170,
+    "newCases": 201,
+    "freshTests": 14074,
+    "reusedUnaffectedTests": 2096,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "ad2f4ee3c6052831e58eff99de68e402dc28cdf7c66f5a65080666c4264772c1",
+    "reportManifestSha256": "4aa5045e11a1faecbd5123cd5cc605f7f2d2fa9081d732c98de61862b481621a",
+    "nativeClaim": "Admitted local metadata observation and finite inbox worker; 28 new shared methods are implemented. Actual Apple execution and product ownership remain separate."
+  },
+  "newSharedMethods": 28,
+  "newDesktopIntegrationMethods": 1,
+  "newlyExecutedExistingApplicationBrowserMethods": 144,
+  "realSqliteApplicationProof": true,
+  "commandSnapshotSuppressionExplicit": true,
+  "timerDrivenRetry": false,
+  "selfRequestRetry": false,
+  "perConversationObservers": false,
+  "admittedTerminalProducerIntegrated": false,
+  "productGraphActivated": false,
+  "actualNewAppleExecution": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "rejectedFixture": {
+    "kind": "invalid new edit fixture",
+    "session": 23021,
+    "reaped": true,
+    "exitCode": 1,
+    "tests": 14,
+    "failures": 1,
+    "sourceManifestSha256": "e25875ed4a6e80ee3713a5addc6ac22475401446b8df8c4a02eb8006b18eb8b4",
+    "test": "SpaceInboxRepairDemandPolicyTest.originalRepairDoesNotTreatAnEditOperationAsANewOriginal",
+    "reason": "The source composer fixture retains a reply target, but the new edit target defaulted to null. The existing immutable edit-context validator correctly rejected this fixture before repair selection ran.",
+    "correction": "Copy the original reply target and forwarded context into the edit target. Keep both validity assertions and both repair-selection expectations unchanged.",
+    "productionChanged": false,
+    "assertionsWeakened": false,
+    "reports": "focused-1/reports"
+  },
+  "preIntegrationProof": {
+    "accepted": true,
+    "tests": 39,
+    "elapsedSeconds": 409.671,
+    "sourceFiles": 5347,
+    "sourceManifestSha256": "876bcdb9f3298ce729248563d30f8f3b74f84a7c7b591d71756b8358a723a78e",
+    "resultSha256": "f3b6d8655c84ad6fd0ab44ad2a3a785a484f852393587e07611eb87fd0f3d919",
+    "classes": {
+      "CollaborationSpaceInboxRepairWorkerTest": 10,
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceInboxRepairProgressStorageTest": 13,
+      "SpaceInboxRepairDemandPolicyTest": 8,
+      "ObserveSpaceInboxRepairDemandTest": 6
+    },
+    "priorCaseIdsRetained": true
+  }
+}

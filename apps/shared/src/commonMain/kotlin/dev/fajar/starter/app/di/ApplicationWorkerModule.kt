@@ -27,6 +27,7 @@ import org.koin.dsl.module
 fun applicationWorkerModule() = module {
     includes(
         applicationNotificationModule(),
+        applicationCollaborationSpaceInboxRepairModule(),
         applicationCollaborationSpaceWorkerModule(),
         applicationCollaborationSpaceIncomingWorkerModule(),
         applicationPushReceiverModule(),

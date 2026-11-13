@@ -8,7 +8,9 @@ import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceInb
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.safeStorageCall
+import dev.fajar.starter.storage.safeStorageFlow
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import org.koin.core.annotation.*
 
 @Single
@@ -18,6 +20,28 @@ class EncryptedCollaborationSpaceInboxRepairProgressRepository(
     @Named("collaboration-history-content-key") private val credentials: AtomicCredentialStore,
 ) : CollaborationSpaceInboxRepairProgressRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
+
+    override fun observe(access: CollaborationSpaceLocalAccess) =
+        safeStorageFlow(
+                flow {
+                    emitAll(
+                        replicas.observeCheckpoint(
+                            spaceHistoryScope(access),
+                            spaceInboxRepairProgressPartition(access),
+                        )
+                    )
+                },
+                mapValue = { raw ->
+                    raw?.let {
+                        keys.use { content, _ ->
+                            CollaborationSpaceInboxRepairProgressCodec(access, cipher, content)
+                                .decode(it)
+                        }
+                    }
+                },
+            )
+            .distinctUntilChanged()
+            .flowOn(Dispatchers.Default)
 
     override suspend fun current(access: CollaborationSpaceLocalAccess) =
         withContext(Dispatchers.Default) {

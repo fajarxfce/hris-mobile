@@ -93,7 +93,8 @@ jobs:
       - name: Check application bindings and platform compilation
         run: >-
           xvfb-run -a ./gradlew --no-daemon --no-parallel --max-workers=2
-          :apps:shared:desktopTest --tests '*CollaborationBindingsTest' --tests '*CollaborationDeliveryWorkerTest' --tests '*CollaborationSpaceRecoveryWorkerTest' --tests '*CollaborationSpaceIncomingWorkerTest' --tests '*CollaborationSpaceIncomingPhysicalWorkerTest' --tests '*CollaborationSpaceOriginalIncomingTurnTest' --tests '*CollaborationSpaceOriginalIncomingWorkerTest' --tests '*CollaborationSpaceIncomingAliasWorkerTest' --tests '*CollaborationSpaceInventoryWorkerTest' --tests '*CollaborationSpaceIncomingFairnessTest' --tests '*CollaborationSpaceHistoryRecoveryServiceTest' --tests '*CollaborationSpaceHistoryRecoveryWorkerTest' --tests '*ApplicationCollaborationIncomingSourcesTest' --tests '*ApplicationCollaborationIncomingStartupTest' --tests '*StartForegroundSyncTest' --tests '*ApplicationCollaborationLifetimeTest' --tests '*AppLocalWorkspaceTest' --tests '*ApplicationPushReceiverTest' --tests '*ApplicationPushIntegrationTest'
+          :apps:shared:desktopTest --tests '*CollaborationBindingsTest' --tests '*CollaborationDeliveryWorkerTest' --tests '*CollaborationSpaceRecoveryWorkerTest' --tests '*CollaborationSpaceIncomingWorkerTest' --tests '*CollaborationSpaceIncomingPhysicalWorkerTest' --tests '*CollaborationSpaceOriginalIncomingTurnTest' --tests '*CollaborationSpaceOriginalIncomingWorkerTest' --tests '*CollaborationSpaceIncomingAliasWorkerTest' --tests '*CollaborationSpaceInventoryWorkerTest' --tests '*CollaborationSpaceIncomingFairnessTest' --tests '*CollaborationSpaceHistoryRecoveryServiceTest' --tests '*CollaborationSpaceHistoryRecoveryWorkerTest' --tests '*ApplicationCollaborationIncomingSourcesTest' --tests '*ApplicationCollaborationIncomingStartupTest' --tests '*StartForegroundSyncTest' --tests '*ApplicationCollaborationLifetimeTest' --tests '*AppLocalWorkspaceTest' --tests '*ApplicationPushReceiverTest' --tests '*ApplicationPushIntegrationTest' --tests '*CollaborationSpaceInboxRepairWorkerTest' --tests '*CollaborationSpaceInboxRepairIntegrationTest'
+          :apps:shared:wasmJsBrowserTest
           :apps:android:assembleDevDebug :apps:android:lintDevDebug :apps:shared:compileKotlinWasmJs
       - uses: actions/upload-artifact@v4
         if: always()
@@ -147,6 +148,7 @@ jobs:
           :features:collaboration:presentation:iosSimulatorArm64Test
           :features:collaboration:presentation:compileKotlinIosArm64
           :features:collaboration:data:compileKotlinIosArm64
+          :apps:shared:iosSimulatorArm64Test
           :apps:shared:compileKotlinIosArm64
       - name: Build iOS application host
         timeout-minutes: 30
@@ -163,6 +165,7 @@ jobs:
           name: collaboration-control-apple
           path: |
             apps/ios/build/push-fields.txt
+            apps/shared/build/test-results/
             features/collaboration/**/build/test-results/
             core/workspace/domain/build/test-results/
             core/worker/build/test-results/

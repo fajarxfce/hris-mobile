@@ -9,6 +9,7 @@ import dev.fajar.starter.database.*
 import kotlin.test.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 
 abstract class CollaborationSpaceInboxRepairProgressStorageContract {
@@ -242,6 +243,127 @@ abstract class CollaborationSpaceInboxRepairProgressStorageContract {
             assertIs<AppResult.Failed>(f.progress().current(other))
             assertEquals(AppResult.Success(original), f.progress().current(f.local()))
         }
+
+    @Test
+    fun absentMetadataObservationCreatesNoKeysAndRejectsAnInvalidOwner() = withDatabase { f ->
+        assertEquals(AppResult.Success(null), f.progress().observe(f.local()).first())
+        assertIs<AppResult.Failed>(
+            f.progress().observe(f.local().copy(spaceId = "invalid")).first()
+        )
+        assertNull(f.keys.read())
+        assertNull(f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY))
+    }
+
+    @Test
+    fun anotherRepositoryUpdatesTheLiveMetadataReaderAndRestartRetainsItsLatestRequest() =
+        withDatabase { f ->
+            coroutineScope {
+                val values =
+                    Channel<AppResult<CollaborationSpaceInboxRepairProgress?>>(Channel.UNLIMITED)
+                val job = launch { f.progress().observe(f.local()).collect { values.send(it) } }
+                try {
+                    assertEquals(AppResult.Success(null), values.nextProgress())
+                    val first = f.value()
+                    assertEquals(
+                        AppResult.Success(first),
+                        f.progress().replace(f.local(), null, first),
+                    )
+                    assertEquals(AppResult.Success(first), values.nextProgress())
+                    val next = first.copy(generation = historyId(20), latestDemand = historyId(21))
+                    assertEquals(
+                        AppResult.Success(next),
+                        f.progress().replace(f.local(), first, next),
+                    )
+                    assertEquals(AppResult.Success(next), values.nextProgress())
+                } finally {
+                    job.cancelAndJoin()
+                }
+            }
+            val retained = f.progress().current(f.local())
+            f.reopen()
+            assertEquals(retained, f.progress().observe(f.local()).first())
+        }
+
+    @Test
+    fun corruptMetadataEmitsFailureAndLaterValidStorageRecoversTheSameSubscription() =
+        withDatabase { f ->
+            val first = f.value()
+            assertEquals(AppResult.Success(first), f.progress().replace(f.local(), null, first))
+            val saved = assertNotNull(f.repairProgressCheckpoint())
+            coroutineScope {
+                val values =
+                    Channel<AppResult<CollaborationSpaceInboxRepairProgress?>>(Channel.UNLIMITED)
+                val job = launch { f.progress().observe(f.local()).collect { values.send(it) } }
+                try {
+                    assertEquals(AppResult.Success(first), values.nextProgress())
+                    val scope = spaceHistoryScope(f.local())
+                    val partition = spaceInboxRepairProgressPartition(f.local())
+                    assertTrue(
+                        f.database.replicas.replace(
+                            scope,
+                            partition,
+                            saved,
+                            ReplicaSnapshot(historyId(30), "malformed", emptyList()),
+                        )
+                    )
+                    assertIs<AppResult.Failed>(values.nextProgress())
+                    val corrupt = assertNotNull(f.repairProgressCheckpoint())
+                    assertTrue(
+                        f.database.replicas.replace(
+                            scope,
+                            partition,
+                            corrupt,
+                            ReplicaSnapshot(saved.handle.generation, saved.payload, emptyList()),
+                        )
+                    )
+                    assertEquals(AppResult.Success(first), values.nextProgress())
+                } finally {
+                    job.cancelAndJoin()
+                }
+            }
+        }
+
+    @Test
+    fun stoppingObservationReleasesTheRawReaderAndCannotReplaceAMissingRetainedKey() =
+        withDatabase { f ->
+            val first = f.value()
+            assertEquals(AppResult.Success(first), f.progress().replace(f.local(), null, first))
+            var starts = 0
+            var stops = 0
+            val actual = f.database.replicas
+            val store =
+                object : ReplicaStore by actual {
+                    override fun observeCheckpoint(
+                        scope: ReplicaScope,
+                        partition: String,
+                    ): Flow<ReplicaCheckpoint?> = flow {
+                        starts++
+                        try {
+                            emitAll(actual.observeCheckpoint(scope, partition))
+                        } finally {
+                            stops++
+                        }
+                    }
+                }
+            assertEquals(AppResult.Success(first), f.progress(store).observe(f.local()).first())
+            assertEquals(1, starts)
+            assertEquals(1, stops)
+            val key = assertNotNull(f.keys.read())
+            val raw = f.repairProgressCheckpoint()
+            f.keys.write(null)
+            try {
+                assertIs<AppResult.Failed>(f.progress(store).observe(f.local()).first())
+                assertNull(f.keys.read())
+                assertEquals(raw, f.repairProgressCheckpoint())
+            } finally {
+                f.keys.write(key)
+            }
+            assertEquals(2, starts)
+            assertEquals(2, stops)
+        }
+
+    private suspend fun Channel<AppResult<CollaborationSpaceInboxRepairProgress?>>.nextProgress() =
+        withContext(Dispatchers.Default) { withTimeout(5_000) { receive() } }
 
     private fun CollaborationHistoryFixture.local() =
         CollaborationSpaceLocalAccess(

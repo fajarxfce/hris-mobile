@@ -736,3 +736,10 @@ Mobile now requires a fresh prepared repair request for Group archival/cancellat
 atomically with the exact command. Fifteen new shared cases pass locally; full 15,969. The generic
 raw prerequisite is already accepted in Starter 0d2b4ee0; this HRIS encryption/policy integration
 stays in Mobile. Admitted terminal callers, the finite worker and product ownership remain.
+
+## Finite local Group inbox repair accepted
+
+Mobile's admitted request observer and finite application worker pass 16,170 local cases,
+including a real SQLite archive-to-inbox proof with command snapshots deliberately suppressed.
+No own-checkpoint retry, polling timer or native send is introduced. The HRIS owner stays in Mobile;
+generic transactional storage is already in Starter. Product ownership and terminal callers follow.

@@ -733,6 +733,14 @@ class CollaborationDataModule {
     ) = ReadCollaborationSpaceInboxRepairProgress(progress, directory, sessions, server)
 
     @Factory
+    fun observeSpaceInboxRepairDemand(
+        progress: CollaborationSpaceInboxRepairProgressRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ObserveCollaborationSpaceInboxRepairDemand(progress, directory, sessions, server)
+
+    @Factory
     fun changeSpaceInboxRepairProgress(
         progress: CollaborationSpaceInboxRepairProgressRepository,
         directory: CollaborationSpaceDirectoryRepository,
