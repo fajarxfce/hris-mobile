@@ -1,0 +1,83 @@
+{
+  "startedAt": "2026-11-13T02:39:56.252901+00:00",
+  "elapsedSeconds": 846.518,
+  "sourceFiles": 5215,
+  "freshCounts": {
+    "tests": 13052,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 153427781,
+    "sha256": "e0dd6222ac93a0e3e8b5e5fe173c250f3d724c3da0f43eaf02e76b409a19c40b"
+  },
+  "fullyAccepted": true,
+  "validatedTests": 15090,
+  "newCases": 40,
+  "freshTests": 13052,
+  "reusedUnaffectedTests": 2038,
+  "priorCaseIdsPreserved": true,
+  "excludedHistoricalReports": 111,
+  "excludedHistoricalCases": 657,
+  "sourceManifestSha256": "7f3a80d7c3e27eda8ccfb5e2fa1fe2c825f94a160f98dc404a5ae296df8042e3",
+  "reportManifestSha256": "917ea48ba1b48c07673ac9d6b662e287cec994515fec86e190ff4aeede5e403c",
+  "nativeClaim": "Local composer read workflow only; no SDK or worker orchestration change. The 20 new shared Apple methods require actual hosted execution. No Group UI, native latency or live deployment claim.",
+  "date": "2026-11-13",
+  "focused": {
+    "accepted": true,
+    "tests": 22,
+    "elapsedSeconds": 342.595,
+    "sourceFiles": 5215,
+    "sourceManifestSha256": "7f3a80d7c3e27eda8ccfb5e2fa1fe2c825f94a160f98dc404a5ae296df8042e3",
+    "resultSha256": "ee9e2d754e50f7028454e70f51cd1ff8b9cf2d0e3bdf5fa958cd7be45d1d0883",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "ObserveSpaceComposerProgressTest": 10,
+      "SpaceComposerProgressLifetimeTest": 10
+    },
+    "priorCaseIdsRetained": true
+  },
+  "sourcePaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceComposerMessageProgress.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceComposerProgress.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceComposerProgressTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceComposerProgressFixture.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceComposerProgressLifetimeTest.kt"
+  ],
+  "newSharedAppleMethods": 20,
+  "appleExecutionsLocally": 0,
+  "newNativeExecution": false,
+  "phoneInstalled": false,
+  "liveGroupDeployed": false,
+  "failedCandidate": null,
+  "exactNewMethods": {
+    "ObserveSpaceComposerProgressTest": [
+      "absentRecordRetainsTheOriginalAndActualTerminalRecordsRemainReadable",
+      "everyOriginalIntentFieldMustMatchTheAuthenticatedRecord",
+      "invalidRecordStateCannotBecomeAProgressSuccess",
+      "oversizedDuplicateAndMalformedRequestsStartNoRecordReads",
+      "aKnownFailureDoesNotWaitForAnotherRecordsInitialResult",
+      "firstSuccessContainsActualResultsFromEveryRequestedRecord",
+      "addingRemovingAndReorderingRequestsKeepsUnchangedReadersAlive",
+      "equalRequestedValuesAndTokenRotationDoNotRestartOrRepublish",
+      "mutableNativeQueueSetsAreDetachedBeforeSuspendedAdmission",
+      "changingAnOriginalWithTheSameIdReplacesItsReaderAndRejectsOldContent"
+    ],
+    "SpaceComposerProgressLifetimeTest": [
+      "accountSessionAudienceReplacementAndLogoutCancelAllExactRecordReaders",
+      "denialCancelsPendingReadersAndFailedCleanupDoesNotReopenBeforeAdmittedObservation",
+      "invalidAdmissionOrFailedSessionNeverOpensExactRecordReaders",
+      "accountReplacementDuringANonCancellableAdmissionReadCannotPublishCapturedContent",
+      "cancellationJoinsRequestedFlowAndAllPendingRecordReaders",
+      "twoCollectorsOfTheSameFlowOwnIndependentDenialLatches",
+      "aSlowConsumerCannotReceiveQueuedOldContentAfterOwnerOrAdmissionReplacement",
+      "aFinishedFailedReaderNeedsAnExplicitNewSubscriptionToReadAgain",
+      "invalidRequestsCancelPreviousReadersBeforeLaterValidRequestsCanResume",
+      "theMaximumRequestInventoryCompletesAndCancellationJoinsEveryReader"
+    ]
+  }
+}

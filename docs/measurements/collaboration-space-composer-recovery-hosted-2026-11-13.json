@@ -1,0 +1,69 @@
+{
+  "composerActionBrowserRuntimeCaseSuffixChanges": 5763,
+  "recentBrowserRuntimeCaseSuffixChanges": {
+    "binding": 0,
+    "contact": 0
+  },
+  "sourceCommit": "90a2c29845097b1845be7c11871c4fda61cffa38",
+  "runId": 43347489951,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43347489951",
+  "jobId": 131630257549,
+  "artifactId": 14004350460,
+  "bytes": 4130546,
+  "sha256": "eadb7d958d4b922a9634dc6adb8a2a3074d46497fe2e4724fbc71056da9258c2",
+  "githubDigestAndZipCrcVerified": true,
+  "priorCaseIdsPreservedExceptReviewedReplacements": true,
+  "reviewedReplacements": 0,
+  "browserRuntimeCaseSuffixChanges": 0,
+  "browserRuntimeChange": null,
+  "counts": {
+    "desktopTest": 6225,
+    "testAndroidHostTest": 960,
+    "wasmJsBrowserTest": 5807
+  },
+  "reportManifestSha256": "85871bab2061320805c35c909f63ffe9073f55afa4a66825ccf8d0a30dc68ad5",
+  "jobLogSha256": "f1df3228ca5458100ff4bdbf069e40551d3a74cd84f687c327627fa42aa5175d",
+  "portableAccepted": true,
+  "appleAccepted": true,
+  "portableTests": 12992,
+  "expectedAppleTests": 5358,
+  "newRecoveryAppleMethods": 44,
+  "failedAuditor": {
+    "path": "failed-browser-runtime-review-1",
+    "session": "10942 REAPED",
+    "cause": "Hosted Chrome stayed156; earlier immediate composer-actions control used157. Actual class/method identities unchanged. Only exact runtime suffixes of5763 immediate baseline cases are mapped; no test replacement or CI rerun."
+  },
+  "portableAuditSession": "34374 REAPED",
+  "laterLocalObservationCommit": "4b91a763",
+  "laterObservationMethodsNotCovered": 18,
+  "complete": true,
+  "appleTests": 5358,
+  "totalAccepted": 18350,
+  "newRecoveryAppleMethodsActuallyExecuted": 44,
+  "appleAuditSession": "95908 REAPED",
+  "appleAudit": {
+    "composerActionBrowserRuntimeCaseSuffixChanges": 0,
+    "recentBrowserRuntimeCaseSuffixChanges": {
+      "binding": 0,
+      "contact": 0
+    },
+    "sourceCommit": "90a2c29845097b1845be7c11871c4fda61cffa38",
+    "runId": 43347489951,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43347489951",
+    "jobId": 131630258093,
+    "artifactId": 14005238151,
+    "bytes": 860879,
+    "sha256": "e674234002cfabe845cb6b638650459c40a91f05b72338b66d50b97853d6336f",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreservedExceptReviewedReplacements": true,
+    "reviewedReplacements": 0,
+    "browserRuntimeCaseSuffixChanges": 0,
+    "browserRuntimeChange": null,
+    "counts": {
+      "iosSimulatorArm64Test": 5358
+    },
+    "reportManifestSha256": "ed4da0c64a1510cbff04101d1b6d49ab60ed6da8aca70022014f7f579c2a6d15",
+    "jobLogSha256": "be3362f420e0ffa3e24a259e4172a3249177540bbe9eb042f0846818be9ad235"
+  },
+  "nextHostedControl": "Batch later observer/progress/presentation after local acceptance and push; no duplicate dispatch"
+}

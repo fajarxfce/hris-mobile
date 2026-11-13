@@ -433,6 +433,7 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<SubmitCollaborationSpaceComposer>())
                 assertNotNull(container.koin.get<RecoverCollaborationSpaceComposer>())
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceComposer>())
+                assertNotNull(container.koin.get<ObserveCollaborationSpaceComposerProgress>())
                 assertSame<Any>(
                     container.koin.get<CollaborationComposerRecoveryCursorRepository>(),
                     container.koin.get<CollaborationSpaceComposerRecoveryCursorRepository>(),

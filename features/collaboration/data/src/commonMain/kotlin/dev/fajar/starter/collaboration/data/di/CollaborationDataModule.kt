@@ -650,6 +650,14 @@ class CollaborationDataModule {
     ) = ObserveCollaborationSpaceComposer(drafts, outbox, directory, sessions, server)
 
     @Factory
+    fun observeCollaborationSpaceComposerProgress(
+        messages: CollaborationSpaceMessageRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ObserveCollaborationSpaceComposerProgress(messages, directory, sessions, server)
+
+    @Factory
     fun editSpaceDraft(
         drafts: CollaborationSpaceDraftRepository,
         conversations: CollaborationSpaceConversationMetadataRepository,

@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 02:18 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 02:54 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -228,11 +228,22 @@ passed but review found premature wake completion/immediate self-wake with absen
 Corrected tests preserve all25 previously accepted worker identities and original assertions.
 No source quality limits relaxed. No Group deployment, phone or UI performance claim.
 Recovery acceptance is committed and pushed: Mobile90a2c298 / Group7ba58196; pushes64599/18925 REAPED.
-One exact-source control43347489951 is active on90a2c29845097b1845be7c11871c4fda61cffa38:
-portable131630257549 expects12,992 cases; Apple131630258093 expects5,358; combined18,350.
-Dispatch4979 and identification19966 REAPED. No duplicate dispatch. The44 new shared recovery
-methods still require the current Apple result. Preserve the unexecuted hosted preparation
-syntax candidate; it caused no source change or CI dispatch.
+Control43347489951 is FULLY ACCEPTED at exact90a2c29845097b1845be7c11871c4fda61cffa38:
+18,350 cases =12,992 portable (6225desktop/960Android host/5807browser) +5358 actual Apple.
+Portable auditor34374 and Apple95908 REAPED. All preceding case identities retained; the44 new
+recovery Apple methods actually executed. iOS host build and native push routing also passed.
+Portable artifact14004350460/4130546B/eadb7d958d4b922a9634dc6adb8a2a3074d46497fe2e4724fbc71056da9258c2;
+report85871bab2061320805c35c909f63ffe9073f55afa4a66825ccf8d0a30dc68ad5;
+logf1df3228ca5458100ff4bdbf069e40551d3a74cd84f687c327627fa42aa5175d.
+Apple artifact14005238151/860879B/e674234002cfabe845cb6b638650459c40a91f05b72338b66d50b97853d6336f;
+reported4da0c64a1510cbff04101d1b6d49ab60ed6da8aca70022014f7f579c2a6d15;
+logbe3362f420e0ffa3e24a259e4172a3249177540bbe9eb042f0846818be9ad235.
+Preserve failed-browser-runtime-review-1: expected Chrome157, actual156. Exact older baseline
+identities already match156; only5763 immediate composer-actions suffixes map157→156, with no
+assertion/test identity replacement. Do not rerun either accepted job. The later18 observation
+and20 progress methods are not covered by this control. Batch their hosted follow-up with the
+pending32 presentation methods after local acceptance and push. This is shared-source/host
+acceptance; separate actual Matrix Swift contracts remain under their own native run.
 
 ACCEPTED: Mobile.work/space-composer-observation-2026-11-13, seven application paths.
 Independent local editor/outbox observation does not gate message history. Per-collector admission,
@@ -246,21 +257,42 @@ with36 new JVM/browser executions. Source5210/589fec1490d68c1105ef4ca074a1f8c9d1
 report6ed8b499cdf8c3537b1137391d0fb769ab5fc76cbf167834913234c7d3605580; immutable full-1/accepted-proof.apk153411460B/0e042bc2bdc7bee4b3276633a86f911e87764c01d678787432f235c2e460369d.
 18 new shared Apple methods require hosted execution; Linux0. No new native/phone/live Group/UI
 claim. Preserve failed-test-type-inference-1, focused1/61969,0 cases/124.531s; expected-list generic
-annotations corrected without production/assertion changes. Commit and push before new application.
+annotations corrected without production/assertion changes. Acceptance is pushed: Mobile4b91a763 /
+Group198d960b, push sessions57130/9413 REAPED.
 
-NEXT: Mobile.work/space-thread-presentation-2026-11-13 has11 UNAPPLIED drafts: typed Company/
-Group composer actor, Group thread ViewModel/state/events, DI and14 new common tests. These
-are not compiled or accepted. Review found a missing consumer prerequisite: active command
-inventory alone can miss a command already retired into terminal evidence. Add a bounded,
-Group-admitted per-original progress observer using the existing SpaceMessageRepository.observeRecord
-(active OR authenticated terminal lookup), then wire it to retained original UI snapshots.
-Do not infer completion from outbox absence or merge equal IDs across Company/Space namespaces.
-Do not apply the current ViewModel draft as finished: its provisional entries are not yet retired
-from exact visible progress, and cold outbox-to-command continuity still needs integration/tests.
-Reuse the route-owned serial actor; no fake Company access. Continue to real Group route/list UI
-and measured first-frame/transition/IME behavior after these checks; no checkpoint is task completion.
-One local compiler OR emulator. Follow the existing phone release handoff for install-only
-delivery, always with an announcement and explicit serial; never drive the user's phone UI.
+ACCEPTED: Mobile.work/space-composer-progress-2026-11-13, seven application paths.
+Per-original Group progress uses existing active-or-authenticated-terminal lookup; no whole
+inventory read, API/SDK, write, key creation or scheduling. Bounded128 requests retain exact
+originals while records are absent. Unchanged readers survive add/remove/reorder; collector
+ownership, denial latching, coherent first results and cancellation joins are covered.
+
+Format1/92018 REAPED36.122s; focused1/82690 REAPED PASS22/342.595s;
+full1/85239 REAPED PASS846.518s. Strict focused/full audits and record-acceptance.py pass.
+Full15,090 = 13052 fresh +2038 exact unchanged, all15,050 prior IDs retained
+with40 new JVM/browser executions. Source5215/7f3a80d7c3e27eda8ccfb5e2fa1fe2c825f94a160f98dc404a5ae296df8042e3;
+report917ea48ba1b48c07673ac9d6b662e287cec994515fec86e190ff4aeede5e403c; immutable full-1/accepted-proof.apk153427781B/e0dd6222ac93a0e3e8b5e5fe173c250f3d724c3da0f43eaf02e76b409a19c40b.
+20 new shared Apple methods remain pending; Linux0. No native/phone/live Group/UI performance
+claim. No failed source/test candidate. Commit and push before applying the typed presentation.
+
+NEXT: Mobile.work/space-thread-presentation-2026-11-13 has13 UNAPPLIED drafts: generic typed
+Company/Group serial composer actor; Group ViewModel/state/events; pure route-owned composer
+continuity projection; DI;32 new shared tests (4actor/16ViewModel/12projection), plus11 existing
+Company actor cases. The original11 drafts were incomplete; the current draft wires the accepted
+per-original observer, preserves cold outbox-to-command gaps and tracks exact terminal evidence.
+Only Group command records can own Group originals; actual room/event/origin evidence is required
+before history represents a sent original. Confirmed cancellation and recent terminal visual
+identities are retained separately. Re-entry clears the screen's leaving state.
+
+These13 drafts remain UNCOMPILED and UNACCEPTED. AppBindings was explicitly rebased over the new
+progress DI assertion; old base retained in draft-base-before-progress.json. Review and prepare
+against this accepted/pushed source, then format/focused45/full15401 with32 new actual Apple
+methods pending. The new full scope adds247 previously hosted-only presentation browser cases
+plus64 new JVM/browser executions;109 historical XML/642 cases remain excluded. Preserve each
+prior hosted browser identity and execute279 presentation browser cases. Do not add a fake
+Company owner or infer delivery from outbox absence.
+After presentation acceptance, continue actual typed Group route/list/page, bounded three-room
+warming and measured first-frame/transition/IME behavior. No checkpoint completes the task.
+One local compiler OR emulator. Phone installs are announced, explicit serial, install-only.
 All54 acceptance groups remain OPEN; continue beyond this checkpoint.
 
 Hosted follow-up43312753298 on exact1f47eeddb833054ae2b3d52c20439e6d11518a02:

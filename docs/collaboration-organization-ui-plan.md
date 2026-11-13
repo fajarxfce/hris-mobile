@@ -106,14 +106,15 @@ identity is fabricated. This preserves coherent initial publication. Bounded rou
 and cold/warm first-frame measurements are still required before claiming immediate room
 rendering. See [participant evidence](collaboration-space-thread-participants.md).
 
-## Per-message progress before activating Group presentation
+## Accepted per-message progress and pending presentation
 
-The first typed Group ViewModel/actor draft exposed another continuity requirement:
-active command inventory can skip a command that reaches terminal storage before its next
-UI emission. The existing Group repository already offers an authenticated active-or-terminal
-`observeRecord` lookup. Add a bounded admitted observer for exact caller-retained original
-submissions, independent of editor/history reads, and validate the whole immutable intent.
-Outbox absence alone must preserve the original. Keep namespace in all identities; matching
-an arbitrary history UUID cannot establish Company-versus-Group ownership. The current11
-presentation drafts and14 new common methods remain uncompiled and need this integration
-before acceptance. This reuses the established Company approach with actual Group ownership.
+The per-original observer now reads authenticated active-or-terminal Group records under
+local account/admission ownership. Its20 shared methods passed locally; actual hosted Apple
+execution remains pending. Outbox absence preserves originals, and unchanged record readers
+survive request-list changes. See [progress evidence](collaboration-space-composer-progress.md).
+
+Thirteen typed presentation drafts now include independent history/editor/progress collectors,
+exact retained-original continuity and recent terminal visual identities. The draft uses
+real Group ownership and preserves Company command namespaces. Its32 new shared methods and
+11 existing actor cases still require compilation/execution before application acceptance.
+Actual Group route/list/page activation and rendering measurements follow that acceptance.
