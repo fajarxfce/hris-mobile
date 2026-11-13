@@ -1,10 +1,40 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 03:29 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 03:41 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
 is waived; native Apple/call/push behavior is not accepted merely by compilation.
+
+## Active Group row integration
+
+Mobile `.work/space-thread-rows-2026-11-13` currently has 11 uncommitted application paths.
+Typed Group/Original/provider row identities and route-local outgoing positions now feed the
+actual Group ViewModel. Exact original evidence joins history; local hiding and cancellation
+cannot resurrect a command bubble. No Group page or live route is activated yet.
+
+Format1/70935 REAPED PASS 35.097 s. Focused1/55136 REAPED PASS 66 / 180.603 s;
+strict focused audit passes. Source 5231 /
+cce02c64035fecc4137c167e467d83cc89043fa86b7aeaf49cf348d43b6e4d25.
+The 21 new shared methods pass on JVM; existing actor/Group presentation and DI cases remain.
+Full validation has started; expect 15,443 = all 15,401 previous IDs plus 42 new JVM/browser
+executions. Do not alter application/library sources while that compiler is active. Preserve
+109 excluded historical XML reports/642 cases. Apple execution of these 21 methods is pending.
+No failed candidate has occurred in this increment so far. No native/phone/latency claim.
+
+Previous presentation acceptance is pushed: Mobile fc451164 / Group 35eb6d6b;
+pushes 49629/58391 REAPED. One follow-up control is active at exact
+fc45116481b6e9a03f1e377bf4a4e11e4e803c74: run 43359439624,
+portable job 131669195141 / Apple job 131669194858. Expected 13,132 portable + 5,428 Apple
+= 18,560, with all 70 observation/progress/presentation methods. Do not duplicate dispatch.
+Actual Matrix Swift contracts remain separate: 43349484661 / 131636790768 at 6cc04d1f.
+
+Next: reap/audit full1, record acceptance, commit and push before further source application.
+Then Group page/route and contextual actions, shared composer visuals, bounded warming and
+first-frame/IME measurements. `.work/space-thread-page-2026-11-13/draft` only contains two
+UNAPPLIED composer extraction files; complete concrete callers/tests before applying them.
+Release 92 is accepted and uninstalled; ADB still times out. Never launch or drive phone UI.
+Continue the long run, push every commit, and keep one local compiler OR emulator.
 
 ## Current next implementation
 
