@@ -1,0 +1,88 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpacePreparedEdit.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceEditPreparationPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/QueueCollaborationSpaceEdit.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/QueueCollaborationSpaceEditTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceEditInboxAdmissionFixture.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 36,
+    "elapsedSeconds": 222.167,
+    "sourceFiles": 5421,
+    "sourceManifestSha256": "472a223f6d613b8a043ee8b84dcfbc24ff9a283a66dcf6c84538aa860bf65467",
+    "resultSha256": "a789e5954b61364d1d9d25f5e1746cbf71ed686cf8f250d91632f87a19ce91c9",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceEditInboxStorageTest": 17,
+      "QueueCollaborationSpaceEditTest": 17
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T21:01:57.537635+00:00",
+    "elapsedSeconds": 954.541,
+    "sourceFiles": 5421,
+    "freshCounts": {
+      "tests": 14533,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153457646,
+      "sha256": "9eaaf0b51c0a840e08972fb2abae51b64724a281f3e8bdc14480f69aa40c5d61"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16687,
+    "newCases": 34,
+    "freshTests": 14533,
+    "reusedUnaffectedTests": 2154,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "472a223f6d613b8a043ee8b84dcfbc24ff9a283a66dcf6c84538aa860bf65467",
+    "reportManifestSha256": "124cc1cf215f792623094810f163510394a290623638867e3cd70fd260cfb009",
+    "nativeClaim": "Admitted offline edit use case; 17 shared behavior methods, prior actual storage tests and Koin resolution. Provider outcome reconciliation, actual Apple and product activation remain separate."
+  },
+  "focusedAttempts": [
+    {
+      "directory": "focused-1",
+      "exitCode": 0,
+      "freshCounts": {
+        "tests": 36,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "759e530d4da25672763a517820a116144f2639a8643e7ca789f4cc103d341665",
+      "sourceManifestSha256": "c9f7f8794c8137d4ef0f5fe2e9210b64511d35412b5eddfed3d52d702f9919f5"
+    },
+    {
+      "directory": "focused-2",
+      "exitCode": 0,
+      "freshCounts": {
+        "tests": 36,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "a789e5954b61364d1d9d25f5e1746cbf71ed686cf8f250d91632f87a19ce91c9",
+      "sourceManifestSha256": "472a223f6d613b8a043ee8b84dcfbc24ff9a283a66dcf6c84538aa860bf65467"
+    }
+  ],
+  "newSharedMethods": 17,
+  "actualNewAppleExecution": false,
+  "requiresStarterPort": false,
+  "editAdmissionBound": true,
+  "providerOutcomeReconciliationActivated": false,
+  "productGraphActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false
+}

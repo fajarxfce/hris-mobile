@@ -279,3 +279,7 @@ Actual command, source guard, prepared projection and wake now share one transac
 ## Atomic edit publication storage
 
 Same-instance Group command and canonical history/index transaction support passes focused27/full16653. Seventeen shared storage methods preserve marked replay, legacy payloads and actual Company source. Admitted user edit policy, provider outcome release and product activation remain; see `docs/collaboration-space-edit-inbox-publication.md`.
+
+## Admitted offline editing
+
+One reviewed edit is admitted against canonical local history and atomically retained with its original inbox anchor. Focused36/full16687 pass. Provider outcome evidence, incoming/backfill ownership and product activation remain; see `docs/collaboration-space-edit-admission.md`.

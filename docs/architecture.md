@@ -1,5 +1,7 @@
 # Architecture
 
+[Admitted offline editing](collaboration-space-edit-admission.md) retains one reviewed gesture and stable preview under owned local facts.
+
 [Atomic edit preview publication](collaboration-space-edit-inbox-publication.md) keeps command, checked original preview and recovery wake together.
 
 [Atomic command and checked projection insertion](command-insert-projection.md) keeps command, source guard, projection and wake in one raw transaction.

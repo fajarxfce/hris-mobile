@@ -641,6 +641,33 @@ class CollaborationDataModule {
     ) = QueueCollaborationSpaceText(messages, conversations, directory, sessions, server, schedules)
 
     @Factory
+    fun queueSpaceEdit(
+        messages: CollaborationSpaceMessageRepository,
+        companyMessages: CollaborationMessageRepository,
+        publications: CollaborationSpaceEditPublicationRepository,
+        inbox: CollaborationSpaceInboxRepository,
+        bindings: CollaborationSpaceRoomBindingRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        schedules: SyncScheduleRepository,
+    ) =
+        QueueCollaborationSpaceEdit(
+            messages,
+            companyMessages,
+            publications,
+            inbox,
+            bindings,
+            registrations,
+            directory,
+            sessions,
+            server,
+            schedules,
+            Clock.System,
+        )
+
+    @Factory
     fun observeSpaceComposer(
         drafts: CollaborationSpaceDraftRepository,
         outbox: CollaborationSpaceComposerOutboxRepository,
