@@ -50,6 +50,25 @@ final class SDK8NativeTests: XCTestCase {
         XCTAssertTrue(try FileManager.default.contentsOfDirectory(atPath: fixture.directory.path).isEmpty)
     }
 
+    func testExistingIdentityRejectsParentSymlinkWithoutChangingRetainedKeys() async throws {
+        let fixture = try SDK8StoreFixture()
+        defer { fixture.remove() }
+        let first = try await fixture.fingerprint()
+        let alias = fixture.directory.appendingPathComponent("alias")
+        try FileManager.default.createSymbolicLink(
+            at: alias, withDestinationURL: fixture.directory.appendingPathComponent("store")
+        )
+        XCTAssertTrue(FileManager.default.fileExists(atPath: alias.appendingPathComponent("matrix-sdk-crypto.sqlite3").path))
+        do {
+            _ = try readExistingCryptoIdentity(databaseDirectory: alias.path, passphrase: fixture.passphrase)
+            XCTFail("A redirected parent opened the retained identity")
+        } catch {
+            XCTAssertEqual(error as? ExistingCryptoIdentityError, .Unavailable)
+        }
+        let restored = try await fixture.fingerprint()
+        XCTAssertEqual(restored, first)
+    }
+
     func testSDK8ListenerCancellationAndObserverCloseRetainNoListener() async throws {
         let fixture = try SDK8StoreFixture()
         defer { fixture.remove() }
@@ -66,7 +85,10 @@ private struct SDK8StoreFixture {
     let passphrase = UUID().uuidString + UUID().uuidString
 
     init() throws {
-        directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        // macOS's system temporary URL can use /var -> /private/var. Resolve the OS-owned
+        // parent before creating our private leaf; retain the SDK's NOFOLLOW guard inside it.
+        directory = FileManager.default.temporaryDirectory.resolvingSymlinksInPath()
+            .appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(
             at: directory, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700]
         )

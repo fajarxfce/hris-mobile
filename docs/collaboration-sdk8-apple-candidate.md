@@ -96,3 +96,26 @@ investigation; diagnostics do not count as a fix or successful native execution.
 The 20 existing builder guards and nine new recheck guards pass locally. The new verifier
 also checked the actual retained archive and all49 recorded package/proof files. Local
 checks execute no Swift. See [failure and local guard evidence](measurements/collaboration-sdk8-apple-proof-cleanup-2026-11-13.json).
+
+## Canonical fixture root and parent-symlink refusal
+
+Recheck43365790802 on2ff1b276 used the exact completed native archive. All native file,
+architecture and export checks passed again; four Swift cases ran, three passed. This time
+all three cleanups completed. The passphrase case instead exposed the underlying
+ExistingCryptoIdentityError.Unavailable at its first direct existing-store read. The failed
+artifact14010089330 (290891237B/0429a0bcfac4f279e052decb4d53ce89b2e048649200a9a556ce1997a2e1ea22)
+and full phase/file metadata remain preserved. No iOS links or native acceptance is claimed.
+
+The metadata reveals Foundation's temporary URL uses /var while enumeration resolves to
+/private/var. The reader uses SQLite OPEN_NOFOLLOW. A local system-SQLite probe confirms
+that this flag rejects a parent symlink with extended code1550, while the canonical path
+opens; ordinary opening follows that same alias. This corroborates the path-policy cause,
+but does not replace an actual Apple recheck.
+
+The fixture now resolves only the OS-owned temporary parent before creating its private
+UUID leaf. It does not relax SDK NOFOLLOW, resolve arbitrary store paths or change the
+native archive. A fifth actual Swift contract creates a parent symlink to a real encrypted
+store, requires exact Unavailable refusal and verifies its original keys still reopen.
+All four original contracts and assertions remain. Cleanup diagnostics and explicit failure
+remain enabled. The current gate requires all five cases and both iOS links; 20 builder and
+nine recheck guards pass locally. See [canonical-root evidence](measurements/collaboration-sdk8-apple-canonical-store-2026-11-13.json).

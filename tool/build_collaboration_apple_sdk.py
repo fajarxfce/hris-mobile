@@ -29,6 +29,7 @@ SWIFT_TESTS = {
     "testPassphraseIdentityReaderPreservesKeysAndRejectsAnUnrelatedPassphrase",
     "testMissingStoreReadDoesNotCreateFiles",
     "testSDK8ListenerCancellationAndObserverCloseRetainNoListener",
+    "testExistingIdentityRejectsParentSymlinkWithoutChangingRetainedKeys",
 }
 PRIVATE_CRATE_TESTS = {
     "rust_196_codegen_units_and_allocator_share_the_crate",

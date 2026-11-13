@@ -1,0 +1,74 @@
+{
+  "date": "2026-11-13",
+  "failure": {
+    "collected": true,
+    "accepted": false,
+    "conclusion": "failure",
+    "runId": 43365790802,
+    "jobId": 131689776366,
+    "sourceCommit": "2ff1b2769f84524a9c7bbef52318e7521a429e7a",
+    "artifactId": 14010089330,
+    "artifactBytes": 290891237,
+    "artifactSha256": "0429a0bcfac4f279e052decb4d53ce89b2e048649200a9a556ce1997a2e1ea22",
+    "githubDigestAndZipCrcVerified": true,
+    "frozenNativePackageAndExactProofFilesVerified": true,
+    "nativeRebuilt": false,
+    "nativeTests": null,
+    "jobLogSha256": "490ec172c39b9ad54922cd76683ece5ab3389ceaf91405063cfe1df05d5c9af4",
+    "buildLogSha256": "9710f1f22ae02497dda54c50dde2468c89d8a2f35b11b9416c6075cc59d6400a",
+    "elapsedSeconds": 205.765,
+    "published": false,
+    "productionAppleRuntimeEnabled": false,
+    "actualSwiftCasesExecuted": 4,
+    "actualSwiftCasesPassed": 3,
+    "actualSwiftCasesFailed": 1,
+    "cleanupCompleted": true,
+    "failedCase": "testPassphraseIdentityReaderPreservesKeysAndRejectsAnUnrelatedPassphrase",
+    "failure": "ExistingCryptoIdentityError.Unavailable before existing identity read completed; all fixture cleanups succeeded.",
+    "hypothesis": "Foundation temporary directory uses /var alias of /private/var. SQLite NOFOLLOW rejects parent symlinks; native logs and local system-SQLite probe support this. Confirm canonical owned-root correction on the same Apple framework."
+  },
+  "local": {
+    "accepted": true,
+    "builderGuardTests": 20,
+    "recheckGuardTests": 9,
+    "elapsedSeconds": 0.279,
+    "guardLogSha256": "e2863ec803770e750071f552cfa0ed2d245324f4c406559f60978afc75e07c44",
+    "sources": {
+      ".github/workflows/collaboration-apple-sdk.yml": "c9b32c67b83923c4c54c1df377b660aa76c651cf108651a3500e5b66523e040c",
+      "tool/collaboration-apple-sdk-proof/SDK8NativeTests.swift": "51177a062f182763e27ec27113bef4ec9957e8377986533a39c8a6c2e79631b3",
+      "tool/recheck_collaboration_apple_sdk.py": "9c54fb012f405941c6bdf3fd3e6988f38b672f851714e179a1bab5339a425739",
+      "tool/test_recheck_collaboration_apple_sdk.py": "cb913d24c35ff0ccf733ca5e7b34bde45e690d9ef9698336288c4f7102867199",
+      "tool/build_collaboration_apple_sdk.py": "45f81382b8624d1523bde82f2ce1371ef9e6147ae271ac08945aca27db853626",
+      "tool/test_build_collaboration_apple_sdk.py": "cb5f45220abae61aea9975586c77de35221d1ba94b6c92291f6faefaf3dfcee5"
+    },
+    "allOriginalSwiftCasesPreserved": true,
+    "totalSwiftCasesExpected": 5,
+    "newSwiftCase": "testExistingIdentityRejectsParentSymlinkWithoutChangingRetainedKeys",
+    "nativeExecutedLocally": 0,
+    "nativeAccepted": false,
+    "sdkManifestUnchanged": "4e3da541a7a4f9a22b631391b0f29cebdb723d43662d530bd7d454ebaeb6686a"
+  },
+  "sqliteProbe": {
+    "platform": "Linux system SQLite; corroborates path policy, not Apple SDK execution",
+    "results": [
+      {
+        "case": "canonical-no-follow",
+        "code": 0,
+        "extended": 0
+      },
+      {
+        "case": "parent-alias-no-follow",
+        "code": 14,
+        "extended": 1550
+      },
+      {
+        "case": "parent-alias-ordinary",
+        "code": 0,
+        "extended": 0
+      }
+    ]
+  },
+  "nativeAccepted": false,
+  "published": false,
+  "productionAppleRuntimeEnabled": false
+}

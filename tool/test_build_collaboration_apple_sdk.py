@@ -308,7 +308,7 @@ class AppleSwiftEvidenceTest(unittest.TestCase):
             for name in sorted(SWIFT_TESTS):
                 ET.SubElement(root, "testcase", name=name)
             ET.ElementTree(root).write(report)
-            self.assertEqual(4, verify_swift_tests(report)["tests"])
+            self.assertEqual(5, verify_swift_tests(report)["tests"])
             for tag in ("failure", "error", "skipped"):
                 failed = copy.deepcopy(root)
                 ET.SubElement(failed[0], tag)
