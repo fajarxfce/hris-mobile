@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 03:04 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 03:24 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -274,48 +274,54 @@ report917ea48ba1b48c07673ac9d6b662e287cec994515fec86e190ff4aeede5e403c; immutabl
 20 new shared Apple methods remain pending; Linux0. No native/phone/live Group/UI performance
 claim. No failed source/test candidate. Commit and push before applying the typed presentation.
 
-IN PROGRESS: Mobile.work/space-thread-presentation-2026-11-13 is now APPLIED (13 source
-paths) on accepted/pushed Mobile6102551b / Groupacb0ad26. The preceding progress pushes15194
-and14887 REAPED; do not rerun its accepted22/15090 gates.
+IN PROGRESS: Mobile.work/space-thread-presentation-2026-11-13 has13 applied, UNCOMMITTED
+source paths. Focused5/24107 REAPED is STRICTLY ACCEPTED:45 cases/185.182s, including11 existing
+Company actor cases,4 Group actor,16 Group ViewModel,12 pure projection and2 DI. iOS test-source
+compilation also passed;0 actual Apple executions locally. Frozen5224 inputs/
+2e67849dff017fedd81b6230206635aaa3c3669f0f334b38ec2cb8d462b92dc0.
+Full1/33647 is ACTIVE; reap and run accept-full.py full-1 before any acceptance claim or source
+change. record-acceptance.py and prepare-hosted.py are prepared but must only run after their
+required gates. Preceding progress acceptance Mobile6102551b / Groupacb0ad26 is pushed.
 
-This application makes the route-owned serial editor generic over the actual Company/Group
-access type and captures edit time once across retry. A Group ViewModel independently observes
-history, editor/outbox and exact message progress. The pure presentation projection retains
-outbox-to-command continuity, namespace ownership and recent terminal visual identity; actual
-room/event/origin proof is required before sent history replaces an original. No Group route,
-page, live rollout, native execution or phone/latency acceptance is claimed yet.
+The typed Group ViewModel independently observes history, draft/outbox and exact-record progress.
+The route-owned serial editor accepts actual Company or Group ownership, captures edit time once,
+and now ends UI callbacks when its parent scope is cancelled while retaining internal cleanup.
+The pure composer projection retains outbox-to-command continuity, exact immutable originals and
+recent terminal visual identity. Actual room/event/origin evidence is required before history
+represents sent Group originals. It never substitutes Original Company command ownership.
+Re-entry clears leaving state; Back retains input after write failure and flushes before exit.
+No Group route/page activation, live rollout, new native execution or phone/latency claim yet.
 
-Format1/67494 REAPED35.422s. Focused1/61172 REAPED failed61.478s before any cases: projection119
-logical lines exceeded unchanged100-line quality limit. Preserved all13 sources/manifests/logs
-under failed-projection-size-1. Display-record revision selection was separated from whole
-composer continuity; no assertion changed. Format2/1938 REAPED35.812s. Focused2/11871 REAPED
-failed61.424s,0 cases: remaining projection101 lines. failed-projection-size-2 retains that
-candidate. Fixed input bounds now use direct conditions before copying, removing a redundant
-list allocation while retaining every guard. Format3/5082 is active; reap, capture the exact
-sources, run focused3, audit, then full1 only after the focused gate passes.
+Preserved failed candidates:
+- failed-projection-size-1:61172 REAPED61.478s,0 cases;119-line projection exceeded unchanged100.
+- failed-projection-size-2:11871 REAPED61.424s,0 cases;101-line remainder. Exact display record
+  selection was separated; fixed input bounds use direct conditions before collection copies.
+- failed-metadata-fixture-1:71610 REAPED158.577s,43 cases/6failed. Corrected fixture metadata.version
+  from1 to actual immutable0 contract and assert validity at construction. Admission unchanged.
+- failed-scope-and-effect-1:54893 REAPED92.496s,43/2failed. Fixed real actor callback after parent
+  disposal; Back test explicitly drains its scheduled background effect collector. Original
+  assertions remain and disposal/navigation checks were strengthened. Focused5 covers both fixes.
+Format5/44259 REAPED35.499s. Every rejected candidate retains13 sources, manifests and full logs.
 
-Expected focused45 =11 old actor +4 Group actor +16 Group ViewModel +12 pure projection +2 DI.
 Expected full15401 =15090 preceding local identities +64 new JVM/browser executions +247
-previously hosted-only presentation browser cases. The full command explicitly adds presentation
-browser tests; imported authenticated hosted baseline is in hosted-presentation-baseline.json.
-Require279 presentation browser cases and all247 prior identities. Two formerly excluded
-historical XML/15 cases are superseded by this fresh browser run;109 XML/642 cases remain
-excluded. Unchanged domain/data reports may be reused only with exact prior accepted hashes;
-changed presentation/shared-app reports must execute afresh. iOS test sources compile, but the
-32 new shared Apple methods require actual hosted execution. Batch them with18 observation and
-20 progress methods after local acceptance and push; no duplicate CI dispatch.
+previously hosted-only presentation browser cases. Require279 presentation browser cases and all
+247 prior hosted identities. Two formerly excluded XML/15 cases are superseded by fresh browser
+execution;109 historical XML/642 cases remain excluded. Exact unchanged domain/data reports may
+be reused; changed presentation/shared-app reports must execute. Nine new and four existing source
+paths are the entire application; AppBindings preserves the accepted progress DI assertion.
 
-AppBindings was explicitly rebased over the accepted progress DI assertion. Original draft
-base remains in draft-base-before-progress.json. Nine new source paths and four existing paths
-are the entire application. Existing Company actor assertions remain; new continuity tests
-cover missing records, archived commands, failure/retry, pending reads, account replacement,
-re-entry and exact namespace ownership. Preserve all rejected candidates and quality limits.
+NEXT: finish full audit, record acceptance, commit and push. Then prepare exactly one hosted
+follow-up for all70 pending shared methods (18 observer +20 progress +32 presentation), expected
+portable13132 =6295desktop/960Android host/5877browser, Apple5428, total18560. Preserve all prior
+recovery-control43347489951 identities. No duplicate dispatch. Actual Matrix Swift contracts stay
+under separate native run43349484661 and are not accepted by shared Kotlin tests.
 
-NEXT: finish this presentation acceptance, commit and push. Continue actual typed Group route,
-list/page, bounded three-room warming, contextual actions and measured first-frame/transition/
-IME behavior. All54 acceptance groups remain OPEN. One local compiler OR emulator. Announce
-each phone install; explicit serial and install-only; never launch or drive the user's UI.
-No checkpoint completes the task.
+Continue actual typed Group row/page/navigation integration, bounded three-room warming,
+contextual actions and measured first-frame/transition/IME behavior. Never fabricate Company
+ownership for Group data. All54 acceptance groups remain OPEN. One local compiler OR emulator.
+Phone: release92 remains accepted/uninstalled; bounded ADB attempt21063 REAPED timed out at03:09.
+Do not repeat availability questions. Every install is announced, explicit serial, install-only;
+never launch or drive the user's UI. Continue past this checkpoint.
 
 Hosted follow-up43312753298 on exact1f47eeddb833054ae2b3d52c20439e6d11518a02:
 Portable131515465558 is ACCEPTED; auditor42039 REAPED,12,716 cases (6083desktop/955Android/5678browser).
