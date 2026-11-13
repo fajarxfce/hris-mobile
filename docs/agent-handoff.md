@@ -17,11 +17,21 @@ explicitly unresolved. It allocates no anchor, changes no command and owns no re
 Three drafts are already applied/accepted; do not rerun preparation/application scripts.
 
 Current .work/space-inbox-edit-provenance-2026-11-13 has14 APPLIED source/test paths,
-20 new shared methods (12 pure/8 actual storage). Formatter49409 is REAPED PASS36.718s;
-focused37/session53119 is RUNNING; full16587 is NOT started or accepted. Source5404/
-19c9bdc0fc3d89252f33b4d1e3177d5e2d760c9bd7b9916e7b4a09529b3a690d. Preparation/application/format
-scripts are already used. Read state.json, review.md and current actual sources; draft files
-predate formatting. Reap the focused process before accepting or starting full.
+20 new shared methods (12 pure/8 actual storage). Focused1/session53119 REAPED exit0/37 assertions,
+but acceptance correctly REJECTED new compiler warnings: a fixture extension named raw was
+shadowed and therefore checked history instead of inbox bytes; one assertion was redundant.
+Both test-only issues are corrected. Focused2/session28154 RUNNING on source5404/
+daca364f1ace2e10a9fdb6992c0f78e72816a12d3dc5eecf8c5945334db2f5ef.
+Full16587 is NOT started or accepted. Preserve focused1 evidence; do not label it accepted.
+Preparation/application/format scripts are used; current actual source supersedes early drafts.
+Reap focused2, run accept-focused.py focused-2, then full gate before accepting these sources.
+
+Next .work/command-insert-projection-2026-11-13 has five raw database source DRAFTS ONLY.
+Actual composer handoff stores originals in replicas, so it cannot atomically publish an actual
+edit command. Draft insertAndMutate reuses the command ledger and source/index replica transaction
+with a wake. It preserves immutable replay without repeating projection/wake. Tests/review/apply
+are still required; do not copy unvalidated drafts into either Mobile or Starter. Generic raw
+storage changes, once proved in Mobile, must port to Starter. No product graph activation.
 
 The optional pending-edit pointer retains actual Group/Company command coordinates, exact
 original target, local creation time and first index publication revision. It carries no second
