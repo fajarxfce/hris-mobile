@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 20:07 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 20:11 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -16,15 +16,40 @@ Replay never overwrites a later projection or renews completed work; conflicts r
 The existing browser mutation transaction remains shared with standalone and archive writes.
 Preparation/application scripts are used. No product graph, phone update or live change.
 
-Next port the nine generic files/tests into Starter, whose five original source files were
-byte-identical before this increment. Preserve its pinned Inspector dependency and independent
-checks. The current .work/space-edit-inbox-authoring-2026-11-13 has8 source drafts,15 common storage test methods,3 platform wrappers and a same-instance
-app binding assertion, ALL UNAPPLIED/UNCOMPILED; no admission/use-case yet: Group intent inboxOrigin, its DTO/shape policy, new publication
-contract and actual same-instance repository transaction. Read review.md. Do not apply it before
-target/admission/replay/cancellation/restart and actual storage tests are reviewed and checked. Its ordinary
-insert rejects marked intents so an older single-ledger write cannot forge joint handoff proof.
-New Group edits may use actual Company history; it does not retrofit Company-authored commands.
-Outcome release needs provider evidence, not ACK alone. No graph activation is implied.
+Current continuation: Mobile source b4a3a89d105f4f79032ced3c912c1d1f6a4a15d7 and Group evidence
+06a1e885f11afbd1b725bbdca86fa9b022332f37 are pushed. Full60029 REAPED0/891.065s;
+full16619 =6265 fresh +10354 unchanged, all16587 prior IDs plus32 new executions.
+Reports79da912a72de2c9a8ea0f792b5657e7d00fd53c56c822d6075f6d3be5fa20955.
+Core prepare-hosted.py and dispatch-hosted.py are USED. Control43498640097 at exactb4a3a89d
+is running (portable132138280906, Apple132138280191), NOT accepted. Expect20459 combined,
+6100 Apple,61 shared new methods plus2 desktop storage fault injections. Audit with hosted-audit.py;
+no repeat dispatch. Main native SDK8 activation is separate. Older43486239620 stays accepted.
+
+Starter .work/command-insert-projection-port-2026-11-13 has9 APPLIED generic paths. Apply is USED;
+independent full1022/session32098 is RUNNING. Reap then accept.py and publish.py; both acceptance
+and publisher are NOT run. Publisher is prepared. Push its commit, then link actual evidence in
+Mobile/Group. Keep Inspector742a2d1c. No second local compiler while32098 owns the heavy slot.
+
+Next Mobile .work/space-edit-inbox-authoring-2026-11-13 has13 UNAPPLIED drafts:8 source paths,
+17 shared storage methods,3 platform wrappers and a same-instance app binding assertion. Source
+and test review is complete for the repository/storage increment; apply/capture/run/accept scripts
+are prepared, NOT used. Expected focused27/full16653. After Starter finishes, apply.py checks the
+accepted raw source, clean pushed worktrees and free heavy slot. Then capture, format, recapture,
+focused gate and full gate. This increment alone does not admit a user's edit or activate a graph.
+
+Its actual Group/Company history reads return candidate and original under one revision, including
+legacy earliest aliases without rewriting history. Joint publication authenticates source/index,
+marks immutable command handoff and retains command/preview/wake together. Exact active/archive
+replay preserves newer edits/drafts; ordinary insert rejects marked commands. Tests cover source
+and index races, key absence, lost reply/restart, cancellation, wrong namespace, account replacement,
+maximum UTF-8, hidden/redacted targets and archived replay. All remain UNCOMPILED at this checkpoint.
+
+Admitted edit use-case and provider outcome release follow this storage increment. Reuse canonical
+binding/source policy, exact active/archive command reads and finite existing owners. Keep actor,
+reviewed text, hidden/redacted state, denial and source/index revision checks. Consecutive edits
+must preserve delivery order even after a backward clock adjustment; preview ordinal alone cannot
+order delivery. An uncertain response must read back the same gesture before recomputation.
+No new polling queue, incoming retry loop, repository chaining or VM business helpers. Read review.md.
 
 Then finish bounded history publication, finite backfill and actual list/graph activation under
 existing incoming ownership. Preserve canonical source selection, original positions, drafts,
