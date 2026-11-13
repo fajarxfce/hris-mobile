@@ -1,10 +1,41 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 15:42 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 16:11 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Existing inbox owner seeding locally accepted
+
+Mobile .work/space-inbox-command-owner-2026-11-13 is accepted: eight source/test paths.
+Focused 41; full 16,351 = 14255 fresh + 2096 exact unchanged.
+All 16,316 preceding identities remain plus 34 shared JVM/browser executions and one new SQLite
+method. Source 5369/95a675711554b11484ee4c13f87ded5b73f69a3e5e5d51d3afaa74e3f2bc374e; report 4158ad25fd847e8369cc8fc96580bff33c0948ceb7e72222715a71e2927054c5.
+The existing worker seeds new/retired IDs from its single bounded command observer. Normal progress
+and request-only notifications do not re-seed all originals. Failed/unattempted seeds stay parked;
+only external original changes or explicit owner restart resume them. The latest seed failure
+survives successful reference-only work, while current operation failures remain visible. An
+actual failing regression exposed a newer AccessDenied result hidden by an older Storage result;
+the corrected case also proves own requests stay finite and actual recovery clears the failure. A real queued original becomes a pending inbox preview and follows
+cancellation, draft preservation and reopening under the actual registered owner.
+
+Continue .work/source-checked-replica-mutations-2026-11-13: eight unapplied drafts, 13 new
+actual-storage methods, guarded application/validation prepared, expected focused 44/full 16,377.
+An exact read-only source checkpoint guard and a projection write share the existing transaction,
+so stale incoming-history publication cannot replace a newer preview or advance unchanged history.
+Verify in Mobile, then port exact reusable files/tests to Starter. Actual admitted history snapshot
+and inbox publication remain next, followed by retained Company-original provenance and product
+account/Group ownership. Do not relabel legacy originals or synthesize a composer submission.
+An active-command inventory cannot discover archives missed before observation; incoming/history
+producers must cover those facts. Preserve pending edits, stable backward-clock ordering and one
+explicit lifetime that cancels and joins before replacing owners. Product Group graph stays off.
+Control 43455295124 at fe2e1cbb742dfde262182863d11b6604fe3a9c32 is dispatched and excludes
+these 17 new Apple methods. Audit both jobs and the iOS host without repeating that source;
+it must prove the earlier failed timing test and new regression. Expected 20,006 is not an
+acceptance result until audited. Then collect owner/guard Apple methods in a later source control.
+Historical apply scripts cannot be rerun. Keep release 92 until a meaningful validated visible
+update, push every commit and continue the long run.
 
 ## Delivery failure diagnostics locally accepted; Apple execution pending
 

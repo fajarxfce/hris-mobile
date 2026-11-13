@@ -34,6 +34,10 @@ class CollaborationSpaceInboxRepairWorker(
         suspend (CollaborationSpaceLocalAccess, String, String) -> AppResult<
                 CollaborationSpaceInboxRepairReference?
             >,
+    private val seed:
+        suspend (CollaborationSpaceLocalAccess, CollaborationSpaceMessageIntent) -> AppResult<
+                Boolean
+            >,
     private val reconcile:
         suspend (
             CollaborationSpaceLocalAccess, CollaborationSpaceInboxRepairReference,
@@ -45,6 +49,8 @@ class CollaborationSpaceInboxRepairWorker(
                 var previous: List<CollaborationSpaceMessageRecord>? = null
                 var receivedRequest = false
                 var previousRequest: String? = null
+                var seedRecoveryPending = false
+                var seedFailure: Failure? = null
                 combine(messages(access), requests(access), ::Input).conflate().collect { input ->
                     val records = input.messages
                     val request = input.request
@@ -62,13 +68,31 @@ class CollaborationSpaceInboxRepairWorker(
                         return@collect
                     }
                     val demand = (selected as AppResult.Success).value
+                    val seedSelection =
+                        collaborationSpaceInboxSeedDemand(
+                            access,
+                            previous,
+                            current,
+                            seedRecoveryPending,
+                        )
+                    if (seedSelection is AppResult.Failed) {
+                        emit(seedSelection)
+                        return@collect
+                    }
+                    val originals = (seedSelection as AppResult.Success).value
                     val signal = (request as AppResult.Success).value
                     val requested = !receivedRequest || previousRequest != signal
                     receivedRequest = true
                     previousRequest = signal
                     previous = requireNotNull(collaborationSpaceMessageInventory(access, current))
-                    if (!requested && !demand.requiresScan && demand.targets.isEmpty())
+                    if (
+                        !requested &&
+                            !demand.requiresScan &&
+                            demand.targets.isEmpty() &&
+                            originals.isEmpty()
+                    )
                         return@collect
+                    if (originals.isNotEmpty()) seedRecoveryPending = true
                     val result =
                         withTimeoutOrNull(30.seconds) {
                             if (demand.requiresScan) {
@@ -81,6 +105,19 @@ class CollaborationSpaceInboxRepairWorker(
                                     )
                                 if (retained is AppResult.Failed) return@withTimeoutOrNull retained
                                 previousRequest = (retained as AppResult.Success).value.latestDemand
+                            }
+                            for (original in originals) {
+                                currentCoroutineContext().ensureActive()
+                                val seeded = seed(access, original)
+                                if (seeded is AppResult.Failed) {
+                                    seedFailure = seeded.failure
+                                    return@withTimeoutOrNull seeded
+                                }
+                                yield()
+                            }
+                            if (originals.isNotEmpty()) {
+                                seedRecoveryPending = false
+                                seedFailure = null
                             }
                             for (target in demand.targets) {
                                 currentCoroutineContext().ensureActive()
@@ -95,7 +132,13 @@ class CollaborationSpaceInboxRepairWorker(
                             if (requested || demand.requiresScan) repairPasses(access)
                             else AppResult.Success(Unit)
                         }
-                    emit(result ?: unfinished())
+                    val outcome = result ?: unfinished()
+                    if (seedRecoveryPending && outcome is AppResult.Failed)
+                        seedFailure = seedFailure ?: outcome.failure
+                    emit(
+                        if (outcome is AppResult.Failed) outcome
+                        else seedFailure?.let { AppResult.Failed(it) } ?: outcome
+                    )
                 }
             }
             .distinctUntilChanged()

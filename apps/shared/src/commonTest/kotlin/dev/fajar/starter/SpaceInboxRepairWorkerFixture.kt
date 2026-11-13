@@ -47,6 +47,10 @@ internal class SpaceInboxRepairWorkerFixture {
     val pages = mutableListOf<String?>()
     val lookups = mutableListOf<Pair<String, String>>()
     val reconciled = mutableListOf<String>()
+    val seeded = mutableListOf<CollaborationSpaceMessageIntent>()
+    var onSeed: suspend (CollaborationSpaceMessageIntent) -> AppResult<Boolean> = {
+        AppResult.Success(true)
+    }
     var commandStarts = 0
     var commandStops = 0
     var requestStarts = 0
@@ -151,6 +155,11 @@ internal class SpaceInboxRepairWorkerFixture {
                 AppResult.Success(
                     references[message]?.takeIf { it.intent.conversationId == conversation }
                 )
+            },
+            seed = { owner, original ->
+                assertEquals(access, owner)
+                seeded += original
+                onSeed(original)
             },
             reconcile = { owner, original ->
                 assertEquals(access, owner)

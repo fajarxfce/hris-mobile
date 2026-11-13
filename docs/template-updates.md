@@ -768,3 +768,9 @@ Actual 31 new Apple methods and continuous seeding/product ownership remain sepa
 The app stage tracer follows the existing shared suspended-exception handling. Local 16,316
 cases pass; the previously failed Apple method still requires the new source control.
 No Starter change is needed because its shared measureOperation already has this handling.
+
+## Existing inbox owner seeding accepted
+
+The single admitted command owner now seeds new/retired originals with bounded failure parking.
+Seventeen shared methods and one new automatic SQLite pending-original proof join 16,351 local cases.
+Actual Apple execution and product collection remain separate; no new generic Starter port.

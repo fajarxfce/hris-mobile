@@ -1,0 +1,121 @@
+{
+  "errorPropagationReview": {
+    "redFailedAsExpected": true,
+    "redResultSha256": "bb285f57bc40977737305222353322e91e56b1e1400c83dfaeb0411427d9274e",
+    "redReportSha256": "f703673222e22ed4b16a0112d77652b68b671214ac5a9d34ec004d417e8dbab8",
+    "sourceManifestSha256": "006a406e29c3ebe59b56495901b1cdace5e7daf7076351b9862e0532789963fc",
+    "tests": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "elapsedSeconds": 199.337,
+    "failure": "java.lang.AssertionError: expected:<Failed(failure=Failure(kind=AccessDenied, code=null))> but was:<Failed(failure=Failure(kind=Storage, code=null))>",
+    "conclusion": "The first cached Storage failure hides a later actual seed AccessDenied result. Preserve latest actual seed failure for successful reference-only work; propagate current failures directly. No additional retry trigger is introduced."
+  },
+  "priorControl": {
+    "dispatched": true,
+    "portableAccepted": false,
+    "appleAccepted": false,
+    "complete": false,
+    "workflow": "collaboration-control.yml",
+    "ref": "feat/chat-send-timing-20261107",
+    "previousRun": 43427620202,
+    "previousCommit": "42fd5d12c5353779d4a61cc50b8c53ae8c6c0bc6",
+    "failedPreviousRun": 43443248470,
+    "failedPreviousCommit": "c2d9b5ea753083967adc40129187e9e5c6fcb413",
+    "expectedPortable": {
+      "desktopTest": 6696,
+      "testAndroidHostTest": 960,
+      "wasmJsBrowserTest": 6400
+    },
+    "expectedApple": {
+      "iosSimulatorArm64Test": 5950
+    },
+    "expectedTotal": 20006,
+    "newSharedMethods": 115,
+    "newDesktopIntegrationMethods": 3,
+    "newlyExecutedExistingApplicationBrowserMethods": 144,
+    "newlyExecutedExistingApplicationAppleMethods": 143,
+    "newlySelectedExistingTimingDesktopMethods": 9,
+    "status": "Exact corrected source control dispatched; both jobs pending",
+    "sourceCommit": "fe2e1cbb742dfde262182863d11b6604fe3a9c32",
+    "dispatchAttemptedAt": "2026-11-13T15:42:25.855849+00:00",
+    "dispatchExitCode": 0,
+    "runId": 43455295124,
+    "runUrl": "https://github.com/fajarxfce/hris-mobile/actions/runs/43455295124"
+  },
+  "accepted": true,
+  "changedPaths": [
+    ".github/workflows/collaboration-control.yml",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationCollaborationSpaceInboxRepairModule.kt",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationSpaceInboxRepairWorker.kt",
+    "apps/shared/src/commonTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxSeedWorkerTest.kt",
+    "apps/shared/src/commonTest/kotlin/dev/fajar/starter/SpaceInboxRepairWorkerFixture.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxRepairIntegrationTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxSeedDemandPolicy.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxSeedDemandPolicyTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 41,
+    "elapsedSeconds": 232.279,
+    "sourceFiles": 5369,
+    "sourceManifestSha256": "95a675711554b11484ee4c13f87ded5b73f69a3e5e5d51d3afaa74e3f2bc374e",
+    "resultSha256": "59cb225fd05aeaeb58653babd5b137db4c6071d788121959701f7458f81d46a7",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceInboxRepairIntegrationTest": 3,
+      "CollaborationSpaceInboxRepairWorkerTest": 10,
+      "CollaborationSpaceOriginalRetirementIntegrationTest": 1,
+      "CollaborationSpaceInboxSeedWorkerTest": 9,
+      "SpaceInboxRepairDemandPolicyTest": 8,
+      "SpaceInboxSeedDemandPolicyTest": 8
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T15:54:54.022544+00:00",
+    "elapsedSeconds": 951.565,
+    "sourceFiles": 5369,
+    "freshCounts": {
+      "tests": 14255,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153425413,
+      "sha256": "e7a09ac2b94db4ae9a9475ed1418d73b141158a59ac84ac8c2f834713098c811"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16351,
+    "newCases": 35,
+    "freshTests": 14255,
+    "reusedUnaffectedTests": 2096,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "95a675711554b11484ee4c13f87ded5b73f69a3e5e5d51d3afaa74e3f2bc374e",
+    "reportManifestSha256": "4158ad25fd847e8369cc8fc96580bff33c0948ceb7e72222715a71e2927054c5",
+    "nativeClaim": "Existing inbox owner seeds retained originals with bounded failure parking; 17 shared methods and one new automatic SQLite seed/cancel/reopen case. Product collection remains separate."
+  },
+  "newSharedMethods": 17,
+  "newDesktopIntegrationMethods": 1,
+  "realSqliteApplicationProof": true,
+  "singleCommandObserver": true,
+  "singleDemandObserver": true,
+  "maxSeedIntents": 256,
+  "turnDeadlineSeconds": 30,
+  "requestOnlySeedRetry": false,
+  "latestSeedFailureRetained": true,
+  "currentOperationFailurePreserved": true,
+  "nativeSend": false,
+  "productGraphActivated": false,
+  "actualNewAppleExecution": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false
+}

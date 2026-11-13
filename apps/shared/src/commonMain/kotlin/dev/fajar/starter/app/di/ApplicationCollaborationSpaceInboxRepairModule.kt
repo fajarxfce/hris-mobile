@@ -16,6 +16,7 @@ internal fun applicationCollaborationSpaceInboxRepairModule() = module {
         val page = inject<ReadCollaborationSpaceInboxRepairs>()
         val reference = inject<ReadCollaborationSpaceInboxRepair>()
         val reconcile = inject<ReconcileCollaborationSpaceInboxOriginal>()
+        val seed = inject<SeedCollaborationSpaceInboxOriginal>()
         CollaborationSpaceInboxRepairWorker(
             messages = { messages.value(it) },
             requests = { requests.value(it) },
@@ -25,6 +26,7 @@ internal fun applicationCollaborationSpaceInboxRepairModule() = module {
             readReference = { access, conversation, message ->
                 reference.value(access, conversation, message)
             },
+            seed = { access, original -> seed.value(access, original) },
             reconcile = { access, original -> reconcile.value(access, original) },
         )
     }

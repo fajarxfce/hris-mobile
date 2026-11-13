@@ -105,6 +105,9 @@ class CollaborationSpaceInboxRepairIntegrationTest {
                         readReference = { local, chat, original ->
                             readReference(local, chat, original)
                         },
+                        seed = { local, original ->
+                            f.koin.get<SeedCollaborationSpaceInboxOriginal>()(local, original)
+                        },
                         reconcile = { local, original -> reconcile(local, original) },
                     )
                 running =
@@ -397,6 +400,201 @@ class CollaborationSpaceInboxRepairIntegrationTest {
                             )
                             .value
                     assertEquals(indexed, reopened)
+                }
+            } finally {
+                running?.cancelAndJoin()
+                f.close()
+            }
+        }
+
+    @Test
+    fun retainedQueuedOriginalIsIndexedByTheExistingOwnerAndFollowsCancellationAcrossRestart() =
+        runBlocking {
+            val f = CollaborationWorkerFixture()
+            var running: Job? = null
+            try {
+                f.initialize()
+                val session = f.session
+                val parent =
+                    CollaborationNativeParent(
+                        session.id,
+                        session.binding.audience,
+                        session.user.id,
+                        session.binding.serverId,
+                    )
+                val owner = CollaborationSpaceOwner(parent, UUID.randomUUID().toString())
+                val access = owner.localDirectoryAccess()
+                val pair = listOf(access.accountId, UUID.randomUUID().toString()).sorted()
+                val conversation =
+                    CollaborationSpaceConversation(
+                        owner,
+                        UUID.randomUUID().toString(),
+                        pair[0],
+                        pair[1],
+                        access.accountId,
+                        Instant.fromEpochMilliseconds(1000),
+                        0,
+                    )
+                assertEquals(
+                    AppResult.Success(true),
+                    f.koin
+                        .get<CollaborationSpaceRootRepository>()
+                        .retain(
+                            parent.localSpaceAccountAccess(),
+                            CollaborationSpaceRoot(owner.spaceId),
+                        ),
+                )
+                assertEquals(
+                    AppResult.Success(true),
+                    f.koin
+                        .get<CollaborationSpaceConversationMetadataRepository>()
+                        .retain(access, conversation),
+                )
+
+                val messages = f.koin.get<CollaborationSpaceMessageRepository>()
+                val inbox = f.koin.get<CollaborationSpaceInboxRepository>()
+                val progress = f.koin.get<CollaborationSpaceInboxRepairProgressRepository>()
+                val intent =
+                    CollaborationSpaceMessageIntent(
+                        UUID.randomUUID().toString(),
+                        access.messageOwner(),
+                        conversation.id,
+                        Instant.fromEpochMilliseconds(2000),
+                        "Fictional queued legacy original",
+                    )
+                assertEquals(
+                    AppResult.Success(CollaborationMessageInsertion.STORED),
+                    messages.insert(access, intent),
+                )
+                val draft =
+                    CollaborationDraft(
+                        conversation.id,
+                        UUID.randomUUID().toString(),
+                        "Independent unfinished draft",
+                        Instant.fromEpochMilliseconds(3000),
+                    )
+                assertEquals(
+                    AppResult.Success(draft),
+                    f.koin.get<EditCollaborationSpaceDraft>()(access, null, draft),
+                )
+                val outcomes = Channel<AppResult<Unit>>(Channel.UNLIMITED)
+                val worker = f.koin.get<CollaborationSpaceInboxRepairWorker>()
+                running =
+                    launch(Dispatchers.Default) { worker(access).collect { outcomes.send(it) } }
+                withTimeout(15_000) {
+                    inbox.observePage(access).first { result ->
+                        result is AppResult.Success &&
+                            (result.value as? CollaborationSpaceInboxPage.Items)?.entries?.any {
+                                it.conversationId == conversation.id &&
+                                    it.newest?.source ==
+                                        CollaborationSpaceInboxSource.GroupOriginal(intent.id)
+                            } == true
+                    }
+                    val pending =
+                        assertIs<AppResult.Success<CollaborationSpaceInboxConversation>>(
+                                inbox.conversation(access, conversation.id)
+                            )
+                            .value
+                    assertEquals(
+                        CollaborationMessageDelivery.PENDING,
+                        pending.entry?.newest?.preview?.delivery,
+                    )
+                    assertEquals(intent.text, pending.entry?.newest?.preview?.text)
+                    assertEquals(draft, pending.draft?.value)
+                    progress.observe(access).first {
+                        it is AppResult.Success &&
+                            it.value?.let { p ->
+                                p.pass == null && p.completedDemand == p.latestDemand
+                            } == true
+                    }
+                    val idle =
+                        assertNotNull(
+                            assertIs<AppResult.Success<CollaborationSpaceInboxRepairProgress?>>(
+                                    progress.current(access)
+                                )
+                                .value
+                        )
+                    val queued =
+                        assertNotNull(
+                            assertIs<AppResult.Success<CollaborationSpaceMessageRecord?>>(
+                                    messages.get(access, intent.id)
+                                )
+                                .value
+                        )
+                    assertEquals(CollaborationMessageState.Queued, queued.state)
+                    assertEquals(
+                        AppResult.Success(Unit),
+                        f.koin.get<CancelCollaborationSpaceText>()(access, queued),
+                    )
+                    inbox.observePage(access).first { result ->
+                        result is AppResult.Success &&
+                            (result.value as? CollaborationSpaceInboxPage.Items)?.entries?.any {
+                                it.conversationId == conversation.id && it.newest == null
+                            } == true
+                    }
+                    progress.observe(access).first {
+                        it is AppResult.Success &&
+                            it.value?.let { p ->
+                                p.latestDemand != idle.latestDemand &&
+                                    p.pass == null &&
+                                    p.completedDemand == p.latestDemand
+                            } == true
+                    }
+                    assertEquals(
+                        AppResult.Success(null),
+                        f.koin
+                            .get<CollaborationSpaceInboxRepairRepository>()
+                            .get(access, conversation.id, intent.id),
+                    )
+                    val repaired =
+                        assertIs<AppResult.Success<CollaborationSpaceInboxConversation>>(
+                                inbox.conversation(access, conversation.id)
+                            )
+                            .value
+                    assertNull(repaired.entry?.newest)
+                    assertEquals(draft, repaired.draft?.value)
+                    assertEquals(draft, repaired.entry?.draft?.value)
+                    requireNotNull(running).cancelAndJoin()
+                    running = null
+                    while (true) {
+                        val result = outcomes.tryReceive().getOrNull() ?: break
+                        assertEquals(AppResult.Success(Unit), result)
+                    }
+                    assertEquals(0, f.sdk.childOpens)
+                    assertEquals(0, f.sdk.deliveries)
+                    val completed = progress.current(access)
+                    f.reopen()
+                    assertEquals(
+                        repaired,
+                        assertIs<AppResult.Success<CollaborationSpaceInboxConversation>>(
+                                f.koin
+                                    .get<CollaborationSpaceInboxRepository>()
+                                    .conversation(access, conversation.id)
+                            )
+                            .value,
+                    )
+                    assertEquals(
+                        completed,
+                        f.koin
+                            .get<CollaborationSpaceInboxRepairProgressRepository>()
+                            .current(access),
+                    )
+                    assertEquals(
+                        AppResult.Success(null),
+                        f.koin
+                            .get<CollaborationSpaceInboxRepairRepository>()
+                            .get(access, conversation.id, intent.id),
+                    )
+                    assertEquals(
+                        CollaborationMessageState.Cancelled,
+                        assertIs<AppResult.Success<CollaborationSpaceMessageRecord?>>(
+                                f.koin
+                                    .get<CollaborationSpaceMessageRepository>()
+                                    .get(access, intent.id)
+                            )
+                            .value
+                            ?.state,
+                    )
                 }
             } finally {
                 running?.cancelAndJoin()
