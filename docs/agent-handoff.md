@@ -1,39 +1,32 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 07:51 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 08:03 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
 
-## Active inbox index implementation
+## Encrypted inbox index locally accepted
 
-Mobile.work/space-inbox-index-2026-11-13 has13 uncommitted source paths. Focused-4 is ACCEPTED23:
-15 actual-storage methods, six domain policy methods and two actual application binding cases;
-source/test compilation on iOS also passed. Session62681 is REAPED. Source5281/
-c7440ce5d21a52a264458e6b4e088de370f4015a80adbe375bc410fe2ee05d27;
-result0d883f30891d1316c4577140f508abe96bdf190781fcbfce5677260568cac38d.
-Full-1/session15701 is RUNNING. Expected15645 retains15603 prior identities plus42 JVM/browser
-executions. Do not run another local compiler or mutate source until15701 is reaped. The exact
-full auditor and guarded record-acceptance.py are prepared, but full acceptance has NOT happened.
+Mobile.work/space-inbox-index-2026-11-13 is accepted locally,13 source paths.
+Focused23; full15645 = 13579 fresh plus2066 exact unchanged.
+All15603 prior identities remain plus42 JVM/browser executions:15 real-storage and6 policy methods.
+Source5281/c7440ce5d21a52a264458e6b4e088de370f4015a80adbe375bc410fe2ee05d27.
+Reportd3034c0dece8d38b61d823721fb8375faebd428e9a5fa2e1eeeb89e1fbb0b5a8. All earlier failed/rejected test candidates, original assertions and reviews
+remain retained. Source producers, admitted list observation, repair and Group graph are NOT
+activated. The user's phone stays on92. No native/live change. Actual21 new Apple executions
+remain pending alongside14 earlier raw mutation methods; catalog control43379266527 is already
+accepted and must not be repeated. The index apply scripts are historical; never reapply them.
 
-Three earlier candidates remain retained. Focused-1/2018 failed a test's stale-session result
-expectation; exact empty projection is now asserted. Focused-2/97105 failed the unsynchronized
-calls++ test barrier; a bounded channel now observes both actual writers and early outcomes.
-Focused-3/4683 passed23 but review REJECTED its evidence because test raw() was shadowed by
-the fixture's Original-history reader. rawInbox() now verifies the exact populated inbox
-checkpoint; focused-4 repeats every assertion against the correct ciphertext. Candidate compiler
-warnings are rejected by the focused/full auditors. Production source did not change during
-these test corrections. Do not mistake an earlier passing execution for accepted evidence.
-
-Source producers, admitted list observation, pending-reference traversal/repair and Group graph
-remain unintegrated. The user's phone retains release92. Complete full verification, commit/push
-acceptance and continue source publication. The next workspace, Mobile.work/
-space-inbox-draft-publication-2026-11-13, contains four UNAPPLIED/UNVALIDATED drafts: pure draft
-proposal policy, mandatory Space draft contract, paired encrypted source/index write and an
-unchanged-index checkpoint guard. Its use-case orchestration, DI, fixtures and regression tests
-still need implementation/review. Do not apply it until the index gate is accepted. The original
-Company contract/bytes must remain intact. Index write-*.py scripts are historical; never reapply.
+Continue source/index atomic publication, beginning with Group draft writes. The concrete review
+is in Mobile.work/space-inbox-draft-publication-2026-11-13/integration-review.md. No draft-source
+implementation from that workspace has been applied. Seven drafts now cover the policy,
+mandatory source contract, source/index codec/write, use-case orchestration, DI and domain
+fixture; real-storage fixture adaptation and new regression tests still remain. Do not apply
+these incomplete drafts before finishing that work. The use case owns current admission,
+immutable gesture and bounded retries; the source repository encrypts both mutations under their
+original namespaces. Keep domain/source policy out of ViewModels. This checkpoint is not the
+end of the long run; commit/push these accepted changes, then implement the next producer.
 
 ## Starter transaction port accepted and pushed
 

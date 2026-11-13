@@ -1,0 +1,106 @@
+{
+  "accepted": true,
+  "sourceFiles": 5281,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/inbox/CollaborationSpaceInboxCodec.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/inbox/CollaborationSpaceInboxDto.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceInboxRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxStorageContract.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceInboxStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceInboxStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxActivity.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxIndex.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceInboxRepository.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceInboxPolicyTest.kt"
+  ],
+  "sourceManifestSha256": "c7440ce5d21a52a264458e6b4e088de370f4015a80adbe375bc410fe2ee05d27",
+  "focused": {
+    "accepted": true,
+    "tests": 23,
+    "elapsedSeconds": 138.291,
+    "sourceFiles": 5281,
+    "sourceManifestSha256": "c7440ce5d21a52a264458e6b4e088de370f4015a80adbe375bc410fe2ee05d27",
+    "resultSha256": "0d883f30891d1316c4577140f508abe96bdf190781fcbfce5677260568cac38d",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceInboxStorageTest": 15,
+      "CollaborationSpaceInboxPolicyTest": 6
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T07:48:19.359393+00:00",
+    "elapsedSeconds": 877.353,
+    "sourceFiles": 5281,
+    "freshCounts": {
+      "tests": 13579,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152527314,
+      "sha256": "f4301a58de5ccedaf07a666c70396da7f090886b714c016614d39b3f9cff05a9"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 15645,
+    "newCases": 42,
+    "freshTests": 13579,
+    "reusedUnaffectedTests": 2066,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 109,
+    "excludedHistoricalCases": 642,
+    "sourceManifestSha256": "c7440ce5d21a52a264458e6b4e088de370f4015a80adbe375bc410fe2ee05d27",
+    "reportManifestSha256": "d3034c0dece8d38b61d823721fb8375faebd428e9a5fa2e1eeeb89e1fbb0b5a8",
+    "nativeClaim": "Encrypted inbox index storage and projection policy; 21 new shared methods require actual Apple execution. Source producer integration and product list activation remain pending."
+  },
+  "newSharedMethods": 21,
+  "failedCandidates": [
+    {
+      "focusedSession": "2018 REAPED",
+      "result": {
+        "tests": 21,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reason": "The stale-session query correctly returns ReplicaQueryPage(null, empty pages). The test expected Failed rather than verifying the exact empty projection. ReplicaDao.queryPages explicitly fences non-owning sessions by returning empty at line532. No foreign account data or cursor was returned. Correct only that assertion to the exact empty Items(null,[],null); retain account restoration and wrong-group/account cursor rejection checks. Production code unchanged.",
+      "sourceManifestSha256": "35101a4379b7f5f9da07a7115fbd1f67906e03efa46d2a5bd7696f4fe5840593"
+    },
+    {
+      "focusedSession": "97105 REAPED",
+      "result": {
+        "tests": 21,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reason": "The two real Dispatchers.Default writers shared an unsynchronized calls++ test counter before releasing their common barrier. That test can lose an arrival. Replace it with a bounded two-element channel and explicitly fail if either repository returns before the barrier. Preserve two actual competing writes, one winner/one conflict, ordinal2 retry and the same five-second timeout. MemoryCredentialStore uses a mutex around read/writeIfAbsent. Production code unchanged; preserve this failed result and candidate.",
+      "sourceManifestSha256": "b4dfb4e54c7f16717be2244accaa73c8b61d2a26b0f6947842920342246f7b38"
+    },
+    {
+      "focusedSession": "4683 REAPED",
+      "execution": {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "accepted": false,
+      "reason": "Post-execution compiler warning revealed that the test extension raw() is shadowed by CollaborationHistoryFixture.raw(). Four unchanged-ciphertext assertions read the Original history partition instead of the new inbox. Reject this passing run as acceptance evidence. Rename the test reader to rawInbox(), assert its exact populated inbox checkpoint and preserve all behavioral/immutability assertions. Production code remains unchanged. Add an acceptance guard against warnings from candidate source files.",
+      "sourceManifestSha256": "ca8565d0c98388a7ad14d81b65a77dbd200019de90fc84007b4c639dbf45b0e7"
+    }
+  ],
+  "sourceProducersIntegrated": false,
+  "productGraphActivated": false,
+  "nativeAppleExecution": false,
+  "phoneInstalled": false,
+  "previousInstalledPhoneBuild": 92,
+  "liveChanged": false,
+  "genericStarterPortRequired": false,
+  "reason": "HRIS Group-owned index and source projection policy; the generic atomic storage foundation is already ported."
+}

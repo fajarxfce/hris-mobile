@@ -1,5 +1,7 @@
 # Architecture
 
+[Persistent Group inbox activity](collaboration-space-inbox-index.md) stores globally ranked encrypted rows and independent draft/activity anchors for atomic source publication.
+
 [Atomic replica mutations](replica-atomic-mutations.md) publish two owned source/projection writes and their recovery wake as one conditional transaction.
 
 [Owned local catalog admission](collaboration-space-catalog-admission.md) keeps finite reads and version observation independent from credentials age while enforcing account/Group denial.

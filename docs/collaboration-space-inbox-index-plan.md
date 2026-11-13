@@ -8,7 +8,7 @@ remains independent. Equal source facts must preserve index rows and observation
 
 The domain catalog admission increment is locally accepted: eight source paths,17 domain
 methods and15,575 full cases. It admits pages/version observation without credentials-age,
-selected-company or native-client gates. Actual Apple execution follows in the combined control.
+selected-company or native-client gates. Actual Apple execution is accepted in combined control43379266527.
 
 The next index implementation must retain:
 
@@ -49,8 +49,8 @@ follow those checks. No activity index or product Group graph is activated by th
 ReplicaStore.mutate now accepts one or two distinct partition mutations under one account.
 Every checkpoint/generation and the optional wake are checked before writing. Room and
 IndexedDB rollback/concurrency/cancellation/restart cases pass locally:14 methods on JVM
-and browser, full15,603. No schema migration is required. Starter port and actual14 Apple
-executions follow. The source repositories receive ready domain proposals, encrypt them and
+and browser, full15,603. No schema migration is required. The Starter port is accepted at36fa855; actual14 Apple
+executions still follow. The source repositories receive ready domain proposals, encrypt them and
 publish both raw mutations; business projection policy stays in the owning use case.
 
 The separate CommandStore should remain authoritative for send/cancel/terminal evidence.
@@ -105,3 +105,12 @@ The current domain delivery enum is PENDING/FAILED/SENT. Server acknowledgement 
 from peer delivery/read evidence. Reuse those actual facts; do not manufacture additional
 check marks from queue absence or elapsed time. A frozen composer submission cannot become
 an editable Draft preview, even if the source still retains its body during handoff.
+
+## Encrypted index accepted; source producers next
+
+The encrypted row/component index is now locally accepted:15 storage and6 policy methods on
+JVM/browser, full15,645. The catalog's immutable HMAC order remains separate. Exact source/index
+producers, admission and bounded repair are still required before UI activation. Group draft
+writes are the next producer; preserve source and index checkpoints in the same raw transaction,
+including repair after a committed source response was lost. Existing history/command identities
+must remain exact. Actual21 Apple methods follow in the next native control.
