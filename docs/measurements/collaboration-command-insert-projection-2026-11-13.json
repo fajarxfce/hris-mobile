@@ -56,10 +56,19 @@
   "newSharedMethods": 15,
   "desktopOnlyFaultInjectionMethods": 2,
   "actualNewAppleExecution": false,
-  "starterPortAccepted": false,
+  "starterPortAccepted": true,
   "atomicEditAuthoringActivated": false,
   "productGraphActivated": false,
   "installedPhoneBuild": 92,
   "phoneInstalled": false,
-  "liveChanged": false
+  "liveChanged": false,
+  "starterPort": {
+    "commit": "d7b6f839350c6dd7f91612f9a09ff15d6b43c33b",
+    "validatedTests": 1022,
+    "freshTests": 544,
+    "reusedUnaffectedTests": 478,
+    "sourceManifestSha256": "2da12deeb63ab6fd4514539674ad694f7324a536a601c31dd7183c57466562a5",
+    "reportManifestSha256": "7b2474fb7f7800ed6393874e00cf5399dec2fafc19ce8a9f8a3f17a7e5a32645",
+    "evidenceUrl": "https://github.com/fajarxfce/compose-fluent-starter/blob/d7b6f839350c6dd7f91612f9a09ff15d6b43c33b/docs/measurements/command-insert-projection-port-2026-11-13.json"
+  }
 }

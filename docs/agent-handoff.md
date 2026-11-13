@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 20:11 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 20:17 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -25,24 +25,24 @@ is running (portable132138280906, Apple132138280191), NOT accepted. Expect20459 
 6100 Apple,61 shared new methods plus2 desktop storage fault injections. Audit with hosted-audit.py;
 no repeat dispatch. Main native SDK8 activation is separate. Older43486239620 stays accepted.
 
-Starter .work/command-insert-projection-port-2026-11-13 has9 APPLIED generic paths. Apply is USED;
-independent full1022/session32098 is RUNNING. Reap then accept.py and publish.py; both acceptance
-and publisher are NOT run. Publisher is prepared. Push its commit, then link actual evidence in
-Mobile/Group. Keep Inspector742a2d1c. No second local compiler while32098 owns the heavy slot.
+Starter d7b6f839350c6dd7f91612f9a09ff15d6b43c33b is accepted and pushed. Nine generic files pass independent1022:
+544 fresh/478 unchanged, all990 prior IDs plus32. Full32098 REAPED0/441.531s. Source1082/
+2da12deeb63ab6fd4514539674ad694f7324a536a601c31dd7183c57466562a5; reports7b2474fb7f7800ed6393874e00cf5399dec2fafc19ce8a9f8a3f17a7e5a32645.
+Apply/accept/publish are USED; push12756 REAPED0. Inspector742a2d1c remains pinned. Do not rerun.
+This port is linked in the atomic-command measurement. Shared Apple evidence remains pending43498640097.
 
-Next Mobile .work/space-edit-inbox-authoring-2026-11-13 has13 UNAPPLIED drafts:8 source paths,
-17 shared storage methods,3 platform wrappers and a same-instance app binding assertion. Source
-and test review is complete for the repository/storage increment; apply/capture/run/accept scripts
-are prepared, NOT used. Expected focused27/full16653. After Starter finishes, apply.py checks the
-accepted raw source, clean pushed worktrees and free heavy slot. Then capture, format, recapture,
-focused gate and full gate. This increment alone does not admit a user's edit or activate a graph.
+Next Mobile .work/space-edit-inbox-authoring-2026-11-13 has13 APPLIED source/test paths:8 source,
+17 shared storage methods,3 platform wrappers and same-instance app binding assertion. Apply64265
+REAPED0. Formatter10996 is RUNNING. Initial capture5416/00e2f2428c824af00a8d90783d6a0655448d2606f0d1cd244850ffa55f352bd9 is preformat.
+Reap formatter, capture again, run focused27 then full16653 and accept their actual reports.
+This increment alone does not admit a user's edit or activate a graph. Do not reapply drafts.
 
 Its actual Group/Company history reads return candidate and original under one revision, including
 legacy earliest aliases without rewriting history. Joint publication authenticates source/index,
 marks immutable command handoff and retains command/preview/wake together. Exact active/archive
 replay preserves newer edits/drafts; ordinary insert rejects marked commands. Tests cover source
 and index races, key absence, lost reply/restart, cancellation, wrong namespace, account replacement,
-maximum UTF-8, hidden/redacted targets and archived replay. All remain UNCOMPILED at this checkpoint.
+maximum UTF-8, hidden/redacted targets and archived replay. Runtime tests remain pending at this checkpoint.
 
 Admitted edit use-case and provider outcome release follow this storage increment. Reuse canonical
 binding/source policy, exact active/archive command reads and finite existing owners. Keep actor,
@@ -50,6 +50,8 @@ reviewed text, hidden/redacted state, denial and source/index revision checks. C
 must preserve delivery order even after a backward clock adjustment; preview ordinal alone cannot
 order delivery. An uncertain response must read back the same gesture before recomputation.
 No new polling queue, incoming retry loop, repository chaining or VM business helpers. Read review.md.
+
+The follow-up .work/space-edit-inbox-admission-2026-11-13 has THREE UNAPPLIED source drafts: explicit request/prepared-write entities, pure admission/ordering proposal, and QueueCollaborationSpaceEdit. No tests, DI or validation yet. Read its review.md; preserve pending reviewed text, bound three CAS preparations, exact uncertain-response readback, source identity and latched denial. No source from that workspace is applied.
 
 Then finish bounded history publication, finite backfill and actual list/graph activation under
 existing incoming ownership. Preserve canonical source selection, original positions, drafts,
