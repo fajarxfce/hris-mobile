@@ -1,43 +1,22 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 22:03 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 22:10 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Coherent history edit evidence locally accepted
+## Inbox edit outcome policy locally accepted
 
-Mobile .work/space-history-edit-evidence-2026-11-13 is accepted:11 paths,16 shared actual Group/
-Company storage methods. Focused51/full16719 (14565 fresh /2154
-unchanged) preserve all16687 prior IDs plus32 executions. Source5426/
-87215fc372d77b538a29dd7d7947f593b7d92d77d631c550528a084e624c02da; reports627caeca3c0d0afa15f46e262dfbd7c97c59c34d32c63e26d6f841fe0910f3b9.
-Canonical original events and bounded exact operation evidence now share one source checkpoint.
-Absent operations remain explicit; changed revisions yield no mixed snapshot. Keys, physical
-namespaces,128alias completeness and joined cancellation are preserved. Default snapshots do no
-extra queries. Apply/record/check scripts are USED; no graph, phone or live change is active.
+Mobile .work/space-inbox-edit-outcome-policy-2026-11-13 is accepted:5 source/test paths,23 shared
+methods. Focused41/full16765 (14611 fresh /2154 unchanged) retain
+all16719 prior IDs plus46 executions. Source5431/cb7ec3ea93f37a0aa646c40b77e812fdb509a2ea46a9de0aba648b45a39f211f;
+reports2425e7fe385360c05b953675afacea36d1c7b01b25bf1fe09e5e77a6696e9a37. Exact pending command/provider facts admit observed/rejected
+outcomes; one authenticated later completion may supersede an older edit. Both applicable
+namespaces and physical room must match; local/provider clocks are never compared.
+The first focused41 source was rejected for a redundant safe call; corrected focused2 passes
+205.481s. Exact rejected source/candidate files and acceptance-rejection.json remain archived.
+Apply/check/record scripts are USED. No projection owner, graph, phone or live change is active.
 
-Next .work/space-inbox-edit-outcome-policy-2026-11-13 has5 APPLIED paths,23 shared methods.
-Corrected focused41/session22334 is REAPED PASS/accepted205.481s. Source5431/
-cb7ec3ea93f37a0aa646c40b77e812fdb509a2ea46a9de0aba648b45a39f211f; result169b2d945e7a6008332ab1e4504fee01b5d45f06316ad8389077bc2cb9d866f6.
-Full16765/session61019 is RUNNING since21:54UTC. Do not alter active compiler inputs until reaped.
-Then accept-full.py full-1, set fullReaped, record-acceptance.py, commit.py mobile/push then group/push.
-The first focused41/session3361 is REAPEDexit0 but acceptance REJECTED for its new redundant safe
-call. Its source751a7212..., result996db5e5..., exact candidate copies and rejection JSON are retained.
-The reviewed correction captures non-null origin once. Recorder includes explicit rejected attempts.
-Record/commit scripts are PREPARED NOT RUN; Group capability mobile-space-inbox-edit-outcomes.md.
-
-After focused41/full16765 acceptance, record/commit/push Mobile then Group. Prepare and dispatch
-its new exact-source control20678/6173 Apple (73 new shared methods) using accepted43498640097.
-Do not redispatch older controls. Source/owner publication and product graph remain open. Pure
-outcomes neither manufacture receipts nor retire commands/resurrect hidden or deleted previews.
-Then integrate finite incoming/repair owners, canonical bounded history publication, durable
-unresolved work and catalog/binding backfill. No polling queue, permanent room observer or VM
-business helper. All exact source/artifact evidence and rejected attempts remain preserved.
-
-Prior admitted edits pass16687; atomic edit storage passes16653. Generic coreb4a3a89d passes16619
-and Starterd7b6f839 passes independent1022 with9 exact files. Control43498640097 covers the earlier
-core only (ACCEPTED20459/6100 Apple), excluding these later HRIS increments; read its audited state
-without redispatch. Bundle later exact-source hosted validation after these local increments.
 The following .work/space-inbox-history-projection-2026-11-13 has3 REVIEWED UNAPPLIED paths,
 16 shared behavior-test drafts, and prepared focused57/full16797 apply/capture/accept scripts.
 Its bounded synchronous proposal retains physical identity, draft, position, delivery and pending
@@ -45,18 +24,36 @@ text, with explicit unresolved originals and17th-candidate fallback. Not compile
 Dispatch the exact accepted/pushed16765 hosted control first, then apply only with a free compiler.
 Projection record/commit scripts are prepared NOT RUN; admitted source/owner integration follows.
 
-Further .work/space-inbox-history-admission-2026-11-13 has6 UNAPPLIED, NOT YET REVIEWED drafts:
-producer/result,13 initial behavior methods and repository fixture, owning data factory, existing
-assembled-graph assertion. No compile/test/application has run. It coordinates exact canonical
-history/index/command/evidence reads and bounded publication under per-call admission. Snapshots
-are detached before admitted suspensions; bindings are immutable; no-op source/index writes are
-already supported. Missing/ambiguous originals map back to captured unresolved aliases. Review
-newer edits, successor namespaces, malformed input, snapshot mutation, denial and restart coverage.
-It requires the preceding57/16797 pure projection acceptance before applying. Do not treat this
-draft as activated owner, catalog backfill, thread/list integration, or phone evidence.
+Read .work/space-inbox-edit-outcome-policy-2026-11-13/next-owner-review.md and the inbox index plan.
+Next implement bounded history publication (at most16 changed originals/17 fallback candidates),
+current access and canonical Group/actual Company source admission. Preserve existing physical
+anchors through proof changes, draft independence, pending edit text and SENT/FAILED evidence.
+Use exact command reads plus coherent operation snapshots and BOTH applicable successor lookups.
+A newer edit changes index revision; eligibility/redaction changes history revision. Condition
+publication on both, keeping bounded retries distinct from operational failure and denied access.
 
-Main native Apple SDK8 activation remains separate. Phone92 stays installed; live Group OFF.
-All54 PRD acceptance groups remain open. Push every commit and continue beyond checkpoints.
+An already materialized incoming reference STILL needs projection completion. Actual Company
+content can predate binding, requiring finite catalog/binding backfill and restart coverage.
+Unresolved work needs durable handoff under existing ownership without blocking future messages
+or entering ordinary30..300second incoming retry. Do not create a permanent observer per room,
+a second queue, VM business helper or claim original-command seeding covers all history.
+Finish admitted producer/owner integration before list/graph activation and actual UI acceptance.
+
+Coherent snapshot baseline16719 and admitted edit baseline16687 remain accepted. Generic coreb4a3a89d
+passes16619 and Starterd7b6f839 passes independent1022. Control43498640097 covers that earlier core
+only (20459/6100 Apple), excluding these later HRIS increments; inspect its audited state without
+redispatch. Bundle later exact-source hosted validation.
+
+Further .work/space-inbox-history-admission-2026-11-13 contains6 UNAPPLIED and NOT YET REVIEWED
+drafts: admitted producer/result,20 behavior methods and repository fixture, owning data factory,
+and existing graph resolution assertion. No compiler/tests/gates have run for it. It must follow
+accepted/pushed57/16797 projection source. Review canonical snapshots and pending/successor proof,
+mutable lists, finite source/index contention, denial/account changes, cancellation and incomplete
+reference handoff. More race coverage and gated application scripts are required; this is not
+owner/backfill or product activation. Read its current state/review before further source work.
+
+Main native Apple SDK8 activation is separate. Phone92 stays installed; live GroupOFF. All54 PRD groups remain open. Continue beyond
+checkpoints, push every commit and preserve the accepted source/artifact evidence.
 
 ## Accepted source and existing hosted controls
 

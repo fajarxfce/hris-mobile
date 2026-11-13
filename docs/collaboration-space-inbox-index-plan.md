@@ -287,3 +287,7 @@ One reviewed edit is admitted against canonical local history and atomically ret
 ## Coherent edit evidence
 
 Existing canonical Group/Company snapshots retain bounded exact replacement operation evidence under the same source revision. Focused51/full16719 pass. Pure outcome policy, incoming/backfill ownership and product activation remain; see `docs/collaboration-history-edit-snapshot.md`.
+
+## Exact edit outcome policy
+
+Pending replacements and authenticated local successors have pure Group/Company admission policies. Focused41/full16765 pass. Admitted publication, incoming/backfill ownership and product activation remain; see `docs/collaboration-space-inbox-edit-outcomes.md`.
