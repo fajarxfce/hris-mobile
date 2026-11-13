@@ -1,0 +1,159 @@
+{
+  "accepted": false,
+  "runId": 43517312645,
+  "sourceCommit": "7aad7abc235278cf8f6340f74bed5e71479d74ef",
+  "jobId": 132202447560,
+  "artifactId": 14081493388,
+  "artifactBytes": 27941,
+  "artifactSha256": "cc93c8d5522bd2fa256763cc1967c0de7e7f4f836239713dd9f8dc73fb1a30bc",
+  "jobLogSha256": "6a362eacf643629c67a4814a0ced5c80f53ed8f09896652ca006c3d54a9c5c4a",
+  "counts": {
+    "tests": 162,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "failures": [
+    {
+      "report": "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleCommandArchiveMutationsTest.xml",
+      "method": "failureDeletingArchivedCommandRollsBackEarlierReplicaWrites[iosSimulatorArm64]",
+      "type": "androidx.sqlite.SQLiteException",
+      "message": "androidx.sqlite.SQLiteException: androidx.sqlite.SQLiteException: Error code: 5, message: database is locked"
+    }
+  ],
+  "reports": {
+    "core/workspace/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.workspace.domain.WorkspaceAdmissionTest.xml": {
+      "sha256": "8252755577630943a3c2f89e446f1cc6080232c167b77086bf05d4c9ddee6cb4",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/workspace/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.workspace.domain.WorkspaceRefreshTargetTest.xml": {
+      "sha256": "4ce4cc92ffd83324f07c7ac9ff347ccaaac4bff0afe4e399543065515ed4bb0d",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/workspace/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.workspace.domain.CompanyAvailabilityTest.xml": {
+      "sha256": "8204fb97a561ac4dfcf8b32421f995b3a18b0259c0da416a6e52c452bdc8b353",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/workspace/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.workspace.domain.WorkspaceSelectionTest.xml": {
+      "sha256": "d5dfeb7643901d624bac3ff88388ddc3017ff677e509bb8bd3c469a27c4fccdc",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleCommandArchiveMutationsTest.xml": {
+      "sha256": "041355723775f303caabd2437ffc06c320ab3c49666ab06cad646dca9993426b",
+      "tests": 15,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleCommandBatchTest.xml": {
+      "sha256": "6f16e0330a753cf5f1b388057ae877d2dfd9738a11ebfe38d23da070855eceb7",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleCommandHandoffTest.xml": {
+      "sha256": "369777fd70a923c58ac116379ba6b28c1eb2b2eb91ab7ff8898b427de96ff8bd",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleCommandInsertMutationsTest.xml": {
+      "sha256": "6d43eb3e91aa72bbc7cdb8e14fba70c2f55ee9e059f4dbe68005456bd7cf106c",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleCommandLookupTest.xml": {
+      "sha256": "64a135672d6f8b9cb4fc3dbdd897210893e8655f1e8ac639a3d4a63acab2dc19",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleCommandPreventionTest.xml": {
+      "sha256": "0b7bb50686c99dbba52ca4810e5630e5911a76f8bb78442365d9f6f47f5ebbd4",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleCommandWakeTest.xml": {
+      "sha256": "c48ab1df68d1df03a71acfcd2c928545c298199777da98ca016c304df91b72cb",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleDeviceRecordStoreTest.xml": {
+      "sha256": "263a5788c836ee62ea6216698d6c676d0095509ee32ea12ab7fb1db697b48c21",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleReplicaChecksTest.xml": {
+      "sha256": "a4fbda2d68ad21ce47698b66dbdf4a882b2b321ae0d046cba6b30fef09ec7e7e",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleReplicaStagingTest.xml": {
+      "sha256": "c00babd7755559700861026f3c93b716994383f8a4471534ad7e44aa27941e7f",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleReplicaMutationsTest.xml": {
+      "sha256": "bf94cde26e6c44a77a91e8e6a94a9959c82372cddd0f542b5142902949febdfc",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleReplicaStoreTest.xml": {
+      "sha256": "35719b42c11d090968fd32787cd7e179a8eadc3b4e429c555c9f0981f971198e",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleReplicaWakeTest.xml": {
+      "sha256": "28c426d3309f0a2ac4dc52498bce1256509b9c587dc0310d4385bd96f052b0be",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleWorkWakeStoreTest.xml": {
+      "sha256": "b14bd1544ab2b74f3b5b4e4b2bfe493b549573912acaea2491dbd34cde850fbd",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "appHostBuilt": false,
+  "remainingTestsNotExecuted": true,
+  "rootCause": "External DROP TRIGGER ran while Room owner remained open; archiveAndMutate finally requests asynchronous invalidation. SQLite code5 at fixture teardown, not the intended injected fault.",
+  "correctionApplied": false,
+  "correctionWorkspace": ".work/sqlite-fault-fixture-ownership-2026-11-13",
+  "phoneChanged": false,
+  "liveChanged": false
+}

@@ -29,10 +29,16 @@ Exact accepted outcome source7aad7abc235278cf8f6340f74bed5e71479d74ef was dispat
 https://github.com/fajarxfce/hris-mobile/actions/runs/43517312645 . Expected20678 total =14505
 portable (6922 desktop/960 Android host/6623 browser) +6173 Apple;73 new shared methods from
 atomic edit storage17/admission17/coherent snapshot16/outcome23. It EXCLUDES the active16-method
-projection and unreviewed producer. Applejob132202447560/portablejob132202448103 are in progress.
-Dispatch62537 is REAPED0. Prepare/dispatch scripts USED; auditors PREPARED NOT RUN. Capture completed
-job artifacts, audit against accepted43498640097 and the retained failed43443248470 identities;
-never redispatch this source. Main native SDK8 Apple app activation is separate.
+projection and unreviewed producer. Applejob132202447560 FAILED:162 tests/1 failure, remaining suites and app host never ran.
+Portablejob132202448103 is still running; audit it independently when complete. Dispatch62537 and
+failure capture40727 are REAPED. Failure artifact14081493388/27941 bytes/cc93c8d5522bd2fa256763cc1967c0de7e7f4f836239713dd9f8dc73fb1a30bc.
+Failure is SQLite5/database locked in existing archive test DROP TRIGGER while Room remained open;
+see measurements/collaboration-inbox-edit-apple-failure-2026-11-13.json. Do not accept/rerun this
+source blindly. .work/sqlite-fault-fixture-ownership-2026-11-13 contains3 formatted UNAPPLIED
+test-only fixes: owned Room callback setup, close before teardown, typed injected-fault marker,
+and reopened rollback confirmation. Review/validate after admitted history producer and port
+these generic tests to Starter; then dispatch a new exact-source control. Main SDK8 Apple app
+activation remains separate.
 
 Read .work/space-inbox-edit-outcome-policy-2026-11-13/next-owner-review.md and the inbox index plan.
 Next implement bounded history publication (at most16 changed originals/17 fallback candidates),
@@ -54,12 +60,12 @@ passes16619 and Starterd7b6f839 passes independent1022. Control43498640097 cover
 only (20459/6100 Apple), excluding these later HRIS increments; inspect its audited state without
 redispatch. Bundle later exact-source hosted validation.
 
-Further .work/space-inbox-history-admission-2026-11-13 contains6 UNAPPLIED and NOT YET REVIEWED
+Further .work/space-inbox-history-admission-2026-11-13 contains6 reviewed formatted UNAPPLIED
 drafts: admitted producer/result,22 behavior methods and repository fixture, owning data factory,
 and existing graph resolution assertion. No compiler/tests/gates have run for it. It must follow
 accepted/pushed57/16797 projection source. Review canonical snapshots and pending/successor proof,
 mutable lists, finite source/index contention, denial/account changes, cancellation and incomplete
-reference handoff. More race coverage and gated application scripts are required; this is not
+reference handoff. Gated application scripts and22 method identities are prepared; this is not
 owner/backfill or product activation. Read its current state/review before further source work.
 Review found a missing-command-proof duplicate-anchor risk in the unapplied producer. It now
 queries all possible physical/Group/Company anchors in at most two32-key reads under the SAME
