@@ -1,10 +1,35 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 06:30 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 06:36 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Active atomic replica storage increment
+
+Mobile.work/replica-atomic-mutations-2026-11-13 is APPLIED,10 source paths.
+Formatter1/session99690 REAPED34.131s. Focused1/session63420 is RUNNING; no test acceptance yet.
+Source5269/a71119ee835a632aeb714f657a7dd11e7488531a224966caa44d8902ec910239.
+Expected focused30 (14 new raw-storage methods,14 existing replication/wake methods and2 DI)
+and full15603 (all15575 prior IDs +28 JVM/browser executions). Do not change candidate sources
+while the gate runs. The old draft is historical; never reapply it. Preserve any failed input
+snapshots and complete actual browser/Apple compilation gates before claiming acceptance.
+
+Catalog admission is committed/pushed at Mobile047584f125b182d8bd811ac343fb6a4ca30fbc9a /
+Group52e7cf17. Pushes96174/35233 and full61001 are REAPED. Do not repeat these local gates.
+Its exact hosted control43379266527 is RUNNING: portable131732963519 and Apple131732963180,
+source047584f1. Dispatch21923 is REAPED; never dispatch a duplicate. Expected13306+5510=18816.
+Auditors are ready in Mobile.work/space-catalog-admission-2026-11-13/hosted-audit.py; invoke only
+when the corresponding job completes successfully. No artifact/native acceptance yet.
+
+After raw transaction acceptance and commit/push, port exactly the10 generic source paths
+into Starter. Starter.work/replica-atomic-mutations-port-2026-11-13 has prepared apply/check
+scripts and baseline906 metadata; sources are NOT applied. Expected934 after the28 new
+JVM/browser executions; its independent auditor still needs completion. No second local
+compiler/emulator may overlap. The activity-index integration review remains in Mobile.work/
+replica-atomic-mutations-2026-11-13/index-integration-review.md. Native14 raw-storage methods
+need a later actual Apple gate; they are not in the already-running catalog control.
 
 ## Latest local catalog admission acceptance
 
@@ -23,12 +48,11 @@ report8203a44f24c822e99cce4845a3f810d67ea450333a323547ecc1a5f602b90b72.
 Its12 real storage methods passed JVM/browser; actual Apple execution follows.
 The failed shadowed-fixture candidate and unchanged requirements remain preserved.
 
-Next: commit/push admission, then dispatch one combined hosted control for navigation13,
-catalog12 and admission17 new actual Apple methods. Expected portable13306 + Apple5510 =18816;
+The combined hosted control above covers navigation13, catalog12 and admission17 new actual
+Apple methods. Expected portable13306 + Apple5510 =18816;
 independently verify identities before acceptance. Do not repeat accepted page run43366809238.
-Continue Mobile.work/replica-atomic-mutations-2026-11-13:10 drafted source paths,14 storage
-methods, prepared apply/format/focused/full scripts. NOT applied or tested. Its apply.py requires
-this accepted clean pushed source. After mobile acceptance, port the generic storage to starter,
+The raw transaction increment above is now applied. Its prepared draft/apply script is
+historical and must not be run again. After mobile acceptance, port the generic storage to starter,
 then integrate the persistent inbox activity index with pending/draft ranking and local repair.
 See collaboration-space-inbox-index-plan.md.
 
