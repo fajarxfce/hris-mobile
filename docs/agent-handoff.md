@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 01:22 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 01:27 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -244,19 +244,20 @@ Six additional domain cases and three worker cases cover pending work and wake r
 previously accepted worker test bodies remain identical, checked against ce1750b8;13 new worker
 cases are separate. No existing assertion or quality limit was relaxed.
 
-Format3/95627 REAPED PASS35.158s. Focused3/99144 ACTIVE, expected169 cases.
+Format3/95627 REAPED PASS35.158s. Focused3/99144 REAPED PASS169/384.667s;
+strict focused audit passes and retains every prior identity. Full2/78490 ACTIVE.
 Frozen5205/7ddaa7f570beab8d7d697f015a7ec32c4cc2f7508b30debbae0d9e0e08860af1.
 Expected full2:15,014 (all14,911 prior IDs +103 new executions).44 new shared Apple methods
-still require hosted execution. Keep sources frozen until the compiler is reaped. Then run
-full2 and the affected native cases. prepare-native.py now uses/freeze-checks full-2 explicitly;
+still require hosted execution. Keep sources frozen until full2 is reaped. Then strict full
+audit and the affected native cases are required. prepare-native.py uses/freeze-checks full-2;
 record-acceptance.py requires exact focused169/full15,014/native2 audits and source/APK hashes.
-No current candidate acceptance, Group UI, native latency or phone installation is claimed.
+No full/native candidate acceptance, Group UI, measured latency or phone installation yet.
 
 NEXT DESIGN ONLY: Mobile.work/space-composer-observation-2026-11-13 has a local editor/outbox
-snapshot use case, fixture and ten draft tests. Not applied or compiled. Its subscription
+snapshot use case, fixture and18 draft tests (ten read/eight lifetime). Not applied or compiled. Its subscription
 stays independent of history rendering and owns current account/Group admission. Complete
-lifetime/cancellation tests before applying it after recovery acceptance. Review draft tests
-against the actual immutable submission shape (id derives from original.revision).
+DI/application binding and strict audit preparation after recovery acceptance. Draft submissions
+now use the actual immutable ID from original.revision. Review all fixture ownership assertions.
 
 
 Continue canonical Group thread/list UI after recovery passes, reusing the route-owned serial
