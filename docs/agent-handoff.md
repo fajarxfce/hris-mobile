@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 00:16 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 00:35 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -77,18 +77,19 @@ and failed-virtual-clock-1: focused1/78741 ran25 cases/one new failure175.034s. 
 deadline expired in22ms wall time around actual Default I/O. Only that test scenario moved to
 Default; all deadlines/assertions and production behavior stay unchanged. Format3/75985 passed35.426s.
 
-Indexed-contact acceptance commits Mobile5d67729f / Groupd02599c0 are pushed; sessions41570
-and59970 REAPED. One follow-up control43322026579 now has portable131549893156 accepted and Apple131549893690 running,
-exact5d67729f9e4ddafc8a8850fb4c6c796236d0d7a1. Expected12,758 portable +5,250 Apple =18,008,
-including25 newly instantiated native directory/admission methods. Portable is ACCEPTED:
-auditor54485 REAPED,12,758 cases (6104desktop/955Android/5699browser), every prior ID retained.
-Artifact13993706111 /4071134B/0510d2693045b003268ebdbb91473a38462b88678238824e6f82f47e898ef6cd;
-report09907c9e65a6abcf2f8d2bc066390087eb9324859f3dcc72e701faaa14f4455b;
-job log79fbb403f1f9d9695d42b6dfcb8a63c8441122706926d960ad24e83a65660e36.
-Apple is still running; no new Apple pass claimed. Do not rerun accepted portable.
-Mobile.work/space-thread-contact-2026-11-12/hosted-control and hosted-audit.py preserve the
-configuration; the auditor additionally requires every immediately preceding control case ID.
-Keep this exact run; do not dispatch another pending control. Dispatch29198 REAPED.
+Indexed-contact acceptance Mobile5d67729f / Groupd02599c0 is pushed. The single
+control43322026579 is now FULLY ACCEPTED at exact5d67729f9e4ddafc8a8850fb4c6c796236d0d7a1:
+12,758 portable (6104desktop/955Android/5699browser) +5,250 Apple =18,008 cases. Both strict
+audits pass with every immediately preceding case ID retained; zero replacements/suffix changes.
+Portable auditor54485 and Apple44978 REAPED. Apple also built the iOS host and passed push
+routing. The25 newly instantiated directory/admission methods actually executed on Apple.
+Portable artifact13993706111/4071134B/0510d2693045b003268ebdbb91473a38462b88678238824e6f82f47e898ef6cd;
+Apple artifact13997337667/831973B/865b143961da4075a9b41b80a101ccceb7a02982afe51a802f8724daed473776;
+Apple report452c26f8527c8e7177263f6c6e81374b227654388369617a82fc4d2a0b9e78e4; log536cb03483a85fc3918a8482eaf45ba56439bca67ad5f6df4bd4e8b68481c0fa.
+Mobile.work/space-thread-contact-2026-11-12/hosted-control preserves original archives/logs.
+Do not rerun either accepted job. This is shared-source/host acceptance, not acceptance of
+later participant/composer increments or the separate four native Matrix Swift contracts.
+One latest follow-up control may be prepared after composer domain full acceptance and push.
 
 Canonical local thread participants are ACCEPTED in
 Mobile.work/space-thread-participants-2026-11-12. Eleven application paths add exact

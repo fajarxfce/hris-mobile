@@ -73,7 +73,7 @@
   "nativeSuiteExecutedForThisIncrement": false,
   "phoneInstalledForThisIncrement": false,
   "groupLiveDeployment": false,
-  "remaining": "Execute the new25 native directory/admission methods in hosted Apple control. Continue canonical participant/composer context and organization presentation.",
+  "remaining": "Contact/unresolved shared code passed hosted control; continue canonical participants, composer and organization presentation. Later source increments and native Matrix SDK contracts have separate acceptance.",
   "hostedPortable": {
     "sourceCommit": "5d67729f9e4ddafc8a8850fb4c6c796236d0d7a1",
     "runId": 43322026579,
@@ -97,10 +97,24 @@
     "fullAuditSha256": "f0f83dc06490a8a8ea0d7f88d91ff01cd2b6cdff72da09fc3fb45da6b1b28de5"
   },
   "hostedApple": {
-    "runId": 43322026579,
-    "jobId": 131549893690,
     "sourceCommit": "5d67729f9e4ddafc8a8850fb4c6c796236d0d7a1",
-    "status": "running; no new native pass claimed",
-    "expectedCases": 5250
-  }
+    "runId": 43322026579,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43322026579",
+    "jobId": 131549893690,
+    "artifactId": 13997337667,
+    "bytes": 831973,
+    "sha256": "865b143961da4075a9b41b80a101ccceb7a02982afe51a802f8724daed473776",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreservedExceptReviewedReplacements": true,
+    "reviewedReplacements": 0,
+    "browserRuntimeCaseSuffixChanges": 0,
+    "browserRuntimeChange": null,
+    "counts": {
+      "iosSimulatorArm64Test": 5250
+    },
+    "reportManifestSha256": "452c26f8527c8e7177263f6c6e81374b227654388369617a82fc4d2a0b9e78e4",
+    "jobLogSha256": "536cb03483a85fc3918a8482eaf45ba56439bca67ad5f6df4bd4e8b68481c0fa",
+    "fullAuditSha256": "492aaa1290d07c70a1e2ec8bd3aa825ddb8193111a8ef6df111daa255b9f6b68"
+  },
+  "hostedTotalCases": 18008
 }
