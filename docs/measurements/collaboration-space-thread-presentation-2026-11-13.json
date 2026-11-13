@@ -1,0 +1,146 @@
+{
+  "startedAt": "2026-11-13T03:19:27.727584+00:00",
+  "elapsedSeconds": 438.932,
+  "sourceFiles": 5224,
+  "freshCounts": {
+    "tests": 1589,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 154350387,
+    "sha256": "8721de5dcf23a6322bc80ad3c11110af287e600d1a8e949b68c24b010da83402"
+  },
+  "fullyAccepted": true,
+  "validatedTests": 15401,
+  "newCases": 311,
+  "freshTests": 1589,
+  "reusedUnaffectedTests": 13812,
+  "priorCaseIdsPreserved": true,
+  "excludedHistoricalReports": 109,
+  "excludedHistoricalCases": 642,
+  "sourceManifestSha256": "2e67849dff017fedd81b6230206635aaa3c3669f0f334b38ec2cb8d462b92dc0",
+  "reportManifestSha256": "e16284692cdee9f71fc1988a40a25a89859da4a0ad317a25e11d7eb3cb9a4c98",
+  "nativeClaim": "Typed Group presentation and serial editor integration; no SDK or worker orchestration change. The 32 new shared Apple methods require actual hosted execution. No Group UI, native latency or live deployment claim.",
+  "date": "2026-11-13",
+  "focused": {
+    "accepted": true,
+    "tests": 45,
+    "elapsedSeconds": 185.182,
+    "sourceFiles": 5224,
+    "sourceManifestSha256": "2e67849dff017fedd81b6230206635aaa3c3669f0f334b38ec2cb8d462b92dc0",
+    "resultSha256": "063e01bb8278ed723fb50a0d0f9d41317b79119ef6f855a9a285a8d08f27f7d5",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "SpaceChatComposerPresentationTest": 12,
+      "ChatComposerEditingSessionTest": 11,
+      "SpaceChatComposerEditingSessionTest": 4,
+      "SpaceChatThreadViewModelTest": 16
+    },
+    "priorCaseIdsRetained": true
+  },
+  "sourcePaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatComposerPresentation.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadEvent.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadState.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadViewModel.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatComposerEditingSession.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModel.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatComposerPresentationTest.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadContentFixture.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadFixture.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadViewModelTest.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatComposerEditingSessionTest.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/SpaceChatComposerEditingSessionTest.kt"
+  ],
+  "newSharedAppleMethods": 32,
+  "newFeatureJvmBrowserExecutions": 64,
+  "additionalPriorHostedPresentationBrowserCases": 247,
+  "actualPresentationBrowserCases": 279,
+  "appleExecutionsLocally": 0,
+  "newNativeExecution": false,
+  "phoneInstalled": false,
+  "liveGroupDeployed": false,
+  "uiRouteActivated": false,
+  "failedCandidates": [
+    {
+      "reason": "Presentation projection119 logical lines exceeded unchanged100-line method limit",
+      "focusedSession": "61172 REAPED",
+      "testsExecuted": 0,
+      "elapsedSeconds": 61.478,
+      "action": "Separate selection of displayed exact command revision from whole composer continuity; no assertion or quality-limit change",
+      "path": "failed-projection-size-1"
+    },
+    {
+      "reason": "Remaining projection101 lines still exceeded unchanged100-line limit",
+      "focusedSession": "11871 REAPED",
+      "testsExecuted": 0,
+      "elapsedSeconds": 61.424,
+      "action": "Remove unnecessary temporary list allocation for five fixed input bounds; preserve all guards and assertions",
+      "path": "failed-projection-size-2"
+    },
+    {
+      "reason": "New fixture used immutable conversation metadata.version=1; actual unchanged contract requires0. All affected history/edit/submit acquisitions rejected it before I/O.",
+      "focusedSession": "71610 REAPED",
+      "testsExecuted": 43,
+      "passed": 37,
+      "failed": 6,
+      "elapsedSeconds": 158.577,
+      "action": "Correct fixture version to0 and assert its validity at construction; no production validation or test assertion relaxed",
+      "path": "failed-metadata-fixture-1"
+    },
+    {
+      "reason": "Disposed parent still received actor cleanup callback; Back test used advanceUntilIdle without draining background effect collector.",
+      "focusedSession": "54893 REAPED",
+      "testsExecuted": 43,
+      "passed": 41,
+      "failed": 2,
+      "elapsedSeconds": 92.496,
+      "action": "Fence presentation callback by actual parent scope while still clearing internal state; explicitly drain current effect collector and preserve expected Back assertion.",
+      "path": "failed-scope-and-effect-1"
+    }
+  ],
+  "exactNewMethods": {
+    "SpaceChatComposerEditingSessionTest": [
+      "retriesKeepTheExactTypedOwnerEditAndCapturedTime",
+      "changingTheGroupCannotPublishALateCancelledOldSubmission",
+      "aNewLocalSessionKeepsItsEditorAfterAnOldWriteFinishes",
+      "theBoundedGroupQueueKeepsTheNextTextWhenItCannotAcceptAnotherGesture"
+    ],
+    "SpaceChatThreadViewModelTest": [
+      "historyPublishesWhileDraftReadIsStillPending",
+      "localEditorDoesNotWaitForThreadMetadataOrNativeKeys",
+      "preparationAndReentryKeepOneLocalSubscriptionWithoutAcquisition",
+      "consecutiveSendsShowImmediatelyAndKeepNewerTypingDuringLocalWrites",
+      "companySelectionAndExpiredCredentialsDoNotReplaceTheGroupEditor",
+      "aRetainedStoppedRouteStillRedactsWhenTheAccountLogsOut",
+      "lateThreadMetadataCannotRestoreContentAfterGroupDenial",
+      "failedAdmissionKeepsTheRestrictionUntilExplicitAdmittedReentry",
+      "clearingDuringLostHandoffReplyKeepsOneOriginalForTheReplacementModel",
+      "backWaitsForLocalDraftAndAWriteFailureKeepsTheEditorOpen",
+      "anOutboxLoadedAtEntryRemainsVisibleAcrossItsRemovalBeforeTheCommandAppears",
+      "aPendingProgressReadDoesNotDelayHistoryEditorOrTheNextGesture",
+      "archivedCommandEvidenceStillPublishesWhileThreadAcquisitionIsPending",
+      "companyChangesKeepTheSameGroupProgressReaderAndRetainedOriginal",
+      "logoutDuringALateProgressReadCannotRestoreTheOriginalOrItsStatus",
+      "failedProgressReadsKeepTheOriginalAndRetryObservesTheSameStoredCommand"
+    ],
+    "SpaceChatComposerPresentationTest": [
+      "aNewGestureAppearsBeforeAnyRecordOrHistoryResult",
+      "aColdOutboxOriginalSurvivesOutboxRemovalAndAnAbsentRecord",
+      "aStaleActiveInventoryAndLaterAbsenceCannotReplaceAnExactSentRecord",
+      "aMatchingUuidWithoutTheExactProviderEventAndOriginDoesNotRetireTheOriginal",
+      "actualSentHistoryRetainsVisualIdentityAndSuppressesAStaleOutboxEntry",
+      "confirmedCancellationWinsOverItsOldQueuedInventory",
+      "theSameIdWithDifferentImmutableContentCannotReplaceTheCapturedGesture",
+      "anOriginalCompanyCommandWithTheSameIdCannotOwnAGroupGesture",
+      "confirmationOfAPrefixKeepsTheOriginalGestureOrder",
+      "heldOutboxAndActualPersistenceFailureRemainAttachedToTheirOwnOriginal",
+      "recentTerminalIdentitiesAreBoundedWithoutDroppingUnknownPendingOriginals",
+      "duplicateOrOversizedInputsFailWithoutSilentlyDroppingOriginals"
+    ]
+  }
+}

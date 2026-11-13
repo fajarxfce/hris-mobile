@@ -143,7 +143,7 @@ class ChatThreadViewModel(
     private var composerRetry: Job? = null
     private var composerProgressReady = false
     private val composer =
-        ChatComposerEditingSession(
+        ChatComposerEditingSession<CollaborationLocalAccess>(
             viewModelScope,
             conversationId,
             save = { write ->

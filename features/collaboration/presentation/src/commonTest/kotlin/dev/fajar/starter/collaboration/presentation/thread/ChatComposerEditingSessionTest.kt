@@ -245,15 +245,15 @@ private class ComposerEditingFixture(scope: CoroutineScope) {
     val storage = Failure(FailureKind.Storage, "Unavailable")
     var persisted: CollaborationDraft? = null
     val retained = mutableMapOf<String, CollaborationComposerSubmission>()
-    val saves = mutableListOf<ChatComposerDraftWrite>()
-    val submits = mutableListOf<ChatComposerSubmissionWrite>()
+    val saves = mutableListOf<ChatComposerDraftWrite<CollaborationLocalAccess>>()
+    val submits = mutableListOf<ChatComposerSubmissionWrite<CollaborationLocalAccess>>()
     var beforeSave: suspend () -> Unit = {}
     var beforeSubmit: suspend () -> Unit = {}
     var saveFailure: Failure? = null
     var submitFailure: Failure? = null
     var sequence = 100
     val session =
-        ChatComposerEditingSession(
+        ChatComposerEditingSession<CollaborationLocalAccess>(
             scope,
             conversation,
             save = { request ->

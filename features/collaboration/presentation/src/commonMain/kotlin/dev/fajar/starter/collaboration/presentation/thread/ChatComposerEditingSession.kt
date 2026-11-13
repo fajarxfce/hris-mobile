@@ -18,12 +18,12 @@ import kotlinx.coroutines.flow.first
  * the supplied use cases own storage, admission, exact replay and delivery scheduling.
  * Closing/rebinding cancels this actor and fences late results. No repository or network access.
  */
-internal class ChatComposerEditingSession(
+internal class ChatComposerEditingSession<Access : Any>(
     private val scope: CoroutineScope,
     private val conversationId: String,
-    private val save: suspend (ChatComposerDraftWrite) -> AppResult<CollaborationDraft>,
+    private val save: suspend (ChatComposerDraftWrite<Access>) -> AppResult<CollaborationDraft>,
     private val submit:
-        suspend (ChatComposerSubmissionWrite) -> AppResult<CollaborationComposerSubmission>,
+        suspend (ChatComposerSubmissionWrite<Access>) -> AppResult<CollaborationComposerSubmission>,
     private val onState: (ChatComposerEditingState) -> Unit,
     private val onSubmitted: () -> Unit = {},
     private val clock: Clock = Clock.System,
@@ -33,17 +33,17 @@ internal class ChatComposerEditingSession(
         private set
 
     private val changes = MutableStateFlow(state)
-    private var owner: CollaborationLocalAccess? = null
+    private var owner: Access? = null
     private var stored: CollaborationDraft? = null
-    private var edit: ChatComposerDraftWrite? = null
+    private var edit: ChatComposerDraftWrite<Access>? = null
     private var actor: Job? = null
     private var writing = false
     private var epoch = 0L
     private var lastSubmittedAt: Instant? = null
     private val pending = ArrayDeque<CollaborationComposerSubmission>()
-    private var submission: ChatComposerSubmissionWrite? = null
+    private var submission: ChatComposerSubmissionWrite<Access>? = null
 
-    fun bind(access: CollaborationLocalAccess, draft: CollaborationDraft?) {
+    fun bind(access: Access, draft: CollaborationDraft?) {
         if (owner == access && state.ready) {
             // Only the confirmed successor of an untouched legacy frozen slot is adopted.
             if (state.legacyPending && draft?.submissionId == null) reset(access, draft)
@@ -52,7 +52,7 @@ internal class ChatComposerEditingSession(
         reset(access, draft)
     }
 
-    fun reset(access: CollaborationLocalAccess, draft: CollaborationDraft?) {
+    fun reset(access: Access, draft: CollaborationDraft?) {
         clear()
         owner = access
         stored = draft
@@ -218,6 +218,7 @@ internal class ChatComposerEditingSession(
                                             revision(),
                                             state.text,
                                             state.replyToEventId,
+                                            clock.now(),
                                         )
                                         .also { edit = it }
                             publish(state.copy(saving = true))
@@ -302,7 +303,8 @@ internal class ChatComposerEditingSession(
         if (state != value) {
             state = value
             changes.value = value
-            onState(value)
+            // Internal cleanup may finish after parent cancellation; its UI callback has ended.
+            if (scope.isActive) onState(value)
         }
     }
 }
@@ -327,18 +329,19 @@ internal data class ChatComposerPendingSubmission(
     override fun toString() = "ChatComposerPendingSubmission([redacted])"
 }
 
-internal data class ChatComposerDraftWrite(
-    val access: CollaborationLocalAccess,
+internal data class ChatComposerDraftWrite<Access : Any>(
+    val access: Access,
     val expected: CollaborationDraft?,
     val revision: String,
     val text: String,
     val replyToEventId: String?,
+    val savedAt: Instant,
 ) {
     override fun toString() = "ChatComposerDraftWrite([redacted])"
 }
 
-internal data class ChatComposerSubmissionWrite(
-    val access: CollaborationLocalAccess,
+internal data class ChatComposerSubmissionWrite<Access : Any>(
+    val access: Access,
     val expected: CollaborationDraft?,
     val original: CollaborationComposerSubmission,
 ) {

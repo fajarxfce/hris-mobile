@@ -113,8 +113,9 @@ local account/admission ownership. Its20 shared methods passed locally; actual h
 execution remains pending. Outbox absence preserves originals, and unchanged record readers
 survive request-list changes. See [progress evidence](collaboration-space-composer-progress.md).
 
-Thirteen typed presentation drafts now include independent history/editor/progress collectors,
-exact retained-original continuity and recent terminal visual identities. The draft uses
-real Group ownership and preserves Company command namespaces. Its32 new shared methods and
-11 existing actor cases still require compilation/execution before application acceptance.
+Thirteen accepted presentation source paths now include independent history/editor/progress collectors,
+exact retained-original continuity and recent terminal visual identities. The implementation uses
+real Group ownership and preserves Company command namespaces. Its 32 new shared methods and
+11 existing actor cases pass locally, including 279 presentation browser cases. Actual Apple
+execution of the 32 new methods remains pending.
 Actual Group route/list/page activation and rendering measurements follow that acceptance.

@@ -895,6 +895,22 @@ class CollaborationBindingsTest {
                         },
                     )
                     screens.put(
+                        "space-thread",
+                        container.koin.get<
+                            dev.fajar.starter.collaboration.presentation.spacethread.SpaceChatThreadViewModel
+                        > {
+                            parametersOf(
+                                CollaborationSpaceLocalAccess(
+                                    "session",
+                                    "https://example.test/",
+                                    "account",
+                                    "group",
+                                ),
+                                "conversation",
+                            )
+                        },
+                    )
+                    screens.put(
                         "setup",
                         container.koin.get<ChatSetupViewModel> { parametersOf("selection") },
                     )

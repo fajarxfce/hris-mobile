@@ -1,5 +1,7 @@
 # Architecture
 
+[Group thread state](collaboration-space-thread-presentation.md) keeps local history, editing and message progress independent under a route-owned typed composer.
+
 [Organization composer progress](collaboration-space-composer-progress.md) follows exact Group originals across active and terminal storage without restarting unchanged readers.
 
 [Organization composer observation](collaboration-space-composer-observation.md) keeps local editing independent from message history under current Group/account ownership.
