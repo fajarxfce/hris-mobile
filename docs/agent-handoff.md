@@ -1,77 +1,62 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 22:57 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 23:05 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Bounded history inbox projection locally accepted
+## Admitted history inbox publication locally accepted
 
-Mobile .work/space-inbox-history-projection-2026-11-13 is locally accepted:3 paths,16 shared
-methods. Focused57/full16797 (14643 fresh /2154 unchanged)
-retain all16765 prior identities plus32 executions. Source5434/
-df3dc9066d8a332fa464db8a66e1b66648d70283eff0295e65f2302505b578db; reports1cb5c419de4f3c81bb731e8bd3d1b2b538386849e527979c87153ccfe5479d9e.
-At most16 coherent originals update canonical history projections while physical anchors,
-position/time, drafts, pending edit text and confirmed delivery remain stable. Exact edit
-clearance cannot clear a newer pointer. Hidden/deleted originals retain their anchors;
-17th-candidate fallback survives16 hidden updates. Unknown new originals remain explicit
-unresolved work. No proposal means no allocation, never permission to complete incoming work.
-Apply/check/record scripts are USED. No source/owner graph, UI, native or phone change is active.
+Mobile .work/space-inbox-history-admission-2026-11-13 is accepted:6 paths,22 shared behavior
+methods. Focused40/full16841 (14687 fresh /2154 unchanged)
+retain all16797 prior identities plus44 executions. Source5438/
+92c4ecfac7019fa090c41f6735fe586f54f9cf0415c828562318a7311fe5180d; reports30057cf0a53bcb9a1f773fef862e979bb7810150cf50bce5debfb685a1bf344b.
+One captured finite publication admits canonical Group/actual Company facts and source/index
+revisions. Both successor namespaces are read; pending edits, original position/draft/delivery
+remain stable. Missing command proof cannot allocate a second History anchor. Up to48 possible
+keys use two32-key reads of the same index generation. Exact aliases remain explicitly unresolved
+when proof is insufficient. Denial is latched, cancellation joined, lost replies remain failures.
+Owning data DI resolves the use case. No incoming/backfill owner or product UI activation yet.
 
-Next implement the admitted source producer: current account/Group checks and canonical binding,
-exact pending command reads, coherent original/operation snapshots, BOTH successor completions,
-complete bounded anchor/candidate reads and publication conditional on source/index versions.
-Preserve latched denial and cancellation. Do not bypass materialized references before inbox
-publication. Unknown originals require durable handoff under existing incoming/repair ownership;
-keep future message processing independent without another polling queue or per-room observer.
-Finite catalog/binding backfill must cover Company history predating binding and process restart.
-Thread optimistic editing and list/graph activation need actual integration tests and UI evidence.
+Separate .work/sqlite-fault-fixture-ownership-2026-11-13 remains unapplied.
+Three reviewed formatted test-only drafts address FAILED Apple control43517312645 at outcome source
+7aad7abc235278cf8f6340f74bed5e71479d74ef. Failure artifact14081493388/27941 bytes/
+cc93c8d5522bd2fa256763cc1967c0de7e7f4f836239713dd9f8dc73fb1a30bc contains162 tests/1 failure;
+remaining Apple tests/app host never executed. The existing archive fault test DROP TRIGGER
+raced Room's active connection/async invalidation (SQLite5). Correction uses owned onOpen trigger
+setup, closes Room before teardown, demands exact SQLite fault markers and verifies persisted
+rollback after reopening. One attempt to prepare the fixture gate script was blocked by the automatic content filter and
+did not execute; do not reproduce that blocked payload. No fixture changes have been applied or
+tested. Unrelated owner integration continues. Actual Apple validation, generic Starter parity
+and new exact-source control remain outstanding. Retain all failed artifacts and method identities.
+Portable43517312645 is independently ACCEPTED14505 (6922 desktop/960 Android host/6623 browser),
+audit5899 REAPED0. Artifact14082887492/4439234 bytes/
+e75e641629b1d0a65b36b52418125bb4de7febb64fb1ca45f239c3ac43825502. Chrome157-to156 suffix was
+explicitly reviewed for all6550 prior accepted browser cases and6342 older failed-run cases;
+class/method/platform identity retained, raw full-name identity false. Two rejected audits remain
+archived. This does not make the Apple job or whole run accepted.
+Accepted43498640097 remains20459/6100 actual Apple and excludes all later HRIS increments.
 
-Outcome source7aad7abc control43517312645 FAILED Apple at an existing core archive rollback test:
-162 tests/1 failure, remaining Apple suites and iOS app host did not run. Failure was SQLite5
-(database locked) in test DROP TRIGGER while Room remained active; the raw failure artifacts and
-stack are retained in hosted-control/apple-failure-review.json. Portable job status still needs
-its independent audit. Never call this complete or rerun without reviewing the source correction.
-The unapplied test-only .work/sqlite-fault-fixture-ownership-2026-11-13 has3 drafts: owned Room
-callback trigger setup, close before external teardown, exact SQLite fault markers and reopened
-rollback checks. Validate after the admitted producer; then port generic tests to Starter and
-run a new exact-source hosted control. Do not change active compiler inputs.
-This earlier hosted run EXCLUDES these16 projection methods. Accepted43498640097/coreb4a3a89d remains20459/6100 Apple.
-Generic Startercaf8103 retains independent1022 and linked15 shared Apple methods; no new port.
-Current .work/space-inbox-history-admission-2026-11-13 has6 APPLIED reviewed paths and22
-behavior methods. Apply32725 and focused40/session42257 are REAPED/ACCEPTED,406.749s. Source5438/
-92c4ecfac7019fa090c41f6735fe586f54f9cf0415c828562318a7311fe5180d.
-Full16841/session59728 is RUNNING. Do not mutate its inputs. Reap, accept-full.py full-1,
-record and commit/push Mobile followed by Group. Record/commit scripts
-are prepared, not run. Missing command proof cannot allocate duplicate History anchors; up to48
-physical/Group/Company keys use two32-key reads of one index generation. Review/state/hashes and
-owner-integration-review.md identify actual unresolved incoming/backfill boundaries.
+Next .work/replica-local-change-pages-2026-11-13 has19 UNAPPLIED drafts: raw bounded changes,
+12 shared storage methods and3 migration methods (SQLite13 and browser12/7). Internal local
+revision is independent from source document version. Finite indexed reads include tombstones;
+newer writes go to the next captured window. SQLite13->14/browser12->13 retain old bytes and
+versions. Final review, generated schema14 and compilation/execution remain. Mobile proof must
+precede the generic Starter port. See collaboration-space-inbox-incremental-history-plan.md.
+No change-feed consumer or product activation is claimed.
 
-Next .work/replica-local-change-pages-2026-11-13 contains15 formatted UNAPPLIED drafts and12
-shared storage methods. Local change revision is independent from ReplicaDocument.version;
-coalesced indexed pages include tombstones and retain finite upper bounds across writes. SQLite
-13->14 and IndexedDB12->13 migrations are proposed; old payload/version/sort/tags stay intact.
-Standalone formatter78516 REAPED0 and browser-read syntax pass only. Actual behavior, generated
-SQLite schema14, old-database migration tests and final source review remain. Do not apply yet.
-See collaboration-space-inbox-incremental-history-plan.md for the concrete design and missing gates.
-This generic increment needs Mobile proof then Starter parity; no source/owner/UI activation.
+Read owner-integration-review.md for actual worker/use-case boundaries.
+Continue owner integration: already-materialized incoming references still need index publication
+before completion; actual Company content may predate binding. Use finite canonical catalog and
+source backfill with durable restart, resolved/unresolved handoff under existing repair ownership,
+and no ordinary30..300second incoming retry or permanent observer per room. Thread optimistic
+editing and product list/graph need integration tests and UI evidence. Do not call original-only
+seeding complete history coverage. Keep business matching/policy out of the ViewModel.
 
-Control43517312645 remains FAILED overall: Apple162/1 at fixture teardown, no later Apple/app
-execution. Portable job132202448103 is independently ACCEPTED14505 (6922 desktop/960 Android host/
-6623 browser), audit5899 REAPED0. Artifact14082887492/4439234 bytes/
-e75e641629b1d0a65b36b52418125bb4de7febb64fb1ca45f239c3ac43825502. Two strict raw-identity audits
-were rejected before review: Chrome157-to156 suffix affected6550 accepted-baseline browser cases
-and6342 older failed-run cases. All class/method/platform identities were independently retained;
-raw full-name identity is explicitly false. See measurements/collaboration-inbox-edit-portable-2026-11-13.json.
-No cases were removed; original timing regressions pass. This excludes new projection/producer.
-
-Generic fixture correction still has3 reviewed unapplied files; no compile or execution. One
-attempt to prepare its gate script was blocked by the automatic content filter and did not
-execute. Do not reproduce that blocked payload. Existing admission verification is unrelated
-and continues. Preserve its current state and all failed hosted artifacts.
-
-Main native Apple SDK8 app activation is separate. Phone92 stays installed, live GroupOFF.
-All54 PRD acceptance groups remain open. Continue beyond checkpoints and push every commit.
+Startercaf8103 retains independent1022 and linked15 shared Apple methods; new generic fixture
+port remains required. Main native SDK8 Apple app activation remains separate. Phone92 stays
+installed; live GroupOFF and V117-140 undeployed. All54 PRD acceptance groups remain open.
+Continue beyond checkpoints, push every commit, and preserve protected stores/keys.
 
 ## Accepted source and existing hosted controls
 

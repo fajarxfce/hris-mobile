@@ -668,6 +668,34 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun publishSpaceInboxHistory(
+        history: CollaborationSpaceHistorySnapshotRepository,
+        companyHistory: CollaborationCompanyHistorySnapshotRepository,
+        messages: CollaborationSpaceMessageRepository,
+        companyMessages: CollaborationMessageRepository,
+        completions: CollaborationSpaceMessageCompletionRepository,
+        companyCompletions: CollaborationMessageCompletionRepository,
+        inbox: CollaborationSpaceInboxRepository,
+        bindings: CollaborationSpaceRoomBindingRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) =
+        PublishCollaborationSpaceInboxHistory(
+            history,
+            companyHistory,
+            messages,
+            companyMessages,
+            completions,
+            companyCompletions,
+            inbox,
+            bindings,
+            directory,
+            sessions,
+            server,
+        )
+
+    @Factory
     fun observeSpaceComposer(
         drafts: CollaborationSpaceDraftRepository,
         outbox: CollaborationSpaceComposerOutboxRepository,

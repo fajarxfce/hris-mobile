@@ -295,3 +295,7 @@ Pending replacements and authenticated local successors have pure Group/Company 
 ## Bounded history proposal
 
 Pure policy now prepares up to16 original changes with17th-candidate fallback, retained physical identity, drafts and exact pending edit clearance. Focused57/full16797 pass. Admitted source/owner and product activation remain; see `docs/collaboration-space-inbox-history-projection.md`.
+
+## Admitted canonical history publication
+
+Finite local publication now checks exact canonical source and index proof, both completion namespaces and existing original identity before allocation. Focused40/full16841 pass. Incoming/backfill owners, thread/list/graph and actual UI acceptance remain; see `docs/collaboration-space-inbox-history-admission.md`.

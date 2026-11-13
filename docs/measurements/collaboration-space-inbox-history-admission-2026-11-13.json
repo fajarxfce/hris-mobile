@@ -1,0 +1,75 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistoryCommit.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PublishCollaborationSpaceInboxHistory.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/PublishSpaceInboxHistoryTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistoryAdmissionFixture.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 40,
+    "elapsedSeconds": 406.749,
+    "sourceFiles": 5438,
+    "sourceManifestSha256": "92c4ecfac7019fa090c41f6735fe586f54f9cf0415c828562318a7311fe5180d",
+    "resultSha256": "4ec35c9da9a8c629a32e6b10a60f0b48ecb20ce097ccfdb290d2fc37c3092fea",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationHistoryEditSnapshotStorageTest": 16,
+      "PublishSpaceInboxHistoryTest": 22
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T22:48:12.538222+00:00",
+    "elapsedSeconds": 989.694,
+    "sourceFiles": 5438,
+    "freshCounts": {
+      "tests": 14687,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 154648739,
+      "sha256": "4341a6e3a60804208b3219e9fd6d4da06d68b7309fb078ff1ee039368f0f03fb"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16841,
+    "newCases": 44,
+    "freshTests": 14687,
+    "reusedUnaffectedTests": 2154,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "92c4ecfac7019fa090c41f6735fe586f54f9cf0415c828562318a7311fe5180d",
+    "reportManifestSha256": "30057cf0a53bcb9a1f773fef862e979bb7810150cf50bce5debfb685a1bf344b",
+    "nativeClaim": "Admitted bounded history/inbox producer;22 shared behavior methods plus assembled graph resolution. Durable incoming/backfill ownership and product activation remain open."
+  },
+  "focusedAttempts": [
+    {
+      "directory": "focused-1",
+      "exitCode": 0,
+      "freshCounts": {
+        "tests": 40,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "4ec35c9da9a8c629a32e6b10a60f0b48ecb20ce097ccfdb290d2fc37c3092fea",
+      "sourceManifestSha256": "92c4ecfac7019fa090c41f6735fe586f54f9cf0415c828562318a7311fe5180d"
+    }
+  ],
+  "newSharedMethods": 22,
+  "actualNewAppleExecution": false,
+  "requiresStarterPort": false,
+  "admittedHistoryPublicationAvailable": true,
+  "providerOutcomeReconciliationActivated": false,
+  "productGraphActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false
+}
