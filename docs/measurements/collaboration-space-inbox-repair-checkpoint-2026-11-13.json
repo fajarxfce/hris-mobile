@@ -1,0 +1,90 @@
+{
+  "accepted": true,
+  "sourceFiles": 5320,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/inbox/CollaborationSpaceInboxRepairProgressCodec.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceInboxRepairProgressRepository.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceInboxRepairRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxRepairProgressStorageContract.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxRepairStorageContract.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxRepairProgressStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceInboxRepairProgressStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceInboxRepairProgressStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxRepairProgress.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxRepairProgressPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceInboxRepairProgressRepository.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceInboxRepairRepository.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxRepairProgressPolicyTest.kt"
+  ],
+  "sourceManifestSha256": "9700ed86d78cf27137c91f8e389feb3d6bed6a15d7d7dc74560b0de78bde6750",
+  "focused": {
+    "accepted": true,
+    "tests": 77,
+    "elapsedSeconds": 322.383,
+    "sourceFiles": 5320,
+    "sourceManifestSha256": "9700ed86d78cf27137c91f8e389feb3d6bed6a15d7d7dc74560b0de78bde6750",
+    "resultSha256": "d887325ae7098fb1b4b96f9ea3bf99933557dcabb64153682ec1198bd20346ba",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceInboxRepairProgressStorageTest": 9,
+      "CollaborationSpaceInboxRepairStorageTest": 16,
+      "CollaborationSpaceInboxStorageTest": 15,
+      "CollaborationSpaceComposerIndexStorageTest": 9,
+      "ReconcileSpaceInboxOriginalTest": 9,
+      "SpaceInboxCommandPolicyTest": 8,
+      "SpaceInboxRepairProgressPolicyTest": 9
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T11:14:03.907156+00:00",
+    "elapsedSeconds": 885.076,
+    "sourceFiles": 5320,
+    "freshCounts": {
+      "tests": 13773,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152553946,
+      "sha256": "3ff7f4863acb238028f8bdc409f96bfa99665b3b70036ef2d71a9d4ff37e6f4f"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 15839,
+    "newCases": 42,
+    "freshTests": 13773,
+    "reusedUnaffectedTests": 2066,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 109,
+    "excludedHistoricalCases": 642,
+    "sourceManifestSha256": "9700ed86d78cf27137c91f8e389feb3d6bed6a15d7d7dc74560b0de78bde6750",
+    "reportManifestSha256": "b3abdc81a3eea6969e6e574cc97884face83805cc143f2da4a81721f8fb3c1d4",
+    "nativeClaim": "Finite repair checkpoint storage and exact reference lookup; 21 new shared methods need actual Apple execution. Admitted recovery owner, legacy seeding, history and product list activation remain pending."
+  },
+  "newSharedMethods": 21,
+  "finiteRepairCheckpoint": true,
+  "targetedReferenceLookup": true,
+  "recoveryOwnerIntegrated": false,
+  "historyProducerIntegrated": false,
+  "productGraphActivated": false,
+  "nativeAppleExecution": false,
+  "phoneInstalled": false,
+  "previousInstalledPhoneBuild": 92,
+  "liveChanged": false,
+  "genericStarterPortRequired": false,
+  "failedCandidates": [
+    {
+      "accepted": false,
+      "reason": "The test-only raw() extension was shadowed by the shared fixture member returning ReplicaPage; use a specific repairProgressCheckpoint name. Remove the redundant already-proven pass assertion without changing any validation or expectation.",
+      "run": "focused-1",
+      "session": 91138,
+      "reaped": true,
+      "partialTests": 26,
+      "resultSha256": "c2988b0733fa13713416cd871340c80829da9098ce89fdcc8a3f651dcda96df7",
+      "sourceManifestSha256": "3109a25f54d19cba381c29d2943ae538027a0ec6b86a3772cdfa5e6f9caa443b"
+    }
+  ]
+}

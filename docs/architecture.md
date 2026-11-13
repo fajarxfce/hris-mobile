@@ -1,5 +1,7 @@
 # Architecture
 
+[Finite inbox repair checkpoints](collaboration-space-inbox-repair-checkpoint.md) retain captured progress and expose exact local reference lookup for the future admitted owner.
+
 [Exact inbox command progress](collaboration-space-inbox-command-progress.md) reconciles retained originals under local admission and bounded contention.
 
 [Durable inbox repair references](collaboration-space-inbox-progress-repair.md) retain exact originals and complete preview/reference changes in one index transaction.

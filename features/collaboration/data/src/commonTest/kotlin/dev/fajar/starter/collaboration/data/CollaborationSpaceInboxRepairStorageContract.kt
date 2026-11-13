@@ -438,6 +438,105 @@ abstract class CollaborationSpaceInboxRepairStorageContract {
             )
         }
 
+    @Test
+    fun exactLookupUsesOneDocumentAndCompletedReferencesStayAbsentAfterRestart() =
+        withDatabase { f ->
+            val original = f.send(1001)
+            f.send(1002)
+            val expected = f.repairs().references.first { it.intent.id == original.id }
+            val requested = mutableListOf<List<String>>()
+            val store =
+                object : ReplicaStore by f.database.replicas {
+                    override suspend fun workingDocuments(
+                        scope: ReplicaScope,
+                        partition: String,
+                        ids: List<String>,
+                    ): ReplicaPage {
+                        requested += ids.toList()
+                        return f.database.replicas.workingDocuments(scope, partition, ids)
+                    }
+
+                    override fun observeQueries(
+                        scope: ReplicaScope,
+                        partition: String,
+                        queries: List<ReplicaQuery>,
+                    ): Flow<ReplicaQueryPage> =
+                        error("Exact reference lookup must not page unrelated references")
+                }
+            val repo = EncryptedCollaborationSpaceInboxRepairRepository(store, f.cipher, f.keys)
+            assertEquals(
+                AppResult.Success(expected),
+                repo.get(f.local(), original.original.conversationId, original.id),
+            )
+            assertEquals(1, requested.size)
+            assertEquals(1, requested.single().size)
+            f.complete(expected)
+            f.reopen()
+            val reopened =
+                EncryptedCollaborationSpaceInboxRepairRepository(
+                    f.database.replicas,
+                    f.cipher,
+                    f.keys,
+                )
+            assertEquals(
+                AppResult.Success(null),
+                reopened.get(f.local(), original.original.conversationId, original.id),
+            )
+            assertEquals(1, f.repairs().references.size)
+        }
+
+    @Test
+    fun absentOrMalformedExactLookupsNeverCreateKeyMaterial() = withDatabase { f ->
+        val repo =
+            EncryptedCollaborationSpaceInboxRepairRepository(f.database.replicas, f.cipher, f.keys)
+        assertEquals(AppResult.Success(null), repo.get(f.local(), f.conversation, historyId(1001)))
+        assertIs<AppResult.Failed>(repo.get(f.local(), "invalid", historyId(1001)))
+        assertIs<AppResult.Failed>(repo.get(f.local(), f.conversation, "invalid"))
+        assertNull(f.keys.read())
+        assertNull(f.indexSnapshot().checkpoint)
+    }
+
+    @Test
+    fun exactLookupPreservesConversationGroupAndCurrentAccountOwnershipAfterRenewal() =
+        withDatabase { f ->
+            val original = f.send(1001)
+            val expected = f.repairs().references.single()
+            val renewed = f.local().copy(sessionId = "renewed")
+            f.reopen(f.access.copy(sessionId = renewed.sessionId))
+            val repo =
+                EncryptedCollaborationSpaceInboxRepairRepository(
+                    f.database.replicas,
+                    f.cipher,
+                    f.keys,
+                )
+            assertEquals(
+                AppResult.Success(expected),
+                repo.get(renewed, f.conversation, original.id),
+            )
+            assertEquals(AppResult.Success(null), repo.get(renewed, historyId(400), original.id))
+            assertEquals(
+                AppResult.Success(null),
+                repo.get(renewed.copy(spaceId = historyId(401)), f.conversation, original.id),
+            )
+            assertEquals(AppResult.Success(null), repo.get(f.local(), f.conversation, original.id))
+            val other = f.access.copy(sessionId = "replacement", accountId = historyId(402))
+            f.activate(other)
+            assertEquals(AppResult.Success(null), repo.get(renewed, f.conversation, original.id))
+            assertEquals(
+                AppResult.Success(null),
+                repo.get(
+                    renewed.copy(sessionId = other.sessionId, accountId = other.accountId),
+                    f.conversation,
+                    original.id,
+                ),
+            )
+            f.activate(f.access.copy(sessionId = renewed.sessionId))
+            assertEquals(
+                AppResult.Success(expected),
+                repo.get(renewed, f.conversation, original.id),
+            )
+        }
+
     private fun CollaborationHistoryFixture.intent(value: CollaborationComposerSubmission) =
         collaborationSpaceComposerIntent(local(), value)
 

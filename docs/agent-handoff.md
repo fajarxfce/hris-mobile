@@ -1,10 +1,41 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 10:57 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 11:29 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Finite inbox repair metadata and exact lookup locally accepted
+
+Mobile.work/space-inbox-repair-owner-2026-11-13 is accepted locally,14 source paths.
+Focused77; full15,839 = 13773 fresh + 2066 exact unchanged.
+All15,797 preceding IDs remain plus42 JVM/browser executions of21 new shared methods.
+Source 5320/9700ed86d78cf27137c91f8e389feb3d6bed6a15d7d7dc74560b0de78bde6750.
+Report b3abdc81a3eea6969e6e574cc97884face83805cc143f2da4a81721f8fb3c1d4.
+The encrypted checkpoint preserves one finite captured pass and one coalesced later demand.
+Completion acknowledges only that pass; pending-only completion becomes idle. Exact reference
+lookup reads one authenticated original document, without whole-inbox scanning. No admitted
+recovery owner, history producer, Group product graph or phone/live activation is included.
+Actual21 new Apple methods remain pending with13 reference and17 command-progress methods.
+
+Continue admitted finite-page/reference readers and progress actions, then the single account/Group
+command observer and finite worker. Target changed originals in steady state; reserve the captured
+reference pass for missed work/startup/resume. Never observe index writes as command demand. Preserve
+confirmed denial, cancel/join old owners and retain unchanged displayed rows during cursor renewal.
+Then seed legacy exact-command references, publish incoming history and integrate product list/Group
+navigation. Review pending edits and global clock ordering separately. The accepted increment's
+preparation/apply scripts are historical; do not rerun them. The design review remains in its workspace.
+Mobile.work/space-inbox-repair-admission-2026-11-13/review.md records the next admitted reader,
+checkpoint-action and observer contract: 14 prepared paths and35 shared methods, none applied or
+accepted yet. Reuse/strengthen ObserveCollaborationSpaceMessages; do not add a duplicate observer.
+Room and IndexedDB active-list snapshots can conflate a fast insert/completion/archive back to the
+same list, losing an unobserved original ID. Before worker integration, prove a durable completion
+wake for this case without polling. Review atomic archival plus the existing repair-progress
+checkpoint; exact archive replay must not create fresh demand. The archive/cancellation storage
+contracts exist, while their Group producer integration still needs explicit tracing. Details are
+in Mobile.work/space-inbox-repair-worker-2026-11-13/review.md; this design is not implemented.
+Push every commit and continue. Phone remains release92 until a validated visible update.
 
 ## Exact original inbox command progress locally accepted
 
@@ -19,11 +50,8 @@ Contention stops after three attempts; operational failures do not loop. No runt
 recovery owner, history producer, Group product graph or phone/live activation is included.
 Actual17 new Apple methods remain pending alongside13 reference-storage methods.
 
-Continue the finite local repair owner, bounded command-only legacy seeding, incoming history and
-admitted product list/Group graph. Mobile.work/space-inbox-repair-owner-2026-11-13 contains a design
-review and 14 prepared source paths for checkpoint storage and exact lookup, with 21 shared
-methods. They are not applied or tested; inspect its state and actual prepared files. Keep one bounded account command subscription,
-a captured pass and one coalesced later demand. Finishing a pending-only pass must become idle.
+Finite checkpoint storage and exact reference lookup are now locally accepted above. The admitted
+worker, legacy seeding, incoming history and Group product integration remain.
 Never reapply this accepted command increment's historical preparation scripts. Push every commit
 and continue the long run. The user's phone remains on release92 until a validated visible update.
 

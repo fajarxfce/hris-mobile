@@ -138,3 +138,9 @@ owned recovery and legacy seeding remain before history/list/product activation.
 Matching terminal originals publish progress and reference completion atomically under local
 admission. Seventeen domain methods pass JVM/browser, full15,797. Finite recovery ownership,
 legacy seeding, history/list and product integration remain.
+
+## Finite repair checkpoint and exact lookup accepted
+
+One captured pass and one coalesced later demand now persist independently of visible index
+revisions. Exact original lookup uses one document. Twenty-one new shared methods pass locally,
+full15,839. Admitted owner, legacy seeding, history/list and product integration remain.

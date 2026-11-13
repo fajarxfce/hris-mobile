@@ -3,6 +3,7 @@ package dev.fajar.starter.collaboration.data.repositories
 import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.data.inbox.*
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationMessageId
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceInboxRepairRepository
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
@@ -19,6 +20,48 @@ class EncryptedCollaborationSpaceInboxRepairRepository(
     @Named("collaboration-history-content-key") private val credentials: AtomicCredentialStore,
 ) : CollaborationSpaceInboxRepairRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
+
+    override suspend fun get(
+        access: CollaborationSpaceLocalAccess,
+        conversationId: String,
+        messageId: String,
+    ): AppResult<CollaborationSpaceInboxRepairReference?> =
+        withContext(Dispatchers.Default) {
+            safeStorageCall {
+                require(
+                    validCollaborationMessageId(conversationId) &&
+                        validCollaborationMessageId(messageId)
+                )
+                val scope = spaceHistoryScope(access)
+                val partition = spaceInboxPartition(access)
+                if (replicas.observePublishedCheckpoint(scope, partition).first() == null)
+                    return@safeStorageCall null
+                keys.use { content, index ->
+                    val codec = CollaborationSpaceInboxCodec(access, cipher, content, index)
+                    val id =
+                        codec.id(
+                            "repair",
+                            conversationId,
+                            CollaborationSpaceInboxSource.GroupOriginal(messageId),
+                        )
+                    val page = replicas.workingDocuments(scope, partition, listOf(id))
+                    val raw = page.checkpoint
+                    if (raw == null) {
+                        require(page.documents.isEmpty())
+                        return@use null
+                    }
+                    codec.version(raw)
+                    require(page.documents.size <= 1 && page.documents.all { it.id == id })
+                    page.documents.singleOrNull()?.let { document ->
+                        val decoded = codec.decode(raw, document)
+                        require(decoded.conversationId == conversationId)
+                        val repair = requireNotNull(decoded.repair)
+                        require(repair.id == messageId)
+                        repair.reference(access)
+                    }
+                }
+            }
+        }
 
     override suspend fun page(
         access: CollaborationSpaceLocalAccess,
