@@ -1,0 +1,755 @@
+{
+  "portable": {
+    "accepted": true,
+    "sourceCommit": "fe2e1cbb742dfde262182863d11b6604fe3a9c32",
+    "runId": 43455295124,
+    "jobId": 131987710916,
+    "counts": {
+      "desktopTest": 6696,
+      "testAndroidHostTest": 960,
+      "wasmJsBrowserTest": 6400
+    },
+    "previousFailedRunCaseIdsRetained": true,
+    "previousFailedRunId": 43443248470,
+    "previousFailedRunCases": 13929,
+    "fixedTimingMethods": [
+      "thrownFailureFinishesTimingWithoutExceptionPayload",
+      "suspendedThrownErrorsFinishRoomAndWorkerStagesWithoutLosingTheirOutcome"
+    ],
+    "artifactId": 14055583379,
+    "artifactBytes": 4392163,
+    "artifactSha256": "76f00285bf48ab1b7191bbf36ac9a06b17c9e1201636de6c57c5a6f57e1f6119",
+    "jobLogSha256": "7ae15237517fb8dd8cda5a264383b6b2bdc57016b6b604a04ae9629e723303cd",
+    "previousExactCaseIdsRetained": true,
+    "previousMethodAndPlatformIdsRetained": true,
+    "browserEngineReview": null,
+    "newSharedMethods": 115,
+    "actualNew": [
+      {
+        "platform": "desktopTest",
+        "clazz": "SpaceInboxRepairPublicationPolicyTest",
+        "methods": [
+          "completedIdlePassCanReceiveFreshWorkWithoutReopeningTheOldPass",
+          "initialPublicationRetainsFreshDemandWithoutInventingAnActivePass",
+          "laterRequestPreservesCapturedPassAndCompletedDemand",
+          "malformedCoordinatesAndProgressAreRejected",
+          "noopOrReusedGenerationCannotArchiveWithoutFreshDemand",
+          "retiredOrActiveDemandCannotBeReusedForAnotherTerminalRecord"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationSpaceMessageStorageTest",
+        "methods": [
+          "accountCommandCapacityDoesNotRotateTheWake",
+          "activeReplayKeepsCiphertextStateAndAcknowledgedWakeUnchanged",
+          "anotherAccountCannotWriteOrReadAndReauthenticationRetainsOwnedFacts",
+          "cancellationAfterAtomicArchivalRetainsBothCommandProofAndDemand",
+          "changedOriginalCannotPublishFreshRepairProgress",
+          "ciphertextCannotBeTransplantedAcrossSpacesWithTheSameLogicalId",
+          "companyAndSpaceCommandsKeepIndependentOwnedNamespaces",
+          "competingRepositoryInstancesRetainOneOriginalAndWake",
+          "completedAndCancelledOriginalsRetainEncryptedRepairDemand",
+          "completedAndCancelledReplayNeverRecreatesPendingWork",
+          "exactArchiveReplayPreservesLaterAcknowledgedRepairCiphertext",
+          "exactObservationPublishesInsertionAndTerminalCancellation",
+          "failedAtomicArchiveLeavesTheOriginalAndRepairCheckpointUntouched",
+          "fullWakeCapacityCannotLeaveACommandWithoutRecoveryWork",
+          "lostArchiveResponseCanBeReadBackWithoutCreatingAnotherDemand",
+          "lostCommittedResponseKeepsExactIntentAndPendingWake",
+          "missingKeyIsNeverReplacedOverActiveOrArchivedCiphertext",
+          "missingRetainedRepairKeyCannotBeReplacedDuringArchival",
+          "newIntentCommitsEncryptedDataAndFreshWorkTogether",
+          "pendingIntentAndTerminalArchiveSurviveDatabaseReopen",
+          "precancelledInsertionCannotCreateDataOrWork",
+          "sameMillisecondMessagesKeepTheirFullTimestampOrderAcrossReopen",
+          "staleRepairProposalCannotArchiveAnUnchangedCommand",
+          "startedStateCannotBeCancelledResetOrRetargeted",
+          "terminalDemandPreservesAnExistingCapturedPassAndCompletedDemand",
+          "terminalProofBindsTheExactCiphertextNotJustDecodedContent"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationSpaceInboxRepairProgressStorageTest",
+        "methods": [
+          "aCapturedPassAndLaterDemandSurviveRestartWithoutMixingTheirPositions",
+          "aLostCommittedResponseRemainsReadableAndTheOldExpectedStateCannotReplayIt",
+          "aStaleWriterCannotOverwriteNewDemandOrReuseTheCurrentGeneration",
+          "absentAndInvalidReadsCreateNoKeysOrWork",
+          "absentMetadataObservationCreatesNoKeysAndRejectsAnInvalidOwner",
+          "acknowledgedIdleProgressAndExactReplayDoNotRewriteCiphertextOrScheduleWork",
+          "anotherRepositoryUpdatesTheLiveMetadataReaderAndRestartRetainsItsLatestRequest",
+          "cancellationBeforeTheRawCommitRetainsTheOriginalPass",
+          "concurrentCheckpointWritersPublishExactlyOneReplacement",
+          "corruptMetadataEmitsFailureAndLaterValidStorageRecoversTheSameSubscription",
+          "equalDemandIdsInDifferentGroupsRemainIndependentAndTheirCiphertextCannotBeMoved",
+          "renewalRetainsOwnedProgressWhileReplacementAccountsFenceReadsAndWrites",
+          "stoppingObservationReleasesTheRawReaderAndCannotReplaceAMissingRetainedKey"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "ObserveSpaceInboxRepairDemandTest",
+        "methods": [
+          "currentOwnershipOverridesAStaleMetadataSuccessAndDisposalJoinsTheReader",
+          "denialRemainsClosedThroughFailedAdmissionUntilAnAdmittedUpdate",
+          "invalidOwnerAndKnownDenialNeverSubscribeOrManufactureDemand",
+          "malformedProgressAndStorageFailureRemainDistinctFromNoRequest",
+          "oldCredentialsAndTheirRotationKeepTheSameLocalMetadataSubscription",
+          "startingAdvancingRestartingAndAcknowledgingOnePassDoNotEmitAnotherRequest"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationSpaceInboxRepairWorkerTest",
+        "methods": [
+          "aFailedPageDoesNotAdvanceOrRetryFromItsOwnStartupRequestNotification",
+          "aPendingOnlyStartupPassCompletesAndStaysIdleWithoutTimersOrDuplicateObservers",
+          "aRequestDuringTheCapturedPassIsProcessedOnceAfterThatPass",
+          "anExcessivePageSourceStopsAtTheTurnBudgetWithoutLosingItsSavedCursor",
+          "anUnobservedFastArchiveStillRepairsThroughItsDurableRequestWithAnEqualEmptyInventory",
+          "cancellationWaitsForAStoppedPageAndNeverSavesItsLateCompletion",
+          "observedTerminalAndRetirementUseExactLookupWithoutRepeatingTheFiniteScan",
+          "repeatedGenerationReplacementHasAFiniteRestartBudgetAndLeavesResumableProgress",
+          "restartingAnOwnerResumesTheSavedCursorBeforeProcessingItsLaterRequest",
+          "theTurnDeadlineCancelsStalledWorkWithoutInventingAnotherRequest"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "SpaceInboxRepairDemandPolicyTest",
+        "methods": [
+          "changedTerminalAndObservedRetirementUseExactOriginalCoordinates",
+          "equalRecordsInDifferentEnumerationOrderDoNotCreateWork",
+          "firstObservationRequestsOneFinitePassAndUnchangedEmptySnapshotsAreIdle",
+          "malformedOwnershipDuplicatesAndRewrittenImmutableIntentAreRejected",
+          "nonterminalProgressDoesNotReadOrScanTheInbox",
+          "originalRepairDoesNotTreatAnEditOperationAsANewOriginal",
+          "overflowKeepsBoundedTargetsAndCoalescesOneFinitePass",
+          "selectedCoordinatesDoNotAliasMutableSourceLists"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CancelSpaceTextTest",
+        "methods": [
+          "absentProgressCanBePublishedWithTheExactExistingOriginal",
+          "anUncertainCommittedResponseStopsThenConfirmsTheExactArchiveOnExplicitRetry",
+          "cancellationWaitsForLateIoThenStopsWithoutRetry",
+          "checkpointContentionRereadsAndPreservesTheLatestCapturedPass",
+          "denialOrAccountReplacementDuringEveryIoBoundaryCannotPublishSuccess",
+          "deniedOrReplacedAccountCannotCancelAnOwnedLocalOriginal",
+          "exactCancelledReplayDoesNotAcquireOrRewriteLaterProgress",
+          "expiredCredentialsAndAbsentCompanySelectionDoNotHideOwnedLocalCancellation",
+          "malformedInputAndRetainedFactsFailBeforePublication",
+          "missingOrChangedOriginalsAreConflictsWithoutCheckpointAcquisition",
+          "operationalFailureAtEachStorageBoundaryStopsWithoutAnotherAttempt",
+          "queuedOriginalAndFreshDemandShareThePublicationWhileTheCapturedPassSurvives",
+          "threeCompareAndSetConflictsPreserveOneDemandAndNeverRewriteProgressSeparately",
+          "workChangedDuringContentionIsNotCancelledOnAnotherAttempt"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "SpaceOriginalRetirementPolicyTest",
+        "methods": [
+          "aLaterAliasIsProvedByHistoryWithoutExtendingTheArchivedCompletion",
+          "accountGroupAndConversationCannotAdoptAnotherOriginalsEvidence",
+          "anotherSenderLogicalIdBodyOrContentHashCannotRetireTheCommand",
+          "everyOldAndNewAliasMustBePresentBeforeReceiptRemoval",
+          "exactSentJournalAndRetainedHistoryProduceAnImmutableCompletion",
+          "localHidingAndValidRedactionPreserveTheOriginalRetirementEvidence",
+          "returnedCompletionDoesNotRetainTheCallersMutableEventList",
+          "stagedOrQueuedRecordsAndContradictoryArchivesCannotBeRetired"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "RetireSpaceOriginalsTest",
+        "methods": [
+          "aNewAliasSurvivesStaleCleanupAndRequiresHistoryBeforeTheNextRetirement",
+          "archivedReplayCleansItsReceiptWithoutAcquiringOrRewritingProgress",
+          "cancellationWaitsForUncooperativeArchivalThenPreventsCleanupAndRetry",
+          "checkpointContentionPreservesTheLatestCapturedPassOnTheNextAttempt",
+          "cleanupFailureDoesNotRepeatArchivesOnALaterInvocation",
+          "concurrentCleanupIsConfirmedByOneBoundedLedgerRead",
+          "denialOrReplacementDuringEveryIoCannotPublishSuccessToTheOldOwner",
+          "deniedOrReplacedAccountCannotAcquireTheReceiptLedger",
+          "eachOperationalStorageFailureStopsAtItsBoundary",
+          "historyProvedOriginalArchivesWithDemandBeforeItsReceiptIsRemoved",
+          "lostArchiveResponseStopsAndExplicitRetryConfirmsItsImmutableProof",
+          "malformedOrOversizedLedgerStopsBeforeAnyOriginalAcquisition",
+          "malformedRetainedCommandArchiveHistoryOrProgressCannotAuthorizeCleanup",
+          "missingHistoryUnsettledCommandsAndEditsDoNotStarveLaterProvedOriginals",
+          "oldCredentialsAndNoSelectedCompanyStillPermitOwnedLocalRetirement",
+          "oneInvocationRetiresAtMostThirtyTwoProvedOriginals",
+          "partialArchivalPreservesEverySelectedReceiptUntilExplicitRecovery",
+          "threeArchiveConflictsStopWithoutCleaningOrMutatingProgressSeparately"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "SeedSpaceInboxOriginalTest",
+        "methods": [
+          "aChangedIndexIsRereadBeforePublishingTheOriginal",
+          "aLostCommittedResponseStopsAndNextInvocationConfirmsWithoutDemand",
+          "accountReplacementRejectsResultsAtEveryBoundary",
+          "anAbsentOriginalDoesNotCreateAnEntryOrReadMutableIndexState",
+          "anExactReplaySucceedsBeforeAnUnavailableProgressRead",
+          "anUnavailableCanonicalConversationDoesNotFabricateMetadata",
+          "changedIdentityAndMalformedCommandEvidenceStopBeforeMetadata",
+          "currentDenialIsCheckedAfterEveryStorageBoundary",
+          "disposalJoinsLateStorageAndCannotPublishAfterIt",
+          "exactOwnedOriginalPublishesIndexReferenceAndDemandWithoutSending",
+          "operationalFailuresNeverBecomeAutomaticRetryLoops",
+          "repeatedCommitContentionUsesOneDemandAndStopsAfterThreeAttempts",
+          "repeatedProbeContentionHasThreeAttemptsAndNoProgressRead",
+          "terminalEvidenceAndMalformedProgressRetainTheirSeparateMeaning"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationSpaceInboxSeedStorageTest",
+        "methods": [
+          "aConcurrentDemandWriteRollsBackTheWholeTwoPartitionSeed",
+          "aConcurrentIndexWriteCannotBeOverwrittenOrPublishThePreparedDemand",
+          "aLostCommittedResponseRemainsRecoverableWithoutAnotherMutation",
+          "anEmptyProbeCreatesNeitherKeyNorProjectionOrDemand",
+          "cancellationBeforeTheTransactionLeavesBothPartitionsUnchanged",
+          "exactAndCompletedReplaysNeverReadOrRewriteLaterRepairProgress",
+          "missingRetainedHistoryKeysCannotBeReplacedOverEitherPartition",
+          "ongoingIndexAndDemandObserversReceiveTheSameCommittedSeed",
+          "theOriginalReferenceAndFreshDemandCommitTogetherAndSurviveReopening"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "SpaceInboxSeedPolicyTest",
+        "methods": [
+          "aQueuedOriginalSeedsItsOwnTimeTextAndReferenceWithoutCreatingAnEditor",
+          "accountMismatchAndMalformedCommandsAreRejectedBeforePublication",
+          "anExistingEditedOrHiddenAnchorKeepsItsContentReceiptAndPosition",
+          "anOlderUnseenOriginalDoesNotInheritNewerRowRecency",
+          "disagreeingAnchorsOrConversationIdentityCannotOverwriteTheIndex",
+          "exhaustedInsertionOrderRejectsNewAnchorsButAllowsExactExistingOnes",
+          "independentDraftContentAndOrdinalRemainUnchanged",
+          "terminalOriginalsUseConfirmedOrHiddenPreviewsWithoutInferringFromAbsence"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationDeliveryTimingTest",
+        "methods": [
+          "advancingIntoRecoveryDoesNotClaimSuccessfulAdmission",
+          "failureKeepsOriginalValueAndOnlyClosedReason",
+          "overlappingAttemptsHaveIndependentStagesAndTraces",
+          "recordsExclusiveStageIntervalsAndFinalResult",
+          "repeatedMessageStagesRemainSeparateIntervals",
+          "retryWithoutFailureAndBlockedWorkAreNotReportedAsCompleted",
+          "suspendedThrownErrorsFinishRoomAndWorkerStagesWithoutLosingTheirOutcome",
+          "thrownFailureFinishesTimingWithoutExceptionPayload",
+          "timeoutAndNormalCancellationFinishTheInterruptedInterval",
+          "workerAndRoomCorrelateWithoutAddingNestedDurations"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SpaceInboxRepairPublicationPolicyTest",
+        "methods": [
+          "completedIdlePassCanReceiveFreshWorkWithoutReopeningTheOldPass",
+          "initialPublicationRetainsFreshDemandWithoutInventingAnActivePass",
+          "laterRequestPreservesCapturedPassAndCompletedDemand",
+          "malformedCoordinatesAndProgressAreRejected",
+          "noopOrReusedGenerationCannotArchiveWithoutFreshDemand",
+          "retiredOrActiveDemandCannotBeReusedForAnotherTerminalRecord"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserCollaborationSpaceMessageStorageTest",
+        "methods": [
+          "accountCommandCapacityDoesNotRotateTheWake",
+          "activeReplayKeepsCiphertextStateAndAcknowledgedWakeUnchanged",
+          "anotherAccountCannotWriteOrReadAndReauthenticationRetainsOwnedFacts",
+          "cancellationAfterAtomicArchivalRetainsBothCommandProofAndDemand",
+          "changedOriginalCannotPublishFreshRepairProgress",
+          "ciphertextCannotBeTransplantedAcrossSpacesWithTheSameLogicalId",
+          "companyAndSpaceCommandsKeepIndependentOwnedNamespaces",
+          "competingRepositoryInstancesRetainOneOriginalAndWake",
+          "completedAndCancelledOriginalsRetainEncryptedRepairDemand",
+          "completedAndCancelledReplayNeverRecreatesPendingWork",
+          "exactArchiveReplayPreservesLaterAcknowledgedRepairCiphertext",
+          "exactObservationPublishesInsertionAndTerminalCancellation",
+          "failedAtomicArchiveLeavesTheOriginalAndRepairCheckpointUntouched",
+          "fullWakeCapacityCannotLeaveACommandWithoutRecoveryWork",
+          "lostArchiveResponseCanBeReadBackWithoutCreatingAnotherDemand",
+          "lostCommittedResponseKeepsExactIntentAndPendingWake",
+          "missingKeyIsNeverReplacedOverActiveOrArchivedCiphertext",
+          "missingRetainedRepairKeyCannotBeReplacedDuringArchival",
+          "newIntentCommitsEncryptedDataAndFreshWorkTogether",
+          "pendingIntentAndTerminalArchiveSurviveDatabaseReopen",
+          "precancelledInsertionCannotCreateDataOrWork",
+          "sameMillisecondMessagesKeepTheirFullTimestampOrderAcrossReopen",
+          "staleRepairProposalCannotArchiveAnUnchangedCommand",
+          "startedStateCannotBeCancelledResetOrRetargeted",
+          "terminalDemandPreservesAnExistingCapturedPassAndCompletedDemand",
+          "terminalProofBindsTheExactCiphertextNotJustDecodedContent"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserCollaborationSpaceInboxRepairProgressStorageTest",
+        "methods": [
+          "aCapturedPassAndLaterDemandSurviveRestartWithoutMixingTheirPositions",
+          "aLostCommittedResponseRemainsReadableAndTheOldExpectedStateCannotReplayIt",
+          "aStaleWriterCannotOverwriteNewDemandOrReuseTheCurrentGeneration",
+          "absentAndInvalidReadsCreateNoKeysOrWork",
+          "absentMetadataObservationCreatesNoKeysAndRejectsAnInvalidOwner",
+          "acknowledgedIdleProgressAndExactReplayDoNotRewriteCiphertextOrScheduleWork",
+          "anotherRepositoryUpdatesTheLiveMetadataReaderAndRestartRetainsItsLatestRequest",
+          "cancellationBeforeTheRawCommitRetainsTheOriginalPass",
+          "concurrentCheckpointWritersPublishExactlyOneReplacement",
+          "corruptMetadataEmitsFailureAndLaterValidStorageRecoversTheSameSubscription",
+          "equalDemandIdsInDifferentGroupsRemainIndependentAndTheirCiphertextCannotBeMoved",
+          "renewalRetainsOwnedProgressWhileReplacementAccountsFenceReadsAndWrites",
+          "stoppingObservationReleasesTheRawReaderAndCannotReplaceAMissingRetainedKey"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "ObserveSpaceInboxRepairDemandTest",
+        "methods": [
+          "currentOwnershipOverridesAStaleMetadataSuccessAndDisposalJoinsTheReader",
+          "denialRemainsClosedThroughFailedAdmissionUntilAnAdmittedUpdate",
+          "invalidOwnerAndKnownDenialNeverSubscribeOrManufactureDemand",
+          "malformedProgressAndStorageFailureRemainDistinctFromNoRequest",
+          "oldCredentialsAndTheirRotationKeepTheSameLocalMetadataSubscription",
+          "startingAdvancingRestartingAndAcknowledgingOnePassDoNotEmitAnotherRequest"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "CollaborationSpaceInboxRepairWorkerTest",
+        "methods": [
+          "aFailedPageDoesNotAdvanceOrRetryFromItsOwnStartupRequestNotification",
+          "aPendingOnlyStartupPassCompletesAndStaysIdleWithoutTimersOrDuplicateObservers",
+          "aRequestDuringTheCapturedPassIsProcessedOnceAfterThatPass",
+          "anExcessivePageSourceStopsAtTheTurnBudgetWithoutLosingItsSavedCursor",
+          "anUnobservedFastArchiveStillRepairsThroughItsDurableRequestWithAnEqualEmptyInventory",
+          "cancellationWaitsForAStoppedPageAndNeverSavesItsLateCompletion",
+          "observedTerminalAndRetirementUseExactLookupWithoutRepeatingTheFiniteScan",
+          "repeatedGenerationReplacementHasAFiniteRestartBudgetAndLeavesResumableProgress",
+          "restartingAnOwnerResumesTheSavedCursorBeforeProcessingItsLaterRequest",
+          "theTurnDeadlineCancelsStalledWorkWithoutInventingAnotherRequest"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SpaceInboxRepairDemandPolicyTest",
+        "methods": [
+          "changedTerminalAndObservedRetirementUseExactOriginalCoordinates",
+          "equalRecordsInDifferentEnumerationOrderDoNotCreateWork",
+          "firstObservationRequestsOneFinitePassAndUnchangedEmptySnapshotsAreIdle",
+          "malformedOwnershipDuplicatesAndRewrittenImmutableIntentAreRejected",
+          "nonterminalProgressDoesNotReadOrScanTheInbox",
+          "originalRepairDoesNotTreatAnEditOperationAsANewOriginal",
+          "overflowKeepsBoundedTargetsAndCoalescesOneFinitePass",
+          "selectedCoordinatesDoNotAliasMutableSourceLists"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "CancelSpaceTextTest",
+        "methods": [
+          "absentProgressCanBePublishedWithTheExactExistingOriginal",
+          "anUncertainCommittedResponseStopsThenConfirmsTheExactArchiveOnExplicitRetry",
+          "cancellationWaitsForLateIoThenStopsWithoutRetry",
+          "checkpointContentionRereadsAndPreservesTheLatestCapturedPass",
+          "denialOrAccountReplacementDuringEveryIoBoundaryCannotPublishSuccess",
+          "deniedOrReplacedAccountCannotCancelAnOwnedLocalOriginal",
+          "exactCancelledReplayDoesNotAcquireOrRewriteLaterProgress",
+          "expiredCredentialsAndAbsentCompanySelectionDoNotHideOwnedLocalCancellation",
+          "malformedInputAndRetainedFactsFailBeforePublication",
+          "missingOrChangedOriginalsAreConflictsWithoutCheckpointAcquisition",
+          "operationalFailureAtEachStorageBoundaryStopsWithoutAnotherAttempt",
+          "queuedOriginalAndFreshDemandShareThePublicationWhileTheCapturedPassSurvives",
+          "threeCompareAndSetConflictsPreserveOneDemandAndNeverRewriteProgressSeparately",
+          "workChangedDuringContentionIsNotCancelledOnAnotherAttempt"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SpaceOriginalRetirementPolicyTest",
+        "methods": [
+          "aLaterAliasIsProvedByHistoryWithoutExtendingTheArchivedCompletion",
+          "accountGroupAndConversationCannotAdoptAnotherOriginalsEvidence",
+          "anotherSenderLogicalIdBodyOrContentHashCannotRetireTheCommand",
+          "everyOldAndNewAliasMustBePresentBeforeReceiptRemoval",
+          "exactSentJournalAndRetainedHistoryProduceAnImmutableCompletion",
+          "localHidingAndValidRedactionPreserveTheOriginalRetirementEvidence",
+          "returnedCompletionDoesNotRetainTheCallersMutableEventList",
+          "stagedOrQueuedRecordsAndContradictoryArchivesCannotBeRetired"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "RetireSpaceOriginalsTest",
+        "methods": [
+          "aNewAliasSurvivesStaleCleanupAndRequiresHistoryBeforeTheNextRetirement",
+          "archivedReplayCleansItsReceiptWithoutAcquiringOrRewritingProgress",
+          "cancellationWaitsForUncooperativeArchivalThenPreventsCleanupAndRetry",
+          "checkpointContentionPreservesTheLatestCapturedPassOnTheNextAttempt",
+          "cleanupFailureDoesNotRepeatArchivesOnALaterInvocation",
+          "concurrentCleanupIsConfirmedByOneBoundedLedgerRead",
+          "denialOrReplacementDuringEveryIoCannotPublishSuccessToTheOldOwner",
+          "deniedOrReplacedAccountCannotAcquireTheReceiptLedger",
+          "eachOperationalStorageFailureStopsAtItsBoundary",
+          "historyProvedOriginalArchivesWithDemandBeforeItsReceiptIsRemoved",
+          "lostArchiveResponseStopsAndExplicitRetryConfirmsItsImmutableProof",
+          "malformedOrOversizedLedgerStopsBeforeAnyOriginalAcquisition",
+          "malformedRetainedCommandArchiveHistoryOrProgressCannotAuthorizeCleanup",
+          "missingHistoryUnsettledCommandsAndEditsDoNotStarveLaterProvedOriginals",
+          "oldCredentialsAndNoSelectedCompanyStillPermitOwnedLocalRetirement",
+          "oneInvocationRetiresAtMostThirtyTwoProvedOriginals",
+          "partialArchivalPreservesEverySelectedReceiptUntilExplicitRecovery",
+          "threeArchiveConflictsStopWithoutCleaningOrMutatingProgressSeparately"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SeedSpaceInboxOriginalTest",
+        "methods": [
+          "aChangedIndexIsRereadBeforePublishingTheOriginal",
+          "aLostCommittedResponseStopsAndNextInvocationConfirmsWithoutDemand",
+          "accountReplacementRejectsResultsAtEveryBoundary",
+          "anAbsentOriginalDoesNotCreateAnEntryOrReadMutableIndexState",
+          "anExactReplaySucceedsBeforeAnUnavailableProgressRead",
+          "anUnavailableCanonicalConversationDoesNotFabricateMetadata",
+          "changedIdentityAndMalformedCommandEvidenceStopBeforeMetadata",
+          "currentDenialIsCheckedAfterEveryStorageBoundary",
+          "disposalJoinsLateStorageAndCannotPublishAfterIt",
+          "exactOwnedOriginalPublishesIndexReferenceAndDemandWithoutSending",
+          "operationalFailuresNeverBecomeAutomaticRetryLoops",
+          "repeatedCommitContentionUsesOneDemandAndStopsAfterThreeAttempts",
+          "repeatedProbeContentionHasThreeAttemptsAndNoProgressRead",
+          "terminalEvidenceAndMalformedProgressRetainTheirSeparateMeaning"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserCollaborationSpaceInboxSeedStorageTest",
+        "methods": [
+          "aConcurrentDemandWriteRollsBackTheWholeTwoPartitionSeed",
+          "aConcurrentIndexWriteCannotBeOverwrittenOrPublishThePreparedDemand",
+          "aLostCommittedResponseRemainsRecoverableWithoutAnotherMutation",
+          "anEmptyProbeCreatesNeitherKeyNorProjectionOrDemand",
+          "cancellationBeforeTheTransactionLeavesBothPartitionsUnchanged",
+          "exactAndCompletedReplaysNeverReadOrRewriteLaterRepairProgress",
+          "missingRetainedHistoryKeysCannotBeReplacedOverEitherPartition",
+          "ongoingIndexAndDemandObserversReceiveTheSameCommittedSeed",
+          "theOriginalReferenceAndFreshDemandCommitTogetherAndSurviveReopening"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SpaceInboxSeedPolicyTest",
+        "methods": [
+          "aQueuedOriginalSeedsItsOwnTimeTextAndReferenceWithoutCreatingAnEditor",
+          "accountMismatchAndMalformedCommandsAreRejectedBeforePublication",
+          "anExistingEditedOrHiddenAnchorKeepsItsContentReceiptAndPosition",
+          "anOlderUnseenOriginalDoesNotInheritNewerRowRecency",
+          "disagreeingAnchorsOrConversationIdentityCannotOverwriteTheIndex",
+          "exhaustedInsertionOrderRejectsNewAnchorsButAllowsExactExistingOnes",
+          "independentDraftContentAndOrdinalRemainUnchanged",
+          "terminalOriginalsUseConfirmedOrHiddenPreviewsWithoutInferringFromAbsence"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "CollaborationDeliveryTimingTest",
+        "methods": [
+          "advancingIntoRecoveryDoesNotClaimSuccessfulAdmission",
+          "failureKeepsOriginalValueAndOnlyClosedReason",
+          "overlappingAttemptsHaveIndependentStagesAndTraces",
+          "recordsExclusiveStageIntervalsAndFinalResult",
+          "repeatedMessageStagesRemainSeparateIntervals",
+          "retryWithoutFailureAndBlockedWorkAreNotReportedAsCompleted",
+          "suspendedThrownErrorsFinishRoomAndWorkerStagesWithoutLosingTheirOutcome",
+          "thrownFailureFinishesTimingWithoutExceptionPayload",
+          "timeoutAndNormalCancellationFinishTheInterruptedInterval",
+          "workerAndRoomCorrelateWithoutAddingNestedDurations"
+        ]
+      }
+    ],
+    "reportManifestSha256": "61c6ae7afcb046356ad9af604d4d7af76e4a154c5c209999d413680678b6826c"
+  },
+  "apple": {
+    "accepted": true,
+    "sourceCommit": "fe2e1cbb742dfde262182863d11b6604fe3a9c32",
+    "runId": 43455295124,
+    "jobId": 131987711422,
+    "counts": {
+      "iosSimulatorArm64Test": 5950
+    },
+    "previousFailedRunCaseIdsRetained": true,
+    "previousFailedRunId": 43443248470,
+    "previousFailedRunCases": 5892,
+    "fixedTimingMethods": [
+      "thrownFailureFinishesTimingWithoutExceptionPayload",
+      "suspendedThrownErrorsFinishRoomAndWorkerStagesWithoutLosingTheirOutcome"
+    ],
+    "artifactId": 14058729277,
+    "artifactBytes": 961043,
+    "artifactSha256": "7dfe29936c1d75dc942354585ec24944d66afb86f4c6a1fb047713af35f38224",
+    "jobLogSha256": "93b564953e8221ec33a72878dc53e410bd47f81a5da175e53d4ea1a27a5cbdf1",
+    "previousExactCaseIdsRetained": true,
+    "previousMethodAndPlatformIdsRetained": true,
+    "browserEngineReview": null,
+    "newSharedMethods": 115,
+    "actualNew": [
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SpaceInboxRepairPublicationPolicyTest",
+        "methods": [
+          "completedIdlePassCanReceiveFreshWorkWithoutReopeningTheOldPass",
+          "initialPublicationRetainsFreshDemandWithoutInventingAnActivePass",
+          "laterRequestPreservesCapturedPassAndCompletedDemand",
+          "malformedCoordinatesAndProgressAreRejected",
+          "noopOrReusedGenerationCannotArchiveWithoutFreshDemand",
+          "retiredOrActiveDemandCannotBeReusedForAnotherTerminalRecord"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleCollaborationSpaceMessageStorageTest",
+        "methods": [
+          "accountCommandCapacityDoesNotRotateTheWake",
+          "activeReplayKeepsCiphertextStateAndAcknowledgedWakeUnchanged",
+          "anotherAccountCannotWriteOrReadAndReauthenticationRetainsOwnedFacts",
+          "cancellationAfterAtomicArchivalRetainsBothCommandProofAndDemand",
+          "changedOriginalCannotPublishFreshRepairProgress",
+          "ciphertextCannotBeTransplantedAcrossSpacesWithTheSameLogicalId",
+          "companyAndSpaceCommandsKeepIndependentOwnedNamespaces",
+          "competingRepositoryInstancesRetainOneOriginalAndWake",
+          "completedAndCancelledOriginalsRetainEncryptedRepairDemand",
+          "completedAndCancelledReplayNeverRecreatesPendingWork",
+          "exactArchiveReplayPreservesLaterAcknowledgedRepairCiphertext",
+          "exactObservationPublishesInsertionAndTerminalCancellation",
+          "failedAtomicArchiveLeavesTheOriginalAndRepairCheckpointUntouched",
+          "fullWakeCapacityCannotLeaveACommandWithoutRecoveryWork",
+          "lostArchiveResponseCanBeReadBackWithoutCreatingAnotherDemand",
+          "lostCommittedResponseKeepsExactIntentAndPendingWake",
+          "missingKeyIsNeverReplacedOverActiveOrArchivedCiphertext",
+          "missingRetainedRepairKeyCannotBeReplacedDuringArchival",
+          "newIntentCommitsEncryptedDataAndFreshWorkTogether",
+          "pendingIntentAndTerminalArchiveSurviveDatabaseReopen",
+          "precancelledInsertionCannotCreateDataOrWork",
+          "sameMillisecondMessagesKeepTheirFullTimestampOrderAcrossReopen",
+          "staleRepairProposalCannotArchiveAnUnchangedCommand",
+          "startedStateCannotBeCancelledResetOrRetargeted",
+          "terminalDemandPreservesAnExistingCapturedPassAndCompletedDemand",
+          "terminalProofBindsTheExactCiphertextNotJustDecodedContent"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleCollaborationSpaceInboxRepairProgressStorageTest",
+        "methods": [
+          "aCapturedPassAndLaterDemandSurviveRestartWithoutMixingTheirPositions",
+          "aLostCommittedResponseRemainsReadableAndTheOldExpectedStateCannotReplayIt",
+          "aStaleWriterCannotOverwriteNewDemandOrReuseTheCurrentGeneration",
+          "absentAndInvalidReadsCreateNoKeysOrWork",
+          "absentMetadataObservationCreatesNoKeysAndRejectsAnInvalidOwner",
+          "acknowledgedIdleProgressAndExactReplayDoNotRewriteCiphertextOrScheduleWork",
+          "anotherRepositoryUpdatesTheLiveMetadataReaderAndRestartRetainsItsLatestRequest",
+          "cancellationBeforeTheRawCommitRetainsTheOriginalPass",
+          "concurrentCheckpointWritersPublishExactlyOneReplacement",
+          "corruptMetadataEmitsFailureAndLaterValidStorageRecoversTheSameSubscription",
+          "equalDemandIdsInDifferentGroupsRemainIndependentAndTheirCiphertextCannotBeMoved",
+          "renewalRetainsOwnedProgressWhileReplacementAccountsFenceReadsAndWrites",
+          "stoppingObservationReleasesTheRawReaderAndCannotReplaceAMissingRetainedKey"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "ObserveSpaceInboxRepairDemandTest",
+        "methods": [
+          "currentOwnershipOverridesAStaleMetadataSuccessAndDisposalJoinsTheReader",
+          "denialRemainsClosedThroughFailedAdmissionUntilAnAdmittedUpdate",
+          "invalidOwnerAndKnownDenialNeverSubscribeOrManufactureDemand",
+          "malformedProgressAndStorageFailureRemainDistinctFromNoRequest",
+          "oldCredentialsAndTheirRotationKeepTheSameLocalMetadataSubscription",
+          "startingAdvancingRestartingAndAcknowledgingOnePassDoNotEmitAnotherRequest"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "CollaborationSpaceInboxRepairWorkerTest",
+        "methods": [
+          "aFailedPageDoesNotAdvanceOrRetryFromItsOwnStartupRequestNotification",
+          "aPendingOnlyStartupPassCompletesAndStaysIdleWithoutTimersOrDuplicateObservers",
+          "aRequestDuringTheCapturedPassIsProcessedOnceAfterThatPass",
+          "anExcessivePageSourceStopsAtTheTurnBudgetWithoutLosingItsSavedCursor",
+          "anUnobservedFastArchiveStillRepairsThroughItsDurableRequestWithAnEqualEmptyInventory",
+          "cancellationWaitsForAStoppedPageAndNeverSavesItsLateCompletion",
+          "observedTerminalAndRetirementUseExactLookupWithoutRepeatingTheFiniteScan",
+          "repeatedGenerationReplacementHasAFiniteRestartBudgetAndLeavesResumableProgress",
+          "restartingAnOwnerResumesTheSavedCursorBeforeProcessingItsLaterRequest",
+          "theTurnDeadlineCancelsStalledWorkWithoutInventingAnotherRequest"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SpaceInboxRepairDemandPolicyTest",
+        "methods": [
+          "changedTerminalAndObservedRetirementUseExactOriginalCoordinates",
+          "equalRecordsInDifferentEnumerationOrderDoNotCreateWork",
+          "firstObservationRequestsOneFinitePassAndUnchangedEmptySnapshotsAreIdle",
+          "malformedOwnershipDuplicatesAndRewrittenImmutableIntentAreRejected",
+          "nonterminalProgressDoesNotReadOrScanTheInbox",
+          "originalRepairDoesNotTreatAnEditOperationAsANewOriginal",
+          "overflowKeepsBoundedTargetsAndCoalescesOneFinitePass",
+          "selectedCoordinatesDoNotAliasMutableSourceLists"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "CancelSpaceTextTest",
+        "methods": [
+          "absentProgressCanBePublishedWithTheExactExistingOriginal",
+          "anUncertainCommittedResponseStopsThenConfirmsTheExactArchiveOnExplicitRetry",
+          "cancellationWaitsForLateIoThenStopsWithoutRetry",
+          "checkpointContentionRereadsAndPreservesTheLatestCapturedPass",
+          "denialOrAccountReplacementDuringEveryIoBoundaryCannotPublishSuccess",
+          "deniedOrReplacedAccountCannotCancelAnOwnedLocalOriginal",
+          "exactCancelledReplayDoesNotAcquireOrRewriteLaterProgress",
+          "expiredCredentialsAndAbsentCompanySelectionDoNotHideOwnedLocalCancellation",
+          "malformedInputAndRetainedFactsFailBeforePublication",
+          "missingOrChangedOriginalsAreConflictsWithoutCheckpointAcquisition",
+          "operationalFailureAtEachStorageBoundaryStopsWithoutAnotherAttempt",
+          "queuedOriginalAndFreshDemandShareThePublicationWhileTheCapturedPassSurvives",
+          "threeCompareAndSetConflictsPreserveOneDemandAndNeverRewriteProgressSeparately",
+          "workChangedDuringContentionIsNotCancelledOnAnotherAttempt"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SpaceOriginalRetirementPolicyTest",
+        "methods": [
+          "aLaterAliasIsProvedByHistoryWithoutExtendingTheArchivedCompletion",
+          "accountGroupAndConversationCannotAdoptAnotherOriginalsEvidence",
+          "anotherSenderLogicalIdBodyOrContentHashCannotRetireTheCommand",
+          "everyOldAndNewAliasMustBePresentBeforeReceiptRemoval",
+          "exactSentJournalAndRetainedHistoryProduceAnImmutableCompletion",
+          "localHidingAndValidRedactionPreserveTheOriginalRetirementEvidence",
+          "returnedCompletionDoesNotRetainTheCallersMutableEventList",
+          "stagedOrQueuedRecordsAndContradictoryArchivesCannotBeRetired"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "RetireSpaceOriginalsTest",
+        "methods": [
+          "aNewAliasSurvivesStaleCleanupAndRequiresHistoryBeforeTheNextRetirement",
+          "archivedReplayCleansItsReceiptWithoutAcquiringOrRewritingProgress",
+          "cancellationWaitsForUncooperativeArchivalThenPreventsCleanupAndRetry",
+          "checkpointContentionPreservesTheLatestCapturedPassOnTheNextAttempt",
+          "cleanupFailureDoesNotRepeatArchivesOnALaterInvocation",
+          "concurrentCleanupIsConfirmedByOneBoundedLedgerRead",
+          "denialOrReplacementDuringEveryIoCannotPublishSuccessToTheOldOwner",
+          "deniedOrReplacedAccountCannotAcquireTheReceiptLedger",
+          "eachOperationalStorageFailureStopsAtItsBoundary",
+          "historyProvedOriginalArchivesWithDemandBeforeItsReceiptIsRemoved",
+          "lostArchiveResponseStopsAndExplicitRetryConfirmsItsImmutableProof",
+          "malformedOrOversizedLedgerStopsBeforeAnyOriginalAcquisition",
+          "malformedRetainedCommandArchiveHistoryOrProgressCannotAuthorizeCleanup",
+          "missingHistoryUnsettledCommandsAndEditsDoNotStarveLaterProvedOriginals",
+          "oldCredentialsAndNoSelectedCompanyStillPermitOwnedLocalRetirement",
+          "oneInvocationRetiresAtMostThirtyTwoProvedOriginals",
+          "partialArchivalPreservesEverySelectedReceiptUntilExplicitRecovery",
+          "threeArchiveConflictsStopWithoutCleaningOrMutatingProgressSeparately"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SeedSpaceInboxOriginalTest",
+        "methods": [
+          "aChangedIndexIsRereadBeforePublishingTheOriginal",
+          "aLostCommittedResponseStopsAndNextInvocationConfirmsWithoutDemand",
+          "accountReplacementRejectsResultsAtEveryBoundary",
+          "anAbsentOriginalDoesNotCreateAnEntryOrReadMutableIndexState",
+          "anExactReplaySucceedsBeforeAnUnavailableProgressRead",
+          "anUnavailableCanonicalConversationDoesNotFabricateMetadata",
+          "changedIdentityAndMalformedCommandEvidenceStopBeforeMetadata",
+          "currentDenialIsCheckedAfterEveryStorageBoundary",
+          "disposalJoinsLateStorageAndCannotPublishAfterIt",
+          "exactOwnedOriginalPublishesIndexReferenceAndDemandWithoutSending",
+          "operationalFailuresNeverBecomeAutomaticRetryLoops",
+          "repeatedCommitContentionUsesOneDemandAndStopsAfterThreeAttempts",
+          "repeatedProbeContentionHasThreeAttemptsAndNoProgressRead",
+          "terminalEvidenceAndMalformedProgressRetainTheirSeparateMeaning"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleCollaborationSpaceInboxSeedStorageTest",
+        "methods": [
+          "aConcurrentDemandWriteRollsBackTheWholeTwoPartitionSeed",
+          "aConcurrentIndexWriteCannotBeOverwrittenOrPublishThePreparedDemand",
+          "aLostCommittedResponseRemainsRecoverableWithoutAnotherMutation",
+          "anEmptyProbeCreatesNeitherKeyNorProjectionOrDemand",
+          "cancellationBeforeTheTransactionLeavesBothPartitionsUnchanged",
+          "exactAndCompletedReplaysNeverReadOrRewriteLaterRepairProgress",
+          "missingRetainedHistoryKeysCannotBeReplacedOverEitherPartition",
+          "ongoingIndexAndDemandObserversReceiveTheSameCommittedSeed",
+          "theOriginalReferenceAndFreshDemandCommitTogetherAndSurviveReopening"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SpaceInboxSeedPolicyTest",
+        "methods": [
+          "aQueuedOriginalSeedsItsOwnTimeTextAndReferenceWithoutCreatingAnEditor",
+          "accountMismatchAndMalformedCommandsAreRejectedBeforePublication",
+          "anExistingEditedOrHiddenAnchorKeepsItsContentReceiptAndPosition",
+          "anOlderUnseenOriginalDoesNotInheritNewerRowRecency",
+          "disagreeingAnchorsOrConversationIdentityCannotOverwriteTheIndex",
+          "exhaustedInsertionOrderRejectsNewAnchorsButAllowsExactExistingOnes",
+          "independentDraftContentAndOrdinalRemainUnchanged",
+          "terminalOriginalsUseConfirmedOrHiddenPreviewsWithoutInferringFromAbsence"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "CollaborationDeliveryTimingTest",
+        "methods": [
+          "advancingIntoRecoveryDoesNotClaimSuccessfulAdmission",
+          "failureKeepsOriginalValueAndOnlyClosedReason",
+          "overlappingAttemptsHaveIndependentStagesAndTraces",
+          "recordsExclusiveStageIntervalsAndFinalResult",
+          "repeatedMessageStagesRemainSeparateIntervals",
+          "retryWithoutFailureAndBlockedWorkAreNotReportedAsCompleted",
+          "suspendedThrownErrorsFinishRoomAndWorkerStagesWithoutLosingTheirOutcome",
+          "thrownFailureFinishesTimingWithoutExceptionPayload",
+          "timeoutAndNormalCancellationFinishTheInterruptedInterval",
+          "workerAndRoomCorrelateWithoutAddingNestedDurations"
+        ]
+      }
+    ],
+    "reportManifestSha256": "281288bb2c58c0c6682346a6cd79cac3905bcc68df87e8b30657e1bce661c1da"
+  },
+  "accepted": true,
+  "runId": 43455295124,
+  "sourceCommit": "fe2e1cbb742dfde262182863d11b6604fe3a9c32",
+  "totalCases": 20006,
+  "newActualAppleMethods": 115,
+  "existingApplicationAppleMethodsFirstExecuted": 143,
+  "oldFailedRunPreserved": true,
+  "actualAppleFixVerified": true,
+  "ownerSeedingIncluded": false,
+  "sourceGuardsIncluded": false,
+  "productGraphActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false
+}

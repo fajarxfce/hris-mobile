@@ -71,7 +71,7 @@
   "newSharedMethods": 1,
   "retainedTimingMethods": 9,
   "existingSharedPatternCommit": "c50a8983",
-  "actualAppleFixVerified": false,
+  "actualAppleFixVerified": true,
   "expectedHostedTotal": 20006,
   "expectedHostedPortable": {
     "desktopTest": 6696,
@@ -82,5 +82,7 @@
   "productGraphActivated": false,
   "phoneInstalled": false,
   "installedPhoneBuild": 92,
-  "liveChanged": false
+  "liveChanged": false,
+  "acceptedHostedRun": 43455295124,
+  "hostedEvidence": "docs/measurements/collaboration-delivery-failure-hosted-2026-11-13.json"
 }

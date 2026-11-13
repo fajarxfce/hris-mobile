@@ -27,3 +27,5 @@ There is no transport, native send, Group activation or phone change. Shared mea
 already contains this handling in Starter, so no additional foundation port is required.
 
 Evidence: `docs/measurements/collaboration-delivery-failure-outcome-2026-11-13.json`.
+
+Actual Apple correction accepted in control 43455295124: 5,950 Apple cases and 20,006 combined, exact previous identities retained, original failing and new regression passed, iOS host and 16 push fields passed. Evidence: `docs/measurements/collaboration-delivery-failure-hosted-2026-11-13.json`. Later owner/guard/snapshot source remains separate.

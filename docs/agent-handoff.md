@@ -1,10 +1,34 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 16:52 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 17:03 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Corrected delivery diagnostics accepted on Apple and portable targets
+
+Control 43455295124 at exact fe2e1cbb742dfde262182863d11b6604fe3a9c32 passes 20,006 cases:
+14,056 portable (6,696 desktop / 960 Android host / 6,400 browser) and 5,950 actual Apple.
+Every previous accepted identity and every case from failed control 43443248470 remains.
+The original thrown-failure timing case and new suspended room/worker regression pass on JVM,
+browser and Apple. iOS application host and all 16 push-envelope fields pass. Artifact hashes,
+complete logs and XML identities were audited. The failed old source remains preserved.
+Apple report manifest: 281288bb2c58c0c6682346a6cd79cac3905bcc68df87e8b30657e1bce661c1da.
+
+This control includes 115 newly executed shared Apple methods and 143 existing app methods
+first selected on Apple. It excludes the subsequent 17 owner-seeding and 13 source-guard methods.
+Control 43467846733 at 951c308dce2dd350a901c67cf449d6913b97cacf was safely queued
+behind this completed run without cancellation (expected 20,097). Audit it without redispatching.
+Continue .work/space-history-snapshot-2026-11-13: eleven applied source/test files, 17 new shared
+methods; focused 60 / full 16,411 expected. Initial focused run stopped on two test-fixture
+tombstones with invalid tags; those fixtures are corrected and production source is unchanged. Existing edit-evidence
+mapping is shared by both readers and the application binds one history instance. Complete
+conditional publication, incoming producers and original provenance before Group product activation.
+.work/space-history-inbox-publication-2026-11-13 has six unapplied source/test drafts and 12 new
+storage methods for the next joint source-check/inbox-write gate; review them after snapshots pass.
+Starter 595d025 is already accepted/pushed (990). Keep release 92 until a meaningful validated
+visible update; no phone or live change here. Push every commit and continue the long run.
 
 ## Generic source guards accepted in Mobile and Starter
 
