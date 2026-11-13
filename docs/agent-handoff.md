@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 00:35 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 00:36 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -168,26 +168,38 @@ three Android-host common protocol executions: exact35 new =16 JVM +16 browser +
 Audit-count-review-1 preserves the initial auditor and result hash; production and test
 assertions were unchanged. The final auditor requires those exact Android methods as well.
 
-ACTIVE: Mobile.work/space-composer-domain-2026-11-12, eight applied source paths.
-EditCollaborationSpaceDraft accepts a complete captured editor revision, time and content.
-SubmitCollaborationSpaceComposer accepts the immutable send gesture. Both own local Group
-admission and session checks around suspended I/O; no selected Company, clock, native SDK or
-network dependency. Exact retained facts resolve replay and uncertain responses. A bounded
-OS scheduling hint follows the atomic send handoff and cannot undo committed input.
+ACCEPTED: Mobile.work/space-composer-domain-2026-11-12, eight source paths.
+EditCollaborationSpaceDraft takes a complete immutable local edit; SubmitCollaborationSpaceComposer
+takes the original send gesture. Current Group/session admission surrounds suspended I/O.
+Exact retained facts resolve interrupted replies, preserving newer input and original time.
+No selected Company, clock, SDK or network dependency. DI owns construction; no usecase-to-usecase.
 
-Format1/5493 REAPED PASS36.438s; focused1/32763 ACTIVE, expected72 cases. Frozen5191 inputs/
-f7820ddd43ecd3f3d3281c179d1a77b4f996a63f9c6e63cb95c4c6f09995140d.
-Full expected14,911 = all14,863 prior IDs plus48 new JVM/browser executions. The24 new
-shared Apple methods still require hosted execution. No domain/full/native/UI acceptance yet.
-Keep sources frozen until the active compiler is reaped; one compiler OR emulator.
+Format1/5493 REAPED PASS36.438s; focused1/32763 REAPED PASS72/375.993s.
+Full1/85431 REAPED PASS813.861s; strict audits pass. Full14,911 =
+12873 fresh +2038 exact unchanged cases, all14,863 prior IDs
+retained with48 new JVM/browser executions. Frozen5191/f7820ddd43ecd3f3d3281c179d1a77b4f996a63f9c6e63cb95c4c6f09995140d;
+report3bc6455c4dfa96efe9cb2d756899bebd8f6c9b8ceb45bfd5143443d23d0dd98a; immutable proof152468626B/c33c83b7d347f30fc8bf7d4b1b01cead31784ed7cd2728a9deb88f635251891d.
+The24 shared Apple methods still need actual hosted execution. No new native, phone, live
+Group or measured UI claim. Commit/push before applying the next recovery increment.
 
-Continue bounded outbox recovery before canonical Group UI activation. Existing
-ChatComposerEditingSession already owns the serial UI-write actor, captures sends before I/O,
-and keeps subsequent typing independent. Reuse that explicit route owner with typed Group
-access; no fake Company access or ViewModel business-retry helpers. Group local materialization
-must precede native adoption/sync so missing keys or network cannot gate local persistence.
-Phone release92 remains uninstalled: bounded connections80184/36823 REAPED timeout,
-latest00:11UTC13Nov. User phone remains install-only, no UI interaction or reset.
+NEXT: Mobile.work/space-composer-recovery-2026-11-13 is DRAFT ONLY.
+Four cursor source drafts reuse the existing encrypted repository and preserve Company frames.
+Eight shared storage methods and two independent protocol methods are drafted, plus a finite
+RecoverCollaborationSpaceComposer, its fixture and22 domain methods. A shared bounded-page
+policy draft serves recovery and planned wake completion. None is applied/compiled. Finish
+reviewing those tests, platform storage wrappers, application DI and worker integration.
+The local pass must precede native-parent/device/adoption/sync. Advance the cursor before
+each original, materialize at most eight, and retire only exact valid command evidence.
+FinishCollaborationSpaceRecovery must include bounded pending outbox facts before completing
+the wake. Review the no-original-device acknowledgement path; do not discharge remaining
+outbox work or add an HTTP/polling loop. Reuse the existing serial route-owned composer actor.
+
+One next hosted-control preparation is ready in the accepted domain workspace, but not run
+or dispatched. It requires prior contact Apple acceptance, current clean pushed sources and
+no active control. Expected12,889 portable +5,314 Apple =18,203; exact prior IDs preserved.
+Keep native SDK candidate43327713661 separate; no SDK/app Apple runtime acceptance implied.
+Phone release92 remains uninstalled, latest bounded ADB11655 timeout00:21UTC13Nov;
+WireGuard last handshake12Nov10:32:22UTC. Phone remains install-only with prior announcement.
 All54 acceptance groups remain OPEN; continue beyond this checkpoint.
 
 Hosted follow-up43312753298 on exact1f47eeddb833054ae2b3d52c20439e6d11518a02:

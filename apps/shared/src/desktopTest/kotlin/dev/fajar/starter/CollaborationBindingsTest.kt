@@ -429,6 +429,8 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceIdentityCommand>())
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceConversationCommands>())
                 assertNotNull(container.koin.get<QueueCollaborationSpaceText>())
+                assertNotNull(container.koin.get<EditCollaborationSpaceDraft>())
+                assertNotNull(container.koin.get<SubmitCollaborationSpaceComposer>())
                 assertSame<Any>(
                     container.koin.get<CollaborationDraftRepository>(),
                     container.koin.get<CollaborationSpaceDraftRepository>(),

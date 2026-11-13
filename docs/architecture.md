@@ -1,5 +1,7 @@
 # Architecture
 
+[Organization composer actions](collaboration-space-composer-actions.md) coordinate current local admission and exact immutable editing/submission without a selected HR company or native runtime.
+
 [Organization composer storage](collaboration-space-composer-storage.md) shares encrypted draft/outbox I/O with explicit Group ownership and an atomic recovery wake.
 
 [Immutable organization submissions](collaboration-space-immutable-submission.md) retain caller-captured ID, content and time across local queue delays and retries.

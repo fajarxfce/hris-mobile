@@ -1,0 +1,70 @@
+{
+  "date": "2026-11-13",
+  "scope": "Admitted local organization editor and immutable composer submission",
+  "baseCommit": "483b9689db690e934964441232c421bc71386542",
+  "sourceFiles": 5191,
+  "sourceManifestSha256": "f7820ddd43ecd3f3d3281c179d1a77b4f996a63f9c6e63cb95c4c6f09995140d",
+  "changedSources": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "9da89cc4012dd7a48963d8460490ca904ac37c2329d90497919f77484f415ee3",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "f28245f17021a5f197a316756badada2ac6cdba74b1dce0a189b5199ce2c3d16",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceComposerPolicy.kt": "ff8d76ca5f9dda73442793615c3e603d4eaa6248782cc66248f2f77b8b7c4fb9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/EditCollaborationSpaceDraft.kt": "a97830b85ab18921873e0db76491e6347efbc030bc6e73d4656b2aa91ff135aa",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/SubmitCollaborationSpaceComposer.kt": "1ae970670ae523ce22028c08487326473902288b7640f6ed2da92e1af5ce1b69",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/EditCollaborationSpaceDraftTest.kt": "4e66e857f7e97e394fc2758897075ff4ee9668e25821df2e123c39daee049736",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceComposerUseCaseFixture.kt": "39d4dbc0f80848f8c43a29426443216051fb142f0381a1a4193de01599a7fbce",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SubmitCollaborationSpaceComposerTest.kt": "52cf4ba586a11438ca0772d3924434a3c047f43f57b7951ef26ad09c36ebab06"
+  },
+  "focused": {
+    "accepted": true,
+    "tests": 72,
+    "elapsedSeconds": 375.993,
+    "sourceFiles": 5191,
+    "sourceManifestSha256": "f7820ddd43ecd3f3d3281c179d1a77b4f996a63f9c6e63cb95c4c6f09995140d",
+    "resultSha256": "3895cdc734fd75af86b05e1a1b656db278a0c2bb3b90f3660b8becb55f503a93",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceComposerStorageTest": 13,
+      "QueueCollaborationSpaceTextTest": 15,
+      "QueueSpaceImmutableTextTest": 6,
+      "SubmitCollaborationComposerTest": 12,
+      "SubmitCollaborationSpaceComposerTest": 14,
+      "EditCollaborationSpaceDraftTest": 10
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T00:22:36.106518+00:00",
+    "elapsedSeconds": 813.861,
+    "sourceFiles": 5191,
+    "freshCounts": {
+      "tests": 12873,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152468626,
+      "sha256": "c33c83b7d347f30fc8bf7d4b1b01cead31784ed7cd2728a9deb88f635251891d"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 14911,
+    "newCases": 48,
+    "freshTests": 12873,
+    "reusedUnaffectedTests": 2038,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 111,
+    "excludedHistoricalCases": 657,
+    "sourceManifestSha256": "f7820ddd43ecd3f3d3281c179d1a77b4f996a63f9c6e63cb95c4c6f09995140d",
+    "reportManifestSha256": "3bc6455c4dfa96efe9cb2d756899bebd8f6c9b8ceb45bfd5143443d23d0dd98a",
+    "nativeClaim": "No native SDK/proof source change or product activation in this domain increment. Linux executes no Apple cases; 24 new shared methods require hosted native execution."
+  },
+  "fullAuditSha256": "c38884306d78785ca882562fc2f4e53d0b82e90d38f2b812e5edd5daa8de7da2",
+  "newAppleMethodsToExecute": 24,
+  "appleCasesExecutedLocally": 0,
+  "currentNativeScenariosExecuted": 0,
+  "phoneInstalledForThisIncrement": false,
+  "groupLiveDeployment": false,
+  "preservedFailures": [],
+  "remaining": "Bounded local outbox materialization, durable cursor fairness, wake completion that includes pending submissions, then canonical thread/list UI and measured first-frame behavior."
+}
