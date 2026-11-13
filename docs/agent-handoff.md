@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 20:17 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 20:30 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -33,9 +33,18 @@ This port is linked in the atomic-command measurement. Shared Apple evidence rem
 
 Next Mobile .work/space-edit-inbox-authoring-2026-11-13 has13 APPLIED source/test paths:8 source,
 17 shared storage methods,3 platform wrappers and same-instance app binding assertion. Apply64265
-REAPED0. Formatter10996 is RUNNING. Initial capture5416/00e2f2428c824af00a8d90783d6a0655448d2606f0d1cd244850ffa55f352bd9 is preformat.
-Reap formatter, capture again, run focused27 then full16653 and accept their actual reports.
-This increment alone does not admit a user's edit or activate a graph. Do not reapply drafts.
+and formatters10996/35934/68063 are REAPED0. First focused12549 failed LongMethod, second93780
+failed formatting; both REAPED1 with zero runtime tests. Their inputs/results remain preserved.
+The repository now reuses its exact active/archive decoder and owns encrypted projection acquisition
+in encryptEditProjection before command-key creation. No new repository or cross-repository call.
+Raw AlreadyStored authenticates the complete immutable encrypted request, including handoff marker.
+
+Third focused27/session14429 is RUNNING. Its17 new actual SQLite tests and2 app bindings have
+fresh passing XML at20:28/20:29UTC; platform compilation is still running. Do not accept yet.
+Source5416/675d968b7df0fcd08dfc6ad7284399438ac4287404266a4a45340b299b2b45e9.
+Reap14429, accept-focused.py focused-3, then run full16653, reap and accept-full.py. Neither full
+nor record-acceptance.py/commit.py has run. Both recording/commit scripts are prepared and guarded.
+The increment still does not admit a user's edit or activate the product graph. Do not reapply drafts.
 
 Its actual Group/Company history reads return candidate and original under one revision, including
 legacy earliest aliases without rewriting history. Joint publication authenticates source/index,
@@ -51,7 +60,14 @@ must preserve delivery order even after a backward clock adjustment; preview ord
 order delivery. An uncertain response must read back the same gesture before recomputation.
 No new polling queue, incoming retry loop, repository chaining or VM business helpers. Read review.md.
 
-The follow-up .work/space-edit-inbox-admission-2026-11-13 has THREE UNAPPLIED source drafts: explicit request/prepared-write entities, pure admission/ordering proposal, and QueueCollaborationSpaceEdit. No tests, DI or validation yet. Read its review.md; preserve pending reviewed text, bound three CAS preparations, exact uncertain-response readback, source identity and latched denial. No source from that workspace is applied.
+The follow-up .work/space-edit-inbox-admission-2026-11-13 has FIVE UNAPPLIED/unreviewed drafts:
+explicit request/prepared-write entities, pure source/order/projection policy, QueueCollaborationSpaceEdit,
+fixture and14 behavioral methods. No DI or validation yet. Its Submission owns denial and finite
+history/association/projection/commit stages for one gesture. Source admission and timestamp ordering
+have named pure policies. Verify formatted method sizes, snapshot scope, race/cancellation and exact
+source association before preparing gates. Tests include pending edit ordering, backwards clocks,
+lost replies, failed readback, independent drafts and editing older messages. Read review.md.
+No source from this follow-up workspace is applied; active source is the storage increment above.
 
 Then finish bounded history publication, finite backfill and actual list/graph activation under
 existing incoming ownership. Preserve canonical source selection, original positions, drafts,
