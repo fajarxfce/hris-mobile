@@ -762,3 +762,9 @@ The admitted Group seed and atomic index/reference/repair transaction pass 16,31
 A real SQLite application race proves completion after worker idle and preserves reopening.
 This HRIS policy remains in Mobile; no new reusable raw storage change is needed in Starter.
 Actual 31 new Apple methods and continuous seeding/product ownership remain separate gates.
+
+## Delivery failure outcome correction
+
+The app stage tracer follows the existing shared suspended-exception handling. Local 16,316
+cases pass; the previously failed Apple method still requires the new source control.
+No Starter change is needed because its shared measureOperation already has this handling.

@@ -1,0 +1,86 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    ".github/workflows/collaboration-control.yml",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryDiagnostics.kt",
+    "apps/shared/src/commonTest/kotlin/dev/fajar/starter/CollaborationDeliveryTimingTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 12,
+    "elapsedSeconds": 138.552,
+    "sourceFiles": 5366,
+    "sourceManifestSha256": "f435aa2b2c4a3b15419b808807bba6f6f99bfcfe5623716c8205dfd9920be175",
+    "resultSha256": "6a9ec8f08ee01874f664f3d1793a4588cddc33506b561f4b1b64af75cbec9b8a",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationDeliveryTimingTest": 10
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T15:35:36.900000+00:00",
+    "elapsedSeconds": 376.95,
+    "sourceFiles": 5366,
+    "freshCounts": {
+      "tests": 1129,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152592195,
+      "sha256": "a1e6ee1aa3898d258207c92ae9d316a94cf14ae5a2744b3c9b1eb5b9e1a1b320"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16316,
+    "newCases": 2,
+    "freshTests": 1129,
+    "reusedUnaffectedTests": 15187,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "f435aa2b2c4a3b15419b808807bba6f6f99bfcfe5623716c8205dfd9920be175",
+    "reportManifestSha256": "5112c0f79acdf07947b0f6346a66b6b52b2ee9ae27bed9e217ffbc24e3a7577d",
+    "nativeClaim": "Explicit thrown-failure outcome assignment in the delivery tracer; one shared regression method plus all nine existing timing methods. Actual Apple correction requires a later exact-source control."
+  },
+  "priorFailedApple": {
+    "accepted": false,
+    "sourceCommit": "c2d9b5ea753083967adc40129187e9e5c6fcb413",
+    "runId": 43443248470,
+    "jobId": 131946048408,
+    "jobConclusion": "failure",
+    "counts": {
+      "tests": 5892,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "failedClass": "CollaborationDeliveryTimingTest",
+    "failedMethod": "thrownFailureFinishesTimingWithoutExceptionPayload",
+    "failure": "Expected Failed diagnostic outcome, actual null after a thrown IllegalStateException on Apple.",
+    "iosHostBuilt": false,
+    "pushEnvelopeFieldsPassed": 16,
+    "artifactId": 14052061005,
+    "artifactBytes": 955461,
+    "artifactSha256": "9497402214f4f231cf39b8611c9dec107b87f3c4e93946126757750163d97d4e",
+    "jobLogSha256": "3b07b2af5701714d005afe89f8d02045f9d40c558de943788a7237b4bb0c252f",
+    "reportManifestSha256": "58a6ba0881fb2d85211ea9e2d23850b3138d62d19c3fb9bfff358dbe77500a34"
+  },
+  "newSharedMethods": 1,
+  "retainedTimingMethods": 9,
+  "existingSharedPatternCommit": "c50a8983",
+  "actualAppleFixVerified": false,
+  "expectedHostedTotal": 20006,
+  "expectedHostedPortable": {
+    "desktopTest": 6696,
+    "testAndroidHostTest": 960,
+    "wasmJsBrowserTest": 6400
+  },
+  "expectedHostedApple": 5950,
+  "productGraphActivated": false,
+  "phoneInstalled": false,
+  "installedPhoneBuild": 92,
+  "liveChanged": false
+}

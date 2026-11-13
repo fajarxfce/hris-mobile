@@ -241,6 +241,38 @@ class CollaborationDeliveryTimingTest {
         }
     }
 
+    @Test
+    fun suspendedThrownErrorsFinishRoomAndWorkerStagesWithoutLosingTheirOutcome() = runTest {
+        for (worker in listOf(false, true)) {
+            capture { events ->
+                val thrown = AssertionError("private thrown error")
+                val action: suspend ((CollaborationDeliveryStage) -> Unit) -> Nothing = { stage ->
+                    delay(5)
+                    stage(CollaborationDeliveryStage.Flush)
+                    delay(17)
+                    throw thrown
+                }
+                try {
+                    if (worker)
+                        traceCollaborationDeliveryWork(
+                            CollaborationDeliveryStage.DiscoverWork,
+                            testScheduler.timeSource,
+                            action,
+                        )
+                    else traceCollaborationDelivery<Unit>(testScheduler.timeSource, action = action)
+                    fail("Thrown error was swallowed")
+                } catch (actual: AssertionError) {
+                    assertTrue(actual === thrown || actual.cause === thrown)
+                }
+                assertEquals(listOf(5L, 17L), events.map { it.durationMillis })
+                assertNull(events.first().outcome)
+                assertEquals(PerformanceOutcome.Failed, events.last().outcome)
+                assertTrue(events.all { it.kind == DiagnosticKind.OperationCompleted })
+                assertTrue(events.none { encodeDiagnostic(it).contains("private") })
+            }
+        }
+    }
+
     private suspend fun capture(action: suspend (MutableList<Diagnostic>) -> Unit) {
         val events = mutableListOf<Diagnostic>()
         Diagnostics.install { event, error ->

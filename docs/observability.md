@@ -49,3 +49,10 @@ that test, and collaboration CI now runs observability on desktop, browser and A
 failed Apple run and the accepted Mobile local checks. Verification on the changed
 Apple source remains pending. This diagnostic correction does not establish the
 cause or resolution of physical-phone message delays.
+
+## Delivery stage exception outcomes
+
+The delivery stage tracer explicitly assigns Failed before rethrowing a suspended exception,
+as measureOperation already does. Actual Apple control 43443248470 exposed a missing outcome;
+local focused/full verification is accepted while the corrected Apple control remains pending.
+See [delivery outcome evidence](collaboration-delivery-failure-outcome.md).

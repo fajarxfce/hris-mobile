@@ -1,10 +1,44 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 15:31 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 15:42 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Delivery failure diagnostics locally accepted; Apple execution pending
+
+Mobile .work/apple-delivery-failure-outcome-2026-11-13 has three accepted source/test/workflow
+paths, focused 12 and full 16,316 (1129 fresh / 15187 exact unchanged).
+All preceding identities remain with two added JVM/browser executions. Source
+5366/f435aa2b2c4a3b15419b808807bba6f6f99bfcfe5623716c8205dfd9920be175; report 5112c0f79acdf07947b0f6346a66b6b52b2ee9ae27bed9e217ffbc24e3a7577d.
+The tracer now explicitly assigns Failed on thrown exceptions, preserving rethrow and separate
+cancellation. The existing shared measurement already uses this handling. Nine old timing tests
+remain plus a suspended room/worker AssertionError regression; hosted JVM now selects all ten.
+
+Control 43443248470 at c2d9b5ea753083967adc40129187e9e5c6fcb413 is NOT fully accepted:
+portable 13,929 passed; Apple 5,892 includes one failed timing test and skipped iOS host build.
+Raw failed artifacts are preserved. The new source still requires actual Apple verification.
+Prepare and dispatch ONE new combined control from this pushed source. Expected 20,006:
+14,056 portable (6696 desktop / 960 Android host / 6400 browser) and 5,950 Apple. Preserve
+fully accepted 43427620202 identities AND every failed-run identity; require both old failing
+method and new regression to pass, plus the iOS host. The old seed-only preparation is superseded.
+
+After dispatch, continue .work/space-inbox-command-owner-2026-11-13: eight unapplied drafts,
+focused 40/full 16,349 expected. One existing worker observes bounded original changes, seeds
+startup/new/retired commands, and parks operational failure until external original change or
+owner restart. Own demand and routine delivery progress must not cause repeated seeding.
+Retain failure until actual seed recovery. Guarded application requires this accepted/pushed
+source and a recorded hosted run ID. Then complete incoming-history/Company-original producers
+and product ownership, preserving provenance, keys, pending edits and clock ordering.
+After that owner, .work/source-checked-replica-mutations-2026-11-13 has eight unapplied drafts
+for exact read-only source guards paired with a projection write: four raw production paths and
+13 new shared actual-storage methods. This prevents stale incoming-history previews without
+advancing unchanged history. Expected focused 44/full 16,375 after owner 16,349; guarded application and validation
+are prepared, but no gates have run. Preserve all prior raw mutation/archive tests and port proven generic files to
+Starter. Admitted history snapshot/publication and product binding remain separate work.
+Keep Group graph/live off and phone release 92 until a meaningful validated app update.
+Push each commit, keep handoffs in Git and continue beyond this checkpoint.
 
 ## Retained-original Group inbox seeding locally accepted
 

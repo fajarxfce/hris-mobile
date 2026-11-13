@@ -119,6 +119,10 @@ private suspend fun <T> traceDeliveryStages(
         } catch (cancelled: CancellationException) {
             finalOutcome = PerformanceOutcome.Cancelled
             throw cancelled
+        } catch (failed: Throwable) {
+            // Assign on the suspended exception path, as in the shared operation measurement.
+            finalOutcome = PerformanceOutcome.Failed
+            throw failed
         } finally {
             recordTiming(finalOutcome)
         }
