@@ -1,0 +1,91 @@
+{
+  "accepted": true,
+  "sourceFiles": 5288,
+  "changedPaths": [
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/inbox/CollaborationSpaceInboxCodec.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationDraftRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceComposerStorageContract.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceDraftIndexStorageContract.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceDraftIndexStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceDraftIndexStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceDraftIndexStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxDraftPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceDraftRepository.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/EditCollaborationSpaceDraft.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/EditSpaceDraftInboxTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceComposerUseCaseFixture.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxDraftPublicationTest.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadFixture.kt"
+  ],
+  "sourceManifestSha256": "fea9bf9e2f2a5530483e0f694d534185ceba5e70953a54cb4eaef37bf2083d9c",
+  "focused": {
+    "accepted": true,
+    "tests": 90,
+    "elapsedSeconds": 102.869,
+    "sourceFiles": 5288,
+    "sourceManifestSha256": "fea9bf9e2f2a5530483e0f694d534185ceba5e70953a54cb4eaef37bf2083d9c",
+    "resultSha256": "70c54154c4a2f30db66c5e35839a083ab24a470b8a452234f1a22a437cedc6bc",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "SpaceChatThreadRetentionTest": 4,
+      "SpaceChatThreadViewModelTest": 16,
+      "SpaceChatComposerEditingSessionTest": 4,
+      "SpaceChatComposerFocusTest": 1,
+      "CollaborationSpaceComposerStorageTest": 13,
+      "CollaborationSpaceDraftIndexStorageTest": 9,
+      "CollaborationDraftStorageTest": 18,
+      "EditCollaborationSpaceDraftTest": 10,
+      "EditSpaceDraftInboxTest": 8,
+      "SpaceInboxDraftPublicationTest": 5
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T08:35:44.733779+00:00",
+    "elapsedSeconds": 900.351,
+    "sourceFiles": 5288,
+    "freshCounts": {
+      "tests": 13623,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152533183,
+      "sha256": "0e8799f1badd72ff6274c3113ee53a55c5689f45368acb2dcdf3cca8f15beeea"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 15689,
+    "newCases": 44,
+    "freshTests": 13623,
+    "reusedUnaffectedTests": 2066,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 109,
+    "excludedHistoricalCases": 642,
+    "sourceManifestSha256": "fea9bf9e2f2a5530483e0f694d534185ceba5e70953a54cb4eaef37bf2083d9c",
+    "reportManifestSha256": "54ed9dba67a0d133dd2f5ab70c690a481e367e7e32507e2a7226b23b9cfb6390",
+    "nativeClaim": "Atomic Group draft/index publication; 22 new shared methods require actual Apple execution. Composer/history integration and product list activation remain pending."
+  },
+  "newSharedMethods": 22,
+  "failedCandidates": [
+    {
+      "accepted": false,
+      "reason": "Preflight review found omitted presentation fixture adaptation for the mandatory Group draft contract. Full run cancelled before acceptance; source and original assertions preserved.",
+      "runnerPid": 1124565,
+      "terminatedCompilerGroup": 1124579,
+      "missingPath": "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadFixture.kt"
+    }
+  ],
+  "groupDraftProducerIntegrated": true,
+  "composerProducerIntegrated": false,
+  "historyProducerIntegrated": false,
+  "productGraphActivated": false,
+  "nativeAppleExecution": false,
+  "phoneInstalled": false,
+  "previousInstalledPhoneBuild": 92,
+  "liveChanged": false,
+  "genericStarterPortRequired": false,
+  "reason": "HRIS Group draft/index publication; generic atomic storage is already ported to Starter."
+}

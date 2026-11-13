@@ -109,6 +109,36 @@ internal class SpaceChatThreadFixture {
                 expectedRevision: String?,
             ): AppResult<Boolean> = error("No admission mutation")
         }
+    var inboxState = CollaborationSpaceInboxConversation(null, null, null, emptyList())
+    val inbox =
+        object : CollaborationSpaceInboxRepository {
+            override fun observePage(
+                access: CollaborationSpaceLocalAccess,
+                after: String?,
+                limit: Int,
+            ): Flow<AppResult<CollaborationSpaceInboxPage>> = error("No inbox subscription")
+
+            override suspend fun conversation(
+                access: CollaborationSpaceLocalAccess,
+                conversationId: String,
+                candidateLimit: Int,
+            ): AppResult<CollaborationSpaceInboxConversation> {
+                assertEquals(this@SpaceChatThreadFixture.access, access)
+                assertEquals(this@SpaceChatThreadFixture.conversationId, conversationId)
+                return AppResult.Success(inboxState)
+            }
+
+            override suspend fun activities(
+                access: CollaborationSpaceLocalAccess,
+                conversationId: String,
+                sources: List<CollaborationSpaceInboxSource>,
+            ): AppResult<CollaborationSpaceInboxActivities> = error("No activity acquisition")
+
+            override suspend fun publish(
+                access: CollaborationSpaceLocalAccess,
+                publication: CollaborationSpaceInboxPublication,
+            ): AppResult<Boolean> = error("Editor/index must commit together")
+        }
     val drafts =
         object : CollaborationSpaceDraftRepository {
             override fun observe(
@@ -140,13 +170,28 @@ internal class SpaceChatThreadFixture {
                 access: CollaborationSpaceLocalAccess,
                 expected: CollaborationDraft?,
                 replacement: CollaborationDraft,
+                inbox: CollaborationSpaceInboxPublication,
             ): AppResult<Boolean> {
                 assertEquals(this@SpaceChatThreadFixture.access, access)
                 beforeEdit()
                 editFailure?.let {
                     return AppResult.Failed(it)
                 }
-                if (draft.value != expected) return AppResult.Success(false)
+                if (draft.value != expected || inbox.expected != inboxState.version)
+                    return AppResult.Success(false)
+                assertEquals(replacement, inbox.draft?.value)
+                assertTrue(inbox.activities.isEmpty())
+                inboxState =
+                    CollaborationSpaceInboxConversation(
+                        CollaborationSpaceInboxVersion(
+                            inboxState.version?.generation ?: chatId(808),
+                            (inboxState.version?.revision ?: -1) + 1,
+                            inbox.lastOrdinal,
+                        ),
+                        inbox.entry,
+                        inbox.draft,
+                        inboxState.candidates,
+                    )
                 edits += replacement
                 draft.value = replacement
                 return AppResult.Success(true)
@@ -248,6 +293,7 @@ internal class SpaceChatThreadFixture {
             ),
             EditCollaborationSpaceDraft(
                 drafts,
+                inbox,
                 content.metadata,
                 directory,
                 base.sessions,

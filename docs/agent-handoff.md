@@ -1,10 +1,33 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 08:03 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 08:51 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Group draft and inbox publication locally accepted
+
+Mobile.work/space-inbox-draft-publication-2026-11-13 is accepted locally, 15 source paths.
+Focused 90; full 15,689 = 13623 fresh + 2066 exact unchanged.
+All 15,645 prior identities remain plus 44 JVM/browser executions: 5 policy, 8 use-case
+and 9 real-storage methods. Source 5288/fea9bf9e2f2a5530483e0f694d534185ceba5e70953a54cb4eaef37bf2083d9c.
+Report 54ed9dba67a0d133dd2f5ab70c690a481e367e7e32507e2a7226b23b9cfb6390. Failed candidates and their reviewed corrections
+remain retained. The mandatory Group draft contract now publishes source/index atomically;
+Company writes preserve their existing protocol. No product Group activation or live/phone
+change. Actual 22 Apple methods remain pending alongside 14 raw mutation and 21 index methods.
+The catalog control 43379266527 is accepted and excludes these later increments.
+
+Continue composer source/index handoff, then exact command/history progress and bounded
+retained-reference repair before admitted list/graph activation. Keep original IDs, keys,
+namespace and immutable placement. No whole-history scan or per-row global queue observer.
+The next workspace Mobile.work/space-inbox-composer-publication-2026-11-13 has 16 reviewed
+source drafts: policy, atomic handoff, use case/DI, existing fixtures and 24 shared methods.
+They are not applied or tested. After this source commit is pushed, run its apply-and-prepare.py
+with the exact accepted source commit, then capture, format and verify focused124/full15737.
+The preparatory scripts are historical; do not rerun them. The original draft-producer
+apply script is also historical. This checkpoint
+does not end the long run. Push each commit and continue. Phone remains on release 92.
 
 ## Encrypted inbox index locally accepted
 
@@ -18,15 +41,7 @@ activated. The user's phone stays on92. No native/live change. Actual21 new Appl
 remain pending alongside14 earlier raw mutation methods; catalog control43379266527 is already
 accepted and must not be repeated. The index apply scripts are historical; never reapply them.
 
-Continue source/index atomic publication, beginning with Group draft writes. The concrete review
-is in Mobile.work/space-inbox-draft-publication-2026-11-13/integration-review.md. No draft-source
-implementation from that workspace has been applied. Seven drafts now cover the policy,
-mandatory source contract, source/index codec/write, use-case orchestration, DI and domain
-fixture; real-storage fixture adaptation and new regression tests still remain. Do not apply
-these incomplete drafts before finishing that work. The use case owns current admission,
-immutable gesture and bounded retries; the source repository encrypts both mutations under their
-original namespaces. Keep domain/source policy out of ViewModels. This checkpoint is not the
-end of the long run; commit/push these accepted changes, then implement the next producer.
+The Group draft producer is now accepted above; composer and history producers remain.
 
 ## Starter transaction port accepted and pushed
 

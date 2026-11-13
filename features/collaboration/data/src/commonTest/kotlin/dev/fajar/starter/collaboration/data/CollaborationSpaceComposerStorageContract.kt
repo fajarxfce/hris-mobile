@@ -4,6 +4,7 @@ import dev.fajar.starter.collaboration.data.drafts.*
 import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.data.repositories.*
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
 import kotlin.test.*
@@ -38,18 +39,17 @@ abstract class CollaborationSpaceComposerStorageContract {
     fun exactEditingReopensAfterLoginRenewalAndFencesAStaleWriter() = withDatabase { f ->
         val local = f.space()
         val original = f.submission().original
-        assertEquals(AppResult.Success(true), f.drafts().replace(local, null, original))
+        assertEquals(AppResult.Success(true), f.replaceSpaceDraft(local, null, original))
         val cleared =
             original.copy(revision = historyId(1100), text = "", savedAt = original.savedAt)
-        assertEquals(AppResult.Success(true), f.drafts().replace(local, original, cleared))
+        assertEquals(AppResult.Success(true), f.replaceSpaceDraft(local, original, cleared))
         assertEquals(
             AppResult.Success(false),
-            f.drafts()
-                .replace(
-                    local,
-                    original,
-                    original.copy(revision = historyId(1101), text = "Late text"),
-                ),
+            f.replaceSpaceDraft(
+                local,
+                original,
+                original.copy(revision = historyId(1101), text = "Late text"),
+            ),
         )
         val key = f.keys.read()
         val renewed = local.copy(sessionId = "renewed")
@@ -128,7 +128,7 @@ abstract class CollaborationSpaceComposerStorageContract {
             val editing = original.nextDraft.copy(revision = historyId(1100), text = "Keep typing")
             assertEquals(
                 AppResult.Success(true),
-                f.drafts().replace(local, original.nextDraft, editing),
+                f.replaceSpaceDraft(local, original.nextDraft, editing),
             )
             assertEquals(
                 AppResult.Success(CollaborationComposerHandoffResult.RETAINED),
@@ -145,7 +145,7 @@ abstract class CollaborationSpaceComposerStorageContract {
             val submission = f.submission()
             assertEquals(
                 AppResult.Success(true),
-                f.drafts().replace(local, null, submission.original),
+                f.replaceSpaceDraft(local, null, submission.original),
             )
             repeat(32) {
                 assertNotNull(f.database.workWakes.request("occupied.$it", "generation", 32))
@@ -168,7 +168,7 @@ abstract class CollaborationSpaceComposerStorageContract {
             f.outbox().handoff(local, original, null),
         )
         val next = f.submission(128)
-        assertEquals(AppResult.Success(true), f.drafts().replace(local, null, next.original))
+        assertEquals(AppResult.Success(true), f.replaceSpaceDraft(local, null, next.original))
         val wake = f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY)
         assertEquals(
             AppResult.Success(CollaborationComposerHandoffResult.CAPACITY_EXCEEDED),
@@ -218,7 +218,7 @@ abstract class CollaborationSpaceComposerStorageContract {
         val editing = original.nextDraft.copy(revision = historyId(1100), text = "New input")
         assertEquals(
             AppResult.Success(true),
-            f.drafts().replace(local, original.nextDraft, editing),
+            f.replaceSpaceDraft(local, original.nextDraft, editing),
         )
         val wake = f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY)
         val different = original.copy(original = original.original.copy(text = "Different"))
@@ -269,7 +269,7 @@ abstract class CollaborationSpaceComposerStorageContract {
                 original = first.original.copy(revision = historyId(1200), text = "Second"),
                 nextRevision = historyId(1201),
             )
-        assertEquals(AppResult.Success(true), f.drafts().replace(local, null, first.original))
+        assertEquals(AppResult.Success(true), f.replaceSpaceDraft(local, null, first.original))
         val results = coroutineScope {
             val one = async { f.outbox().handoff(local, first, first.original) }
             val two = async { f.outbox().handoff(local, second, first.original) }
@@ -384,6 +384,46 @@ abstract class CollaborationSpaceComposerStorageContract {
             access.accountId,
             access.companyId,
         )
+
+    /** Existing storage cases now supply the mandatory ready index proposal to the source. */
+    private suspend fun CollaborationHistoryFixture.replaceSpaceDraft(
+        access: CollaborationSpaceLocalAccess,
+        expected: CollaborationDraft?,
+        replacement: CollaborationDraft,
+    ): AppResult<Boolean> {
+        val index = EncryptedCollaborationSpaceInboxRepository(database.replicas, cipher, keys)
+        val current =
+            assertIs<AppResult.Success<CollaborationSpaceInboxConversation>>(
+                    index.conversation(access, replacement.conversationId)
+                )
+                .value
+        val previous = current.draft?.takeIf { it.value == replacement }
+        val ordinal = current.version?.lastOrdinal ?: 0L
+        val draft =
+            previous
+                ?: CollaborationSpaceInboxDraft(
+                    replacement,
+                    CollaborationSpaceInboxPosition(
+                        replacement.savedAt.toEpochMilliseconds(),
+                        ordinal + 1,
+                    ),
+                )
+        val entry =
+            collaborationSpaceInboxEntry(
+                replacement.conversationId,
+                current.entry?.createdAt ?: 0L,
+                draft,
+                current.candidates.firstOrNull(),
+            )
+        val publication =
+            CollaborationSpaceInboxPublication(
+                current.version,
+                if (previous == null) ordinal + 1 else ordinal,
+                entry,
+                draft,
+            )
+        return drafts().replace(access, expected, replacement, publication)
+    }
 
     private fun CollaborationHistoryFixture.drafts() =
         EncryptedCollaborationDraftRepository(database.replicas, cipher, keys)

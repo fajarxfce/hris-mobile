@@ -114,3 +114,9 @@ producers, admission and bounded repair are still required before UI activation.
 writes are the next producer; preserve source and index checkpoints in the same raw transaction,
 including repair after a committed source response was lost. Existing history/command identities
 must remain exact. Actual21 Apple methods follow in the next native control.
+
+## Draft producer accepted
+
+Group editor and index publication is locally accepted: 22 shared methods, 15,689 full
+executions. Composer handoff and command/history progress with bounded repair remain
+before product activation. The source draft scripts are historical and must not be rerun.

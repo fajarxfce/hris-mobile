@@ -42,6 +42,48 @@ internal class SpaceComposerUseCaseFixture {
     var handoffFailure: Failure? = null
     var handoffFailureBeforeCommit: Failure? = null
     var forcedHandoff: CollaborationComposerHandoffResult? = null
+    var inboxState = CollaborationSpaceInboxConversation(null, null, null, emptyList())
+    var inboxReads = 0
+    var beforeInboxRead: suspend () -> Unit = {}
+    var inboxFailure: Failure? = null
+    val inbox =
+        object : CollaborationSpaceInboxRepository {
+            override fun observePage(
+                access: CollaborationSpaceLocalAccess,
+                after: String?,
+                limit: Int,
+            ): Flow<AppResult<CollaborationSpaceInboxPage>> =
+                error("Draft actions do not own an inbox subscription")
+
+            override suspend fun conversation(
+                access: CollaborationSpaceLocalAccess,
+                conversationId: String,
+                candidateLimit: Int,
+            ): AppResult<CollaborationSpaceInboxConversation> {
+                assertEquals(
+                    this@SpaceComposerUseCaseFixture.access.messageOwner(),
+                    access.messageOwner(),
+                )
+                assertEquals(original.conversationId, conversationId)
+                assertEquals(2, candidateLimit)
+                inboxReads++
+                beforeInboxRead()
+                return inboxFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(inboxState)
+            }
+
+            override suspend fun activities(
+                access: CollaborationSpaceLocalAccess,
+                conversationId: String,
+                sources: List<CollaborationSpaceInboxSource>,
+            ): AppResult<CollaborationSpaceInboxActivities> = error("No unrelated activity lookup")
+
+            override suspend fun publish(
+                access: CollaborationSpaceLocalAccess,
+                publication: CollaborationSpaceInboxPublication,
+            ): AppResult<Boolean> =
+                error("Draft and index must be committed by the source repository")
+        }
+
     val drafts =
         object : CollaborationSpaceDraftRepository {
             override fun observe(
@@ -67,9 +109,29 @@ internal class SpaceComposerUseCaseFixture {
                 access: CollaborationSpaceLocalAccess,
                 expected: CollaborationDraft?,
                 replacement: CollaborationDraft,
+                inbox: CollaborationSpaceInboxPublication,
             ): AppResult<Boolean> {
                 beforeEdit()
-                if (editor != expected) return AppResult.Success(false)
+                if (
+                    (editor != expected && editor != replacement) ||
+                        inbox.expected != inboxState.version
+                )
+                    return AppResult.Success(false)
+                assertEquals(replacement, inbox.draft?.value)
+                assertEquals(emptyList<CollaborationSpaceInboxActivity>(), inbox.activities)
+                val version =
+                    CollaborationSpaceInboxVersion(
+                        inboxState.version?.generation ?: "d3000000-0000-4000-8000-000000000001",
+                        (inboxState.version?.revision ?: -1) + 1,
+                        inbox.lastOrdinal,
+                    )
+                inboxState =
+                    CollaborationSpaceInboxConversation(
+                        version,
+                        inbox.entry,
+                        inbox.draft,
+                        inboxState.candidates,
+                    )
                 editor = replacement
                 edits += replacement
                 afterEdit()
@@ -143,6 +205,7 @@ internal class SpaceComposerUseCaseFixture {
     fun edit() =
         EditCollaborationSpaceDraft(
             drafts,
+            inbox,
             base.metadata,
             base.base.directory,
             base.sessions,

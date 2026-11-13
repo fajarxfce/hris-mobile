@@ -16,10 +16,11 @@ interface CollaborationSpaceDraftRepository {
         conversationId: String,
     ): AppResult<CollaborationDraft?>
 
-    /** Exact previous-slot CAS; an empty successor retains its revision to fence stale writers. */
+    /** Source slot and ready inbox publication commit together under both original checkpoints. */
     suspend fun replace(
         access: CollaborationSpaceLocalAccess,
         expected: CollaborationDraft?,
         replacement: CollaborationDraft,
+        inbox: CollaborationSpaceInboxPublication,
     ): AppResult<Boolean>
 }

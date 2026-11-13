@@ -1,5 +1,7 @@
 # Architecture
 
+[Atomic Group draft publication](collaboration-space-inbox-draft-publication.md) commits editor and list preview together under source/index versions.
+
 [Persistent Group inbox activity](collaboration-space-inbox-index.md) stores globally ranked encrypted rows and independent draft/activity anchors for atomic source publication.
 
 [Atomic replica mutations](replica-atomic-mutations.md) publish two owned source/projection writes and their recovery wake as one conditional transaction.

@@ -668,11 +668,12 @@ class CollaborationDataModule {
     @Factory
     fun editSpaceDraft(
         drafts: CollaborationSpaceDraftRepository,
+        inbox: CollaborationSpaceInboxRepository,
         conversations: CollaborationSpaceConversationMetadataRepository,
         directory: CollaborationSpaceDirectoryRepository,
         sessions: SessionRepository,
         server: IdentityServer,
-    ) = EditCollaborationSpaceDraft(drafts, conversations, directory, sessions, server)
+    ) = EditCollaborationSpaceDraft(drafts, inbox, conversations, directory, sessions, server)
 
     @Factory
     fun submitSpaceComposer(

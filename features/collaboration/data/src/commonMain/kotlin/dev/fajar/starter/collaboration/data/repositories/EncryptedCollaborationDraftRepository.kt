@@ -4,6 +4,7 @@ package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.drafts.*
 import dev.fajar.starter.collaboration.data.history.*
+import dev.fajar.starter.collaboration.data.inbox.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationDraftRepository
@@ -53,7 +54,107 @@ class EncryptedCollaborationDraftRepository(
         access: CollaborationSpaceLocalAccess,
         expected: CollaborationDraft?,
         replacement: CollaborationDraft,
-    ) = replace(CollaborationComposerCoordinates.Space(access), expected, replacement)
+        inbox: CollaborationSpaceInboxPublication,
+    ): AppResult<Boolean> {
+        val publication = inbox.copy(activities = inbox.activities.toList())
+        return withContext(Dispatchers.Default) {
+            safeStorageCall {
+                require(validCollaborationDraft(replacement))
+                require(
+                    expected == null ||
+                        (validCollaborationDraft(expected) &&
+                            expected.conversationId == replacement.conversationId)
+                )
+                require(validCollaborationSpaceInboxPublication(publication))
+                require(publication.draft?.value == replacement && publication.activities.isEmpty())
+                require(publication.entry.conversationId == replacement.conversationId)
+                val coordinates = CollaborationComposerCoordinates.Space(access)
+                val scope = coordinates.scope
+                val indexPartition = spaceInboxPartition(access)
+                val source =
+                    replicas
+                        .observeDocument(scope, coordinates.partition, replacement.conversationId)
+                        .first()
+                val index = replicas.checkpoint(scope, indexPartition)
+                if (
+                    index?.published == false || ((index == null) != (publication.expected == null))
+                )
+                    return@safeStorageCall false
+                keys.use(create = source.checkpoint == null) { content, indexKey ->
+                    val sourceCodec = CollaborationDraftCodec(coordinates, cipher, content)
+                    val current =
+                        source.checkpoint?.let { raw ->
+                            sourceCodec.checkpoint(raw)
+                            require(source.documents.size <= 1)
+                            source.documents.singleOrNull()?.let { sourceCodec.decode(raw, it) }
+                        }
+                    require(source.checkpoint != null || source.documents.isEmpty())
+                    if (current != expected && current != replacement) return@use false
+                    require(current == replacement || current?.revision != replacement.revision)
+                    val indexCodec = CollaborationSpaceInboxCodec(access, cipher, content, indexKey)
+                    if (index?.let { indexCodec.version(it) } != publication.expected)
+                        return@use false
+                    val entryId = indexCodec.id("entry", replacement.conversationId)
+                    val ids = buildList {
+                        add(entryId)
+                        add(indexCodec.id("draft", replacement.conversationId))
+                        publication.entry.newest?.let {
+                            add(indexCodec.id("activity", replacement.conversationId, it.source))
+                        }
+                    }
+                    val held = replicas.workingDocuments(scope, indexPartition, ids)
+                    if (held.checkpoint != index) return@use false
+                    val previousEntry =
+                        held.documents
+                            .singleOrNull { it.id == entryId }
+                            ?.let {
+                                val value = indexCodec.decode(requireNotNull(index), it)
+                                require(value.conversationId == replacement.conversationId)
+                                requireNotNull(value.entry).domain(value.conversationId)
+                            }
+                    require(publication.entry.newest == previousEntry?.newest)
+                    val indexMutation = indexCodec.mutation(index, held.documents, publication)
+                    currentCoroutineContext().ensureActive()
+                    if (current == replacement && indexMutation == null) {
+                        // These checks overlap both original reads; no unchanged document is
+                        // rewritten.
+                        return@use replicas.checkpoint(scope, coordinates.partition) ==
+                            source.checkpoint && replicas.checkpoint(scope, indexPartition) == index
+                    }
+                    val raw = source.checkpoint
+                    val generation = raw?.handle?.generation ?: Uuid.random().toString()
+                    val revision = raw?.revision?.plus(1) ?: 0L
+                    require(revision in 0 until COLLABORATION_SPACE_INBOX_MAX_ORDER)
+                    val checkpoint = sourceCodec.checkpoint(generation, revision)
+                    val documents =
+                        if (current == replacement) emptyList()
+                        else listOf(sourceCodec.encode(generation, revision, replacement))
+                    val sourceMutation =
+                        if (raw == null)
+                            ReplicaMutation.Replace(
+                                coordinates.partition,
+                                null,
+                                ReplicaSnapshot(generation, checkpoint, documents),
+                            )
+                        else
+                            ReplicaMutation.Commit(
+                                raw.handle,
+                                raw.revision,
+                                checkpoint,
+                                documents,
+                                true,
+                            )
+                    replicas.mutate(
+                        scope,
+                        listOf(
+                            sourceMutation,
+                            indexMutation ?: indexCodec.guardCheckpoint(requireNotNull(index)),
+                        ),
+                    )
+                }
+            }
+        }
+    }
 
     private fun observe(coordinates: CollaborationComposerCoordinates, conversationId: String) =
         safeStorageFlow(

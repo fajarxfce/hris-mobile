@@ -222,6 +222,21 @@ internal class CollaborationSpaceInboxCodec(
         else ReplicaMutation.Commit(raw.handle, raw.revision, checkpoint, changed, true)
     }
 
+    /** Guard an unchanged index alongside a source write without replacing its documents. */
+    suspend fun guardCheckpoint(raw: ReplicaCheckpoint): ReplicaMutation.Commit {
+        val current = version(raw)
+        require(current.revision < COLLABORATION_SPACE_INBOX_MAX_ORDER)
+        val checkpoint =
+            seal(
+                current.generation,
+                "checkpoint",
+                current.revision + 1,
+                "",
+                Json.encodeToString(InboxCheckpointDto(1, current.lastOrdinal)),
+            )
+        return ReplicaMutation.Commit(raw.handle, current.revision, checkpoint, emptyList(), true)
+    }
+
     private suspend fun coordinates(value: InboxDocumentDto): Triple<String, String, Set<String>> {
         require(listOf(value.entry, value.draft, value.activity).count { it != null } == 1)
         val entry = value.entry
