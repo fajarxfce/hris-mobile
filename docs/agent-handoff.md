@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 06:36 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 06:47 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
@@ -9,10 +9,11 @@ is waived; native Apple, calls and push still need their actual behavior gates.
 ## Active atomic replica storage increment
 
 Mobile.work/replica-atomic-mutations-2026-11-13 is APPLIED,10 source paths.
-Formatter1/session99690 REAPED34.131s. Focused1/session63420 is RUNNING; no test acceptance yet.
+Formatter1/session99690 REAPED34.131s. Focused1/session63420 REAPED:30 passed in299.133s;
+strict audit passed. Full1/session64015 is RUNNING; no full acceptance yet.
 Source5269/a71119ee835a632aeb714f657a7dd11e7488531a224966caa44d8902ec910239.
-Expected focused30 (14 new raw-storage methods,14 existing replication/wake methods and2 DI)
-and full15603 (all15575 prior IDs +28 JVM/browser executions). Do not change candidate sources
+Actual focused30 covers14 new raw-storage methods,14 existing replication/wake methods and2 DI.
+Expected full15603 (all15575 prior IDs +28 JVM/browser executions). Do not change candidate sources
 while the gate runs. The old draft is historical; never reapply it. Preserve any failed input
 snapshots and complete actual browser/Apple compilation gates before claiming acceptance.
 
