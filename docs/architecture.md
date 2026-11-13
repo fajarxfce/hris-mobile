@@ -1,5 +1,7 @@
 # Architecture
 
+[Durable inbox repair references](collaboration-space-inbox-progress-repair.md) retain exact originals and complete preview/reference changes in one index transaction.
+
 [Atomic Group send publication](collaboration-space-inbox-composer-publication.md) retains original, editor, pending preview and wake under source/index versions.
 
 [Atomic Group draft publication](collaboration-space-inbox-draft-publication.md) commits editor and list preview together under source/index versions.

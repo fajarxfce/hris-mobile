@@ -1,0 +1,115 @@
+{
+  "accepted": true,
+  "sourceFiles": 5305,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationSpaceComposerHandoffCodec.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/inbox/CollaborationSpaceInboxCodec.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/inbox/CollaborationSpaceInboxRepairDto.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceInboxRepairRepository.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceInboxRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceComposerIndexStorageContract.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceComposerStorageContract.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxRepairStorageContract.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxRepairStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceInboxRepairStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceInboxRepairStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxIndex.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxRepair.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxComposerPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxRepairPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceMessagePolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceInboxRepairRepository.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/SubmitCollaborationSpaceComposer.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxComposerPublicationTest.kt"
+  ],
+  "sourceManifestSha256": "a65f9a173a6c38f03fa57eb3e1c6d3411536100e64ded07d700f82614f1b4410",
+  "focused": {
+    "accepted": true,
+    "tests": 139,
+    "elapsedSeconds": 400.901,
+    "sourceFiles": 5305,
+    "sourceManifestSha256": "a65f9a173a6c38f03fa57eb3e1c6d3411536100e64ded07d700f82614f1b4410",
+    "resultSha256": "8427e976fbadb8477b3ee1fe9319edc8151f67b2bd295de9e61356cfdf80925c",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceComposerIndexStorageTest": 9,
+      "CollaborationSpaceComposerStorageTest": 13,
+      "CollaborationSpaceInboxRepairStorageTest": 13,
+      "CollaborationSpaceInboxStorageTest": 15,
+      "CollaborationComposerOutboxStorageTest": 28,
+      "CollaborationSpaceMessagePolicyTest": 9,
+      "QueueCollaborationSpaceTextTest": 15,
+      "SpaceInboxComposerPublicationTest": 7,
+      "SubmitCollaborationSpaceComposerTest": 14,
+      "SubmitSpaceComposerInboxTest": 8,
+      "CollaborationSpaceInboxPolicyTest": 6
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T10:15:21.760910+00:00",
+    "elapsedSeconds": 895.895,
+    "sourceFiles": 5305,
+    "freshCounts": {
+      "tests": 13697,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152542741,
+      "sha256": "df84f0055af7b1294c04e5c29ed1617cc347277095fe3cba75302db3176b3b51"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 15763,
+    "newCases": 26,
+    "freshTests": 13697,
+    "reusedUnaffectedTests": 2066,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 109,
+    "excludedHistoricalCases": 642,
+    "sourceManifestSha256": "a65f9a173a6c38f03fa57eb3e1c6d3411536100e64ded07d700f82614f1b4410",
+    "reportManifestSha256": "9004696717e3cff488d9659f4bbe7310ee42de92f6fb964f80c4bbe9bd582bc1",
+    "nativeClaim": "Atomic original repair-reference retention/completion and bounded local traversal; 13 real-storage methods need actual Apple execution. Admitted command progress, repair owner, history and product list activation remain pending."
+  },
+  "newSharedMethods": 13,
+  "sourceReferenceIntegrated": true,
+  "referenceCompletionAtomic": true,
+  "finiteReferenceReads": true,
+  "commandProgressIntegrated": false,
+  "recoveryOwnerIntegrated": false,
+  "historyProducerIntegrated": false,
+  "productGraphActivated": false,
+  "nativeAppleExecution": false,
+  "phoneInstalled": false,
+  "previousInstalledPhoneBuild": 92,
+  "liveChanged": false,
+  "genericStarterPortRequired": false,
+  "priorNativeControl": {
+    "runId": 43403331941,
+    "sourceCommit": "8a48212f21c0e1c18802997fe46aabd4c567fba7",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43403331941",
+    "status": "Running exact source; both job audits pending",
+    "complete": false
+  },
+  "failedCandidates": [
+    {
+      "accepted": false,
+      "focusedPassed": 114,
+      "reason": "Repair references retain full composer submission including editor revision/time, which existing Group command records do not retain. This prevents exact command-only recovery/seeding without fabricated editor data. Retain the exact immutable Group command intent instead; preserve source/index atomicity and bounded cursor semantics. No tests or limits are weakened.",
+      "fullDirectory": "full-1",
+      "stoppedCompilerGroup": 1643125
+    },
+    {
+      "accepted": false,
+      "focusedDirectory": "focused-2",
+      "focusedSession": 59670,
+      "reaped": true,
+      "tests": 0,
+      "reason": "Pure composer publication became 102 lines after adding owned intent validation. Capture the immutable intent once for both validation and repair publication, removing duplicate construction; preserve every check and the 100-line limit."
+    }
+  ]
+}

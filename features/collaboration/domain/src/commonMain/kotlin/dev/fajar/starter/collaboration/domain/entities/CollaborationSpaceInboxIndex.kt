@@ -33,6 +33,8 @@ data class CollaborationSpaceInboxPublication(
     val draft: CollaborationSpaceInboxDraft? = null,
     /** Hidden replacements preserve anchors; no arbitrary activity deletion is exposed. */
     val activities: List<CollaborationSpaceInboxActivity> = emptyList(),
+    /** Original retention/completion participates in this same index transaction. */
+    val repair: CollaborationSpaceInboxRepairChange? = null,
 ) {
     override fun toString() = "CollaborationSpaceInboxPublication([redacted])"
 }

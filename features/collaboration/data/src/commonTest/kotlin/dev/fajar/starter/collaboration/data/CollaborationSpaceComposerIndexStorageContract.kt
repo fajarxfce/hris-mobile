@@ -397,6 +397,7 @@ abstract class CollaborationSpaceComposerIndexStorageContract {
             else value.nextDraft
         return success(
             collaborationSpaceInboxComposerPublication(
+                local(),
                 metadata(value.original.conversationId),
                 current,
                 anchors,

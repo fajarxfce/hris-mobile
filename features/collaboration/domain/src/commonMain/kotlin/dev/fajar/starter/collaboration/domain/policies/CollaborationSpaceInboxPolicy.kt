@@ -85,6 +85,7 @@ fun collaborationSpaceInboxEntry(
  * Finite proposal validation; source identity/receipt admission is owned by the source use case.
  */
 fun validCollaborationSpaceInboxPublication(value: CollaborationSpaceInboxPublication): Boolean {
+    if (!validCollaborationSpaceInboxRepairChange(value)) return false
     val expected = value.expected
     if (
         expected != null &&

@@ -126,3 +126,9 @@ before product activation. The source draft scripts are historical and must not 
 Original send, editor successor, pending preview and recovery wake now publish atomically.
 The 24 shared methods pass locally; full15737. Exact command/history progress, retained repair
 references and admitted list/graph activation remain. Applied preparation scripts are historical.
+
+## Original repair-reference storage accepted
+
+Original retention and preview completion now share the index transaction; finite high-revision
+reference reads pass thirteen shared storage methods locally, full15,763. Exact command progress,
+owned recovery and legacy seeding remain before history/list/product activation.

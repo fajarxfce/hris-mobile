@@ -11,7 +11,7 @@ import kotlin.uuid.Uuid
 
 /** Authenticated source/index mapping for one key lease. No I/O, retries or admission policy. */
 internal class CollaborationSpaceComposerHandoffCodec(
-    access: CollaborationSpaceLocalAccess,
+    private val access: CollaborationSpaceLocalAccess,
     cipher: ContentCipher,
     contentKey: ByteArray,
     indexKey: ByteArray,
@@ -38,6 +38,12 @@ internal class CollaborationSpaceComposerHandoffCodec(
         expected: CollaborationDraft?,
         proposal: CollaborationSpaceInboxPublication,
     ): Source? {
+        require(
+            proposal.repair ==
+                CollaborationSpaceInboxRepairChange.Retain(
+                    collaborationSpaceComposerIntent(access, submission)
+                )
+        )
         val checkpoint = captured.checkpoint
         require(
             captured.documents.size <= 2 && (checkpoint != null || captured.documents.isEmpty())
@@ -66,6 +72,13 @@ internal class CollaborationSpaceComposerHandoffCodec(
         return buildList {
                 add(inbox.id("entry", conversation))
                 add(inbox.id("draft", conversation))
+                add(
+                    inbox.id(
+                        "repair",
+                        conversation,
+                        CollaborationSpaceInboxSource.GroupOriginal(submission.id),
+                    )
+                )
                 add(
                     inbox.id(
                         "activity",

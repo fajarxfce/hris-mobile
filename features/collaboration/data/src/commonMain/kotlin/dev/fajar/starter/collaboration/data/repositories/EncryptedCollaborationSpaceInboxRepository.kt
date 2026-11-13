@@ -246,6 +246,22 @@ class EncryptedCollaborationSpaceInboxRepository(
                         buildList {
                                 add(codec.id("entry", conversationId))
                                 add(codec.id("draft", conversationId))
+                                retained.repair?.let { change ->
+                                    val original =
+                                        when (change) {
+                                            is CollaborationSpaceInboxRepairChange.Retain ->
+                                                change.intent
+                                            is CollaborationSpaceInboxRepairChange.Complete ->
+                                                change.reference.intent
+                                        }
+                                    add(
+                                        codec.id(
+                                            "repair",
+                                            conversationId,
+                                            CollaborationSpaceInboxSource.GroupOriginal(original.id),
+                                        )
+                                    )
+                                }
                                 retained.entry.newest?.let {
                                     add(codec.id("activity", conversationId, it.source))
                                 }

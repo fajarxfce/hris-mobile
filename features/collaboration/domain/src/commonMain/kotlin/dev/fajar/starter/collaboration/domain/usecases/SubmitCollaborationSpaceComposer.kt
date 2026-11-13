@@ -108,6 +108,7 @@ class SubmitCollaborationSpaceComposer(
                     )
                 val prepared =
                     collaborationSpaceInboxComposerPublication(
+                        access,
                         conversation,
                         index,
                         anchors,

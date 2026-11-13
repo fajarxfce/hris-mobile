@@ -1,10 +1,33 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 09:39 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 10:30 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Original inbox repair references locally accepted
+
+Mobile.work/space-inbox-progress-repair-2026-11-13 is accepted locally, 21 source paths.
+Focused 139; full 15,763 = 13697 fresh + 2066 exact unchanged.
+All 15,737 preceding IDs remain plus 26 JVM/browser executions of 13 real-storage methods.
+Source 5305/a65f9a173a6c38f03fa57eb3e1c6d3411536100e64ded07d700f82614f1b4410.
+Report 9004696717e3cff488d9659f4bbe7310ee42de92f6fb964f80c4bbe9bd582bc1.
+Original repair references publish with source/index/wake. Exact completion updates the preview
+and encrypted marker atomically, discards retained original text and cannot reactivate on replay.
+Finite reference pages retain a high revision through ordinary index changes and exclude later
+insertions. No recovery owner, command-progress producer, history or product graph is activated.
+Actual 13 Apple methods are pending; preceding control 43403331941 at 8a48212f is separate.
+
+The next Mobile.work/space-inbox-command-progress-2026-11-13 has seven prepared source drafts
+and 17 domain methods (eight policies, nine use-case cases), not applied or tested. It validates
+exact immutable command intent, publishes only terminal progress, preserves newer edits and
+uses at most three index-contention attempts. After this accepted source is pushed, verify its
+draft-base/prepared-sources and apply under the exact commit. Expected focused85/full15797.
+Its preparation scripts and this reference increment's apply scripts are historical; never
+rerun them. Then implement the finite owned repair worker, bounded legacy reference seeding,
+incoming history/list and Group graph. Keep pending edits and global clock ordering explicit.
+Push every commit and continue beyond checkpoints. Phone remains release 92.
 
 ## Group send and pending inbox publication locally accepted
 
@@ -23,12 +46,7 @@ inbox/list and Group graph integration. Preserve original namespaces, anchors an
 bounded account command observer, never one per row. Pending edits of SENT messages need their
 own retained repair reference. CommandStore.insertBatchAndWake does not yet accept replica
 mutations; review the actual outgoing edit producer before claiming atomic edit/index recovery.
-The next workspace Mobile.work/space-inbox-progress-repair-2026-11-13 contains 16 reviewed
-source drafts and 12 new real-storage methods for atomic original repair-reference retention,
-completion markers and finite local traversal. They are not applied or tested. After this
-source commit is pushed, its guarded apply-and-prepare.py accepts the exact source commit,
-then capture, format and validate focused 114/full 15,761. Preparation scripts are historical;
-do not rerun them. Admitted command progress, recovery ownership and pending edits still follow.
+The reference storage increment is now locally accepted above; its prepared drafts are applied.
 The applied composer preparation scripts are historical; never rerun them. Push every commit
 and continue the long run. Phone remains on 92 until a validated visible feature update.
 

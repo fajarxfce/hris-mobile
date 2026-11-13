@@ -486,6 +486,7 @@ abstract class CollaborationSpaceComposerStorageContract {
                 0,
             )
         return collaborationSpaceInboxComposerPublication(
+            local,
             canonical,
             current,
             (anchors as AppResult.Success).value,

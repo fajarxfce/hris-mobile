@@ -35,6 +35,7 @@ class SpaceInboxComposerPublicationTest {
         val value =
             success(
                 collaborationSpaceInboxComposerPublication(
+                    f.access,
                     f.base.canonical!!,
                     current,
                     CollaborationSpaceInboxActivities(current.version, emptyList()),
@@ -68,6 +69,7 @@ class SpaceInboxComposerPublicationTest {
         val value =
             success(
                 collaborationSpaceInboxComposerPublication(
+                    f.access,
                     f.base.canonical!!,
                     current,
                     CollaborationSpaceInboxActivities(current.version, emptyList()),
@@ -113,6 +115,7 @@ class SpaceInboxComposerPublicationTest {
         val value =
             success(
                 collaborationSpaceInboxComposerPublication(
+                    f.access,
                     f.base.canonical!!,
                     current,
                     CollaborationSpaceInboxActivities(current.version, listOf(sent)),
@@ -146,6 +149,7 @@ class SpaceInboxComposerPublicationTest {
         val value =
             success(
                 collaborationSpaceInboxComposerPublication(
+                    f.access,
                     f.base.canonical!!,
                     current,
                     CollaborationSpaceInboxActivities(current.version, listOf(hidden)),
@@ -173,6 +177,7 @@ class SpaceInboxComposerPublicationTest {
             FailureKind.Conflict,
             assertIs<AppResult.Failed>(
                     collaborationSpaceInboxComposerPublication(
+                        f.access,
                         f.base.canonical!!,
                         current,
                         moved,
@@ -217,6 +222,7 @@ class SpaceInboxComposerPublicationTest {
             FailureKind.Conflict,
             assertIs<AppResult.Failed>(
                     collaborationSpaceInboxComposerPublication(
+                        f.access,
                         f.base.canonical!!,
                         current,
                         CollaborationSpaceInboxActivities(current.version, emptyList()),
@@ -232,6 +238,7 @@ class SpaceInboxComposerPublicationTest {
         val existing = snapshot(first)
         assertIs<AppResult.Failed>(
             collaborationSpaceInboxComposerPublication(
+                f.access,
                 f.base.canonical!!,
                 existing,
                 CollaborationSpaceInboxActivities(existing.version, first.activities),
@@ -245,6 +252,7 @@ class SpaceInboxComposerPublicationTest {
     private fun initial(f: SpaceComposerUseCaseFixture) =
         success(
             collaborationSpaceInboxComposerPublication(
+                f.access,
                 f.base.canonical!!,
                 f.inboxState,
                 CollaborationSpaceInboxActivities(null, emptyList()),

@@ -35,10 +35,11 @@ internal class CollaborationSpaceInboxCodec(
         source: CollaborationSpaceInboxSource? = null,
     ): String {
         require(
-            kind in listOf("entry", "draft", "activity", "candidates") &&
+            kind in listOf("entry", "draft", "activity", "candidates", "repair") &&
                 validCollaborationMessageId(conversationId)
         )
-        require((kind == "activity") == (source != null))
+        require((kind in listOf("activity", "repair")) == (source != null))
+        require(kind != "repair" || source is CollaborationSpaceInboxSource.GroupOriginal)
         val parts =
             listOf(kind, conversationId) +
                 (source?.let { InboxSourceDto(it).partsWithKind() } ?: emptyList())
@@ -97,6 +98,7 @@ internal class CollaborationSpaceInboxCodec(
                 document.sortKey == expected.second &&
                 document.tags == expected.third
         )
+        require(value.repair == null || value.repair.insertedAtRevision <= document.version)
         return value
     }
 
@@ -120,6 +122,25 @@ internal class CollaborationSpaceInboxCodec(
         return decoded
     }
 
+    suspend fun repairCursor(generation: String, highRevision: Long, sort: String): String =
+        seal(
+            "cursor",
+            "repair-page",
+            0,
+            "",
+            Json.encodeToString(InboxRepairCursorDto(1, generation, highRevision, sort)),
+        )
+
+    suspend fun repairCursor(value: String): InboxRepairCursorDto {
+        val decoded =
+            Json.decodeFromString<InboxRepairCursorDto>(open("cursor", "repair-page", 0, "", value))
+        require(decoded.schema == 1 && validCollaborationMessageId(decoded.generation))
+        require(decoded.highRevision in 0..COLLABORATION_SPACE_INBOX_MAX_ORDER)
+        require(decoded.after.matches(Regex("[0-9]{16}:i-[0-9a-f]{64}")))
+        require(decoded.after.substringBefore(':').toLong() <= decoded.highRevision)
+        return decoded
+    }
+
     /** Existing anchors and creation facts are checked against the same preflight revision. */
     suspend fun mutation(
         raw: ReplicaCheckpoint?,
@@ -130,30 +151,7 @@ internal class CollaborationSpaceInboxCodec(
         require((raw?.let { version(it) }) == proposal.expected)
         val generation = raw?.handle?.generation ?: Uuid.random().toString()
         val revision = raw?.revision?.plus(1) ?: 0L
-        val values = buildList {
-            add(
-                InboxDocumentDto(
-                    conversationId = proposal.entry.conversationId,
-                    entry = InboxEntryDto(proposal.entry),
-                )
-            )
-            proposal.draft?.let {
-                add(
-                    InboxDocumentDto(
-                        conversationId = proposal.entry.conversationId,
-                        draft = InboxDraftDto(it),
-                    )
-                )
-            }
-            proposal.activities.forEach {
-                add(
-                    InboxDocumentDto(
-                        conversationId = proposal.entry.conversationId,
-                        activity = InboxActivityDto(it),
-                    )
-                )
-            }
-        }
+        val values = documents(raw, existing, proposal, revision)
         val previous = existing.associateBy { it.id }
         require(previous.size == existing.size && (raw != null || existing.isEmpty()))
         val retainedValues =
@@ -222,6 +220,63 @@ internal class CollaborationSpaceInboxCodec(
         else ReplicaMutation.Commit(raw.handle, raw.revision, checkpoint, changed, true)
     }
 
+    private suspend fun documents(
+        raw: ReplicaCheckpoint?,
+        existing: List<ReplicaDocument>,
+        proposal: CollaborationSpaceInboxPublication,
+        revision: Long,
+    ): List<InboxDocumentDto> {
+        return buildList {
+            add(
+                InboxDocumentDto(
+                    conversationId = proposal.entry.conversationId,
+                    entry = InboxEntryDto(proposal.entry),
+                )
+            )
+            proposal.draft?.let {
+                add(
+                    InboxDocumentDto(
+                        conversationId = proposal.entry.conversationId,
+                        draft = InboxDraftDto(it),
+                    )
+                )
+            }
+            proposal.activities.forEach {
+                add(
+                    InboxDocumentDto(
+                        conversationId = proposal.entry.conversationId,
+                        activity = InboxActivityDto(it),
+                    )
+                )
+            }
+            proposal.repair?.let { change ->
+                val source =
+                    when (change) {
+                        is CollaborationSpaceInboxRepairChange.Retain -> change.intent
+                        is CollaborationSpaceInboxRepairChange.Complete -> change.reference.intent
+                    }
+                val token =
+                    id(
+                        "repair",
+                        proposal.entry.conversationId,
+                        CollaborationSpaceInboxSource.GroupOriginal(source.id),
+                    )
+                val old =
+                    existing
+                        .singleOrNull { it.id == token }
+                        ?.let { decode(requireNotNull(raw), it).repair }
+                val repair =
+                    CollaborationSpaceInboxRepairCodec(access).proposed(change, old, revision)
+                add(
+                    InboxDocumentDto(
+                        conversationId = proposal.entry.conversationId,
+                        repair = repair,
+                    )
+                )
+            }
+        }
+    }
+
     /** Guard an unchanged index alongside a source write without replacing its documents. */
     suspend fun guardCheckpoint(raw: ReplicaCheckpoint): ReplicaMutation.Commit {
         val current = version(raw)
@@ -238,7 +293,24 @@ internal class CollaborationSpaceInboxCodec(
     }
 
     private suspend fun coordinates(value: InboxDocumentDto): Triple<String, String, Set<String>> {
-        require(listOf(value.entry, value.draft, value.activity).count { it != null } == 1)
+        require(
+            listOf(value.entry, value.draft, value.activity, value.repair).count { it != null } == 1
+        )
+        value.repair?.let { repair ->
+            CollaborationSpaceInboxRepairCodec(access).validate(repair, value.conversationId)
+            val token =
+                id(
+                    "repair",
+                    value.conversationId,
+                    CollaborationSpaceInboxSource.GroupOriginal(repair.id),
+                )
+            val sort = repair.insertedAtRevision.toString().padStart(16, '0') + ":" + token
+            return Triple(
+                token,
+                sort,
+                if (repair.intent == null) setOf(token) else setOf(token, SPACE_INBOX_REPAIRS),
+            )
+        }
         val entry = value.entry
         val draft = value.draft
         val activity = value.activity
@@ -366,4 +438,13 @@ internal data class InboxDocumentDto(
     val entry: InboxEntryDto? = null,
     val draft: InboxDraftDto? = null,
     val activity: InboxActivityDto? = null,
+    val repair: InboxRepairDto? = null,
+)
+
+@Serializable
+internal data class InboxRepairCursorDto(
+    val schema: Int,
+    val generation: String,
+    val highRevision: Long,
+    val after: String,
 )

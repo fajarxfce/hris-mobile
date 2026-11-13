@@ -33,6 +33,7 @@ fun captureCollaborationSpaceInboxComposerAnchor(
 
 /** A new original and its editor successor share one index version and insertion sequence. */
 fun collaborationSpaceInboxComposerPublication(
+    access: CollaborationSpaceLocalAccess,
     conversation: CollaborationSpaceConversationMetadata,
     current: CollaborationSpaceInboxConversation,
     anchors: CollaborationSpaceInboxActivities,
@@ -47,6 +48,7 @@ fun collaborationSpaceInboxComposerPublication(
     if (anchors.version != owned.version)
         return collaborationRecoveryFailure("client.collaboration_inbox_busy", FailureKind.Conflict)
     val source = CollaborationSpaceInboxSource.GroupOriginal(submission.id)
+    val intent = collaborationSpaceComposerIntent(access, submission)
     if (
         actualAnchors.size > 1 ||
             actualAnchors.any {
@@ -56,6 +58,7 @@ fun collaborationSpaceInboxComposerPublication(
             } ||
             (actualAnchors.isNotEmpty() && owned.entry == null) ||
             !validCollaborationComposerHandoff(submission, null) ||
+            !validCollaborationSpaceMessageIntent(access, intent) ||
             submission.original.conversationId != conversation.id ||
             !validCollaborationDraft(editor) ||
             editor.conversationId != conversation.id ||
@@ -126,6 +129,7 @@ fun collaborationSpaceInboxComposerPublication(
             collaborationSpaceInboxEntry(conversation.id, createdAt, draft, newest),
             draft,
             listOf(activity),
+            CollaborationSpaceInboxRepairChange.Retain(intent),
         )
     return if (validCollaborationSpaceInboxPublication(proposal)) AppResult.Success(proposal)
     else

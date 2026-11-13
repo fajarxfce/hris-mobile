@@ -8,15 +8,19 @@ import dev.fajar.starter.collaboration.domain.entities.*
 fun validCollaborationSpaceMessageIntent(
     access: CollaborationSpaceLocalAccess,
     intent: CollaborationSpaceMessageIntent,
-): Boolean {
+): Boolean =
+    validCollaborationSpaceAccountAccess(
+        CollaborationSpaceAccountAccess(access.sessionId, access.audience, access.accountId)
+    ) &&
+        validCollaborationSpaceConversationId(access.accountId) &&
+        validCollaborationSpaceConversationId(access.spaceId) &&
+        intent.owner == access.messageOwner() &&
+        validCollaborationSpaceMessageIntentContent(intent)
+
+/** Payload validity alone grants no account ownership or access. */
+fun validCollaborationSpaceMessageIntentContent(intent: CollaborationSpaceMessageIntent): Boolean {
     if (
-        !validCollaborationSpaceAccountAccess(
-            CollaborationSpaceAccountAccess(access.sessionId, access.audience, access.accountId)
-        ) ||
-            !validCollaborationSpaceConversationId(access.accountId) ||
-            !validCollaborationSpaceConversationId(access.spaceId) ||
-            intent.owner != access.messageOwner() ||
-            !validCollaborationSpaceConversationId(intent.id) ||
+        !validCollaborationSpaceConversationId(intent.id) ||
             !validCollaborationSpaceConversationId(intent.conversationId) ||
             intent.createdAt.toEpochMilliseconds() !in 0 until 253_402_300_800_000L ||
             !validCollaborationText(intent.text) ||
