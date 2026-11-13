@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 19:43 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 19:45 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -17,12 +17,24 @@ provenance and optimistic text remain immutable while retained; old payloads sti
 storage support, not atomic edit authoring or proof of provider success. Preparation/application
 scripts are already used. No product graph, phone update or live service change is active here.
 
-Next .work/command-insert-projection-2026-11-13 has9 reviewed source/test drafts: raw
-insertAndMutate plus15 shared methods and2 SQLite fault injections. Its gates are prepared for
-focused47/full16619, but apply.py is NOT used and no Kotlin/runtime validation is claimed.
-All five source bases match Starter; after Mobile proof, port all9 generic files/tests there.
-Read review.md, apply only after this accepted source is committed/pushed, then format/capture/test.
-No next raw source has been applied during this full gate.
+Current .work/command-insert-projection-2026-11-13 has9 APPLIED source/test paths:
+five core database changes,15 shared methods and2 SQLite fault injections. Apply76475 and
+formatter54282 are REAPED PASS; formatted source5408/
+ede5cc85977f2c0c9826da2573c2f97b6118dadf4008052b67a543deca491089.
+Focused47/session54274 RUNNING; full16619 NOT started. No new runtime validation is claimed.
+Preparation/application/format scripts are used; actual source supersedes early draft formatting.
+Reap focused, run accept-focused.py focused-1, then full before acceptance/commit/Starter port.
+
+insertAndMutate retains one actual command, prepared source/index mutation and fresh wake in one
+raw transaction. Old active/archive replay preserves later projection/work. Source/index/wake,
+resource, identity, capacity or constraints must leave no partial publication. Existing browser
+standalone and archive operations share the updated transaction; their regression cases are in
+the focused/full gates. All five original source files matched Starter byte-for-byte. After Mobile
+acceptance, port nine generic source/test files into Starter with independent checks and its
+pinned Inspector. Actual edit authoring/outcome/list activation is still separate.
+
+Control43486239620 portable14,235 is accepted (audit44615 REAPED). Apple is still building its
+application host after shared tests. Audit the existing job when complete; do not redispatch.
 
 The following .work/space-edit-inbox-authoring-2026-11-13 has8 source DRAFTS ONLY, no tests or
 use-case admission: optional immutable Group intent inboxOrigin, DTO/shape policy, publication
