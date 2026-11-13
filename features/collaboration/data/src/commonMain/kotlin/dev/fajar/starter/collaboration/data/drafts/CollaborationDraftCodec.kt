@@ -1,7 +1,6 @@
 package dev.fajar.starter.collaboration.data.drafts
 
 import dev.fajar.starter.collaboration.data.history.COLLABORATION_HISTORY_PREFIX
-import dev.fajar.starter.collaboration.data.history.historyScope
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.database.*
@@ -20,13 +19,13 @@ internal fun draftPartition(access: CollaborationLocalAccess): String {
 internal const val PREPARED_DRAFT_TAG = "prepared"
 
 internal class CollaborationDraftCodec(
-    private val access: CollaborationLocalAccess,
+    private val coordinates: CollaborationComposerCoordinates,
     private val cipher: ContentCipher,
     private val key: ByteArray,
 ) {
     suspend fun checkpoint(raw: ReplicaCheckpoint) {
-        require(raw.published && raw.handle.scope == historyScope(access))
-        require(raw.handle.partition == draftPartition(access))
+        require(raw.published && raw.handle.scope == coordinates.scope)
+        require(raw.handle.partition == coordinates.partition)
         require(
             raw.revision in 0 until 9_007_199_254_740_991L &&
                 validCollaborationMessageId(raw.handle.generation)
@@ -112,19 +111,7 @@ internal class CollaborationDraftCodec(
     }
 
     private fun aad(generation: String, kind: String, revision: Long, sort: String) =
-        Json.encodeToString(
-                listOf(
-                    "hris-composer-content-v2",
-                    access.audience,
-                    access.accountId,
-                    access.companyId,
-                    draftPartition(access),
-                    generation,
-                    kind,
-                    revision.toString(),
-                    sort,
-                )
-            )
+        Json.encodeToString(coordinates.draftFrame(generation, kind, revision, sort))
             .encodeToByteArray()
 
     private suspend fun seal(

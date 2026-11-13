@@ -15,7 +15,7 @@ internal const val COMPOSER_HELD_TAG = "composer-held-v1"
 
 /** Separate authenticated payload type; the shared partition keeps handoff atomic. */
 internal class CollaborationComposerSubmissionCodec(
-    private val access: CollaborationLocalAccess,
+    private val coordinates: CollaborationComposerCoordinates,
     private val cipher: ContentCipher,
     private val key: ByteArray,
 ) {
@@ -107,19 +107,7 @@ internal class CollaborationComposerSubmissionCodec(
     }
 
     private fun aad(generation: String, id: String, revision: Long) =
-        Json.encodeToString(
-                listOf(
-                    "hris-composer-outbox-v1",
-                    access.audience,
-                    access.accountId,
-                    access.companyId,
-                    draftPartition(access),
-                    generation,
-                    id,
-                    revision.toString(),
-                )
-            )
-            .encodeToByteArray()
+        Json.encodeToString(coordinates.outboxFrame(generation, id, revision)).encodeToByteArray()
 }
 
 @Serializable

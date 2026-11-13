@@ -1,5 +1,7 @@
 # Architecture
 
+[Organization composer storage](collaboration-space-composer-storage.md) shares encrypted draft/outbox I/O with explicit Group ownership and an atomic recovery wake.
+
 [Immutable organization submissions](collaboration-space-immutable-submission.md) retain caller-captured ID, content and time across local queue delays and retries.
 
 [Canonical thread participants](collaboration-space-thread-participants.md) keep exact peer and historical/current sender facts under the existing local thread owner.

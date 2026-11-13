@@ -7,6 +7,7 @@ import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationDraftRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceDraftRepository
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
@@ -21,40 +22,70 @@ class EncryptedCollaborationDraftRepository(
     private val replicas: ReplicaStore,
     private val cipher: ContentCipher,
     @Named("collaboration-history-content-key") private val credentials: AtomicCredentialStore,
-) : CollaborationDraftRepository {
+) : CollaborationDraftRepository, CollaborationSpaceDraftRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
 
     override fun observe(access: CollaborationLocalAccess, conversationId: String) =
+        observe(CollaborationComposerCoordinates.Company(access), conversationId)
+
+    override suspend fun get(access: CollaborationLocalAccess, conversationId: String) =
+        get(CollaborationComposerCoordinates.Company(access), conversationId)
+
+    override suspend fun replace(
+        access: CollaborationLocalAccess,
+        expected: CollaborationDraft?,
+        replacement: CollaborationDraft,
+    ) = replace(CollaborationComposerCoordinates.Company(access), expected, replacement)
+
+    override suspend fun prepared(
+        access: CollaborationLocalAccess,
+        afterConversationId: String?,
+        limit: Int,
+    ) = prepared(CollaborationComposerCoordinates.Company(access), afterConversationId, limit)
+
+    override fun observe(access: CollaborationSpaceLocalAccess, conversationId: String) =
+        observe(CollaborationComposerCoordinates.Space(access), conversationId)
+
+    override suspend fun get(access: CollaborationSpaceLocalAccess, conversationId: String) =
+        get(CollaborationComposerCoordinates.Space(access), conversationId)
+
+    override suspend fun replace(
+        access: CollaborationSpaceLocalAccess,
+        expected: CollaborationDraft?,
+        replacement: CollaborationDraft,
+    ) = replace(CollaborationComposerCoordinates.Space(access), expected, replacement)
+
+    private fun observe(coordinates: CollaborationComposerCoordinates, conversationId: String) =
         safeStorageFlow(
                 flow {
                     require(validCollaborationMessageId(conversationId))
                     emitAll(
                         replicas.observeDocument(
-                            historyScope(access),
-                            draftPartition(access),
+                            coordinates.scope,
+                            coordinates.partition,
                             conversationId,
                         )
                     )
                 },
-                mapValue = { decode(access, conversationId, it) },
+                mapValue = { decode(coordinates, conversationId, it) },
             )
             .flowOn(Dispatchers.Default)
 
-    override suspend fun get(access: CollaborationLocalAccess, conversationId: String) =
+    private suspend fun get(coordinates: CollaborationComposerCoordinates, conversationId: String) =
         withContext(Dispatchers.Default) {
             safeStorageCall {
                     require(validCollaborationMessageId(conversationId))
-                    val scope = historyScope(access)
-                    val partition = draftPartition(access)
+                    val scope = coordinates.scope
+                    val partition = coordinates.partition
                     val page = replicas.observeDocument(scope, partition, conversationId).first()
-                    val result = decode(access, conversationId, page)
+                    val result = decode(coordinates, conversationId, page)
                     result to (replicas.checkpoint(scope, partition) == page.checkpoint)
                 }
                 .stableRead()
         }
 
-    override suspend fun prepared(
-        access: CollaborationLocalAccess,
+    private suspend fun prepared(
+        coordinates: CollaborationComposerCoordinates,
         afterConversationId: String?,
         limit: Int,
     ) =
@@ -65,8 +96,8 @@ class EncryptedCollaborationDraftRepository(
                             (afterConversationId == null ||
                                 validCollaborationMessageId(afterConversationId))
                     )
-                    val scope = historyScope(access)
-                    val partition = draftPartition(access)
+                    val scope = coordinates.scope
+                    val partition = coordinates.partition
                     val page =
                         replicas
                             .observeQueries(
@@ -89,7 +120,7 @@ class EncryptedCollaborationDraftRepository(
                             emptyList()
                         } else
                             keys.use { content, _ ->
-                                val codec = CollaborationDraftCodec(access, cipher, content)
+                                val codec = CollaborationDraftCodec(coordinates, cipher, content)
                                 codec.checkpoint(checkpoint)
                                 require(documents.size <= limit + 1)
                                 documents
@@ -142,8 +173,8 @@ class EncryptedCollaborationDraftRepository(
             )
         )
 
-    override suspend fun replace(
-        access: CollaborationLocalAccess,
+    private suspend fun replace(
+        coordinates: CollaborationComposerCoordinates,
         expected: CollaborationDraft?,
         replacement: CollaborationDraft,
     ) =
@@ -155,8 +186,8 @@ class EncryptedCollaborationDraftRepository(
                             (validCollaborationDraft(expected) &&
                                 expected.conversationId == replacement.conversationId)
                     )
-                    val scope = historyScope(access)
-                    val partition = draftPartition(access)
+                    val scope = coordinates.scope
+                    val partition = coordinates.partition
                     // Technical CAS contention from another document must not drop this mutation.
                     // Every attempt rereads this exact target; a changed target is never
                     // overwritten.
@@ -166,14 +197,14 @@ class EncryptedCollaborationDraftRepository(
                             replicas
                                 .observeDocument(scope, partition, replacement.conversationId)
                                 .first()
-                        val current = decode(access, replacement.conversationId, page)
+                        val current = decode(coordinates, replacement.conversationId, page)
                         if (replicas.checkpoint(scope, partition) != page.checkpoint) return@repeat
                         if (current == replacement) return@safeStorageCall true
                         if (current != expected) return@safeStorageCall false
                         require(current?.revision != replacement.revision)
                         val written =
                             keys.use(create = page.checkpoint == null) { content, _ ->
-                                val codec = CollaborationDraftCodec(access, cipher, content)
+                                val codec = CollaborationDraftCodec(coordinates, cipher, content)
                                 val raw = page.checkpoint
                                 val generation = raw?.handle?.generation ?: Uuid.random().toString()
                                 val revision = raw?.revision?.plus(1) ?: 0L
@@ -206,7 +237,7 @@ class EncryptedCollaborationDraftRepository(
         }
 
     private suspend fun decode(
-        access: CollaborationLocalAccess,
+        coordinates: CollaborationComposerCoordinates,
         conversationId: String,
         page: ReplicaPage,
     ): CollaborationDraft? {
@@ -216,7 +247,7 @@ class EncryptedCollaborationDraftRepository(
             return null
         }
         return keys.use { content, _ ->
-            val codec = CollaborationDraftCodec(access, cipher, content)
+            val codec = CollaborationDraftCodec(coordinates, cipher, content)
             codec.checkpoint(checkpoint)
             require(page.documents.size <= 1)
             page.documents.singleOrNull()?.let {

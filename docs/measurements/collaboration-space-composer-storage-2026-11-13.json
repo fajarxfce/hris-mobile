@@ -1,0 +1,90 @@
+{
+  "date": "2026-11-13",
+  "scope": "Encrypted organization composer slots and atomic handoff storage",
+  "baseCommit": "98f6f55c52ba1fff04c863aa4681e2d518558bfd",
+  "sourceFiles": 5185,
+  "sourceManifestSha256": "62b03b22add0d74c7d024c032a5f9a8e85f5e7050cae5e49b93c5dfe6951ae11",
+  "changedSources": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "55c10e6940b5519e878383afcffb6fa9e9b1f2eb254db7483446df3354164952",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationComposerCoordinates.kt": "514aa0a37987c6c822d1a5e3986e0d9bdb4f68f0c3efae0854474068142449de",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationComposerSubmissionCodec.kt": "b5817da279084b4be61e1b90ca4b976396496d6d5a112c30030a2e80fc5bc1cd",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationDraftCodec.kt": "37b0a74901e743fe42ef36d825bd109e4532d4df00a7c36792476dff13728e61",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationComposerOutboxRepository.kt": "bf9f63c2da0a30058f803aa10ea1736689bbabb20a5041aab2d7832adc6aebbe",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationDraftRepository.kt": "43deaa8b91845da239fefd52b3d11e42aa5d4b1fb6580192d88c440c230ca036",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationComposerCoordinatesTest.kt": "b2350ec20b229aaa8538a9fe00f63eeac3b87f27c60eeae0a02f937f7c22050d",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceComposerStorageContract.kt": "d5a4eca99af57287970e692c1d7e9fbc9d6046d2d7979671718833598238cb98",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceComposerStorageTest.kt": "98f8482e83a4d50fab746981e0d0b3eda5f2f2531d2cf7b35bcc97a0ad2409c4",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceComposerStorageTest.kt": "30339b98c2a18a1d199f05c24ca6d53ba8518cf72980f0882ec6cd2768764365",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceComposerStorageTest.kt": "7f44478db7ce6b18c705a12f37d8c30a87dc1970910f0ac4c7039cc653219c76",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceComposerOutboxRepository.kt": "f69c309b5cb3c7918c6820c0dd17e2570bd4ef55814a0063574a215a9403121f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceDraftRepository.kt": "0b995dffcce6d31acbbf8d9caeaa4e51d1e1dc49ff60f1fc061779465fe94fb0"
+  },
+  "focused": {
+    "accepted": true,
+    "tests": 81,
+    "elapsedSeconds": 337.314,
+    "sourceFiles": 5185,
+    "sourceManifestSha256": "62b03b22add0d74c7d024c032a5f9a8e85f5e7050cae5e49b93c5dfe6951ae11",
+    "resultSha256": "6d6b1829397d3d6741ecd0228dee348e23ac653ccdad20477ed45b9b08732a29",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationComposerOutboxStorageTest": 28,
+      "CollaborationDraftStorageTest": 18,
+      "CollaborationSpaceComposerStorageTest": 13,
+      "CollaborationSpaceMessageStorageTest": 17,
+      "CollaborationComposerCoordinatesTest": 3
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-12T23:58:25.009083+00:00",
+    "elapsedSeconds": 871.701,
+    "sourceFiles": 5185,
+    "freshCounts": {
+      "tests": 12825,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152457744,
+      "sha256": "d8a0c369ef9d8f8eb55de857d0295dc9b5960e0be0f8d5b68f47b45fc3eff4cc"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 14863,
+    "newCases": 35,
+    "freshTests": 12825,
+    "reusedUnaffectedTests": 2038,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 111,
+    "excludedHistoricalCases": 657,
+    "sourceManifestSha256": "62b03b22add0d74c7d024c032a5f9a8e85f5e7050cae5e49b93c5dfe6951ae11",
+    "reportManifestSha256": "e4ae4d1857c6b82ad81c86a9b7ce79e684665994ff845f0945672fe30afb3bb3",
+    "nativeClaim": "No native SDK/proof source change in this storage increment. Linux executes no Apple cases; the new Apple wrapper and common protocol tests require actual hosted native execution."
+  },
+  "fullAuditSha256": "2ddd13c35a7e0235f5e6ae1778d86a44230cd4949f7771a82d09be0ce865a0c1",
+  "newAppleMethodsToExecute": 16,
+  "appleCasesExecutedLocally": 0,
+  "currentNativeScenariosExecuted": 0,
+  "phoneInstalledForThisIncrement": false,
+  "groupLiveDeployment": false,
+  "auditCountReview": {
+    "cause": "Planned32 omitted the three new common protocol methods also executed by Android host tests. Actual new35 = desktop16 + browser16 + Android host3. All prior14828 identities retained; production/test assertions unchanged.",
+    "observedOldCases": 14828,
+    "observedNewCases": 35,
+    "resultSha256": "d3085d69f1b8fd72b66ef4effb2b8a0a6b8343a6a27ee85627cebc4d3d85f067"
+  },
+  "preservedFailures": [
+    {
+      "path": "failed-handoff-publication-boundary-1",
+      "phase": "focused-1",
+      "session": "79504 REAPED",
+      "elapsedSeconds": 63.792,
+      "testsExecuted": 0,
+      "cause": "Detekt LongMethod: handoff109 lines, maximum100. The shared handoff still mixed payload preparation with the two raw conditional publication operations.",
+      "correction": "Separate the exact encrypted snapshot/wake publication into a named private repository operation. Keep CAS, optional wake, cancellation and source ownership unchanged; no new layer, altered thresholds or weakened tests."
+    }
+  ],
+  "remaining": "Admitted Group editor/submit actions, bounded outbox recovery, canonical thread/list presentation and measured first-frame behavior."
+}

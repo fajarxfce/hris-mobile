@@ -9,6 +9,7 @@ import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.entities.CollaborationComposerHandoffResult as HandoffResult
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationComposerOutboxRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceComposerOutboxRepository
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
 import dev.fajar.starter.observability.PerformanceOperation
@@ -25,11 +26,64 @@ class EncryptedCollaborationComposerOutboxRepository(
     private val replicas: ReplicaStore,
     private val cipher: ContentCipher,
     @Named("collaboration-history-content-key") private val credentials: AtomicCredentialStore,
-) : CollaborationComposerOutboxRepository {
+) : CollaborationComposerOutboxRepository, CollaborationSpaceComposerOutboxRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
 
     override suspend fun handoff(
         access: CollaborationLocalAccess,
+        submission: CollaborationComposerSubmission,
+        expected: CollaborationDraft?,
+    ) = handoff(CollaborationComposerCoordinates.Company(access), submission, expected)
+
+    override suspend fun get(access: CollaborationLocalAccess, id: String) =
+        get(CollaborationComposerCoordinates.Company(access), id)
+
+    override fun observe(access: CollaborationLocalAccess) =
+        observe(CollaborationComposerCoordinates.Company(access))
+
+    override suspend fun hold(
+        access: CollaborationLocalAccess,
+        expected: CollaborationComposerSubmission,
+    ) = hold(CollaborationComposerCoordinates.Company(access), expected)
+
+    override suspend fun pending(access: CollaborationLocalAccess, after: String?, limit: Int) =
+        pending(CollaborationComposerCoordinates.Company(access), after, limit)
+
+    override suspend fun remove(
+        access: CollaborationLocalAccess,
+        expected: CollaborationComposerSubmission,
+    ) = remove(CollaborationComposerCoordinates.Company(access), expected)
+
+    override suspend fun handoff(
+        access: CollaborationSpaceLocalAccess,
+        submission: CollaborationComposerSubmission,
+        expected: CollaborationDraft?,
+    ) = handoff(CollaborationComposerCoordinates.Space(access), submission, expected)
+
+    override suspend fun get(access: CollaborationSpaceLocalAccess, id: String) =
+        get(CollaborationComposerCoordinates.Space(access), id)
+
+    override fun observe(access: CollaborationSpaceLocalAccess) =
+        observe(CollaborationComposerCoordinates.Space(access))
+
+    override suspend fun hold(
+        access: CollaborationSpaceLocalAccess,
+        expected: CollaborationComposerSubmission,
+    ) = hold(CollaborationComposerCoordinates.Space(access), expected)
+
+    override suspend fun pending(
+        access: CollaborationSpaceLocalAccess,
+        after: String?,
+        limit: Int,
+    ) = pending(CollaborationComposerCoordinates.Space(access), after, limit)
+
+    override suspend fun remove(
+        access: CollaborationSpaceLocalAccess,
+        expected: CollaborationComposerSubmission,
+    ) = remove(CollaborationComposerCoordinates.Space(access), expected)
+
+    private suspend fun handoff(
+        coordinates: CollaborationComposerCoordinates,
         submission: CollaborationComposerSubmission,
         expected: CollaborationDraft?,
     ): AppResult<HandoffResult> =
@@ -37,8 +91,8 @@ class EncryptedCollaborationComposerOutboxRepository(
             withContext(Dispatchers.Default) {
                 safeStorageCall {
                         require(validCollaborationComposerHandoff(submission, expected))
-                        val scope = historyScope(access)
-                        val partition = draftPartition(access)
+                        val scope = coordinates.scope
+                        val partition = coordinates.partition
                         val conversation = submission.original.conversationId
                         repeat(3) {
                             currentCoroutineContext().ensureActive()
@@ -57,8 +111,8 @@ class EncryptedCollaborationComposerOutboxRepository(
                             require(original.documents.size <= 1 && outgoing.documents.size <= 1)
                             val result =
                                 keys.use(create = checkpoint == null) { key, _ ->
-                                    val drafts = CollaborationDraftCodec(access, cipher, key)
-                                    val outbox = SubmissionCodec(access, cipher, key)
+                                    val drafts = CollaborationDraftCodec(coordinates, cipher, key)
+                                    val outbox = SubmissionCodec(coordinates, cipher, key)
                                     if (checkpoint != null) drafts.checkpoint(checkpoint)
                                     val retained =
                                         outgoing.documents.singleOrNull()?.let { existing ->
@@ -106,23 +160,21 @@ class EncryptedCollaborationComposerOutboxRepository(
                                             outbox.encode(generation, revision, submission),
                                         )
                                     val next = drafts.checkpoint(generation, revision)
-                                    currentCoroutineContext().ensureActive()
+                                    val wake =
+                                        if (coordinates is CollaborationComposerCoordinates.Space)
+                                            WorkWakeRequest(
+                                                CollaborationSpaceRecoveryWake.WORK_KEY,
+                                                Uuid.random().toString(),
+                                                SPACE_RECOVERY_WAKE_MAX_KEYS,
+                                            )
+                                        else null
                                     val written =
-                                        if (checkpoint == null)
-                                            replicas.replace(
-                                                scope,
-                                                partition,
-                                                null,
-                                                ReplicaSnapshot(generation, next, documents),
-                                            )
-                                        else
-                                            replicas.commit(
-                                                checkpoint.handle,
-                                                checkpoint.revision,
-                                                next,
-                                                documents,
-                                                true,
-                                            )
+                                        publishHandoff(
+                                            coordinates,
+                                            checkpoint,
+                                            ReplicaSnapshot(generation, next, documents),
+                                            wake,
+                                        )
                                     if (written) HandoffResult.STORED else null
                                 }
                             if (result != null) return@safeStorageCall result
@@ -133,34 +185,58 @@ class EncryptedCollaborationComposerOutboxRepository(
             }
         }
 
+    /** Both encrypted documents and their wake publish through one conditional storage mutation. */
+    private suspend fun publishHandoff(
+        coordinates: CollaborationComposerCoordinates,
+        expected: ReplicaCheckpoint?,
+        snapshot: ReplicaSnapshot,
+        wake: WorkWakeRequest?,
+    ): Boolean {
+        currentCoroutineContext().ensureActive()
+        return if (expected == null)
+            replicas.replace(coordinates.scope, coordinates.partition, null, snapshot, wake)
+        else
+            replicas.commit(
+                expected.handle,
+                expected.revision,
+                snapshot.checkpoint,
+                snapshot.documents,
+                true,
+                wake,
+            )
+    }
+
     // Checkpoint and documents belong to one coherent observation. A different editor advancing
     // the partition does not invalidate these immutable originals; mutations still use exact CAS.
-    override suspend fun get(
-        access: CollaborationLocalAccess,
+    private suspend fun get(
+        coordinates: CollaborationComposerCoordinates,
         id: String,
     ): AppResult<CollaborationComposerSubmission?> =
         withContext(Dispatchers.Default) {
             safeStorageCall {
                 require(validCollaborationMessageId(id))
-                val scope = historyScope(access)
-                val partition = draftPartition(access)
+                val scope = coordinates.scope
+                val partition = coordinates.partition
                 val page = replicas.observeDocument(scope, partition, id).first()
-                decode(access, id, page)
+                decode(coordinates, id, page)
             }
         }
 
-    override fun observe(
-        access: CollaborationLocalAccess
+    private fun observe(
+        coordinates: CollaborationComposerCoordinates
     ): Flow<AppResult<List<CollaborationComposerOutboxEntry>>> =
-        replicas
-            .observeQueries(
-                historyScope(access),
-                draftPartition(access),
-                listOf(
-                    ReplicaQuery(COMPOSER_OUTBOX_TAG, limit = 129),
-                    ReplicaQuery(COMPOSER_HELD_TAG, limit = 129),
-                ),
-            )
+        flow {
+                emitAll(
+                    replicas.observeQueries(
+                        coordinates.scope,
+                        coordinates.partition,
+                        listOf(
+                            ReplicaQuery(COMPOSER_OUTBOX_TAG, limit = 129),
+                            ReplicaQuery(COMPOSER_HELD_TAG, limit = 129),
+                        ),
+                    )
+                )
+            }
             .map { page ->
                 safeStorageCall {
                     require(page.pages.size == 2)
@@ -175,8 +251,8 @@ class EncryptedCollaborationComposerOutboxRepository(
                         emptyList()
                     } else
                         keys.use { key, _ ->
-                            CollaborationDraftCodec(access, cipher, key).checkpoint(checkpoint)
-                            val codec = SubmissionCodec(access, cipher, key)
+                            CollaborationDraftCodec(coordinates, cipher, key).checkpoint(checkpoint)
+                            val codec = SubmissionCodec(coordinates, cipher, key)
                             documents
                                 .map { codec.decodeEntry(checkpoint, it) }
                                 .sortedBy { it.submission.id }
@@ -187,8 +263,8 @@ class EncryptedCollaborationComposerOutboxRepository(
             .flowOn(Dispatchers.Default)
             .distinctUntilChanged()
 
-    override suspend fun hold(
-        access: CollaborationLocalAccess,
+    private suspend fun hold(
+        coordinates: CollaborationComposerCoordinates,
         expected: CollaborationComposerSubmission,
     ): AppResult<Boolean> =
         withContext(Dispatchers.Default) {
@@ -199,8 +275,8 @@ class EncryptedCollaborationComposerOutboxRepository(
                         val page =
                             replicas
                                 .observeDocument(
-                                    historyScope(access),
-                                    draftPartition(access),
+                                    coordinates.scope,
+                                    coordinates.partition,
                                     expected.id,
                                 )
                                 .first()
@@ -212,16 +288,14 @@ class EncryptedCollaborationComposerOutboxRepository(
                         require(page.documents.size <= 1)
                         val held =
                             keys.use { key, _ ->
-                                val drafts = CollaborationDraftCodec(access, cipher, key)
+                                val drafts = CollaborationDraftCodec(coordinates, cipher, key)
                                 drafts.checkpoint(checkpoint)
-                                val codec = SubmissionCodec(access, cipher, key)
+                                val codec = SubmissionCodec(coordinates, cipher, key)
                                 val document = page.documents.singleOrNull() ?: return@use false
                                 val current = codec.decodeEntry(checkpoint, document)
                                 if (
-                                    replicas.checkpoint(
-                                        historyScope(access),
-                                        draftPartition(access),
-                                    ) != checkpoint
+                                    replicas.checkpoint(coordinates.scope, coordinates.partition) !=
+                                        checkpoint
                                 )
                                     return@use null
                                 if (current.submission != expected) return@use false
@@ -256,16 +330,16 @@ class EncryptedCollaborationComposerOutboxRepository(
                 .stable()
         }
 
-    override suspend fun pending(
-        access: CollaborationLocalAccess,
+    private suspend fun pending(
+        coordinates: CollaborationComposerCoordinates,
         after: String?,
         limit: Int,
     ): AppResult<CollaborationComposerSubmissionPage> =
         withContext(Dispatchers.Default) {
             safeStorageCall {
                 require(limit in 1..8 && (after == null || validCollaborationMessageId(after)))
-                val scope = historyScope(access)
-                val partition = draftPartition(access)
+                val scope = coordinates.scope
+                val partition = coordinates.partition
                 val page =
                     replicas
                         .observeQueries(
@@ -282,9 +356,9 @@ class EncryptedCollaborationComposerOutboxRepository(
                         emptyList()
                     } else
                         keys.use { key, _ ->
-                            CollaborationDraftCodec(access, cipher, key).checkpoint(checkpoint)
+                            CollaborationDraftCodec(coordinates, cipher, key).checkpoint(checkpoint)
                             require(documents.size <= limit + 1)
-                            val codec = SubmissionCodec(access, cipher, key)
+                            val codec = SubmissionCodec(coordinates, cipher, key)
                             documents
                                 .map { codec.decode(checkpoint, it) }
                                 .also { submissions ->
@@ -303,19 +377,19 @@ class EncryptedCollaborationComposerOutboxRepository(
             }
         }
 
-    override suspend fun remove(
-        access: CollaborationLocalAccess,
+    private suspend fun remove(
+        coordinates: CollaborationComposerCoordinates,
         expected: CollaborationComposerSubmission,
     ): AppResult<Boolean> =
         withContext(Dispatchers.Default) {
             safeStorageCall {
                     require(validCollaborationComposerSubmission(expected))
-                    val scope = historyScope(access)
-                    val partition = draftPartition(access)
+                    val scope = coordinates.scope
+                    val partition = coordinates.partition
                     repeat(3) {
                         currentCoroutineContext().ensureActive()
                         val page = replicas.observeDocument(scope, partition, expected.id).first()
-                        val retained = decode(access, expected.id, page)
+                        val retained = decode(coordinates, expected.id, page)
                         if (replicas.checkpoint(scope, partition) != page.checkpoint) return@repeat
                         if (retained != expected) return@safeStorageCall false
                         val checkpoint = requireNotNull(page.checkpoint)
@@ -323,7 +397,7 @@ class EncryptedCollaborationComposerOutboxRepository(
                         require(revision in 0 until 9_007_199_254_740_991L)
                         val next =
                             keys.use { key, _ ->
-                                CollaborationDraftCodec(access, cipher, key)
+                                CollaborationDraftCodec(coordinates, cipher, key)
                                     .checkpoint(checkpoint.handle.generation, revision)
                             }
                         currentCoroutineContext().ensureActive()
@@ -344,7 +418,7 @@ class EncryptedCollaborationComposerOutboxRepository(
         }
 
     private suspend fun decode(
-        access: CollaborationLocalAccess,
+        coordinates: CollaborationComposerCoordinates,
         id: String,
         page: ReplicaPage,
     ): CollaborationComposerSubmission? {
@@ -355,10 +429,10 @@ class EncryptedCollaborationComposerOutboxRepository(
         }
         require(page.documents.size <= 1)
         return keys.use { key, _ ->
-            CollaborationDraftCodec(access, cipher, key).checkpoint(checkpoint)
+            CollaborationDraftCodec(coordinates, cipher, key).checkpoint(checkpoint)
             page.documents.singleOrNull()?.let {
                 require(it.id == id)
-                SubmissionCodec(access, cipher, key).decode(checkpoint, it)
+                SubmissionCodec(coordinates, cipher, key).decode(checkpoint, it)
             }
         }
     }
