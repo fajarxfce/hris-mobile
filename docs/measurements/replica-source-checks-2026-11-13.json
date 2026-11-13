@@ -1,0 +1,131 @@
+{
+  "previousCorrectedControl": {
+    "dispatched": true,
+    "portableAccepted": true,
+    "appleAccepted": false,
+    "complete": false,
+    "workflow": "collaboration-control.yml",
+    "ref": "feat/chat-send-timing-20261107",
+    "previousRun": 43427620202,
+    "previousCommit": "42fd5d12c5353779d4a61cc50b8c53ae8c6c0bc6",
+    "failedPreviousRun": 43443248470,
+    "failedPreviousCommit": "c2d9b5ea753083967adc40129187e9e5c6fcb413",
+    "expectedPortable": {
+      "desktopTest": 6696,
+      "testAndroidHostTest": 960,
+      "wasmJsBrowserTest": 6400
+    },
+    "expectedApple": {
+      "iosSimulatorArm64Test": 5950
+    },
+    "expectedTotal": 20006,
+    "newSharedMethods": 115,
+    "newDesktopIntegrationMethods": 3,
+    "newlyExecutedExistingApplicationBrowserMethods": 144,
+    "newlyExecutedExistingApplicationAppleMethods": 143,
+    "newlySelectedExistingTimingDesktopMethods": 9,
+    "status": "one job accepted; other job pending",
+    "sourceCommit": "fe2e1cbb742dfde262182863d11b6604fe3a9c32",
+    "dispatchAttemptedAt": "2026-11-13T15:42:25.855849+00:00",
+    "dispatchExitCode": 0,
+    "runId": 43455295124,
+    "runUrl": "https://github.com/fajarxfce/hris-mobile/actions/runs/43455295124",
+    "portableJobId": 131987710916,
+    "totalAccepted": 14056,
+    "portableAuditSession": 62676,
+    "portableAuditReaped": true
+  },
+  "previousAcceptedJobs": {
+    "portable": {
+      "accepted": true,
+      "sourceCommit": "fe2e1cbb742dfde262182863d11b6604fe3a9c32",
+      "runId": 43455295124,
+      "jobId": 131987710916,
+      "counts": {
+        "desktopTest": 6696,
+        "testAndroidHostTest": 960,
+        "wasmJsBrowserTest": 6400
+      },
+      "previousFailedRunCaseIdsRetained": true,
+      "previousFailedRunId": 43443248470,
+      "previousFailedRunCases": 13929,
+      "fixedTimingMethods": [
+        "thrownFailureFinishesTimingWithoutExceptionPayload",
+        "suspendedThrownErrorsFinishRoomAndWorkerStagesWithoutLosingTheirOutcome"
+      ],
+      "artifactId": 14055583379,
+      "artifactBytes": 4392163,
+      "artifactSha256": "76f00285bf48ab1b7191bbf36ac9a06b17c9e1201636de6c57c5a6f57e1f6119",
+      "jobLogSha256": "7ae15237517fb8dd8cda5a264383b6b2bdc57016b6b604a04ae9629e723303cd",
+      "previousExactCaseIdsRetained": true,
+      "previousMethodAndPlatformIdsRetained": true,
+      "browserEngineReview": null,
+      "newSharedMethods": 115,
+      "reportManifestSha256": "61c6ae7afcb046356ad9af604d4d7af76e4a154c5c209999d413680678b6826c"
+    }
+  },
+  "acceptedLocally": true,
+  "changedPaths": [
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/ReplicaMutation.kt",
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/ReplicaStore.kt",
+    "core/database/src/commonTest/kotlin/dev/fajar/starter/database/ReplicaChecksContract.kt",
+    "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/ReplicaChecksTest.kt",
+    "core/database/src/iosTest/kotlin/dev/fajar/starter/database/AppleReplicaChecksTest.kt",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/dao/ReplicaDao.kt",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbReplicaMutations.kt",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserReplicaChecksTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 44,
+    "elapsedSeconds": 329.537,
+    "sourceFiles": 5373,
+    "sourceManifestSha256": "419f946b90d5dbdc4f1ddedd896f9df3d7504a002d2de6e07cef33a7cd2248b5",
+    "resultSha256": "7cd43d1832595808e6427972c2629fb576defb236e337b9a7eb037fc86882b92",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "ReplicaChecksTest": 13,
+      "ReplicaMutationsTest": 14,
+      "CommandArchiveMutationsTest": 15
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T16:18:47.692588+00:00",
+    "elapsedSeconds": 888.851,
+    "sourceFiles": 5373,
+    "freshCounts": {
+      "tests": 6135,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153425413,
+      "sha256": "08a214f1deda585b660834d7ecfdc480256c3de392e4f3d73403b85cc446096b"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16377,
+    "newCases": 26,
+    "freshTests": 6135,
+    "reusedUnaffectedTests": 10242,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "419f946b90d5dbdc4f1ddedd896f9df3d7504a002d2de6e07cef33a7cd2248b5",
+    "reportManifestSha256": "6d3e230ac673132084b454f72151ba05fafd029a9b501e3fa28b8b338cf3262f",
+    "nativeClaim": "Read-only exact source checkpoint guard paired with a replica write; 13 shared actual-storage methods. Actual Apple execution, incoming-history producer integration and Starter port remain separate."
+  },
+  "newSharedMethods": 13,
+  "maxMutations": 2,
+  "requiresAtLeastOneWrite": true,
+  "readOnlyCheckpointGuard": true,
+  "sourceRevisionAndCiphertextPreserved": true,
+  "actualNewAppleExecution": false,
+  "starterPortAccepted": false,
+  "productGraphActivated": false,
+  "phoneInstalled": false,
+  "installedPhoneBuild": 92,
+  "liveChanged": false
+}

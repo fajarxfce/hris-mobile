@@ -23,6 +23,7 @@ import kotlin.js.Promise
             return;
         }
         const {mutation:m, partition, head, current} = prepared[index];
+        if (m.type === 'check') { write(index + 1); return; }
         if (m.type === 'replace') {
             heads.delete([ownerKey, partition]);
             generations.delete(IDBKeyRange.bound([ownerKey, partition, ''], [ownerKey, partition, '\uffff']));
@@ -82,7 +83,7 @@ import kotlin.js.Promise
     };
     const preflight = index => {
         if (index === mutations.length) { admitWake(); return; }
-        const m = mutations[index], partition = m.type === 'replace' ? m.partition : m.handle.partition;
+        const m = mutations[index], partition = m.type === 'commit' ? m.handle.partition : m.partition;
         const found = heads.get([ownerKey, partition]);
         found.onsuccess = () => {
             const head = found.result, generation = head?.stagingGeneration ?? head?.activeGeneration;
@@ -98,7 +99,7 @@ import kotlin.js.Promise
                     expected.handle.partition !== partition || expected.handle.generation !== current.generation ||
                     expected.revision !== current.revision || expected.payload !== current.checkpoint ||
                     expected.published !== (head.activeGeneration === generation)) return;
-                if (m.snapshot == null) { ready(); return; }
+                if (m.type === 'check' || m.snapshot == null) { ready(); return; }
                 const existing = generations.get([ownerKey, partition, m.snapshot.generation]);
                 existing.onsuccess = () => { if (!existing.result) ready(); };
             };

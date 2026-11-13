@@ -6,6 +6,11 @@ import kotlinx.serialization.Serializable
 /** Ready-to-store ciphertext. Admission, encryption and projection policy belong to callers. */
 @Serializable
 sealed interface ReplicaMutation {
+    /** Exact working checkpoint or absence; pair with one write to a different partition. */
+    @Serializable
+    @SerialName("check")
+    data class Check(val partition: String, val expected: ReplicaCheckpoint?) : ReplicaMutation
+
     @Serializable
     @SerialName("replace")
     data class Replace(
@@ -31,9 +36,11 @@ internal fun retainReplicaMutations(
     mutations: List<ReplicaMutation>,
 ): List<ReplicaMutation> {
     require(mutations.size in 1..2)
+    require(mutations.any { it !is ReplicaMutation.Check })
     val retained =
         mutations.toList().map { mutation ->
             when (mutation) {
+                is ReplicaMutation.Check -> mutation
                 is ReplicaMutation.Replace ->
                     mutation.copy(
                         snapshot =
@@ -53,6 +60,10 @@ internal fun retainReplicaMutations(
     val partitions =
         retained.map { mutation ->
             when (mutation) {
+                is ReplicaMutation.Check -> {
+                    validateReplicaReplacement(scope, mutation.partition, mutation.expected, null)
+                    mutation.partition
+                }
                 is ReplicaMutation.Replace -> {
                     validateReplicaReplacement(
                         scope,

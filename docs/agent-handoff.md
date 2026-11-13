@@ -1,10 +1,41 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 16:11 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 16:34 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Source-checked replica publication locally accepted
+
+Mobile .work/source-checked-replica-mutations-2026-11-13 has eight accepted generic source/test
+paths: focused 44/full 16,377, 6135 fresh / 10242 exact unchanged.
+All 16,351 preceding identities remain plus 26 JVM/browser executions. Source
+5373/419f946b90d5dbdc4f1ddedd896f9df3d7504a002d2de6e07cef33a7cd2248b5; reports 6d3e230ac673132084b454f72151ba05fafd029a9b501e3fa28b8b338cf3262f.
+The exact read-only Check shares one transaction with a real projection write and preserves
+source revision/ciphertext. Tests include actual stores, absence/staging/ownership, preflight,
+rollback, cancellation, observation, competing writers, lost replies, archive replay and reopen.
+No product collector, new queue, native send, backend deployment or phone change is included.
+
+Next port these eight identical generic paths to Starter (currently 116627f / full964; expected
+990 after 26 added desktop/browser cases). All eight predecessor paths were compared exactly;
+its AGENTS/handoff were read and .work/replica-source-checks-port-2026-11-13 contains guarded
+apply/check/accept scripts, expected990; publishing/handoff script is also prepared. Apply only after
+this Mobile source is accepted and pushed. Preserve
+its pinned inspector and current platform configuration. Actual shared Apple execution remains
+pending a later source control; do not count compilation as runtime evidence.
+
+Then implement admitted bounded incoming-history snapshot and conditional inbox publication in
+the history repository, coordinated by domain policy and the existing incoming owner. The notes
+in .work/source-checked-replica-mutations-2026-11-13/history-publication-notes.md identify replay
+paths where no new merge occurs. Do not relabel Company/history as Group from a matching UUID.
+Preserve aliases, hidden/redacted records, independent drafts, pending edits and clock ordering.
+Product Group graph remains off until these producers and a single account/Group owner are ready.
+
+Control 43455295124 at fe2e1cbb covers the earlier diagnostics correction, not the 17 owner or
+13 guard Apple methods. Audit that existing run and its iOS host before any later combined
+control. Its expected 20,006 is not accepted until audited. Do not rerun the failed old
+43443248470 source. Keep phone release92 until a meaningful validated update; push every commit.
 
 ## Existing inbox owner seeding locally accepted
 

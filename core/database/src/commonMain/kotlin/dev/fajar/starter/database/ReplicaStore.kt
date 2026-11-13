@@ -46,11 +46,13 @@ interface ReplicaStore {
     ): Boolean
 
     /**
-     * Applies one or two mutations to distinct partitions under the same account owner. Each entry
-     * retains the replacement/commit semantics and 200-document, 4MiB bounds. All expected
-     * checkpoints, generations and the optional wake are checked in one write transaction; any
-     * conflict changes neither partition nor wake. Database failure rolls back every write. A
-     * cancelled caller may lose a committed response; it cannot leave a partially committed pair.
+     * Applies one or two mutations to distinct partitions under the same account owner, with at
+     * least one write. A Check compares the exact working checkpoint (or its absence) without
+     * advancing it or changing its documents. Writes retain replacement/commit semantics and
+     * 200-document, 4MiB bounds. All expected checkpoints, generations and the optional wake are
+     * checked in one write transaction; any conflict changes neither partition nor wake. Database
+     * failure rolls back every write. A cancelled caller may lose a committed response; it cannot
+     * leave a partially committed pair.
      */
     suspend fun mutate(
         scope: ReplicaScope,

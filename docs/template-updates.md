@@ -774,3 +774,9 @@ No Starter change is needed because its shared measureOperation already has this
 The single admitted command owner now seeds new/retired originals with bounded failure parking.
 Seventeen shared methods and one new automatic SQLite pending-original proof join 16,351 local cases.
 Actual Apple execution and product collection remain separate; no new generic Starter port.
+
+## Exact source guard ready for Starter port
+
+Eight generic files and 13 new actual-storage methods pass Mobile full16,377. The raw Check
+conditions a projection write without advancing source revision. Independent Starter port,
+actual Apple execution and admitted incoming-history publication are the next separate gates.

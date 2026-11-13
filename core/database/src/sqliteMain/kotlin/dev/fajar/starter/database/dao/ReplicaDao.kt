@@ -271,6 +271,9 @@ abstract class ReplicaDao {
         if (!owns(scope.sessionId, scope.accountKey)) return false
         for (mutation in mutations) {
             when (mutation) {
+                is ReplicaMutation.Check -> {
+                    if (checkpoint(scope, mutation.partition) != mutation.expected) return false
+                }
                 is ReplicaMutation.Replace -> {
                     if (checkpoint(scope, mutation.partition) != mutation.expected) return false
                     if (
@@ -297,6 +300,7 @@ abstract class ReplicaDao {
         for (mutation in mutations) {
             val written =
                 when (mutation) {
+                    is ReplicaMutation.Check -> true
                     is ReplicaMutation.Replace ->
                         replace(
                             scope,
