@@ -259,3 +259,9 @@ Pending edit overlays require actual operation outcome before history can replac
 The existing Company source and shared conditional writer pass focused 43/full 16,495.
 Actual source coordinates and keys remain intact. Admitted canonical producer and bounded
 history/catalog backfill remain before activation. See `docs/collaboration-company-history-inbox-source.md`.
+
+## Canonical history source identity — 13 November 2026
+
+Bounded canonical snapshot and exact source selection pass focused46/full16547. Both proven
+namespaces and possible unstamped originals remain unresolved without allocating duplicate
+anchors. Admitted preview publication and bounded backfill remain before activation. See `docs/collaboration-space-inbox-history-source.md`.

@@ -1,5 +1,7 @@
 # Architecture
 
+[Canonical inbox history identity](collaboration-space-inbox-history-source.md) preserves actual source namespaces and explicit original ambiguity.
+
 [Company history inbox source](collaboration-company-history-inbox-source.md) preserves actual Company coordinates while publishing to a canonical Group inbox.
 
 [Original inbox association](collaboration-space-inbox-original-association.md) keeps source identity and actual command acknowledgement separate.

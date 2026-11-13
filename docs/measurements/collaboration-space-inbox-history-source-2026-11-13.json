@@ -1,0 +1,57 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistorySource.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistorySourcePolicy.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistorySourcePolicyTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 46,
+    "elapsedSeconds": 356.665,
+    "sourceFiles": 5396,
+    "sourceManifestSha256": "35ffe4ff05af6d56986f7a173a62960534d0ed3b7deeaf7247acdd5e66137c8f",
+    "resultSha256": "db6ea753e90556c42fc636c3bd7a5ed888a3495d936778e7579e71f2dc738fc1",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "SpaceInboxHistorySourcePolicyTest": 26,
+      "SpaceInboxOriginalAssociationTest": 18
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T18:56:30.774369+00:00",
+    "elapsedSeconds": 952.63,
+    "sourceFiles": 5396,
+    "freshCounts": {
+      "tests": 14425,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 154567586,
+      "sha256": "919f7158f1b683429516cc2f27bb6312cfe950f0cacf261fffba4bbdea728c3a"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16547,
+    "newCases": 52,
+    "freshTests": 14425,
+    "reusedUnaffectedTests": 2122,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "35ffe4ff05af6d56986f7a173a62960534d0ed3b7deeaf7247acdd5e66137c8f",
+    "reportManifestSha256": "12a59f595bffc967b212a8814f52076b13fef1be9e623e879dd6ddcd85306c77",
+    "nativeClaim": "Canonical source selection and bounded snapshot validation; 26 shared pure policy methods. Actual Apple and incoming product integration remain separate."
+  },
+  "newSharedMethods": 26,
+  "canonicalThreadSourcePreserved": true,
+  "ambiguousOriginalsCannotAllocateAnchors": true,
+  "actualNewAppleExecution": false,
+  "productGraphActivated": false,
+  "phoneInstalled": false,
+  "installedPhoneBuild": 92,
+  "liveChanged": false
+}
