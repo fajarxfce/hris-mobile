@@ -1,0 +1,321 @@
+{
+  "portable": {
+    "accepted": true,
+    "sourceCommit": "7fedb33ef8c215838dcee9fbc915af25d862f5e1",
+    "runId": 43486239620,
+    "jobId": 132095346679,
+    "counts": {
+      "desktopTest": 6786,
+      "testAndroidHostTest": 960,
+      "wasmJsBrowserTest": 6489
+    },
+    "previousFailedRunCaseIdsRetained": true,
+    "previousFailedRunId": 43443248470,
+    "previousFailedRunCases": 13929,
+    "fixedTimingMethods": [
+      "thrownFailureFinishesTimingWithoutExceptionPayload",
+      "suspendedThrownErrorsFinishRoomAndWorkerStagesWithoutLosingTheirOutcome"
+    ],
+    "artifactId": 14068674073,
+    "artifactBytes": 4418445,
+    "artifactSha256": "d9453ce79cd0bf467725a271b9ca3a603b1dacad7666de763c610d25d2767ab8",
+    "jobLogSha256": "5f823bc4fe74b5715583c162d4283ed0d24af36af8a2bb3ee1ba6b5646896e4c",
+    "previousExactCaseIdsRetained": true,
+    "previousMethodAndPlatformIdsRetained": true,
+    "browserEngineReview": null,
+    "newSharedMethods": 59,
+    "actualNew": [
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationSpaceHistorySnapshotStorageTest",
+        "methods": [
+          "absentAndInvalidInputsNeverCreateAContentKey",
+          "accountReplacementDuringAcquisitionCannotReturnThePreviousOwnersContent",
+          "alteredCiphertextOrMissingOriginalNeverReturnsAPartialBatch",
+          "cancellationJoinsALateReadWithoutPublishingOrWriting",
+          "companyHistoryWithMatchingIdsDoesNotBecomeGroupHistory",
+          "hiddenOriginalsRemainAvailableForPreviewRemovalWithoutChangingStorage",
+          "indexedBatchesPreserveInputOrderAndCanonicalIdentityBeyondAliasWindow",
+          "legacyReplacementAliasesRequireTheirAuthenticatedRevision",
+          "missingKeysAndWrongOwnershipNeverCreateReplacementKeysOrCrossNamespaces",
+          "mutableCallerInputsAreCapturedBeforeTheFirstStorageSuspension",
+          "operationalFailuresAreNotConvertedIntoContentionOrRetried",
+          "redactedEditsAndTombstonesCannotResurrectOriginalText",
+          "replacementsResolveTheCurrentOriginalIncludingRejectedAndEarlierEdits",
+          "snapshotsAndSemanticReplaysSurviveReopenWithoutAdvancingTheSource",
+          "sourceChangeAfterDecodingCannotPublishAnOldSnapshot",
+          "sourceChangeBetweenIndexedBatchesReturnsChangedWithoutRetry",
+          "sourceCreatedDuringConfirmedAbsenceRequiresFreshObservation"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationSpaceHistoryInboxStorageTest",
+        "methods": [
+          "aConcurrentDestinationWriteRetainsItsDraftAndRejectsTheOlderProposal",
+          "aStorageFailureStopsAfterOneCommitAttemptWithoutLosingTheSource",
+          "accountReplacementAtTheCommitCannotWriteEitherAccountsIndex",
+          "callerActivityMutationAfterEntryCannotReplaceTheCapturedPublication",
+          "cancellationJoinsTheUncertainCommitWithoutReportingSuccess",
+          "changedSourceBeforePublicationLeavesTheDestinationEmpty",
+          "exactReplayDoesNotAdvanceSourceOrIndexAndNeverSubmitsAnEmptyMutation",
+          "hiddenPreviewAndEditedPreviewKeepTheOriginalAnchorAndIndependentDraft",
+          "lostCommitReplyIsRecoveredByExactLocalReplay",
+          "missingRetainedKeyDoesNotRegenerateOverHistoryOrCreateAnIndex",
+          "publicationPreservesSourceCiphertextAndIsVisibleAfterReopening",
+          "replayCannotConfirmAnIndexChangedAfterItsSourceCheck",
+          "replayRechecksSourceAndIndexWithoutRetryingAChangedSnapshot",
+          "sourceChangedInsideTheCommitCannotPublishAnOldPreview",
+          "sourcePublicationCannotModifyDraftsOrAnotherConversationsEntry",
+          "wrongRoomOwnerAndMissingSourceCannotWriteOrCreateKeys"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "SpaceInboxOriginalAssociationTest",
+        "methods": [
+          "anotherCanonicalGroupConversationWithTheSameIdIsNotThisOriginal",
+          "anotherRoomDoesNotAssociateEvenWithMatchingSenderAndContent",
+          "bindingAdmissionAndRedactedDiagnosticsDoNotLeakMessageContent",
+          "companyOriginalKeepsItsActualCompanyAndConversation",
+          "foreignAccountOrGroupRecordIsAStorageScopeFailureNotAbsence",
+          "foreignCompanyAndOriginalConversationCannotReuseTheCanonicalBinding",
+          "malformedHistoryAndCorruptRecordsFailInsteadOfBecomingUnmatched",
+          "missingLegacyOriginDoesNotAcquireProofFromAnAcknowledgedEventId",
+          "nativeGroupRoomsAcceptGroupOriginalsWithoutInventingACompanyOrigin",
+          "newGroupCommandsCannotUseTheLegacyMissingOriginException",
+          "queuedAndCancelledCommandsDoNotGainProofFromTheirUuidOrText",
+          "redactionAndLocalHidingRetainIdentityWithoutRevivingContent",
+          "retainedEditsDoNotReplaceTheOriginalContentProof",
+          "sameLogicalIdWithDifferentSenderHashOrExactBodyCannotAssociate",
+          "sameUuidInBothNamespacesNeverMakesTheirSourceIdentityEqual",
+          "sentAliasNeedNotBeInThisHistorySnapshotToIdentifyTheSameOriginal",
+          "stagedOriginalKeepsPendingDisplayAndCannotBecomeAReceipt",
+          "stagingProofAssociatesWithoutInventingAnEnqueueMapping"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationCompanyHistoryInboxStorageTest",
+        "methods": [
+          "actualCompanyAliasesEditsAndLocalHidingKeepTheOriginalSource",
+          "cancellationJoinsALateCompanyPublicationAndItsReplayNeedsNoWrite",
+          "companySnapshotsRemainSeparateFromEqualGroupCoordinatesAcrossReopen",
+          "concurrentSourceOrDestinationMutationRejectsTheStalePreviewAndPreservesTyping",
+          "missingKeysWrongRoomsAndForeignAccountsCannotPublishOrReplaceKeys",
+          "missingSourceAndInvalidInputDoNotCreateHistoryOrDestinationKeys",
+          "publicationUsesCanonicalTargetIdWithoutCopyingOrRewritingCompanyHistory",
+          "sourceChangedDuringABoundedReadReturnsChangedInsteadOfMixedContent"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserCollaborationSpaceHistorySnapshotStorageTest",
+        "methods": [
+          "absentAndInvalidInputsNeverCreateAContentKey",
+          "accountReplacementDuringAcquisitionCannotReturnThePreviousOwnersContent",
+          "alteredCiphertextOrMissingOriginalNeverReturnsAPartialBatch",
+          "cancellationJoinsALateReadWithoutPublishingOrWriting",
+          "companyHistoryWithMatchingIdsDoesNotBecomeGroupHistory",
+          "hiddenOriginalsRemainAvailableForPreviewRemovalWithoutChangingStorage",
+          "indexedBatchesPreserveInputOrderAndCanonicalIdentityBeyondAliasWindow",
+          "legacyReplacementAliasesRequireTheirAuthenticatedRevision",
+          "missingKeysAndWrongOwnershipNeverCreateReplacementKeysOrCrossNamespaces",
+          "mutableCallerInputsAreCapturedBeforeTheFirstStorageSuspension",
+          "operationalFailuresAreNotConvertedIntoContentionOrRetried",
+          "redactedEditsAndTombstonesCannotResurrectOriginalText",
+          "replacementsResolveTheCurrentOriginalIncludingRejectedAndEarlierEdits",
+          "snapshotsAndSemanticReplaysSurviveReopenWithoutAdvancingTheSource",
+          "sourceChangeAfterDecodingCannotPublishAnOldSnapshot",
+          "sourceChangeBetweenIndexedBatchesReturnsChangedWithoutRetry",
+          "sourceCreatedDuringConfirmedAbsenceRequiresFreshObservation"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserCollaborationSpaceHistoryInboxStorageTest",
+        "methods": [
+          "aConcurrentDestinationWriteRetainsItsDraftAndRejectsTheOlderProposal",
+          "aStorageFailureStopsAfterOneCommitAttemptWithoutLosingTheSource",
+          "accountReplacementAtTheCommitCannotWriteEitherAccountsIndex",
+          "callerActivityMutationAfterEntryCannotReplaceTheCapturedPublication",
+          "cancellationJoinsTheUncertainCommitWithoutReportingSuccess",
+          "changedSourceBeforePublicationLeavesTheDestinationEmpty",
+          "exactReplayDoesNotAdvanceSourceOrIndexAndNeverSubmitsAnEmptyMutation",
+          "hiddenPreviewAndEditedPreviewKeepTheOriginalAnchorAndIndependentDraft",
+          "lostCommitReplyIsRecoveredByExactLocalReplay",
+          "missingRetainedKeyDoesNotRegenerateOverHistoryOrCreateAnIndex",
+          "publicationPreservesSourceCiphertextAndIsVisibleAfterReopening",
+          "replayCannotConfirmAnIndexChangedAfterItsSourceCheck",
+          "replayRechecksSourceAndIndexWithoutRetryingAChangedSnapshot",
+          "sourceChangedInsideTheCommitCannotPublishAnOldPreview",
+          "sourcePublicationCannotModifyDraftsOrAnotherConversationsEntry",
+          "wrongRoomOwnerAndMissingSourceCannotWriteOrCreateKeys"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SpaceInboxOriginalAssociationTest",
+        "methods": [
+          "anotherCanonicalGroupConversationWithTheSameIdIsNotThisOriginal",
+          "anotherRoomDoesNotAssociateEvenWithMatchingSenderAndContent",
+          "bindingAdmissionAndRedactedDiagnosticsDoNotLeakMessageContent",
+          "companyOriginalKeepsItsActualCompanyAndConversation",
+          "foreignAccountOrGroupRecordIsAStorageScopeFailureNotAbsence",
+          "foreignCompanyAndOriginalConversationCannotReuseTheCanonicalBinding",
+          "malformedHistoryAndCorruptRecordsFailInsteadOfBecomingUnmatched",
+          "missingLegacyOriginDoesNotAcquireProofFromAnAcknowledgedEventId",
+          "nativeGroupRoomsAcceptGroupOriginalsWithoutInventingACompanyOrigin",
+          "newGroupCommandsCannotUseTheLegacyMissingOriginException",
+          "queuedAndCancelledCommandsDoNotGainProofFromTheirUuidOrText",
+          "redactionAndLocalHidingRetainIdentityWithoutRevivingContent",
+          "retainedEditsDoNotReplaceTheOriginalContentProof",
+          "sameLogicalIdWithDifferentSenderHashOrExactBodyCannotAssociate",
+          "sameUuidInBothNamespacesNeverMakesTheirSourceIdentityEqual",
+          "sentAliasNeedNotBeInThisHistorySnapshotToIdentifyTheSameOriginal",
+          "stagedOriginalKeepsPendingDisplayAndCannotBecomeAReceipt",
+          "stagingProofAssociatesWithoutInventingAnEnqueueMapping"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserCollaborationCompanyHistoryInboxStorageTest",
+        "methods": [
+          "actualCompanyAliasesEditsAndLocalHidingKeepTheOriginalSource",
+          "cancellationJoinsALateCompanyPublicationAndItsReplayNeedsNoWrite",
+          "companySnapshotsRemainSeparateFromEqualGroupCoordinatesAcrossReopen",
+          "concurrentSourceOrDestinationMutationRejectsTheStalePreviewAndPreservesTyping",
+          "missingKeysWrongRoomsAndForeignAccountsCannotPublishOrReplaceKeys",
+          "missingSourceAndInvalidInputDoNotCreateHistoryOrDestinationKeys",
+          "publicationUsesCanonicalTargetIdWithoutCopyingOrRewritingCompanyHistory",
+          "sourceChangedDuringABoundedReadReturnsChangedInsteadOfMixedContent"
+        ]
+      }
+    ],
+    "reportManifestSha256": "e997050a32c08bb9652dd1296b96d52c4998addffd119e5d3de873bf28140181"
+  },
+  "apple": {
+    "accepted": true,
+    "sourceCommit": "7fedb33ef8c215838dcee9fbc915af25d862f5e1",
+    "runId": 43486239620,
+    "jobId": 132095347319,
+    "counts": {
+      "iosSimulatorArm64Test": 6039
+    },
+    "previousFailedRunCaseIdsRetained": true,
+    "previousFailedRunId": 43443248470,
+    "previousFailedRunCases": 5892,
+    "fixedTimingMethods": [
+      "thrownFailureFinishesTimingWithoutExceptionPayload",
+      "suspendedThrownErrorsFinishRoomAndWorkerStagesWithoutLosingTheirOutcome"
+    ],
+    "artifactId": 14071692387,
+    "artifactBytes": 974949,
+    "artifactSha256": "7a25078f830cb0c13d9fadb7edf6a223c5cae7ff6fc7720b6018458381589e0e",
+    "jobLogSha256": "d74b4ded229971a8d68d5acd01f7fb036070b4d945073ea50286f1e2c604e5c1",
+    "previousExactCaseIdsRetained": true,
+    "previousMethodAndPlatformIdsRetained": true,
+    "browserEngineReview": null,
+    "newSharedMethods": 59,
+    "actualNew": [
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleCollaborationSpaceHistorySnapshotStorageTest",
+        "methods": [
+          "absentAndInvalidInputsNeverCreateAContentKey",
+          "accountReplacementDuringAcquisitionCannotReturnThePreviousOwnersContent",
+          "alteredCiphertextOrMissingOriginalNeverReturnsAPartialBatch",
+          "cancellationJoinsALateReadWithoutPublishingOrWriting",
+          "companyHistoryWithMatchingIdsDoesNotBecomeGroupHistory",
+          "hiddenOriginalsRemainAvailableForPreviewRemovalWithoutChangingStorage",
+          "indexedBatchesPreserveInputOrderAndCanonicalIdentityBeyondAliasWindow",
+          "legacyReplacementAliasesRequireTheirAuthenticatedRevision",
+          "missingKeysAndWrongOwnershipNeverCreateReplacementKeysOrCrossNamespaces",
+          "mutableCallerInputsAreCapturedBeforeTheFirstStorageSuspension",
+          "operationalFailuresAreNotConvertedIntoContentionOrRetried",
+          "redactedEditsAndTombstonesCannotResurrectOriginalText",
+          "replacementsResolveTheCurrentOriginalIncludingRejectedAndEarlierEdits",
+          "snapshotsAndSemanticReplaysSurviveReopenWithoutAdvancingTheSource",
+          "sourceChangeAfterDecodingCannotPublishAnOldSnapshot",
+          "sourceChangeBetweenIndexedBatchesReturnsChangedWithoutRetry",
+          "sourceCreatedDuringConfirmedAbsenceRequiresFreshObservation"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleCollaborationSpaceHistoryInboxStorageTest",
+        "methods": [
+          "aConcurrentDestinationWriteRetainsItsDraftAndRejectsTheOlderProposal",
+          "aStorageFailureStopsAfterOneCommitAttemptWithoutLosingTheSource",
+          "accountReplacementAtTheCommitCannotWriteEitherAccountsIndex",
+          "callerActivityMutationAfterEntryCannotReplaceTheCapturedPublication",
+          "cancellationJoinsTheUncertainCommitWithoutReportingSuccess",
+          "changedSourceBeforePublicationLeavesTheDestinationEmpty",
+          "exactReplayDoesNotAdvanceSourceOrIndexAndNeverSubmitsAnEmptyMutation",
+          "hiddenPreviewAndEditedPreviewKeepTheOriginalAnchorAndIndependentDraft",
+          "lostCommitReplyIsRecoveredByExactLocalReplay",
+          "missingRetainedKeyDoesNotRegenerateOverHistoryOrCreateAnIndex",
+          "publicationPreservesSourceCiphertextAndIsVisibleAfterReopening",
+          "replayCannotConfirmAnIndexChangedAfterItsSourceCheck",
+          "replayRechecksSourceAndIndexWithoutRetryingAChangedSnapshot",
+          "sourceChangedInsideTheCommitCannotPublishAnOldPreview",
+          "sourcePublicationCannotModifyDraftsOrAnotherConversationsEntry",
+          "wrongRoomOwnerAndMissingSourceCannotWriteOrCreateKeys"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SpaceInboxOriginalAssociationTest",
+        "methods": [
+          "anotherCanonicalGroupConversationWithTheSameIdIsNotThisOriginal",
+          "anotherRoomDoesNotAssociateEvenWithMatchingSenderAndContent",
+          "bindingAdmissionAndRedactedDiagnosticsDoNotLeakMessageContent",
+          "companyOriginalKeepsItsActualCompanyAndConversation",
+          "foreignAccountOrGroupRecordIsAStorageScopeFailureNotAbsence",
+          "foreignCompanyAndOriginalConversationCannotReuseTheCanonicalBinding",
+          "malformedHistoryAndCorruptRecordsFailInsteadOfBecomingUnmatched",
+          "missingLegacyOriginDoesNotAcquireProofFromAnAcknowledgedEventId",
+          "nativeGroupRoomsAcceptGroupOriginalsWithoutInventingACompanyOrigin",
+          "newGroupCommandsCannotUseTheLegacyMissingOriginException",
+          "queuedAndCancelledCommandsDoNotGainProofFromTheirUuidOrText",
+          "redactionAndLocalHidingRetainIdentityWithoutRevivingContent",
+          "retainedEditsDoNotReplaceTheOriginalContentProof",
+          "sameLogicalIdWithDifferentSenderHashOrExactBodyCannotAssociate",
+          "sameUuidInBothNamespacesNeverMakesTheirSourceIdentityEqual",
+          "sentAliasNeedNotBeInThisHistorySnapshotToIdentifyTheSameOriginal",
+          "stagedOriginalKeepsPendingDisplayAndCannotBecomeAReceipt",
+          "stagingProofAssociatesWithoutInventingAnEnqueueMapping"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleCollaborationCompanyHistoryInboxStorageTest",
+        "methods": [
+          "actualCompanyAliasesEditsAndLocalHidingKeepTheOriginalSource",
+          "cancellationJoinsALateCompanyPublicationAndItsReplayNeedsNoWrite",
+          "companySnapshotsRemainSeparateFromEqualGroupCoordinatesAcrossReopen",
+          "concurrentSourceOrDestinationMutationRejectsTheStalePreviewAndPreservesTyping",
+          "missingKeysWrongRoomsAndForeignAccountsCannotPublishOrReplaceKeys",
+          "missingSourceAndInvalidInputDoNotCreateHistoryOrDestinationKeys",
+          "publicationUsesCanonicalTargetIdWithoutCopyingOrRewritingCompanyHistory",
+          "sourceChangedDuringABoundedReadReturnsChangedInsteadOfMixedContent"
+        ]
+      }
+    ],
+    "reportManifestSha256": "7821a54e40bafd40debd254fbcd4c2204fcde87c7615fe97e0a43627f5cb286b"
+  },
+  "accepted": true,
+  "runId": 43486239620,
+  "sourceCommit": "7fedb33ef8c215838dcee9fbc915af25d862f5e1",
+  "totalCases": 20274,
+  "newActualAppleMethods": 59,
+  "oldFailedRunPreserved": true,
+  "historySnapshotIncluded": true,
+  "historyPublicationIncluded": true,
+  "originalAssociationIncluded": true,
+  "companyHistoryIncluded": true,
+  "laterCanonicalSourcePolicyIncluded": false,
+  "productGraphActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false
+}

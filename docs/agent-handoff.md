@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 19:45 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 19:49 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -33,8 +33,8 @@ the focused/full gates. All five original source files matched Starter byte-for-
 acceptance, port nine generic source/test files into Starter with independent checks and its
 pinned Inspector. Actual edit authoring/outcome/list activation is still separate.
 
-Control43486239620 portable14,235 is accepted (audit44615 REAPED). Apple is still building its
-application host after shared tests. Audit the existing job when complete; do not redispatch.
+Control43486239620 is fully accepted:20,274 cases, including6,039 actual Apple and the iOS host.
+It excludes later canonical-source, pending-edit and command-insertion changes. Preserve artifacts; do not redispatch.
 
 The following .work/space-edit-inbox-authoring-2026-11-13 has8 source DRAFTS ONLY, no tests or
 use-case admission: optional immutable Group intent inboxOrigin, DTO/shape policy, publication
@@ -61,7 +61,7 @@ identity through redaction, monotonic SENT/failure state, pending edit content a
 drafts. At most16 originals need17 visible fallback candidates. Company content can precede
 binding, so finite catalog/history backfill and restart coverage remain before activation.
 
-Control43486239620 at7fedb33ef8c215838dcee9fbc915af25d862f5e1 is active; audit existing jobs without redispatching.
+Control43486239620 at7fedb33ef8c215838dcee9fbc915af25d862f5e1 is fully accepted (20,274 cases).
 It covers59 earlier snapshot/publication/association/Company shared methods and EXCLUDES later26
 canonical-source +20 pending-edit methods. A later exact-source control must retain prior IDs and
 cover these46 methods. Main native Apple SDK8 activation is still separate from shared testing.
@@ -98,6 +98,16 @@ artifact 14063039224 / 963925 bytes /
 ad5e5ac8be7491e6866695f81f308554004f61fc35cb9fcd1b431bde110f1219; reports 8abbdd5a7ec5d613d79f8692fdc04645ba8ec8c0c3dd689d2b49b3323b45e38b.
 This exact source EXCLUDES later history snapshot, conditional publication and association work.
 Do not rerun the accepted control; retain source-specific evidence for those later increments.
+
+Control 43486239620 at exact 7fedb33ef8c215838dcee9fbc915af25d862f5e1 is FULLY ACCEPTED:
+20,274 =14,235 portable (6,786 desktop /960 Android host /6,489 browser) +6,039 actual Apple.
+All preceding accepted and failed-run identities remain, including both timing regressions.
+59 new shared Apple methods cover history snapshots17, conditional publication16, original
+association18 and actual Company source8. iOS application host and all16 push fields pass.
+Apple artifact 14071692387 /974949 bytes /
+7a25078f830cb0c13d9fadb7edf6a223c5cae7ff6fc7720b6018458381589e0e; reports 7821a54e40bafd40debd254fbcd4c2204fcde87c7615fe97e0a43627f5cb286b.
+This exact source EXCLUDES later canonical source policy methods. No native SDK8 main-application
+activation, product graph or phone latency is claimed. Preserve artifacts; do not rerun.
 
 ## Native Apple and product work still outstanding
 

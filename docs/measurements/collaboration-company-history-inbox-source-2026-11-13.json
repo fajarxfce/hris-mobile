@@ -56,9 +56,11 @@
   "newSharedMethods": 8,
   "sharedRawWriter": true,
   "actualCompanyNamespacePreserved": true,
-  "actualNewAppleExecution": false,
+  "actualNewAppleExecution": true,
   "productGraphActivated": false,
   "phoneInstalled": false,
   "installedPhoneBuild": 92,
-  "liveChanged": false
+  "liveChanged": false,
+  "acceptedHostedRun": 43486239620,
+  "hostedEvidence": "docs/measurements/collaboration-canonical-history-hosted-2026-11-13.json"
 }

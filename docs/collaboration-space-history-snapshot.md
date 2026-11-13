@@ -31,3 +31,5 @@ preview/source policy, exact original Group/Company provenance and existing inco
 integration follow. No product graph activation, native transport, server or phone change.
 
 Evidence: `docs/measurements/collaboration-space-history-snapshot-2026-11-13.json`.
+
+Actual Apple execution is accepted in control 43486239620, exact source `7fedb33ef8c215838dcee9fbc915af25d862f5e1`: 6,039 Apple /20,274 combined cases, all prior identities, iOS host and16 push fields pass. This source covers snapshot/publication/association/Company storage; later canonical source policy remains separate. Evidence: `docs/measurements/collaboration-canonical-history-hosted-2026-11-13.json`.
