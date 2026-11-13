@@ -132,3 +132,9 @@ references and admitted list/graph activation remain. Applied preparation script
 Original retention and preview completion now share the index transaction; finite high-revision
 reference reads pass thirteen shared storage methods locally, full15,763. Exact command progress,
 owned recovery and legacy seeding remain before history/list/product activation.
+
+## Exact command progress accepted
+
+Matching terminal originals publish progress and reference completion atomically under local
+admission. Seventeen domain methods pass JVM/browser, full15,797. Finite recovery ownership,
+legacy seeding, history/list and product integration remain.

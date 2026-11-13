@@ -400,6 +400,7 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<ReadCollaborationSpaceSdkPossession>())
                 assertNotNull(container.koin.get<CollaborationSpaceInboxRepository>())
                 assertNotNull(container.koin.get<CollaborationSpaceInboxRepairRepository>())
+                assertNotNull(container.koin.get<ReconcileCollaborationSpaceInboxOriginal>())
                 assertNotNull(container.koin.get<ReadCollaborationSpaceConversationCatalog>())
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceConversationCatalog>())
                 assertSame(possession, container.koin.get<CollaborationSdkPossessionRepository>())

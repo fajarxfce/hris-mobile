@@ -1,0 +1,93 @@
+{
+  "accepted": true,
+  "sourceFiles": 5310,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxCommandPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReconcileCollaborationSpaceInboxOriginal.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReconcileSpaceInboxOriginalTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxCommandFixture.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxCommandPolicyTest.kt"
+  ],
+  "sourceManifestSha256": "e28c1c6ac57444102601e8a3956c00a2abfa4736d3eb62c06cbeeb144c59c9b2",
+  "focused": {
+    "accepted": true,
+    "tests": 85,
+    "elapsedSeconds": 388.394,
+    "sourceFiles": 5310,
+    "sourceManifestSha256": "e28c1c6ac57444102601e8a3956c00a2abfa4736d3eb62c06cbeeb144c59c9b2",
+    "resultSha256": "d9236273c4642b6091992a5bb1eac6a3bde58eb0e7019c41e96b638f377b156a",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceInboxRepairStorageTest": 13,
+      "CollaborationSpaceInboxStorageTest": 15,
+      "CollaborationSpaceComposerIndexStorageTest": 9,
+      "SpaceInboxCommandPolicyTest": 8,
+      "SpaceInboxComposerPublicationTest": 7,
+      "SubmitCollaborationSpaceComposerTest": 14,
+      "SubmitSpaceComposerInboxTest": 8,
+      "ReconcileSpaceInboxOriginalTest": 9
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T10:41:09.764405+00:00",
+    "elapsedSeconds": 892.438,
+    "sourceFiles": 5310,
+    "freshCounts": {
+      "tests": 13731,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152550418,
+      "sha256": "ba6c2e9285722ab15a7ffc324f11a1917e1b48e1058761d2941b7082d81c387f"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 15797,
+    "newCases": 34,
+    "freshTests": 13731,
+    "reusedUnaffectedTests": 2066,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 109,
+    "excludedHistoricalCases": 642,
+    "sourceManifestSha256": "e28c1c6ac57444102601e8a3956c00a2abfa4736d3eb62c06cbeeb144c59c9b2",
+    "reportManifestSha256": "04f2f5e131a598a7c2720c05276bb7fc00480bfcd5784a9f7854e41aae8f7393",
+    "nativeClaim": "Admitted exact original command progress; 17 domain methods need actual Apple execution. Finite repair owner, legacy reference seeding, history and product list activation remain pending."
+  },
+  "newSharedMethods": 17,
+  "commandProgressIntegrated": true,
+  "referenceCompletionAtomic": true,
+  "recoveryOwnerIntegrated": false,
+  "historyProducerIntegrated": false,
+  "productGraphActivated": false,
+  "nativeAppleExecution": false,
+  "phoneInstalled": false,
+  "previousInstalledPhoneBuild": 92,
+  "liveChanged": false,
+  "genericStarterPortRequired": false,
+  "failedCandidates": [
+    {
+      "accepted": false,
+      "reason": "Formatter rejected extra closing parenthesis in the CompanyOriginal namespace mismatch assertion. No tests executed. Preserve the full namespace assertion and rewrite it legibly.",
+      "run": "format-1",
+      "session": 52941,
+      "reaped": true,
+      "tests": 0,
+      "preformatSourceManifestSha256": "9f396311c5bcd2e3762a4faada9d56bc19ed142f4ddcd9ef6a462cfbd0d92b03",
+      "rejectedFormattedSourceFiles": {
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReconcileSpaceInboxOriginalTest.kt": "802f99f82006e2c66168f996941453035050187ff712aefbdc682b2f9c459cd8",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxCommandFixture.kt": "0f70fb7ebd854d837d06a9133ff23fa4c6d38418b75790dd3886e46983142c66",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxCommandPolicyTest.kt": "93fc06062846e3bda47d413031c1ab40f90d6da0c51059a36cdb0fcf402e0ee2",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxCommandPolicy.kt": "f8aa1ef019af8dcc2fcf10884de55eae8dcee39619f5c6311892b186c9fd15fa",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReconcileCollaborationSpaceInboxOriginal.kt": "f80c02eb5c1bd06ade3a3cab6a45cafc5bb2b94cc359a9768bd12d4c1a37fb58",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "2a353aac1dd7825bc9d8433712451624407eee2e070ad97443f96181e7b1eb81",
+        "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "38d963406359484e4a334529d39e26d9e0e46ae74eb1cc0e91e3bee4f7fa47bd"
+      },
+      "formatResultSha256": "2631fead70676bfbccb0edd691f8936640628e604b62866e05eacef07bfa7db8"
+    }
+  ]
+}

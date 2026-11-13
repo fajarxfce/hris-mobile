@@ -700,6 +700,15 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun reconcileSpaceInboxOriginal(
+        messages: CollaborationSpaceMessageRepository,
+        inbox: CollaborationSpaceInboxRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReconcileCollaborationSpaceInboxOriginal(messages, inbox, directory, sessions, server)
+
+    @Factory
     fun recoverSpaceComposer(
         roots: CollaborationSpaceRootRepository,
         outbox: CollaborationSpaceComposerOutboxRepository,

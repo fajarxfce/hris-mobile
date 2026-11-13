@@ -1,5 +1,7 @@
 # Architecture
 
+[Exact inbox command progress](collaboration-space-inbox-command-progress.md) reconciles retained originals under local admission and bounded contention.
+
 [Durable inbox repair references](collaboration-space-inbox-progress-repair.md) retain exact originals and complete preview/reference changes in one index transaction.
 
 [Atomic Group send publication](collaboration-space-inbox-composer-publication.md) retains original, editor, pending preview and wake under source/index versions.
