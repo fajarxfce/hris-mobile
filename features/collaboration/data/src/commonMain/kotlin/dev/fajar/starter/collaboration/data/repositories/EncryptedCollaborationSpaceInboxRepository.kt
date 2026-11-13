@@ -229,18 +229,57 @@ class EncryptedCollaborationSpaceInboxRepository(
     override suspend fun publish(
         access: CollaborationSpaceLocalAccess,
         publication: CollaborationSpaceInboxPublication,
-    ): AppResult<Boolean> {
+    ): AppResult<Boolean> =
+        when (val result = publishProjection(access, publication, false, null)) {
+            is AppResult.Failed -> result
+            is AppResult.Success ->
+                AppResult.Success(result.value != CollaborationSpaceInboxSeedResult.CHANGED)
+        }
+
+    override suspend fun seed(
+        access: CollaborationSpaceLocalAccess,
+        publication: CollaborationSpaceInboxPublication,
+        repair: CollaborationSpaceInboxRepairPublication?,
+    ): AppResult<CollaborationSpaceInboxSeedResult> =
+        publishProjection(access, publication, true, repair)
+
+    /** One preparation path preserves exact anchors and commits optional repair demand jointly. */
+    private suspend fun publishProjection(
+        access: CollaborationSpaceLocalAccess,
+        publication: CollaborationSpaceInboxPublication,
+        seeding: Boolean,
+        repair: CollaborationSpaceInboxRepairPublication?,
+    ): AppResult<CollaborationSpaceInboxSeedResult> {
         val retained = publication.copy(activities = publication.activities.toList())
         return withContext(Dispatchers.Default) {
             safeStorageCall {
                 require(validCollaborationSpaceInboxPublication(retained))
+                require(
+                    !seeding ||
+                        (retained.repair is CollaborationSpaceInboxRepairChange.Retain &&
+                            retained.draft == null)
+                )
+                require(repair == null || validCollaborationSpaceInboxRepairPublication(repair))
+                if (seeding)
+                    require(
+                        validCollaborationSpaceMessageIntent(
+                            access,
+                            (retained.repair as CollaborationSpaceInboxRepairChange.Retain).intent,
+                        )
+                    )
                 val scope = spaceHistoryScope(access)
                 val partition = spaceInboxPartition(access)
                 val initial = replicas.checkpoint(scope, partition)
-                if (initial?.published == false) return@safeStorageCall false
+                if (initial?.published == false)
+                    return@safeStorageCall CollaborationSpaceInboxSeedResult.CHANGED
+                if (initial == null && retained.expected != null)
+                    return@safeStorageCall CollaborationSpaceInboxSeedResult.CHANGED
+                if (initial == null && seeding && repair == null)
+                    return@safeStorageCall CollaborationSpaceInboxSeedResult.DEMAND_REQUIRED
                 keys.use(create = initial == null) { content, index ->
                     val codec = CollaborationSpaceInboxCodec(access, cipher, content, index)
-                    if (initial?.let { codec.version(it) } != retained.expected) return@use false
+                    if (initial?.let { codec.version(it) } != retained.expected)
+                        return@use CollaborationSpaceInboxSeedResult.CHANGED
                     val conversationId = retained.entry.conversationId
                     val ids =
                         buildList {
@@ -271,11 +310,39 @@ class EncryptedCollaborationSpaceInboxRepository(
                             }
                             .distinct()
                     val current = replicas.workingDocuments(scope, partition, ids)
-                    if (current.checkpoint != initial) return@use false
+                    if (current.checkpoint != initial)
+                        return@use CollaborationSpaceInboxSeedResult.CHANGED
                     val mutation = codec.mutation(initial, current.documents, retained)
                     currentCoroutineContext().ensureActive()
-                    if (mutation == null) replicas.checkpoint(scope, partition) == initial
-                    else replicas.mutate(scope, listOf(mutation))
+                    if (mutation == null) {
+                        return@use if (replicas.checkpoint(scope, partition) == initial)
+                            CollaborationSpaceInboxSeedResult.RETAINED
+                        else CollaborationSpaceInboxSeedResult.CHANGED
+                    }
+                    if (seeding && repair == null)
+                        return@use CollaborationSpaceInboxSeedResult.DEMAND_REQUIRED
+                    val mutations = mutableListOf(mutation)
+                    if (repair != null) {
+                        val progressPartition = spaceInboxRepairProgressPartition(access)
+                        val raw = replicas.checkpoint(scope, progressPartition)
+                        val progressCodec =
+                            CollaborationSpaceInboxRepairProgressCodec(access, cipher, content)
+                        if (raw?.let { progressCodec.decode(it) } != repair.expected)
+                            return@use CollaborationSpaceInboxSeedResult.CHANGED
+                        mutations +=
+                            ReplicaMutation.Replace(
+                                progressPartition,
+                                raw,
+                                ReplicaSnapshot(
+                                    repair.replacement.generation,
+                                    progressCodec.encode(repair.replacement),
+                                    emptyList(),
+                                ),
+                            )
+                    }
+                    currentCoroutineContext().ensureActive()
+                    if (replicas.mutate(scope, mutations)) CollaborationSpaceInboxSeedResult.STORED
+                    else CollaborationSpaceInboxSeedResult.CHANGED
                 }
             }
         }

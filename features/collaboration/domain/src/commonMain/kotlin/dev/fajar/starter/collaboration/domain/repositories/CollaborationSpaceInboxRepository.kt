@@ -24,6 +24,17 @@ interface CollaborationSpaceInboxRepository {
         sources: List<CollaborationSpaceInboxSource>,
     ): AppResult<CollaborationSpaceInboxActivities>
 
+    /**
+     * Retain an existing original and fresh repair demand atomically. Null repair only probes: a
+     * semantic replay returns RETAINED without acquiring progress; new work returns DEMAND_REQUIRED
+     * without writing. CHANGED requires a fresh source/index observation.
+     */
+    suspend fun seed(
+        access: CollaborationSpaceLocalAccess,
+        publication: CollaborationSpaceInboxPublication,
+        repair: CollaborationSpaceInboxRepairPublication?,
+    ): AppResult<CollaborationSpaceInboxSeedResult>
+
     /** Projection-only seeding/repair. Source changes use the source repository's joint commit. */
     suspend fun publish(
         access: CollaborationSpaceLocalAccess,

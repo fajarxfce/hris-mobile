@@ -700,6 +700,26 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun seedSpaceInboxOriginal(
+        messages: CollaborationSpaceMessageRepository,
+        conversations: CollaborationSpaceConversationMetadataRepository,
+        inbox: CollaborationSpaceInboxRepository,
+        progress: CollaborationSpaceInboxRepairProgressRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) =
+        SeedCollaborationSpaceInboxOriginal(
+            messages,
+            conversations,
+            inbox,
+            progress,
+            directory,
+            sessions,
+            server,
+        )
+
+    @Factory
     fun reconcileSpaceInboxOriginal(
         messages: CollaborationSpaceMessageRepository,
         inbox: CollaborationSpaceInboxRepository,

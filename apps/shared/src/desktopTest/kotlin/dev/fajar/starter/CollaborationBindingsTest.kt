@@ -402,6 +402,7 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<CollaborationSpaceInboxRepairRepository>())
                 assertNotNull(container.koin.get<CollaborationSpaceInboxRepairProgressRepository>())
                 assertNotNull(container.koin.get<ReconcileCollaborationSpaceInboxOriginal>())
+                assertNotNull(container.koin.get<SeedCollaborationSpaceInboxOriginal>())
                 assertNotNull(container.koin.get<ReadCollaborationSpaceInboxRepairs>())
                 assertNotNull(container.koin.get<ReadCollaborationSpaceInboxRepair>())
                 assertNotNull(container.koin.get<ReadCollaborationSpaceInboxRepairProgress>())

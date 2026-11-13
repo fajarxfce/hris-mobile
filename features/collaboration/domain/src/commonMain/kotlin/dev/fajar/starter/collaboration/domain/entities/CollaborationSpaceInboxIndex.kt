@@ -51,3 +51,11 @@ sealed interface CollaborationSpaceInboxPage {
         override fun toString() = "CollaborationSpaceInboxPage([redacted])"
     }
 }
+
+/** A replay is confirmed before reading repair progress; a new seed requires atomic demand. */
+enum class CollaborationSpaceInboxSeedResult {
+    RETAINED,
+    STORED,
+    DEMAND_REQUIRED,
+    CHANGED,
+}

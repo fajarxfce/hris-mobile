@@ -755,3 +755,10 @@ actual Apple execution follows. This HRIS admission and cancellation policy stay
 The exact original retirement policy and use case pass 16,251 local cases, including a new
 SQLite application proof for later aliases and reopening. Twenty-six new shared methods pass
 on JVM/browser; actual Apple execution remains separate. This HRIS policy stays in Mobile.
+
+## Retained-original inbox seeding accepted
+
+The admitted Group seed and atomic index/reference/repair transaction pass 16,314 local cases.
+A real SQLite application race proves completion after worker idle and preserves reopening.
+This HRIS policy remains in Mobile; no new reusable raw storage change is needed in Starter.
+Actual 31 new Apple methods and continuous seeding/product ownership remain separate gates.

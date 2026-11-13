@@ -1,5 +1,7 @@
 # Architecture
 
+[Retained-original inbox seeding](collaboration-space-inbox-command-seeding.md) preserves exact activity and draft state while publishing new references with durable repair demand.
+
 [Admitted Group original retirement](collaboration-space-original-retirement.md) requires exact command, receipt and retained history before atomic archival and bounded cleanup.
 
 [Admitted Group cancellation](collaboration-space-original-cancellation.md) archives an exact untouched original with repair demand while fencing started work and confirming replay locally.

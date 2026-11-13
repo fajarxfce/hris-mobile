@@ -1,10 +1,49 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 14:59 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 15:31 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Retained-original Group inbox seeding locally accepted
+
+Mobile .work/space-inbox-command-seeding-2026-11-13 is accepted: 17 source/test paths.
+Focused 36; full 16,314 = 14218 fresh + 2096 exact unchanged.
+All 16,251 preceding identities remain plus 62 shared JVM/browser executions and one new actual
+SQLite worker race. Source 5366/4d31aa0b34794330398e8fc3bbffc858792d437e0e82cd843026ada56e6c37eb;
+report 919e728834b6fe8bdde57daf6bb357f9d4d335d015298b56eac0caecb5732235.
+The admitted seed preserves exact originals, independent drafts and hidden/edited anchors.
+Its explicit replay probe avoids progress reads; new index/reference plus demand commits jointly.
+The application proof seeds a retired original after worker idle, observes reference completion,
+then reopens without native send or another demand. Contention is bounded to three attempts.
+
+First finish Mobile .work/apple-delivery-failure-outcome-2026-11-13: three unapplied source/test/workflow
+paths and one added shared method, expected focused 12/full 16,316. Control 43443248470 at
+c2d9b5ea753083967adc40129187e9e5c6fcb413 has portable 13,929 accepted, but Apple executed
+5,892 cases with one real failure: CollaborationDeliveryTimingTest.thrownFailureFinishesTimingWithoutExceptionPayload
+received null instead of Failed after a suspended exception. Its iOS host step was skipped;
+this control is NOT fully accepted. Failed zip/log/manifest are preserved in its hosted-control.
+The app tracer lacks the explicit thrown-failure assignment already present in shared
+measureOperation (c50a8983). The three-file draft adopts that exception path, preserves rethrow,
+and adds a room/worker thrown-Error regression. Local success is not Apple proof.
+
+After that fix, dispatch one new combined source control; do not relabel or repeat the failed
+old control. Expected 20,006 (14,056 portable / 5,950 Apple), including all previous failed-run
+identities now passing plus the new regression and iOS host. Nine existing desktop timing methods are newly selected. Preparation for the earlier 19,994
+seed-only control is superseded and must NOT be run. The diagnostics workspace owns the new
+control preparation. Use fully accepted control 43427620202 as the historical acceptance baseline.
+
+Then continue Mobile .work/space-inbox-command-owner-2026-11-13: eight unapplied drafts,
+16 shared methods, one automatic SQLite pending-original case, DI/fixtures and hosted selection.
+Expected focused 40/full 16,349 after the diagnostics fix. Guarded apply.py and validation are
+prepared; apply requires the fix source to be accepted/pushed and its control dispatched. Normal
+delivery progress and own demand must not re-probe all originals. Keep unfinished-seed failure
+until actual recovery, with one command observer and external-change-only retry. Then connect
+incoming-history/Company-original producers and product ownership. Preserve actual provenance,
+missing history keys, pending edits and clock ordering. Product Group graph and live stay off.
+Historical preparation/apply scripts are already used. Keep release 92 on the phone until a
+meaningful validated update, push every commit and continue beyond this checkpoint.
 
 ## Admitted Group original retirement locally accepted
 

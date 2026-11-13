@@ -147,6 +147,12 @@ internal class SpaceChatThreadFixture {
                 )
             }
 
+            override suspend fun seed(
+                access: CollaborationSpaceLocalAccess,
+                publication: CollaborationSpaceInboxPublication,
+                repair: CollaborationSpaceInboxRepairPublication?,
+            ): AppResult<CollaborationSpaceInboxSeedResult> = error("Seeding has a separate owner")
+
             override suspend fun publish(
                 access: CollaborationSpaceLocalAccess,
                 publication: CollaborationSpaceInboxPublication,
