@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 18:50 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 19:05 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -18,9 +18,12 @@ independent draft state survive races/replay; existing keys are never replaced. 
 new contract to the existing Company history instance. No product graph is active.
 
 Current .work/space-inbox-history-source-policy-2026-11-13 has three APPLIED domain/test paths.
-Formatting is accepted; focused46 is running in session41258; full16547 is NOT
-started or accepted. Draft preparation/application scripts are already used. Read its state.json,
-review.md and current actual sources, and reap the active gate before accepting or starting full.
+Focused46/session41258 is REAPED PASS (356.665s), including26 new policy methods,
+18 association methods,2 app bindings and Apple test compilation. Full16547 is RUNNING in
+session91030/full-1, not yet accepted. Source5396/35ffe4ff05af6d56986f7a173a62960534d0ed3b7deeaf7247acdd5e66137c8f;
+focused result db6ea753e90556c42fc636c3bd7a5ed888a3495d936778e7579e71f2dc738fc1.
+Preparation/application/formatting scripts are already used. Reap91030 then accept its exact
+reports before recording or committing the source; do not repeat the gate without a new cause.
 The policy validates at most16 canonical snapshot events, retains full128-alias originals and
 rejects contradictory identities. It selects only the SAME binding-selected history used by the
 thread: Group for SPACE, actual Company for LEGACY. Group recovery copies cannot replace it.
@@ -30,7 +33,23 @@ proved namespaces or a possible queued/unstamped original. Unproved/ambiguous re
 anchor and start no retry. Known unrelated body/room/conversation or cancelled commands do not
 block history; redaction cannot turn missing text into negative proof. Failed reads cannot become
 absence. No source/command is mutated; actual admitted incoming and preview publication remain next.
-The policies and26 new shared methods are NOT yet validated. There is no new product graph.
+Focused validation passes; full validation remains pending. There is no new product graph.
+
+Next .work/space-inbox-edit-provenance-2026-11-13 has14 UNAPPLIED source/test drafts with20 shared
+methods (12 pure /8 actual storage); review and guarded gates are still pending. It proposes a
+body-free pointer to the actual Group/Company edit command and original target. Publication uses
+the index revision, not a new placement ordinal; draft/message ordering stays unchanged. Same
+operation provenance and optimistic text cannot be silently rewritten while retained. Old payloads
+without the optional field still decode; exact source admission and atomic command publication
+remain separate requirements. Do NOT apply before reviewing drafts and accepting/pushing current
+source. Test preparation is not validation. Read next state.json and current actual source.
+
+Observed next gates: incoming ordinary failures use30..300s retries; Unresolved needs durable
+local handoff/parking rather than that retry path. Existing local inbox repair already parks
+until changed command/request facts or owner restart. Legacy QueueCollaborationEdit does not yet
+publish to the canonical index atomically. Actual edit outcomes must release optimistic content;
+command ACK alone is insufficient. Exact retained History anchors must also keep identity when
+redaction removes text formerly used to exclude an unrelated unstamped command.
 
 AcquireCollaborationSpaceEvents owns Group retention; AcquireCollaborationSpaceOriginalEvents
 owns Company retention. Required publication must participate in completion, including retained
