@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 07:38 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 07:51 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
@@ -8,28 +8,32 @@ is waived; native Apple, calls and push still need their actual behavior gates.
 
 ## Active inbox index implementation
 
-Mobile.work/space-inbox-index-2026-11-13 has13 uncommitted source paths: encrypted global
-recency index, independent editor/activity anchors, six pure domain methods/tests,15 actual
-storage tests and the application binding assertion. Source producers and product list remain
-unintegrated. Focused-3/session4683 is RUNNING after format-3/20653 REAPED; expected23.
-Do not run another local compiler or modify source until4683 is reaped. Current source5281/
-ca8565d0c98388a7ad14d81b65a77dbd200019de90fc84007b4c639dbf45b0e7.
+Mobile.work/space-inbox-index-2026-11-13 has13 uncommitted source paths. Focused-4 is ACCEPTED23:
+15 actual-storage methods, six domain policy methods and two actual application binding cases;
+source/test compilation on iOS also passed. Session62681 is REAPED. Source5281/
+c7440ce5d21a52a264458e6b4e088de370f4015a80adbe375bc410fe2ee05d27;
+result0d883f30891d1316c4577140f508abe96bdf190781fcbfce5677260568cac38d.
+Full-1/session15701 is RUNNING. Expected15645 retains15603 prior identities plus42 JVM/browser
+executions. Do not run another local compiler or mutate source until15701 is reaped. The exact
+full auditor and guarded record-acceptance.py are prepared, but full acceptance has NOT happened.
 
-Both earlier failures and candidate sources are retained. Focused-1/2018 REAPED had21 cases,
-one wrong test expectation: the raw stale-session fence returns an exact empty page rather
-than Failed. That assertion now verifies the empty page, without relaxing cross-owner/cursor
-checks. Focused-2/97105 REAPED had21 cases, one timeout in the test's unsynchronized calls++
-barrier shared by two Default-dispatcher writers. It is replaced with a bounded channel and
-early-result diagnostics, keeping two actual writes, one winner/conflict and the same5s limit.
-No production source changed for these corrections; inspect focused-3 before acceptance.
+Three earlier candidates remain retained. Focused-1/2018 failed a test's stale-session result
+expectation; exact empty projection is now asserted. Focused-2/97105 failed the unsynchronized
+calls++ test barrier; a bounded channel now observes both actual writers and early outcomes.
+Focused-3/4683 passed23 but review REJECTED its evidence because test raw() was shadowed by
+the fixture's Original-history reader. rawInbox() now verifies the exact populated inbox
+checkpoint; focused-4 repeats every assertion against the correct ciphertext. Candidate compiler
+warnings are rejected by the focused/full auditors. Production source did not change during
+these test corrections. Do not mistake an earlier passing execution for accepted evidence.
 
-Full expectation15645 retains15603 prior identities plus42 JVM/browser executions. The full
-runner/auditor and guarded record-acceptance.py are prepared; they have NOT run for this index.
-The write-*.py scripts are historical and must not be reapplied. Complete tests, commit/push
-acceptance, then continue atomic source/index publication. A concrete Group draft boundary
-review is in Mobile.work/space-inbox-draft-publication-2026-11-13/integration-review.md; it has
-no applied source implementation. The user's phone retains release92. This is a checkpoint,
-not the end of the long run. Preserve original namespaces, keys and source-owned admission.
+Source producers, admitted list observation, pending-reference traversal/repair and Group graph
+remain unintegrated. The user's phone retains release92. Complete full verification, commit/push
+acceptance and continue source publication. The next workspace, Mobile.work/
+space-inbox-draft-publication-2026-11-13, contains four UNAPPLIED/UNVALIDATED drafts: pure draft
+proposal policy, mandatory Space draft contract, paired encrypted source/index write and an
+unchanged-index checkpoint guard. Its use-case orchestration, DI, fixtures and regression tests
+still need implementation/review. Do not apply it until the index gate is accepted. The original
+Company contract/bytes must remain intact. Index write-*.py scripts are historical; never reapply.
 
 ## Starter transaction port accepted and pushed
 
