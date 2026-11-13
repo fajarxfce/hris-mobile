@@ -14,7 +14,7 @@
   "nonDebuggable": true,
   "samePreviouslyInstalledSigner": true,
   "lintIssues": 0,
-  "phoneInstalled": false,
+  "phoneInstalled": true,
   "phoneUiTouched": false,
   "liveGroupChanged": false,
   "limitations": [
@@ -165,5 +165,21 @@
     "serial": "10.77.77.3:5555",
     "installed": false,
     "result": "timeout"
-  }
+  },
+  "installation": {
+    "startedAt": "2026-11-13T04:10:44.981104+00:00",
+    "confirmed": true,
+    "serial": "10.77.77.3:5555",
+    "phoneUiTouched": false,
+    "freshInstall": false,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "versionCode": 92,
+    "installedSha256": "d8001bd137fdd08d3d3b112519eef226ee38ba78c35c6b29cba51b019fc3700c",
+    "installedBytesMatch": true,
+    "verificationMethod": "Device SHA-256 equals validated local APK",
+    "existingIdentityPreserved": true,
+    "elapsedSeconds": 25.071
+  },
+  "installSession": "99895 REAPED"
 }

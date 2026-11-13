@@ -1,0 +1,67 @@
+{
+  "date": "2026-11-13",
+  "sourceCommit": "fc45116481b6e9a03f1e377bf4a4e11e4e803c74",
+  "runId": 43359439624,
+  "complete": true,
+  "portableTests": 13132,
+  "appleTests": 5428,
+  "totalAccepted": 18560,
+  "newSharedAppleMethodsActuallyExecuted": 70,
+  "portableAuditSession": "35285 REAPED",
+  "appleAuditSession": "80173 REAPED",
+  "portable": {
+    "composerActionBrowserRuntimeCaseSuffixChanges": 5763,
+    "recentBrowserRuntimeCaseSuffixChanges": {
+      "binding": 0,
+      "contact": 0
+    },
+    "sourceCommit": "fc45116481b6e9a03f1e377bf4a4e11e4e803c74",
+    "runId": 43359439624,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43359439624",
+    "jobId": 131669195141,
+    "artifactId": 14009481108,
+    "bytes": 4159238,
+    "sha256": "79a2fb0eecfcbcf4f9ebc2e6fdedd30589fd43097f2c2d0cb825d73974de8627",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreservedExceptReviewedReplacements": true,
+    "reviewedReplacements": 0,
+    "browserRuntimeCaseSuffixChanges": 0,
+    "browserRuntimeChange": null,
+    "counts": {
+      "desktopTest": 6295,
+      "testAndroidHostTest": 960,
+      "wasmJsBrowserTest": 5877
+    },
+    "reportManifestSha256": "8a535629609abb8a5e6f38f17e1dd996187f131aa5462abcd50f08c9c58fc493",
+    "jobLogSha256": "dc359ce043499cd4c0b238fa37526efce33673010a62a285c67221f6721d9b3a"
+  },
+  "apple": {
+    "composerActionBrowserRuntimeCaseSuffixChanges": 0,
+    "recentBrowserRuntimeCaseSuffixChanges": {
+      "binding": 0,
+      "contact": 0
+    },
+    "sourceCommit": "fc45116481b6e9a03f1e377bf4a4e11e4e803c74",
+    "runId": 43359439624,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43359439624",
+    "jobId": 131669194858,
+    "artifactId": 14009590843,
+    "bytes": 869277,
+    "sha256": "94f9574dc29ad7bc5d7fd37364b31de0d9a7ae3328cf62c02161a025346291de",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreservedExceptReviewedReplacements": true,
+    "reviewedReplacements": 0,
+    "browserRuntimeCaseSuffixChanges": 0,
+    "browserRuntimeChange": null,
+    "counts": {
+      "iosSimulatorArm64Test": 5428
+    },
+    "reportManifestSha256": "f99bca51441e4007652db8d0ae99b4dbea9240b4b65a36a3ec54d127c297b2af",
+    "jobLogSha256": "8dd6f758dede912de9219e1ee3e646e5023ada751641247464c065b1f4afe420"
+  },
+  "limitations": [
+    "Covers observation18, progress20 and presentation32; later row21 and page19 shared methods remain pending.",
+    "Actual Matrix Swift crypto and ownership contracts remain under separate native run43349484661.",
+    "No Group rollout or new UI/native latency acceptance."
+  ]
+}

@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 04:01 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 04:12 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -8,39 +8,37 @@ is waived; native Apple/call/push behavior is not accepted merely by compilation
 
 ## Active Group page integration
 
-Mobile `.work/space-thread-page-2026-11-13` has 22 applied, uncommitted source paths.
-Application files are authoritative; do not reapply its older draft copies. The Group page
-uses the existing bubble/day divider and a shared composer input with real Company and Group
-callers. Long press opens bounded typed selection; copy confirms fresh local admission in
-ReadCollaborationSpaceThreadContext. Stop/disposal, late denial and changed selected content
-fence clipboard writes. Reply saves only the event reference. Navigation content owns effects,
-focus, keyboard and first-layout end anchoring, keyed by actual account/Group/conversation.
-The product graph and live Group rollout remain disabled; bounded three-room warming and
-remaining edit/delete/forward actions still follow. No screenshot/rendering/Android IME
-acceptance is claimed yet.
+Mobile `.work/space-thread-page-2026-11-13` has 23 applied, uncommitted source paths.
+Application sources are authoritative; do not reapply stale draft copies. The page reuses
+actual bubble/day-divider/composer visuals, preserves typed Group/Original identities and
+adds contextual long-press selection/copy/reply. Domain confirms current local action
+admission; navigation owns effects, focus and first-layout anchoring. Copy effect collection
+now belongs to STARTED lifecycle and cancels on stop/new effects. A disposed ViewModel
+rejects confirmation before any local I/O. Product graph and live Group remain disabled.
 
-Format1/51935 REAPED PASS 35.059 s. Focused1/18812 REAPED failed compilation after
-118.474 s, 0 tests: two new context expectations used nullable metadata. The immutable
-failed-nullable-context-1 source/log/review is preserved. Expected successful metadata is
-now explicitly non-null; production admission and all assertions remain. Format2/53113
-REAPED PASS 37.159 s. Focused2/69074 is active, expected 99 cases (11 new domain, 8 new
-selection, 7 new desktop UI plus the existing actor/rows/Company composer/DI controls).
-Source 5242 / 3f958e2a1f399f56b2045ed83a83ff5803c98c488cc4af9a41ea759080d70e9b.
-No application/library source changes while that compiler runs.
+Preserve failed-nullable-context-1 (focused1/18812, 0 tests) and
+failed-test-synchronization-2 (focused2/69074, 97 tests/4 failures, 215.347s).
+The latter exposed two assertions before queued events, an invalid denial fixture and a
+placeholder-vs-editable-text assertion. Original requirements remain. Review also found and
+fixed the actual copy lifetime gaps; a new desktop test exercises the real Content lifecycle.
+Format3/20855 REAPED PASS34.565s. Focused3/3736 is ACTIVE, expected100.
+Source5243/d65c490eab7bb1c9ccf53bd5555f1bc43860c4deab960632dc6c0404bcb79148.
+Do not change application/library inputs while the compiler runs.
+Next: reap focused3, audit exact cases, then record and individually inspect the three fresh
+screenshots. Full expects15489: all15443 prior IDs +38 shared JVM/browser +8 desktop UI.
+No screenshot, Android IME or transition acceptance is claimed yet.
 
-Next: reap focused2, inspect every failure, run strict focused audit when successful.
-Then run inspect-screenshots.py with the accepted focused directory and visually inspect
-all three actual artifacts before marking screenshot review complete. Full gate expects
-15,488 = all 15,443 prior IDs + 38 new JVM/browser executions + 7 desktop UI cases.
-19 new shared Apple methods remain pending; Linux executes none. Prior row 21 methods
-also remain pending, so the next single hosted follow-up would add 40 shared methods and
-7 desktop cases after this page increment is fully accepted, committed and pushed.
-Do not duplicate the currently active control 43359439624 or native Swift run 43349484661.
+Control43359439624 is FULLY ACCEPTED at exactfc45116481b6e9a03f1e377bf4a4e11e4e803c74:
+18560=13132 portable (6295desktop/960Android host/5877browser) +5428 actual Apple.
+Auditors35285/80173 REAPED; archived artifacts, digests, ZIP CRC and prior case IDs verified.
+The70 observation/progress/presentation methods actually ran on Apple; iOS host and push
+routing passed. Later row21 and page19 still need Apple. After page acceptance and push,
+one follow-up expects13220portable+5468Apple=18688. Do not rerun this completed control.
+Separate Matrix Swift contracts remain active under43349484661/job131636790768.
 
-Row acceptance is pushed: Mobile f4c91604 / Group 35a8ce01; pushes 13553/83109 REAPED.
-Phone ADB remains unavailable. At 03:59 UTC the server route was wg0/10.77.77.1 and the
-registered phone peer's last handshake was 12 November 10:32:22 UTC. Release 92 remains
-accepted and uninstalled; never launch or drive the phone. Continue past checkpoints.
+Release92 is INSTALLED on10.77.77.3:5555,13Nov04:11UTC; installer99895 REAPED25.071s.
+Device APK SHA matches the accepted ARM artifact, package identity/data retained. No phone
+UI was opened or driven. Do not repeat installation. Continue beyond checkpoints.
 
 ## Latest implementation checkpoint
 
@@ -53,15 +51,15 @@ Source: 5231 / cce02c64035fecc4137c167e467d83cc89043fa86b7aeaf49cf348d43b6e4d25.
 Report: 2d28c4bbd380510463fcc66dafaddaad4006aeb8cc5c38a3837e2fc135af544a.
 Proof: 154350387 bytes / eaf723cec8cd80cb5cf62583f30d6e9ed2c0f5d1cc1fc4ac1f714145416c2fa5. The focused/full audits passed.
 Actual Apple execution of the 21 row methods is pending; Linux executed none.
-The previous 70 observation/progress/presentation methods are under one hosted control:
+The previous 70 observation/progress/presentation methods passed actual Apple under control:
 43359439624, exact fc45116481b6e9a03f1e377bf4a4e11e4e803c74,
-portable job 131669195141 and Apple job 131669194858. Do not duplicate dispatch.
+portable job 131669195141 and Apple job 131669194858, both fully audited. Do not rerun.
 Separate actual Matrix Swift contracts remain under 43349484661 / 131636790768.
 
 Next: push this acceptance, then concrete Group page/route, shared composer visuals and
 contextual actions; measure first frame and keyboard positioning before performance claims.
-No live Group rollout or phone install is claimed. Release 92 is accepted and ready;
-ADB 10.77.77.3:5555 remains unavailable. Phone delivery is install-only after announcement.
+No live Group rollout is claimed. Release 92 is accepted and installed;
+phone delivery remains install-only after announcement.
 Continue the long run and push every commit. Do not repeat accepted test gates.
 
 ## Current next implementation
@@ -399,7 +397,7 @@ Report2d942e3fa5cd90e46d74baaf60442c5c146f76e37e26e1102943a955e985a14a.
 Preserve red1 (16cases/one real failure,3values instead of2), failed-publication-boundary-1,
 and exact111 historical excluded XML/657 cases. Source/native acceptance is finished; do not rerun.
 
-Release92 is fully ACCEPTED and UNINSTALLED; see Phone delivery below. No local heavy process
+Release92 is fully ACCEPTED and INSTALLED; see Phone delivery below. No local heavy process
 remains after ARM build39435 and verifier38284 REAPED. The release gates and canonical command checks above are finished.
 
 Canonical history baseline is Mobileed4e61f5 / Group6c34ecbd, full14686 accepted; no rerun.
@@ -506,7 +504,7 @@ Apple app runtime binding; app runtime is still unavailable. Android/Group work 
 
 ## Phone delivery
 
-Release92 is fully accepted from151438b4ba85f599fb2eefc080a6ac15423ac6e1 and UNINSTALLED.
+Release92 is fully accepted from151438b4ba85f599fb2eefc080a6ac15423ac6e1 and INSTALLED.
 Mobile.work/release-phone-2026-11-12-build92/release-acceptance.json and measurement record
 14688+10native, source5161/52aa82e1..., SDK26.10.23-hris.8, nondebuggable, same signer,
 lint0, compiled backup exclusions,16KiB ZIP/native alignment and equal executable DEX:
@@ -518,13 +516,11 @@ fresh2560MiB/two cores, cold2908ms/reopen2145ms, stable10s/process. Both screens
 were inspected and show complete onboarding. ARM39435 REAPED42.972s, verify38284 REAPED.
 All gates are finished; do not rebuild. No authenticated release/phone latency claim.
 
-Latest ADB8143 REAPED: timeout after15 seconds at02:05UTC13Nov; no install attempted.
-WireGuard peer10.77.77.3 last handshake10:32:22UTC (checked23:05); route viawg0 is correct.
-Do not repeat availability questions. Continue bounded connection checks independently.
-When10.77.77.3:5555 connects, announce EACH actual installation, then run Mobile
-.work/release-phone-2026-11-12-build92/install.py --install-only. Inspect any existing
-install-result first; never uninstall/reset/downgrade/launch/drive the phone UI. Preserve app data.
-92 supersedes uninstalled91/90. Last confirmed physical install89 at09:10UTC; never reinstall89.
+Installation99895 REAPED at04:11UTC13Nov,25.071s. Exact device APK SHA matches the
+accepted ARM92 artifact. Existing app ID/first-install identity retained; no reset/uninstall.
+The app was not launched or driven. Installation result is retained with release evidence.
+Never repeat92 or downgrade; 92 supersedes uninstalled90/91. Future validated installs need
+prior announcement, explicit10.77.77.3:5555 and --install-only. Preserve phone data/UI.
 
 ## Protected repositories, stores and live runtime
 
