@@ -786,3 +786,5 @@ Shared source-guard Apple evidence is linked in Starter `77b0788f70b78077968000e
 ## Atomic command and checked projection — 13 November 2026
 
 Starter `d7b6f839350c6dd7f91612f9a09ff15d6b43c33b` ports nine exact Mobile files from `b4a3a89d105f4f79032ced3c912c1d1f6a4a15d7`. Independent1,022 checks preserve990 prior cases plus17 SQLite/15 browser cases; Android variants, lint, Web and Apple compilation pass. Inspector742a2d1c stays pinned. See [evidence](measurements/collaboration-command-insert-projection-2026-11-13.json). HRIS edit provenance and admission stay downstream.
+
+Shared Apple execution of all15 atomic command/projection methods is linked in Starter `caf8103cc8ce6ace62a2d47a3ffb0e06a10919c5` from Mobile control43498640097 at exactb4a3a89d. All9 generic files match; the independent1022-case Starter gate is unchanged. This is shared Mobile execution, not an independent Starter Apple application run. [Evidence](https://github.com/fajarxfce/compose-fluent-starter/blob/caf8103cc8ce6ace62a2d47a3ffb0e06a10919c5/docs/measurements/command-insert-projection-shared-apple-2026-11-13.json).

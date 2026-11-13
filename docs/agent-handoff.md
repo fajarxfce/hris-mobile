@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 21:21 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 21:23 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -16,19 +16,33 @@ preparations. Exact readback handles lost responses; source/position/draft ident
 The first focused source is rejected for its compiler warning; corrected source follows below in
 measurement attempts. Apply/check/record scripts are USED. No graph, phone or live change.
 
-Next .work/space-history-edit-evidence-2026-11-13 has11 REVIEWED UNAPPLIED source/test drafts: existing
-Group/Company history snapshot contracts and implementations gain optional bounded operation
-evidence under the SAME source revision;16 shared actual-storage test drafts have platform wrappers.
-Read its current review/state before application. No acceptance is claimed. Source/fixture review is complete;
-capture baseline after this accepted commit/push, then run prepared focused51/full16719 checks.
-Pure outcome admission must match exact pending command/source/target and trusted sender/hash;
-ACK, absence and elapsed time never clear the overlay. Provider application/rejection/supersession
-must be reconciled under existing incoming/repair ownership without another timer or per-room loop.
+Next .work/space-history-edit-evidence-2026-11-13 has11 APPLIED reviewed paths. Apply72007 is
+REAPED0; focused51/session24522 is RUNNING. Source5426/87215fc372d77b538a29dd7d7947f593b7d92d77d631c550528a084e624c02da.
+Existing Group/actual Company snapshots gain optional bounded operation evidence under the SAME
+source revision;16 shared actual-storage methods and three platform wrappers are being checked.
+Do not change active inputs until24522 is reaped. Then accept-focused.py focused-1, run/reap full16719
+and accept-full.py full-1. Guarded record-acceptance.py/commit.py are prepared NOT RUN. Read state/review.
+
+Follow-up .work/space-inbox-edit-outcome-policy-2026-11-13 has5 REVIEWED UNAPPLIED paths and23
+behavior-test drafts. Exact pending Group/Company/provider facts admit observed/rejected results;
+one authenticated later completion across both namespaces may supersede an older pending edit.
+Wrong-room proof and contradictory redaction were found during review and have regression drafts.
+Focused41/full16765, apply/capture/acceptance/commit scripts are prepared NOT RUN. Apply requires
+accepted/pushed16719 and a free compiler slot. Source/owner publication and product graph remain open.
+Read next-owner-review.md for bounded16original/17fallback publication, canonical source, durable
+unresolved handoff, retained-reference completion and finite catalog/binding backfill under existing
+owners. No new per-room observer, polling queue, VM helper or status guessed from an ACK.
+
+Future pure-policy prepare-hosted.py is PREPARED NOT RUN: expect73 new shared methods across
+atomic edit storage17, admission17, coherent snapshot16 and outcome23, total20678/6173 Apple,
+after all those local gates and exact pushed source. It must use accepted43498640097 as baseline;
+current dispatcher/auditors are USED and must not be redispatched. Main native SDK8 is separate.
 
 Prior atomic edit storage92158660 passes16653. Generic coreb4a3a89d passes16619 and Starter
 d7b6f839 passes independent1022 with9 exact files. Control43498640097 covers that earlier core
-(expected20459/6100 Apple), EXCLUDING the two later17-method edit increments. Read its audited
-state; do not redispatch. Main native Apple SDK8 activation remains separate. Phone92 stays
+(ACCEPTED20459/6100 Apple), EXCLUDING the two later17-method edit increments. Read its audited
+state; do not redispatch. Startercaf8103 links its15 byte-identical shared Apple methods;
+nine generic files and independent1022 remain unchanged. Main native Apple SDK8 is separate. Phone92 stays
 installed; live Group OFF. Finish bounded history publication/backfill and list/graph integration.
 All54 PRD acceptance groups remain open. Push every commit and continue beyond checkpoints.
 

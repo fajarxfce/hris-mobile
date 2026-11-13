@@ -72,5 +72,13 @@
     "evidenceUrl": "https://github.com/fajarxfce/compose-fluent-starter/blob/d7b6f839350c6dd7f91612f9a09ff15d6b43c33b/docs/measurements/command-insert-projection-port-2026-11-13.json"
   },
   "acceptedHostedRun": 43498640097,
-  "hostedEvidence": "docs/measurements/collaboration-inbox-command-hosted-2026-11-13.json"
+  "hostedEvidence": "docs/measurements/collaboration-inbox-command-hosted-2026-11-13.json",
+  "starterSharedApple": {
+    "commit": "caf8103cc8ce6ace62a2d47a3ffb0e06a10919c5",
+    "evidenceUrl": "https://github.com/fajarxfce/compose-fluent-starter/blob/caf8103cc8ce6ace62a2d47a3ffb0e06a10919c5/docs/measurements/command-insert-projection-shared-apple-2026-11-13.json",
+    "sharedMethods": 15,
+    "exactGenericFiles": 9,
+    "independentStarterAppleRun": false,
+    "hostedRunId": 43498640097
+  }
 }
