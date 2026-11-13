@@ -1,5 +1,27 @@
 # Apple SDK build budget continuation
 
+## Isolated SDK8 Apple candidate — 13 November 2026, 02:03 UTC
+
+This worktree owns only the native Apple builder correction. Run43327713661 is
+FINISHED/FAILED on65e649d12375af02a359470789e26584ad26c292, job131564298006.
+The pinned symbol reader and all five architecture/export checks passed; Swift
+linking failed after8744.846s, with zero native test executions. Original archive
+14001768615/306715428B/9ac07f4ed39b2b4fd4fbea96c1cf590c149562880039663dc79938ea25277e49
+and job/build logs remain under Mobile.work/sdk8-apple-symbol-reader-2026-11-12.
+
+The root cause is partial crate selection during upstream SQLite symbol localization:
+Rust1.96 object names no longer match its legacy crate-hash parser. The build-only
+patch keeps all Rust codegen units and allocator shims together. Existing SQLite
+isolation, source pins, Rust version, five architectures and four Swift tests remain.
+Mobile.work/sdk8-apple-crate-units-2026-11-13 contains the exact old candidate, failure
+inventory, red3/green8 actual Rust tests and20 passing Python guards. No compiler
+ran alongside the Mobile Gradle build; the short Rust test ran after focused2 reaped.
+Commit/push this isolated candidate, then dispatch exactly one hosted SDK workflow.
+Do not use the old success-only auditor without updating its exact head/job and new
+privateCrateProbe evidence. No release publication or production Apple activation.
+Main Mobile composer observation full1 is separately running; keep its sources frozen.
+
+
 Isolated branch fix/apple-sdk-build-budget-20261112, based on Mobilee056b86a.
 This checkout changes only the SDK Apple build driver, its CI budget and evidence.
 The main Mobile checkout has an active source-exact native suite; do not edit its

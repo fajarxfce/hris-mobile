@@ -2,15 +2,15 @@
 +++ b/xtask/src/swift.rs
 @@ -255,7 +255,7 @@
      create_dir_all(ffi_directory.as_path())?;
- 
+
      let sh = sh();
 -    cmd!(sh, "rustup run stable cargo build -p matrix-sdk-ffi --features {FFI_FEATURES}").run()?;
 +    cmd!(sh, "cargo build --locked -p matrix-sdk-ffi --features {FFI_FEATURES}").run()?;
- 
+
      rename(lib_output_dir.join(FFI_LIBRARY_NAME), ffi_directory.join(FFI_LIBRARY_NAME))?;
      let swift_directory = root_directory.join("bindings/apple/generated/swift");
 @@ -424,7 +424,7 @@
- 
+
              println!("-- Building for {}", target.description);
              if target.status == TargetStatus::TopTier {
 -                cmd!(sh, "rustup run stable cargo build -p matrix-sdk-ffi --target {triple} --profile {profile} --features {FFI_FEATURES}")
@@ -19,7 +19,7 @@
              } else {
                  cmd!(sh, "rustup run nightly cargo build -p matrix-sdk-ffi -Zbuild-std --target {triple} --profile {profile} --features {FFI_FEATURES}")
 @@ -437,7 +437,7 @@
- 
+
          if !stable_targets.is_empty() {
              let triples = stable_targets.iter().map(|target| target.triple).collect::<Vec<_>>();
 -            let mut cmd = cmd!(sh, "rustup run stable cargo build -p matrix-sdk-ffi");
@@ -27,3 +27,102 @@
              for triple in &triples {
                  cmd = cmd.arg("--target").arg(triple);
              }
+@@ -576,6 +576,18 @@
+ /// The crate an object file belongs to, or its own name for the objects that
+ /// don't come from one, such as the bundled SQLite.
+ fn crate_of(member: &str) -> &str {
++    // Rust 1.96 names units `crate.crate.hash-cgu.N.rcgu.o` and allocator
++    // shims `crate.hash.rcgu.o`. All units must stay with the crate: merging
++    // only a SQLite caller leaves its hidden references outside `ld -r`.
++    if member.ends_with(".rcgu.o") {
++        if let Some((name, _)) = member.split_once('.') {
++            if !name.is_empty()
++                && name.bytes().all(|byte| byte.is_ascii_alphanumeric() || byte == b'_')
++            {
++                return name;
++            }
++        }
++    }
+     member
+         .split_once('-')
+         .filter(|(_, rest)| {
+@@ -584,6 +596,79 @@
+                 && rest[..16].bytes().all(|byte| byte.is_ascii_hexdigit())
+         })
+         .map_or(member, |(name, _)| name)
++}
++
++#[cfg(test)]
++mod private_symbol_crate_tests {
++    use super::crate_of;
++    use std::collections::HashSet;
++
++    #[test]
++    fn rust_196_codegen_units_and_allocator_share_the_crate() {
++        for unit in 0..16 {
++            let name = format!("matrix_sdk_ffi.matrix_sdk_ffi.f1e34f89cd2ae0e2-cgu.{unit:02}.rcgu.o");
++            assert_eq!(crate_of(&name), "matrix_sdk_ffi");
++        }
++        assert_eq!(crate_of("matrix_sdk_ffi.8b7zbn7tftv75m9z7kj4vaoos.rcgu.o"), "matrix_sdk_ffi");
++    }
++
++    #[test]
++    fn legacy_codegen_units_keep_their_existing_group() {
++        assert_eq!(crate_of("rusqlite-0123456789abcdef.rusqlite.cgu.0.rcgu.o"), "rusqlite");
++        assert_eq!(crate_of("rusqlite-0123456789abcdef.allocator.rcgu.o"), "rusqlite");
++    }
++
++    #[test]
++    fn different_rust_crates_never_share_a_group() {
++        let one = "matrix_sdk_ffi.matrix_sdk_ffi.0123456789abcdef-cgu.00.rcgu.o";
++        let two = "matrix_sdk.matrix_sdk.0123456789abcdef-cgu.00.rcgu.o";
++        assert_ne!(crate_of(one), crate_of(two));
++        assert_eq!(crate_of(two), "matrix_sdk");
++    }
++
++    #[test]
++    fn ordinary_c_and_archive_members_keep_their_names() {
++        for name in ["c877a2978823c39d-sqlite3.o", "sqlite3.o", "libmatrix_sdk_ffi_merged.o", "__.SYMDEF SORTED"] {
++            assert_eq!(crate_of(name), name);
++        }
++    }
++
++    #[test]
++    fn malformed_legacy_hashes_are_not_crate_identifiers() {
++        for name in ["ffi-0123456789abcdeg.unit.rcgu.o", "ffi-0123456789abcde.unit.rcgu.o", "ffi-0123456789abcdefunit.rcgu.o"] {
++            assert_eq!(crate_of(name), name);
++        }
++    }
++
++    #[test]
++    fn non_rust_prefixes_and_extensions_remain_independent() {
++        for name in [".hash.rcgu.o", "other-crate.hash.rcgu.o", "sqlite3.hash.o", "unit.rcgu"] {
++            assert_eq!(crate_of(name), name);
++        }
++    }
++
++    #[test]
++    fn a_single_sqlite_caller_selects_every_sibling_codegen_unit() {
++        let caller = "matrix_sdk_ffi.matrix_sdk_ffi.f1e34f89cd2ae0e2-cgu.10.rcgu.o";
++        let crates: HashSet<_> = [crate_of(caller)].into_iter().collect();
++        let mut members: Vec<_> = (0..16).map(|unit| {
++            format!("matrix_sdk_ffi.matrix_sdk_ffi.f1e34f89cd2ae0e2-cgu.{unit:02}.rcgu.o")
++        }).collect();
++        members.push("matrix_sdk_ffi.8b7zbn7tftv75m9z7kj4vaoos.rcgu.o".to_owned());
++        members.push("other_crate.other_crate.f1e34f89cd2ae0e2-cgu.10.rcgu.o".to_owned());
++        let selected: Vec<_> = members.iter().filter(|member| crates.contains(crate_of(member))).collect();
++        assert_eq!(selected.len(), 17);
++        assert!(selected.iter().all(|name| name.starts_with("matrix_sdk_ffi.")));
++    }
++
++    #[test]
++    fn bundled_sqlite_object_does_not_absorb_unrelated_c_objects() {
++        let sqlite = "c877a2978823c39d-sqlite3.o";
++        let crates: HashSet<_> = [crate_of(sqlite)].into_iter().collect();
++        assert!(crates.contains(crate_of(sqlite)));
++        assert!(!crates.contains(crate_of("c877a2978823c39d-other.o")));
++        assert!(!crates.contains(crate_of("sqlite3_wrapper.sqlite3_wrapper.1234-cgu.0.rcgu.o")));
++    }
+ }
+
+ /// The path of the built library for a specific target and profile.

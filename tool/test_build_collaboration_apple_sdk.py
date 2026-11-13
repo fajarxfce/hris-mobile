@@ -13,8 +13,8 @@ from types import SimpleNamespace
 import xml.etree.ElementTree as ET
 
 from build_collaboration_apple_sdk import (
-    SLICE_ARCHITECTURES, SWIFT_TESTS, build, contained_file, load_manifest,
-    probe_symbol_reader, resolve_symbol_reader, verify_framework, verify_swift_tests,
+    PRIVATE_CRATE_TESTS, SLICE_ARCHITECTURES, SWIFT_TESTS, build, contained_file, load_manifest,
+    probe_private_symbol_crates, probe_symbol_reader, resolve_symbol_reader, verify_framework, verify_swift_tests,
 )
 
 
@@ -241,6 +241,63 @@ class AppleSymbolReaderProbeTest(unittest.TestCase):
                     probe_symbol_reader(Path("/pinned-rust/bin/llvm-nm"), {"host": "x86_64-apple-darwin"},
                                         Path(directory), {}, io.StringIO())
                 self.assertEqual(1, reader.call_count)
+
+
+class ApplePrivateCrateProbeTest(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporary.cleanup)
+        self.root = Path(self.temporary.name)
+        self.sdk = self.root / "sdk"
+        self.output = self.root / "output"
+        self.output.mkdir()
+        self.source = self.sdk / "xtask/src/swift.rs"
+        self.source.parent.mkdir(parents=True)
+        methods = "\n".join("#[test] fn " + name + "() {}" for name in sorted(PRIVATE_CRATE_TESTS))
+        self.source.write_text("fn crate_of(member: &str) -> &str { member }\n" + methods +
+                               "\n/// The path of the built library for a specific target and profile.\n")
+        self.env = {"RUSTUP_TOOLCHAIN": "1.96.0"}
+
+    def test_exact_selector_tests_compile_and_execute_before_recording_success(self):
+        commands = []
+        def run(command, **kwargs):
+            commands.append(command)
+            self.assertEqual(self.env, kwargs["env"])
+            if command[0] == "rustc":
+                self.assertIn("--test", command)
+                self.assertIn("--edition=2024", command)
+                Path(command[-1]).write_bytes(b"compiled-tests")
+            else:
+                self.assertEqual("--test-threads=1", command[1])
+        with patch("build_collaboration_apple_sdk.run", side_effect=run):
+            result = probe_private_symbol_crates(self.sdk, self.output, self.env, io.StringIO())
+        self.assertEqual(2, len(commands))
+        self.assertTrue(result["passed"])
+        self.assertEqual(8, result["tests"])
+        self.assertEqual(sorted(PRIVATE_CRATE_TESTS), result["methods"])
+        self.assertEqual(64, len(result["sourceSha256"]))
+
+    def test_missing_or_duplicate_case_is_rejected_before_compilation(self):
+        original = self.source.read_text()
+        name = sorted(PRIVATE_CRATE_TESTS)[0]
+        second = sorted(PRIVATE_CRATE_TESTS)[1]
+        for changed in (original.replace("#[test] fn " + name, "fn " + name),
+                        original.replace("fn " + name + "()", "fn " + second + "()")):
+            self.source.write_text(changed)
+            with self.subTest(changed=changed), patch("build_collaboration_apple_sdk.run") as run, self.assertRaisesRegex(
+                ValueError, "Missing or unexpected private crate"
+            ):
+                probe_private_symbol_crates(self.sdk, self.output, self.env, io.StringIO())
+            run.assert_not_called()
+
+    def test_failed_rust_test_never_records_success(self):
+        def run(command, **_):
+            if command[0] == "rustc":
+                Path(command[-1]).write_bytes(b"compiled-tests")
+            else:
+                raise subprocess.CalledProcessError(101, command)
+        with patch("build_collaboration_apple_sdk.run", side_effect=run), self.assertRaises(subprocess.CalledProcessError):
+            probe_private_symbol_crates(self.sdk, self.output, self.env, io.StringIO())
 
 
 class AppleSwiftEvidenceTest(unittest.TestCase):

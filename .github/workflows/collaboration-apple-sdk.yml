@@ -57,6 +57,7 @@ jobs:
             artifact/build.log
             artifact/swift-tests.xml
             artifact/symbol-reader-probe/
+            artifact/private-crate-probe/
             artifact/Cargo.lock
             artifact/sdk/
             artifact/proof/Package.swift

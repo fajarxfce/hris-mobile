@@ -1,0 +1,119 @@
+{
+  "date": "2026-11-13",
+  "failedRun": 43327713661,
+  "failedHead": "65e649d12375af02a359470789e26584ad26c292",
+  "failedJob": 131564298006,
+  "elapsedSeconds": 8744.846,
+  "artifactId": 14001768615,
+  "artifactBytes": 306715428,
+  "artifactSha256": "9ac07f4ed39b2b4fd4fbea96c1cf590c149562880039663dc79938ea25277e49",
+  "jobLogSha256": "e6c7fb4eea0affc3c13a88f63d8f297fd431c5115704f7593cc0fab1debfa695",
+  "buildLogSha256": "a1275f712abeae068a9fb5cd72d8cf0735c1104b1f01e5c5dcf93ee931f18959",
+  "packageAndProofDigestsVerified": true,
+  "symbolReader": {
+    "rust": "1.96.0",
+    "host": "x86_64-apple-darwin",
+    "llvmVersion": "22.1.2",
+    "version": "llvm-nm, compatible with GNU nm\nLLVM (http://llvm.org/):\n  LLVM version 22.1.2-rust-1.96.0-stable\n  Optimized build.",
+    "sha256": "342b5bf39636fdbc6aa5e113cd2932395c2a1c461f9cf77c8c885dccdc2977b0"
+  },
+  "symbolReaderProbe": {
+    "passed": true,
+    "architecture": "x86_64",
+    "sourceSha256": "edb509f2e6fbbb58b70746a35248f7779ea8bab84381804f4e274583844b414f",
+    "archiveSha256": "a71c9d6382f3c92c3a92ceb58e41c534ecd4588d46e844650ea63f0edcb42dee"
+  },
+  "verifiedSlices": [
+    {
+      "platform": "ios",
+      "variant": "",
+      "architectures": [
+        "arm64"
+      ],
+      "nativeSha256": "42b31759e12c8f4bfc123fe598ffc9497f71810a4c42c4d7747a574920e1efa3",
+      "nativeBytes": 229380576,
+      "requiredSymbolsPresent": true
+    },
+    {
+      "platform": "macos",
+      "variant": "",
+      "architectures": [
+        "arm64",
+        "x86_64"
+      ],
+      "nativeSha256": "2d6cfa344f3bfb2b8d581b6e026b807a215c3b1eda792f3bab35cbe7b1cf75ed",
+      "nativeBytes": 457395920,
+      "requiredSymbolsPresent": true
+    },
+    {
+      "platform": "ios",
+      "variant": "simulator",
+      "architectures": [
+        "arm64",
+        "x86_64"
+      ],
+      "nativeSha256": "486262dbcf5dc55279af35a9e3c3c558fed9e574f18b9bc0e5c26e0c19ab71d8",
+      "nativeBytes": 449109728,
+      "requiredSymbolsPresent": true
+    }
+  ],
+  "swiftCasesExecuted": 0,
+  "failure": "Swift dynamic-library link cannot resolve Rust private references after SDK SQLite symbol localization.",
+  "cause": "Upstream crate_of understands legacy crate-hash names, but Rust 1.96 emits crate.crate.hash-cgu.N.rcgu.o. It selects only individual SQLite-using units, leaving hidden same-crate references across the relocatable merge.",
+  "observedArchive": {
+    "members": 2063,
+    "remainingFfiMembers": 16,
+    "missingCodegenUnit": "10",
+    "mergedObjectPresent": true,
+    "inventorySha256": "c93dcf32ba05b58c63f9a8a4aecbd7478c3d16c637db705627d12ea1912cebf2"
+  },
+  "correction": "Group all Rust .rcgu.o members by their crate prefix while retaining legacy grouping and independent C object names. Keep SQLite localization enabled.",
+  "localAcceptance": {
+    "accepted": true,
+    "checkedAt": "2026-11-13T02:03:27.441975+00:00",
+    "sourceFiles": {
+      "tool/collaboration-sdk-patches/swift-pinned-build.patch": "ee80329ce2239c6a6a6bad3fcb0ad451067ace263789d0b41b8a1a96d9c385b2",
+      "tool/collaboration-sdk-patches/apple-incoming-hints-build.json": "4e3da541a7a4f9a22b631391b0f29cebdb723d43662d530bd7d454ebaeb6686a",
+      "tool/build_collaboration_apple_sdk.py": "39e123346286fb77b4db71033475791440277db701cf1fc91ee686f43b7fda82",
+      "tool/test_build_collaboration_apple_sdk.py": "956432b8ef3b30e279367b922eb86c0829378b36a58690f2523ddf9b705e9778",
+      ".github/workflows/collaboration-apple-sdk.yml": "914152d874c18ef224c7170ff6af2dc1f0c48c6bc19dfa4c1ffa822aad523dac"
+    },
+    "rustVersion": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+    "redFailures": [
+      "a_single_sqlite_caller_selects_every_sibling_codegen_unit",
+      "different_rust_crates_never_share_a_group",
+      "rust_196_codegen_units_and_allocator_share_the_crate"
+    ],
+    "redLogSha256": "9076df37f536ae25e20c85361d2a57a5112939d095cd29363a8aaa56c7a07737",
+    "green": {
+      "passed": true,
+      "tests": 8,
+      "methods": [
+        "a_single_sqlite_caller_selects_every_sibling_codegen_unit",
+        "bundled_sqlite_object_does_not_absorb_unrelated_c_objects",
+        "different_rust_crates_never_share_a_group",
+        "legacy_codegen_units_keep_their_existing_group",
+        "malformed_legacy_hashes_are_not_crate_identifiers",
+        "non_rust_prefixes_and_extensions_remain_independent",
+        "ordinary_c_and_archive_members_keep_their_names",
+        "rust_196_codegen_units_and_allocator_share_the_crate"
+      ],
+      "sourceSha256": "88f259494e4bd798c776f4e5ddac7416dbf79f2f2fcb2f2baaf43b4cb02d0bda",
+      "binarySha256": "139544a3f494b8b9d40acadf3446d13e25f4b88e92ff4157a13a7a30eef5939b"
+    },
+    "greenLogSha256": "5fb9c79af3f1204a6cf5c1208fdf5555aa0642fc1a2c7bd47929904a0a50c5d2",
+    "guards": {
+      "tests": 20,
+      "exitCode": 0,
+      "elapsedSeconds": 0.114,
+      "logSha256": "f836e94d5aacd008f64ea6b5ce818639493bf99effcc09c9711cfa1ba0b67ece"
+    },
+    "swiftCasesExecuted": 0,
+    "hostedAccepted": false,
+    "published": false
+  },
+  "hostedAccepted": false,
+  "published": false,
+  "productionAppleRuntimeEnabled": false,
+  "remaining": "One exact-source hosted build: eight selector tests, all five export checks, four actual Swift contracts, iOS device and simulator links. No production Apple activation."
+}

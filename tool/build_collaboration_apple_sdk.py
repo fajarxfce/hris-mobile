@@ -30,6 +30,16 @@ SWIFT_TESTS = {
     "testMissingStoreReadDoesNotCreateFiles",
     "testSDK8ListenerCancellationAndObserverCloseRetainNoListener",
 }
+PRIVATE_CRATE_TESTS = {
+    "rust_196_codegen_units_and_allocator_share_the_crate",
+    "legacy_codegen_units_keep_their_existing_group",
+    "different_rust_crates_never_share_a_group",
+    "ordinary_c_and_archive_members_keep_their_names",
+    "malformed_legacy_hashes_are_not_crate_identifiers",
+    "non_rust_prefixes_and_extensions_remain_independent",
+    "a_single_sqlite_caller_selects_every_sibling_codegen_unit",
+    "bundled_sqlite_object_does_not_absorb_unrelated_c_objects",
+}
 
 
 def verify_swift_tests(report):
@@ -108,6 +118,27 @@ def probe_symbol_reader(symbol_reader, provenance, output, env, log):
         raise ValueError("Pinned symbol reader could not inspect a real Rust archive")
     return {"passed": True, "architecture": architecture, "sourceSha256": sha(source),
             "archiveSha256": sha(archive)}
+
+
+def probe_private_symbol_crates(sdk, output, env, log):
+    """Execute the exact patched crate selector before any expensive target build."""
+    builder = (sdk / "xtask/src/swift.rs").read_text()
+    start = builder.index("fn crate_of(member: &str) -> &str {")
+    end = builder.index("/// The path of the built library for a specific target and profile.", start)
+    source = builder[start:end]
+    methods = re.findall(r"#\[test\]\s+fn\s+(\w+)\s*\(", source)
+    if len(methods) != len(PRIVATE_CRATE_TESTS) or set(methods) != PRIVATE_CRATE_TESTS:
+        raise ValueError("Missing or unexpected private crate selection contract")
+    probe = output / "private-crate-probe"
+    probe.mkdir()
+    path = probe / "probe.rs"
+    path.write_text(source)
+    binary = probe / "crate-tests"
+    run(["rustc", "--edition=2024", "--test", str(path), "-o", str(binary)],
+        cwd=probe, env=env, log=log, timeout=120)
+    run([str(binary), "--test-threads=1"], cwd=probe, env=env, log=log, timeout=30)
+    return {"passed": True, "tests": len(methods), "methods": sorted(methods),
+            "sourceSha256": sha(path), "binarySha256": sha(binary)}
 
 
 def verify_framework(framework, base, symbol_reader):
@@ -204,6 +235,7 @@ def build(args):
             before = {name: sha(sdk / name) for name in expected}
             if before != expected:
                 raise ValueError("Patched Apple inputs differ from SDK8 and its pinned builder")
+            record["privateCrateProbe"] = probe_private_symbol_crates(sdk, out, env, log)
             run(["cargo", "fetch", "--locked"], cwd=sdk, env=env, log=log, timeout=900)
             env["CARGO_NET_OFFLINE"] = "true"
             command = ["cargo", "run", "--locked", "-p", "xtask", "--", "swift", "build-framework",

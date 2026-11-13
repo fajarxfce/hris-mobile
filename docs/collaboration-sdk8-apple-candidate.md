@@ -52,3 +52,23 @@ python3 -m unittest discover -s tool -p test_build_collaboration_apple_sdk.py
 python3 tool/build_collaboration_apple_sdk.py \
   --sdk /path/to/fresh-matrix-sdk --output /path/to/new-artifact --bootstrap
 ```
+
+## Rust codegen-unit ownership during SQLite localization
+
+Run43327713661 at65e649d1 passed the pinned LLVM22 reader probe, all five native
+builds and each architecture's required exports. Swift linking then failed on
+internal Rust symbols; zero Swift contracts executed. The retained macOS archive
+contains FFI units00–09 and11–15 plus its allocator, while unit10 alone was moved
+into the merged SQLite object. The upstream crate selector only recognizes the
+older `crate-hash` filenames, so Rust1.96 `crate.crate.hash-cgu.N.rcgu.o` members
+were treated as unrelated objects despite sharing hidden references.
+
+The build-only patch now groups all `.rcgu.o` members by their Rust crate prefix,
+retains legacy grouping and keeps C objects independent. SQLite symbol localization
+stays enabled. The driver runs eight tests of the exact patched selector before
+building the five targets. The old selector fails three of those tests locally;
+the corrected selector passes all eight, and all20 Python build guards pass.
+The standalone test source and executable are retained in the hosted artifact.
+See [failure and correction evidence](measurements/collaboration-sdk8-apple-crate-units-2026-11-13.json).
+The four native Swift contracts and both iOS links remain required; Linux selector
+tests do not establish Apple runtime acceptance. Android SDK8 is unchanged.
