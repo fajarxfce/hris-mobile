@@ -1,0 +1,331 @@
+{
+  "portable": {
+    "accepted": true,
+    "sourceCommit": "b4a3a89d105f4f79032ced3c912c1d1f6a4a15d7",
+    "runId": 43498640097,
+    "jobId": 132138280906,
+    "counts": {
+      "desktopTest": 6849,
+      "testAndroidHostTest": 960,
+      "wasmJsBrowserTest": 6550
+    },
+    "previousFailedRunCaseIdsRetained": true,
+    "previousFailedRunId": 43443248470,
+    "previousFailedRunCases": 13929,
+    "fixedTimingMethods": [
+      "thrownFailureFinishesTimingWithoutExceptionPayload",
+      "suspendedThrownErrorsFinishRoomAndWorkerStagesWithoutLosingTheirOutcome"
+    ],
+    "artifactId": 14074603097,
+    "artifactBytes": 4425454,
+    "artifactSha256": "ee63ed5baa0344f84a3e733fd89e0847d0eda315601b8f1a9882e13bb9315ca6",
+    "jobLogSha256": "a077527e83016145ed965cf1c76525ccacef45e01fbde72359bfa01539d632ae",
+    "previousExactCaseIdsRetained": true,
+    "previousMethodAndPlatformIdsRetained": true,
+    "browserEngineReview": null,
+    "newSharedMethods": 61,
+    "newDesktopStorageMethods": 2,
+    "actualNew": [
+      {
+        "platform": "desktopTest",
+        "clazz": "SpaceInboxHistorySourcePolicyTest",
+        "methods": [
+          "absenceOrTombstoneWithoutAnOriginalCannotInventAnActivity",
+          "aliasesAndReplacementEventsShareOneOriginalWithoutTruncatingItsAliases",
+          "anOriginalWithoutALogicalIdRequiresNoCommandLookupAndKeepsItsPrimaryIdentity",
+          "boundedBatchKeepsFirstRequestedOriginalOrderAndPreservesHiddenOrEditedFacts",
+          "canonicalSourceMatchesTheThreadForNativeAndLegacyRooms",
+          "capturedOriginalsDoNotRetainMutableAliasLists",
+          "commandsMustBeExactLookupResultsAndCannotCrossAnAccountBoundary",
+          "conflictingCopiesOfOnePrimaryCannotBeCoalescedByTheirEventId",
+          "foreignSourceCoordinatesAndSessionsFailBeforePublishingIdentity",
+          "groupRecoveryCopyOfALegacyRoomCannotBecomeTheVisibleInboxSource",
+          "hiddenEditedAndConfirmedMessagesPreserveIdentityWithoutSettlingAnotherCommand",
+          "immutableNonmatchingFactsDoNotParkAnUnrelatedHistoryMessage",
+          "invalidRevisionAndMalformedOriginalRemainFailures",
+          "matchedGroupAndCompanyCommandsKeepTheirActualNamespaces",
+          "missingLegacyOriginRemainsUnresolvedEvenWithAnAcknowledgedEventId",
+          "nativeGroupBindingCannotAuthorizeACompanyCommandRead",
+          "overlappingAliasesAndSplitLogicalOriginalsAreRejected",
+          "queuedOriginalWaitsForProofWithoutAllocatingAHistoryAnchor",
+          "redactionDoesNotUseMissingTextToDismissAnUnstampedOriginal",
+          "replacementCommandsNeverOwnTheOriginalInboxAnchor",
+          "requestedAliasCannotSimultaneouslyBeAbsentOrPointToAnotherOriginal",
+          "sameLogicalIdFromDifferentSendersRemainsTwoIndependentOriginals",
+          "snapshotMustContainExactlyTheCapturedBoundedRequestInOrder",
+          "sourceDiagnosticsContainNeitherMessageTextNorProviderIdentifiers",
+          "twoProvenOriginalsAreAmbiguousInsteadOfUsingANamespacePriority",
+          "unprovenOtherNamespaceCannotBeIgnoredBecauseOneOriginalAlreadyMatches"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "SpaceInboxPendingEditPolicyTest",
+        "methods": [
+          "aNestedNewestPreviewCannotCarryProvenanceFromTheFuture",
+          "aTargetForAnotherOriginalCannotBeAssignedToAnExistingOriginalAnchor",
+          "actualReplacementNamespaceIsIndependentOfTheOriginalNamespace",
+          "aliasTargetDoesNotHaveToBeTheHistoryPrimaryEvent",
+          "capturedConversationRequiresEditProvenanceUnderItsOwnRevision",
+          "diagnosticsDoNotExposeTheTargetOrEitherCommandNamespace",
+          "editPublicationUsesTheNextRevisionWithoutAllocatingAPlacementOrdinal",
+          "exactComposerAnchorCaptureAlsoRejectsFuturePendingProvenance",
+          "historyTargetsKeepPhysicalRoomSenderAndCompanyCoordinates",
+          "operationAgeIsNotAnExpiryButInvalidTimesAndRevisionsAreRejected",
+          "pendingTextCanBeHiddenOrRedactedWithoutRevivingItsPreview",
+          "replacementIdCannotReuseTheOriginalOrMalformedCoordinates"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationSpaceInboxPendingEditStorageTest",
+        "methods": [
+          "aLaterEditUsesPublicationOrderWithoutReorderingTheChat",
+          "anExistingPendingOperationCannotChangeItsTargetOrPublicationStamp",
+          "clearingProvenanceLeavesDraftAndOriginalPlacementIntact",
+          "hiddenAndDeletedPendingPreviewsCannotReviveByKeepingTheirStamp",
+          "lostPublicationReplyPreservesItsEditAndCannotOverwriteALaterOperation",
+          "pendingEditMetadataDoesNotDuplicateTheMaximumSizeBody",
+          "pendingEditsRoundTripWithoutMovingTheOriginalOrTyping",
+          "replayAndReceiptUpdatesKeepThePendingIntentAndPlacement"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CommandInsertMutationsTest",
+        "methods": [
+          "accountAndGlobalCapacityDoNotPublishOrRenewWork",
+          "activeAndArchivedReplayNeverRestoresOldProjectionOrWake",
+          "callerCollectionsAreDetachedBeforeSuspension",
+          "cancelledWriterLeavesAllOrNoneCommitted",
+          "commandIdentityAndResourceConflictsPreserveProjection",
+          "commandProjectionAndWakeCommitAndNotifyTogether",
+          "commandProjectionAndWakeSurviveReopening",
+          "competingEditsPublishOnlyTheWinningCommandAndProjection",
+          "concurrentExactReplayPublishesOnlyOnce",
+          "invalidInputsAreRejectedEvenForRetainedCommands",
+          "lostReplyIsRecoveredWithoutRevivingAcknowledgedWork",
+          "projectionAndCommandConstraintsRollBackEveryStore",
+          "replacementAccountCannotWriteAndRenewedOwnerCanContinue",
+          "sourceOrIndexChangesRollBackTheInsertedCommand",
+          "sqliteCheckpointFailureRollsBackEarlierCommandProjectionAndWake",
+          "sqliteInsertFailureLeavesProjectionAndWakeUntouched",
+          "wakeConflictsLeaveNoCommandOrProjection"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SpaceInboxHistorySourcePolicyTest",
+        "methods": [
+          "absenceOrTombstoneWithoutAnOriginalCannotInventAnActivity",
+          "aliasesAndReplacementEventsShareOneOriginalWithoutTruncatingItsAliases",
+          "anOriginalWithoutALogicalIdRequiresNoCommandLookupAndKeepsItsPrimaryIdentity",
+          "boundedBatchKeepsFirstRequestedOriginalOrderAndPreservesHiddenOrEditedFacts",
+          "canonicalSourceMatchesTheThreadForNativeAndLegacyRooms",
+          "capturedOriginalsDoNotRetainMutableAliasLists",
+          "commandsMustBeExactLookupResultsAndCannotCrossAnAccountBoundary",
+          "conflictingCopiesOfOnePrimaryCannotBeCoalescedByTheirEventId",
+          "foreignSourceCoordinatesAndSessionsFailBeforePublishingIdentity",
+          "groupRecoveryCopyOfALegacyRoomCannotBecomeTheVisibleInboxSource",
+          "hiddenEditedAndConfirmedMessagesPreserveIdentityWithoutSettlingAnotherCommand",
+          "immutableNonmatchingFactsDoNotParkAnUnrelatedHistoryMessage",
+          "invalidRevisionAndMalformedOriginalRemainFailures",
+          "matchedGroupAndCompanyCommandsKeepTheirActualNamespaces",
+          "missingLegacyOriginRemainsUnresolvedEvenWithAnAcknowledgedEventId",
+          "nativeGroupBindingCannotAuthorizeACompanyCommandRead",
+          "overlappingAliasesAndSplitLogicalOriginalsAreRejected",
+          "queuedOriginalWaitsForProofWithoutAllocatingAHistoryAnchor",
+          "redactionDoesNotUseMissingTextToDismissAnUnstampedOriginal",
+          "replacementCommandsNeverOwnTheOriginalInboxAnchor",
+          "requestedAliasCannotSimultaneouslyBeAbsentOrPointToAnotherOriginal",
+          "sameLogicalIdFromDifferentSendersRemainsTwoIndependentOriginals",
+          "snapshotMustContainExactlyTheCapturedBoundedRequestInOrder",
+          "sourceDiagnosticsContainNeitherMessageTextNorProviderIdentifiers",
+          "twoProvenOriginalsAreAmbiguousInsteadOfUsingANamespacePriority",
+          "unprovenOtherNamespaceCannotBeIgnoredBecauseOneOriginalAlreadyMatches"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SpaceInboxPendingEditPolicyTest",
+        "methods": [
+          "aNestedNewestPreviewCannotCarryProvenanceFromTheFuture",
+          "aTargetForAnotherOriginalCannotBeAssignedToAnExistingOriginalAnchor",
+          "actualReplacementNamespaceIsIndependentOfTheOriginalNamespace",
+          "aliasTargetDoesNotHaveToBeTheHistoryPrimaryEvent",
+          "capturedConversationRequiresEditProvenanceUnderItsOwnRevision",
+          "diagnosticsDoNotExposeTheTargetOrEitherCommandNamespace",
+          "editPublicationUsesTheNextRevisionWithoutAllocatingAPlacementOrdinal",
+          "exactComposerAnchorCaptureAlsoRejectsFuturePendingProvenance",
+          "historyTargetsKeepPhysicalRoomSenderAndCompanyCoordinates",
+          "operationAgeIsNotAnExpiryButInvalidTimesAndRevisionsAreRejected",
+          "pendingTextCanBeHiddenOrRedactedWithoutRevivingItsPreview",
+          "replacementIdCannotReuseTheOriginalOrMalformedCoordinates"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserCollaborationSpaceInboxPendingEditStorageTest",
+        "methods": [
+          "aLaterEditUsesPublicationOrderWithoutReorderingTheChat",
+          "anExistingPendingOperationCannotChangeItsTargetOrPublicationStamp",
+          "clearingProvenanceLeavesDraftAndOriginalPlacementIntact",
+          "hiddenAndDeletedPendingPreviewsCannotReviveByKeepingTheirStamp",
+          "lostPublicationReplyPreservesItsEditAndCannotOverwriteALaterOperation",
+          "pendingEditMetadataDoesNotDuplicateTheMaximumSizeBody",
+          "pendingEditsRoundTripWithoutMovingTheOriginalOrTyping",
+          "replayAndReceiptUpdatesKeepThePendingIntentAndPlacement"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserCommandInsertMutationsTest",
+        "methods": [
+          "accountAndGlobalCapacityDoNotPublishOrRenewWork",
+          "activeAndArchivedReplayNeverRestoresOldProjectionOrWake",
+          "callerCollectionsAreDetachedBeforeSuspension",
+          "cancelledWriterLeavesAllOrNoneCommitted",
+          "commandIdentityAndResourceConflictsPreserveProjection",
+          "commandProjectionAndWakeCommitAndNotifyTogether",
+          "commandProjectionAndWakeSurviveReopening",
+          "competingEditsPublishOnlyTheWinningCommandAndProjection",
+          "concurrentExactReplayPublishesOnlyOnce",
+          "invalidInputsAreRejectedEvenForRetainedCommands",
+          "lostReplyIsRecoveredWithoutRevivingAcknowledgedWork",
+          "projectionAndCommandConstraintsRollBackEveryStore",
+          "replacementAccountCannotWriteAndRenewedOwnerCanContinue",
+          "sourceOrIndexChangesRollBackTheInsertedCommand",
+          "wakeConflictsLeaveNoCommandOrProjection"
+        ]
+      }
+    ],
+    "reportManifestSha256": "96d1379565eefc77fec9f6200c6c123d5246748be86a5b3036fa0c1263c0e1db"
+  },
+  "apple": {
+    "accepted": true,
+    "sourceCommit": "b4a3a89d105f4f79032ced3c912c1d1f6a4a15d7",
+    "runId": 43498640097,
+    "jobId": 132138280191,
+    "counts": {
+      "iosSimulatorArm64Test": 6100
+    },
+    "previousFailedRunCaseIdsRetained": true,
+    "previousFailedRunId": 43443248470,
+    "previousFailedRunCases": 5892,
+    "fixedTimingMethods": [
+      "thrownFailureFinishesTimingWithoutExceptionPayload",
+      "suspendedThrownErrorsFinishRoomAndWorkerStagesWithoutLosingTheirOutcome"
+    ],
+    "artifactId": 14076538831,
+    "artifactBytes": 984474,
+    "artifactSha256": "d266351f73c82a078f9e2201c6d7fcd0fc06e82c712a4b12849409d6ab186d30",
+    "jobLogSha256": "10ff123309e02acdfe1887600fb237a35b60467d5a349559c35b9eb89754db5f",
+    "previousExactCaseIdsRetained": true,
+    "previousMethodAndPlatformIdsRetained": true,
+    "browserEngineReview": null,
+    "newSharedMethods": 61,
+    "newDesktopStorageMethods": 2,
+    "actualNew": [
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SpaceInboxHistorySourcePolicyTest",
+        "methods": [
+          "absenceOrTombstoneWithoutAnOriginalCannotInventAnActivity",
+          "aliasesAndReplacementEventsShareOneOriginalWithoutTruncatingItsAliases",
+          "anOriginalWithoutALogicalIdRequiresNoCommandLookupAndKeepsItsPrimaryIdentity",
+          "boundedBatchKeepsFirstRequestedOriginalOrderAndPreservesHiddenOrEditedFacts",
+          "canonicalSourceMatchesTheThreadForNativeAndLegacyRooms",
+          "capturedOriginalsDoNotRetainMutableAliasLists",
+          "commandsMustBeExactLookupResultsAndCannotCrossAnAccountBoundary",
+          "conflictingCopiesOfOnePrimaryCannotBeCoalescedByTheirEventId",
+          "foreignSourceCoordinatesAndSessionsFailBeforePublishingIdentity",
+          "groupRecoveryCopyOfALegacyRoomCannotBecomeTheVisibleInboxSource",
+          "hiddenEditedAndConfirmedMessagesPreserveIdentityWithoutSettlingAnotherCommand",
+          "immutableNonmatchingFactsDoNotParkAnUnrelatedHistoryMessage",
+          "invalidRevisionAndMalformedOriginalRemainFailures",
+          "matchedGroupAndCompanyCommandsKeepTheirActualNamespaces",
+          "missingLegacyOriginRemainsUnresolvedEvenWithAnAcknowledgedEventId",
+          "nativeGroupBindingCannotAuthorizeACompanyCommandRead",
+          "overlappingAliasesAndSplitLogicalOriginalsAreRejected",
+          "queuedOriginalWaitsForProofWithoutAllocatingAHistoryAnchor",
+          "redactionDoesNotUseMissingTextToDismissAnUnstampedOriginal",
+          "replacementCommandsNeverOwnTheOriginalInboxAnchor",
+          "requestedAliasCannotSimultaneouslyBeAbsentOrPointToAnotherOriginal",
+          "sameLogicalIdFromDifferentSendersRemainsTwoIndependentOriginals",
+          "snapshotMustContainExactlyTheCapturedBoundedRequestInOrder",
+          "sourceDiagnosticsContainNeitherMessageTextNorProviderIdentifiers",
+          "twoProvenOriginalsAreAmbiguousInsteadOfUsingANamespacePriority",
+          "unprovenOtherNamespaceCannotBeIgnoredBecauseOneOriginalAlreadyMatches"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SpaceInboxPendingEditPolicyTest",
+        "methods": [
+          "aNestedNewestPreviewCannotCarryProvenanceFromTheFuture",
+          "aTargetForAnotherOriginalCannotBeAssignedToAnExistingOriginalAnchor",
+          "actualReplacementNamespaceIsIndependentOfTheOriginalNamespace",
+          "aliasTargetDoesNotHaveToBeTheHistoryPrimaryEvent",
+          "capturedConversationRequiresEditProvenanceUnderItsOwnRevision",
+          "diagnosticsDoNotExposeTheTargetOrEitherCommandNamespace",
+          "editPublicationUsesTheNextRevisionWithoutAllocatingAPlacementOrdinal",
+          "exactComposerAnchorCaptureAlsoRejectsFuturePendingProvenance",
+          "historyTargetsKeepPhysicalRoomSenderAndCompanyCoordinates",
+          "operationAgeIsNotAnExpiryButInvalidTimesAndRevisionsAreRejected",
+          "pendingTextCanBeHiddenOrRedactedWithoutRevivingItsPreview",
+          "replacementIdCannotReuseTheOriginalOrMalformedCoordinates"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleCollaborationSpaceInboxPendingEditStorageTest",
+        "methods": [
+          "aLaterEditUsesPublicationOrderWithoutReorderingTheChat",
+          "anExistingPendingOperationCannotChangeItsTargetOrPublicationStamp",
+          "clearingProvenanceLeavesDraftAndOriginalPlacementIntact",
+          "hiddenAndDeletedPendingPreviewsCannotReviveByKeepingTheirStamp",
+          "lostPublicationReplyPreservesItsEditAndCannotOverwriteALaterOperation",
+          "pendingEditMetadataDoesNotDuplicateTheMaximumSizeBody",
+          "pendingEditsRoundTripWithoutMovingTheOriginalOrTyping",
+          "replayAndReceiptUpdatesKeepThePendingIntentAndPlacement"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleCommandInsertMutationsTest",
+        "methods": [
+          "accountAndGlobalCapacityDoNotPublishOrRenewWork",
+          "activeAndArchivedReplayNeverRestoresOldProjectionOrWake",
+          "callerCollectionsAreDetachedBeforeSuspension",
+          "cancelledWriterLeavesAllOrNoneCommitted",
+          "commandIdentityAndResourceConflictsPreserveProjection",
+          "commandProjectionAndWakeCommitAndNotifyTogether",
+          "commandProjectionAndWakeSurviveReopening",
+          "competingEditsPublishOnlyTheWinningCommandAndProjection",
+          "concurrentExactReplayPublishesOnlyOnce",
+          "invalidInputsAreRejectedEvenForRetainedCommands",
+          "lostReplyIsRecoveredWithoutRevivingAcknowledgedWork",
+          "projectionAndCommandConstraintsRollBackEveryStore",
+          "replacementAccountCannotWriteAndRenewedOwnerCanContinue",
+          "sourceOrIndexChangesRollBackTheInsertedCommand",
+          "wakeConflictsLeaveNoCommandOrProjection"
+        ]
+      }
+    ],
+    "reportManifestSha256": "1aed194689fdd16dbfaa7211c1ea5a0687bf8784ddd5ab8b1a62fce28d8b7dbb"
+  },
+  "accepted": true,
+  "runId": 43498640097,
+  "sourceCommit": "b4a3a89d105f4f79032ced3c912c1d1f6a4a15d7",
+  "totalCases": 20459,
+  "newActualAppleMethods": 61,
+  "newDesktopStorageMethods": 2,
+  "oldFailedRunPreserved": true,
+  "canonicalSourcePolicyIncluded": true,
+  "pendingEditProvenanceIncluded": true,
+  "atomicCommandInsertionIncluded": true,
+  "laterEditPublicationIncluded": false,
+  "productGraphActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false
+}

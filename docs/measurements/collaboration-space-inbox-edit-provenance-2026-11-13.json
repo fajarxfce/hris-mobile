@@ -69,10 +69,12 @@
   "bodyFreePendingEditPointer": true,
   "originalPlacementPreserved": true,
   "oldPayloadReadsPreserved": true,
-  "actualNewAppleExecution": false,
+  "actualNewAppleExecution": true,
   "atomicEditAuthoringActivated": false,
   "productGraphActivated": false,
   "phoneInstalled": false,
   "installedPhoneBuild": 92,
-  "liveChanged": false
+  "liveChanged": false,
+  "acceptedHostedRun": 43498640097,
+  "hostedEvidence": "docs/measurements/collaboration-inbox-command-hosted-2026-11-13.json"
 }

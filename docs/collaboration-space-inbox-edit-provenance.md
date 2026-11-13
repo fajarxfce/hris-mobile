@@ -32,3 +32,5 @@ history backfill is still needed when content predates its Group binding. HRIS p
 this schema is not a generic Starter port.
 
 Evidence: `docs/measurements/collaboration-space-inbox-edit-provenance-2026-11-13.json`.
+
+Actual Apple execution is accepted in control 43498640097, exact source `b4a3a89d105f4f79032ced3c912c1d1f6a4a15d7`: 6,100 Apple /20,459 combined cases, all prior identities, iOS host and16 push fields pass. This source covers canonical source policy, pending edit provenance and raw command insertion; later edit publication remains separate. Evidence: `docs/measurements/collaboration-inbox-command-hosted-2026-11-13.json`.

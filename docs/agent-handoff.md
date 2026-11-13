@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 21:18 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 21:21 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -72,6 +72,16 @@ Apple artifact 14071692387 /974949 bytes /
 7a25078f830cb0c13d9fadb7edf6a223c5cae7ff6fc7720b6018458381589e0e; reports 7821a54e40bafd40debd254fbcd4c2204fcde87c7615fe97e0a43627f5cb286b.
 This exact source EXCLUDES later canonical source policy methods. No native SDK8 main-application
 activation, product graph or phone latency is claimed. Preserve artifacts; do not rerun.
+
+Control 43498640097 at exact b4a3a89d105f4f79032ced3c912c1d1f6a4a15d7 is FULLY ACCEPTED:
+20,459 =14,359 portable (6,849 desktop /960 Android host /6,550 browser) +6,100 actual Apple.
+All preceding accepted and failed-run identities remain, including both timing regressions.
+61 new shared Apple methods cover canonical source26, pending edit20 and raw command insertion15;
+two extra SQLite fault injections also pass. iOS application host and all16 push fields pass.
+Apple artifact 14076538831 /984474 bytes /
+d266351f73c82a078f9e2201c6d7fcd0fc06e82c712a4b12849409d6ab186d30; reports 1aed194689fdd16dbfaa7211c1ea5a0687bf8784ddd5ab8b1a62fce28d8b7dbb.
+This exact source EXCLUDES later edit command/inbox publication. Main native SDK8 activation,
+product graph and phone latency remain separate. Preserve artifacts; do not redispatch.
 
 ## Native Apple and product work still outstanding
 

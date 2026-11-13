@@ -29,3 +29,5 @@ Finite catalog/history backfill is also required when content predates a canonic
 must participate in incoming completion, including retained key-history replay without new merge.
 
 Evidence: `docs/measurements/collaboration-space-inbox-history-source-2026-11-13.json`.
+
+Actual Apple execution is accepted in control 43498640097, exact source `b4a3a89d105f4f79032ced3c912c1d1f6a4a15d7`: 6,100 Apple /20,459 combined cases, all prior identities, iOS host and16 push fields pass. This source covers canonical source policy, pending edit provenance and raw command insertion; later edit publication remains separate. Evidence: `docs/measurements/collaboration-inbox-command-hosted-2026-11-13.json`.
