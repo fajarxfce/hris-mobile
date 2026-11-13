@@ -54,6 +54,7 @@ jobs:
         run: |
           python3 -m unittest discover -s mobile/tool -p test_build_collaboration_apple_sdk.py
           python3 -m unittest discover -s mobile/tool -p test_recheck_collaboration_apple_sdk.py
+          python3 -m unittest discover -s mobile/tool -p test_package_collaboration_apple_sdk.py
       - name: Build pinned SDK8 and run actual Swift crypto and ownership contracts
         if: ${{ !inputs.recheck_completed_candidate }}
         run: |

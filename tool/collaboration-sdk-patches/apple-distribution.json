@@ -1,0 +1,100 @@
+{
+  "schema": 1,
+  "version": "26.10.23-hris.8",
+  "artifactId": 14011628218,
+  "archiveSha256": "b8dfea189c802558ecc5c1b9f20354337375cb5d9d8342426933c3eaf2ece040",
+  "acceptedRun": 43370071243,
+  "acceptedJob": 131703523190,
+  "acceptedSource": "ad96a35a8d4ea2f931476a906a4183fb6e1f3c5e",
+  "nativeSourceRun": 43349484661,
+  "nativeSourceCommit": "6cc04d1f7c92dd60923c8d291e978e6d8a42728a",
+  "appleManifestSha256": "4e3da541a7a4f9a22b631391b0f29cebdb723d43662d530bd7d454ebaeb6686a",
+  "nativeTests": 5,
+  "packageFiles": {
+    "LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+    "Package.swift": "66ede2c1d0bd9f112473469ad198626d2f153476623efeaf6919a8a2569f234a",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/Info.plist": "87c343e444decf9532079f9cb014608a8b409f2dae997376c1bafea8dec00de0",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdkFFI.h": "bfa73a44fbd901b9a1a919a58bf003ebeda38f666e223733e08ad3a47a7e6f20",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdk_baseFFI.h": "387c558d754b75bb98bc3f0905e5631db05a1666dc307e35de03ee115eaa44f6",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdk_commonFFI.h": "3a22d33577ae8f12eca3458b5a1bab4ed2469e41420975a17be05f341ac2f20c",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdk_contentscannerFFI.h": "0ce37456c773a99486e69d5af33933b93abca6e1ca70b7a23895a5b1fb7e63dd",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdk_cryptoFFI.h": "4821cdf9d356c98f211616feff4c506dae1b8c2238da4918c04ae34ecbf978de",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdk_ffiFFI.h": "06046359058f812209a159fafbc27a3361e08433f683722dd23ee822438c9fe7",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdk_sqliteFFI.h": "2bc2a579dc1410136bb579ac115e191689a27cca54d3089ae10dcc14d4db2e47",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdk_uiFFI.h": "29dcb5e2708f164b2657ad02b9d4539de721b1e17919e0a93d5d3cce2dbae9ef",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/module.modulemap": "129370e9f5b2e29a8dcff5c3bd6f34f2723938c2faefd74c5abbf7ed3fc7d82d",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/ruma_eventsFFI.h": "33ecaa3a2d17c3ec058983b5520143cf60c40a92a851a5c395c1f6f8f725ba2f",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64/libmatrix_sdk_ffi.a": "0e6c3cd06f8c32ba8677b80a170d4b22738d87b352deddf3ce2b0e1af77f2b74",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64_x86_64-simulator/Headers/MatrixSDKFFI/matrix_sdkFFI.h": "bfa73a44fbd901b9a1a919a58bf003ebeda38f666e223733e08ad3a47a7e6f20",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64_x86_64-simulator/Headers/MatrixSDKFFI/matrix_sdk_baseFFI.h": "387c558d754b75bb98bc3f0905e5631db05a1666dc307e35de03ee115eaa44f6",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64_x86_64-simulator/Headers/MatrixSDKFFI/matrix_sdk_commonFFI.h": "3a22d33577ae8f12eca3458b5a1bab4ed2469e41420975a17be05f341ac2f20c",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64_x86_64-simulator/Headers/MatrixSDKFFI/matrix_sdk_contentscannerFFI.h": "0ce37456c773a99486e69d5af33933b93abca6e1ca70b7a23895a5b1fb7e63dd",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64_x86_64-simulator/Headers/MatrixSDKFFI/matrix_sdk_cryptoFFI.h": "4821cdf9d356c98f211616feff4c506dae1b8c2238da4918c04ae34ecbf978de",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64_x86_64-simulator/Headers/MatrixSDKFFI/matrix_sdk_ffiFFI.h": "06046359058f812209a159fafbc27a3361e08433f683722dd23ee822438c9fe7",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64_x86_64-simulator/Headers/MatrixSDKFFI/matrix_sdk_sqliteFFI.h": "2bc2a579dc1410136bb579ac115e191689a27cca54d3089ae10dcc14d4db2e47",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64_x86_64-simulator/Headers/MatrixSDKFFI/matrix_sdk_uiFFI.h": "29dcb5e2708f164b2657ad02b9d4539de721b1e17919e0a93d5d3cce2dbae9ef",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64_x86_64-simulator/Headers/MatrixSDKFFI/module.modulemap": "129370e9f5b2e29a8dcff5c3bd6f34f2723938c2faefd74c5abbf7ed3fc7d82d",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64_x86_64-simulator/Headers/MatrixSDKFFI/ruma_eventsFFI.h": "33ecaa3a2d17c3ec058983b5520143cf60c40a92a851a5c395c1f6f8f725ba2f",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/ios-arm64_x86_64-simulator/libmatrix_sdk_ffi.a": "0193800349ea5361060b09872da4bc82ee96ae3082906aeac1c0429b7d50d52b",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/macos-arm64_x86_64/Headers/MatrixSDKFFI/matrix_sdkFFI.h": "bfa73a44fbd901b9a1a919a58bf003ebeda38f666e223733e08ad3a47a7e6f20",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/macos-arm64_x86_64/Headers/MatrixSDKFFI/matrix_sdk_baseFFI.h": "387c558d754b75bb98bc3f0905e5631db05a1666dc307e35de03ee115eaa44f6",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/macos-arm64_x86_64/Headers/MatrixSDKFFI/matrix_sdk_commonFFI.h": "3a22d33577ae8f12eca3458b5a1bab4ed2469e41420975a17be05f341ac2f20c",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/macos-arm64_x86_64/Headers/MatrixSDKFFI/matrix_sdk_contentscannerFFI.h": "0ce37456c773a99486e69d5af33933b93abca6e1ca70b7a23895a5b1fb7e63dd",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/macos-arm64_x86_64/Headers/MatrixSDKFFI/matrix_sdk_cryptoFFI.h": "4821cdf9d356c98f211616feff4c506dae1b8c2238da4918c04ae34ecbf978de",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/macos-arm64_x86_64/Headers/MatrixSDKFFI/matrix_sdk_ffiFFI.h": "06046359058f812209a159fafbc27a3361e08433f683722dd23ee822438c9fe7",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/macos-arm64_x86_64/Headers/MatrixSDKFFI/matrix_sdk_sqliteFFI.h": "2bc2a579dc1410136bb579ac115e191689a27cca54d3089ae10dcc14d4db2e47",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/macos-arm64_x86_64/Headers/MatrixSDKFFI/matrix_sdk_uiFFI.h": "29dcb5e2708f164b2657ad02b9d4539de721b1e17919e0a93d5d3cce2dbae9ef",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/macos-arm64_x86_64/Headers/MatrixSDKFFI/module.modulemap": "129370e9f5b2e29a8dcff5c3bd6f34f2723938c2faefd74c5abbf7ed3fc7d82d",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/macos-arm64_x86_64/Headers/MatrixSDKFFI/ruma_eventsFFI.h": "33ecaa3a2d17c3ec058983b5520143cf60c40a92a851a5c395c1f6f8f725ba2f",
+    "bindings/apple/generated/MatrixSDKFFI.xcframework/macos-arm64_x86_64/libmatrix_sdk_ffi.a": "09ab1d2a5daa8b9e03fd8c8d3e9f9a34ce229e6bdf75b99dcb9deebf9aeec5b5",
+    "bindings/apple/generated/swift/matrix_sdk.swift": "630bf4cc8e529c67f48628769b233b01c3348f358f68054f243772ab40e942d3",
+    "bindings/apple/generated/swift/matrix_sdk_base.swift": "89dd8ec013e0d397071472e81990e65a74290d754fcb140c7a723a4e865da3c8",
+    "bindings/apple/generated/swift/matrix_sdk_common.swift": "0f6bf9e98bd74c8d178c4102046d1d0e1c3822d68331b5ce9e222433206781f4",
+    "bindings/apple/generated/swift/matrix_sdk_contentscanner.swift": "61acddd004bdac0fc6a496e806652491218fa2961f93ff33503ac26bee5bd5e5",
+    "bindings/apple/generated/swift/matrix_sdk_crypto.swift": "02b662f54e12ea618a856396e3aef749eac93706dc9d6af612d64deec1f68324",
+    "bindings/apple/generated/swift/matrix_sdk_ffi.swift": "adc2cf8a632af4ab5474eb5625ec4e635c33f811de420a886e1794347ffe5065",
+    "bindings/apple/generated/swift/matrix_sdk_sqlite.swift": "9d9f94afa6313dc2a62ba19b37bfb502bba0021146fbf0f3bb7118eaa6bf2cf1",
+    "bindings/apple/generated/swift/matrix_sdk_ui.swift": "e23c4e02c41d934016a8e998714340ef630d896fd8b004e7facf5423168db8d2",
+    "bindings/apple/generated/swift/ruma_events.swift": "e916f5df83a84e45a758738cbde941599ddec4f1314863e3cec174c8e5e5796c"
+  },
+  "proofFiles": {
+    "Package.swift": "8ab77653c28eff32349f5f9ea473951424c4e1d74067c75a6f2169c86c0520a3",
+    "Sources/HrisCollaborationAppleProof/LocalCryptoProbe.swift": "aa20560479aae695c7cf8472c08c1abfa7217c966f13c03d70cf0ea85cbb9f29",
+    "Tests/HrisCollaborationAppleProofTests/LocalCryptoProbeTests.swift": "51d757df9e9f157d5369daf050971b6fd1d873027bdf8a6ac75e47eb845a49f9",
+    "Tests/HrisCollaborationAppleProofTests/SDK8NativeTests.swift": "509a4045bf165dd304d6d6f301fd0ed32eb7d28cfb2b4b4f1d8d6edad53776f9"
+  },
+  "slices": [
+    {
+      "platform": "macos",
+      "variant": "",
+      "architectures": [
+        "arm64",
+        "x86_64"
+      ],
+      "nativeSha256": "09ab1d2a5daa8b9e03fd8c8d3e9f9a34ce229e6bdf75b99dcb9deebf9aeec5b5",
+      "nativeBytes": 442547448,
+      "requiredSymbolsPresent": true
+    },
+    {
+      "platform": "ios",
+      "variant": "",
+      "architectures": [
+        "arm64"
+      ],
+      "nativeSha256": "0e6c3cd06f8c32ba8677b80a170d4b22738d87b352deddf3ce2b0e1af77f2b74",
+      "nativeBytes": 221205384,
+      "requiredSymbolsPresent": true
+    },
+    {
+      "platform": "ios",
+      "variant": "simulator",
+      "architectures": [
+        "arm64",
+        "x86_64"
+      ],
+      "nativeSha256": "0193800349ea5361060b09872da4bc82ee96ae3082906aeac1c0429b7d50d52b",
+      "nativeBytes": 433461840,
+      "requiredSymbolsPresent": true
+    }
+  ]
+}

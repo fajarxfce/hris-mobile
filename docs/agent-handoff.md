@@ -1,5 +1,17 @@
 # Apple SDK native continuation
 
+## Current SDK8 distribution — 13 November 2026
+
+The accepted native run43370071243/ad96a35a8 has been packaged without rebuilding.
+Five real Swift tests and both iOS links remain accepted; all45 Python packaging/builder/recheck
+guards pass. Local runtime-only ZIP283386841B/SHA966c198f042a092423ca7e5c55ca3dc69bf7d448ef8caf991c1b4e44d7e5b687
+contains all45 frozen runtime files. See collaboration-sdk8-apple-distribution.md.
+Package82309 REAPED. No publication or app activation yet. Main navigationc6debddb is
+accepted15517 and pushed. Phone92 was installed04:11UTC13Nov; never install91 or92 again.
+The older phone/native statuses below are historical and superseded by this section.
+Next: consume the exact Swift package and implement the actual Apple bridge.
+
+
 Separate native Apple candidate43370071243/job131703523190 is FULLY ACCEPTED at
 ad96a35a8d4ea2f931476a906a4183fb6e1f3c5e. Collector4632 REAPED. Five exact actual Swift
 XML cases passed, all five frozen native architectures/exports match, process-owned fixture

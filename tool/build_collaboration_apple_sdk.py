@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import datetime
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -44,14 +45,20 @@ PRIVATE_CRATE_TESTS = {
 
 
 def verify_swift_tests(report):
-    root = ET.parse(report).getroot()
+    return validate_swift_test_report(report.read_bytes())
+
+
+def validate_swift_test_report(report):
+    """Validate original XCTest XML bytes, including when read from an accepted archive."""
+    root = ET.fromstring(report)
     cases = list(root.iter("testcase"))
     names = {case.get("name", "").removesuffix("()") for case in cases}
     if len(cases) != len(SWIFT_TESTS) or names != SWIFT_TESTS:
         raise ValueError("Missing or unexpected Swift native contract")
     if any(list(root.iter(tag)) for tag in ("failure", "error", "skipped")):
         raise ValueError("Swift native contract failed or was skipped")
-    return {"tests": len(cases), "failures": 0, "errors": 0, "skipped": 0, "reportSha256": sha(report)}
+    return {"tests": len(cases), "failures": 0, "errors": 0, "skipped": 0,
+            "reportSha256": hashlib.sha256(report).hexdigest()}
 
 
 def run_swift_contracts(proof, output, jobs, env, log, record):
