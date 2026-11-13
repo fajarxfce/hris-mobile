@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 20:48 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 20:55 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -17,14 +17,24 @@ not prove publication. Coherent candidate/original reads preserve legacy aliases
 Initial focused method-length and subsequent formatting failures are retained; acceptance follows
 their corrections. Apply/format/check scripts are USED. No graph, phone or live change is active.
 
-Next .work/space-edit-inbox-admission-2026-11-13 has seven UNAPPLIED drafts: request/prepared
+Next .work/space-edit-inbox-admission-2026-11-13 has seven APPLIED paths: request/prepared
 entities, source/ordering policy, QueueCollaborationSpaceEdit with a per-gesture Submission owner,
-fixture, seventeen behavioral tests, data-module constructor binding and app-resolution assertion.
-Gates are prepared for focused36/full16687 but have not run. Final review must confirm existing
-History anchors survive newly proven or ambiguous original-command associations without relabelling.
-Tests cover independent drafts, Group/Company sources, clock ordering, exact uncertain-write readback,
-denial, account replacement and joined cancellation. Inspect review.md and state before application;
-apply requires this accepted/pushed storage baseline and the free compiler slot. No product activation.
+seventeen shared behavioral tests, data-module constructor binding and app-resolution assertion.
+Apply89831 is REAPED0; focused36/session65047 is RUNNING. The17 new domain tests have fresh
+passing XML at20:52UTC, but a new compiler warning at preparation policy126 must be corrected
+AFTER reaping the current attempt. Use the already nonnull newestOriginal when selecting replacement.
+Do not accept this attempt or change active files while the compiler runs. Then recapture inputs,
+rerun focused36, reap/accept and run full16687; the full gate and acceptance scripts have NOT run.
+Source5421/c9f7f8794c8137d4ef0f5fe2e9210b64511d35412b5eddfed3d52d702f9919f5.
+Existing History anchors survive newly proven/ambiguous original-command evidence without relabelling.
+No product activation. Exact readback precedes uncertain-write recomputation; cancellation joins storage.
+
+Follow-up .work/space-history-edit-evidence-2026-11-13 has11 UNAPPLIED/unreviewed source/test drafts,
+16 shared actual Group/Company store methods and3 platform wrappers. It extends existing snapshot
+contracts with bounded optional replacement-operation evidence under the SAME source revision.
+Read review.md; no gates, application or acceptance yet. Required next review: provider eligibility,
+redaction, operation/alias limits, actual namespace, source changes, cancellation and retained keys.
+Its draft-format session3000 must be reaped. No new transport, polling owner or repository chain.
 
 Outcome reconciliation follows under the existing incoming/repair owners. Provider application,
 rejection or supersession needs authenticated evidence; ACK alone cannot clear optimistic content.
