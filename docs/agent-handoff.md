@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 20:55 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 21:09 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -17,24 +17,35 @@ not prove publication. Coherent candidate/original reads preserve legacy aliases
 Initial focused method-length and subsequent formatting failures are retained; acceptance follows
 their corrections. Apply/format/check scripts are USED. No graph, phone or live change is active.
 
-Next .work/space-edit-inbox-admission-2026-11-13 has seven APPLIED paths: request/prepared
-entities, source/ordering policy, QueueCollaborationSpaceEdit with a per-gesture Submission owner,
-seventeen shared behavioral tests, data-module constructor binding and app-resolution assertion.
-Apply89831 is REAPED0; focused36/session65047 is RUNNING. The17 new domain tests have fresh
-passing XML at20:52UTC, but a new compiler warning at preparation policy126 must be corrected
-AFTER reaping the current attempt. Use the already nonnull newestOriginal when selecting replacement.
-Do not accept this attempt or change active files while the compiler runs. Then recapture inputs,
-rerun focused36, reap/accept and run full16687; the full gate and acceptance scripts have NOT run.
-Source5421/c9f7f8794c8137d4ef0f5fe2e9210b64511d35412b5eddfed3d52d702f9919f5.
-Existing History anchors survive newly proven/ambiguous original-command evidence without relabelling.
-No product activation. Exact readback precedes uncertain-write recomputation; cancellation joins storage.
+Next .work/space-edit-inbox-admission-2026-11-13 has seven APPLIED source/test paths.
+First focused65047 REAPED0/408.112s passes36 but is REJECTED for a new compiler warning;
+its source/results are retained. The corrected policy reuses validated newestOriginal directly.
+Second focused51544 is REAPED0/222.167s and ACCEPTED36, including17 new behaviors,17 actual
+storage cases and2 app bindings plus Apple compilation. Resulta789e5954b61364d1d9d25f5e1746cbf71ed686cf8f250d91632f87a19ce91c9.
+Source5421/472a223f6d613b8a043ee8b84dcfbc24ff9a283a66dcf6c84538aa860bf65467.
+Full16687/session35506 is RUNNING. Reap and accept-full.py full-1, then guarded record-acceptance.py,
+commit.py mobile/push/reap and group/push/reap. Those scripts are PREPARED NOT RUN. Do not reapply.
+Existing History anchors survive new/ambiguous original proof, draft/position stays stable,
+and exact readback precedes uncertain-write recomputation. No user graph is active yet.
 
-Follow-up .work/space-history-edit-evidence-2026-11-13 has11 UNAPPLIED/unreviewed source/test drafts,
-16 shared actual Group/Company store methods and3 platform wrappers. It extends existing snapshot
-contracts with bounded optional replacement-operation evidence under the SAME source revision.
-Read review.md; no gates, application or acceptance yet. Required next review: provider eligibility,
-redaction, operation/alias limits, actual namespace, source changes, cancellation and retained keys.
-Its draft-format session3000 must be reaped. No new transport, polling owner or repository chain.
+Follow-up .work/space-history-edit-evidence-2026-11-13 has11 REVIEWED UNAPPLIED paths and16
+shared Group/Company actual-storage test drafts with3 platform wrappers. Optional bounded exact
+operation evidence joins original events under the SAME canonical source checkpoint; old calls
+perform no extra query. Repeated formatting3000/79292 is REAPED0. Focused51/full16719, apply,
+capture, acceptance and commit scripts are PREPARED NOT RUN. Apply requires this admitted-edit
+increment accepted/pushed and a free compiler slot. Read current review/state first.
+
+Next .work/space-inbox-edit-outcome-policy-2026-11-13 has5 UNAPPLIED/unreviewed policy/test drafts:
+14 exact-outcome methods and8 successor-completion methods, with shared synthetic fixture.
+Provider facts match actual pending namespace/target/sender/hash. Supersession requires one exact
+matching completion across BOTH applicable namespaces and a later LOCAL authored timestamp;
+it never compares provider/local clocks or guesses namespace priority. A discovered wrong-room
+match was corrected in the draft and has regressions. Compile/semantic review/gates still remain.
+Pure display outcomes never manufacture receipts, retire commands or restore hidden/deleted text.
+
+Control43498640097 portable14359 is audited; Apple has reached iOS application host build but
+is NOT yet accepted. Existing hosted-audit.py, record-hosted-acceptance.py and link-starter-apple.py
+are prepared for that run only. No repeat dispatch or old workflow. Main native SDK8 is separate.
 
 Outcome reconciliation follows under the existing incoming/repair owners. Provider application,
 rejection or supersession needs authenticated evidence; ACK alone cannot clear optimistic content.
