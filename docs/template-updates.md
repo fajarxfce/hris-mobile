@@ -723,6 +723,9 @@ No Starter change is included in this checkpoint.
 
 ## Command archival and replica publication
 
-The ten generic raw transaction files are locally accepted in Mobile (15 new platform methods,
-full 15,939). The independent Starter port is prepared but not applied. Group terminal producers
-and the repair worker still need to use the atomic retained demand before product activation.
+The ten generic raw transaction files from Mobile `42fd5d12` are accepted and pushed in Starter
+`0d2b4ee0ad5dffd5552bfda37e399e50357e752a`. Its independent gate passes 964 cases, preserving all 934 prior identities plus 30
+JVM/browser executions of 15 new contracts. Three Android variants, lint, production Web and
+Apple source/test compilation pass. Actual Apple execution is tracked separately in Mobile
+control 43427620202. Group terminal policy and the finite repair worker stay in Mobile.
+See Starter `docs/measurements/command-archive-replica-port-2026-11-13.json`.

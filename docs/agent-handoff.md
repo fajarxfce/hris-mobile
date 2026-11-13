@@ -1,10 +1,27 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 12:42 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 12:54 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Atomic archival Starter port accepted; hosted control running
+
+Starter 0d2b4ee0ad5dffd5552bfda37e399e50357e752a is independently accepted and pushed: ten exact generic files,
+964 cases = 486 fresh + 478 byte-identical unaffected, preserving all 934 preceding identities.
+Report 901d5ef80a1cc9fc12e6aa7141b08e99c85b73524198a98f852f2d1b2864f96b; source 1074/620fe910ef50fcf69474ae17f7338c71e5bb011c6a9930250d90c1f468be15e8.
+Dev/Staging/Prod Android builds, lint with zero errors, production Web and Apple source/test
+compilation pass. This is not actual Apple execution. Inspector stays pinned at 742a2d1c.
+Mobile control 43427620202 is running at exact 42fd5d12c5353779d4a61cc50b8c53ae8c6c0bc6;
+expected 19,362 cases, including 101 new actual Apple methods. Collect and audit both jobs;
+do not redispatch. Scripts are in Mobile .work/command-archive-replica-2026-11-13.
+
+Continue the prepared terminal-publication increment in
+Mobile .work/space-inbox-terminal-publication-2026-11-13, then the admitted demand observer
+and finite local worker. Its 13 draft paths and 15 new shared methods are not applied yet.
+Do not rerun historical preparation scripts. The raw and Starter gates are accepted.
+Keep the phone on release 92 until a validated visible update. Group product graph stays off.
 
 ## Atomic command archival and replica publication locally accepted
 

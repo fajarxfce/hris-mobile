@@ -27,9 +27,9 @@ back. An equal empty active inventory cannot erase the separately retained repli
 Focused 47, browser database 129 and full 15,939 pass locally. All 15,909 prior test identities
 remain, plus 30 JVM/browser executions. Android compilation/lint, browser tests, Apple test-source compilation and the proof
 APK pass. Actual execution of the 15 new Apple cases remains pending alongside 86 preceding cases;
-the prepared combined control expects 19,362 cases and has not yet been dispatched.
+combined control 43427620202 is running at exact Mobile 42fd5d12 and expects 19,362 cases.
 
-Next, port these ten exact generic files to Starter and validate independently. Group completion
+The ten exact generic files are accepted in Starter 0d2b4ee0 after its independent 964-case gate. Group completion
 and cancellation must supply a prepared encrypted repair Request to this transaction before a
 fast archived original can be covered by the repair worker. Thirteen subsequent draft paths and
 15 new shared tests prepare that source boundary; they are not applied or tested. Then integrate
@@ -37,3 +37,6 @@ one admitted demand stream with the existing command observer and the finite loc
 No Group product graph, live service, phone build or native runtime is activated by this raw API.
 
 Evidence: `docs/measurements/command-archive-replica-2026-11-13.json`.
+
+The Starter port is pushed at `0d2b4ee0ad5dffd5552bfda37e399e50357e752a`. Its report digest is
+`901d5ef80a1cc9fc12e6aa7141b08e99c85b73524198a98f852f2d1b2864f96b`. Actual Apple execution remains separate from its local gate.
