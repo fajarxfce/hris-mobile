@@ -780,3 +780,5 @@ Actual Apple execution and product collection remain separate; no new generic St
 Eight generic files and 13 new actual-storage methods pass Mobile full16,377. The raw Check
 conditions a projection write without advancing source revision. Independent Starter port,
 actual Apple execution and admitted incoming-history publication are the next separate gates.
+
+Shared source-guard Apple evidence is linked in Starter `77b0788f70b78077968000ee743ab4d757ab0fc6` from Mobile control 43467846733 at `951c308dce2dd350a901c67cf449d6913b97cacf`: all 13 methods passed, eight source/test files match byte-for-byte. The independent Starter 990-case gate is unchanged; this is Mobile execution of shared code, not an independent Starter Apple application run. [Evidence](https://github.com/fajarxfce/compose-fluent-starter/blob/77b0788f70b78077968000ee743ab4d757ab0fc6/docs/measurements/replica-source-checks-shared-apple-2026-11-13.json).

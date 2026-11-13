@@ -1,0 +1,57 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxOriginalAssociation.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxOriginalAssociationPolicy.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxOriginalAssociationTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 28,
+    "elapsedSeconds": 356.345,
+    "sourceFiles": 5387,
+    "sourceManifestSha256": "1597c19e0ed86b1f2e8bff0789feeecd8f3747c918f2bc5491881f1ac010b589",
+    "resultSha256": "96a294c1ad26665dcf54f7f24c913fc924c2962f33b9992dfcc97bbc68204a06",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "SpaceInboxCommandPolicyTest": 8,
+      "SpaceInboxOriginalAssociationTest": 18
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T18:04:11.093261+00:00",
+    "elapsedSeconds": 957.1,
+    "sourceFiles": 5387,
+    "freshCounts": {
+      "tests": 14357,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153426476,
+      "sha256": "ab9bb6232b32e95aa0fc85fb033596e41c4e90e0f54c920479ac2facc47533b0"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16479,
+    "newCases": 36,
+    "freshTests": 14357,
+    "reusedUnaffectedTests": 2122,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "1597c19e0ed86b1f2e8bff0789feeecd8f3747c918f2bc5491881f1ac010b589",
+    "reportManifestSha256": "6d38f41d60b8cc08043ef0bdeb2a8c1c977739bf489e75932dc91c010501ba06",
+    "nativeClaim": "Exact original association; 18 shared policy methods. Display identity is separate from acknowledgement; incoming producer and actual Apple execution remain separate."
+  },
+  "newSharedMethods": 18,
+  "associationDoesNotSettleReceipts": true,
+  "unmatchedDoesNotAuthorizeHistoryAnchor": true,
+  "actualNewAppleExecution": false,
+  "productGraphActivated": false,
+  "phoneInstalled": false,
+  "installedPhoneBuild": 92,
+  "liveChanged": false
+}

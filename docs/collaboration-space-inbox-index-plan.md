@@ -241,3 +241,15 @@ origin), so a missing-origin terminal record cannot later acquire a stamp via a 
 Still review actual receipt proof before choosing its display source; the association policy's
 null is deliberately not authority to allocate an anchor. Preserve ambiguity and denial without
 introducing a busy retry loop. New Group records require origin before delivery.
+
+## Original association — 13 November 2026
+
+Pure Group/Company source identity policies pass focused 28/full 16,479; association cannot
+settle a receipt or use an unproved legacy UUID as an anchor. Pending edit/delivery precedence
+and admitted existing-producer integration remain. See `docs/collaboration-space-inbox-original-association.md`.
+
+Existing inbox conversation reads/capture support 1..33 candidates. For at most 16 changed
+originals, read up to 17 candidates to retain the first unaffected visible fallback after a
+hide/redaction batch. Avoid the default two and avoid scanning all history. Original association
+PENDING does not clear an existing failure or downgrade SENT; command progress owns status.
+Pending edit overlays require actual operation outcome before history can replace their text.

@@ -1,5 +1,7 @@
 # Architecture
 
+[Original inbox association](collaboration-space-inbox-original-association.md) keeps source identity and actual command acknowledgement separate.
+
 [Conditional history publication](collaboration-space-history-inbox-publication.md) writes an inbox projection only while its authenticated source remains current.
 
 [Coherent history snapshots](collaboration-space-history-snapshot.md) resolve incoming aliases and edits under one authenticated local source revision.
