@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 21:48 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 22:03 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -16,15 +16,15 @@ Absent operations remain explicit; changed revisions yield no mixed snapshot. Ke
 namespaces,128alias completeness and joined cancellation are preserved. Default snapshots do no
 extra queries. Apply/record/check scripts are USED; no graph, phone or live change is active.
 
-Next .work/space-inbox-edit-outcome-policy-2026-11-13 now has5 APPLIED reviewed paths,23 shared
-methods. Apply66564 is REAPED0; focused41/session3361 is RUNNING. Source5431/
-751a721282e0768226ccddd1a2b85fdd752fc0c3959d033c857522e38781faee.
-The23 new domain methods pass, but a candidate compiler warning at supersession policy:120 makes
-this first source NOT ACCEPTABLE. A correction under correction/ captures non-null origin once;
-it is UNAPPLIED. Do not change active source until3361 is reaped. Invoke accept-focused to retain
-its rejection, inspect every new warning/failure, then apply/review/format correction, recapture and
-run focused-2. Full16765 has NOT RUN. Record/commit scripts are prepared NOT RUN; corrected unique
-Group capability path mobile-space-inbox-edit-outcomes.md preserves the prior admission document.
+Next .work/space-inbox-edit-outcome-policy-2026-11-13 has5 APPLIED paths,23 shared methods.
+Corrected focused41/session22334 is REAPED PASS/accepted205.481s. Source5431/
+cb7ec3ea93f37a0aa646c40b77e812fdb509a2ea46a9de0aba648b45a39f211f; result169b2d945e7a6008332ab1e4504fee01b5d45f06316ad8389077bc2cb9d866f6.
+Full16765/session61019 is RUNNING since21:54UTC. Do not alter active compiler inputs until reaped.
+Then accept-full.py full-1, set fullReaped, record-acceptance.py, commit.py mobile/push then group/push.
+The first focused41/session3361 is REAPEDexit0 but acceptance REJECTED for its new redundant safe
+call. Its source751a7212..., result996db5e5..., exact candidate copies and rejection JSON are retained.
+The reviewed correction captures non-null origin once. Recorder includes explicit rejected attempts.
+Record/commit scripts are PREPARED NOT RUN; Group capability mobile-space-inbox-edit-outcomes.md.
 
 After focused41/full16765 acceptance, record/commit/push Mobile then Group. Prepare and dispatch
 its new exact-source control20678/6173 Apple (73 new shared methods) using accepted43498640097.
@@ -44,6 +44,16 @@ Its bounded synchronous proposal retains physical identity, draft, position, del
 text, with explicit unresolved originals and17th-candidate fallback. Not compiled or activated.
 Dispatch the exact accepted/pushed16765 hosted control first, then apply only with a free compiler.
 Projection record/commit scripts are prepared NOT RUN; admitted source/owner integration follows.
+
+Further .work/space-inbox-history-admission-2026-11-13 has6 UNAPPLIED, NOT YET REVIEWED drafts:
+producer/result,13 initial behavior methods and repository fixture, owning data factory, existing
+assembled-graph assertion. No compile/test/application has run. It coordinates exact canonical
+history/index/command/evidence reads and bounded publication under per-call admission. Snapshots
+are detached before admitted suspensions; bindings are immutable; no-op source/index writes are
+already supported. Missing/ambiguous originals map back to captured unresolved aliases. Review
+newer edits, successor namespaces, malformed input, snapshot mutation, denial and restart coverage.
+It requires the preceding57/16797 pure projection acceptance before applying. Do not treat this
+draft as activated owner, catalog backfill, thread/list integration, or phone evidence.
 
 Main native Apple SDK8 activation remains separate. Phone92 stays installed; live Group OFF.
 All54 PRD acceptance groups remain open. Push every commit and continue beyond checkpoints.
