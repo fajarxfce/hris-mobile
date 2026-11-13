@@ -1,5 +1,7 @@
 # Architecture
 
+[Atomic command and checked projection insertion](command-insert-projection.md) keeps command, source guard, projection and wake in one raw transaction.
+
 [Pending inbox edit provenance](collaboration-space-inbox-edit-provenance.md) retains actual replacement identity without moving the original preview anchor.
 
 [Canonical inbox history identity](collaboration-space-inbox-history-source.md) preserves actual source namespaces and explicit original ambiguity.

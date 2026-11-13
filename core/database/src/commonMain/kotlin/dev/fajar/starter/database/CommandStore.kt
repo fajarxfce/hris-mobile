@@ -47,6 +47,25 @@ interface CommandStore {
         wake: WorkWakeRequest,
     ): CommandInsertResult?
 
+    /**
+     * Inserts one new command together with one or two prepared replica mutations and a fresh wake.
+     * Source checks and projection writes share the command transaction and account check. Null is
+     * a replica or wake conflict; no command, projection or wake changes. Other results follow
+     * insert's identity, resource and capacity contract. Constraint failures roll back all.
+     *
+     * An identical active or archived identity returns AlreadyStored without applying mutations or
+     * renewing the wake. State/revision may already have advanced. Callers must confirm the
+     * immutable intent and its original handoff, rather than use replay to repair a projection.
+     * Inputs are validated and detached before suspension, including on replay. Cancellation or a
+     * lost reply requires local readback; neither proves that the transaction did not commit.
+     */
+    suspend fun insertAndMutate(
+        scope: CommandScope,
+        record: CommandRecord,
+        mutations: List<ReplicaMutation>,
+        wake: WorkWakeRequest,
+    ): CommandInsertResult?
+
     suspend fun update(
         scope: CommandScope,
         partition: String,

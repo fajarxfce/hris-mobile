@@ -160,6 +160,45 @@ internal class IndexedDbCommandStore(
         }
     }
 
+    override suspend fun insertAndMutate(
+        scope: CommandScope,
+        record: CommandRecord,
+        mutations: List<ReplicaMutation>,
+        wake: WorkWakeRequest,
+    ): CommandInsertResult? {
+        validateCommandRecord(scope, record)
+        val replicaScope = ReplicaScope(scope.sessionId, scope.accountKey)
+        val retained = retainReplicaMutations(replicaScope, mutations)
+        validateWorkWakeRequest(wake)
+        val encoded = codec.encodeToString(record)
+        val encodedMutations = codec.encodeToString(retained)
+        val encodedWake = codec.encodeToString(wake)
+        val db = database()
+        currentCoroutineContext().ensureActive()
+        return withContext(NonCancellable) {
+            val outcome =
+                codec
+                    .decodeFromString<String?>(
+                        mutateReplicas(
+                                db,
+                                codec.encodeToString(replicaScope),
+                                encodedMutations,
+                                encodedWake,
+                                "null",
+                                encoded,
+                            )
+                            .await<JsString>()
+                            .toString()
+                    )
+                    ?.let(CommandInsertResult::valueOf)
+            if (outcome == CommandInsertResult.Stored) {
+                changes.tryEmit(Unit)
+                replicaChanges.tryEmit(Unit)
+            }
+            outcome
+        }
+    }
+
     override suspend fun update(
         scope: CommandScope,
         partition: String,
@@ -270,15 +309,18 @@ internal class IndexedDbCommandStore(
         currentCoroutineContext().ensureActive()
         return withContext(NonCancellable) {
             val changed =
-                mutateReplicas(
-                        db,
-                        codec.encodeToString(replicaScope),
-                        codec.encodeToString(retained),
-                        "null",
-                        codec.encodeToString(CommandArchive(expected, evidence)),
-                    )
-                    .await<JsBoolean>()
-                    .toBoolean()
+                codec.decodeFromString<Boolean>(
+                    mutateReplicas(
+                            db,
+                            codec.encodeToString(replicaScope),
+                            codec.encodeToString(retained),
+                            "null",
+                            codec.encodeToString(CommandArchive(expected, evidence)),
+                            "null",
+                        )
+                        .await<JsString>()
+                        .toString()
+                )
             if (changed) {
                 changes.tryEmit(Unit)
                 replicaChanges.tryEmit(Unit)

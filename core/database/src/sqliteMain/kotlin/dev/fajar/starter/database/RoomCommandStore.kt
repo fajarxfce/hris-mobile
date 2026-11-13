@@ -112,6 +112,32 @@ internal class RoomCommandStore(private val database: StarterDatabase) : Command
         return dao.insertBatch(scope.sessionId, detached, wake)
     }
 
+    override suspend fun insertAndMutate(
+        scope: CommandScope,
+        record: CommandRecord,
+        mutations: List<ReplicaMutation>,
+        wake: WorkWakeRequest,
+    ): CommandInsertResult? {
+        validateCommandRecord(scope, record)
+        val replicaScope = ReplicaScope(scope.sessionId, scope.accountKey)
+        val retained = retainReplicaMutations(replicaScope, mutations)
+        validateWorkWakeRequest(wake)
+        val candidate = record.toEntity(scope.accountKey)
+        currentCoroutineContext().ensureActive()
+        return try {
+            database.useWriterConnection { connection ->
+                connection.immediateTransaction<CommandInsertResult?> {
+                    val inserted = dao.insert(scope.sessionId, candidate)
+                    if (inserted != CommandInsertResult.Stored) return@immediateTransaction inserted
+                    if (!database.replicaDao().mutate(replicaScope, retained, wake)) rollback(null)
+                    CommandInsertResult.Stored
+                }
+            }
+        } finally {
+            database.invalidationTracker.refreshAsync()
+        }
+    }
+
     override suspend fun update(
         scope: CommandScope,
         partition: String,

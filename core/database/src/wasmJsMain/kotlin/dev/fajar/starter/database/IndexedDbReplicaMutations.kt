@@ -5,19 +5,23 @@ package dev.fajar.starter.database
 import kotlin.js.Promise
 
 @JsFun(
-    """(db, scopeJson, mutationsJson, wakeJson, archiveJson) => new Promise((resolve, reject) => {
-    const scope = JSON.parse(scopeJson), mutations = JSON.parse(mutationsJson), wake = JSON.parse(wakeJson), archive = JSON.parse(archiveJson);
+    """(db, scopeJson, mutationsJson, wakeJson, archiveJson, insertionJson) => new Promise((resolve, reject) => {
+    const scope = JSON.parse(scopeJson), mutations = JSON.parse(mutationsJson), wake = JSON.parse(wakeJson), archive = JSON.parse(archiveJson), insertion = JSON.parse(insertionJson);
     const {sessionId, accountKey = null} = scope, ownerKey = accountKey ?? '';
-    const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents', ...(wake == null ? [] : ['work_wakes']), ...(archive == null ? [] : ['durable_commands', 'command_archives'])], 'readwrite');
+    const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents', ...(wake == null ? [] : ['work_wakes']), ...(archive == null && insertion == null ? [] : ['durable_commands', 'command_archives'])], 'readwrite');
     const heads = tx.objectStore('replica_heads'), generations = tx.objectStore('replica_generations'), documents = tx.objectStore('replica_documents');
     const prepared = [];
-    let changed = false;
+    let changed = false, insertionResult = 'ScopeChanged';
     const write = index => {
         if (index === prepared.length) {
             if (archive != null) {
                 const record = archive.record;
                 tx.objectStore('command_archives').add({...record, accountKey, evidence:archive.evidence});
                 tx.objectStore('durable_commands').delete([accountKey, record.partition, record.id]);
+            }
+            if (insertion != null) {
+                tx.objectStore('durable_commands').add({...insertion, accountKey});
+                insertionResult = 'Stored';
             }
             changed = true;
             return;
@@ -108,6 +112,31 @@ import kotlin.js.Promise
             row.onsuccess = () => { if (row.result) inspect(row.result); };
         };
     };
+    const admitInsertion = () => {
+        insertionResult = null;
+        const commands = tx.objectStore('durable_commands'), archives = tx.objectStore('command_archives');
+        const key = [accountKey, insertion.partition, insertion.id];
+        const current = commands.get(key), archived = archives.get(key);
+        archived.onsuccess = () => {
+            if (current.result && archived.result) { tx.abort(); return; }
+            const previous = current.result || archived.result;
+            if (previous) {
+                if (previous.request !== insertion.request || previous.resourceId !== insertion.resourceId || previous.sortKey !== insertion.sortKey) {
+                    tx.abort(); return;
+                }
+                insertionResult = 'AlreadyStored'; return;
+            }
+            const occupied = commands.index('resource').getKey([accountKey, insertion.partition, insertion.resourceId]);
+            occupied.onsuccess = () => {
+                if (occupied.result !== undefined) { insertionResult = 'ResourceOccupied'; return; }
+                const total = commands.count(), own = commands.index('account').count(accountKey);
+                own.onsuccess = () => {
+                    if (total.result >= 512 || own.result >= 128) { insertionResult = 'CapacityExceeded'; return; }
+                    preflight(0);
+                };
+            };
+        };
+    };
     const admitArchive = () => {
         if (archive == null) { preflight(0); return; }
         const expected = archive.record, key = [accountKey, expected.partition, expected.id];
@@ -124,9 +153,11 @@ import kotlin.js.Promise
     const owner = tx.objectStore('account_scope').get('current');
     const account = tx.objectStore('account_scope').get('command-account');
     account.onsuccess = () => {
-        if (owner.result === sessionId && (accountKey == null || account.result === accountKey)) admitArchive();
+        if (owner.result === sessionId && (accountKey == null || account.result === accountKey)) {
+            if (insertion == null) admitArchive(); else admitInsertion();
+        }
     };
-    tx.oncomplete = () => resolve(changed);
+    tx.oncomplete = () => resolve(JSON.stringify(insertion == null ? changed : insertionResult));
     tx.onabort = () => reject(tx.error || new Error('Replica mutation failed.'));
 })"""
 )
@@ -136,4 +167,5 @@ internal external fun mutateReplicas(
     mutations: String,
     wake: String,
     archive: String,
-): Promise<JsBoolean>
+    insertion: String,
+): Promise<JsString>

@@ -1,0 +1,65 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/CommandStore.kt",
+    "core/database/src/commonTest/kotlin/dev/fajar/starter/database/CommandInsertMutationContract.kt",
+    "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/CommandInsertMutationsTest.kt",
+    "core/database/src/iosTest/kotlin/dev/fajar/starter/database/AppleCommandInsertMutationsTest.kt",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/RoomCommandStore.kt",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbCommandStore.kt",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbReplicaMutations.kt",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbReplicaStore.kt",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserCommandInsertMutationsTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 47,
+    "elapsedSeconds": 329.651,
+    "sourceFiles": 5408,
+    "sourceManifestSha256": "ede5cc85977f2c0c9826da2573c2f97b6118dadf4008052b67a543deca491089",
+    "resultSha256": "c985e467e19b31f4e769595b269bd0b6c1c943a380c97e72e94888979f1254b1",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CommandInsertMutationsTest": 17,
+      "ReplicaChecksTest": 13,
+      "CommandArchiveMutationsTest": 15
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T19:51:56.637565+00:00",
+    "elapsedSeconds": 891.065,
+    "sourceFiles": 5408,
+    "freshCounts": {
+      "tests": 6265,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 154575619,
+      "sha256": "1e2288fa18b563fd358cfbd6347b3d9b15b20205f4132aecd048b3073a6c3a3a"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16619,
+    "newCases": 32,
+    "freshTests": 6265,
+    "reusedUnaffectedTests": 10354,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "ede5cc85977f2c0c9826da2573c2f97b6118dadf4008052b67a543deca491089",
+    "reportManifestSha256": "79da912a72de2c9a8ea0f792b5657e7d00fd53c56c822d6075f6d3be5fa20955",
+    "nativeClaim": "Atomic command, checked projection and recovery wake in actual SQLite and IndexedDB storage; 15 shared methods and two SQLite fault injections. Actual edit authoring and product activation remain separate."
+  },
+  "newSharedMethods": 15,
+  "desktopOnlyFaultInjectionMethods": 2,
+  "actualNewAppleExecution": false,
+  "starterPortAccepted": false,
+  "atomicEditAuthoringActivated": false,
+  "productGraphActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false
+}

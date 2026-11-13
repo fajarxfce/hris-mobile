@@ -80,19 +80,22 @@ internal class IndexedDbReplicaStore(
         currentCoroutineContext().ensureActive()
         return withContext(NonCancellable) {
             val changed =
-                mutateReplicas(
-                        db,
-                        Json.encodeToString(scope),
-                        Json.encodeToString(
-                            listOf<ReplicaMutation>(
-                                ReplicaMutation.Replace(partition, expected, retained)
-                            )
-                        ),
-                        Json.encodeToString(wake),
-                        "null",
-                    )
-                    .await<JsBoolean>()
-                    .toBoolean()
+                Json.decodeFromString<Boolean>(
+                    mutateReplicas(
+                            db,
+                            Json.encodeToString(scope),
+                            Json.encodeToString(
+                                listOf<ReplicaMutation>(
+                                    ReplicaMutation.Replace(partition, expected, retained)
+                                )
+                            ),
+                            Json.encodeToString(wake),
+                            "null",
+                            "null",
+                        )
+                        .await<JsString>()
+                        .toString()
+                )
             if (changed) changes.tryEmit(Unit)
             changed
         }
@@ -109,15 +112,18 @@ internal class IndexedDbReplicaStore(
         currentCoroutineContext().ensureActive()
         return withContext(NonCancellable) {
             val changed =
-                mutateReplicas(
-                        db,
-                        Json.encodeToString(scope),
-                        Json.encodeToString(retained),
-                        Json.encodeToString(wake),
-                        "null",
-                    )
-                    .await<JsBoolean>()
-                    .toBoolean()
+                Json.decodeFromString<Boolean>(
+                    mutateReplicas(
+                            db,
+                            Json.encodeToString(scope),
+                            Json.encodeToString(retained),
+                            Json.encodeToString(wake),
+                            "null",
+                            "null",
+                        )
+                        .await<JsString>()
+                        .toString()
+                )
             if (changed) changes.tryEmit(Unit)
             changed
         }
@@ -214,25 +220,28 @@ internal class IndexedDbReplicaStore(
         currentCoroutineContext().ensureActive()
         return withContext(NonCancellable) {
             val changed =
-                mutateReplicas(
-                        db,
-                        Json.encodeToString(handle.scope),
-                        Json.encodeToString(
-                            listOf<ReplicaMutation>(
-                                ReplicaMutation.Commit(
-                                    handle,
-                                    expectedRevision,
-                                    checkpoint,
-                                    batch,
-                                    publish,
+                Json.decodeFromString<Boolean>(
+                    mutateReplicas(
+                            db,
+                            Json.encodeToString(handle.scope),
+                            Json.encodeToString(
+                                listOf<ReplicaMutation>(
+                                    ReplicaMutation.Commit(
+                                        handle,
+                                        expectedRevision,
+                                        checkpoint,
+                                        batch,
+                                        publish,
+                                    )
                                 )
-                            )
-                        ),
-                        Json.encodeToString(wake),
-                        "null",
-                    )
-                    .await<JsBoolean>()
-                    .toBoolean()
+                            ),
+                            Json.encodeToString(wake),
+                            "null",
+                            "null",
+                        )
+                        .await<JsString>()
+                        .toString()
+                )
             if (changed) changes.tryEmit(Unit)
             changed
         }

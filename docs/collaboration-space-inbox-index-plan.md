@@ -271,3 +271,7 @@ anchors. Admitted preview publication and bounded backfill remain before activat
 Body-free replacement pointers and immutable optimistic previews pass focused37/full16587.
 Actual command authoring/outcome release and canonical incoming/history backfill remain before
 activation. See `docs/collaboration-space-inbox-edit-provenance.md`.
+
+## Atomic command insertion support
+
+Actual command, source guard, prepared projection and wake now share one transaction. Fifteen shared methods plus two SQLite fault injections pass focused47/full16619. Immutable handoff origin, admitted edit authoring/outcome release, bounded history publication and list/graph activation remain; see `docs/command-insert-projection.md`.
