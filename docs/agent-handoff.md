@@ -1,10 +1,23 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 07:12 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 07:22 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Active inbox index implementation
+
+Mobile.work/space-inbox-index-2026-11-13 has13 uncommitted source paths: domain activity/
+placement/projection contracts, encrypted ranked index storage,15 actual-storage methods,
+six policy methods, platform test hosts and one application binding assertion. Source producers
+and product list are NOT integrated yet. Format82797 is REAPED; focused23/session2018 is
+RUNNING, with domain/data iOS test compilation. Full expectation15645 retains15603 prior IDs
+plus42 JVM/browser executions. Do not run another local compiler or mutate these source paths
+until2018 is reaped. Source5281/35101a4379b7f5f9da07a7115fbd1f67906e03efa46d2a5bd7696f4fe5840593.
+The work's write-*.py scripts are historical; never reapply them. Inspect results, preserve any
+failed candidate, complete the full gate, then commit/push acceptance and continue actual
+source/index atomic publication. The user's phone retains release92; no new install here.
 
 ## Starter transaction port accepted and pushed
 
@@ -32,14 +45,20 @@ the actual inbox activity index and source publication integration; the review i
 in Mobile.work/replica-atomic-mutations-2026-11-13/index-integration-review.md. Preserve each
 original command/history namespace and keep policy in domain and encryption/storage in data.
 
-## Running catalog Apple and portable control
+## Accepted catalog Apple and portable control
 
-Run43379266527 is still running at exact047584f125b182d8bd811ac343fb6a4ca30fbc9a:
-portable131732963519 and Apple131732963180. Expected13306 portable +5510 actual Apple =18816.
-Dispatch21923 is REAPED. Never dispatch a duplicate. Auditors are prepared in Mobile.work/
-space-catalog-admission-2026-11-13/hosted-audit.py; audit each job only after it succeeds.
-The14 new raw transaction methods are not included in this earlier catalog source snapshot.
-They require a later native gate. No artifact acceptance for this running control yet.
+Run43379266527 at exact047584f125b182d8bd811ac343fb6a4ca30fbc9a is fully accepted18,816:
+portable131732963519/13,306 plus Apple131732963180/5,510.
+All preceding class/method/platform identities remain, plus42 new shared methods and2 desktop navigation cases.
+The5,917 preceding browser cases use the explicitly verified Chrome157→156 suffix change;
+no other identity normalization is allowed. Apple and JVM identities remain exact.
+Navigation13, catalog12 and admission17 now have actual Apple execution. The iOS host and16
+push fields pass. Artifact digests, XML identities and job logs are verified in Mobile.work/
+space-catalog-admission-2026-11-13/hosted-control. Do not rerun this accepted control.
+Portable report503b193679efe3ea3a8180976b8273fea2b18a8c452519545089e4dc350061da.
+Apple report762cdc7913fc974d940673af6622894cdc0fc436c6e8044ec37a2aa67531a477.
+The14 later raw transaction methods are not in this source and still need their native gate.
+No product Group graph, physical iPhone acceptance or live rollout is claimed.
 
 ## Latest local catalog admission acceptance
 
@@ -48,19 +67,19 @@ Focused45; full15575 = 13537 fresh plus2038 exact unchanged.
 All15541 prior IDs remain plus34 JVM/browser executions of17 domain methods.
 Source5263/440dd76d6df79f42f87bc038dd0c8b8e403530201203519e09ec2290173b84a8.
 Report4d470c81dc9d0205e6b6881e1a6fab29d4cf337d6810a8af3f84b05a10865600.
-Local admission/ownership, cancellation and denial tests pass; the actual Apple17 follow.
+Local admission/ownership, cancellation and denial tests pass; Apple17 are accepted in the control above.
 The old draft is historical and has been applied. Never reapply it. No activity index,
 product Group graph or native runtime activation is included.
 
 Preceding catalogd38fb419/Group75b63566 is accepted: focused28/full15541,
 source5257/95fd1639a68ff1b9d1e2b1eef8157867b6f18cfbe4608c96f37ea9bc6a7d1a2e,
 report8203a44f24c822e99cce4845a3f810d67ea450333a323547ecc1a5f602b90b72.
-Its12 real storage methods passed JVM/browser; actual Apple execution follows.
+Its12 real storage methods now pass JVM/browser and actual Apple in the control above.
 The failed shadowed-fixture candidate and unchanged requirements remain preserved.
 
-The combined hosted control above covers navigation13, catalog12 and admission17 new actual
-Apple methods. Expected portable13306 + Apple5510 =18816;
-independently verify identities before acceptance. Do not repeat accepted page run43366809238.
+The combined hosted control above is accepted: navigation13, catalog12 and admission17 now
+have actual Apple execution, with portable13306 + Apple5510 =18816. Artifact/report identities
+and completed logs are audited. Do not repeat this control or accepted page run43366809238.
 The raw transaction increment above is now locally accepted. Its prepared draft/apply script is
 historical and must not be run again. The generic storage is now ported and independently accepted in Starter; integrate the persistent inbox activity index with pending/draft ranking and local repair.
 See collaboration-space-inbox-index-plan.md.
@@ -80,7 +99,7 @@ Immutable proof152507383B/826acc09280b527ed4df7ac177f7e7a2d1134e5aacb3ec3262d2fa
 Strict focused/full audits and three screenshot reviews passed. Failed candidates and
 their unchanged requirements are retained in state.json and the measurement. No new
 native/phone acceptance, product Group graph or live rollout. Thirteen shared methods
-still need actual Apple execution; the preceding page control is already accepted.
+now have actual Apple execution in the catalog control above; the preceding page control is accepted.
 
 Next: actual local conversation list and account/Group
 graph integration, including pending and draft previews; finish contextual mutations and

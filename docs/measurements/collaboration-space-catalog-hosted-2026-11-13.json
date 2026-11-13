@@ -1,0 +1,282 @@
+{
+  "portable": {
+    "accepted": true,
+    "sourceCommit": "047584f125b182d8bd811ac343fb6a4ca30fbc9a",
+    "runId": 43379266527,
+    "jobId": 131732963519,
+    "counts": {
+      "desktopTest": 6387,
+      "testAndroidHostTest": 960,
+      "wasmJsBrowserTest": 5959
+    },
+    "artifactId": 14016908169,
+    "artifactBytes": 4272745,
+    "artifactSha256": "97c34d91359c0d81f7a103b4d18c1a0111093a5e29411b7079d50c2b21657db5",
+    "jobLogSha256": "4760622953f75a3a00fbf577b15d65e0fba9771e44f6e74912f751ee5f9f9e3a",
+    "previousExactCaseIdsRetained": false,
+    "previousMethodAndPlatformIdsRetained": true,
+    "browserEngineReview": "browser-engine-identity-review.json",
+    "newSharedMethods": 42,
+    "actualNew": [
+      {
+        "platform": "desktopTest",
+        "clazz": "SpaceChatNavigationOwnerTest",
+        "methods": [
+          "capacityCannotExceedThreeOrDisableTheBound",
+          "graphDisposalClearsUnopenedPreparationAndRejectsLatePreparation",
+          "graphReplacementClearsLiveAndIdleModelsAndLateReleaseIsHarmless",
+          "idleEvictionKeepsRecentlyReopenedAndLiveRooms",
+          "liveEntriesNeverShareAModelEvenForTheSameConversation",
+          "modelKeysPreserveEachAccountGroupSessionAndConversationBoundary",
+          "preparationUsesTheSameBoundAndDoesNotDisplaceVisitedOrActiveRooms",
+          "removedRouteCanReopenItsSameModelWithANewEntryOwner",
+          "separateGraphsNeverRestoreAnotherGroupsRoomStore"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "SpaceChatThreadRetentionTest",
+        "methods": [
+          "aLateClipboardAdmissionCannotCrossPermanentReleaseAndReentry",
+          "permanentReleaseDiscardsBufferedCopyAndBackBeforeTheNextEntryCollects",
+          "releasingADepartureKeepsItsInFlightDraftWriteWithoutALateBackEffect",
+          "releasingAndReopeningRetainsRowsDraftAndTheExistingLocalReaders"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "ReadSpaceConversationCatalogTest",
+        "methods": [
+          "accountSessionAndAudienceReplacementAtReadReturnDiscardCapturedData",
+          "cancellationDoesNotBecomeAbsenceOrRetryTheInventory",
+          "confirmedDenialAndMalformedRequestsNeverReadTheCatalog",
+          "denialReceivedDuringReadWinsOverSuccessfulOrFailedCatalogResults",
+          "emptyContinuationsAndGenerationRestartRemainExplicitWithoutLooping",
+          "identityReplacementWhileAdmissionIsSuspendedStopsBeforeInventory",
+          "malformedOwnershipInventoryAndCursorResponsesCannotBePublished",
+          "ownedCatalogIgnoresCredentialAgeAndSelectedCompanyWithoutAcquisition",
+          "publishedItemsDoNotAliasAMutableRepositoryList"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "ObserveSpaceConversationCatalogTest",
+        "methods": [
+          "aSlowConsumerCannotReceiveQueuedVersionsAfterRevocation",
+          "denialJoinsPendingVersionWorkWithoutStartingAReplacementRead",
+          "denialSurvivesFailedAdmissionAndOnlyAnAdmittedGateReopensVersions",
+          "invalidOwnerAndMalformedAdmissionCannotOpenMetadataObservation",
+          "knownFinalDenialPublishesWithoutWaitingForAnotherSessionRead",
+          "malformedVersionAndCompletedFailureDoNotBecomeEmptyOrAutomaticRetries",
+          "offlineVersionAndTokenRotationKeepOneLocalSubscriptionWithoutScanning",
+          "replacingAccountSessionOrAudienceRetiresTheOwnedVersionReader"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationSpaceConversationCatalogStorageTest",
+        "methods": [
+          "accountReplacementAtFinalPublicationCannotExposeTheCapturedRows",
+          "cancellationDuringPairReadEscapesWithoutPublishingOrChangingFacts",
+          "cursorSurvivesRenewedLoginButRejectsAnotherGroupAccountOrServer",
+          "damagedCiphertextOrMissingPeerCannotPublishPartialCatalog",
+          "emptyInventoryAndVersionNeverCreateKeysOrWriteRecords",
+          "finiteCursorVisitsEveryCanonicalPairOnceIncludingEmptyPages",
+          "generationReplacementRequiresRestartInsteadOfAnEmptySuccessfulContinuation",
+          "insertsBehindTheCursorWaitForTheNextPassWithoutLosingOldPairs",
+          "missingKeysBadCursorsAndBoundsCannotCreateOrRewriteInventory",
+          "readsArePublishedBoundedAndNeverScanMessageHistory",
+          "replacementDuringPairAuthenticationRetiresTheWholeCapturedPage",
+          "versionObservesOnlyAuthenticatedPublishedFactsAndSuppressesEqualEmissions"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SpaceChatNavigationOwnerTest",
+        "methods": [
+          "capacityCannotExceedThreeOrDisableTheBound",
+          "graphDisposalClearsUnopenedPreparationAndRejectsLatePreparation",
+          "graphReplacementClearsLiveAndIdleModelsAndLateReleaseIsHarmless",
+          "idleEvictionKeepsRecentlyReopenedAndLiveRooms",
+          "liveEntriesNeverShareAModelEvenForTheSameConversation",
+          "modelKeysPreserveEachAccountGroupSessionAndConversationBoundary",
+          "preparationUsesTheSameBoundAndDoesNotDisplaceVisitedOrActiveRooms",
+          "removedRouteCanReopenItsSameModelWithANewEntryOwner",
+          "separateGraphsNeverRestoreAnotherGroupsRoomStore"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SpaceChatThreadRetentionTest",
+        "methods": [
+          "aLateClipboardAdmissionCannotCrossPermanentReleaseAndReentry",
+          "permanentReleaseDiscardsBufferedCopyAndBackBeforeTheNextEntryCollects",
+          "releasingADepartureKeepsItsInFlightDraftWriteWithoutALateBackEffect",
+          "releasingAndReopeningRetainsRowsDraftAndTheExistingLocalReaders"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "ReadSpaceConversationCatalogTest",
+        "methods": [
+          "accountSessionAndAudienceReplacementAtReadReturnDiscardCapturedData",
+          "cancellationDoesNotBecomeAbsenceOrRetryTheInventory",
+          "confirmedDenialAndMalformedRequestsNeverReadTheCatalog",
+          "denialReceivedDuringReadWinsOverSuccessfulOrFailedCatalogResults",
+          "emptyContinuationsAndGenerationRestartRemainExplicitWithoutLooping",
+          "identityReplacementWhileAdmissionIsSuspendedStopsBeforeInventory",
+          "malformedOwnershipInventoryAndCursorResponsesCannotBePublished",
+          "ownedCatalogIgnoresCredentialAgeAndSelectedCompanyWithoutAcquisition",
+          "publishedItemsDoNotAliasAMutableRepositoryList"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "ObserveSpaceConversationCatalogTest",
+        "methods": [
+          "aSlowConsumerCannotReceiveQueuedVersionsAfterRevocation",
+          "denialJoinsPendingVersionWorkWithoutStartingAReplacementRead",
+          "denialSurvivesFailedAdmissionAndOnlyAnAdmittedGateReopensVersions",
+          "invalidOwnerAndMalformedAdmissionCannotOpenMetadataObservation",
+          "knownFinalDenialPublishesWithoutWaitingForAnotherSessionRead",
+          "malformedVersionAndCompletedFailureDoNotBecomeEmptyOrAutomaticRetries",
+          "offlineVersionAndTokenRotationKeepOneLocalSubscriptionWithoutScanning",
+          "replacingAccountSessionOrAudienceRetiresTheOwnedVersionReader"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserCollaborationSpaceConversationCatalogStorageTest",
+        "methods": [
+          "accountReplacementAtFinalPublicationCannotExposeTheCapturedRows",
+          "cancellationDuringPairReadEscapesWithoutPublishingOrChangingFacts",
+          "cursorSurvivesRenewedLoginButRejectsAnotherGroupAccountOrServer",
+          "damagedCiphertextOrMissingPeerCannotPublishPartialCatalog",
+          "emptyInventoryAndVersionNeverCreateKeysOrWriteRecords",
+          "finiteCursorVisitsEveryCanonicalPairOnceIncludingEmptyPages",
+          "generationReplacementRequiresRestartInsteadOfAnEmptySuccessfulContinuation",
+          "insertsBehindTheCursorWaitForTheNextPassWithoutLosingOldPairs",
+          "missingKeysBadCursorsAndBoundsCannotCreateOrRewriteInventory",
+          "readsArePublishedBoundedAndNeverScanMessageHistory",
+          "replacementDuringPairAuthenticationRetiresTheWholeCapturedPage",
+          "versionObservesOnlyAuthenticatedPublishedFactsAndSuppressesEqualEmissions"
+        ]
+      }
+    ],
+    "reportManifestSha256": "503b193679efe3ea3a8180976b8273fea2b18a8c452519545089e4dc350061da"
+  },
+  "apple": {
+    "accepted": true,
+    "sourceCommit": "047584f125b182d8bd811ac343fb6a4ca30fbc9a",
+    "runId": 43379266527,
+    "jobId": 131732963180,
+    "counts": {
+      "iosSimulatorArm64Test": 5510
+    },
+    "artifactId": 14017053713,
+    "artifactBytes": 883573,
+    "artifactSha256": "68431f81c0a564f5d5564c87e101d9fd7bc41a0e3e999637a2283be0be1a02cc",
+    "jobLogSha256": "346fae8d199016a0588c25b7f4c1eaaf7c985c62d931eefe1dd0c27bc98325b1",
+    "previousExactCaseIdsRetained": true,
+    "previousMethodAndPlatformIdsRetained": true,
+    "browserEngineReview": null,
+    "newSharedMethods": 42,
+    "actualNew": [
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SpaceChatNavigationOwnerTest",
+        "methods": [
+          "capacityCannotExceedThreeOrDisableTheBound",
+          "graphDisposalClearsUnopenedPreparationAndRejectsLatePreparation",
+          "graphReplacementClearsLiveAndIdleModelsAndLateReleaseIsHarmless",
+          "idleEvictionKeepsRecentlyReopenedAndLiveRooms",
+          "liveEntriesNeverShareAModelEvenForTheSameConversation",
+          "modelKeysPreserveEachAccountGroupSessionAndConversationBoundary",
+          "preparationUsesTheSameBoundAndDoesNotDisplaceVisitedOrActiveRooms",
+          "removedRouteCanReopenItsSameModelWithANewEntryOwner",
+          "separateGraphsNeverRestoreAnotherGroupsRoomStore"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SpaceChatThreadRetentionTest",
+        "methods": [
+          "aLateClipboardAdmissionCannotCrossPermanentReleaseAndReentry",
+          "permanentReleaseDiscardsBufferedCopyAndBackBeforeTheNextEntryCollects",
+          "releasingADepartureKeepsItsInFlightDraftWriteWithoutALateBackEffect",
+          "releasingAndReopeningRetainsRowsDraftAndTheExistingLocalReaders"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "ReadSpaceConversationCatalogTest",
+        "methods": [
+          "accountSessionAndAudienceReplacementAtReadReturnDiscardCapturedData",
+          "cancellationDoesNotBecomeAbsenceOrRetryTheInventory",
+          "confirmedDenialAndMalformedRequestsNeverReadTheCatalog",
+          "denialReceivedDuringReadWinsOverSuccessfulOrFailedCatalogResults",
+          "emptyContinuationsAndGenerationRestartRemainExplicitWithoutLooping",
+          "identityReplacementWhileAdmissionIsSuspendedStopsBeforeInventory",
+          "malformedOwnershipInventoryAndCursorResponsesCannotBePublished",
+          "ownedCatalogIgnoresCredentialAgeAndSelectedCompanyWithoutAcquisition",
+          "publishedItemsDoNotAliasAMutableRepositoryList"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "ObserveSpaceConversationCatalogTest",
+        "methods": [
+          "aSlowConsumerCannotReceiveQueuedVersionsAfterRevocation",
+          "denialJoinsPendingVersionWorkWithoutStartingAReplacementRead",
+          "denialSurvivesFailedAdmissionAndOnlyAnAdmittedGateReopensVersions",
+          "invalidOwnerAndMalformedAdmissionCannotOpenMetadataObservation",
+          "knownFinalDenialPublishesWithoutWaitingForAnotherSessionRead",
+          "malformedVersionAndCompletedFailureDoNotBecomeEmptyOrAutomaticRetries",
+          "offlineVersionAndTokenRotationKeepOneLocalSubscriptionWithoutScanning",
+          "replacingAccountSessionOrAudienceRetiresTheOwnedVersionReader"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleCollaborationSpaceConversationCatalogStorageTest",
+        "methods": [
+          "accountReplacementAtFinalPublicationCannotExposeTheCapturedRows",
+          "cancellationDuringPairReadEscapesWithoutPublishingOrChangingFacts",
+          "cursorSurvivesRenewedLoginButRejectsAnotherGroupAccountOrServer",
+          "damagedCiphertextOrMissingPeerCannotPublishPartialCatalog",
+          "emptyInventoryAndVersionNeverCreateKeysOrWriteRecords",
+          "finiteCursorVisitsEveryCanonicalPairOnceIncludingEmptyPages",
+          "generationReplacementRequiresRestartInsteadOfAnEmptySuccessfulContinuation",
+          "insertsBehindTheCursorWaitForTheNextPassWithoutLosingOldPairs",
+          "missingKeysBadCursorsAndBoundsCannotCreateOrRewriteInventory",
+          "readsArePublishedBoundedAndNeverScanMessageHistory",
+          "replacementDuringPairAuthenticationRetiresTheWholeCapturedPage",
+          "versionObservesOnlyAuthenticatedPublishedFactsAndSuppressesEqualEmissions"
+        ]
+      }
+    ],
+    "reportManifestSha256": "762cdc7913fc974d940673af6622894cdc0fc436c6e8044ec37a2aa67531a477"
+  },
+  "browserEngineReview": {
+    "accepted": true,
+    "previousRun": 43366809238,
+    "run": 43379266527,
+    "changedReports": 499,
+    "precedingBrowserCases": 5917,
+    "oldSuffix": "[wasmJs, browser, ChromeHeadless157.0.0.0, Linux0.0.0]",
+    "newSuffix": "[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+    "reason": "All differences are the explicitly observed browser engine suffix. Exact report path, class, method and other platform suffix fields are retained. Current execution is Chrome156; no source/test change or rerun. Failed strict comparison is retained."
+  },
+  "auditCorrections": [
+    "Early Apple log collection was unavailable while the sibling job ran; its empty file and first premature audit are retained. Final audit requires nonempty successful completed logs.",
+    "Strict portable identity comparison rejected the browser157 to156 suffix. All499 affected reports and5917 old methods were independently compared before allowing only that exact substitution. No source/test change or execution rerun."
+  ],
+  "accepted": true,
+  "runId": 43379266527,
+  "sourceCommit": "047584f125b182d8bd811ac343fb6a4ca30fbc9a",
+  "totalCases": 18816,
+  "newSharedMethods": 42,
+  "newDesktopNavigationCases": 2,
+  "productGraphActivated": false,
+  "newRawTransactionAppleMethodsIncluded": false
+}

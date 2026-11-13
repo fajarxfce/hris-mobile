@@ -24,3 +24,11 @@ persistent activity index described in collaboration-space-inbox-index-plan.md, 
 pending and draft previews. No product Group graph, native runtime or live feature is enabled.
 
 Evidence: `docs/measurements/collaboration-space-catalog-admission-2026-11-13.json`.
+
+## Actual Apple and portable verification
+
+Combined control43379266527 at047584f125b182d8bd811ac343fb6a4ca30fbc9a passes18,816 cases,
+including13,306 portable and5,510 actual Apple cases. All42 new navigation/catalog/admission
+methods run on Apple; the iOS host and16 push-field cases pass. Earlier pending native statuses
+above are superseded by this result. No product Group graph or live rollout is enabled.
+Evidence: `docs/measurements/collaboration-space-catalog-hosted-2026-11-13.json`.
