@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 18:01 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 18:10 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -17,11 +17,23 @@ No-op replay never calls mutate. Missing source needs no key, missing retained k
 regenerated, conflicts return false and operational failures/cancellation remain distinct.
 Snapshot source 854d8b32 / Group 033e8420 was already accepted (focused 60/full 16,411).
 
-Next .work/space-inbox-original-association-2026-11-13 has three unapplied domain/test drafts
-and 18 shared methods (focused 28/full 16,479 expected). Review/apply after this commit is pushed;
-its preparation is already used. Association is not receipt settlement, and an unmatched legacy
-record does not authorize a new History anchor. Do not choose arbitrarily if both actual command
-namespaces prove association. Then implement admitted preview policy and the incoming producer.
+Current .work/space-inbox-original-association-2026-11-13 has THREE APPLIED domain/test paths.
+Focused 28 passed (18 new policy + 8 command-policy + 2 application-binding cases); Apple test
+compilation passed. Full 16,479 is RUNNING in session 27225/full-1; reap and audit before claiming
+acceptance or committing the source. Candidate 5387/1597c19e0ed86b1f2e8bff0789feeecd8f3747c918f2bc5491881f1ac010b589.
+Format 5060 and focused 50507 are reaped. Do not rerun apply/preparation. The policies prove
+Group/actual Company original identity without settling ACKs. Valid same-ID facts in another
+conversation are nonmatching; malformed or foreign ownership remains a failure. Null does not
+authorize a History anchor, and ambiguous namespaces cannot be chosen arbitrarily.
+
+Next .work/company-history-inbox-source-2026-11-13 has NINE UNAPPLIED drafts: typed Company source,
+shared raw writer, eight shared actual-storage methods and existing app binding assertions.
+Prepared guarded gates expect focused 43/full 16,495, AFTER association is accepted/pushed.
+prepare-drafts.py and prepare-recording.py are already used; subsequent draft corrections are
+authoritative. Review actual storage fixtures before application. Canonical producer investigation
+is now committed in the inbox-index plan: use the thread's binding-selected source, never both
+physical copies of a legacy room; Company content may predate binding and needs finite backfill.
+
 Read the committed inbox-index plan's provenance investigation and supplementary
 .work/space-history-inbox-publication-2026-11-13/producer-provenance-notes.md. Exact trusted
 sender, canonical content, conversation, device room and original namespace establish display
@@ -34,11 +46,12 @@ Actual Company-history source snapshots/publication and single account/Group pro
 remain explicit work. Keep the product graph off until these producers and ownership are ready.
 
 Existing control 43467846733 at 951c308d covers earlier owner seeding/source guards, not these
-16 publication or 17 snapshot Apple methods. This control is accepted;
-collect the 33 new shared methods in a later exact-source control. Expected combined count
-would be 20,196 if this is the only subsequent source increment; preserve prior identities.
+16 publication, 17 snapshot or 18 current association Apple methods. This control is accepted;
+collect later shared methods in one exact-source control after source acceptance. Expected total
+20,250 for those 51 methods, or 20,274 including the eight Company-source drafts. These totals
+are expectations, not accepted executions; preserve all previous identities.
 Control 43455295124 is already accepted (20,006 / Apple 5,950, iOS host and 16 push fields).
-Starter 595d025 already passes 990; this HRIS work stays downstream. Keep release 92 until a
+Starter source 595d025 passes 990; shared Apple proof is pushed at 77b0788f70b78077968000ee743ab4d757ab0fc6; this HRIS work stays downstream. Keep release 92 until a
 meaningful validated app update and preserve live Group OFF. Push every commit and continue.
 
 ## Accepted source and existing hosted controls

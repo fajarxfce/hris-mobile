@@ -209,3 +209,35 @@ The existing history repository now guards an inbox write by the retained source
 changing source bytes, drafts or repair references. Focused 50/full 16,443 pass locally.
 Source/preview policy, actual Company-history sources and incoming-owner integration remain next.
 See `docs/collaboration-space-history-inbox-publication.md`; no new product collector is active.
+
+## Canonical producer source review — 13 November 2026
+
+Observed source facts:
+- ObserveCollaborationSpaceThread resolves the immutable binding with
+  resolveCollaborationSpaceHistoryLocation. SPACE reads the Group namespace; LEGACY reads the
+  actual Company/conversation namespace. SpaceChatThreadRows consumes that selected history.
+- AcquireCollaborationSpaceEvents retains Group history even for a LEGACY room/key-history
+  coordinate. That can be recovery evidence without being the canonical thread's visible source.
+- AcquireCollaborationSpaceOriginalEvents retains Company history and only owns original-room
+  metadata/demand today; it does not yet look up the canonical Group binding.
+
+Therefore review a producer rule that publishes only the SAME canonical source selected by the
+thread. Do not publish both physical copies and try to repair duplicate immutable inbox anchors
+later. In particular, Group LEGACY evidence should not overwrite Company hiding or newer edits.
+A Group command can still associate to Company canonical history via its original physical room
+and trusted content, retaining GroupOriginal identity; physical history location and command
+namespace are separate axes.
+
+The Company producer needs an admitted exact binding (existing findByRoom/access/server/room
+contract is a candidate), whose original metadata matches its retained source. No binding means
+no authority to invent a canonical conversation ID. Content may predate binding publication;
+finite catalog/binding backfill and durable restart coverage must be designed before activation.
+The existing command seed owner alone does not seed all incoming/history entries. Do not create
+one permanent observer per conversation, infer a binding from UUID equality, or let completion
+lose a required projection update. This is an implementation direction, not an accepted producer.
+
+Legacy origin stamps are immutable through Staging -> Staged -> Sent (transition preserves
+origin), so a missing-origin terminal record cannot later acquire a stamp via a normal ACK.
+Still review actual receipt proof before choosing its display source; the association policy's
+null is deliberately not authority to allocate an anchor. Preserve ambiguity and denial without
+introducing a busy retry loop. New Group records require origin before delivery.
