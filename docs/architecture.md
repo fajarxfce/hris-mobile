@@ -1,5 +1,7 @@
 # Architecture
 
+[Coherent history snapshots](collaboration-space-history-snapshot.md) resolve incoming aliases and edits under one authenticated local source revision.
+
 [Exact source checks](replica-source-checks.md) guard a projection write without changing the retained source checkpoint or ciphertext.
 
 [Existing inbox owner seeding](collaboration-space-inbox-command-owner.md) uses one command inventory, bounds failures and preserves drafts while retained originals acquire pending previews.

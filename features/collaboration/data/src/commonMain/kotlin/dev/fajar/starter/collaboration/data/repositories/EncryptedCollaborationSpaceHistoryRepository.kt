@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceHistoryRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceHistorySnapshotRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceMessageEditRepository
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
@@ -23,8 +24,51 @@ class EncryptedCollaborationSpaceHistoryRepository(
     private val replicas: ReplicaStore,
     private val cipher: ContentCipher,
     @Named("collaboration-history-content-key") private val credentials: AtomicCredentialStore,
-) : CollaborationSpaceHistoryRepository, CollaborationSpaceMessageEditRepository {
+) :
+    CollaborationSpaceHistoryRepository,
+    CollaborationSpaceMessageEditRepository,
+    CollaborationSpaceHistorySnapshotRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
+
+    override suspend fun snapshot(
+        access: CollaborationSpaceLocalAccess,
+        conversationId: String,
+        roomId: String,
+        eventIds: List<String>,
+    ) = safeStorageCall {
+        val ids = eventIds.toList()
+        require(ids.size in 1..16 && ids.distinct().size == ids.size)
+        require(ids.all(::validCollaborationEventId))
+        validateHistoryRoom(roomId)
+        val scope = spaceHistoryScope(access)
+        val partition = spaceHistoryPartition(access, conversationId)
+        val raw = replicas.checkpoint(scope, partition)
+        if (raw == null) {
+            currentCoroutineContext().ensureActive()
+            return@safeStorageCall if (replicas.checkpoint(scope, partition) == null)
+                CollaborationSpaceHistorySnapshot(
+                    null,
+                    ids.map { CollaborationSpaceHistorySnapshotEvent(it, null) },
+                )
+            else null
+        }
+        try {
+            withKey(access, conversationId, roomId) { codec ->
+                codec.checkpoint(raw)
+                val events = CollaborationHistorySnapshotReader(replicas, raw, codec).read(ids)
+                currentCoroutineContext().ensureActive()
+                if (replicas.checkpoint(scope, partition) == raw)
+                    CollaborationSpaceHistorySnapshot(
+                        raw.handle.generation + ":" + raw.revision,
+                        events,
+                    )
+                else null
+            }
+        } catch (_: CollaborationHistoryPreparationChanged) {
+            currentCoroutineContext().ensureActive()
+            null
+        }
+    }
 
     override fun observe(
         access: CollaborationSpaceLocalAccess,

@@ -150,3 +150,55 @@ full15,839. Admitted owner, legacy seeding, history/list and product integration
 Four admitted finite/exact read and checkpoint actions, plus the strengthened existing message
 observer, pass35 new shared methods and all prior identities, full15,909. The finite worker,
 legacy seeding, history/list and Group product integration remain.
+
+## Retained history snapshot source — 13 November 2026
+
+Bounded original/replacement reads preserve one authenticated revision and current hidden/edited
+facts. Focused 60/full 16,411 pass locally; conditional inbox publication and admitted incoming
+producers remain next. See `docs/collaboration-space-history-snapshot.md`. No new product collector is active.
+
+### Incoming producer investigation (not implemented)
+
+Existing Group command get() returns either active or authenticated archived records. There is
+no intended absent interval during retirement. Original identity is retained before native send.
+recoverCollaborationSpaceOriginalReceipt checks exact sender, logical ID, canonical content hash
+and original text (unless redacted), plus the owned command. It accepts Staged only. A Sent record
+can be inspected through its equivalent Staged mapping, but also require its acknowledged event
+ID in the retained original aliases. Require record conversation and device room equal the actual
+snapshot coordinates; matching UUID alone does not establish association. Canonical content hash
+includes metadata that a plain-text comparison cannot prove. Company originals keep their own
+access/conversation/room namespace and must not become Group originals.
+
+Incoming policy must resolve source identity before first publication. A matching in-flight
+Staging original may not yet expose its final native mapping; publishing a History source first
+and relabeling it later risks two immutable anchors. Do not quietly create a second source or reuse
+an existing ordinal for a new source (InboxCodec correctly rejects that). Determine admitted
+ordering/recovery with the existing incoming owner and command lifetime before product activation.
+Current Group composer publication seeds its original/index atomically before send; startup
+seeding plus exact archived reads cover retained sources. A valid same-ID record from another
+sender/conversation is not evidence for this incoming message. Preserve corrupt/failed local reads
+as failures, not fabricated absence. Source history can be replayed without new merge content,
+especially retained key-history references; incoming completion must include successful projection.
+
+History primaryEventId and original timestamp stay immutable across aliases; firstAcceptedAt may
+move earlier. Use the canonical retained original, never truncate its 128 aliases to fit the 32
+activity bound. At most 16 requested events resolve to at most 16 canonical originals. Edits resolve
+to their authentic original target, and hidden/redacted states are retained for preview removal.
+Snapshot acquisition, pure preview/source policy, index/anchor reads and conditional publication
+need current local admission around I/O and bounded contention owned by the use case. No use-case
+calls, repository calls, new polling queue or VM orchestration helper.
+
+The current publication draft shares the existing history key format with Inbox under distinct
+cipher frames. It conditions an actual inbox write on the complete source checkpoint and keeps
+no-op replay free of new revisions. It does not prove source association itself; that remains the
+admitted domain producer. Separate clock policy is still needed for genuinely new local actions
+under backward clock changes; historical imports must not be promoted as newly authored messages.
+
+Association and receipt confirmation are different questions. Do not blindly coerce a Staging
+record to Staged just to reuse receipt recovery. Review whether its retained trusted sender,
+complete content hash, logical intent, conversation and device room already prove which display
+anchor owns the incoming original; that need not create a receipt or alter command progress.
+A preview may retain PENDING until exact command acknowledgement while updating retained edit/
+hiding facts. This could avoid blocking incoming completion solely on a concurrent staging write.
+It still requires explicit policy/tests, and unproved legacy missing-origin records must not be
+associated using text/UUID alone. This is a design option for the next producer, not accepted code.

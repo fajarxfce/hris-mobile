@@ -1,0 +1,115 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationEditEvidenceReader.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationHistorySnapshotReader.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/HistoryEditEvidenceDto.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceHistoryRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceHistorySnapshotStorageContract.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceHistorySnapshotStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceHistorySnapshotStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceHistorySnapshotStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceHistorySnapshot.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceHistorySnapshotRepository.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 60,
+    "elapsedSeconds": 266.408,
+    "sourceFiles": 5380,
+    "sourceManifestSha256": "c9479117063ef60bad895d6265b49361330a99d6adb5622e9d2720e8a8ebca59",
+    "resultSha256": "6c5b3c8e87d71775657d577365f12d2a362c3f8b98fae5338f6a7daaa9a06d66",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationEditEvidenceStorageTest": 8,
+      "CollaborationSpaceHistoryStorageTest": 16,
+      "CollaborationSpaceMessageEditStorageTest": 17,
+      "CollaborationSpaceHistorySnapshotStorageTest": 17
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T17:08:05.933060+00:00",
+    "elapsedSeconds": 992.684,
+    "sourceFiles": 5380,
+    "freshCounts": {
+      "tests": 14289,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153426166,
+      "sha256": "b02b08e55bda594b21e52bb8f19fceb401cfc7c8980f7b0786bbb3d49d9d5a30"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16411,
+    "newCases": 34,
+    "freshTests": 14289,
+    "reusedUnaffectedTests": 2122,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "c9479117063ef60bad895d6265b49361330a99d6adb5622e9d2720e8a8ebca59",
+    "reportManifestSha256": "62643fc59704a52f7738d08ce860a032c3da10e67edba69d90646d2d73ddf6c7",
+    "nativeClaim": "Bounded authenticated retained Group history snapshots; 17 shared actual-storage methods. Actual Apple execution, conditional publication and incoming producer integration remain separate."
+  },
+  "newSharedMethods": 17,
+  "sourceInputLimit": 16,
+  "sourceBatchLimit": 64,
+  "maximumReadBatches": 3,
+  "fixtureCorrection": {
+    "focusedDirectory": "focused-1",
+    "session": 86057,
+    "reaped": true,
+    "resultSha256": "7e36e0c9cdcfbf510dd4b71a09fda3a7efbf0e3e2111dfe439f1c079e40aadc3",
+    "tests": 58,
+    "failures": 2,
+    "reason": "Two test-only removal fixtures retained tags on payload-null tombstones; ReplicaBounds rejects before intended read scenario",
+    "sourceBeforeSha256": "b5b422d7c8dade2026a26ce915cb0ad5f60414e9df5ab08351d0aef400e2d727",
+    "productionChanged": false
+  },
+  "previousAcceptedHostedRun": 43455295124,
+  "previousAcceptedHostedTotal": 20006,
+  "predecessorControl": {
+    "dispatched": true,
+    "portableAccepted": false,
+    "appleAccepted": false,
+    "complete": false,
+    "workflow": "collaboration-control.yml",
+    "ref": "feat/chat-send-timing-20261107",
+    "previousRun": 43455295124,
+    "previousCommit": "fe2e1cbb742dfde262182863d11b6604fe3a9c32",
+    "failedPreviousRun": 43443248470,
+    "failedPreviousCommit": "c2d9b5ea753083967adc40129187e9e5c6fcb413",
+    "expectedPortable": {
+      "desktopTest": 6727,
+      "testAndroidHostTest": 960,
+      "wasmJsBrowserTest": 6430
+    },
+    "expectedApple": {
+      "iosSimulatorArm64Test": 5980
+    },
+    "expectedTotal": 20097,
+    "newSharedMethods": 30,
+    "newDesktopIntegrationMethods": 1,
+    "status": "Portable running; Apple queued. Previous 43455295124 accepted; this source remains pending.",
+    "sourceCommit": "951c308dce2dd350a901c67cf449d6913b97cacf",
+    "dispatchAttemptedAt": "2026-11-13T16:57:02.978775+00:00",
+    "dispatchExitCode": 0,
+    "runId": 43467846733,
+    "runUrl": "https://github.com/fajarxfce/hris-mobile/actions/runs/43467846733",
+    "dispatchSession": 68248,
+    "dispatchReaped": true,
+    "portableJobId": 132033900708,
+    "appleJobId": 132033900078
+  },
+  "snapshotMethodsIncludedInPredecessorControl": false,
+  "actualNewAppleExecution": false,
+  "productGraphActivated": false,
+  "phoneInstalled": false,
+  "installedPhoneBuild": 92,
+  "liveChanged": false
+}

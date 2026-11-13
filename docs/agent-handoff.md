@@ -1,45 +1,39 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 17:13 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 17:25 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active local gate and next implementation
+## Coherent history snapshots locally accepted
 
-Mobile .work/space-history-snapshot-2026-11-13 has eleven applied source/test files, not yet
-committed. Seventeen new shared actual-storage methods plus unchanged history/edit/evidence
-contracts pass focused 60. Application binding and Apple source/test compilation pass.
-Focused-2 session 6043 is REAPED: 266.408s, sources 5380/
-c9479117063ef60bad895d6265b49361330a99d6adb5622e9d2720e8a8ebca59; result
-6c5b3c8e87d71775657d577365f12d2a362c3f8b98fae5338f6a7daaa9a06d66.
-Full-1 session 62593 is RUNNING; expected 16,411 (all 16,377 previous identities plus 34 new
-JVM/browser executions). Reap before accepting. Do not rerun an existing gate directory.
-Two initial test-only tombstones retained invalid tags; focused-1 failure/result and the correction
-are preserved in fixture-review.json. Production source did not change for that fixture fix.
-
-The existing encrypted history instance resolves up to 16 original/replacement IDs under one
-published checkpoint using at most three bounded indexed batches. Shared edit-evidence mapping
-preserves target/alias validation. Current edits and hidden/redacted originals stay available to
-preview policy; absent partitions need no key, mixed revisions return Changed without retries,
-and cancellation/operational failure remain separate. No product collector has been activated.
-After full success, run accept-full.py full-1, set fullReaped, then the prepared record-acceptance.py
-and commit.py mobile/group; push each commit. Those recording/commit scripts are NOT used yet.
-Apply/format/preparation scripts for this snapshot are already used and must not be rerun.
+Mobile .work/space-history-snapshot-2026-11-13 is accepted: eleven source/test files, 17 new shared
+methods; focused 60 / full 16,411 (14289 fresh / 2122 exact unchanged).
+All 16,377 previous identities remain plus 34 JVM/browser cases. Source 5380/
+c9479117063ef60bad895d6265b49361330a99d6adb5622e9d2720e8a8ebca59; reports 62643fc59704a52f7738d08ce860a032c3da10e67edba69d90646d2d73ddf6c7.
+The existing history instance resolves at most 16 incoming IDs under one checkpoint via bounded
+indexed reads, authenticating original/alias/edit/legacy evidence. Current hidden/redacted and
+edited originals remain available to preview policy. Missing partitions need no key, mixed
+revisions return Changed, and cancellation/operational failures are distinct. Shared edit-evidence
+mapping removes duplicate validation. Two invalid tombstone test fixtures were corrected; raw
+failed reports are retained and no production logic was changed for that fixture correction.
 
 Next .work/space-history-inbox-publication-2026-11-13 has six unapplied source/test drafts and
-16 shared storage methods. Guarded apply/checks are prepared: focused 50/full 16,443 expected,
-only after snapshots pass and are pushed. Review before application. Do not rerun prepare-tests.py
-over reviewed drafts. This method pairs exact source Check with inbox mutation; replay checks
-both unchanged revisions without an empty write. Source bytes, drafts and repair references stay
-intact. Both codecs share the history key format under separate authenticated namespaces.
+16 shared storage methods for conditional source Check plus inbox mutation. Review and verify
+those drafts; guarded application/checks are prepared (focused 50 / full 16,443 expected).
+Do not rerun the already-used preparation scripts over reviewed drafts. Both codecs share the existing
+history key format with separate authenticated namespaces. No replacement key is needed.
+Preserve source bytes/revision, independent draft and repair references; semantic replay must
+not create an empty commit. Then add admitted preview policy and the existing incoming producer,
+including replay without a new merge. Prove Group/Company original namespace from retained
+sender/content/receipt facts, never UUID equality. Keep pending edits and backward-clock anchors.
 
-Then implement source/preview policy and the existing admitted incoming producer, including
-retained-reference replay with no new merge. Review producer-provenance-notes.md in that workspace.
-Exact sender/content/receipt/room facts establish Group/Company origins; UUID equality does not.
-Do not create duplicate immutable anchors when a matching original is still Staging. Preserve
-pending edits, drafts, hidden/redacted data, and backward-clock ordering. Finish the single
-account/Group product owner before enabling its graph. See the inbox integration plan below.
+Control 43455295124 at fe2e1cbb is accepted: 20,006 cases, including actual Apple 5,950, iOS host
+and 16 push fields. Subsequent control 43467846733 at 951c308d covers owner seeding/source guards,
+not these 17 new snapshot Apple methods; audit existing jobs without redispatching. Preserve the
+old failed control. Starter 595d025 already passed 990; this HRIS snapshot policy stays downstream.
+Keep phone release 92 and Group graph/live off until product acceptance. Push each commit and
+continue beyond this checkpoint.
 
 ## Accepted source and existing hosted controls
 
