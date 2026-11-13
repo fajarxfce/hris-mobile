@@ -127,5 +127,29 @@
   "productGraphActivated": false,
   "phoneInstalled": false,
   "installedPhoneBuild": 92,
-  "liveChanged": false
+  "liveChanged": false,
+  "starterPort": {
+    "accepted": true,
+    "acceptedAt": "2026-11-13T16:47:30.133120+00:00",
+    "mobileCommit": "020b52d48fc016ab804f1b418e3800fa396627d6",
+    "starterBase": "116627fbcad89e64e8c0099a292d21602f44e00f",
+    "validatedTests": 990,
+    "freshTests": 512,
+    "reusedUnaffectedTests": 478,
+    "targetCounts": {
+      "desktopTest": 517,
+      "wasmJsBrowserTest": 467,
+      "test": 6
+    },
+    "sourceManifestSha256": "e019e174d000bc84a598f98b4f09588925a8f3e8c5125227dce493d190a5d68f",
+    "prior964CaseIdsPreserved": true,
+    "newStorageMethods": 13,
+    "reportManifestSha256": "047639456ea09628bf3d7591a174f604a9d827ee1af2b77ed9cad43a1835037b",
+    "lintErrors": 0,
+    "lintAdvisories": 46,
+    "actualNewAppleTests": 0,
+    "phoneInstalled": false,
+    "liveChanged": false,
+    "commit": "595d02509c9083e264ba7983e8811f6f9c8f2cc3"
+  }
 }

@@ -1,10 +1,32 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 16:34 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 16:52 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Generic source guards accepted in Mobile and Starter
+
+Starter 595d02509c9083e264ba7983e8811f6f9c8f2cc3 is pushed: eight byte-identical generic files from Mobile 020b52d4,
+full 990 (512 fresh / 478 exact unchanged), preserving all 964 prior identities plus 26 new
+JVM/browser executions. Source manifest e019e174d000bc84a598f98b4f09588925a8f3e8c5125227dce493d190a5d68f; reports
+047639456ea09628bf3d7591a174f604a9d827ee1af2b77ed9cad43a1835037b. Android Dev/Staging/Prod, lint (0 errors), Web execution/distribution,
+and Apple source/test compilation pass. Actual new shared Apple execution is still separate.
+
+Next .work/space-history-snapshot-2026-11-13 in Mobile contains eight unapplied source/test drafts
+for bounded authenticated original/replacement snapshots and 14 new shared storage methods.
+Review, apply and verify (focused 49 / full 16,405 expected), then implement conditional inbox
+publication and the existing admitted incoming producer. The reader must preserve aliases,
+current edits, hidden/redacted records and exact ownership without a new queue or hidden retries.
+Keep independent drafts, pending edits, original receipt provenance and stable clock ordering.
+
+Existing control 43455295124 at fe2e1cbb has portable 14,056 audited. Apple adapter step succeeded;
+iOS host is still running and artifacts have not been accepted. After auditing success, prepare
+ONE combined control from the still-clean accepted raw source using
+.work/source-checked-replica-mutations-2026-11-13/prepare-hosted.py (expected 20,097). Dispatch
+before applying snapshot drafts; that later source still needs its own Apple evidence.
+Preserve failed control 43443248470. Keep phone release 92, Group graph/live off, and push each commit.
 
 ## Source-checked replica publication locally accepted
 

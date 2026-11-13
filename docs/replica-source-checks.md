@@ -26,3 +26,5 @@ files must next be ported to Starter with independent checks. This does not acti
 collector, change native transport, deploy a backend or install a phone update.
 
 Evidence: `docs/measurements/replica-source-checks-2026-11-13.json`.
+
+Starter port 595d02509c9083e264ba7983e8811f6f9c8f2cc3 is independently accepted and pushed: full 990, all 964 prior identities retained, Android variants, lint, browser and Apple compilation passed. Actual Apple execution remains separate.
