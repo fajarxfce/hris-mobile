@@ -1,10 +1,46 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 03:49 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 04:01 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
 is waived; native Apple/call/push behavior is not accepted merely by compilation.
+
+## Active Group page integration
+
+Mobile `.work/space-thread-page-2026-11-13` has 22 applied, uncommitted source paths.
+Application files are authoritative; do not reapply its older draft copies. The Group page
+uses the existing bubble/day divider and a shared composer input with real Company and Group
+callers. Long press opens bounded typed selection; copy confirms fresh local admission in
+ReadCollaborationSpaceThreadContext. Stop/disposal, late denial and changed selected content
+fence clipboard writes. Reply saves only the event reference. Navigation content owns effects,
+focus, keyboard and first-layout end anchoring, keyed by actual account/Group/conversation.
+The product graph and live Group rollout remain disabled; bounded three-room warming and
+remaining edit/delete/forward actions still follow. No screenshot/rendering/Android IME
+acceptance is claimed yet.
+
+Format1/51935 REAPED PASS 35.059 s. Focused1/18812 REAPED failed compilation after
+118.474 s, 0 tests: two new context expectations used nullable metadata. The immutable
+failed-nullable-context-1 source/log/review is preserved. Expected successful metadata is
+now explicitly non-null; production admission and all assertions remain. Format2/53113
+REAPED PASS 37.159 s. Focused2/69074 is active, expected 99 cases (11 new domain, 8 new
+selection, 7 new desktop UI plus the existing actor/rows/Company composer/DI controls).
+Source 5242 / 3f958e2a1f399f56b2045ed83a83ff5803c98c488cc4af9a41ea759080d70e9b.
+No application/library source changes while that compiler runs.
+
+Next: reap focused2, inspect every failure, run strict focused audit when successful.
+Then run inspect-screenshots.py with the accepted focused directory and visually inspect
+all three actual artifacts before marking screenshot review complete. Full gate expects
+15,488 = all 15,443 prior IDs + 38 new JVM/browser executions + 7 desktop UI cases.
+19 new shared Apple methods remain pending; Linux executes none. Prior row 21 methods
+also remain pending, so the next single hosted follow-up would add 40 shared methods and
+7 desktop cases after this page increment is fully accepted, committed and pushed.
+Do not duplicate the currently active control 43359439624 or native Swift run 43349484661.
+
+Row acceptance is pushed: Mobile f4c91604 / Group 35a8ce01; pushes 13553/83109 REAPED.
+Phone ADB remains unavailable. At 03:59 UTC the server route was wg0/10.77.77.1 and the
+registered phone peer's last handshake was 12 November 10:32:22 UTC. Release 92 remains
+accepted and uninstalled; never launch or drive the phone. Continue past checkpoints.
 
 ## Latest implementation checkpoint
 
