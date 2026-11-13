@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 07:22 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 07:38 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
@@ -8,16 +8,28 @@ is waived; native Apple, calls and push still need their actual behavior gates.
 
 ## Active inbox index implementation
 
-Mobile.work/space-inbox-index-2026-11-13 has13 uncommitted source paths: domain activity/
-placement/projection contracts, encrypted ranked index storage,15 actual-storage methods,
-six policy methods, platform test hosts and one application binding assertion. Source producers
-and product list are NOT integrated yet. Format82797 is REAPED; focused23/session2018 is
-RUNNING, with domain/data iOS test compilation. Full expectation15645 retains15603 prior IDs
-plus42 JVM/browser executions. Do not run another local compiler or mutate these source paths
-until2018 is reaped. Source5281/35101a4379b7f5f9da07a7115fbd1f67906e03efa46d2a5bd7696f4fe5840593.
-The work's write-*.py scripts are historical; never reapply them. Inspect results, preserve any
-failed candidate, complete the full gate, then commit/push acceptance and continue actual
-source/index atomic publication. The user's phone retains release92; no new install here.
+Mobile.work/space-inbox-index-2026-11-13 has13 uncommitted source paths: encrypted global
+recency index, independent editor/activity anchors, six pure domain methods/tests,15 actual
+storage tests and the application binding assertion. Source producers and product list remain
+unintegrated. Focused-3/session4683 is RUNNING after format-3/20653 REAPED; expected23.
+Do not run another local compiler or modify source until4683 is reaped. Current source5281/
+ca8565d0c98388a7ad14d81b65a77dbd200019de90fc84007b4c639dbf45b0e7.
+
+Both earlier failures and candidate sources are retained. Focused-1/2018 REAPED had21 cases,
+one wrong test expectation: the raw stale-session fence returns an exact empty page rather
+than Failed. That assertion now verifies the empty page, without relaxing cross-owner/cursor
+checks. Focused-2/97105 REAPED had21 cases, one timeout in the test's unsynchronized calls++
+barrier shared by two Default-dispatcher writers. It is replaced with a bounded channel and
+early-result diagnostics, keeping two actual writes, one winner/conflict and the same5s limit.
+No production source changed for these corrections; inspect focused-3 before acceptance.
+
+Full expectation15645 retains15603 prior identities plus42 JVM/browser executions. The full
+runner/auditor and guarded record-acceptance.py are prepared; they have NOT run for this index.
+The write-*.py scripts are historical and must not be reapplied. Complete tests, commit/push
+acceptance, then continue atomic source/index publication. A concrete Group draft boundary
+review is in Mobile.work/space-inbox-draft-publication-2026-11-13/integration-review.md; it has
+no applied source implementation. The user's phone retains release92. This is a checkpoint,
+not the end of the long run. Preserve original namespaces, keys and source-owned admission.
 
 ## Starter transaction port accepted and pushed
 
