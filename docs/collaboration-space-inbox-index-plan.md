@@ -253,3 +253,9 @@ originals, read up to 17 candidates to retain the first unaffected visible fallb
 hide/redaction batch. Avoid the default two and avoid scanning all history. Original association
 PENDING does not clear an existing failure or downgrade SENT; command progress owns status.
 Pending edit overlays require actual operation outcome before history can replace their text.
+
+## Actual Company history source — 13 November 2026
+
+The existing Company source and shared conditional writer pass focused 43/full 16,495.
+Actual source coordinates and keys remain intact. Admitted canonical producer and bounded
+history/catalog backfill remain before activation. See `docs/collaboration-company-history-inbox-source.md`.

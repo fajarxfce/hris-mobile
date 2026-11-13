@@ -106,41 +106,11 @@ class EncryptedCollaborationSpaceHistoryRepository(
                             index,
                         )
                         .checkpoint(source)
-                    val partition = spaceInboxPartition(access)
-                    val initial = replicas.checkpoint(scope, partition)
-                    if (
-                        initial?.published == false ||
-                            (initial == null && captured.expected != null)
-                    )
-                        return@use false
-                    val codec = CollaborationSpaceInboxCodec(access, cipher, content, index)
-                    if (initial?.let { codec.version(it) } != captured.expected) return@use false
-                    val ids =
-                        buildList {
-                                add(codec.id("entry", conversationId))
-                                add(codec.id("draft", conversationId))
-                                captured.entry.newest?.let {
-                                    add(codec.id("activity", conversationId, it.source))
-                                }
-                                captured.activities.forEach {
-                                    add(codec.id("activity", conversationId, it.source))
-                                }
-                            }
-                            .distinct()
-                    val current = replicas.workingDocuments(scope, partition, ids)
-                    if (current.checkpoint != initial) return@use false
-                    val mutation = codec.mutation(initial, current.documents, captured)
-                    currentCoroutineContext().ensureActive()
-                    if (mutation == null) {
-                        // Equality at both reads establishes a common unchanged source/index
-                        // observation. No empty commit or artificial source revision is needed.
-                        return@use replicas.checkpoint(scope, sourcePartition) == source &&
-                            replicas.checkpoint(scope, partition) == initial
-                    }
-                    replicas.mutate(
-                        scope,
-                        listOf(ReplicaMutation.Check(sourcePartition, source), mutation),
-                    )
+                    CollaborationHistoryInboxWriter(
+                            replicas,
+                            CollaborationSpaceInboxCodec(access, cipher, content, index),
+                        )
+                        .publish(access, source, captured)
                 }
             }
         }

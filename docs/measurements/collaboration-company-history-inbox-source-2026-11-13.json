@@ -1,0 +1,64 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationHistoryInboxWriter.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationHistoryRepository.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceHistoryRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationCompanyHistoryInboxStorageContract.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationCompanyHistoryInboxStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationCompanyHistoryInboxStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationCompanyHistoryInboxStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationCompanyHistorySnapshotRepository.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 43,
+    "elapsedSeconds": 333.72,
+    "sourceFiles": 5393,
+    "sourceManifestSha256": "948f5c487432c2b04e83d75badc0ccc9c6c6bb91d992a332431c41be764c913e",
+    "resultSha256": "02b0414e75150ff0fc885e3e559fde0c544512460c6234aae8fc467d8a64c75b",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceHistoryInboxStorageTest": 16,
+      "CollaborationSpaceHistorySnapshotStorageTest": 17,
+      "CollaborationCompanyHistoryInboxStorageTest": 8
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T18:30:20.454972+00:00",
+    "elapsedSeconds": 1027.49,
+    "sourceFiles": 5393,
+    "freshCounts": {
+      "tests": 14373,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 154560835,
+      "sha256": "a28d8e203d42d66fb2113de1a9c2d9330a2132cc631f5630629a84d27bf5c127"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16495,
+    "newCases": 16,
+    "freshTests": 14373,
+    "reusedUnaffectedTests": 2122,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "948f5c487432c2b04e83d75badc0ccc9c6c6bb91d992a332431c41be764c913e",
+    "reportManifestSha256": "2f336709dd0cc9caa3b00e05283cf36c561ec764fa39b128d3a2c24c56e5fa6a",
+    "nativeClaim": "Actual Company history snapshots and conditional inbox publication; eight shared storage methods with unchanged Group contracts. Actual Apple and incoming product ownership remain separate."
+  },
+  "newSharedMethods": 8,
+  "sharedRawWriter": true,
+  "actualCompanyNamespacePreserved": true,
+  "actualNewAppleExecution": false,
+  "productGraphActivated": false,
+  "phoneInstalled": false,
+  "installedPhoneBuild": 92,
+  "liveChanged": false
+}

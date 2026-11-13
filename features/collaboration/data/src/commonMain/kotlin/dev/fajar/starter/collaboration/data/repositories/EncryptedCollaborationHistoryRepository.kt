@@ -3,14 +3,17 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.history.*
+import dev.fajar.starter.collaboration.data.inbox.CollaborationSpaceInboxCodec
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationCompanyHistorySnapshotRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationEditEvidenceRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationEditTargetRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationHistoryRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationLocalVisibilityRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageEditRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationQuoteRepository
+import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.*
@@ -26,12 +29,93 @@ class EncryptedCollaborationHistoryRepository(
     @Named("collaboration-history-content-key") private val credentials: AtomicCredentialStore,
 ) :
     CollaborationHistoryRepository,
+    CollaborationCompanyHistorySnapshotRepository,
     CollaborationMessageEditRepository,
     CollaborationEditEvidenceRepository,
     CollaborationEditTargetRepository,
     CollaborationLocalVisibilityRepository,
     CollaborationQuoteRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
+
+    override suspend fun snapshot(
+        source: CollaborationSpaceHistoryLocation.Original,
+        eventIds: List<String>,
+    ) = safeStorageCall {
+        val access = source.access
+        val conversationId = source.conversationId
+        val roomId = source.roomId
+        val ids = eventIds.toList()
+        require(ids.size in 1..16 && ids.distinct().size == ids.size)
+        require(ids.all(::validCollaborationEventId))
+        validateHistoryRoom(roomId)
+        val scope = historyScope(access)
+        val partition = historyPartition(access, conversationId)
+        val raw = replicas.checkpoint(scope, partition)
+        if (raw == null) {
+            currentCoroutineContext().ensureActive()
+            return@safeStorageCall if (replicas.checkpoint(scope, partition) == null)
+                CollaborationSpaceHistorySnapshot(
+                    null,
+                    ids.map { CollaborationSpaceHistorySnapshotEvent(it, null) },
+                )
+            else null
+        }
+        try {
+            withKey(access, conversationId, roomId) { codec ->
+                codec.checkpoint(raw)
+                val events = CollaborationHistorySnapshotReader(replicas, raw, codec).read(ids)
+                currentCoroutineContext().ensureActive()
+                if (replicas.checkpoint(scope, partition) == raw)
+                    CollaborationSpaceHistorySnapshot(
+                        raw.handle.generation + ":" + raw.revision,
+                        events,
+                    )
+                else null
+            }
+        } catch (_: CollaborationHistoryPreparationChanged) {
+            currentCoroutineContext().ensureActive()
+            null
+        }
+    }
+
+    override suspend fun publishInbox(
+        access: CollaborationSpaceLocalAccess,
+        source: CollaborationSpaceHistoryLocation.Original,
+        sourceRevision: String,
+        publication: CollaborationSpaceInboxPublication,
+    ): AppResult<Boolean> {
+        val captured = publication.copy(activities = publication.activities.toList())
+        return withContext(Dispatchers.Default) {
+            safeStorageCall {
+                require(sourceRevision.length in 1..128)
+                require(validCollaborationSpaceInboxPublication(captured))
+                require(captured.draft == null && captured.repair == null)
+                validateHistoryRoom(source.roomId)
+                val scope = historyScope(source.access)
+                require(scope == spaceHistoryScope(access))
+                val partition = historyPartition(source.access, source.conversationId)
+                val raw = replicas.checkpoint(scope, partition) ?: return@safeStorageCall false
+                if (!raw.published || raw.handle.generation + ":" + raw.revision != sourceRevision)
+                    return@safeStorageCall false
+                keys.use { content, index ->
+                    CollaborationHistoryCodec(
+                            source.access,
+                            source.conversationId,
+                            source.roomId,
+                            cipher,
+                            content,
+                            index,
+                        )
+                        .checkpoint(raw)
+                    CollaborationHistoryInboxWriter(
+                            replicas,
+                            CollaborationSpaceInboxCodec(access, cipher, content, index),
+                        )
+                        .publish(access, raw, captured)
+                }
+            }
+        }
+    }
 
     override suspend fun getEditCandidate(
         access: CollaborationLocalAccess,

@@ -707,6 +707,10 @@ class CollaborationBindingsTest {
                     container.koin.get<CollaborationMessageCompletionRepository>(),
                 )
                 assertNotNull(container.koin.get<CollaborationHistoryRepository>())
+                assertSame<Any>(
+                    container.koin.get<CollaborationHistoryRepository>(),
+                    container.koin.get<CollaborationCompanyHistorySnapshotRepository>(),
+                )
                 assertNotNull(container.koin.get<CollaborationLocalVisibilityRepository>())
                 assertNotNull(container.koin.get<ObserveCollaborationHiddenMessages>())
                 assertNotNull(container.koin.get<DeleteCollaborationMessagesForMe>())

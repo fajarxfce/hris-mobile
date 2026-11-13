@@ -1,5 +1,7 @@
 # Architecture
 
+[Company history inbox source](collaboration-company-history-inbox-source.md) preserves actual Company coordinates while publishing to a canonical Group inbox.
+
 [Original inbox association](collaboration-space-inbox-original-association.md) keeps source identity and actual command acknowledgement separate.
 
 [Conditional history publication](collaboration-space-history-inbox-publication.md) writes an inbox projection only while its authenticated source remains current.

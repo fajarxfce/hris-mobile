@@ -1,52 +1,48 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 18:21 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 18:47 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Exact inbox original association locally accepted
+## Canonical Company history source locally accepted
 
-Mobile .work/space-inbox-original-association-2026-11-13 is accepted: three domain/test files,
-18 new shared methods; focused 28/full 16,479 (14357 fresh / 2122 exact unchanged).
-All prior 16,443 identities remain plus 36 JVM/browser executions. Source 5387/
-1597c19e0ed86b1f2e8bff0789feeecd8f3747c918f2bc5491881f1ac010b589; reports 6d38f41d60b8cc08043ef0bdeb2a8c1c977739bf489e75932dc91c010501ba06.
-The pure policies identify Group/actual Company originals through admitted room/conversation,
-owner, trusted sender and complete content. Staging/Staged remain pending; association cannot
-settle a receipt. Wrong scope/corrupt facts fail; unproved legacy facts return null. Null is NOT
-authority to allocate a new History source, and two proven namespaces require explicit ambiguity
-handling. Hidden/deleted/edited originals retain identity. Edit operations are excluded.
+Mobile .work/company-history-inbox-source-2026-11-13 is accepted: nine source/test paths,
+eight new shared methods; focused 43/full 16,495 (14373 fresh / 2122 exact unchanged).
+All 16,479 previous identities remain plus 16 JVM/browser executions. Source 5393/
+948f5c487432c2b04e83d75badc0ccc9c6c6bb91d992a332431c41be764c913e; reports 2f336709dd0cc9caa3b00e05283cf36c561ec764fa39b128d3a2c24c56e5fa6a.
+The existing Company adapter retains actual source coordinates, reuses the authenticated
+snapshot reader and the raw conditional writer now shared with Group history. The target
+canonical conversation may differ from the original Company conversation. Source bytes and
+independent draft state survive races/replay; existing keys are never replaced. Koin binds the
+new contract to the existing Company history instance. No product graph is active.
 
-Next .work/company-history-inbox-source-2026-11-13 has nine unapplied source/test drafts: a typed
-Company contract, the existing Company adapter, and a shared raw writer extracted from the
-Space adapter, eight shared actual-storage methods and existing application binding assertions.
-Preparation is already used and subsequent draft corrections are authoritative; DO NOT rerun it.
-The storage/DI drafts still need review; guarded gates are prepared (focused 43/full 16,495). Read
-.work/space-inbox-original-association-2026-11-13/company-source-review.md before proceeding.
-Then implement bounded admitted preview/source policy and the existing incoming producer.
-Review .work/company-history-inbox-source-2026-11-13/canonical-producer-review.md: the inbox
-should follow the same binding-selected source as the thread, not both copies of a LEGACY room.
-Company content can precede canonical binding; bounded history/catalog backfill remains a gate.
-Use the existing history snapshot and conditional publication adapters; do not duplicate their
-I/O logic for Company sources. Current Group producer AcquireCollaborationSpaceEvents retains
-history/edits then returns AcquiredContent; projection success must be part of that completion,
-including KeyHistory retained-reference replay without new merge content. Actual Company source
-is AcquireCollaborationSpaceOriginalEvents and EncryptedCollaborationHistoryRepository; it must
-keep Company coordinates and use a separate typed contract with the shared snapshot reader.
-Never call another use case or repository, introduce a second polling owner, or move policy to VMs.
+Next .work/space-inbox-history-source-policy-2026-11-13 has three UNAPPLIED domain/test drafts
+with 26 shared methods and guarded focused46/full16547 gates. Review its review.md and drafts;
+finish both Company commits/pushes and the exact-source hosted dispatch before application.
+They validate canonical snapshots and explicit source ambiguity without allocating an anchor or
+starting a retry. Admitted preview policy and existing incoming producer integration follow. Review
+.work/company-history-inbox-source-2026-11-13/canonical-producer-review.md. The inbox must use
+the SAME binding-selected history source as ObserveCollaborationSpaceThread: Group for SPACE,
+actual Company for LEGACY. Do not publish both physical copies of a legacy room and then try
+to relabel immutable anchors. Group commands can still associate to Company physical history;
+command namespace and history source are independent. The accepted original-association policies
+preserve this distinction, and null does not grant authority to invent a History anchor.
 
-Pending edit preview precedence, hidden/deleted anchors, monotonic delivery after stale command
-reads, alias deduplication across actual sources, retained placement and independent drafts remain
-product gates. Source IDs cannot be relabelled while reusing another anchor's ordinal. Ordinary
-history imports cannot acquire the recency of a fresh send gesture. Consult the committed
-inbox-index plan and supplementary producer-provenance notes; no product graph is active.
+AcquireCollaborationSpaceEvents owns Group retention; AcquireCollaborationSpaceOriginalEvents
+owns Company retention. Required publication must participate in completion, including retained
+key-history replay without a new merge. The Company path still needs an exact admitted canonical
+binding; content can predate it, so finite catalog/history backfill and restart recovery are
+required. Do not create one permanent stream per conversation, call another use case/repository,
+or place orchestration in a VM. Pending edits, hidden/deleted anchors, monotonic delivery after
+stale reads, immutable placement and independent drafts remain explicit product gates.
 
-Control 43467846733 is pinned to 951c308d and covers earlier owner seeding/source guards. Its
-state/evidence is in .work/source-checked-replica-mutations-2026-11-13/hosted-control. It EXCLUDES
-these 18 association, 17 snapshot and 16 publication shared methods. The existing control is fully accepted; preserve its artifacts and do not redispatch.
-Prepare a later exact-source control (20,250 expected if only these 51 shared methods are added). Keep release 92 until a meaningful validated app update and live
-Group OFF. Starter source 595d025 is accepted/pushed (990); shared Apple proof is linked at
-77b0788f70b78077968000ee743ab4d757ab0fc6. HRIS source policy stays downstream.
+Control 43467846733 at 951c308d is accepted (20,097 / actual Apple 5,980) for earlier owner/source
+guard work. It excludes 17 snapshot + 16 publication + 18 association + 8 Company-source shared
+methods. Prepare one later exact-source control for these 59 methods (20,274 expected if no more
+source changes), preserving previous exact identities. Do not rerun the accepted control.
+Starter source 595d025 remains accepted at 990 and shared Apple proof is linked at 77b0788f70b78077968000ee743ab4d757ab0fc6.
+Keep phone release 92 until a meaningful validated app update and preserve live Group OFF.
 Push every commit and continue beyond this checkpoint.
 
 ## Accepted source and existing hosted controls
