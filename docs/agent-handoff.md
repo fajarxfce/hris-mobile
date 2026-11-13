@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 01:54 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 02:07 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -234,12 +234,19 @@ Dispatch4979 and identification19966 REAPED. No duplicate dispatch. The44 new sh
 methods still require the current Apple result. Preserve the unexecuted hosted preparation
 syntax candidate; it caused no source change or CI dispatch.
 
-NEXT: Mobile.work/space-composer-observation-2026-11-13 has seven complete UNAPPLIED source drafts,
-including18 domain methods and DI, ready for prepare.py after this handoff is pushed. Local
-editor and retained outbox observation belongs to one account/Group use case, independent of
-history rendering. Format and validate focused20/full15,050 before accepting it and applying
-the typed Group composer caller and canonical thread/list UI. Reuse the route-owned serial write actor; never
-fabricate a Company access for Group content. Measure first-frame/transition/IME behavior.
+IN PROGRESS: Mobile.work/space-composer-observation-2026-11-13, seven application paths.
+The independent local editor/outbox read is applied. Format2/98933 REAPED37.817s;
+focused2/37553 REAPED PASS20/312.112s and strict audit accepted. Source5210/
+589fec1490d68c1105ef4ca074a1f8c9d1ef21765970939d6c8de0a211b34a51.
+Full1/8599 is ACTIVE, expecting15,050 =15,014 retained +36 new JVM/browser cases.
+Keep application sources frozen until reaped/audited.18 new shared Apple methods are
+compiled locally, not executed. Preserve failed-test-type-inference-1: focused1/61969
+failed before any test at124.531s; two new expected lists needed explicit AppResult types.
+No production or assertion semantics changed for that correction.
+
+NEXT: apply the typed Group composer caller and canonical thread/list UI after full
+acceptance and push. Reuse the route-owned serial write actor with explicit Company
+and Group owners; never fabricate Company access. Measure first-frame/transition/IME behavior.
 One local compiler OR emulator. Follow the existing phone release handoff for install-only
 delivery, always with an announcement and explicit serial; never drive the user's phone UI.
 All54 acceptance groups remain OPEN; continue beyond this checkpoint.
@@ -361,20 +368,22 @@ Mobile.work/sdk8-apple-build-budget-2026-11-12/hosted-43296438399.
 Artifact13992067219 / 18757B / d48c496130814b7a083d3483ccf9e37f523d6fb33cd4ca7916d3f308aaf831db;
 job log7042ba65af48e9eb6e4112845ddc564ce96dda87e15dc8042da89ef4fb480884.
 
-The isolated fix65e649d12375af02a359470789e26584ad26c292 is committed and pushed
-(push10232 REAPED). Exactly one native run43327713661/job131564298006 is active;
-dispatch41039 REAPED. All17 builder guards pass locally and the hosted guard step passes.
-Mobile.work/sdk8-apple-symbol-reader-2026-11-12 records source hashes, failed predecessor
-and a success-only audit pinned to this head/job, requiring the real retained archive probe.
-The fix uses llvm-nm from the exact pinned Rust sysroot, verifies compiler/reader provenance
-and tests a real tiny Rust archive before the expensive build. No old-reader fallback or ignored failure. Five
-architectures, all required exports, four Swift contracts and device/simulator links remain
-required. The fix is not yet hosted-accepted. Keep it separate from main app source and
-avoid duplicate native dispatch. The older budget auditor remains pinned to the FAILED head;
-use the new symbol-reader workspace auditor for this run. Preserve the older deadline failure
-43267867675 and two pre-step runner-capacity failures. No SDK publication or Apple app
-runtime binding yet; the app still selects the unavailable Apple Matrix runtime.
-Independent Android/Group work continues.
+Native SDK candidate43327713661 FINISHED/FAILED on65e649d12375af02a359470789e26584ad26c292,
+job131564298006,8744.846s. The pinned LLVM22 reader probe and all five native/export checks
+passed; Swift linking failed with0 tests executed. Archive14001768615/306715428B/
+9ac07f4ed39b2b4fd4fbea96c1cf590c149562880039663dc79938ea25277e49 and original logs remain.
+Root cause: the upstream crate selector understands legacy crate-hash names, while Rust1.96
+uses crate.crate.hash-cgu.N.rcgu.o; partial SQLite merging separates hidden same-crate symbols.
+
+The isolated build-only correction6cc04d1f7c92dd60923c8d291e978e6d8a42728a is pushed53263 REAPED.
+Its actual selector tests reproduce3 failures with the old function and pass8 after correction;
+20 Python guards pass. SQLite localization, SDK source pins and Android artifacts are unchanged.
+Exactly one new native run43349484661/job131636790768 is ACTIVE; dispatch56942 and
+identification17353 REAPED. Mobile.work/sdk8-apple-crate-units-2026-11-13 has the failure,
+local acceptance and success-only auditor pinned to the new head/job, including exact8 probe
+methods/source/binary hashes. Do not dispatch duplicates or use the older auditor for this run.
+All five exports, four Swift contracts and both iOS links remain required. No publication or
+Apple app runtime binding; app runtime is still unavailable. Android/Group work continues.
 
 ## Phone delivery
 
@@ -390,7 +399,7 @@ fresh2560MiB/two cores, cold2908ms/reopen2145ms, stable10s/process. Both screens
 were inspected and show complete onboarding. ARM39435 REAPED42.972s, verify38284 REAPED.
 All gates are finished; do not rebuild. No authenticated release/phone latency claim.
 
-Latest ADB78079 REAPED: timeout after 15 seconds at23:47UTC; no install attempted.
+Latest ADB8143 REAPED: timeout after15 seconds at02:05UTC13Nov; no install attempted.
 WireGuard peer10.77.77.3 last handshake10:32:22UTC (checked23:05); route viawg0 is correct.
 Do not repeat availability questions. Continue bounded connection checks independently.
 When10.77.77.3:5555 connects, announce EACH actual installation, then run Mobile
