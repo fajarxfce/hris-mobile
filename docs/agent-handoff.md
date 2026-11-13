@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 21:42 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 21:48 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -16,14 +16,23 @@ Absent operations remain explicit; changed revisions yield no mixed snapshot. Ke
 namespaces,128alias completeness and joined cancellation are preserved. Default snapshots do no
 extra queries. Apply/record/check scripts are USED; no graph, phone or live change is active.
 
-Next .work/space-inbox-edit-outcome-policy-2026-11-13 contains five REVIEWED UNAPPLIED pure policy/
-behavior-test drafts (23 methods at this checkpoint). They match actual pending Group/Company
-commands, immutable provenance, targets and provider sender/hash facts. Read current review/state;
-focused41/full16765 gates are prepared but NOT RUN. Authenticated newer-operation supersession
-uses both possible completion namespaces and local ordering; execute/review the actual tests. Policy outcomes do not manufacture receipts,
-retire commands or resurrect hidden/deleted previews. Then integrate finite existing incoming/repair
-owners, canonical bounded history publication, durable unresolved work and catalog/binding backfill.
-Do not create another timer, per-room observer or VM business helper.
+Next .work/space-inbox-edit-outcome-policy-2026-11-13 now has5 APPLIED reviewed paths,23 shared
+methods. Apply66564 is REAPED0; focused41/session3361 is RUNNING. Source5431/
+751a721282e0768226ccddd1a2b85fdd752fc0c3959d033c857522e38781faee.
+The23 new domain methods pass, but a candidate compiler warning at supersession policy:120 makes
+this first source NOT ACCEPTABLE. A correction under correction/ captures non-null origin once;
+it is UNAPPLIED. Do not change active source until3361 is reaped. Invoke accept-focused to retain
+its rejection, inspect every new warning/failure, then apply/review/format correction, recapture and
+run focused-2. Full16765 has NOT RUN. Record/commit scripts are prepared NOT RUN; corrected unique
+Group capability path mobile-space-inbox-edit-outcomes.md preserves the prior admission document.
+
+After focused41/full16765 acceptance, record/commit/push Mobile then Group. Prepare and dispatch
+its new exact-source control20678/6173 Apple (73 new shared methods) using accepted43498640097.
+Do not redispatch older controls. Source/owner publication and product graph remain open. Pure
+outcomes neither manufacture receipts nor retire commands/resurrect hidden or deleted previews.
+Then integrate finite incoming/repair owners, canonical bounded history publication, durable
+unresolved work and catalog/binding backfill. No polling queue, permanent room observer or VM
+business helper. All exact source/artifact evidence and rejected attempts remain preserved.
 
 Prior admitted edits pass16687; atomic edit storage passes16653. Generic coreb4a3a89d passes16619
 and Starterd7b6f839 passes independent1022 with9 exact files. Control43498640097 covers the earlier
