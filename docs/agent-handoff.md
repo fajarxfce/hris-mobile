@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 23:05 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 23:13 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -37,13 +37,24 @@ class/method/platform identity retained, raw full-name identity false. Two rejec
 archived. This does not make the Apple job or whole run accepted.
 Accepted43498640097 remains20459/6100 actual Apple and excludes all later HRIS increments.
 
-Next .work/replica-local-change-pages-2026-11-13 has19 UNAPPLIED drafts: raw bounded changes,
-12 shared storage methods and3 migration methods (SQLite13 and browser12/7). Internal local
-revision is independent from source document version. Finite indexed reads include tombstones;
-newer writes go to the next captured window. SQLite13->14/browser12->13 retain old bytes and
-versions. Final review, generated schema14 and compilation/execution remain. Mobile proof must
-precede the generic Starter port. See collaboration-space-inbox-incremental-history-plan.md.
-No change-feed consumer or product activation is claimed.
+Current .work/replica-local-change-pages-2026-11-13 has20 APPLIED paths, including generated
+schema14. Fixed-source5450/4e12e2e90915314892ca57e4900af35a77dba57128f59fbc4606f9d2ef909c61.
+Focused176/session52335 is RUNNING: the12 new SQLite storage methods andSQLite13 migration already
+pass, but the full focused/app/Apple compilation result remains pending. Browser12/7 migrations
+andfull16868 remain required. No consumer or product activation. Reap52335 then accept-focused;
+run/accept full and commit/push source/evidence. Prepared record/commit scripts are NOT USED.
+Generation-only23295 REAPED0 captured inputs before asynchronous apply76168 completed; preserve
+its source-drift result and do not call it test evidence. Fixed-source checks own acceptance.
+The sole existing expect-object warning was matched to the prior accepted log with a one-line
+location shift. No suppression was added. Query planning used system SQLite only; actual source
+and old-database tests own behavior acceptance.
+
+Starter .work/replica-local-change-pages-port-2026-11-13 has3 PREPARED scripts, no source applied.
+Wait for complete Mobile acceptance andpush; then apply/reap andcheck1049 (1022+27) independently.
+All20 predecessor files match, including absent schema14; Inspector742a2d1c remains pinned.
+Next HRIS integration needs authenticated source-reference mapping anddurable finite progress.
+Do not mark raw-window exhaustion as index publication or complete incoming references early.
+See collaboration-space-inbox-incremental-history-plan.md for the concrete source boundaries.
 
 Read owner-integration-review.md for actual worker/use-case boundaries.
 Continue owner integration: already-materialized incoming references still need index publication
