@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 00:36 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 00:49 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -182,24 +182,40 @@ report3bc6455c4dfa96efe9cb2d756899bebd8f6c9b8ceb45bfd5143443d23d0dd98a; immutabl
 The24 shared Apple methods still need actual hosted execution. No new native, phone, live
 Group or measured UI claim. Commit/push before applying the next recovery increment.
 
-NEXT: Mobile.work/space-composer-recovery-2026-11-13 is DRAFT ONLY.
-Four cursor source drafts reuse the existing encrypted repository and preserve Company frames.
-Eight shared storage methods and two independent protocol methods are drafted, plus a finite
-RecoverCollaborationSpaceComposer, its fixture and22 domain methods. A shared bounded-page
-policy draft serves recovery and planned wake completion. None is applied/compiled. Finish
-reviewing those tests, platform storage wrappers, application DI and worker integration.
-The local pass must precede native-parent/device/adoption/sync. Advance the cursor before
-each original, materialize at most eight, and retire only exact valid command evidence.
-FinishCollaborationSpaceRecovery must include bounded pending outbox facts before completing
-the wake. Review the no-original-device acknowledgement path; do not discharge remaining
-outbox work or add an HTTP/polling loop. Reuse the existing serial route-owned composer actor.
+Composer action acceptance is pushed: Mobilece1750b8 / Group53ce34fd;
+pushes2023/74533 REAPED. One latest control43338633598 is running at exact
+ce1750b8bf5f1622e1f8f70eddb69bacaf587876, Apple131601109334 and portable131601109781.
+Dispatch65415 REAPED; do not dispatch a duplicate. Expected12,889 portable +5,314 Apple
+=18,203; strict prepared auditors preserve every previous identity and new storage methods.
+The separate SDK native candidate43327713661 remains active; no Matrix Apple runtime pass.
 
-One next hosted-control preparation is ready in the accepted domain workspace, but not run
-or dispatched. It requires prior contact Apple acceptance, current clean pushed sources and
-no active control. Expected12,889 portable +5,314 Apple =18,203; exact prior IDs preserved.
-Keep native SDK candidate43327713661 separate; no SDK/app Apple runtime acceptance implied.
-Phone release92 remains uninstalled, latest bounded ADB11655 timeout00:21UTC13Nov;
-WireGuard last handshake12Nov10:32:22UTC. Phone remains install-only with prior announcement.
+ACTIVE: Mobile.work/space-composer-recovery-2026-11-13,24 applied source paths.
+Typed encrypted Group cursor storage reuses the existing repository with unchanged Company
+frames and an independent legacy ciphertext test. RecoverCollaborationSpaceComposer discovers
+the owned root and materializes at most eight exact originals before native prerequisites.
+It advances a durable cursor before each original, reads back immutable command facts, and
+retires only that original. Held entries remain available without automatic retries.
+
+The application worker invokes this local pass before native-parent/device/adoption/sync.
+FinishCollaborationSpaceRecovery checks a bounded pending composer page before discharging
+its captured wake; the missing-native-original path also preserves known remaining work.
+Shared pure page validation and existing conditional wake completion prevent an empty or
+malformed read from hiding queued originals. No Group UI/live deployment is activated.
+
+Format1/80320 REAPED PASS35.953s. Focused1/58771 ACTIVE, expected156 cases.
+Frozen5203/fa5b385695991bc07a20806ac56cdf3746f25cc76d8d28d98a4d5a03a44a80e3.
+Expected full14,995 = all14,911 prior IDs plus84 new executions:56 domain JVM/browser,
+16 cursor storage,6 protocol JVM/browser/Android and6 worker cases. The38 new shared Apple
+methods still require hosted execution. No focused/full/native acceptance claimed yet.
+Keep source frozen until the active compiler is reaped. Then full validation and affected
+Original/Space native delivery scenarios are required before acceptance/commit. Previous
+native scenarios used an earlier proof and are historical. One compiler OR emulator.
+
+Continue canonical Group thread/list UI after recovery passes, reusing the route-owned serial
+composer actor and existing thread admission owner. Measure first-frame/transition behavior;
+do not imply latency improvements from source checks. All54 acceptance groups remain OPEN.
+Phone92 remains uninstalled. ADB50293 REAPED timeout00:38UTC13Nov; last WireGuard handshake
+12Nov10:32:22UTC. Always announce each install and use install-only; never drive phone UI.
 All54 acceptance groups remain OPEN; continue beyond this checkpoint.
 
 Hosted follow-up43312753298 on exact1f47eeddb833054ae2b3d52c20439e6d11518a02:
