@@ -77,6 +77,23 @@ interface CommandStore {
     suspend fun archive(scope: CommandScope, expected: CommandRecord, evidence: String): Boolean
 
     /**
+     * Archives the exact active command and publishes one or two prepared replica mutations in one
+     * transaction under the same session/account. Replica CAS/generation or command identity
+     * conflicts return false without writing. Constraint failures roll back every store.
+     *
+     * An exact retained archive succeeds without replaying the replica mutations, even if their
+     * checkpoints have since advanced. Different evidence or command bytes return false. All inputs
+     * are validated and detached before I/O, including on replay. Callers own encryption,
+     * completion policy and recovery after an uncertain response; no retry or wake is invented.
+     */
+    suspend fun archiveAndMutate(
+        scope: CommandScope,
+        expected: CommandRecord,
+        evidence: String,
+        mutations: List<ReplicaMutation>,
+    ): Boolean
+
+    /**
      * Retains immutable evidence without ever publishing pending work. An active ID or occupied
      * resource returns false; an existing archive succeeds only for the exact record/evidence.
      * Shares the insertion transaction, so a competing insert cannot bypass the retained ID.

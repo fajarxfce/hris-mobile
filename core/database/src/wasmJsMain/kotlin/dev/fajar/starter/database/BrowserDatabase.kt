@@ -63,7 +63,7 @@ private class IndexedDbAppDatabase(name: String) : AppDatabase {
     override val replicas: ReplicaStore =
         IndexedDbReplicaStore(replicaChanges) { database.await<JsAny>() }
     override val commands: CommandStore =
-        IndexedDbCommandStore(commandChanges) { database.await<JsAny>() }
+        IndexedDbCommandStore(commandChanges, replicaChanges) { database.await<JsAny>() }
     override val workWakes: WorkWakeStore = IndexedDbWorkWakeStore { database.await<JsAny>() }
     override val deviceRecords: DeviceRecordStore = IndexedDbDeviceRecordStore {
         database.await<JsAny>()

@@ -720,3 +720,9 @@ database/schema inputs match Starter exactly. Eight Apple contract wrappers awai
 full hosted Mobile execution before this source and schema are ported. The encrypted
 HRIS reply repository, origin authentication and callback/review policy remain Mobile.
 No Starter change is included in this checkpoint.
+
+## Command archival and replica publication
+
+The ten generic raw transaction files are locally accepted in Mobile (15 new platform methods,
+full 15,939). The independent Starter port is prepared but not applied. Group terminal producers
+and the repair worker still need to use the atomic retained demand before product activation.

@@ -89,6 +89,7 @@ internal class IndexedDbReplicaStore(
                             )
                         ),
                         Json.encodeToString(wake),
+                        "null",
                     )
                     .await<JsBoolean>()
                     .toBoolean()
@@ -113,6 +114,7 @@ internal class IndexedDbReplicaStore(
                         Json.encodeToString(scope),
                         Json.encodeToString(retained),
                         Json.encodeToString(wake),
+                        "null",
                     )
                     .await<JsBoolean>()
                     .toBoolean()
@@ -227,6 +229,7 @@ internal class IndexedDbReplicaStore(
                             )
                         ),
                         Json.encodeToString(wake),
+                        "null",
                     )
                     .await<JsBoolean>()
                     .toBoolean()

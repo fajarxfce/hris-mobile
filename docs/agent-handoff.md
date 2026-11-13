@@ -1,10 +1,34 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 12:01 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 12:42 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Atomic command archival and replica publication locally accepted
+
+Mobile.work/command-archive-replica-2026-11-13 is accepted locally: ten generic source/test paths.
+Focused 47; full 15,939 = 5877 fresh + 10062 exact unchanged.
+All 15,909 prior identities remain, plus 30 JVM/browser executions of 15 database cases.
+Source 5335/af3e5b3a351e41caf32dda8c65428c81812628603bd862f6d658fb296d10b782.
+Report 9c996746e85cb63efb302c0f2b2b1798f0d7707dc6a3bd9a2fd99a79cef4cd45.
+An exact command and one/two replica mutations now share an atomic archive transaction. Replay
+does not regenerate demand; forced final-delete failure rolls back the earlier replica writes.
+Continuous observation, competing writers, cancellation and reopening pass. Actual 15 new Apple
+cases remain pending with 86 previous cases. No terminal producer, worker or product activation.
+
+Continue the prepared ten-file Starter port in Starter.work/command-archive-replica-port-2026-11-13,
+expected full 964. It is not applied. Dispatch the prepared combined Mobile control once,
+after confirming this exact source is pushed; expected 19,362 cases (13,670 portable + 5,692 Apple).
+Its workspace is this increment's hosted-control. Do not repeat accepted control 43403331941.
+Mobile.work/space-inbox-terminal-publication-2026-11-13 contains 13 unapplied paths and 15 new shared
+tests for mandatory archival/cancellation repair publication, preserving all 17 existing storage
+methods. Its prepared scripts are not an applied implementation. Review the independent command
+and history keys and four fake signatures before applying. The finite local worker, legacy
+seeding, incoming history, admitted product list/Group graph, pending edits and clock ordering
+remain. Cancel/join old owners; do not create demand from index writes. The raw increment's apply
+scripts are historical. Push every commit and continue. Phone stays on 92 until a visible update.
 
 ## Admitted inbox repair actions locally accepted
 
@@ -31,7 +55,7 @@ Then implement bounded legacy references, incoming history and product list/Grou
 including pending edits and global clock ordering. The accepted preparation scripts are historical;
 do not reapply them. Push every commit and continue. Phone stays on92 until a visible validated update.
 
-The next raw transaction is prepared, not applied or tested, in
+The raw transaction is now locally accepted above in
 Mobile.work/command-archive-replica-2026-11-13: CommandStore.archiveAndMutate copies one exact
 command to its immutable archive together with one or two prepared replica mutations. Exact
 archive replay must leave later replica progress untouched. Room uses one public writer

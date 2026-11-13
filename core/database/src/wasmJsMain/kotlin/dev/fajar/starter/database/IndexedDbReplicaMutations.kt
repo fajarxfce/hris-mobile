@@ -5,15 +5,23 @@ package dev.fajar.starter.database
 import kotlin.js.Promise
 
 @JsFun(
-    """(db, scopeJson, mutationsJson, wakeJson) => new Promise((resolve, reject) => {
-    const scope = JSON.parse(scopeJson), mutations = JSON.parse(mutationsJson), wake = JSON.parse(wakeJson);
+    """(db, scopeJson, mutationsJson, wakeJson, archiveJson) => new Promise((resolve, reject) => {
+    const scope = JSON.parse(scopeJson), mutations = JSON.parse(mutationsJson), wake = JSON.parse(wakeJson), archive = JSON.parse(archiveJson);
     const {sessionId, accountKey = null} = scope, ownerKey = accountKey ?? '';
-    const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents', ...(wake == null ? [] : ['work_wakes'])], 'readwrite');
+    const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents', ...(wake == null ? [] : ['work_wakes']), ...(archive == null ? [] : ['durable_commands', 'command_archives'])], 'readwrite');
     const heads = tx.objectStore('replica_heads'), generations = tx.objectStore('replica_generations'), documents = tx.objectStore('replica_documents');
     const prepared = [];
     let changed = false;
     const write = index => {
-        if (index === prepared.length) { changed = true; return; }
+        if (index === prepared.length) {
+            if (archive != null) {
+                const record = archive.record;
+                tx.objectStore('command_archives').add({...record, accountKey, evidence:archive.evidence});
+                tx.objectStore('durable_commands').delete([accountKey, record.partition, record.id]);
+            }
+            changed = true;
+            return;
+        }
         const {mutation:m, partition, head, current} = prepared[index];
         if (m.type === 'replace') {
             heads.delete([ownerKey, partition]);
@@ -99,10 +107,23 @@ import kotlin.js.Promise
             row.onsuccess = () => { if (row.result) inspect(row.result); };
         };
     };
+    const admitArchive = () => {
+        if (archive == null) { preflight(0); return; }
+        const expected = archive.record, key = [accountKey, expected.partition, expected.id];
+        const matches = value => value && value.accountKey === accountKey && value.partition === expected.partition && value.id === expected.id &&
+            value.resourceId === expected.resourceId && value.sortKey === expected.sortKey && value.request === expected.request &&
+            value.state === expected.state && value.revision === expected.revision;
+        const retained = tx.objectStore('command_archives').get(key);
+        retained.onsuccess = () => {
+            if (retained.result) { changed = matches(retained.result) && retained.result.evidence === archive.evidence; return; }
+            const current = tx.objectStore('durable_commands').get(key);
+            current.onsuccess = () => { if (matches(current.result)) preflight(0); };
+        };
+    };
     const owner = tx.objectStore('account_scope').get('current');
     const account = tx.objectStore('account_scope').get('command-account');
     account.onsuccess = () => {
-        if (owner.result === sessionId && (accountKey == null || account.result === accountKey)) preflight(0);
+        if (owner.result === sessionId && (accountKey == null || account.result === accountKey)) admitArchive();
     };
     tx.oncomplete = () => resolve(changed);
     tx.onabort = () => reject(tx.error || new Error('Replica mutation failed.'));
@@ -113,4 +134,5 @@ internal external fun mutateReplicas(
     scope: String,
     mutations: String,
     wake: String,
+    archive: String,
 ): Promise<JsBoolean>

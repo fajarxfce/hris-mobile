@@ -1,0 +1,118 @@
+{
+  "accepted": true,
+  "changedPaths": [
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/CommandStore.kt",
+    "core/database/src/commonTest/kotlin/dev/fajar/starter/database/CommandArchiveMutationContract.kt",
+    "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/CommandArchiveMutationsTest.kt",
+    "core/database/src/iosTest/kotlin/dev/fajar/starter/database/AppleCommandArchiveMutationsTest.kt",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/RoomCommandStore.kt",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/BrowserDatabase.kt",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbCommandStore.kt",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbReplicaMutations.kt",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbReplicaStore.kt",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserCommandArchiveMutationsTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 47,
+    "elapsedSeconds": 55.542,
+    "sourceFiles": 5335,
+    "sourceManifestSha256": "af3e5b3a351e41caf32dda8c65428c81812628603bd862f6d658fb296d10b782",
+    "resultSha256": "b067bc8f4390af23d046ca9db19d458dd86d91b2c06b000c2a3ee665cf63fd60",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CommandArchiveMutationsTest": 15,
+      "CommandStoreTest": 16,
+      "ReplicaMutationsTest": 14
+    },
+    "priorCaseIdsRetained": true
+  },
+  "browser": {
+    "accepted": true,
+    "tests": 129,
+    "priorCaseIdsRetained": true,
+    "newPlatformMethods": 15,
+    "elapsedSeconds": 89.713,
+    "sourceManifestSha256": "af3e5b3a351e41caf32dda8c65428c81812628603bd862f6d658fb296d10b782",
+    "resultSha256": "0ed1b5576c3b5b7cfaea6280e6bd54910c7e2605220e6bf7f38421524346e8ee"
+  },
+  "full": {
+    "startedAt": "2026-11-13T12:32:50.523215+00:00",
+    "elapsedSeconds": 529.342,
+    "sourceFiles": 5335,
+    "freshCounts": {
+      "tests": 5877,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152563548,
+      "sha256": "af9b8a14942d9c14b932653dc4b815b5fdd0b35a22b1a039f5c6cdc521e2acb5"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 15939,
+    "newCases": 30,
+    "freshTests": 5877,
+    "reusedUnaffectedTests": 10062,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 109,
+    "excludedHistoricalCases": 642,
+    "sourceManifestSha256": "af3e5b3a351e41caf32dda8c65428c81812628603bd862f6d658fb296d10b782",
+    "reportManifestSha256": "9c996746e85cb63efb302c0f2b2b1798f0d7707dc6a3bd9a2fd99a79cef4cd45",
+    "nativeClaim": "Exact command archival and prepared replica mutations share one transaction; 15 new actual Apple methods remain pending. Group producer, repair worker and product integration remain separate."
+  },
+  "newPlatformMethods": 15,
+  "moduleReuseReview": {
+    "reviewed": true,
+    "beforeFullAudit": true,
+    "reason": "The audit was copied from a collaboration-domain increment. This candidate changes only core/database. Use the same fresh-report module set as accepted replica-atomic-mutations-2026-11-13: database, collaboration data, app composition and proof. Collaboration domain and presentation source manifests are unchanged and their declared dependencies exclude core/database; reuse only byte-identical previously accepted XML. Every previous class/method/platform identity remains required.",
+    "freshPrefixes": [
+      "core/database/",
+      "features/collaboration/data/",
+      "apps/shared/",
+      "apps/collaboration-proof/"
+    ],
+    "priorReference": "replica-atomic-mutations-2026-11-13/accept-full.py:31"
+  },
+  "rawTransactionIntegrated": true,
+  "groupTerminalProducerIntegrated": false,
+  "repairWorkerIntegrated": false,
+  "productGraphActivated": false,
+  "genericStarterPortRequired": true,
+  "actualNewAppleExecution": false,
+  "phoneInstalled": false,
+  "previousInstalledPhoneBuild": 92,
+  "liveChanged": false,
+  "failedCandidates": [
+    {
+      "accepted": false,
+      "session": 6895,
+      "reaped": true,
+      "sourceManifestSha256": "35a3a4fc6c616e8e3671e5cba91b81ea35a5882f439c963f28de2f1841584ec6",
+      "resultSha256": "b1552cf3b0edb3bc365e1a06674d207d03f42867d14082ddb76e14a432ce196c",
+      "partialTests": {
+        "tests": 45,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cause": "The real Room IO observer was timed with runTest virtual time. XML explicitly reports five virtual seconds in 0.029 real seconds. Preserve the five-second bound on Dispatchers.Default; keep all expectations and production source unchanged."
+    },
+    {
+      "accepted": false,
+      "session": 91839,
+      "reaped": true,
+      "sourceManifestSha256": "dc11453c007cbe186e229424ab652c00b28033245a424ec68c18d139d5ccdf8d",
+      "resultSha256": "5311f981ab0a3ee48ee38064fba2f581ff7e2e3e3d8f641de9db5dcac56c496d",
+      "partialTests": {
+        "tests": 5877,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cause": "BrowserDatabase owns separate commandChanges and replicaChanges flows. The new command transaction notified only commandChanges after also writing replicas. Pass the existing replicaChanges flow from database composition and notify both after successful transaction. Keep the continuous observation regression and real-time bound unchanged."
+    }
+  ]
+}

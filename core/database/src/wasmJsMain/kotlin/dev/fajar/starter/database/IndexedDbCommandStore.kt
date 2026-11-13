@@ -11,6 +11,7 @@ import kotlinx.serialization.json.Json
 
 internal class IndexedDbCommandStore(
     private val changes: MutableSharedFlow<Unit>,
+    private val replicaChanges: MutableSharedFlow<Unit>,
     private val database: suspend () -> JsAny,
 ) : CommandStore {
     private val codec = Json { encodeDefaults = true }
@@ -252,6 +253,36 @@ internal class IndexedDbCommandStore(
                     .await<JsBoolean>()
                     .toBoolean()
             if (changed) changes.tryEmit(Unit)
+            changed
+        }
+    }
+
+    override suspend fun archiveAndMutate(
+        scope: CommandScope,
+        expected: CommandRecord,
+        evidence: String,
+        mutations: List<ReplicaMutation>,
+    ): Boolean {
+        validateCommandArchive(scope, expected, evidence)
+        val replicaScope = ReplicaScope(scope.sessionId, scope.accountKey)
+        val retained = retainReplicaMutations(replicaScope, mutations)
+        val db = database()
+        currentCoroutineContext().ensureActive()
+        return withContext(NonCancellable) {
+            val changed =
+                mutateReplicas(
+                        db,
+                        codec.encodeToString(replicaScope),
+                        codec.encodeToString(retained),
+                        "null",
+                        codec.encodeToString(CommandArchive(expected, evidence)),
+                    )
+                    .await<JsBoolean>()
+                    .toBoolean()
+            if (changed) {
+                changes.tryEmit(Unit)
+                replicaChanges.tryEmit(Unit)
+            }
             changed
         }
     }

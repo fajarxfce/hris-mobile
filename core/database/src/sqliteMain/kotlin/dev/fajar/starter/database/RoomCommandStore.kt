@@ -1,5 +1,7 @@
 package dev.fajar.starter.database
 
+import androidx.room.immediateTransaction
+import androidx.room.useWriterConnection
 import dev.fajar.starter.database.entities.CommandEntity
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -178,6 +180,45 @@ internal class RoomCommandStore(private val database: StarterDatabase) : Command
             ),
             evidence,
         )
+    }
+
+    override suspend fun archiveAndMutate(
+        scope: CommandScope,
+        expected: CommandRecord,
+        evidence: String,
+        mutations: List<ReplicaMutation>,
+    ): Boolean {
+        validateCommandArchive(scope, expected, evidence)
+        val replicaScope = ReplicaScope(scope.sessionId, scope.accountKey)
+        val retained = retainReplicaMutations(replicaScope, mutations)
+        val candidate = expected.toEntity(scope.accountKey)
+        currentCoroutineContext().ensureActive()
+        return try {
+            database.useWriterConnection { connection ->
+                connection.immediateTransaction {
+                    val (active, archived) =
+                        dao.lookup(
+                            scope.sessionId,
+                            scope.accountKey,
+                            expected.partition,
+                            expected.id,
+                        )
+                    if (archived != null)
+                        return@immediateTransaction dao.archive(
+                            scope.sessionId,
+                            candidate,
+                            evidence,
+                        )
+                    if (active != candidate) return@immediateTransaction false
+                    if (!database.replicaDao().mutate(replicaScope, retained, null))
+                        return@immediateTransaction false
+                    check(dao.archive(scope.sessionId, candidate, evidence))
+                    true
+                }
+            }
+        } finally {
+            database.invalidationTracker.refreshAsync()
+        }
     }
 
     override suspend fun containsRecords() = dao.containsRecords()
