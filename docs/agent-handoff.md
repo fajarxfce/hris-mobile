@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 00:13 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 00:16 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -161,11 +161,32 @@ Preserve failed-handoff-publication-boundary-1: Detekt109,0 tests. The correctio
 replica publication in the owning repository, with no new helper layer or relaxed threshold.
 The16 new Apple methods need hosted execution. No new native/phone/live Group/UI latency claim.
 
-NEXT: Mobile.work/space-composer-domain-2026-11-12 contains draft editor/submit actions and
-24 focused domain methods. Not applied or compiled yet. Reuse the existing route-owned
-ChatComposerEditingSession serial write actor; it already captures gestures immediately and
-keeps subsequent input independent. Do not add a global scheduler-blocking mutex or business
-retry helpers in ViewModels. Complete bounded worker consumption before Group UI activation.
+Storage acceptance is pushed: Mobile483b9689 / Group3fac2f94;
+pushes27746/36369 REAPED. No accepted gate needs rerunning. The initial audit count omitted
+three Android-host common protocol executions: exact35 new =16 JVM +16 browser +3 Android.
+Audit-count-review-1 preserves the initial auditor and result hash; production and test
+assertions were unchanged. The final auditor requires those exact Android methods as well.
+
+ACTIVE: Mobile.work/space-composer-domain-2026-11-12, eight applied source paths.
+EditCollaborationSpaceDraft accepts a complete captured editor revision, time and content.
+SubmitCollaborationSpaceComposer accepts the immutable send gesture. Both own local Group
+admission and session checks around suspended I/O; no selected Company, clock, native SDK or
+network dependency. Exact retained facts resolve replay and uncertain responses. A bounded
+OS scheduling hint follows the atomic send handoff and cannot undo committed input.
+
+Format1/5493 REAPED PASS36.438s; focused1/32763 ACTIVE, expected72 cases. Frozen5191 inputs/
+f7820ddd43ecd3f3d3281c179d1a77b4f996a63f9c6e63cb95c4c6f09995140d.
+Full expected14,911 = all14,863 prior IDs plus48 new JVM/browser executions. The24 new
+shared Apple methods still require hosted execution. No domain/full/native/UI acceptance yet.
+Keep sources frozen until the active compiler is reaped; one compiler OR emulator.
+
+Continue bounded outbox recovery before canonical Group UI activation. Existing
+ChatComposerEditingSession already owns the serial UI-write actor, captures sends before I/O,
+and keeps subsequent typing independent. Reuse that explicit route owner with typed Group
+access; no fake Company access or ViewModel business-retry helpers. Group local materialization
+must precede native adoption/sync so missing keys or network cannot gate local persistence.
+Phone release92 remains uninstalled: bounded connections80184/36823 REAPED timeout,
+latest00:11UTC13Nov. User phone remains install-only, no UI interaction or reset.
 All54 acceptance groups remain OPEN; continue beyond this checkpoint.
 
 Hosted follow-up43312753298 on exact1f47eeddb833054ae2b3d52c20439e6d11518a02:
