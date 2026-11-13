@@ -1,34 +1,27 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 05:19 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 05:27 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
 
-## Active Group navigation increment
+## Latest Group navigation acceptance
 
-Mobile.work/space-thread-navigation-2026-11-13 has11 uncommitted application paths.
+Mobile `.work/space-thread-navigation-2026-11-13` is accepted locally, 11 source paths.
+Focused122; full15517 = 5877 fresh + 9640 exact unchanged.
+All15489 prior IDs remain, plus26 JVM/browser executions and2 desktop UI cases.
 Source5249/98f424faca8d7789abc6ef17009d5811d2148fb5c3708d9a820f99a8d01de8cf.
-Focused6/60458 REAPED PASS122/187.029s; strict focused audit passed, including actual
-NavHost/Koin/Content first-destination checks. Both prepared/reopened destinations first
-compose at frozen clock tick2 with retained messages, one model/local reader and saved draft.
-These are desktop clock ticks, not Android wall-clock latency. Three screenshots were
-recorded and individually reviewed. Format6/45012 REAPED35.648s.
+Report56aa7538df9e144571f52f1ff12f56899e940d04e23afbb14895409e6d161856.
+Immutable proof152507383B/826acc09280b527ed4df7ac177f7e7a2d1134e5aacb3ec3262d2fa73e1dc37a1.
+Strict focused/full audits and three screenshot reviews passed. Failed candidates and
+their unchanged requirements are retained in state.json and the measurement. No new
+native/phone acceptance, product Group graph or live rollout. Thirteen shared methods
+still need actual Apple execution; do not duplicate the active earlier control.
 
-Full1/57098 is ACTIVE, expected15517 =15489 prior +26 JVM/browser +2 desktop UI.
-Do not change application sources until it is reaped. record-acceptance.py is prepared;
-run full audit then record acceptance and commit/push. Product Group graph/list stays off.
-Five failed candidates are preserved in state.json: private test-route JVM visibility;
-masked lifecycle disposal (two attempts); diagnostic discovery of Desktop pointer dispatch
-calling NavController off Main; and incorrect assumption that the first global NavHost
-clock tick already contains its destination. The real button semantic action now runs on
-UI Main. Tests inspect the first composed destination within two ticks and immediately
-require rows there; they never wait for message data. No source-only pass is claimed.
-
-Next: actual local conversation list and account/Group graph including pending/draft
-previews, remaining contextual mutations, Android IME/transition evidence. Domain owns
-admission and durable commands; navigation owns only explicit presentation lifetime.
+Next: actual local conversation list and account/Group
+graph integration, including pending and draft previews; finish contextual mutations and
+Android IME/transition measurements. Reuse admitted local records without network waiting.
 
 ## Latest accepted application
 

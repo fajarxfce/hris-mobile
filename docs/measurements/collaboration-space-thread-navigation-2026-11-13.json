@@ -1,0 +1,193 @@
+{
+  "startedAt": "2026-11-13T05:17:04.679715+00:00",
+  "elapsedSeconds": 608.89,
+  "sourceFiles": 5249,
+  "freshCounts": {
+    "tests": 5877,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 152507383,
+    "sha256": "826acc09280b527ed4df7ac177f7e7a2d1134e5aacb3ec3262d2fa73e1dc37a1"
+  },
+  "fullyAccepted": true,
+  "validatedTests": 15517,
+  "newCases": 28,
+  "freshTests": 5877,
+  "reusedUnaffectedTests": 9640,
+  "priorCaseIdsPreserved": true,
+  "excludedHistoricalReports": 109,
+  "excludedHistoricalCases": 642,
+  "sourceManifestSha256": "98f424faca8d7789abc6ef17009d5811d2148fb5c3708d9a820f99a8d01de8cf",
+  "reportManifestSha256": "56aa7538df9e144571f52f1ff12f56899e940d04e23afbb14895409e6d161856",
+  "nativeClaim": "Bounded Group navigation ownership, local preparation and permanent route release; no SDK/worker change. The 13 new shared methods require hosted Apple execution. Actual NavHost desktop checks are not Android IME or native latency acceptance; no live rollout.",
+  "date": "2026-11-13",
+  "focused": {
+    "accepted": true,
+    "tests": 122,
+    "elapsedSeconds": 187.029,
+    "sourceFiles": 5249,
+    "sourceManifestSha256": "98f424faca8d7789abc6ef17009d5811d2148fb5c3708d9a820f99a8d01de8cf",
+    "resultSha256": "6af1e53c64a497e48d15294fa26e57580f58c1ac41487f1c7ab4a35ef5110811",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "SpaceChatNavigationTest": 2,
+      "ChatComposerFocusTest": 1,
+      "ChatEditorLayoutTest": 3,
+      "ChatQuotedReplyLayoutTest": 3,
+      "SpaceChatComposerFocusTest": 1,
+      "SpaceChatContentLifetimeTest": 1,
+      "SpaceChatPageLayoutTest": 6,
+      "ChatThreadViewModelStoresTest": 7,
+      "SpaceChatNavigationOwnerTest": 9,
+      "SpaceChatComposerPresentationTest": 12,
+      "SpaceChatRowPositionTest": 6,
+      "SpaceChatSelectionTest": 8,
+      "SpaceChatThreadRetentionTest": 4,
+      "SpaceChatThreadRowsTest": 15,
+      "SpaceChatThreadViewModelTest": 16,
+      "ChatComposerEditingSessionTest": 11,
+      "SpaceChatComposerEditingSessionTest": 4,
+      "ReadCollaborationSpaceThreadContextTest": 11
+    },
+    "priorCaseIdsRetained": true,
+    "firstComposedDestinationFrames": {
+      "1": 2,
+      "2": 2
+    },
+    "frameClaim": "Frozen desktop Compose clock ticks; not physical Android render latency."
+  },
+  "sourcePaths": [
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/PrepareVisibleSpaceChatThreads.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/SpaceChatNavigation.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/SpaceChatNavigationOwner.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/SpaceChatThreadContent.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadEvent.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadViewModel.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/navigation/SpaceChatNavigationOwnerTest.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadRetentionTest.kt",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/SpaceChatNavigationTest.kt"
+  ],
+  "newSharedMethods": 13,
+  "newDesktopUiMethods": 2,
+  "actualNewAppleExecutions": 0,
+  "screenshots": {
+    "artifacts": [
+      {
+        "path": "features/collaboration/presentation/build/reports/screenshots/group-chat-selection-compact.png",
+        "copy": ".work/space-thread-navigation-2026-11-13/screenshots/group-chat-selection-compact.png",
+        "bytes": 21361,
+        "sha256": "cd6157fae3baf41f7d3d1288d3affe8f72360b0ec5f7cda14ad2577ce3de0d03",
+        "width": 375,
+        "height": 780
+      },
+      {
+        "path": "features/collaboration/presentation/build/reports/screenshots/group-chat-selection-dark-large.png",
+        "copy": ".work/space-thread-navigation-2026-11-13/screenshots/group-chat-selection-dark-large.png",
+        "bytes": 37616,
+        "sha256": "08aab68370f176f284e1e07c8ee0e35c9513add4548be50cf610fea9c152b6d3",
+        "width": 375,
+        "height": 780
+      },
+      {
+        "path": "features/collaboration/presentation/build/reports/screenshots/group-chat-selection-landscape.png",
+        "copy": ".work/space-thread-navigation-2026-11-13/screenshots/group-chat-selection-landscape.png",
+        "bytes": 21032,
+        "sha256": "d86d248902e7ac8abdf1c936525cc2248e5371b48dda01f9c86efd3d221fd020",
+        "width": 720,
+        "height": 375
+      }
+    ],
+    "recordingVerified": true,
+    "visuallyReviewed": true,
+    "claim": "Desktop Compose geometry only; not Android IME or native latency.",
+    "reviewedAt": "2026-11-13T05:17:41.406167+00:00",
+    "review": {
+      "compact": "Unknown sender caption, both selected rows, day marker and disabled composer fit without clipping or overlap.",
+      "dark-large": "Large text wraps inside the received bubble; timestamps, selection checks and composer stay visible without overlapping.",
+      "landscape": "Both selection rows and composer remain within the short viewport; no header/content overlap.",
+      "limits": "Desktop Compose images; no Android IME, native delivery or physical rendering latency claim."
+    }
+  },
+  "productGraphActivated": false,
+  "newNativeExecution": false,
+  "phoneInstalled": false,
+  "liveGroupDeployed": false,
+  "exactNewMethods": {
+    "SpaceChatNavigationOwnerTest": [
+      "preparationUsesTheSameBoundAndDoesNotDisplaceVisitedOrActiveRooms",
+      "graphDisposalClearsUnopenedPreparationAndRejectsLatePreparation",
+      "removedRouteCanReopenItsSameModelWithANewEntryOwner",
+      "liveEntriesNeverShareAModelEvenForTheSameConversation",
+      "idleEvictionKeepsRecentlyReopenedAndLiveRooms",
+      "graphReplacementClearsLiveAndIdleModelsAndLateReleaseIsHarmless",
+      "separateGraphsNeverRestoreAnotherGroupsRoomStore",
+      "capacityCannotExceedThreeOrDisableTheBound",
+      "modelKeysPreserveEachAccountGroupSessionAndConversationBoundary"
+    ],
+    "SpaceChatThreadRetentionTest": [
+      "releasingAndReopeningRetainsRowsDraftAndTheExistingLocalReaders",
+      "permanentReleaseDiscardsBufferedCopyAndBackBeforeTheNextEntryCollects",
+      "releasingADepartureKeepsItsInFlightDraftWriteWithoutALateBackEffect",
+      "aLateClipboardAdmissionCannotCrossPermanentReleaseAndReentry"
+    ]
+  },
+  "exactNewUiMethods": {
+    "SpaceChatNavigationTest": [
+      "preparedRowsExistInTheFirstComposedDestinationWithoutAnotherModelOrReader",
+      "reopeningUsesUpdatedIdleRowsAndTheSameDraftInItsFirstComposedDestination"
+    ]
+  },
+  "failedCandidates": [
+    {
+      "directory": ".work/space-thread-navigation-2026-11-13/failed-private-test-route-1",
+      "run": "focused-1",
+      "session": "65417 REAPED",
+      "elapsedSeconds": 139.735,
+      "tests": 120,
+      "failures": 2,
+      "cause": "New private test route prevents Kotlin serialization JVM reflective access before NavHost layout. Make test-only route internal; preserve both first-frame assertions and production code."
+    },
+    {
+      "directory": ".work/space-thread-navigation-2026-11-13/failed-harness-disposal-2",
+      "run": "focused-2",
+      "session": "46172 REAPED",
+      "elapsedSeconds": 95.378,
+      "tests": 120,
+      "failures": 2,
+      "cause": "New NavHost harness destroys lifecycle while a destination transition remains INITIALIZED; disposal error masks earlier assertion. Dispose composition and settle lifecycle before closing test resources, preserving first-frame requirement."
+    },
+    {
+      "directory": ".work/space-thread-navigation-2026-11-13/failed-harness-disposal-3",
+      "run": "focused-3",
+      "session": "81600 REAPED before daemon restart",
+      "elapsedSeconds": 95.856,
+      "tests": 120,
+      "failures": 2,
+      "cause": "Waiting for idle in teardown did not fix INITIALIZED destination disposal. Preserve this failed attempt; capture the prior composition/assertion exception next."
+    },
+    {
+      "directory": ".work/space-thread-navigation-2026-11-13/failed-desktop-pointer-thread-4",
+      "run": "focused-4",
+      "session": "22692 REAPED",
+      "elapsedSeconds": 94.106,
+      "tests": 120,
+      "failures": 2,
+      "cause": "Diagnostic stack exposes Desktop performClick mouse dispatch invoking the test list NavController.navigate off Main; lifecycle enforcement leaves an INITIALIZED entry. Invoke the same actual button semantics action on UI thread. Production navigation unchanged."
+    },
+    {
+      "directory": ".work/space-thread-navigation-2026-11-13/failed-navigation-clock-assumption-5",
+      "run": "focused-5",
+      "session": "32370 REAPED",
+      "elapsedSeconds": 96.068,
+      "tests": 120,
+      "failures": 2,
+      "cause": "UI-thread navigation now works; message assertion fails at the first global animation tick. Next test detects the actual first composed destination within two ticks and immediately requires rows, without waiting for data."
+    }
+  ]
+}

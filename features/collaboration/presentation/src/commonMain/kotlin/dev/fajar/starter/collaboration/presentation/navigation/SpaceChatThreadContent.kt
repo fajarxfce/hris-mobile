@@ -53,17 +53,10 @@ private fun SpaceChatThreadEntry(
     val model =
         koinViewModel<SpaceChatThreadViewModel>(
             viewModelStoreOwner = owner,
-            key =
-                listOf(
-                        access.audience,
-                        access.accountId,
-                        access.spaceId,
-                        access.sessionId,
-                        conversationId,
-                    )
-                    .joinToString("") { "${it.length}:$it" },
+            key = spaceChatThreadModelKey(access, conversationId),
             parameters = { parametersOf(access, conversationId) },
         )
+    if (owner is SpaceChatThreadViewModelOwner) owner.bind(model)
     val state by model.state.collectAsStateWithLifecycle()
     val list = rememberLazyListState()
     val focus = LocalFocusManager.current

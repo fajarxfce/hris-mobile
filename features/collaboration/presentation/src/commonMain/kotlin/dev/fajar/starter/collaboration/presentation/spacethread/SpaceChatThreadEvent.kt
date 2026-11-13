@@ -7,6 +7,8 @@ sealed interface SpaceChatThreadEvent {
 
     data object Stopped : SpaceChatThreadEvent
 
+    data object RouteReleased : SpaceChatThreadEvent
+
     data class DraftChanged(val text: String) : SpaceChatThreadEvent {
         override fun toString() = "DraftChanged([redacted])"
     }

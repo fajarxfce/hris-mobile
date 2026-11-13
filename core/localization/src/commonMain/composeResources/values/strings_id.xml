@@ -982,7 +982,7 @@
     <string name="chat_encrypted_unavailable_id">Pesan ini belum dapat didekripsi.</string>
     <string name="chat_unsupported_id">Jenis pesan ini belum didukung.</string>
     <string name="chat_edited_id">Diedit</string>
-    <string name="chat_unknown_sender_id">Pengirim belum diverifikasi</string>
+    <string name="chat_unknown_sender_id">Pengirim tidak dikenal</string>
     <string name="chat_connecting_id">Menghubungkan…</string>
     <string name="chat_offline_id">Menunggu koneksi</string>
     <string name="chat_connected_id">Terhubung</string>

@@ -982,7 +982,7 @@
     <string name="chat_encrypted_unavailable_en">This message cannot be decrypted yet.</string>
     <string name="chat_unsupported_en">This message type is not supported yet.</string>
     <string name="chat_edited_en">Edited</string>
-    <string name="chat_unknown_sender_en">Sender not verified</string>
+    <string name="chat_unknown_sender_en">Unknown sender</string>
     <string name="chat_connecting_en">Connecting…</string>
     <string name="chat_offline_en">Waiting for connection</string>
     <string name="chat_connected_en">Connected</string>

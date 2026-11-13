@@ -135,3 +135,10 @@ copy and reply. Local action admission is a domain use case; the route owns clip
 and first-layout anchoring. 100 focused cases and three reviewed desktop screenshots support
 this increment. Product graph/list activation, bounded warming, remaining mutation actions
 and actual Android IME/transition measurements still follow.
+
+## Accepted bounded Group navigation
+
+An explicit account/Group owner, visible local preparation and real typed route are accepted.
+Actual desktop NavHost checks preserve prepared/reopened rows and draft state with one local
+reader. Permanent route release retires obsolete page actions. Product list/graph rollout
+and actual Android IME/latency still follow; see collaboration-space-thread-navigation.md.

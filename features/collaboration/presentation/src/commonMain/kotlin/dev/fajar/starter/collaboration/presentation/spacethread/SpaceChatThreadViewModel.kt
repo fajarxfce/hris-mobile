@@ -64,6 +64,7 @@ class SpaceChatThreadViewModel(
         on<SpaceChatThreadEvent.Prepared>(::onPrepared)
         on<SpaceChatThreadEvent.Entered>(::onEntered)
         on<SpaceChatThreadEvent.Stopped>(::onStopped)
+        on<SpaceChatThreadEvent.RouteReleased>(::onRouteReleased)
         on<SpaceChatThreadEvent.DraftChanged>(::onDraftChanged)
         on<SpaceChatThreadEvent.SendRequested>(::onSendRequested)
         on<SpaceChatThreadEvent.DraftRetryRequested>(::onDraftRetryRequested)
@@ -103,6 +104,22 @@ class SpaceChatThreadViewModel(
         pendingCopy = null
         // Retained routes keep their owned local readers to redact on logout or Group denial.
         // The bounded navigation store owns disposal; no transport work is started by this model.
+    }
+
+    private fun onRouteReleased(event: SpaceChatThreadEvent.RouteReleased) {
+        visible = false
+        pendingCopy = null
+        departure?.cancel()
+        departure = null
+        discardPendingEffects()
+        updateState {
+            it.copy(
+                selection = emptySet(),
+                selectionLimitReached = false,
+                actionFailure = null,
+                leaving = false,
+            )
+        }
     }
 
     private fun observeHistory() {
