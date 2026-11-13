@@ -1,0 +1,101 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceHistoryRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceHistoryInboxStorageContract.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceHistoryInboxStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceHistoryInboxStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceHistoryInboxStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceHistorySnapshotRepository.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 50,
+    "elapsedSeconds": 344.482,
+    "sourceFiles": 5384,
+    "sourceManifestSha256": "a537f39f2a4257a5cd7b0a9f3211b0d881e3d9ed6eed3394872033e37915a624",
+    "resultSha256": "e986a3d2edd9f1a834a9cebba63300a029a9523e39545c4956ba67d17bf656c5",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceHistorySnapshotStorageTest": 17,
+      "CollaborationSpaceInboxStorageTest": 15,
+      "CollaborationSpaceHistoryInboxStorageTest": 16
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T17:39:21.312495+00:00",
+    "elapsedSeconds": 1003.675,
+    "sourceFiles": 5384,
+    "freshCounts": {
+      "tests": 14321,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153426817,
+      "sha256": "7e373f0071d4f9926688fe09cc022b39920207fc57ef92f23de1ad4a4036f438"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16443,
+    "newCases": 32,
+    "freshTests": 14321,
+    "reusedUnaffectedTests": 2122,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "a537f39f2a4257a5cd7b0a9f3211b0d881e3d9ed6eed3394872033e37915a624",
+    "reportManifestSha256": "ade5d423e500421894faa822d13708214953ed28043afec4d51ff221e66c0623",
+    "nativeClaim": "Conditional source-checked history inbox publication; 16 shared actual-storage methods. Actual Apple execution, projection policy and incoming producer integration remain separate."
+  },
+  "newSharedMethods": 16,
+  "indexActivityLimit": 32,
+  "maxMutations": 2,
+  "sourceRevisionAndCiphertextPreserved": true,
+  "draftAndRepairWritesRejected": true,
+  "sourceKeysCreated": false,
+  "predecessorControl": {
+    "dispatched": true,
+    "portableAccepted": true,
+    "appleAccepted": false,
+    "complete": false,
+    "workflow": "collaboration-control.yml",
+    "ref": "feat/chat-send-timing-20261107",
+    "previousRun": 43455295124,
+    "previousCommit": "fe2e1cbb742dfde262182863d11b6604fe3a9c32",
+    "failedPreviousRun": 43443248470,
+    "failedPreviousCommit": "c2d9b5ea753083967adc40129187e9e5c6fcb413",
+    "expectedPortable": {
+      "desktopTest": 6727,
+      "testAndroidHostTest": 960,
+      "wasmJsBrowserTest": 6430
+    },
+    "expectedApple": {
+      "iosSimulatorArm64Test": 5980
+    },
+    "expectedTotal": 20097,
+    "newSharedMethods": 30,
+    "newDesktopIntegrationMethods": 1,
+    "status": "one job accepted; other job pending",
+    "sourceCommit": "951c308dce2dd350a901c67cf449d6913b97cacf",
+    "dispatchAttemptedAt": "2026-11-13T16:57:02.978775+00:00",
+    "dispatchExitCode": 0,
+    "runId": 43467846733,
+    "runUrl": "https://github.com/fajarxfce/hris-mobile/actions/runs/43467846733",
+    "dispatchSession": 68248,
+    "dispatchReaped": true,
+    "portableJobId": 132033900708,
+    "appleJobId": 132033900078,
+    "totalAccepted": 14117,
+    "portableAuditSession": 79580,
+    "portableAuditReaped": true
+  },
+  "publicationMethodsIncludedInPredecessorControl": false,
+  "actualNewAppleExecution": false,
+  "productGraphActivated": false,
+  "phoneInstalled": false,
+  "installedPhoneBuild": 92,
+  "liveChanged": false
+}

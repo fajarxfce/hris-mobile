@@ -1,5 +1,7 @@
 # Architecture
 
+[Conditional history publication](collaboration-space-history-inbox-publication.md) writes an inbox projection only while its authenticated source remains current.
+
 [Coherent history snapshots](collaboration-space-history-snapshot.md) resolve incoming aliases and edits under one authenticated local source revision.
 
 [Exact source checks](replica-source-checks.md) guard a projection write without changing the retained source checkpoint or ciphertext.

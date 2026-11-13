@@ -3,11 +3,13 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.history.*
+import dev.fajar.starter.collaboration.data.inbox.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceHistoryRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceHistorySnapshotRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceMessageEditRepository
+import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.*
@@ -67,6 +69,80 @@ class EncryptedCollaborationSpaceHistoryRepository(
         } catch (_: CollaborationHistoryPreparationChanged) {
             currentCoroutineContext().ensureActive()
             null
+        }
+    }
+
+    override suspend fun publishInbox(
+        access: CollaborationSpaceLocalAccess,
+        conversationId: String,
+        roomId: String,
+        sourceRevision: String,
+        publication: CollaborationSpaceInboxPublication,
+    ): AppResult<Boolean> {
+        val captured = publication.copy(activities = publication.activities.toList())
+        return withContext(Dispatchers.Default) {
+            safeStorageCall {
+                require(sourceRevision.length in 1..128)
+                require(validCollaborationSpaceInboxPublication(captured))
+                require(captured.entry.conversationId == conversationId)
+                require(captured.draft == null && captured.repair == null)
+                validateHistoryRoom(roomId)
+                val scope = spaceHistoryScope(access)
+                val sourcePartition = spaceHistoryPartition(access, conversationId)
+                val source =
+                    replicas.checkpoint(scope, sourcePartition) ?: return@safeStorageCall false
+                if (
+                    !source.published ||
+                        source.handle.generation + ":" + source.revision != sourceRevision
+                )
+                    return@safeStorageCall false
+                keys.use { content, index ->
+                    CollaborationHistoryCodec(
+                            access,
+                            conversationId,
+                            roomId,
+                            cipher,
+                            content,
+                            index,
+                        )
+                        .checkpoint(source)
+                    val partition = spaceInboxPartition(access)
+                    val initial = replicas.checkpoint(scope, partition)
+                    if (
+                        initial?.published == false ||
+                            (initial == null && captured.expected != null)
+                    )
+                        return@use false
+                    val codec = CollaborationSpaceInboxCodec(access, cipher, content, index)
+                    if (initial?.let { codec.version(it) } != captured.expected) return@use false
+                    val ids =
+                        buildList {
+                                add(codec.id("entry", conversationId))
+                                add(codec.id("draft", conversationId))
+                                captured.entry.newest?.let {
+                                    add(codec.id("activity", conversationId, it.source))
+                                }
+                                captured.activities.forEach {
+                                    add(codec.id("activity", conversationId, it.source))
+                                }
+                            }
+                            .distinct()
+                    val current = replicas.workingDocuments(scope, partition, ids)
+                    if (current.checkpoint != initial) return@use false
+                    val mutation = codec.mutation(initial, current.documents, captured)
+                    currentCoroutineContext().ensureActive()
+                    if (mutation == null) {
+                        // Equality at both reads establishes a common unchanged source/index
+                        // observation. No empty commit or artificial source revision is needed.
+                        return@use replicas.checkpoint(scope, sourcePartition) == source &&
+                            replicas.checkpoint(scope, partition) == initial
+                    }
+                    replicas.mutate(
+                        scope,
+                        listOf(ReplicaMutation.Check(sourcePartition, source), mutation),
+                    )
+                }
+            }
         }
     }
 

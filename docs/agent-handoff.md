@@ -1,39 +1,45 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 17:25 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 17:56 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Coherent history snapshots locally accepted
+## Conditional history inbox publication locally accepted
 
-Mobile .work/space-history-snapshot-2026-11-13 is accepted: eleven source/test files, 17 new shared
-methods; focused 60 / full 16,411 (14289 fresh / 2122 exact unchanged).
-All 16,377 previous identities remain plus 34 JVM/browser cases. Source 5380/
-c9479117063ef60bad895d6265b49361330a99d6adb5622e9d2720e8a8ebca59; reports 62643fc59704a52f7738d08ce860a032c3da10e67edba69d90646d2d73ddf6c7.
-The existing history instance resolves at most 16 incoming IDs under one checkpoint via bounded
-indexed reads, authenticating original/alias/edit/legacy evidence. Current hidden/redacted and
-edited originals remain available to preview policy. Missing partitions need no key, mixed
-revisions return Changed, and cancellation/operational failures are distinct. Shared edit-evidence
-mapping removes duplicate validation. Two invalid tombstone test fixtures were corrected; raw
-failed reports are retained and no production logic was changed for that fixture correction.
+Mobile .work/space-history-inbox-publication-2026-11-13 is accepted: six source/test files and
+16 new shared methods, focused 50/full 16,443 (14321 fresh / 2122 exact unchanged).
+All 16,411 preceding identities remain plus 32 JVM/browser executions. Source 5384/
+a537f39f2a4257a5cd7b0a9f3211b0d881e3d9ed6eed3394872033e37915a624; reports ade5d423e500421894faa822d13708214953ed28043afec4d51ff221e66c0623.
+The existing history repository conditions one inbox mutation on its exact retained source
+checkpoint. Source bytes/revision, independent drafts and repair references remain intact.
+No-op replay never calls mutate. Missing source needs no key, missing retained keys are not
+regenerated, conflicts return false and operational failures/cancellation remain distinct.
+Snapshot source 854d8b32 / Group 033e8420 was already accepted (focused 60/full 16,411).
 
-Next .work/space-history-inbox-publication-2026-11-13 has six unapplied source/test drafts and
-16 shared storage methods for conditional source Check plus inbox mutation. Review and verify
-those drafts; guarded application/checks are prepared (focused 50 / full 16,443 expected).
-Do not rerun the already-used preparation scripts over reviewed drafts. Both codecs share the existing
-history key format with separate authenticated namespaces. No replacement key is needed.
-Preserve source bytes/revision, independent draft and repair references; semantic replay must
-not create an empty commit. Then add admitted preview policy and the existing incoming producer,
-including replay without a new merge. Prove Group/Company original namespace from retained
-sender/content/receipt facts, never UUID equality. Keep pending edits and backward-clock anchors.
+Next .work/space-inbox-original-association-2026-11-13 has three unapplied domain/test drafts
+and 18 shared methods (focused 28/full 16,479 expected). Review/apply after this commit is pushed;
+its preparation is already used. Association is not receipt settlement, and an unmatched legacy
+record does not authorize a new History anchor. Do not choose arbitrarily if both actual command
+namespaces prove association. Then implement admitted preview policy and the incoming producer.
+Read the committed inbox-index plan's provenance investigation and supplementary
+.work/space-history-inbox-publication-2026-11-13/producer-provenance-notes.md. Exact trusted
+sender, canonical content, conversation, device room and original namespace establish display
+association; receipt confirmation remains separate. Never infer Group/Company ownership from
+UUID/text alone or coerce Staging into Staged to fabricate a receipt. Preserve immutable anchors,
+hidden/redacted/edited originals, drafts and backward-clock ordering. Retained-reference replay
+can need projection without any new history merge. Incoming completion must include the admitted
+projection outcome under the existing lifetime; use cases must not call another use case.
+Actual Company-history source snapshots/publication and single account/Group product ownership
+remain explicit work. Keep the product graph off until these producers and ownership are ready.
 
-Control 43455295124 at fe2e1cbb is accepted: 20,006 cases, including actual Apple 5,950, iOS host
-and 16 push fields. Subsequent control 43467846733 at 951c308d covers owner seeding/source guards,
-not these 17 new snapshot Apple methods; audit existing jobs without redispatching. Preserve the
-old failed control. Starter 595d025 already passed 990; this HRIS snapshot policy stays downstream.
-Keep phone release 92 and Group graph/live off until product acceptance. Push each commit and
-continue beyond this checkpoint.
+Existing control 43467846733 at 951c308d covers earlier owner seeding/source guards, not these
+16 publication or 17 snapshot Apple methods. Audit the existing jobs without redispatching;
+then collect the 33 new shared methods in a later exact-source control. Expected combined count
+would be 20,196 if this is the only subsequent source increment; preserve prior identities.
+Control 43455295124 is already accepted (20,006 / Apple 5,950, iOS host and 16 push fields).
+Starter 595d025 already passes 990; this HRIS work stays downstream. Keep release 92 until a
+meaningful validated app update and preserve live Group OFF. Push every commit and continue.
 
 ## Accepted source and existing hosted controls
 

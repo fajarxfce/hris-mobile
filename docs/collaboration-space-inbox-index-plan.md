@@ -202,3 +202,10 @@ A preview may retain PENDING until exact command acknowledgement while updating 
 hiding facts. This could avoid blocking incoming completion solely on a concurrent staging write.
 It still requires explicit policy/tests, and unproved legacy missing-origin records must not be
 associated using text/UUID alone. This is a design option for the next producer, not accepted code.
+
+## Conditional history publication — 13 November 2026
+
+The existing history repository now guards an inbox write by the retained source revision without
+changing source bytes, drafts or repair references. Focused 50/full 16,443 pass locally.
+Source/preview policy, actual Company-history sources and incoming-owner integration remain next.
+See `docs/collaboration-space-history-inbox-publication.md`; no new product collector is active.
