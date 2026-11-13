@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 00:59 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 01:10 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -215,14 +215,32 @@ failed local pass. Only a current authoritative empty completion can acknowledge
 Four additional worker cases cover capacity drainage, finite yield, recovered empty state,
 and missing native originals. All25 previously accepted worker identities remain.
 
-Format2/49614 REAPED PASS35.381s. Focused2/59794 ACTIVE, expected160 cases.
-Frozen5203/570d8e0bb4bbc605af6f6a5fcc25258924dd0c341ae2b9808f0e992ea67dfa89.
-Expected full14,999 = all14,911 prior IDs plus88 new executions:56 domain JVM/browser,
-16 cursor storage,6 protocol JVM/browser/Android and10 worker cases. The38 new shared Apple
-methods still require hosted execution. No focused/full/native acceptance claimed yet.
-Keep sources frozen until the compiler is reaped. Full checks and the affected Original/Space
-native delivery scenarios must pass before acceptance. Prior native runs remain historical.
-One compiler OR emulator; no Group UI/live deployment or phone latency claim.
+Format2/49614 REAPED PASS35.381s. Frozen5203/
+570d8e0bb4bbc605af6f6a5fcc25258924dd0c341ae2b9808f0e992ea67dfa89.
+Focused2/59794 REAPED PASS160/187.122s, strict audit passes with all prior identities.
+Full1/40638 is ACTIVE on those exact frozen sources, but a further review REJECTS this
+candidate for acceptance: an empty composer outbox can still leave queued native messages.
+The missing-device path could acknowledge those messages too early, or immediately self-wake
+when outbox work remained but keys were absent. Do not accept/commit these application sources.
+
+pending-native-review-draft contains eight UNAPPLIED correction paths. Return distinct
+pendingSubmissions/pendingMessages after a bounded validated message inventory, within the
+same five-second pass. Missing native prerequisites retain the wake with scheduler backoff
+for either kind. Inventory absence/failure cannot prove idle; cancellation and late denial
+preserve the already materialized command. Six additional domain cases and one worker case
+are drafted. The previous25 worker cases remain unchanged. Expected next focused167/full15,012
+(all14,911 prior IDs +101 new executions);44 new shared Apple methods need hosted execution.
+Let full1 finish/reap, preserve its exact candidate/reports as failed-native-pending-review-2,
+then apply only the reviewed draft, format, refreeze and repeat affected checks. Native proof
+must use the final full build; change prepare-native.py mobilePhase from full-1 to full-2 and
+freeze that exact proof. No new native/phone/UI acceptance is claimed by this review.
+
+NEXT DESIGN ONLY: Mobile.work/space-composer-observation-2026-11-13 has a local editor/outbox
+snapshot use case, fixture and ten draft tests. Not applied or compiled. Its subscription
+stays independent of history rendering and owns current account/Group admission. Complete
+lifetime/cancellation tests before applying it after recovery acceptance. Review draft tests
+against the actual immutable submission shape (id derives from original.revision).
+
 
 Continue canonical Group thread/list UI after recovery passes, reusing the route-owned serial
 composer actor and existing thread admission owner. Measure first-frame/transition behavior;
