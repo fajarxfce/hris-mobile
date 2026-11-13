@@ -1,10 +1,38 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 06:02 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 06:21 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Active catalog admission and next storage increment
+
+Mobile.work/space-catalog-admission-2026-11-13 is APPLIED,8 source paths; the old draft is historical.
+Focused2/session36443 REAPED:45 passed in349.623s, exact audit passed.
+Source5263/440dd76d6df79f42f87bc038dd0c8b8e403530201203519e09ec2290173b84a8.
+Full1/session61001 is RUNNING. Do not change application sources until reaped and audited.
+Expected15575 =15541 prior identities +34 new JVM/browser executions. No full acceptance yet.
+Failed focused1/session75064 REAPED stopped at five collection type-inference errors before tests.
+Original values, all17 method names and the failed source are preserved; only explicit assertion
+collection types changed. Formatter2/session27872 is REAPED. The focused proof is actual45.
+
+After full acceptance: record-acceptance.py is prepared; commit/push the application, then dispatch
+one collaboration-control.yml at that exact commit. Hosted scripts/configuration are prepared
+under this workspace but NOT dispatched: expected13306 portable +5510 Apple =18816, including
+navigation13, catalog12 and admission17 new actual Apple methods and two desktop navigation cases.
+The auditor preserves all immediately preceding exact identities and verifies artifact digests.
+
+Next Mobile.work/replica-atomic-mutations-2026-11-13 contains10 DRAFT source paths, not applied,
+compiled or tested. ReplicaStore.mutate will admit one/two distinct partitions with one owner,
+preflight every snapshot/delta condition, and commit the optional wake in the same transaction.
+Room reuses its existing transactional writes; IndexedDB replacement/commit share one new raw
+transaction implementation. Fourteen real storage scenarios are drafted across JVM/browser/Apple:
+conflicts, rollback, staged visibility, tombstones, ownership, mutable inputs, cancellation,
+concurrent writers, lost response and restart. Expected focused30/full15603; not actual results.
+apply.py requires the preceding full acceptance, a clean pushed checkout and original file hashes.
+All ten starter base paths match; port only after mobile acceptance. No migration is introduced.
+This enables source/index atomicity; it does not itself implement the visible activity index.
 
 ## Latest local catalog acceptance
 
@@ -16,9 +44,8 @@ Report8203a44f24c822e99cce4845a3f810d67ea450333a323547ecc1a5f602b90b72. Twelve r
 their actual Apple execution is pending. Failed-shadowed-fixture-1 preserves the unchanged
 failed requirements and source. No product list/graph, activity index or native activation.
 
-Next: review/apply Mobile.work/space-catalog-admission-2026-11-13.
-It contains8 draft paths with17 domain methods, including DI checks. These drafts are NOT
-applied or compiled. Rebase their data/app DI edits against current sources before applying.
+The follow-up catalog admission is applied and under full verification as recorded above.
+Do not reapply its historical draft.
 After local admission acceptance, one combined hosted control can cover navigation13,
 catalog12 and admission17 new Apple methods; do not repeat accepted page run43366809238.
 The persistent activity-index requirements are in collaboration-space-inbox-index-plan.md.

@@ -6,10 +6,15 @@ The user-visible list needs its own encrypted, persistent activity index with gl
 ordered queries. Reads reopen that index immediately; network discovery/delta acquisition
 remains independent. Equal source facts must preserve index rows and observation identity.
 
-The prepared domain increment in Mobile `.work/space-catalog-admission-2026-11-13` admits local catalog
-pages/version observation without credentials-age, selected-company or native-client gates.
-It has eight draft paths and17 intended domain methods. It is NOT applied or compiled.
-Apply only after the catalog full gate96127 is reaped and accepted, committed and pushed.
+The prepared domain increment in Mobile `.work/space-catalog-admission-2026-11-13` has now
+been applied: eight source paths and17 domain methods. Focused45 passes; full verification
+is running. The historical draft must not be applied again. Native execution follows the
+combined hosted control after local acceptance and commit/push.
+
+The generic atomic storage draft is in Mobile `.work/replica-atomic-mutations-2026-11-13`.
+It contains10 source paths and14 intended storage scenarios; it is NOT applied or tested.
+It must follow the current application acceptance and be ported to the starter only after
+its own mobile gates. The implementation plan below remains product work, not acceptance.
 
 The next index implementation must retain:
 
