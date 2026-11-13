@@ -44,16 +44,14 @@ after a committed source write, competing projection updates, local restart with
 and account/Group revocation. Actual list/graph activation and Android transition/IME evidence
 follow those checks. No activity index or product Group graph is activated by the catalog.
 
-## Transaction approach to review during implementation
+## Accepted raw transaction and next integration
 
-Composer drafts/outbox and history already use ReplicaStore. A bounded atomic publication
-of two replica mutations could update the source partition and the Group inbox projection
-together, preserving each expected generation/revision and account ownership. Encryption
-and policy remain outside the database transaction; the datasource receives ready ciphertext.
-Check the actual Room/IndexedDB transaction implementations before introducing this API.
-Such a general storage capability belongs in core/database and should return to the starter
-only after mobile acceptance. It must not call other datasource objects or acquire business
-policy inside a transaction. No new table or migration is assumed necessary yet.
+ReplicaStore.mutate now accepts one or two distinct partition mutations under one account.
+Every checkpoint/generation and the optional wake are checked before writing. Room and
+IndexedDB rollback/concurrency/cancellation/restart cases pass locally:14 methods on JVM
+and browser, full15,603. No schema migration is required. Starter port and actual14 Apple
+executions follow. The source repositories receive ready domain proposals, encrypt them and
+publish both raw mutations; business projection policy stays in the owning use case.
 
 The separate CommandStore should remain authoritative for send/cancel/terminal evidence.
 The inbox index can retain an exact pending original reference until command/history evidence
@@ -67,5 +65,43 @@ this design, including how a removed latest pending row reveals the previous act
 Keep projection components separate: a history update cannot clear an editable draft, and a
 command confirmation cannot replace a newer pending submission. The index CAS serializes
 concurrent component updates. The newest activity identity should remain stable through
-handoff/confirmation while visible receipts still come from actual evidence. This approach
-is planning, not an implemented transaction/index or a justification to claim UI acceptance.
+handoff/confirmation while visible receipts still come from actual evidence. The raw transaction
+is accepted; the inbox index and its product UI are still implementation work.
+
+## Concrete next boundary
+
+The source use case can read the current inbox components, apply a pure domain change and
+pass the proposed publication to the owning source repository. The repository encrypts the
+source and proposed index documents and calls ReplicaStore.mutate. It must not call the inbox
+repository, run UI ranking policy itself, or accept an unguarded second write. The proposal
+carries the expected index generation/revision as well as the immutable source expectation.
+An index conflict invalidates the entire proposal; any finite retry retains the original
+gesture and re-reads the components. Source-specific admission stays in the use case.
+
+Retain separate indexed component records for editable drafts, outgoing originals, current
+history candidates and stable placement anchors. A bounded aggregate record per conversation
+can then supply the visible preview and whole-list rank. On removal/cancellation, query the
+next candidate from that conversation's index rather than guessing from the current page.
+Keeping only one pending scalar cannot recover the previous pending message after removal.
+
+Anchors retain their first position across acknowledgement, provider alias changes and
+command retirement. Equal send timestamps need an insertion tie-breaker that survives
+restart; UUID lexical order does not establish the user's gesture order. Do not use a
+mutable command/hold revision as the original insertion order. Display timestamps remain
+the captured real message time and are separate from the retained position.
+
+Resolve an outgoing history alias through existing intent/receipt/origin validation, not
+through logicalId alone. The pending Group command has no native sender before acquisition,
+and the same logical ID can appear under another sender or original Company namespace.
+Existing Space/Original message receipts retain the physical mapping and exact original.
+
+Editing an earlier message changes its content without creating a new conversation activity.
+Pending edit overlays must target the original candidate and preserve its placement; they
+cannot enter the same new-send candidate bucket. Cancellation and confirmed local hiding
+need the same bounded fallback rule. Non-text/decryption outcomes retain their actual kind;
+the UI supplies short localized preview labels without exposing protocol terms.
+
+The current domain delivery enum is PENDING/FAILED/SENT. Server acknowledgement is distinct
+from peer delivery/read evidence. Reuse those actual facts; do not manufacture additional
+check marks from queue absence or elapsed time. A frozen composer submission cannot become
+an editable Draft preview, even if the source still retains its body during handoff.

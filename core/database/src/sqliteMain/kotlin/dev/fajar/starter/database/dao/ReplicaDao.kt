@@ -261,6 +261,67 @@ abstract class ReplicaDao {
         return true
     }
 
+    /** Every condition is checked before either partition or the shared wake is changed. */
+    @Transaction
+    open suspend fun mutate(
+        scope: ReplicaScope,
+        mutations: List<ReplicaMutation>,
+        wake: WorkWakeRequest?,
+    ): Boolean {
+        if (!owns(scope.sessionId, scope.accountKey)) return false
+        for (mutation in mutations) {
+            when (mutation) {
+                is ReplicaMutation.Replace -> {
+                    if (checkpoint(scope, mutation.partition) != mutation.expected) return false
+                    if (
+                        mutation.snapshot != null &&
+                            generation(
+                                scope.accountKey.orEmpty(),
+                                mutation.partition,
+                                mutation.snapshot.generation,
+                            ) != null
+                    )
+                        return false
+                }
+                is ReplicaMutation.Commit -> {
+                    val current = checkpoint(scope, mutation.handle.partition) ?: return false
+                    if (
+                        current.handle != mutation.handle ||
+                            current.revision != mutation.expectedRevision
+                    )
+                        return false
+                }
+            }
+        }
+        if (!retainMutationWake(wake)) return false
+        for (mutation in mutations) {
+            val written =
+                when (mutation) {
+                    is ReplicaMutation.Replace ->
+                        replace(
+                            scope,
+                            mutation.partition,
+                            mutation.expected,
+                            mutation.snapshot,
+                            null,
+                        )
+                    is ReplicaMutation.Commit ->
+                        commit(
+                            mutation.handle,
+                            mutation.expectedRevision,
+                            mutation.checkpoint,
+                            mutation.documents,
+                            mutation.publish,
+                            null,
+                        )
+                }
+            // Distinct partitions and the enclosing transaction preserve the preflight facts.
+            // A violated invariant must abort the transaction rather than commit a partial write.
+            check(written) { "Replica mutation changed after transactional preflight" }
+        }
+        return true
+    }
+
     @Transaction
     open suspend fun begin(
         scope: ReplicaScope,

@@ -1,36 +1,35 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 06:47 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 06:54 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
 
-## Active atomic replica storage increment
+## Latest atomic replica storage acceptance
 
-Mobile.work/replica-atomic-mutations-2026-11-13 is APPLIED,10 source paths.
-Formatter1/session99690 REAPED34.131s. Focused1/session63420 REAPED:30 passed in299.133s;
-strict audit passed. Full1/session64015 is RUNNING; no full acceptance yet.
+Mobile.work/replica-atomic-mutations-2026-11-13 is locally accepted,10 generic source paths.
+Focused30; full15603 = 5731 fresh plus9872 exact unchanged.
+All15575 prior IDs remain plus28 JVM/browser executions of14 real storage methods.
 Source5269/a71119ee835a632aeb714f657a7dd11e7488531a224966caa44d8902ec910239.
-Actual focused30 covers14 new raw-storage methods,14 existing replication/wake methods and2 DI.
-Expected full15603 (all15575 prior IDs +28 JVM/browser executions). Do not change candidate sources
-while the gate runs. The old draft is historical; never reapply it. Preserve any failed input
-snapshots and complete actual browser/Apple compilation gates before claiming acceptance.
+Reporte90c62e08012c2353a3b17aa24cfdedddbd9a474d3162f904f2b40b69ebc3c5b.
+No table migration, inbox activity index, product Group graph or native runtime activation.
+Actual14 new Apple executions remain pending. The source draft is historical; never reapply it.
 
-Catalog admission is committed/pushed at Mobile047584f125b182d8bd811ac343fb6a4ca30fbc9a /
-Group52e7cf17. Pushes96174/35233 and full61001 are REAPED. Do not repeat these local gates.
-Its exact hosted control43379266527 is RUNNING: portable131732963519 and Apple131732963180,
-source047584f1. Dispatch21923 is REAPED; never dispatch a duplicate. Expected13306+5510=18816.
-Auditors are ready in Mobile.work/space-catalog-admission-2026-11-13/hosted-audit.py; invoke only
-when the corresponding job completes successfully. No artifact/native acceptance yet.
+Next: commit/push this mobile acceptance, then port the10 exact generic paths to starter with
+its full platform checks. The ten pre-change starter hashes match draft-base.json. Continue
+the actual inbox activity index and source publication integration; the review is retained
+in Mobile.work/replica-atomic-mutations-2026-11-13/index-integration-review.md. Preserve each
+original command/history namespace and keep policy in domain and encryption/storage in data.
 
-After raw transaction acceptance and commit/push, port exactly the10 generic source paths
-into Starter. Starter.work/replica-atomic-mutations-port-2026-11-13 has prepared apply/check
-scripts and baseline906 metadata; sources are NOT applied. Expected934 after the28 new
-JVM/browser executions; its independent auditor still needs completion. No second local
-compiler/emulator may overlap. The activity-index integration review remains in Mobile.work/
-replica-atomic-mutations-2026-11-13/index-integration-review.md. Native14 raw-storage methods
-need a later actual Apple gate; they are not in the already-running catalog control.
+## Running catalog Apple and portable control
+
+Run43379266527 is still running at exact047584f125b182d8bd811ac343fb6a4ca30fbc9a:
+portable131732963519 and Apple131732963180. Expected13306 portable +5510 actual Apple =18816.
+Dispatch21923 is REAPED. Never dispatch a duplicate. Auditors are prepared in Mobile.work/
+space-catalog-admission-2026-11-13/hosted-audit.py; audit each job only after it succeeds.
+The14 new raw transaction methods are not included in this earlier catalog source snapshot.
+They require a later native gate. No artifact acceptance for this running control yet.
 
 ## Latest local catalog admission acceptance
 
@@ -52,7 +51,7 @@ The failed shadowed-fixture candidate and unchanged requirements remain preserve
 The combined hosted control above covers navigation13, catalog12 and admission17 new actual
 Apple methods. Expected portable13306 + Apple5510 =18816;
 independently verify identities before acceptance. Do not repeat accepted page run43366809238.
-The raw transaction increment above is now applied. Its prepared draft/apply script is
+The raw transaction increment above is now locally accepted. Its prepared draft/apply script is
 historical and must not be run again. After mobile acceptance, port the generic storage to starter,
 then integrate the persistent inbox activity index with pending/draft ranking and local repair.
 See collaboration-space-inbox-index-plan.md.

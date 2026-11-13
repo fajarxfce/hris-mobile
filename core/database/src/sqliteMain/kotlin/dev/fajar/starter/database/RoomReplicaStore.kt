@@ -65,6 +65,17 @@ internal class RoomReplicaStore(private val database: StarterDatabase) : Replica
         return dao.replace(scope, partition, expected, retained, wake)
     }
 
+    override suspend fun mutate(
+        scope: ReplicaScope,
+        mutations: List<ReplicaMutation>,
+        wake: WorkWakeRequest?,
+    ): Boolean {
+        val retained = retainReplicaMutations(scope, mutations)
+        validateWorkWakeRequest(wake)
+        currentCoroutineContext().ensureActive()
+        return dao.mutate(scope, retained, wake)
+    }
+
     override suspend fun begin(
         scope: ReplicaScope,
         partition: String,

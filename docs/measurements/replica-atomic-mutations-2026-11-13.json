@@ -1,0 +1,91 @@
+{
+  "startedAt": "2026-11-13T06:39:06.246887+00:00",
+  "elapsedSeconds": 823.586,
+  "sourceFiles": 5269,
+  "freshCounts": {
+    "tests": 5731,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 153543901,
+    "sha256": "9d83222293e6e0f7fb394e6e73543999fd98f34235635deb4452429444d7400d"
+  },
+  "fullyAccepted": true,
+  "validatedTests": 15603,
+  "newCases": 28,
+  "freshTests": 5731,
+  "reusedUnaffectedTests": 9872,
+  "priorCaseIdsPreserved": true,
+  "excludedHistoricalReports": 109,
+  "excludedHistoricalCases": 642,
+  "sourceManifestSha256": "a71119ee835a632aeb714f657a7dd11e7488531a224966caa44d8902ec910239",
+  "reportManifestSha256": "e90c62e08012c2353a3b17aa24cfdedddbd9a474d3162f904f2b40b69ebc3c5b",
+  "nativeClaim": "Atomic replica mutation storage; 14 new storage methods require actual Apple execution. No inbox projection, API, native runtime or product rollout.",
+  "date": "2026-11-13",
+  "focused": {
+    "accepted": true,
+    "tests": 30,
+    "elapsedSeconds": 299.133,
+    "sourceFiles": 5269,
+    "sourceManifestSha256": "a71119ee835a632aeb714f657a7dd11e7488531a224966caa44d8902ec910239",
+    "resultSha256": "bf94c7013d4f5c1a02757241e464d93b6ca8a0f8e4cf01f92547afb66a951f9d",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "ReplicaStoreTest": 3,
+      "ReplicaWakeTest": 11,
+      "ReplicaMutationsTest": 14
+    },
+    "priorCaseIdsRetained": true
+  },
+  "sourcePaths": [
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/ReplicaMutation.kt",
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/ReplicaStore.kt",
+    "core/database/src/commonTest/kotlin/dev/fajar/starter/database/ReplicaMutationsContract.kt",
+    "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/ReplicaMutationsTest.kt",
+    "core/database/src/iosTest/kotlin/dev/fajar/starter/database/AppleReplicaMutationsTest.kt",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/RoomReplicaStore.kt",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/dao/ReplicaDao.kt",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbReplicaMutations.kt",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbReplicaStore.kt",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserReplicaMutationsTest.kt"
+  ],
+  "newStorageMethods": 14,
+  "actualNewAppleTests": 0,
+  "productGraphActivated": false,
+  "activityIndexImplemented": false,
+  "nativeRuntimeChanged": false,
+  "failedCandidates": [],
+  "methods": [
+    "replacementAndRemovalPublishBothPartitions",
+    "mixedStagingAndDeltaKeepPublishedVisibility",
+    "eitherStaleCheckpointPreservesBothPartitionsAndWake",
+    "reusedGenerationRejectsTheWholeMutation",
+    "secondDatabaseConstraintFailureRollsBackFirstMutationAndWake",
+    "tombstonesVersionsAndTagsRetainTheirExistingSemantics",
+    "replacementAccountCannotWriteAndRenewedOwnerKeepsOriginals",
+    "invalidBatchesAreRejectedBeforeAnyMutation",
+    "wakeCapacityOrReusedGenerationPreservesBothPartitions",
+    "competingWritersCommitOnlyOneConsistentPair",
+    "callerCollectionMutationCannotChangeTheCapturedWrite",
+    "cancelledWritesLeaveEitherAllOrNoneCommitted",
+    "lostResponseReadbackCannotResurrectAnAcknowledgedWake",
+    "bothPartitionsAndWakeSurviveRestart"
+  ],
+  "sourceImpactReview": {
+    "reason": "The changed core/database dependency affects collaboration data and app composition. Collaboration domain/presentation have no database/data dependency; unchanged reports still require exact baseline hashes and all prior case IDs. No source, test identity, assertion or requested task changed.",
+    "requiredFreshPrefixes": [
+      "core/database/",
+      "features/collaboration/data/",
+      "apps/shared/",
+      "apps/collaboration-proof/"
+    ],
+    "reviewedModules": {
+      "features/collaboration/domain/build.gradle.kts": "68268c5f45d1e2297d9b5ff2682e72d60ff931fe198af614aa4debc90078184a",
+      "features/collaboration/presentation/build.gradle.kts": "abfadc9fe4c71b5feef867b8876e9159e4d4857542964016e217adbac3f7df02"
+    },
+    "changedOnlyAuditorBeforeFullResult": true
+  }
+}

@@ -45,6 +45,19 @@ interface ReplicaStore {
         wake: WorkWakeRequest? = null,
     ): Boolean
 
+    /**
+     * Applies one or two mutations to distinct partitions under the same account owner. Each entry
+     * retains the replacement/commit semantics and 200-document, 4MiB bounds. All expected
+     * checkpoints, generations and the optional wake are checked in one write transaction; any
+     * conflict changes neither partition nor wake. Database failure rolls back every write. A
+     * cancelled caller may lose a committed response; it cannot leave a partially committed pair.
+     */
+    suspend fun mutate(
+        scope: ReplicaScope,
+        mutations: List<ReplicaMutation>,
+        wake: WorkWakeRequest? = null,
+    ): Boolean
+
     /** Starts a replacement without exposing its incomplete documents to readers. */
     suspend fun begin(
         scope: ReplicaScope,

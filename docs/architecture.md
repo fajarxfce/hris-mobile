@@ -1,5 +1,7 @@
 # Architecture
 
+[Atomic replica mutations](replica-atomic-mutations.md) publish two owned source/projection writes and their recovery wake as one conditional transaction.
+
 [Owned local catalog admission](collaboration-space-catalog-admission.md) keeps finite reads and version observation independent from credentials age while enforcing account/Group denial.
 
 [Local Group conversation catalog](collaboration-space-conversation-catalog.md) enumerates authenticated canonical pairs for a separate persistent activity index.
