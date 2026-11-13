@@ -1,5 +1,14 @@
 # Template updates
 
+## Atomic replica publication — port complete
+
+[Starter36fa855](https://github.com/fajarxfce/compose-fluent-starter/commit/36fa855c58772d4863d27ba6c4e28123dea9a441)
+ports ten exact files from Mobile0734dd82. Both partition changes and their optional wake
+commit together. Independent validation passes934 cases, retaining all906 prior identities,
+plus Android, web and iOS compilation. Actual Apple execution of the14 new methods remains
+pending. [Evidence](https://github.com/fajarxfce/compose-fluent-starter/blob/36fa855c58772d4863d27ba6c4e28123dea9a441/docs/measurements/replica-atomic-mutations-port-2026-11-13.json).
+
+
 ## Kotlin browser reporting — port complete
 
 [Starter badfc0d](https://github.com/fajarxfce/compose-fluent-starter/commit/badfc0d)

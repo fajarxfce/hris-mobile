@@ -1,22 +1,21 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 06:59 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 07:12 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
 
-## Active starter port
+## Starter transaction port accepted and pushed
 
-Mobile transaction source0734dd82f6a017345e350c6d4de6d330b7539067 is committed/pushed;
-Group evidence914cdc1a is pushed. Mobile full64015 and pushes57072/66511 are REAPED.
-The10 exact generic paths are APPLIED to Starter basebadfc0dddc4ef382f1dde473f7b200eddfc09e76,
-branchfeat/network-inspector-20261107. Starter.work/replica-atomic-mutations-port-2026-11-13
-full-1/session1090 is RUNNING. Expected934 =906 retained +28 new JVM/browser executions;
-no Starter acceptance yet. Its apply/check/accept/publish scripts are prepared. Do not reapply
-or run another local compiler/emulator until1090 is reaped. Keep pinned Inspector742a2d1c intact.
-After success, audit the exact source/reports, publish evidence, commit/push the Starter port,
-then record its final commit in Mobile template-updates and continue inbox implementation.
+Starter36fa855c58772d4863d27ba6c4e28123dea9a441 contains the10 exact generic files from Mobile0734dd82.
+Independent full934 =456 fresh +478 exact unchanged; all906 prior identities retained,
+plus28 actual JVM/browser executions. Android three variants, lint, production Web and
+Apple source/test compilation pass. Full1090 and push24712 are REAPED. No compiler or
+emulator remains active. Keep Inspector742a2d1c pinned. Evidence:
+https://github.com/fajarxfce/compose-fluent-starter/blob/36fa855c58772d4863d27ba6c4e28123dea9a441/docs/measurements/replica-atomic-mutations-port-2026-11-13.json
+Continue the actual inbox index and source publication integration. Fourteen new storage
+methods still require actual Apple execution; catalog control43379266527 excludes them.
 
 ## Latest atomic replica storage acceptance
 
@@ -28,7 +27,7 @@ Reporte90c62e08012c2353a3b17aa24cfdedddbd9a474d3162f904f2b40b69ebc3c5b.
 No table migration, inbox activity index, product Group graph or native runtime activation.
 Actual14 new Apple executions remain pending. The source draft is historical; never reapply it.
 
-The exact generic Starter port is running as recorded above. The ten pre-change starter hashes match draft-base.json. Continue
+The exact generic Starter port is accepted and pushed as recorded above. Continue
 the actual inbox activity index and source publication integration; the review is retained
 in Mobile.work/replica-atomic-mutations-2026-11-13/index-integration-review.md. Preserve each
 original command/history namespace and keep policy in domain and encryption/storage in data.
@@ -63,8 +62,7 @@ The combined hosted control above covers navigation13, catalog12 and admission17
 Apple methods. Expected portable13306 + Apple5510 =18816;
 independently verify identities before acceptance. Do not repeat accepted page run43366809238.
 The raw transaction increment above is now locally accepted. Its prepared draft/apply script is
-historical and must not be run again. After mobile acceptance, port the generic storage to starter,
-then integrate the persistent inbox activity index with pending/draft ranking and local repair.
+historical and must not be run again. The generic storage is now ported and independently accepted in Starter; integrate the persistent inbox activity index with pending/draft ranking and local repair.
 See collaboration-space-inbox-index-plan.md.
 
 Apple local consumer is accepted on isolatedd21fdf34 (8 Python guards;45 frozen files).
