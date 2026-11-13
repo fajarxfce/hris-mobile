@@ -2,12 +2,19 @@ name: SDK8 Apple native candidate
 
 on:
   workflow_dispatch:
+    inputs:
+      recheck_completed_candidate:
+        description: Recheck exact completed SDK8 framework and Swift cleanup, without rebuilding Rust
+        type: boolean
+        default: false
   push:
     branches: [main, feat/chat-send-timing-20261107]
     paths:
       - .github/workflows/collaboration-apple-sdk.yml
       - tool/build_collaboration_apple_sdk.py
       - tool/test_build_collaboration_apple_sdk.py
+      - tool/recheck_collaboration_apple_sdk.py
+      - tool/test_recheck_collaboration_apple_sdk.py
       - tool/collaboration-apple-sdk-proof/**
       - tool/collaboration-apple-proof/**
       - tool/collaboration-sdk-patches/apple-incoming-hints-build.json
@@ -16,6 +23,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: collaboration-apple-sdk-${{ github.ref }}
@@ -31,6 +39,7 @@ jobs:
         with:
           path: mobile
       - uses: actions/checkout@v4
+        if: ${{ !inputs.recheck_completed_candidate }}
         with:
           repository: matrix-org/matrix-rust-sdk
           ref: 8de215a0aa0026afa5754ae5f05a6d168d1a1d60
@@ -42,18 +51,27 @@ jobs:
           swift --version
           uname -m
       - name: Verify builder guards
-        run: python3 -m unittest discover -s mobile/tool -p test_build_collaboration_apple_sdk.py
+        run: |
+          python3 -m unittest discover -s mobile/tool -p test_build_collaboration_apple_sdk.py
+          python3 -m unittest discover -s mobile/tool -p test_recheck_collaboration_apple_sdk.py
       - name: Build pinned SDK8 and run actual Swift crypto and ownership contracts
+        if: ${{ !inputs.recheck_completed_candidate }}
         run: |
           python3 mobile/tool/build_collaboration_apple_sdk.py \
             --sdk "$GITHUB_WORKSPACE/sdk" \
             --output "$GITHUB_WORKSPACE/artifact" --bootstrap
+      - name: Recheck completed SDK8 and inspect Swift fixture cleanup
+        if: ${{ inputs.recheck_completed_candidate }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 mobile/tool/recheck_collaboration_apple_sdk.py --output "$GITHUB_WORKSPACE/artifact"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: sdk8-apple-native-candidate
           path: |
             artifact/result.json
+            artifact/origin.json
             artifact/build.log
             artifact/swift-tests.xml
             artifact/symbol-reader-probe/

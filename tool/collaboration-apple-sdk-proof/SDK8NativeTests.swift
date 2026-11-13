@@ -6,8 +6,11 @@ final class SDK8NativeTests: XCTestCase {
     func testPassphraseIdentityReaderPreservesKeysAndRejectsAnUnrelatedPassphrase() async throws {
         let fixture = try SDK8StoreFixture()
         defer { fixture.remove() }
+        fixture.recordFiles("before-first-client")
         let first = try await fixture.fingerprint()
+        fixture.recordFiles("after-first-client")
         let restored = try await fixture.fingerprint()
+        fixture.recordFiles("after-restored-client")
         XCTAssertEqual(first, restored)
         // Both clients have left their owning function before this blocking, local-only read.
         let identity = try readExistingCryptoIdentity(
@@ -18,6 +21,7 @@ final class SDK8NativeTests: XCTestCase {
         XCTAssertEqual(identity.deviceId, "PROOF_APPLE")
         XCTAssertEqual(identity.ed25519Key, first)
         XCTAssertFalse(identity.curve25519Key.isEmpty)
+        fixture.recordFiles("after-existing-identity-read")
         do {
             _ = try readExistingCryptoIdentity(
                 databaseDirectory: fixture.directory.appendingPathComponent("store").path,
@@ -27,8 +31,10 @@ final class SDK8NativeTests: XCTestCase {
         } catch {
             XCTAssertTrue(error is ExistingCryptoIdentityError)
         }
+        fixture.recordFiles("after-unrelated-passphrase-refusal")
         let afterRefusal = try await fixture.fingerprint()
         XCTAssertEqual(afterRefusal, first)
+        fixture.recordFiles("after-final-client")
     }
 
     func testMissingStoreReadDoesNotCreateFiles() async throws {
@@ -66,7 +72,44 @@ private struct SDK8StoreFixture {
         )
     }
 
-    func remove() { try? FileManager.default.removeItem(at: directory) }
+    func remove(file: StaticString = #filePath, line: UInt = #line) {
+        recordFiles("before-cleanup")
+        do {
+            try FileManager.default.removeItem(at: directory)
+            XCTAssertFalse(FileManager.default.fileExists(atPath: directory.path), file: file, line: line)
+            print("SDK8 fixture cleanup completed")
+        } catch {
+            recordFiles("cleanup-failed")
+            let failure = error as NSError
+            XCTFail("SDK8 fixture cleanup failed: \(failure.domain)/\(failure.code)", file: file, line: line)
+        }
+    }
+
+    /// File metadata only, inside this fictional fixture. Never print keys, tokens or file bodies.
+    func recordFiles(_ phase: String) {
+        let manager = FileManager.default
+        var files = [directory]
+        if let contents = manager.enumerator(at: directory, includingPropertiesForKeys: nil) {
+            for case let file as URL in contents {
+                if files.count == 64 { break }
+                files.append(file)
+            }
+        }
+        print("SDK8 fixture phase: \(phase)")
+        for file in files {
+            do {
+                let attributes = try manager.attributesOfItem(atPath: file.path)
+                let name = file == directory ? "." : String(file.path.dropFirst(directory.path.count + 1))
+                let mode = attributes[.posixPermissions] ?? "absent"
+                let immutable = attributes[.immutable] ?? "absent"
+                let appendOnly = attributes[.appendOnly] ?? "absent"
+                print("SDK8 fixture file: \(name), mode=\(mode), immutable=\(immutable), appendOnly=\(appendOnly)")
+            } catch {
+                let failure = error as NSError
+                print("SDK8 fixture metadata failure: \(failure.domain)/\(failure.code)")
+            }
+        }
+    }
 
     func client() async throws -> Client {
         let store = SqliteStoreBuilder(

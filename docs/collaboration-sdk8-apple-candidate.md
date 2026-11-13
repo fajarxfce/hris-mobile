@@ -72,3 +72,27 @@ The standalone test source and executable are retained in the hosted artifact.
 See [failure and correction evidence](measurements/collaboration-sdk8-apple-crate-units-2026-11-13.json).
 The four native Swift contracts and both iOS links remain required; Linux selector
 tests do not establish Apple runtime acceptance. Android SDK8 is unchanged.
+
+## Completed framework and Swift cleanup investigation
+
+Run43349484661 at6cc04d1f completed all five native architectures and required symbols.
+The crate-unit correction also passed all eight probe tests and resolved the Swift link
+failure. Four actual Swift cases then ran: three passed, while the passphrase continuity
+case reported NSCocoaErrorDomain513/POSIX EPERM when removing its temporary UUID directory.
+The XML report was not produced and iOS link checks did not run. This is not native acceptance.
+The complete failed artifact14009837009 and logs are retained with verified GitHub digest,
+ZIP CRC and every recorded package/proof file. Its SHA256 is
+1fd951cc4f0c71adcbf4f1914d31f191ecb8c6dfcc1ac40a86eb0d8474d094ca.
+
+The existing workflow now has an explicit `recheck_completed_candidate` option. It uses
+only that exact run/job/commit/artifact and verifies its immutable native package, manifest,
+all five architectures and required exports before rerunning Swift and both iOS links.
+It never rebuilds or publishes Rust. The original raw-key contract remains byte-for-byte
+unchanged. The SDK8 fixture retains all four test identities and assertions, adds bounded
+file-metadata phase diagnostics, and makes cleanup failure explicit instead of ignoring it.
+No file contents, passphrases, tokens or fingerprints are printed. Root cause remains under
+investigation; diagnostics do not count as a fix or successful native execution.
+
+The 20 existing builder guards and nine new recheck guards pass locally. The new verifier
+also checked the actual retained archive and all49 recorded package/proof files. Local
+checks execute no Swift. See [failure and local guard evidence](measurements/collaboration-sdk8-apple-proof-cleanup-2026-11-13.json).
