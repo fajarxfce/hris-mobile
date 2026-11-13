@@ -39,8 +39,8 @@ close/reopen. Focused176, browser171 and full16868 retain all16841 prior cases p
 executions. Linux Apple source/test compilation is separate from actual Apple execution, which
 is still outstanding. No chat owner, UI, phone build or live deployment was activated here.
 
-Port the exact generic code/schema/tests to Compose Fluent Starter only after this Mobile source
-is committed and pushed, then run its independent checks. HRIS readers still need authenticated
+The exact21 generic code/schema/test files are independently accepted in Compose Fluent Starter
+with1049 cases and pushed at 092fbe6f70475efe950c697d3b7c6ec46b1fb267. HRIS readers still need authenticated
 history-reference mapping, durable bounded progress and integration with existing incoming/repair
 owners before product activation. See the incremental history plan for those remaining boundaries.
 

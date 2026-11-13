@@ -20,8 +20,7 @@ Schema generation23295 is REAPED0 but is not test evidence: its initial input ca
 completion of apply76168. Fixed-source focused/full validation above owns source acceptance.
 One existing unchanged expect-object warning was explicitly matched to its prior accepted log.
 
-Next port these21 exact generic paths to Starter after Mobile push; independent Starter1049 is
-expected from1022+27. Preserve Inspector742a2d1c. Then add authenticated Group/actual-Company history
+Starter port 092fbe6f70475efe950c697d3b7c6ec46b1fb267 is independently accepted and pushed:1049 cases, all1022 prior identities plus27. The21 generic files are byte-identical to Mobile source de4d59d1a8f60e309dd2715e4c52e0098ed91b32. Source/report hashes are in docs/measurements/replica-change-starter-link-2026-11-13.json. Preserve Inspector742a2d1c. Then add authenticated Group/actual-Company history
 change readers and durable finite progress under existing incoming/repair ownership. Twelve formatted UNAPPLIED drafts now exist in .work/history-local-change-enumeration-2026-11-13,
 including15 shared storage test methods and two same-instance DI assertions. They add exact stable
 source cursor ownership and one captured authenticated page through existing Group/Company repos.
@@ -70,7 +69,7 @@ class/method/platform identity retained, raw full-name identity false. Two rejec
 archived. This does not make the Apple job or whole run accepted.
 Accepted43498640097 remains20459/6100 actual Apple and excludes all later HRIS increments.
 
-Incremental raw storage is now locally accepted as recorded above. Continue the pending Starter port and authenticated history reader from the current opening; do not rerun historical apply/check scripts.
+Incremental raw storage is now locally accepted as recorded above. Continue the authenticated history reader from the current opening; do not rerun historical apply/check scripts.
 
 Read owner-integration-review.md for actual worker/use-case boundaries.
 Continue owner integration: already-materialized incoming references still need index publication

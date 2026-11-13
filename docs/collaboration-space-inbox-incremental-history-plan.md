@@ -43,6 +43,47 @@ This reusable capability must be proven in Mobile and ported with tests/migratio
 Apple fixture correction and its blocked gate-script attempt are separate; do not reproduce that
 blocked payload. Do not change inputs of an active verification process.
 
-Current raw storage acceptance:21 paths, focused176, browser171 and full16868. The initial full run failed4 browser cases; concrete cursor JSON and a complete browser9 predecessor fixture corrected them. All original cases and failed identities remain. Focused non-browser inputs are byte-identical across the two browser-only fixes. See replica-change-pages.md and its exact-source measurement. Independent Starter1049 remains required before the next HRIS source increment.
+Current raw storage acceptance:21 paths, focused176, browser171 and full16868. The initial full run failed4 browser cases; concrete cursor JSON and a complete browser9 predecessor fixture corrected them. All original cases and failed identities remain. Focused non-browser inputs are byte-identical across the two browser-only fixes. See replica-change-pages.md and its exact-source measurement. Independent Starter1049 is accepted and pushed at 092fbe6f70475efe950c697d3b7c6ec46b1fb267; its21 generic files are byte-identical. The next HRIS increment may proceed.
 
 The authenticated history reader has12 reviewed/formatted unapplied drafts and15 shared storage methods. Its focused55/full16898 gates have not run. Admitted local access, durable progress, existing incoming/repair integration and UI activation remain pending.
+
+## Existing owner follow-up — not implemented
+
+The accepted raw feed and drafted authenticated reader do not themselves schedule anything.
+Actual writers EncryptedCollaborationSpaceHistoryRepository.merge/mergeEdits and the Company
+history writer commit raw source changes without an inbox recovery wake. The existing Group
+repair owner currently observes only original command inventory and its repair-demand stream.
+It does not observe the canonical catalog or retained history. Merely adding a reader would
+therefore leave an already-open list unaware of new incoming content.
+
+Integration must provide all of these together:
+- A coalesced account-owned history-change signal committed with effective source changes.
+  WorkWakeStore alone is application-global and has no observe contract, so its existing atomic
+  WorkWakeRequest support is insufficient for this local owner. Review the existing atomic replica
+  mutation capability for an owned observable signal; do not add polling to bridge that gap.
+  Exact replay must not generate fresh work. Company history may exist before Group binding, so
+  signal identity cannot assume a current Group.
+- The existing account/Group repair owner observes canonical catalog version plus the owned
+  history signal. A newly materialized binding requests finite backfill of existing Company facts.
+  No permanent per-room subscriptions, extra polling scheduler, or network acquisition is needed.
+- Durable progress preserves a finite catalog pass and each actual source's captured raw window.
+  Large source windows must yield to other conversations and resume after process/turn boundaries.
+  New messages do not restart that captured interval. Completion uses window.throughRevision.
+- Unresolved references need a durable handoff before cursor advancement; a permanently unresolved
+  alias must not block all later originals in that conversation or cause unbounded immediate retry.
+  Extend repair ownership/storage deliberately instead of introducing another worker queue.
+- Existing incoming completion can rely on a proven atomic durable handoff only after the source
+  writer and recovery path are actually integrated and tested. Previously retained sources and
+  pre-binding Company content require explicit startup/catalog recovery evidence. Otherwise split
+  retained proof preparation from traversal resolution; do not complete on uncertain publication.
+- Current global repair worker treats its 256-page/30-second budget as a failure and then waits
+  for new demand. History continuation must distinguish successful finite progress with more work
+  from operational failure: continue owned bounded turns with cancellation/yield, while failures
+  park until a real signal or owner restart. Never spin on the same cursor or self-generated wake.
+
+Required behavioral evidence includes stopped process between each durable handoff, missing and
+later-created binding, old Company content, unchanged reopen, concurrent new messages while a
+large interval is visited, a hot room alongside cold rooms, unresolved references alongside later
+originals, denied/replaced account, joined cancellation, and no request loop for exact replay.
+This review selects no new production entity/schema yet. It is a concrete integration checklist,
+not acceptance or an active observer. Keep use-case orchestration out of repositories/ViewModels.
