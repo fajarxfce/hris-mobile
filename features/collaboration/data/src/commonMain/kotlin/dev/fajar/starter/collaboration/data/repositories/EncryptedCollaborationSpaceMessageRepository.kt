@@ -2,7 +2,9 @@
 
 package dev.fajar.starter.collaboration.data.repositories
 
+import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.data.identity.CollaborationSpaceCommandKeys
+import dev.fajar.starter.collaboration.data.inbox.*
 import dev.fajar.starter.collaboration.data.messages.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
@@ -23,11 +25,14 @@ class EncryptedCollaborationSpaceMessageRepository(
     private val commands: CommandStore,
     private val cipher: ContentCipher,
     @Named("command-content-key") credentials: AtomicCredentialStore,
+    private val replicas: ReplicaStore,
+    @Named("collaboration-history-content-key") historyCredentials: AtomicCredentialStore,
 ) :
     CollaborationSpaceMessageRepository,
     CollaborationSpaceMessageCompletionRepository,
     CollaborationSpaceMessageCancellationRepository {
     private val keys = CollaborationSpaceCommandKeys(commands, cipher, credentials)
+    private val historyKeys = CollaborationHistoryKeys(replicas, cipher, historyCredentials)
     private val insertions = Mutex()
 
     override fun observe(access: CollaborationSpaceLocalAccess, conversationId: String?) =
@@ -203,7 +208,9 @@ class EncryptedCollaborationSpaceMessageRepository(
     override suspend fun archiveCompletion(
         access: CollaborationSpaceLocalAccess,
         completion: CollaborationSpaceMessageCompletion,
+        repair: CollaborationSpaceInboxRepairPublication,
     ) = safeStorageCall {
+        require(validCollaborationSpaceInboxRepairPublication(repair))
         require(completion.eventIds.size in 1..128)
         val detached = completion.copy(eventIds = completion.eventIds.toList())
         require(validCollaborationSpaceMessageCompletion(access, detached))
@@ -220,7 +227,7 @@ class EncryptedCollaborationSpaceMessageRepository(
                     else {
                         val proof = codec.completion(active, detached.eventIds)
                         currentCoroutineContext().ensureActive()
-                        commands.archive(spaceMessageScope(access), active, proof)
+                        archiveWithRepairDemand(access, active, proof, repair)
                     }
                 }
             }
@@ -229,7 +236,9 @@ class EncryptedCollaborationSpaceMessageRepository(
     override suspend fun cancel(
         access: CollaborationSpaceLocalAccess,
         expected: CollaborationSpaceMessageRecord,
+        repair: CollaborationSpaceInboxRepairPublication,
     ) = safeStorageCall {
+        require(validCollaborationSpaceInboxRepairPublication(repair))
         require(validCollaborationSpaceMessageCancellation(access, expected))
         val raw = lookup(access, expected.intent.id)
         if (raw.active == null && raw.archived == null) false
@@ -246,10 +255,40 @@ class EncryptedCollaborationSpaceMessageRepository(
                     else {
                         val proof = codec.cancellation(active)
                         currentCoroutineContext().ensureActive()
-                        commands.archive(spaceMessageScope(access), active, proof)
+                        archiveWithRepairDemand(access, active, proof, repair)
                     }
                 }
             }
+    }
+
+    private suspend fun archiveWithRepairDemand(
+        access: CollaborationSpaceLocalAccess,
+        active: CommandRecord,
+        proof: String,
+        repair: CollaborationSpaceInboxRepairPublication,
+    ): Boolean {
+        val scope = spaceHistoryScope(access)
+        val partition = spaceInboxRepairProgressPartition(access)
+        val raw = replicas.checkpoint(scope, partition)
+        if (raw == null && repair.expected != null) return false
+        return historyKeys.use(create = raw == null && repair.expected == null) { content, _ ->
+            val codec = CollaborationSpaceInboxRepairProgressCodec(access, cipher, content)
+            val retained = raw?.let { codec.decode(it) }
+            if (retained != repair.expected) return@use false
+            val snapshot =
+                ReplicaSnapshot(
+                    repair.replacement.generation,
+                    codec.encode(repair.replacement),
+                    emptyList(),
+                )
+            currentCoroutineContext().ensureActive()
+            commands.archiveAndMutate(
+                spaceMessageScope(access),
+                active,
+                proof,
+                listOf(ReplicaMutation.Replace(partition, raw, snapshot)),
+            )
+        }
     }
 
     private suspend fun lookup(access: CollaborationSpaceLocalAccess, id: String): CommandLookup {

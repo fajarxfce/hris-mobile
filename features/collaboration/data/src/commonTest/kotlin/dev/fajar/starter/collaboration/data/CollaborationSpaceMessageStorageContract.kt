@@ -1,14 +1,21 @@
+@file:OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
 package dev.fajar.starter.collaboration.data
 
+import dev.fajar.starter.collaboration.data.history.*
+import dev.fajar.starter.collaboration.data.inbox.*
 import dev.fajar.starter.collaboration.data.messages.*
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationMessageRepository
+import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationSpaceInboxRepairProgressRepository
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationSpaceMessageRepository
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
 import kotlin.io.encoding.Base64
 import kotlin.test.*
 import kotlin.time.Instant
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
@@ -35,7 +42,13 @@ abstract class CollaborationSpaceMessageStorageContract {
         )
 
     private fun CollaborationHistoryFixture.messages(store: CommandStore = database.commands) =
-        EncryptedCollaborationSpaceMessageRepository(store, cipher, keys)
+        EncryptedCollaborationSpaceMessageRepository(
+            store,
+            cipher,
+            commandKeys,
+            database.replicas,
+            keys,
+        )
 
     private suspend fun CollaborationHistoryFixture.readMessage(
         id: String,
@@ -166,8 +179,14 @@ abstract class CollaborationSpaceMessageStorageContract {
                 sent,
                 listOf((sent.state as CollaborationMessageState.Sent).eventId, "\$alias"),
             )
-        assertEquals(AppResult.Success(true), f.messages().archiveCompletion(f.local(), completion))
-        assertEquals(AppResult.Success(true), f.messages().archiveCompletion(f.local(), completion))
+        assertEquals(
+            AppResult.Success(true),
+            f.messages().archiveCompletion(f.local(), completion, f.repairRequest()),
+        )
+        assertEquals(
+            AppResult.Success(true),
+            f.messages().archiveCompletion(f.local(), completion, f.repairRequest()),
+        )
         assertEquals(
             AppResult.Success(completion),
             f.messages().readCompletion(f.local(), sent.intent.id),
@@ -178,8 +197,14 @@ abstract class CollaborationSpaceMessageStorageContract {
             f.messages().insert(f.local(), other),
         )
         val queued = f.readMessage(other.id)
-        assertEquals(AppResult.Success(true), f.messages().cancel(f.local(), queued))
-        assertEquals(AppResult.Success(true), f.messages().cancel(f.local(), queued))
+        assertEquals(
+            AppResult.Success(true),
+            f.messages().cancel(f.local(), queued, f.repairRequest()),
+        )
+        assertEquals(
+            AppResult.Success(true),
+            f.messages().cancel(f.local(), queued, f.repairRequest()),
+        )
         assertEquals(AppResult.Success(null), f.messages().readCompletion(f.local(), other.id))
         val key = CollaborationSpaceRecoveryWake.WORK_KEY
         val wake = assertNotNull(f.database.workWakes.get(key))
@@ -270,17 +295,20 @@ abstract class CollaborationSpaceMessageStorageContract {
             f.messages().insert(f.local(), value),
         )
         val queued = f.readMessage(value.id)
-        val key = assertNotNull(f.keys.read())
+        val key = assertNotNull(f.commandKeys.read())
         for (archived in listOf(false, true)) {
             if (archived)
-                assertEquals(AppResult.Success(true), f.messages().cancel(f.local(), queued))
+                assertEquals(
+                    AppResult.Success(true),
+                    f.messages().cancel(f.local(), queued, f.repairRequest()),
+                )
             val before = f.rawMessages()
-            f.keys.write(null)
+            f.commandKeys.write(null)
             assertIs<AppResult.Failed>(f.messages().get(f.local(), value.id))
             assertIs<AppResult.Failed>(f.messages().insert(f.local(), intent(f.local(), 2)))
-            assertNull(f.keys.read())
+            assertNull(f.commandKeys.read())
             assertEquals(before, f.rawMessages())
-            f.keys.write(key)
+            f.commandKeys.write(key)
             assertEquals(
                 if (archived) CollaborationMessageState.Cancelled
                 else CollaborationMessageState.Queued,
@@ -323,7 +351,10 @@ abstract class CollaborationSpaceMessageStorageContract {
                 sent,
                 listOf((sent.state as CollaborationMessageState.Sent).eventId),
             )
-        assertEquals(AppResult.Success(true), f.messages().archiveCompletion(f.local(), completion))
+        assertEquals(
+            AppResult.Success(true),
+            f.messages().archiveCompletion(f.local(), completion, f.repairRequest()),
+        )
         val raw =
             assertNotNull(
                 f.database.commands.archived(
@@ -332,7 +363,7 @@ abstract class CollaborationSpaceMessageStorageContract {
                     sent.intent.id,
                 )
             )
-        val key = Base64.decode(assertNotNull(f.keys.read()))
+        val key = Base64.decode(assertNotNull(f.commandKeys.read()))
         val resealed =
             try {
                 val codec = CollaborationSpaceMessageCodec(f.local(), f.cipher, key)
@@ -365,7 +396,8 @@ abstract class CollaborationSpaceMessageStorageContract {
                 value.createdAt,
                 "Original company message",
             )
-        val old = EncryptedCollaborationMessageRepository(f.database.commands, f.cipher, f.keys)
+        val old =
+            EncryptedCollaborationMessageRepository(f.database.commands, f.cipher, f.commandKeys)
         assertEquals(
             AppResult.Success(CollaborationMessageInsertion.STORED),
             old.insert(f.access, legacy),
@@ -438,7 +470,10 @@ abstract class CollaborationSpaceMessageStorageContract {
         assertIs<AppResult.Failed>(f.messages().update(f.local(), queued, next.copy(origin = null)))
         assertEquals(AppResult.Success(true), f.messages().update(f.local(), queued, next))
         assertEquals(AppResult.Success(false), f.messages().update(f.local(), queued, next))
-        assertEquals(AppResult.Success(false), f.messages().cancel(f.local(), queued))
+        assertEquals(
+            AppResult.Success(false),
+            f.messages().cancel(f.local(), queued, f.repairRequest()),
+        )
         val current = f.readMessage(value.id)
         assertIs<AppResult.Failed>(
             f.messages().update(f.local(), current, CollaborationMessageState.Queued)
@@ -511,14 +546,19 @@ abstract class CollaborationSpaceMessageStorageContract {
             f.messages().insert(f.local(), first),
         )
         val cancelled = f.readMessage(first.id)
-        assertEquals(AppResult.Success(true), f.messages().cancel(f.local(), cancelled))
+        assertEquals(
+            AppResult.Success(true),
+            f.messages().cancel(f.local(), cancelled, f.repairRequest()),
+        )
         assertEquals(
             AppResult.Success(CollaborationMessageInsertion.STORED),
             f.messages().insert(f.local(), second),
         )
         val wake = f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY)
+        val savedRepair = f.repairProgress().current(f.local())
         f.reopen(f.access.copy(sessionId = "reopened"))
         val access = f.local().copy(sessionId = "reopened")
+        assertEquals(savedRepair, f.repairProgress().current(access))
         assertEquals(
             cancelled.copy(state = CollaborationMessageState.Cancelled),
             f.readMessage(first.id, access),
@@ -553,7 +593,7 @@ abstract class CollaborationSpaceMessageStorageContract {
                         it == AppResult.Success(cancelled)
                     }
                 }
-            assertEquals(AppResult.Success(true), repo.cancel(f.local(), queued))
+            assertEquals(AppResult.Success(true), repo.cancel(f.local(), queued, f.repairRequest()))
             assertEquals(AppResult.Success(cancelled), terminal.await())
             assertEquals(
                 AppResult.Success(emptyList()),
@@ -561,6 +601,275 @@ abstract class CollaborationSpaceMessageStorageContract {
             )
         }
     }
+
+    @Test
+    fun completedAndCancelledOriginalsRetainEncryptedRepairDemand() = withDatabase { f ->
+        val sent = f.retainSentRecord(intent(f.local()))
+        val first = f.repairRequest()
+        val completion =
+            CollaborationSpaceMessageCompletion(
+                sent,
+                listOf((sent.state as CollaborationMessageState.Sent).eventId),
+            )
+        assertEquals(
+            AppResult.Success(true),
+            f.messages().archiveCompletion(f.local(), completion, first),
+        )
+        assertEquals(AppResult.Success(first.replacement), f.repairProgress().current(f.local()))
+        val other = intent(f.local(), 2)
+        assertIs<AppResult.Success<*>>(f.messages().insert(f.local(), other))
+        val queued = f.readMessage(other.id)
+        val second = f.repairRequest()
+        assertEquals(AppResult.Success(true), f.messages().cancel(f.local(), queued, second))
+        assertEquals(AppResult.Success(second.replacement), f.repairProgress().current(f.local()))
+        assertEquals(first.replacement, second.expected)
+        val raw = assertNotNull(f.rawRepair())
+        assertFalse(raw.payload.contains(second.replacement.latestDemand))
+        assertEquals(32, Base64.decode(assertNotNull(f.commandKeys.read())).size)
+        assertEquals(64, Base64.decode(assertNotNull(f.keys.read())).size)
+        assertTrue(f.rawMessages().isEmpty())
+    }
+
+    @Test
+    fun terminalDemandPreservesAnExistingCapturedPassAndCompletedDemand() = withDatabase { f ->
+        val current =
+            CollaborationSpaceInboxRepairProgress(
+                historyId(9810),
+                historyId(9811),
+                historyId(9812),
+                CollaborationSpaceInboxRepairPass(historyId(9811), "retained-cursor"),
+            )
+        assertEquals(
+            AppResult.Success(current),
+            f.repairProgress().replace(f.local(), null, current),
+        )
+        val original = intent(f.local())
+        assertIs<AppResult.Success<*>>(f.messages().insert(f.local(), original))
+        val publication = f.repairRequest()
+        assertEquals(
+            AppResult.Success(true),
+            f.messages().cancel(f.local(), f.readMessage(original.id), publication),
+        )
+        val after =
+            assertIs<AppResult.Success<CollaborationSpaceInboxRepairProgress?>>(
+                    f.repairProgress().current(f.local())
+                )
+                .value
+        assertEquals(publication.replacement, after)
+        assertEquals(current.pass, after?.pass)
+        assertEquals(current.completedDemand, after?.completedDemand)
+    }
+
+    @Test
+    fun staleRepairProposalCannotArchiveAnUnchangedCommand() = withDatabase { f ->
+        val original = intent(f.local())
+        assertIs<AppResult.Success<*>>(f.messages().insert(f.local(), original))
+        val queued = f.readMessage(original.id)
+        val stale = f.repairRequest()
+        val replacement = f.repairRequest()
+        assertEquals(
+            AppResult.Success(replacement.replacement),
+            f.repairProgress().replace(f.local(), replacement.expected, replacement.replacement),
+        )
+        val raw = f.rawRepair()
+        assertEquals(AppResult.Success(false), f.messages().cancel(f.local(), queued, stale))
+        assertEquals(queued, f.readMessage(original.id))
+        assertEquals(raw, f.rawRepair())
+        assertNull(
+            f.database.commands.archived(
+                spaceMessageScope(f.local()),
+                spaceMessagePartition(f.local()),
+                original.id,
+            )
+        )
+    }
+
+    @Test
+    fun changedOriginalCannotPublishFreshRepairProgress() = withDatabase { f ->
+        val original = intent(f.local())
+        assertIs<AppResult.Success<*>>(f.messages().insert(f.local(), original))
+        val queued = f.readMessage(original.id)
+        val changed = queued.copy(intent = original.copy(text = "Different original"))
+        assertEquals(
+            AppResult.Success(false),
+            f.messages().cancel(f.local(), changed, f.repairRequest()),
+        )
+        assertEquals(queued, f.readMessage(original.id))
+        assertNull(f.rawRepair())
+    }
+
+    @Test
+    fun exactArchiveReplayPreservesLaterAcknowledgedRepairCiphertext() = withDatabase { f ->
+        val original = intent(f.local())
+        assertIs<AppResult.Success<*>>(f.messages().insert(f.local(), original))
+        val queued = f.readMessage(original.id)
+        val publication = f.repairRequest()
+        assertEquals(AppResult.Success(true), f.messages().cancel(f.local(), queued, publication))
+        val idle =
+            publication.replacement.copy(
+                generation = historyId(9820),
+                completedDemand = publication.replacement.latestDemand,
+            )
+        assertEquals(
+            AppResult.Success(idle),
+            f.repairProgress().replace(f.local(), publication.replacement, idle),
+        )
+        val raw = f.rawRepair()
+        assertEquals(
+            AppResult.Success(true),
+            f.messages().cancel(f.local(), queued, f.repairRequest()),
+        )
+        assertEquals(raw, f.rawRepair())
+        assertEquals(AppResult.Success(idle), f.repairProgress().current(f.local()))
+    }
+
+    @Test
+    fun failedAtomicArchiveLeavesTheOriginalAndRepairCheckpointUntouched() = withDatabase { f ->
+        val original = intent(f.local())
+        assertIs<AppResult.Success<*>>(f.messages().insert(f.local(), original))
+        val queued = f.readMessage(original.id)
+        val store =
+            object : CommandStore by f.database.commands {
+                override suspend fun archiveAndMutate(
+                    scope: CommandScope,
+                    expected: CommandRecord,
+                    evidence: String,
+                    mutations: List<ReplicaMutation>,
+                ): Boolean = error("Storage interruption")
+            }
+        assertIs<AppResult.Failed>(f.messages(store).cancel(f.local(), queued, f.repairRequest()))
+        assertEquals(queued, f.readMessage(original.id))
+        assertNull(f.rawRepair())
+    }
+
+    @Test
+    fun lostArchiveResponseCanBeReadBackWithoutCreatingAnotherDemand() = withDatabase { f ->
+        val original = intent(f.local())
+        assertIs<AppResult.Success<*>>(f.messages().insert(f.local(), original))
+        val queued = f.readMessage(original.id)
+        val publication = f.repairRequest()
+        val actual = f.database.commands
+        val store =
+            object : CommandStore by actual {
+                override suspend fun archiveAndMutate(
+                    scope: CommandScope,
+                    expected: CommandRecord,
+                    evidence: String,
+                    mutations: List<ReplicaMutation>,
+                ): Boolean {
+                    check(actual.archiveAndMutate(scope, expected, evidence, mutations))
+                    error("Response interrupted after commit")
+                }
+            }
+        assertIs<AppResult.Failed>(f.messages(store).cancel(f.local(), queued, publication))
+        assertEquals(
+            queued.copy(state = CollaborationMessageState.Cancelled),
+            f.readMessage(original.id),
+        )
+        assertEquals(
+            AppResult.Success(publication.replacement),
+            f.repairProgress().current(f.local()),
+        )
+        val raw = f.rawRepair()
+        assertEquals(
+            AppResult.Success(true),
+            f.messages().cancel(f.local(), queued, f.repairRequest()),
+        )
+        assertEquals(raw, f.rawRepair())
+    }
+
+    @Test
+    fun missingRetainedRepairKeyCannotBeReplacedDuringArchival() = withDatabase { f ->
+        val initial = f.repairRequest().replacement
+        assertEquals(
+            AppResult.Success(initial),
+            f.repairProgress().replace(f.local(), null, initial),
+        )
+        val original = intent(f.local())
+        assertIs<AppResult.Success<*>>(f.messages().insert(f.local(), original))
+        val queued = f.readMessage(original.id)
+        val publication = f.repairRequest()
+        val key = assertNotNull(f.keys.read())
+        val raw = f.rawRepair()
+        f.keys.write(null)
+        try {
+            assertIs<AppResult.Failed>(f.messages().cancel(f.local(), queued, publication))
+            assertNull(f.keys.read())
+            assertEquals(queued, f.readMessage(original.id))
+            assertEquals(raw, f.rawRepair())
+        } finally {
+            f.keys.write(key)
+        }
+        assertEquals(AppResult.Success(initial), f.repairProgress().current(f.local()))
+    }
+
+    @Test
+    fun cancellationAfterAtomicArchivalRetainsBothCommandProofAndDemand() = withDatabase { f ->
+        val original = intent(f.local())
+        assertIs<AppResult.Success<*>>(f.messages().insert(f.local(), original))
+        val queued = f.readMessage(original.id)
+        val publication = f.repairRequest()
+        val actual = f.database.commands
+        val store =
+            object : CommandStore by actual {
+                override suspend fun archiveAndMutate(
+                    scope: CommandScope,
+                    expected: CommandRecord,
+                    evidence: String,
+                    mutations: List<ReplicaMutation>,
+                ): Boolean {
+                    val committed = actual.archiveAndMutate(scope, expected, evidence, mutations)
+                    currentCoroutineContext().cancel()
+                    return committed
+                }
+            }
+        coroutineScope {
+            launch {
+                    assertFailsWith<CancellationException> {
+                        f.messages(store).cancel(f.local(), queued, publication)
+                    }
+                }
+                .join()
+        }
+        assertEquals(
+            queued.copy(state = CollaborationMessageState.Cancelled),
+            f.readMessage(original.id),
+        )
+        assertEquals(
+            AppResult.Success(publication.replacement),
+            f.repairProgress().current(f.local()),
+        )
+    }
+
+    private fun CollaborationHistoryFixture.repairProgress() =
+        EncryptedCollaborationSpaceInboxRepairProgressRepository(database.replicas, cipher, keys)
+
+    private suspend fun CollaborationHistoryFixture.repairRequest():
+        CollaborationSpaceInboxRepairPublication {
+        val current =
+            assertIs<AppResult.Success<CollaborationSpaceInboxRepairProgress?>>(
+                    repairProgress().current(local())
+                )
+                .value
+        val replacement =
+            assertIs<AppResult.Success<CollaborationSpaceInboxRepairProgress>>(
+                    collaborationSpaceInboxRepairProgress(
+                        current,
+                        CollaborationSpaceInboxRepairProgressChange.Request(
+                            Uuid.random().toString()
+                        ),
+                        Uuid.random().toString(),
+                    )
+                )
+                .value
+        return CollaborationSpaceInboxRepairPublication(current, replacement)
+    }
+
+    private suspend fun CollaborationHistoryFixture.rawRepair() =
+        database.replicas.checkpoint(
+            spaceHistoryScope(local()),
+            spaceInboxRepairProgressPartition(local()),
+        )
 
     private fun withDatabase(block: suspend (CollaborationHistoryFixture) -> Unit) = runTest {
         val f = CollaborationHistoryFixture(databaseOwner())

@@ -12,9 +12,12 @@ interface CollaborationSpaceMessageCompletionRepository {
 
     /**
      * Full original command and proof must match; this never erases a receipt or sends a message.
+     * Terminal archival and this fresh repair Request commit atomically. Exact archived replay
+     * leaves later repair progress unchanged; a competing proposal returns false without writing.
      */
     suspend fun archiveCompletion(
         access: CollaborationSpaceLocalAccess,
         completion: CollaborationSpaceMessageCompletion,
+        repair: CollaborationSpaceInboxRepairPublication,
     ): AppResult<Boolean>
 }

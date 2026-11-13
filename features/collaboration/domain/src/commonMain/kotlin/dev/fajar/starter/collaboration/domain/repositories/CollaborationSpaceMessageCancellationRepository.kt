@@ -8,9 +8,12 @@ interface CollaborationSpaceMessageCancellationRepository {
     /**
      * Archive only this complete Queued record. A matching previous cancellation is successful;
      * changed or started work returns false. The immutable archive permanently fences insertion.
+     * Terminal archival and this fresh repair Request commit atomically. Exact archived replay
+     * leaves later repair progress unchanged; a competing proposal returns false without writing.
      */
     suspend fun cancel(
         access: CollaborationSpaceLocalAccess,
         expected: CollaborationSpaceMessageRecord,
+        repair: CollaborationSpaceInboxRepairPublication,
     ): AppResult<Boolean>
 }

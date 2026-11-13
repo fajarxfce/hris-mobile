@@ -1,0 +1,79 @@
+{
+  "accepted": true,
+  "changedPaths": [
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceMessageRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationHistoryFixture.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceMessageStorageContract.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingPreparationStorageContract.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxRepairPublication.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxRepairPublicationPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceMessageCancellationRepository.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceMessageCompletionRepository.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/MixedOriginalQueueReadFixture.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceDeliveryStorageFixture.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxRepairPublicationPolicyTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceMessageStagingFixture.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceReceiptProjectionFixture.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 65,
+    "elapsedSeconds": 400.539,
+    "sourceFiles": 5338,
+    "sourceManifestSha256": "f5a524d8d917fba16f5a00d66b3082a1cc711214436835ad67a0e31df93bf7a2",
+    "resultSha256": "e46a2d21878684d15c6384d34286c42f8b6a8a6be7c5c45a058124fa7d0e7899",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceMessageStorageTest": 26,
+      "CollaborationSpaceRoomBindingPreparationStorageTest": 13,
+      "CollaborationSpaceInboxRepairProgressStorageTest": 9,
+      "SpaceInboxRepairProgressPolicyTest": 9,
+      "SpaceInboxRepairPublicationPolicyTest": 6
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T13:04:21.370310+00:00",
+    "elapsedSeconds": 907.866,
+    "sourceFiles": 5338,
+    "freshCounts": {
+      "tests": 13873,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152564183,
+      "sha256": "125c93b9f79eeda5c5d36a5575463a87142e3664d56839df94734c84ada9451d"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 15969,
+    "newCases": 30,
+    "freshTests": 13873,
+    "reusedUnaffectedTests": 2096,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 109,
+    "excludedHistoricalCases": 642,
+    "sourceManifestSha256": "f5a524d8d917fba16f5a00d66b3082a1cc711214436835ad67a0e31df93bf7a2",
+    "reportManifestSha256": "7f1aac498788d1b32cb24a4d62c3f7520d4615595dcc94ba80cbb5edd2e85858",
+    "nativeClaim": "Group terminal archival and prepared repair Request publish atomically;15 new shared methods need actual Apple execution. Admitted terminal producer, finite worker and product graph remain separate."
+  },
+  "newSharedMethods": 15,
+  "mandatoryAtomicTerminalStorage": true,
+  "independentCommandAndHistoryKeys": true,
+  "admittedTerminalProducerIntegrated": false,
+  "repairWorkerIntegrated": false,
+  "productGraphActivated": false,
+  "actualNewAppleExecution": false,
+  "genericStarterPrerequisite": "0d2b4ee0ad5dffd5552bfda37e399e50357e752a",
+  "phoneInstalled": false,
+  "installedPhoneBuild": 92,
+  "liveChanged": false,
+  "runnerSetupFailure": {
+    "compilerStarted": false,
+    "reason": "Missing candidate-files.json: capture must precede formatting",
+    "exitCode": 1,
+    "reaped": true
+  }
+}

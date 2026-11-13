@@ -95,6 +95,7 @@ internal class SpaceReceiptProjectionFixture {
             override suspend fun archiveCompletion(
                 access: CollaborationSpaceLocalAccess,
                 completion: CollaborationSpaceMessageCompletion,
+                repair: CollaborationSpaceInboxRepairPublication,
             ): AppResult<Boolean> = error("History retirement has a separate owner")
         }
     val directory =

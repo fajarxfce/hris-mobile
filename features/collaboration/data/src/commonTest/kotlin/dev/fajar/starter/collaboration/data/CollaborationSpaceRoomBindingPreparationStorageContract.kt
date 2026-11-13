@@ -1046,6 +1046,8 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                 history.database.commands,
                 history.cipher,
                 commandKey,
+                history.database.replicas,
+                history.keys,
             )
 
         fun originalMessages() =

@@ -116,6 +116,7 @@ internal class SpaceMessageStagingFixture {
             override suspend fun archiveCompletion(
                 access: CollaborationSpaceLocalAccess,
                 completion: CollaborationSpaceMessageCompletion,
+                repair: CollaborationSpaceInboxRepairPublication,
             ): AppResult<Boolean> = error("Never retire")
         }
     val queues =

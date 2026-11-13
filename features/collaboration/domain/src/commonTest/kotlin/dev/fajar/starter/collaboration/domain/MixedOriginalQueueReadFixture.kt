@@ -99,6 +99,7 @@ internal class MixedOriginalQueueReadFixture {
             override suspend fun archiveCompletion(
                 access: CollaborationSpaceLocalAccess,
                 completion: CollaborationSpaceMessageCompletion,
+                repair: CollaborationSpaceInboxRepairPublication,
             ): AppResult<Boolean> = error("No retirement")
         }
 

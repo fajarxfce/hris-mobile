@@ -1,10 +1,36 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 12:54 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 13:20 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Group terminal repair publication locally accepted
+
+Mobile .work/space-inbox-terminal-publication-2026-11-13 is accepted: 13 source/test paths.
+Focused 65; full 15,969 = 13873 fresh + 2096 exact unchanged.
+All 15,939 preceding identities remain plus 30 JVM/browser executions of 15 shared methods.
+Source 5338/f5a524d8d917fba16f5a00d66b3082a1cc711214436835ad67a0e31df93bf7a2.
+Report 7f1aac498788d1b32cb24a4d62c3f7520d4615595dcc94ba80cbb5edd2e85858.
+Group archiveCompletion and cancel now require a fresh prepared Request. Exact command archival
+and encrypted repair progress commit together; replay preserves later progress. Command/history
+keys remain independent. No admitted terminal caller, worker or product activation is claimed.
+Actual 15 new Apple methods are outside control 43427620202 at 42fd5d12. Audit that already
+running control without redispatch, then collect these later methods with the next source control.
+
+Continue Mobile .work/space-inbox-repair-worker-2026-11-13: the prepared metadata observation,
+latestDemand-only admitted observer and local worker have 17 draft paths and 28 new shared methods.
+They must pass their actual integration gates, including common application browser/Apple tests.
+Its draft combines complete command/request snapshots, handles exact terminal/retired targets,
+and bounds pages/restarts/deadlines while preserving progress. Startup must acknowledge its own
+request before processing so a failed page cannot retry from that same notification. Test this
+and the invisible fast-archive case; no observer or checkpoint write may schedule itself.
+Prepared scripts are historical after execution; read review.md and the draft manifests.
+Then finish admitted terminal callers, legacy seeding, incoming history, product list/Group
+ownership, pending edit references and clock ordering. The generic Starter port is accepted and
+pushed at 0d2b4ee0; do not repeat it. One local compiler OR emulator. Phone stays on release 92
+until a validated visible update. Push every commit and continue the long run.
 
 ## Atomic archival Starter port accepted; hosted control running
 

@@ -116,6 +116,7 @@ internal class SpaceDeliveryStorageFixture(private val f: SpaceOriginalDeliveryF
             override suspend fun archiveCompletion(
                 access: CollaborationSpaceLocalAccess,
                 completion: CollaborationSpaceMessageCompletion,
+                repair: CollaborationSpaceInboxRepairPublication,
             ): AppResult<Boolean> = error("Separate retirement")
         }
 }

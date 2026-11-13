@@ -729,3 +729,10 @@ JVM/browser executions of 15 new contracts. Three Android variants, lint, produc
 Apple source/test compilation pass. Actual Apple execution is tracked separately in Mobile
 control 43427620202. Group terminal policy and the finite repair worker stay in Mobile.
 See Starter `docs/measurements/command-archive-replica-port-2026-11-13.json`.
+
+## Mandatory Group terminal repair publication
+
+Mobile now requires a fresh prepared repair request for Group archival/cancellation, retaining it
+atomically with the exact command. Fifteen new shared cases pass locally; full 15,969. The generic
+raw prerequisite is already accepted in Starter 0d2b4ee0; this HRIS encryption/policy integration
+stays in Mobile. Admitted terminal callers, the finite worker and product ownership remain.

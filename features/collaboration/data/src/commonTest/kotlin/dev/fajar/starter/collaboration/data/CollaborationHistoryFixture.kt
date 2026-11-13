@@ -23,6 +23,7 @@ internal class CollaborationHistoryFixture(private val owner: CollaborationHisto
     val conversation = historyId(9002)
     val room = "!history:example.test"
     val keys = MemoryCredentialStore()
+    val commandKeys = MemoryCredentialStore()
     val cipher = AesGcmContentCipher()
     var repository = repository()
 
@@ -82,6 +83,7 @@ internal class CollaborationHistoryFixture(private val owner: CollaborationHisto
     fun close() {
         database.close()
         keys.close()
+        commandKeys.close()
         owner.dispose()
     }
 }
