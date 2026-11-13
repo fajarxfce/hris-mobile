@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 05:01 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 05:19 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
@@ -8,31 +8,27 @@ is waived; native Apple, calls and push still need their actual behavior gates.
 
 ## Active Group navigation increment
 
-Main Mobile branch `feat/chat-send-timing-20261107`, latest application commit
-549407f6aab1d718ff4edd726b5221a550227999, is pushed. Eleven uncommitted source paths add
-bounded Group navigation stores, visible local room preparation, per-entry leases and
-RouteReleased handling. The caption becomes Unknown sender / Pengirim tidak dikenal;
-missing sender metadata is not an assertion about cryptographic verification.
+Mobile.work/space-thread-navigation-2026-11-13 has11 uncommitted application paths.
+Source5249/98f424faca8d7789abc6ef17009d5811d2148fb5c3708d9a820f99a8d01de8cf.
+Focused6/60458 REAPED PASS122/187.029s; strict focused audit passed, including actual
+NavHost/Koin/Content first-destination checks. Both prepared/reopened destinations first
+compose at frozen clock tick2 with retained messages, one model/local reader and saved draft.
+These are desktop clock ticks, not Android wall-clock latency. Three screenshots were
+recorded and individually reviewed. Format6/45012 REAPED35.648s.
 
-Workspace Mobile `.work/space-thread-navigation-2026-11-13` owns the candidate and exact
-snapshots. Source 5249 / 8e555fb1a2af8501167e200da8eb03484b5c9b4af1de46560280a79398cc5a1c.
-Format3/22304 REAPED PASS37.001s. Focused3/81600 is ACTIVE; expected122 cases.
-Full gate NOT STARTED: expected15517 =15489 prior +26 JVM/browser +2 desktop UI cases.
-No product Group graph/list, server rollout, new phone install or native acceptance.
+Full1/57098 is ACTIVE, expected15517 =15489 prior +26 JVM/browser +2 desktop UI.
+Do not change application sources until it is reaped. record-acceptance.py is prepared;
+run full audit then record acceptance and commit/push. Product Group graph/list stays off.
+Five failed candidates are preserved in state.json: private test-route JVM visibility;
+masked lifecycle disposal (two attempts); diagnostic discovery of Desktop pointer dispatch
+calling NavController off Main; and incorrect assumption that the first global NavHost
+clock tick already contains its destination. The real button semantic action now runs on
+UI Main. Tests inspect the first composed destination within two ticks and immediately
+require rows there; they never wait for message data. No source-only pass is claimed.
 
-Preserve both failed candidates: focused1/65417 REAPED120cases/2fail139.735s (private
-new test route blocked JVM serialization), focused2/46172 REAPED120/2fail95.378s
-(new test harness destroyed an unfinished NavHost entry, masking its first-frame result).
-Corrections only make the test route internal and settle its lifecycle before teardown;
-first-frame assertions remain. Review the actual first rendered destination before
-claiming performance. `state.json`, candidates and complete XML/logs preserve failures.
-
-Next: reap focused3, resolve any failure from evidence, run strict focused/full audits,
-inspect the three screenshots after caption correction, then commit/push implementation.
-Prepare record-acceptance.py; it does not exist yet. Do not reapply historical draft files.
-Then implement the actual locally owned conversation list and account/Group graph,
-including pending/draft previews; finish edit/delete/forward and Android IME/transition
-measurement. Navigation must keep HR company selection independent from Group ownership.
+Next: actual local conversation list and account/Group graph including pending/draft
+previews, remaining contextual mutations, Android IME/transition evidence. Domain owns
+admission and durable commands; navigation owns only explicit presentation lifetime.
 
 ## Latest accepted application
 
@@ -46,10 +42,11 @@ are accepted; do not repeat their local gates. Prior detailed evidence is in the
 
 ## Exact hosted controls
 
-Shared page/rows control43366809238 is ACTIVE at549407f6, portable131693032344 and
-Apple131693032072. Workspace Mobile.work/space-thread-page-2026-11-13/hosted-control;
-expected18688 =13220 portable +5468 Apple. `hosted-audit.py` is prepared, not run.
-It adds40 shared methods (21 rows +19 page/context) and8 desktop UI cases, retaining
+Shared page/rows control43366809238 at549407f6: portable131693032344 is ACCEPTED13220,
+auditor12474 REAPED; Apple131693032072 is still ACTIVE. Workspace Mobile.work/space-thread-page-2026-11-13/hosted-control;
+expected18688 =13220 portable +5468 Apple. `hosted-audit.py` portable passed; Apple audit remains pending.
+The reviewed Chrome156→157 suffix preserves all5877 previous browser class/method IDs;
+5917 actual browser cases pass. No source method was renamed. It adds40 shared methods (21 rows +19 page/context) and8 desktop UI cases, retaining
 all previous case IDs. It does not cover the current navigation increment. Do not duplicate.
 
 Previous control43359439624 atfc45116481b6e9a03f1e377bf4a4e11e4e803c74 is FULLY ACCEPTED:
@@ -57,25 +54,16 @@ Previous control43359439624 atfc45116481b6e9a03f1e377bf4a4e11e4e803c74 is FULLY 
 iOS host and push routing passed. The70 observation/progress/presentation methods have
 actual Apple execution. Do not rerun this completed control.
 
-Separate native Matrix Swift recheck43369039918/job131700250671 is ACTIVE at
-894947608d5b37ecf31bfee73e9e769ef2a1387c, isolated branch fix/apple-sdk-build-budget-20261112.
-Push1891, dispatch67767 and identification2989 REAPED. It reuses the immutable native
-package43349484661; no Rust rebuild or publication. Workspace Mobile.work/
-sdk8-apple-fixture-lifetime-2026-11-13 has current state, local guards and prepared collector.
-Acceptance requires five exact Swift cases, process-owned fixture cleanup and both iOS links.
-25 builder +9 recheck Python guards passed. Linux executed no Swift test.
-
-Previous native d34 recheck43367060755 FAILED after320.859s: five actual Swift cases,
-four passed. A cleanup error reported a disappearing media WAL; Foundation paths still
-showed /private alias mismatch. Collector60072 REAPED, archive14010603799/290891897B/
-72a96b8af7e4a2a7645e42152c498a03762fe19461be0dde624c939e8692d3c3 verified.
-The new fixture passes POSIX canonical String paths into native I/O and retains stores
-until the Swift process exits. Parent cleanup is mandatory even after a failed test;
-no WAL sleep/retry. Symlink refusal first requires a successful direct identity read.
-See `docs/measurements/collaboration-sdk8-apple-fixture-lifetime-2026-11-13.json`.
-Earlier6cc full native build proved all five architectures/exports and fixed Rust linking;
-2ff recheck exposed ExistingCryptoIdentityError.Unavailable. Their failed evidence remains.
-No native package acceptance, Apple runtime activation or release publication yet.
+Separate native Apple candidate43370071243/job131703523190 is FULLY ACCEPTED at
+ad96a35a8d4ea2f931476a906a4183fb6e1f3c5e. Collector4632 REAPED. Five exact actual Swift
+XML cases passed, all five frozen native architectures/exports match, process-owned fixture
+cleanup passed, and both iOS device/simulator products linked. Recheck343.438s; no Rust rebuild.
+Artifact14011628218/290901638B/b8dfea189c802558ecc5c1b9f20354337375cb5d9d8342426933c3eaf2ece040.
+See docs/measurements/collaboration-sdk8-apple-native-2026-11-13.json. Native source remains
+isolated under fix/apple-sdk-build-budget-20261112. Do not duplicate the accepted job.
+Next: immutable Swift packaging/application consumption and actual Apple bridge; no release
+publication, product runtime activation, actual iPhone test or live Group rollout is claimed.
+All earlier failed candidates remain under their original Mobile.work paths.
 
 ## Phone delivery
 
