@@ -1,5 +1,7 @@
 # Architecture
 
+[Admitted Group original retirement](collaboration-space-original-retirement.md) requires exact command, receipt and retained history before atomic archival and bounded cleanup.
+
 [Admitted Group cancellation](collaboration-space-original-cancellation.md) archives an exact untouched original with repair demand while fencing started work and confirming replay locally.
 
 [Finite inbox repair](collaboration-space-inbox-repair-worker.md) follows admitted command changes and durable demand under one explicit local account/Group lifetime.

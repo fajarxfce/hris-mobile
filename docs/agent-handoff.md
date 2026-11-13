@@ -1,10 +1,40 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 14:27 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 14:59 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Admitted Group original retirement locally accepted
+
+Mobile .work/space-original-retirement-2026-11-13 is accepted: nine source/test paths.
+Focused 30; full 16,251 = 14155 fresh + 2096 exact unchanged.
+All 16,198 preceding identities remain plus 52 shared JVM/browser executions and one new actual
+application SQLite case. Source 5357/b54dc392bc88fe2610634752331ae05d6c63330caa33f07f8d4018e204f88d0c;
+report 59319c85871d3a05c3776faf424ec8c13dc790176f3f45322a467117efd34688.
+Original retirement proves exact command/receipt/history before atomic archival and repair demand.
+Exact archive replay precedes progress reads; later aliases preserve immutable archive facts.
+Batch/ledger/CAS are bounded, and false concurrent cleanup receives one exact ledger confirmation.
+Operational failures stop. Current admission surrounds all I/O and late cancellation prevents
+cleanup. The real SQLite proof includes missing history, later alias, unchanged demand and reopen.
+
+Continue Mobile .work/space-inbox-command-seeding-2026-11-13: 17 prepared, unapplied paths,
+31 shared methods and one new SQLite worker race; expected focused 36/full 16,314. Review the
+explicit replay probe before applying its guarded apply.py. A retained original must preserve
+independent draft/edited/hidden anchors and old time; do not fabricate a composer submission.
+A new index/reference and fresh repair Request share the existing two-partition transaction.
+A semantic replay confirms before progress reads. The real application test seeds a cancelled
+original after the worker is already idle, then checks completion and reopening without native I/O.
+The existing CollaborationHistoryKeys protects retained ciphertext; never replace a missing key.
+Then integrate bounded inventory seeding in the existing owner, incoming history and account/Group
+product ownership. Keep actual Company-original provenance, pending edits and backward-clock
+ordering explicit. Group UI/runtime and live rollout remain disabled. Hosted control 43443248470
+at c2d9b5ea753083967adc40129187e9e5c6fcb413 predates these 26 new shared Apple methods;
+audit it without redispatch, expected 19,821 including 5,892 actual Apple cases. Its scripts and
+state are in .work/space-original-cancellation-2026-11-13/hosted-control. Historical apply scripts
+cannot be rerun. Push every commit and retain phone release 92 until a meaningful validated update.
+Continue the long run.
 
 ## Admitted Group original cancellation locally accepted
 

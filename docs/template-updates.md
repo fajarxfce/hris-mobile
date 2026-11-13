@@ -749,3 +749,9 @@ generic transactional storage is already in Starter. Product ownership and termi
 The exact queued-original action and atomic inbox request pass 16,198 local cases, including
 the real SQLite worker integration. Fourteen new shared methods are executed on JVM/browser;
 actual Apple execution follows. This HRIS admission and cancellation policy stays in Mobile.
+
+## Admitted Group original retirement accepted
+
+The exact original retirement policy and use case pass 16,251 local cases, including a new
+SQLite application proof for later aliases and reopening. Twenty-six new shared methods pass
+on JVM/browser; actual Apple execution remains separate. This HRIS policy stays in Mobile.

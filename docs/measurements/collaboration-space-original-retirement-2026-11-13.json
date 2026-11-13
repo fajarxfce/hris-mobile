@@ -1,0 +1,73 @@
+{
+  "accepted": true,
+  "changedPaths": [
+    ".github/workflows/collaboration-control.yml",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationSpaceOriginalRetirementIntegrationTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceOriginalRetirementPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RetireCollaborationSpaceOriginals.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/RetireSpaceOriginalsTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceOriginalRetirementFixture.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceOriginalRetirementPolicyTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 30,
+    "elapsedSeconds": 393.358,
+    "sourceFiles": 5357,
+    "sourceManifestSha256": "b54dc392bc88fe2610634752331ae05d6c63330caa33f07f8d4018e204f88d0c",
+    "resultSha256": "8684d7c23b4946f30a4306b67ad4efff66477a78c742da6a25a73a734cb8226b",
+    "classes": {
+      "CollaborationSpaceInboxRepairIntegrationTest": 1,
+      "CollaborationSpaceOriginalRetirementIntegrationTest": 1,
+      "CollaborationBindingsTest": 2,
+      "RetireSpaceOriginalsTest": 18,
+      "SpaceOriginalRetirementPolicyTest": 8
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T14:42:04.640589+00:00",
+    "elapsedSeconds": 970.572,
+    "sourceFiles": 5357,
+    "freshCounts": {
+      "tests": 14155,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152583452,
+      "sha256": "dec4ef81948b5b1fe997f22b9dfc3c97e1df3bf64a3706565fb27c4bf3162faa"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16251,
+    "newCases": 53,
+    "freshTests": 14155,
+    "reusedUnaffectedTests": 2096,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "b54dc392bc88fe2610634752331ae05d6c63330caa33f07f8d4018e204f88d0c",
+    "reportManifestSha256": "59319c85871d3a05c3776faf424ec8c13dc790176f3f45322a467117efd34688",
+    "nativeClaim": "Admitted original Group retirement with immutable history proof; 26 shared methods and one new real SQLite application case. Actual Apple execution and product ownership remain separate."
+  },
+  "newSharedMethods": 26,
+  "newDesktopIntegrationMethods": 1,
+  "realSqliteApplicationProof": true,
+  "admittedOriginalRetirementIntegrated": true,
+  "exactReplayAvoidsProgressRead": true,
+  "immutableArchivedAliases": true,
+  "maximumLedger": 128,
+  "maximumBatch": 32,
+  "maxCompareAndSetAttempts": 3,
+  "maximumCleanupConfirmationReads": 1,
+  "nativeSend": false,
+  "productGraphActivated": false,
+  "actualNewAppleExecution": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false
+}

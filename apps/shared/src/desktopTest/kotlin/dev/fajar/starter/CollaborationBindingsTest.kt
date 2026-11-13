@@ -408,6 +408,7 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<ChangeCollaborationSpaceInboxRepairProgress>())
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceInboxRepairDemand>())
                 assertNotNull(container.koin.get<CancelCollaborationSpaceText>())
+                assertNotNull(container.koin.get<RetireCollaborationSpaceOriginals>())
                 assertNotNull(
                     container.koin.get<
                         dev.fajar.starter.app.work.CollaborationSpaceInboxRepairWorker

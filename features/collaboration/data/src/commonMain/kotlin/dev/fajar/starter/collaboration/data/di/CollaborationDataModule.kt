@@ -759,6 +759,30 @@ class CollaborationDataModule {
     ) = CancelCollaborationSpaceText(messages, cancellations, progress, directory, sessions, server)
 
     @Factory
+    fun retireSpaceOriginals(
+        messages: CollaborationSpaceMessageRepository,
+        completions: CollaborationSpaceMessageCompletionRepository,
+        receipts: CollaborationSpaceReceiptRepository,
+        retirement: CollaborationSpaceReceiptRetirementRepository,
+        history: CollaborationSpaceHistoryRepository,
+        progress: CollaborationSpaceInboxRepairProgressRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) =
+        RetireCollaborationSpaceOriginals(
+            messages,
+            completions,
+            receipts,
+            retirement,
+            history,
+            progress,
+            directory,
+            sessions,
+            server,
+        )
+
+    @Factory
     fun recoverSpaceComposer(
         roots: CollaborationSpaceRootRepository,
         outbox: CollaborationSpaceComposerOutboxRepository,
