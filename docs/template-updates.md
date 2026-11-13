@@ -743,3 +743,9 @@ Mobile's admitted request observer and finite application worker pass 16,170 loc
 including a real SQLite archive-to-inbox proof with command snapshots deliberately suppressed.
 No own-checkpoint retry, polling timer or native send is introduced. The HRIS owner stays in Mobile;
 generic transactional storage is already in Starter. Product ownership and terminal callers follow.
+
+## Admitted Group cancellation accepted
+
+The exact queued-original action and atomic inbox request pass 16,198 local cases, including
+the real SQLite worker integration. Fourteen new shared methods are executed on JVM/browser;
+actual Apple execution follows. This HRIS admission and cancellation policy stays in Mobile.

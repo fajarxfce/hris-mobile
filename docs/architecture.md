@@ -1,5 +1,7 @@
 # Architecture
 
+[Admitted Group cancellation](collaboration-space-original-cancellation.md) archives an exact untouched original with repair demand while fencing started work and confirming replay locally.
+
 [Finite inbox repair](collaboration-space-inbox-repair-worker.md) follows admitted command changes and durable demand under one explicit local account/Group lifetime.
 
 [Atomic terminal repair publication](collaboration-space-inbox-terminal-publication.md) retains fresh Group repair demand with exact command archival under independent content keys.

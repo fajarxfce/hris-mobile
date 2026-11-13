@@ -749,6 +749,16 @@ class CollaborationDataModule {
     ) = ChangeCollaborationSpaceInboxRepairProgress(progress, directory, sessions, server)
 
     @Factory
+    fun cancelSpaceText(
+        messages: CollaborationSpaceMessageRepository,
+        cancellations: CollaborationSpaceMessageCancellationRepository,
+        progress: CollaborationSpaceInboxRepairProgressRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = CancelCollaborationSpaceText(messages, cancellations, progress, directory, sessions, server)
+
+    @Factory
     fun recoverSpaceComposer(
         roots: CollaborationSpaceRootRepository,
         outbox: CollaborationSpaceComposerOutboxRepository,

@@ -1,0 +1,70 @@
+{
+  "accepted": true,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxRepairIntegrationTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CancelCollaborationSpaceText.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CancelSpaceTextTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceTextCancellationFixture.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 17,
+    "elapsedSeconds": 358.481,
+    "sourceFiles": 5351,
+    "sourceManifestSha256": "d6bc3c6e4f46c650d8da0872b0b5c380f6d214a3327ca3a1bf612b37a1b1ff75",
+    "resultSha256": "eb008b7ac04dd11c6340b62edffd12f9a6f75e9ba0267020024bc79a678863f8",
+    "classes": {
+      "CollaborationSpaceInboxRepairIntegrationTest": 1,
+      "CollaborationBindingsTest": 2,
+      "CancelSpaceTextTest": 14
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-13T14:10:36.705953+00:00",
+    "elapsedSeconds": 967.67,
+    "sourceFiles": 5351,
+    "freshCounts": {
+      "tests": 14102,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 152574584,
+      "sha256": "f47429fc6728ef0865c04257256fee1cb273001126b1fd46013a832df57a1974"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16198,
+    "newCases": 28,
+    "freshTests": 14102,
+    "reusedUnaffectedTests": 2096,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "d6bc3c6e4f46c650d8da0872b0b5c380f6d214a3327ca3a1bf612b37a1b1ff75",
+    "reportManifestSha256": "331c570b5f8c3cae14b00de1e8e85e6c2eed32b01e20a9c9748e2bd2aa9a7d01",
+    "nativeClaim": "Admitted local Group cancellation; 14 shared methods and real SQLite application integration. Actual Apple execution and product ownership remain separate."
+  },
+  "newSharedMethods": 14,
+  "realSqliteApplicationProof": true,
+  "admittedCancellationIntegrated": true,
+  "exactReplayAvoidsProgressRead": true,
+  "maxCompareAndSetAttempts": 3,
+  "nativeCancellation": false,
+  "remoteDeletion": false,
+  "productGraphActivated": false,
+  "actualNewAppleExecution": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "documentationPathReview": {
+    "reason": "Prepared Group capability path still named the preceding worker document. The existing-file assertion stopped before Group writes. Mobile partial documentation is checked byte-for-byte and resumed without duplicate sections.",
+    "sourceChanged": false,
+    "testsChanged": false,
+    "groupPreviousEvidencePreserved": true
+  }
+}

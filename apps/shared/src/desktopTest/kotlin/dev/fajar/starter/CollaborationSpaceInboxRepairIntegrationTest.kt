@@ -158,26 +158,19 @@ class CollaborationSpaceInboxRepairIntegrationTest {
                             .value
                     )
                 assertEquals(before.latestDemand, before.completedDemand)
-                val demand = UUID.randomUUID().toString()
-                val next =
-                    assertIs<AppResult.Success<CollaborationSpaceInboxRepairProgress>>(
-                            collaborationSpaceInboxRepairProgress(
-                                before,
-                                CollaborationSpaceInboxRepairProgressChange.Request(demand),
-                                UUID.randomUUID().toString(),
-                            )
-                        )
-                        .value
                 assertEquals(
-                    AppResult.Success(true),
-                    f.koin
-                        .get<CollaborationSpaceMessageCancellationRepository>()
-                        .cancel(
-                            access,
-                            queued,
-                            CollaborationSpaceInboxRepairPublication(before, next),
-                        ),
+                    AppResult.Success(Unit),
+                    f.koin.get<CancelCollaborationSpaceText>()(access, queued),
                 )
+                val demand =
+                    assertNotNull(
+                            assertIs<AppResult.Success<CollaborationSpaceInboxRepairProgress?>>(
+                                    readProgress(access)
+                                )
+                                .value
+                        )
+                        .latestDemand
+                assertNotEquals(before.latestDemand, demand)
                 withTimeout(5_000) {
                     progress.observe(access).first { result ->
                         result is AppResult.Success &&

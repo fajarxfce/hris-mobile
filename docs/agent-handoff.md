@@ -1,10 +1,35 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 14:01 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 14:27 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
 is waived; native Apple, calls and push still need their actual behavior gates.
+
+## Admitted Group original cancellation locally accepted
+
+Mobile .work/space-original-cancellation-2026-11-13 is accepted: six source/test paths.
+Focused 17; full 16,198 = 14102 fresh + 2096 exact unchanged.
+All 16,170 preceding identities remain plus 28 JVM/browser executions of 14 new shared methods.
+Source 5351/d6bc3c6e4f46c650d8da0872b0b5c380f6d214a3327ca3a1bf612b37a1b1ff75; report 331c570b5f8c3cae14b00de1e8e85e6c2eed32b01e20a9c9748e2bd2aa9a7d01.
+The admitted action cancels an exact untouched original with atomic repair demand. Exact cancelled
+replay precedes checkpoint acquisition. Command/checkpoint contention is bounded to three attempts;
+started work conflicts, operational failures stop, and admission surrounds every I/O. The SQLite
+worker application proof now exercises this use case and preserves the reopened inbox and draft.
+
+Continue Mobile .work/space-original-retirement-2026-11-13: nine paths are prepared, not applied.
+They contain the original retirement policy/caller, 26 shared cases, DI and one new real SQLite
+proof. Expected focused 30/full 16,251; review its guarded apply script and drafts first. Exact
+old completion confirms replay before progress reads; later aliases require retained history
+before exact receipt cleanup. False concurrent cleanup gets one bounded ledger confirmation;
+operational failure stops. Preserve changed receipts and bound ledger/batch/CAS independently.
+Then finish legacy references, incoming history and account/Group product ownership. Preserve independent composer/native cancellation and remote-deletion contracts.
+The next hosted source control must execute these 14 plus the preceding 43 shared Apple methods;
+control 43427620202 is already accepted at earlier 42fd5d12. prepare-hosted.py prepares one
+new control after this source is pushed: expected 19,821 total / 5,892 Apple, including 143
+existing app methods executed on Apple for the first time. Its auditors check those exact
+application identities against accepted browser reports. Do not repeat old controls or historical
+apply scripts. Keep phone release 92 until a meaningful validated update; push every commit.
 
 ## Finite Group inbox repair worker locally accepted
 
