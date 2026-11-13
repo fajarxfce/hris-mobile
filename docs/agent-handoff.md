@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 17:56 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 18:01 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -34,8 +34,8 @@ Actual Company-history source snapshots/publication and single account/Group pro
 remain explicit work. Keep the product graph off until these producers and ownership are ready.
 
 Existing control 43467846733 at 951c308d covers earlier owner seeding/source guards, not these
-16 publication or 17 snapshot Apple methods. Audit the existing jobs without redispatching;
-then collect the 33 new shared methods in a later exact-source control. Expected combined count
+16 publication or 17 snapshot Apple methods. This control is accepted;
+collect the 33 new shared methods in a later exact-source control. Expected combined count
 would be 20,196 if this is the only subsequent source increment; preserve prior identities.
 Control 43455295124 is already accepted (20,006 / Apple 5,950, iOS host and 16 push fields).
 Starter 595d025 already passes 990; this HRIS work stays downstream. Keep release 92 until a
@@ -62,13 +62,15 @@ report 281288bb2c58c0c6682346a6cd79cac3905bcc68df87e8b30657e1bce661c1da.
 Audit 6133 and evidence push 53482 are REAPED. Mobile 02dd7570 and Group 495e731e record it.
 Do not rerun this control. The old failed 43443248470 remains failed and preserved.
 
-Control 43467846733 at 951c308dce2dd350a901c67cf449d6913b97cacf is already dispatched:
-portable job 132033900708 and Apple job 132033900078 are running. Workspace
-.work/source-checked-replica-mutations-2026-11-13/hosted-control; expected 20,097 = 14,117
-portable + 5,980 Apple. It adds 17 owner-seeding and 13 source-guard shared methods plus one
-SQLite case. It EXCLUDES the current 17 snapshot methods. Audit each existing completed job
-with hosted-audit.py, preserve exact source/identity comparisons, then record in Git. Do not
-dispatch another copy. It was queued behind the preceding control without cancelling that run.
+Control 43467846733 at exact 951c308dce2dd350a901c67cf449d6913b97cacf is FULLY ACCEPTED:
+20,097 = 14,117 portable (6,727 desktop / 960 Android host / 6,430 browser) + 5,980 actual Apple.
+All earlier accepted and failed-run identities remain; the two timing regression methods pass.
+The 30 new shared Apple methods cover owner seeding (17) and source guards (13), plus one new
+SQLite application case on desktop. iOS application host and all 16 push fields pass. Apple
+artifact 14063039224 / 963925 bytes /
+ad5e5ac8be7491e6866695f81f308554004f61fc35cb9fcd1b431bde110f1219; reports 8abbdd5a7ec5d613d79f8692fdc04645ba8ec8c0c3dd689d2b49b3323b45e38b.
+This exact source EXCLUDES later history snapshot, conditional publication and association work.
+Do not rerun the accepted control; retain source-specific evidence for those later increments.
 
 ## Native Apple and product work still outstanding
 

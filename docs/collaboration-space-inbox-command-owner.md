@@ -36,3 +36,5 @@ or phone installation is included. HRIS policy stays in Mobile; shared raw stora
 Starter.
 
 Evidence: `docs/measurements/collaboration-space-inbox-command-owner-2026-11-13.json`.
+
+Actual Apple execution is accepted in control 43467846733, exact source `951c308dce2dd350a901c67cf449d6913b97cacf`: 5,980 Apple / 20,097 combined cases, all previous identities, iOS host and 16 push fields pass. This includes the 30 owner/source-guard methods; later history and association increments remain separate. Evidence: `docs/measurements/collaboration-owner-source-guards-hosted-2026-11-13.json`.

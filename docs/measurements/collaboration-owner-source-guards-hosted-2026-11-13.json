@@ -1,0 +1,215 @@
+{
+  "portable": {
+    "accepted": true,
+    "sourceCommit": "951c308dce2dd350a901c67cf449d6913b97cacf",
+    "runId": 43467846733,
+    "jobId": 132033900708,
+    "counts": {
+      "desktopTest": 6727,
+      "testAndroidHostTest": 960,
+      "wasmJsBrowserTest": 6430
+    },
+    "previousFailedRunCaseIdsRetained": true,
+    "previousFailedRunId": 43443248470,
+    "previousFailedRunCases": 13929,
+    "fixedTimingMethods": [
+      "thrownFailureFinishesTimingWithoutExceptionPayload",
+      "suspendedThrownErrorsFinishRoomAndWorkerStagesWithoutLosingTheirOutcome"
+    ],
+    "artifactId": 14062251755,
+    "artifactBytes": 4402659,
+    "artifactSha256": "ed2bd42a26ecb7b7b0ea3e7d19917fd064b1c05561b9a1aefe03166b56868b42",
+    "jobLogSha256": "20e1563de3dea19eecbb5b16ee702de0f921ccce7d275e151a4b9fbf81f409da",
+    "previousExactCaseIdsRetained": true,
+    "previousMethodAndPlatformIdsRetained": true,
+    "browserEngineReview": null,
+    "newSharedMethods": 30,
+    "actualNew": [
+      {
+        "platform": "desktopTest",
+        "clazz": "SpaceInboxSeedDemandPolicyTest",
+        "methods": [
+          "aJustObservedRetirementKeepsItsExactSourceIntent",
+          "allTwoHundredFiftySixBoundedInputsAreDetachedWithoutTruncatingUnattemptedWork",
+          "editOnlyProgressCannotRetryOriginalSeeding",
+          "laterExternalOriginalChangesCanResumeAllUnfinishedCurrentOriginals",
+          "malformedOwnershipDuplicatesAndRewrittenImmutableIntentNeverSelectWork",
+          "ordinaryDeliveryProgressSeedsOnlyANewOriginal",
+          "startupCapturesEveryCurrentOriginalInStableOrder",
+          "unchangedOrReorderedInventoriesNeverRetryEvenWhenRecoveryIsPending"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationSpaceInboxSeedWorkerTest",
+        "methods": [
+          "aFailedSeedStaysParkedWhenAnEarlierSeedProducesARequest",
+          "aSeedDeadlineCancelsTheAttemptAndWaitsForAChangedOriginalBeforeRetrying",
+          "anExplicitNewOwnerCanRetryTheSameRetainedInventory",
+          "anUncertainCommittedSeedIsNotRetriedByItsOwnRequest",
+          "cancelledStartupLeavesUnattemptedOriginalsForTheNextExplicitOwner",
+          "disposingTheOwnerCancelsSeedingAndJoinsBothObservers",
+          "laterSeedDenialSurvivesOwnRepairUntilAnAdmittedSeedRecovers",
+          "missingSourcesAreFiniteAndNewOriginalsAreSelectedWithoutReprobingKnownOnes",
+          "startupSeedsOnceAndOwnDemandOrOrdinaryProgressCannotRepeatIt"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "ReplicaChecksTest",
+        "methods": [
+          "allConditionsPrecedeWritesRegardlessOfMutationOrder",
+          "archiveReplayDoesNotRecheckAnAlreadyCompletedSource",
+          "cancelledWritersRetainSourceAndAtomicProjectionWake",
+          "checkedProjectionSurvivesRestartWithOriginalSource",
+          "competingWritersPublishOnlyOneProjection",
+          "confirmedAbsenceDoesNotCreateSourceAndRejectsLaterCreation",
+          "constraintFailureRollsBackProjectionAndWake",
+          "exactCheckpointIncludesPayloadAndStagingVisibility",
+          "exactMatchPublishesProjectionAndWakeWithoutChangingSource",
+          "foreignScopeAndReplacementAccountCannotPublish",
+          "lostResponseReadbackCannotResurrectAcknowledgedWake",
+          "readOnlyDuplicateAndOversizedBatchesAreRejected",
+          "wakeConflictsPreserveSourceAndProjection"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SpaceInboxSeedDemandPolicyTest",
+        "methods": [
+          "aJustObservedRetirementKeepsItsExactSourceIntent",
+          "allTwoHundredFiftySixBoundedInputsAreDetachedWithoutTruncatingUnattemptedWork",
+          "editOnlyProgressCannotRetryOriginalSeeding",
+          "laterExternalOriginalChangesCanResumeAllUnfinishedCurrentOriginals",
+          "malformedOwnershipDuplicatesAndRewrittenImmutableIntentNeverSelectWork",
+          "ordinaryDeliveryProgressSeedsOnlyANewOriginal",
+          "startupCapturesEveryCurrentOriginalInStableOrder",
+          "unchangedOrReorderedInventoriesNeverRetryEvenWhenRecoveryIsPending"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "CollaborationSpaceInboxSeedWorkerTest",
+        "methods": [
+          "aFailedSeedStaysParkedWhenAnEarlierSeedProducesARequest",
+          "aSeedDeadlineCancelsTheAttemptAndWaitsForAChangedOriginalBeforeRetrying",
+          "anExplicitNewOwnerCanRetryTheSameRetainedInventory",
+          "anUncertainCommittedSeedIsNotRetriedByItsOwnRequest",
+          "cancelledStartupLeavesUnattemptedOriginalsForTheNextExplicitOwner",
+          "disposingTheOwnerCancelsSeedingAndJoinsBothObservers",
+          "laterSeedDenialSurvivesOwnRepairUntilAnAdmittedSeedRecovers",
+          "missingSourcesAreFiniteAndNewOriginalsAreSelectedWithoutReprobingKnownOnes",
+          "startupSeedsOnceAndOwnDemandOrOrdinaryProgressCannotRepeatIt"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserReplicaChecksTest",
+        "methods": [
+          "allConditionsPrecedeWritesRegardlessOfMutationOrder",
+          "archiveReplayDoesNotRecheckAnAlreadyCompletedSource",
+          "cancelledWritersRetainSourceAndAtomicProjectionWake",
+          "checkedProjectionSurvivesRestartWithOriginalSource",
+          "competingWritersPublishOnlyOneProjection",
+          "confirmedAbsenceDoesNotCreateSourceAndRejectsLaterCreation",
+          "constraintFailureRollsBackProjectionAndWake",
+          "exactCheckpointIncludesPayloadAndStagingVisibility",
+          "exactMatchPublishesProjectionAndWakeWithoutChangingSource",
+          "foreignScopeAndReplacementAccountCannotPublish",
+          "lostResponseReadbackCannotResurrectAcknowledgedWake",
+          "readOnlyDuplicateAndOversizedBatchesAreRejected",
+          "wakeConflictsPreserveSourceAndProjection"
+        ]
+      }
+    ],
+    "reportManifestSha256": "a7e53e7178e9877794a0231a56aabc9a1580264c6c8a1378b9ee22516ef77726"
+  },
+  "apple": {
+    "accepted": true,
+    "sourceCommit": "951c308dce2dd350a901c67cf449d6913b97cacf",
+    "runId": 43467846733,
+    "jobId": 132033900078,
+    "counts": {
+      "iosSimulatorArm64Test": 5980
+    },
+    "previousFailedRunCaseIdsRetained": true,
+    "previousFailedRunId": 43443248470,
+    "previousFailedRunCases": 5892,
+    "fixedTimingMethods": [
+      "thrownFailureFinishesTimingWithoutExceptionPayload",
+      "suspendedThrownErrorsFinishRoomAndWorkerStagesWithoutLosingTheirOutcome"
+    ],
+    "artifactId": 14063039224,
+    "artifactBytes": 963925,
+    "artifactSha256": "ad5e5ac8be7491e6866695f81f308554004f61fc35cb9fcd1b431bde110f1219",
+    "jobLogSha256": "ec44160811a249b7e0dafac2a3cf7912bb4f34205edbc46687d3c3f3d97eb2c8",
+    "previousExactCaseIdsRetained": true,
+    "previousMethodAndPlatformIdsRetained": true,
+    "browserEngineReview": null,
+    "newSharedMethods": 30,
+    "actualNew": [
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SpaceInboxSeedDemandPolicyTest",
+        "methods": [
+          "aJustObservedRetirementKeepsItsExactSourceIntent",
+          "allTwoHundredFiftySixBoundedInputsAreDetachedWithoutTruncatingUnattemptedWork",
+          "editOnlyProgressCannotRetryOriginalSeeding",
+          "laterExternalOriginalChangesCanResumeAllUnfinishedCurrentOriginals",
+          "malformedOwnershipDuplicatesAndRewrittenImmutableIntentNeverSelectWork",
+          "ordinaryDeliveryProgressSeedsOnlyANewOriginal",
+          "startupCapturesEveryCurrentOriginalInStableOrder",
+          "unchangedOrReorderedInventoriesNeverRetryEvenWhenRecoveryIsPending"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "CollaborationSpaceInboxSeedWorkerTest",
+        "methods": [
+          "aFailedSeedStaysParkedWhenAnEarlierSeedProducesARequest",
+          "aSeedDeadlineCancelsTheAttemptAndWaitsForAChangedOriginalBeforeRetrying",
+          "anExplicitNewOwnerCanRetryTheSameRetainedInventory",
+          "anUncertainCommittedSeedIsNotRetriedByItsOwnRequest",
+          "cancelledStartupLeavesUnattemptedOriginalsForTheNextExplicitOwner",
+          "disposingTheOwnerCancelsSeedingAndJoinsBothObservers",
+          "laterSeedDenialSurvivesOwnRepairUntilAnAdmittedSeedRecovers",
+          "missingSourcesAreFiniteAndNewOriginalsAreSelectedWithoutReprobingKnownOnes",
+          "startupSeedsOnceAndOwnDemandOrOrdinaryProgressCannotRepeatIt"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleReplicaChecksTest",
+        "methods": [
+          "allConditionsPrecedeWritesRegardlessOfMutationOrder",
+          "archiveReplayDoesNotRecheckAnAlreadyCompletedSource",
+          "cancelledWritersRetainSourceAndAtomicProjectionWake",
+          "checkedProjectionSurvivesRestartWithOriginalSource",
+          "competingWritersPublishOnlyOneProjection",
+          "confirmedAbsenceDoesNotCreateSourceAndRejectsLaterCreation",
+          "constraintFailureRollsBackProjectionAndWake",
+          "exactCheckpointIncludesPayloadAndStagingVisibility",
+          "exactMatchPublishesProjectionAndWakeWithoutChangingSource",
+          "foreignScopeAndReplacementAccountCannotPublish",
+          "lostResponseReadbackCannotResurrectAcknowledgedWake",
+          "readOnlyDuplicateAndOversizedBatchesAreRejected",
+          "wakeConflictsPreserveSourceAndProjection"
+        ]
+      }
+    ],
+    "reportManifestSha256": "8abbdd5a7ec5d613d79f8692fdc04645ba8ec8c0c3dd689d2b49b3323b45e38b"
+  },
+  "accepted": true,
+  "runId": 43467846733,
+  "sourceCommit": "951c308dce2dd350a901c67cf449d6913b97cacf",
+  "totalCases": 20097,
+  "newActualAppleMethods": 30,
+  "newSqliteApplicationCases": 1,
+  "oldFailedRunPreserved": true,
+  "actualOwnerSeedingAndSourceGuardsVerified": true,
+  "historySnapshotIncluded": false,
+  "historyPublicationIncluded": false,
+  "productGraphActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false
+}

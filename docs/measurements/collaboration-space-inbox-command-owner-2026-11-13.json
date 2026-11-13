@@ -114,8 +114,10 @@
   "currentOperationFailurePreserved": true,
   "nativeSend": false,
   "productGraphActivated": false,
-  "actualNewAppleExecution": false,
+  "actualNewAppleExecution": true,
   "installedPhoneBuild": 92,
   "phoneInstalled": false,
-  "liveChanged": false
+  "liveChanged": false,
+  "acceptedHostedRun": 43467846733,
+  "hostedEvidence": "docs/measurements/collaboration-owner-source-guards-hosted-2026-11-13.json"
 }
