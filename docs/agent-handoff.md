@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 01:10 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 01:22 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Phone installs require a prior announcement, explicit serial and `--install-only`; never
 launch/drive/reset/uninstall the user's phone UI. The physical iPhone interaction requirement
@@ -189,7 +189,18 @@ Dispatch65415 REAPED; do not dispatch a duplicate. Expected12,889 portable +5,31
 =18,203; strict prepared auditors preserve every previous identity and new storage methods.
 The separate SDK native candidate43327713661 remains active; no Matrix Apple runtime pass.
 
-ACTIVE: Mobile.work/space-composer-recovery-2026-11-13,24 applied source paths.
+Portable control43338633598/job131601109781 is ACCEPTED at exactce1750b8;
+auditor90988 REAPED:12,889=6168desktop+958Android+5763browser. Apple131601109334 remains active.
+Artifact14000497284/4116000B/707933fd03836b410e9e46cf9420db7ff3366a8ba8db6e1a1a95df52135f14a6;
+reports2274e48a46e9aa3d47ed7314801345654f3bd48c3f3649fd88d87b5be9d8e666;
+log483a4c8cc2aa66a44f58134d431c3aa678e7690491785f377a8e700be67c7eb8.
+Preserve failed-browser-runtime-audit-1/auditor37178: hosted Chrome changed156 to157. The
+corrected strict auditor permits only that exact launcher suffix, preserving every class and
+method across historical5601, binding5678 and contact5699 browser cases, with zero test renames.
+No source/assertion change or CI rerun. Both original and corrected auditors/configs are retained.
+Do not rerun portable or dispatch another control while Apple is active.
+
+ACTIVE: Mobile.work/space-composer-recovery-2026-11-13,26 applied source paths.
 Typed encrypted Group cursor storage reuses the existing repository with unchanged Company
 frames and an independent legacy ciphertext test. RecoverCollaborationSpaceComposer discovers
 the owned root and materializes at most eight exact originals before native prerequisites.
@@ -218,22 +229,28 @@ and missing native originals. All25 previously accepted worker identities remain
 Format2/49614 REAPED PASS35.381s. Frozen5203/
 570d8e0bb4bbc605af6f6a5fcc25258924dd0c341ae2b9808f0e992ea67dfa89.
 Focused2/59794 REAPED PASS160/187.122s, strict audit passes with all prior identities.
-Full1/40638 is ACTIVE on those exact frozen sources, but a further review REJECTS this
-candidate for acceptance: an empty composer outbox can still leave queued native messages.
-The missing-device path could acknowledge those messages too early, or immediately self-wake
-when outbox work remained but keys were absent. Do not accept/commit these application sources.
+Full1/40638 REAPED exit0/815.968s with12,961 fresh passing cases, but the candidate was
+REJECTED in review: empty composer storage could still leave queued native messages, losing
+their wake or immediately self-waking while keys were absent. Preserve failed-native-pending-review-2
+and immutable full-1/rejected-proof.apk152481620B/
+2035e39d0128b9c02171e43dedb66aeead0ffe57f9d14ca292d7c69281ea7e0d. No acceptance was recorded.
 
-pending-native-review-draft contains eight UNAPPLIED correction paths. Return distinct
-pendingSubmissions/pendingMessages after a bounded validated message inventory, within the
-same five-second pass. Missing native prerequisites retain the wake with scheduler backoff
-for either kind. Inventory absence/failure cannot prove idle; cancellation and late denial
-preserve the already materialized command. Six additional domain cases and one worker case
-are drafted. The previous25 worker cases remain unchanged. Expected next focused167/full15,012
-(all14,911 prior IDs +101 new executions);44 new shared Apple methods need hosted execution.
-Let full1 finish/reap, preserve its exact candidate/reports as failed-native-pending-review-2,
-then apply only the reviewed draft, format, refreeze and repeat affected checks. Native proof
-must use the final full build; change prepare-native.py mobilePhase from full-1 to full-2 and
-freeze that exact proof. No new native/phone/UI acceptance is claimed by this review.
+Eight correction paths are now APPLIED,26 total. Recovery reports pendingSubmissions and
+pendingMessages separately after a bounded validated inventory, within the same five-second
+pass. Missing native prerequisites retain the wake with scheduler backoff for either kind.
+Capture the eligible wake BEFORE local reads, so a concurrent handoff's later generation can
+never be acknowledged by an earlier empty pass. Inventory absence/failure never proves idle.
+Six additional domain cases and three worker cases cover pending work and wake races. All25
+previously accepted worker test bodies remain identical, checked against ce1750b8;13 new worker
+cases are separate. No existing assertion or quality limit was relaxed.
+
+Format3/95627 REAPED PASS35.158s. Focused3/99144 ACTIVE, expected169 cases.
+Frozen5205/7ddaa7f570beab8d7d697f015a7ec32c4cc2f7508b30debbae0d9e0e08860af1.
+Expected full2:15,014 (all14,911 prior IDs +103 new executions).44 new shared Apple methods
+still require hosted execution. Keep sources frozen until the compiler is reaped. Then run
+full2 and the affected native cases. prepare-native.py now uses/freeze-checks full-2 explicitly;
+record-acceptance.py requires exact focused169/full15,014/native2 audits and source/APK hashes.
+No current candidate acceptance, Group UI, native latency or phone installation is claimed.
 
 NEXT DESIGN ONLY: Mobile.work/space-composer-observation-2026-11-13 has a local editor/outbox
 snapshot use case, fixture and ten draft tests. Not applied or compiled. Its subscription
@@ -245,7 +262,7 @@ against the actual immutable submission shape (id derives from original.revision
 Continue canonical Group thread/list UI after recovery passes, reusing the route-owned serial
 composer actor and existing thread admission owner. Measure first-frame/transition behavior;
 do not imply latency improvements from source checks. All54 acceptance groups remain OPEN.
-Phone92 remains uninstalled. ADB7726 REAPED timeout00:56UTC13Nov; last WireGuard handshake
+Phone92 remains uninstalled. ADB18038 REAPED timeout01:12UTC13Nov; last WireGuard handshake
 12Nov10:32:22UTC. Always announce each install and use install-only; never drive phone UI.
 All54 acceptance groups remain OPEN; continue beyond this checkpoint.
 

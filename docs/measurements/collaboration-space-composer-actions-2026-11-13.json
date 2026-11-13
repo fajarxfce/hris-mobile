@@ -66,5 +66,47 @@
   "phoneInstalledForThisIncrement": false,
   "groupLiveDeployment": false,
   "preservedFailures": [],
-  "remaining": "Bounded local outbox materialization, durable cursor fairness, wake completion that includes pending submissions, then canonical thread/list UI and measured first-frame behavior."
+  "remaining": "Bounded local outbox materialization, durable cursor fairness, wake completion that includes pending submissions, then canonical thread/list UI and measured first-frame behavior.",
+  "hostedControl": {
+    "runId": 43338633598,
+    "sourceCommit": "ce1750b8bf5f1622e1f8f70eddb69bacaf587876",
+    "portable": {
+      "sourceCommit": "ce1750b8bf5f1622e1f8f70eddb69bacaf587876",
+      "runId": 43338633598,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43338633598",
+      "jobId": 131601109781,
+      "artifactId": 14000497284,
+      "bytes": 4116000,
+      "sha256": "707933fd03836b410e9e46cf9420db7ff3366a8ba8db6e1a1a95df52135f14a6",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreservedExceptReviewedReplacements": true,
+      "reviewedReplacements": 0,
+      "browserRuntimeCaseSuffixChanges": 5601,
+      "recentBrowserRuntimeCaseSuffixChanges": {
+        "binding": 5678,
+        "contact": 5699
+      },
+      "browserRuntimeChange": {
+        "fromSuffix": "[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "toSuffix": "[wasmJs, browser, ChromeHeadless157.0.0.0, Linux0.0.0]",
+        "priorCases": 5601,
+        "recentPriorCases": {
+          "binding": 5678,
+          "contact": 5699
+        },
+        "reason": "Exact source case identities retained; hosted Chrome launcher version advanced."
+      },
+      "counts": {
+        "desktopTest": 6168,
+        "testAndroidHostTest": 958,
+        "wasmJsBrowserTest": 5763
+      },
+      "reportManifestSha256": "2274e48a46e9aa3d47ed7314801345654f3bd48c3f3649fd88d87b5be9d8e666",
+      "jobLogSha256": "483a4c8cc2aa66a44f58134d431c3aa678e7690491785f377a8e700be67c7eb8",
+      "fullAuditSha256": "d2531012f4ddfb6730a01a8ca71152423ee67c2dfea41c7defd400eb7fccf4c5",
+      "auditSession": "90988 REAPED",
+      "preservedFailedAudit": "failed-browser-runtime-audit-1"
+    },
+    "appleStatus": "in progress; not yet accepted"
+  }
 }
