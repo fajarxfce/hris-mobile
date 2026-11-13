@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 14:00 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 14:01 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
@@ -72,6 +72,22 @@ Mobile .work/space-inbox-terminal-publication-2026-11-13, then the admitted dema
 and finite local worker. Its 13 draft paths and 15 new shared methods are not applied yet.
 Do not rerun historical preparation scripts. The raw and Starter gates are accepted.
 Keep the phone on release 92 until a validated visible update. Group product graph stays off.
+
+## Inbox repair Apple and portable control accepted
+
+Run 43427620202 at exact 42fd5d12c5353779d4a61cc50b8c53ae8c6c0bc6 passes 19,362 cases:
+portable 131892855414 has 13,670; Apple 131892855717 has 5,692.
+All preceding class/method/platform identities remain exact.
+The 101 newly executed Apple methods cover original repair references (13), exact command
+progress (17), checkpoint/lookup (21), admitted repair actions (35) and atomic archival (15).
+The iOS host and 16 push-envelope fields pass; both artifact digests, XML and full job logs are
+audited. Do not repeat this control. Portable report d4b0b58bc782856624ae79265a8a1fb45e2b022ca2ee598edebbf848253b477f.
+Apple report 591f326606e34085c5e53c2fee79c7519150af06725df01160c03ea3158ad50a.
+The accepted local terminal publication and finite repair worker are outside this exact source.
+Their 43 new shared Apple methods need a later control; admitted terminal producers and product
+ownership remain to integrate. Generic Starter
+source equivalence can reuse these 15 storage cases as Mobile execution, not as a separate
+Starter Apple application run. Preserve source ownership and continue the long run.
 
 ## Atomic command archival and replica publication locally accepted
 

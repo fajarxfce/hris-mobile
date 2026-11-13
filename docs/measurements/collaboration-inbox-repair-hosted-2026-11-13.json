@@ -1,0 +1,569 @@
+{
+  "portable": {
+    "accepted": true,
+    "sourceCommit": "42fd5d12c5353779d4a61cc50b8c53ae8c6c0bc6",
+    "runId": 43427620202,
+    "jobId": 131892855414,
+    "counts": {
+      "desktopTest": 6569,
+      "testAndroidHostTest": 960,
+      "wasmJsBrowserTest": 6141
+    },
+    "artifactId": 14039983552,
+    "artifactBytes": 4330172,
+    "artifactSha256": "06164c90c4620b068fbcb73180dac239fa9c656c3d44d891dd6ed5c0174e62fe",
+    "jobLogSha256": "d4dc58408eb18c67f9d37dcc1339072e025b834cad8b920af28a25b31ea26293",
+    "previousExactCaseIdsRetained": true,
+    "previousMethodAndPlatformIdsRetained": true,
+    "browserEngineReview": null,
+    "newSharedMethods": 101,
+    "actualNew": [
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationSpaceInboxRepairStorageTest",
+        "methods": [
+          "aCapturedPassSurvivesCompletionAndDefersNewReferencesToTheNextPass",
+          "aLostCompletionReplySurvivesRestartAndOriginalReplayCannotReviveItsReference",
+          "aSendRetainsItsExactRepairOriginalWithSourceIndexAndWakeAcrossRestart",
+          "absentOrMalformedExactLookupsNeverCreateKeyMaterial",
+          "anExistingCommandCanRetainAndCompleteAReferenceWithoutAnyEditorEnvelope",
+          "anIndexConflictCannotRetireARepairOrPublishItsAcknowledgement",
+          "anotherOriginalWithTheSameIdCannotCompleteTheRetainedReference",
+          "cancellationBeforeCommitKeepsThePendingPreviewAndRepairTogether",
+          "completionDropsTheOriginalTextAndRetainsItsStableActivityAnchor",
+          "completionPublishesItsPreviewAndRetiresOnlyThatReferenceAtomically",
+          "eachReadUsesOneBoundedRepairSubsetAndRejectsOversizedLimits",
+          "exactLookupPreservesConversationGroupAndCurrentAccountOwnershipAfterRenewal",
+          "exactLookupUsesOneDocumentAndCompletedReferencesStayAbsentAfterRestart",
+          "hidingNewestAndCompletingItsReferenceRevealsEarlierPendingAfterRestart",
+          "removingTheGenerationRestartsAnExistingCursorWithoutExposingAnotherAccount",
+          "sessionRenewalKeepsOriginalReferencesAndReplacementAccountCannotReadThem"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "SpaceInboxCommandPolicyTest",
+        "methods": [
+          "aDifferentIntentOrNamespaceCannotConfirmAnOriginalWithTheSameId",
+          "aHiddenAnchorCannotBeRevivedByLateSentEvidence",
+          "absentAndNonterminalRecordsDoNotBecomeDeliveryReceiptsAndCapturedSetsAreDetached",
+          "anEarlierAcknowledgementCannotReplaceANewerPendingConversationPreview",
+          "cancelledEvidenceCannotEraseAnAlreadyConfirmedOriginal",
+          "cancelledNewestRevealsTheEarlierCandidateAndRetainsTyping",
+          "changedIndexVersionOrMissingExactAnchorCannotCompleteAReference",
+          "sentEvidencePreservesANewerEditedPreviewTimeAndPlacement"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "ReconcileSpaceInboxOriginalTest",
+        "methods": [
+          "aConcurrentNewerEditIsRereadBeforeCompletionPublication",
+          "anAccountReplacementBeforePublicationRejectsTheLateOriginal",
+          "anUncertainPublicationRetainsItsFailureAndDoesNotStartAWriteLoop",
+          "cancellationDuringTheAnchorReadEscapesWithoutAWrite",
+          "commandReadFailuresAndMismatchedIntentNeverManufactureFailedOrSentPreviews",
+          "denialDuringCommandReadStopsBeforeAnyIndexAcquisition",
+          "exactTerminalEvidencePublishesProgressAndCompletionTogetherWithoutTransport",
+          "missingOrQueuedCommandsRetainPendingWithoutReadingTheIndex",
+          "repeatedIndexContentionStopsAtThreeAttemptsWithTheSameOriginal"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "SpaceInboxRepairProgressPolicyTest",
+        "methods": [
+          "aNewDemandStartsOneFinitePassAndBeginningItAgainDoesNotResetItsCursor",
+          "aPageThatDoesNotAdvanceCannotKeepTheWorkerRunning",
+          "aPendingOnlyPassBecomesIdleAfterItsLastPageAndDoesNotGenerateAnotherDemand",
+          "aRepeatedCurrentDemandDoesNotRewriteAnActivePassOrCreateAnotherGeneration",
+          "demandDuringAnActivePassIsCoalescedWithoutDiscardingItsCapturedProgress",
+          "generationReplacementCanExplicitlyRestartOnlyTheMatchingCapturedPass",
+          "invalidCoordinatesAndMalformedStatesAreRejectedBeforeAProgressWrite",
+          "replayingAnOlderActiveOrCompletedDemandCannotReplaceALaterDemand",
+          "stalePageCompletionCannotAcknowledgeANewerCursorOrNewlyStartedPass"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationSpaceInboxRepairProgressStorageTest",
+        "methods": [
+          "aCapturedPassAndLaterDemandSurviveRestartWithoutMixingTheirPositions",
+          "aLostCommittedResponseRemainsReadableAndTheOldExpectedStateCannotReplayIt",
+          "aStaleWriterCannotOverwriteNewDemandOrReuseTheCurrentGeneration",
+          "absentAndInvalidReadsCreateNoKeysOrWork",
+          "acknowledgedIdleProgressAndExactReplayDoNotRewriteCiphertextOrScheduleWork",
+          "cancellationBeforeTheRawCommitRetainsTheOriginalPass",
+          "concurrentCheckpointWritersPublishExactlyOneReplacement",
+          "equalDemandIdsInDifferentGroupsRemainIndependentAndTheirCiphertextCannotBeMoved",
+          "renewalRetainsOwnedProgressWhileReplacementAccountsFenceReadsAndWrites"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "ReadSpaceInboxRepairsTest",
+        "methods": [
+          "accountSessionAndAudienceReplacementAtReadReturnDiscardCapturedData",
+          "cancellationDoesNotBecomeAbsenceOrRetryTheRepairPage",
+          "confirmedDenialAndMalformedRequestsNeverReadTheRepairPage",
+          "denialReceivedDuringReadWinsOverSuccessfulOrFailedRepairPageResults",
+          "emptyPageAndGenerationRestartRemainExplicitWithoutLooping",
+          "identityReplacementWhileAdmissionIsSuspendedStopsBeforeInventory",
+          "malformedOwnershipInventoryAndCursorResponsesCannotBePublished",
+          "ownedRepairPageIgnoresCredentialAgeAndSelectedCompanyWithoutAcquisition",
+          "publishedItemsDoNotAliasAMutableRepositoryList"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "ReadSpaceInboxRepairTest",
+        "methods": [
+          "absentCompletedReferenceRemainsAbsenceWithoutAnotherRead",
+          "cancellationRetiresAnUncooperativeLookupWithoutPublishingItsResult",
+          "denialAndAccountReplacementDuringLookupDiscardLateSuccessAndFailure",
+          "exactOwnedLookupDoesNotScanOrAcquireTransportWhenOffline",
+          "foreignOrMalformedReferenceCannotBePublishedAsTheRequestedOriginal",
+          "invalidRequestOrKnownDenialStopsBeforeExactLookup"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "ReadSpaceInboxRepairProgressTest",
+        "methods": [
+          "cancellationDoesNotCreateAPassOrTreatItsLateResultAsMissing",
+          "knownDenialAndInvalidOwnerDoNotReadTheCheckpoint",
+          "malformedCheckpointIsFailureRatherThanMissingWork",
+          "ownershipChangesDuringReadOverrideCapturedSuccessOrStorageFailure",
+          "readingAbsentActiveAndCompletedProgressNeverCreatesDemand"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "ChangeSpaceInboxRepairProgressTest",
+        "methods": [
+          "cancellationAfterAnUncooperativeWriteDoesNotStartAnotherAttempt",
+          "competingLaterDemandIsRereadBeforeCapturedPassCompletion",
+          "completionAcknowledgesOnlyItsCapturedDemandAndThenBecomesIdle",
+          "denialDuringContentionAndOwnershipReplacementAfterCommitStopOldWork",
+          "genuineContentionStopsAfterThreeAttemptsWithoutScanningOrTransport",
+          "invalidTransitionsAndMalformedRepositoryResponsesCannotAdvanceWork",
+          "lostCommittedResponseIsRecoveredByExactRequestReplayWithoutAnotherWrite",
+          "operationalFailureStopsImmediatelyWithoutClaimingProgress",
+          "requestingAgainPreservesTheCapturedPassAndExactReplayDoesNotRewrite",
+          "stalePageCannotFinishANewerPassAndRestartKeepsTheLaterDemand"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "ObserveSpaceMessageInventoryTest",
+        "methods": [
+          "aConversationReaderRejectsUnrelatedReturnedRecords",
+          "knownDenialIsReportedBeforeWaitingForUnrelatedSessionStorage",
+          "malformedInventoriesAreRejectedAndCompletedFailureDoesNotLoop",
+          "sameSourceEmissionsAreDetachedAndDoNotEmitDuplicateInventories",
+          "stagingSnapshotDoesNotAliasMutableNativePredecessors"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CommandArchiveMutationsTest",
+        "methods": [
+          "anyChangedCommandFieldLeavesEveryStoreUntouched",
+          "archiveAndReplicaDemandSurviveReopening",
+          "callerCollectionsAreDetachedBeforeSuspending",
+          "cancelledWritesLeaveAllOrNoneCommitted",
+          "commandUpdateAndArchivalHaveOneConsistentWinner",
+          "eitherReplicaConflictOrGenerationReusePreservesCommand",
+          "emptyActiveInventoryStillPublishesDurableReplicaDemand",
+          "exactArchiveReplayDoesNotRewriteLaterReplicaProgress",
+          "failureDeletingArchivedCommandRollsBackEarlierReplicaWrites",
+          "independentProgressAndArchivalHaveOneConsistentWinner",
+          "invalidOrForeignBatchesAreRejectedIncludingOnReplay",
+          "lostResponseCanBeConfirmedWithoutRepeatingDemand",
+          "mixedReplicaMutationsAndArchiveCommitTogether",
+          "replacementAccountIsDeniedAndRenewedOwnerCanComplete",
+          "secondReplicaConstraintFailureRollsBackEveryStore"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserCollaborationSpaceInboxRepairStorageTest",
+        "methods": [
+          "aCapturedPassSurvivesCompletionAndDefersNewReferencesToTheNextPass",
+          "aLostCompletionReplySurvivesRestartAndOriginalReplayCannotReviveItsReference",
+          "aSendRetainsItsExactRepairOriginalWithSourceIndexAndWakeAcrossRestart",
+          "absentOrMalformedExactLookupsNeverCreateKeyMaterial",
+          "anExistingCommandCanRetainAndCompleteAReferenceWithoutAnyEditorEnvelope",
+          "anIndexConflictCannotRetireARepairOrPublishItsAcknowledgement",
+          "anotherOriginalWithTheSameIdCannotCompleteTheRetainedReference",
+          "cancellationBeforeCommitKeepsThePendingPreviewAndRepairTogether",
+          "completionDropsTheOriginalTextAndRetainsItsStableActivityAnchor",
+          "completionPublishesItsPreviewAndRetiresOnlyThatReferenceAtomically",
+          "eachReadUsesOneBoundedRepairSubsetAndRejectsOversizedLimits",
+          "exactLookupPreservesConversationGroupAndCurrentAccountOwnershipAfterRenewal",
+          "exactLookupUsesOneDocumentAndCompletedReferencesStayAbsentAfterRestart",
+          "hidingNewestAndCompletingItsReferenceRevealsEarlierPendingAfterRestart",
+          "removingTheGenerationRestartsAnExistingCursorWithoutExposingAnotherAccount",
+          "sessionRenewalKeepsOriginalReferencesAndReplacementAccountCannotReadThem"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SpaceInboxCommandPolicyTest",
+        "methods": [
+          "aDifferentIntentOrNamespaceCannotConfirmAnOriginalWithTheSameId",
+          "aHiddenAnchorCannotBeRevivedByLateSentEvidence",
+          "absentAndNonterminalRecordsDoNotBecomeDeliveryReceiptsAndCapturedSetsAreDetached",
+          "anEarlierAcknowledgementCannotReplaceANewerPendingConversationPreview",
+          "cancelledEvidenceCannotEraseAnAlreadyConfirmedOriginal",
+          "cancelledNewestRevealsTheEarlierCandidateAndRetainsTyping",
+          "changedIndexVersionOrMissingExactAnchorCannotCompleteAReference",
+          "sentEvidencePreservesANewerEditedPreviewTimeAndPlacement"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "ReconcileSpaceInboxOriginalTest",
+        "methods": [
+          "aConcurrentNewerEditIsRereadBeforeCompletionPublication",
+          "anAccountReplacementBeforePublicationRejectsTheLateOriginal",
+          "anUncertainPublicationRetainsItsFailureAndDoesNotStartAWriteLoop",
+          "cancellationDuringTheAnchorReadEscapesWithoutAWrite",
+          "commandReadFailuresAndMismatchedIntentNeverManufactureFailedOrSentPreviews",
+          "denialDuringCommandReadStopsBeforeAnyIndexAcquisition",
+          "exactTerminalEvidencePublishesProgressAndCompletionTogetherWithoutTransport",
+          "missingOrQueuedCommandsRetainPendingWithoutReadingTheIndex",
+          "repeatedIndexContentionStopsAtThreeAttemptsWithTheSameOriginal"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SpaceInboxRepairProgressPolicyTest",
+        "methods": [
+          "aNewDemandStartsOneFinitePassAndBeginningItAgainDoesNotResetItsCursor",
+          "aPageThatDoesNotAdvanceCannotKeepTheWorkerRunning",
+          "aPendingOnlyPassBecomesIdleAfterItsLastPageAndDoesNotGenerateAnotherDemand",
+          "aRepeatedCurrentDemandDoesNotRewriteAnActivePassOrCreateAnotherGeneration",
+          "demandDuringAnActivePassIsCoalescedWithoutDiscardingItsCapturedProgress",
+          "generationReplacementCanExplicitlyRestartOnlyTheMatchingCapturedPass",
+          "invalidCoordinatesAndMalformedStatesAreRejectedBeforeAProgressWrite",
+          "replayingAnOlderActiveOrCompletedDemandCannotReplaceALaterDemand",
+          "stalePageCompletionCannotAcknowledgeANewerCursorOrNewlyStartedPass"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserCollaborationSpaceInboxRepairProgressStorageTest",
+        "methods": [
+          "aCapturedPassAndLaterDemandSurviveRestartWithoutMixingTheirPositions",
+          "aLostCommittedResponseRemainsReadableAndTheOldExpectedStateCannotReplayIt",
+          "aStaleWriterCannotOverwriteNewDemandOrReuseTheCurrentGeneration",
+          "absentAndInvalidReadsCreateNoKeysOrWork",
+          "acknowledgedIdleProgressAndExactReplayDoNotRewriteCiphertextOrScheduleWork",
+          "cancellationBeforeTheRawCommitRetainsTheOriginalPass",
+          "concurrentCheckpointWritersPublishExactlyOneReplacement",
+          "equalDemandIdsInDifferentGroupsRemainIndependentAndTheirCiphertextCannotBeMoved",
+          "renewalRetainsOwnedProgressWhileReplacementAccountsFenceReadsAndWrites"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "ReadSpaceInboxRepairsTest",
+        "methods": [
+          "accountSessionAndAudienceReplacementAtReadReturnDiscardCapturedData",
+          "cancellationDoesNotBecomeAbsenceOrRetryTheRepairPage",
+          "confirmedDenialAndMalformedRequestsNeverReadTheRepairPage",
+          "denialReceivedDuringReadWinsOverSuccessfulOrFailedRepairPageResults",
+          "emptyPageAndGenerationRestartRemainExplicitWithoutLooping",
+          "identityReplacementWhileAdmissionIsSuspendedStopsBeforeInventory",
+          "malformedOwnershipInventoryAndCursorResponsesCannotBePublished",
+          "ownedRepairPageIgnoresCredentialAgeAndSelectedCompanyWithoutAcquisition",
+          "publishedItemsDoNotAliasAMutableRepositoryList"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "ReadSpaceInboxRepairTest",
+        "methods": [
+          "absentCompletedReferenceRemainsAbsenceWithoutAnotherRead",
+          "cancellationRetiresAnUncooperativeLookupWithoutPublishingItsResult",
+          "denialAndAccountReplacementDuringLookupDiscardLateSuccessAndFailure",
+          "exactOwnedLookupDoesNotScanOrAcquireTransportWhenOffline",
+          "foreignOrMalformedReferenceCannotBePublishedAsTheRequestedOriginal",
+          "invalidRequestOrKnownDenialStopsBeforeExactLookup"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "ReadSpaceInboxRepairProgressTest",
+        "methods": [
+          "cancellationDoesNotCreateAPassOrTreatItsLateResultAsMissing",
+          "knownDenialAndInvalidOwnerDoNotReadTheCheckpoint",
+          "malformedCheckpointIsFailureRatherThanMissingWork",
+          "ownershipChangesDuringReadOverrideCapturedSuccessOrStorageFailure",
+          "readingAbsentActiveAndCompletedProgressNeverCreatesDemand"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "ChangeSpaceInboxRepairProgressTest",
+        "methods": [
+          "cancellationAfterAnUncooperativeWriteDoesNotStartAnotherAttempt",
+          "competingLaterDemandIsRereadBeforeCapturedPassCompletion",
+          "completionAcknowledgesOnlyItsCapturedDemandAndThenBecomesIdle",
+          "denialDuringContentionAndOwnershipReplacementAfterCommitStopOldWork",
+          "genuineContentionStopsAfterThreeAttemptsWithoutScanningOrTransport",
+          "invalidTransitionsAndMalformedRepositoryResponsesCannotAdvanceWork",
+          "lostCommittedResponseIsRecoveredByExactRequestReplayWithoutAnotherWrite",
+          "operationalFailureStopsImmediatelyWithoutClaimingProgress",
+          "requestingAgainPreservesTheCapturedPassAndExactReplayDoesNotRewrite",
+          "stalePageCannotFinishANewerPassAndRestartKeepsTheLaterDemand"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "ObserveSpaceMessageInventoryTest",
+        "methods": [
+          "aConversationReaderRejectsUnrelatedReturnedRecords",
+          "knownDenialIsReportedBeforeWaitingForUnrelatedSessionStorage",
+          "malformedInventoriesAreRejectedAndCompletedFailureDoesNotLoop",
+          "sameSourceEmissionsAreDetachedAndDoNotEmitDuplicateInventories",
+          "stagingSnapshotDoesNotAliasMutableNativePredecessors"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserCommandArchiveMutationsTest",
+        "methods": [
+          "anyChangedCommandFieldLeavesEveryStoreUntouched",
+          "archiveAndReplicaDemandSurviveReopening",
+          "callerCollectionsAreDetachedBeforeSuspending",
+          "cancelledWritesLeaveAllOrNoneCommitted",
+          "commandUpdateAndArchivalHaveOneConsistentWinner",
+          "eitherReplicaConflictOrGenerationReusePreservesCommand",
+          "emptyActiveInventoryStillPublishesDurableReplicaDemand",
+          "exactArchiveReplayDoesNotRewriteLaterReplicaProgress",
+          "failureDeletingArchivedCommandRollsBackEarlierReplicaWrites",
+          "independentProgressAndArchivalHaveOneConsistentWinner",
+          "invalidOrForeignBatchesAreRejectedIncludingOnReplay",
+          "lostResponseCanBeConfirmedWithoutRepeatingDemand",
+          "mixedReplicaMutationsAndArchiveCommitTogether",
+          "replacementAccountIsDeniedAndRenewedOwnerCanComplete",
+          "secondReplicaConstraintFailureRollsBackEveryStore"
+        ]
+      }
+    ],
+    "reportManifestSha256": "d4b0b58bc782856624ae79265a8a1fb45e2b022ca2ee598edebbf848253b477f"
+  },
+  "apple": {
+    "accepted": true,
+    "sourceCommit": "42fd5d12c5353779d4a61cc50b8c53ae8c6c0bc6",
+    "runId": 43427620202,
+    "jobId": 131892855717,
+    "counts": {
+      "iosSimulatorArm64Test": 5692
+    },
+    "artifactId": 14041918793,
+    "artifactBytes": 920741,
+    "artifactSha256": "fb69605c64b9442d6fc577f3b963c55497f58b6f3745be6613aaf4baad971cb2",
+    "jobLogSha256": "a3860bf3b7c210c9723a3174214e2c55b9fbb95e9dc03d0f655f673d8e45e563",
+    "previousExactCaseIdsRetained": true,
+    "previousMethodAndPlatformIdsRetained": true,
+    "browserEngineReview": null,
+    "newSharedMethods": 101,
+    "actualNew": [
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleCollaborationSpaceInboxRepairStorageTest",
+        "methods": [
+          "aCapturedPassSurvivesCompletionAndDefersNewReferencesToTheNextPass",
+          "aLostCompletionReplySurvivesRestartAndOriginalReplayCannotReviveItsReference",
+          "aSendRetainsItsExactRepairOriginalWithSourceIndexAndWakeAcrossRestart",
+          "absentOrMalformedExactLookupsNeverCreateKeyMaterial",
+          "anExistingCommandCanRetainAndCompleteAReferenceWithoutAnyEditorEnvelope",
+          "anIndexConflictCannotRetireARepairOrPublishItsAcknowledgement",
+          "anotherOriginalWithTheSameIdCannotCompleteTheRetainedReference",
+          "cancellationBeforeCommitKeepsThePendingPreviewAndRepairTogether",
+          "completionDropsTheOriginalTextAndRetainsItsStableActivityAnchor",
+          "completionPublishesItsPreviewAndRetiresOnlyThatReferenceAtomically",
+          "eachReadUsesOneBoundedRepairSubsetAndRejectsOversizedLimits",
+          "exactLookupPreservesConversationGroupAndCurrentAccountOwnershipAfterRenewal",
+          "exactLookupUsesOneDocumentAndCompletedReferencesStayAbsentAfterRestart",
+          "hidingNewestAndCompletingItsReferenceRevealsEarlierPendingAfterRestart",
+          "removingTheGenerationRestartsAnExistingCursorWithoutExposingAnotherAccount",
+          "sessionRenewalKeepsOriginalReferencesAndReplacementAccountCannotReadThem"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SpaceInboxCommandPolicyTest",
+        "methods": [
+          "aDifferentIntentOrNamespaceCannotConfirmAnOriginalWithTheSameId",
+          "aHiddenAnchorCannotBeRevivedByLateSentEvidence",
+          "absentAndNonterminalRecordsDoNotBecomeDeliveryReceiptsAndCapturedSetsAreDetached",
+          "anEarlierAcknowledgementCannotReplaceANewerPendingConversationPreview",
+          "cancelledEvidenceCannotEraseAnAlreadyConfirmedOriginal",
+          "cancelledNewestRevealsTheEarlierCandidateAndRetainsTyping",
+          "changedIndexVersionOrMissingExactAnchorCannotCompleteAReference",
+          "sentEvidencePreservesANewerEditedPreviewTimeAndPlacement"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "ReconcileSpaceInboxOriginalTest",
+        "methods": [
+          "aConcurrentNewerEditIsRereadBeforeCompletionPublication",
+          "anAccountReplacementBeforePublicationRejectsTheLateOriginal",
+          "anUncertainPublicationRetainsItsFailureAndDoesNotStartAWriteLoop",
+          "cancellationDuringTheAnchorReadEscapesWithoutAWrite",
+          "commandReadFailuresAndMismatchedIntentNeverManufactureFailedOrSentPreviews",
+          "denialDuringCommandReadStopsBeforeAnyIndexAcquisition",
+          "exactTerminalEvidencePublishesProgressAndCompletionTogetherWithoutTransport",
+          "missingOrQueuedCommandsRetainPendingWithoutReadingTheIndex",
+          "repeatedIndexContentionStopsAtThreeAttemptsWithTheSameOriginal"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SpaceInboxRepairProgressPolicyTest",
+        "methods": [
+          "aNewDemandStartsOneFinitePassAndBeginningItAgainDoesNotResetItsCursor",
+          "aPageThatDoesNotAdvanceCannotKeepTheWorkerRunning",
+          "aPendingOnlyPassBecomesIdleAfterItsLastPageAndDoesNotGenerateAnotherDemand",
+          "aRepeatedCurrentDemandDoesNotRewriteAnActivePassOrCreateAnotherGeneration",
+          "demandDuringAnActivePassIsCoalescedWithoutDiscardingItsCapturedProgress",
+          "generationReplacementCanExplicitlyRestartOnlyTheMatchingCapturedPass",
+          "invalidCoordinatesAndMalformedStatesAreRejectedBeforeAProgressWrite",
+          "replayingAnOlderActiveOrCompletedDemandCannotReplaceALaterDemand",
+          "stalePageCompletionCannotAcknowledgeANewerCursorOrNewlyStartedPass"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleCollaborationSpaceInboxRepairProgressStorageTest",
+        "methods": [
+          "aCapturedPassAndLaterDemandSurviveRestartWithoutMixingTheirPositions",
+          "aLostCommittedResponseRemainsReadableAndTheOldExpectedStateCannotReplayIt",
+          "aStaleWriterCannotOverwriteNewDemandOrReuseTheCurrentGeneration",
+          "absentAndInvalidReadsCreateNoKeysOrWork",
+          "acknowledgedIdleProgressAndExactReplayDoNotRewriteCiphertextOrScheduleWork",
+          "cancellationBeforeTheRawCommitRetainsTheOriginalPass",
+          "concurrentCheckpointWritersPublishExactlyOneReplacement",
+          "equalDemandIdsInDifferentGroupsRemainIndependentAndTheirCiphertextCannotBeMoved",
+          "renewalRetainsOwnedProgressWhileReplacementAccountsFenceReadsAndWrites"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "ReadSpaceInboxRepairsTest",
+        "methods": [
+          "accountSessionAndAudienceReplacementAtReadReturnDiscardCapturedData",
+          "cancellationDoesNotBecomeAbsenceOrRetryTheRepairPage",
+          "confirmedDenialAndMalformedRequestsNeverReadTheRepairPage",
+          "denialReceivedDuringReadWinsOverSuccessfulOrFailedRepairPageResults",
+          "emptyPageAndGenerationRestartRemainExplicitWithoutLooping",
+          "identityReplacementWhileAdmissionIsSuspendedStopsBeforeInventory",
+          "malformedOwnershipInventoryAndCursorResponsesCannotBePublished",
+          "ownedRepairPageIgnoresCredentialAgeAndSelectedCompanyWithoutAcquisition",
+          "publishedItemsDoNotAliasAMutableRepositoryList"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "ReadSpaceInboxRepairTest",
+        "methods": [
+          "absentCompletedReferenceRemainsAbsenceWithoutAnotherRead",
+          "cancellationRetiresAnUncooperativeLookupWithoutPublishingItsResult",
+          "denialAndAccountReplacementDuringLookupDiscardLateSuccessAndFailure",
+          "exactOwnedLookupDoesNotScanOrAcquireTransportWhenOffline",
+          "foreignOrMalformedReferenceCannotBePublishedAsTheRequestedOriginal",
+          "invalidRequestOrKnownDenialStopsBeforeExactLookup"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "ReadSpaceInboxRepairProgressTest",
+        "methods": [
+          "cancellationDoesNotCreateAPassOrTreatItsLateResultAsMissing",
+          "knownDenialAndInvalidOwnerDoNotReadTheCheckpoint",
+          "malformedCheckpointIsFailureRatherThanMissingWork",
+          "ownershipChangesDuringReadOverrideCapturedSuccessOrStorageFailure",
+          "readingAbsentActiveAndCompletedProgressNeverCreatesDemand"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "ChangeSpaceInboxRepairProgressTest",
+        "methods": [
+          "cancellationAfterAnUncooperativeWriteDoesNotStartAnotherAttempt",
+          "competingLaterDemandIsRereadBeforeCapturedPassCompletion",
+          "completionAcknowledgesOnlyItsCapturedDemandAndThenBecomesIdle",
+          "denialDuringContentionAndOwnershipReplacementAfterCommitStopOldWork",
+          "genuineContentionStopsAfterThreeAttemptsWithoutScanningOrTransport",
+          "invalidTransitionsAndMalformedRepositoryResponsesCannotAdvanceWork",
+          "lostCommittedResponseIsRecoveredByExactRequestReplayWithoutAnotherWrite",
+          "operationalFailureStopsImmediatelyWithoutClaimingProgress",
+          "requestingAgainPreservesTheCapturedPassAndExactReplayDoesNotRewrite",
+          "stalePageCannotFinishANewerPassAndRestartKeepsTheLaterDemand"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "ObserveSpaceMessageInventoryTest",
+        "methods": [
+          "aConversationReaderRejectsUnrelatedReturnedRecords",
+          "knownDenialIsReportedBeforeWaitingForUnrelatedSessionStorage",
+          "malformedInventoriesAreRejectedAndCompletedFailureDoesNotLoop",
+          "sameSourceEmissionsAreDetachedAndDoNotEmitDuplicateInventories",
+          "stagingSnapshotDoesNotAliasMutableNativePredecessors"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleCommandArchiveMutationsTest",
+        "methods": [
+          "anyChangedCommandFieldLeavesEveryStoreUntouched",
+          "archiveAndReplicaDemandSurviveReopening",
+          "callerCollectionsAreDetachedBeforeSuspending",
+          "cancelledWritesLeaveAllOrNoneCommitted",
+          "commandUpdateAndArchivalHaveOneConsistentWinner",
+          "eitherReplicaConflictOrGenerationReusePreservesCommand",
+          "emptyActiveInventoryStillPublishesDurableReplicaDemand",
+          "exactArchiveReplayDoesNotRewriteLaterReplicaProgress",
+          "failureDeletingArchivedCommandRollsBackEarlierReplicaWrites",
+          "independentProgressAndArchivalHaveOneConsistentWinner",
+          "invalidOrForeignBatchesAreRejectedIncludingOnReplay",
+          "lostResponseCanBeConfirmedWithoutRepeatingDemand",
+          "mixedReplicaMutationsAndArchiveCommitTogether",
+          "replacementAccountIsDeniedAndRenewedOwnerCanComplete",
+          "secondReplicaConstraintFailureRollsBackEveryStore"
+        ]
+      }
+    ],
+    "reportManifestSha256": "591f326606e34085c5e53c2fee79c7519150af06725df01160c03ea3158ad50a"
+  },
+  "jobLogTransportReview": {
+    "reason": "Completed job log retrieval is blocked by gh run view until the whole run completes; use the GitHub job-log endpoint for the verified completed job ID.",
+    "firstAuditSession": 65193,
+    "firstAuditExit": 1,
+    "firstAuditReaped": true,
+    "testCriteriaChanged": false,
+    "caseIdentityCriteriaChanged": false,
+    "emptyLogPreserved": true,
+    "secondAuditSession": 68896,
+    "secondAuditExit": 1,
+    "secondAuditReaped": true,
+    "secondReason": "gh api rejects ANSI sequences even when stdout is redirected to a file; preserve raw completed-job logs with its explicit escape-sequence flag. Logs are written only to disk and not rendered.",
+    "rawLogsRendered": false
+  },
+  "accepted": true,
+  "runId": 43427620202,
+  "sourceCommit": "42fd5d12c5353779d4a61cc50b8c53ae8c6c0bc6",
+  "totalCases": 19362,
+  "newActualAppleMethods": 101,
+  "terminalPublicationMethodsIncluded": false,
+  "repairWorkerIncluded": false,
+  "productGraphActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false
+}
