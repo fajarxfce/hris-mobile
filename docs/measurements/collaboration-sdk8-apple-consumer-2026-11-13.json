@@ -1,0 +1,20 @@
+{
+  "status": "exact local consumer prepared; commit and push",
+  "unitTestsPassed": 8,
+  "unitTestsSeconds": 0.005,
+  "nativeTestsRepeated": 0,
+  "publication": false,
+  "sourceBase": "637f0aca560d95804bf0d00896bae2e87a918c4b",
+  "sources": {
+    "tool/prepare_collaboration_apple_sdk.py": "2a35096d640fb2e193dc29891fe25af8938d54fef17b87f95d1a9baeff85b9f2",
+    "tool/test_prepare_collaboration_apple_sdk.py": "efe0f7cf0c67194315588e57b77ceb7bdb1ec1fe53c89a8cd3e694c2ed521716",
+    "tool/collaboration-sdk-patches/apple-consumer.json": "26cc2e68c8009c0db17cfd6dfa57b4829c96cf7ee644477aa10caa696397aff6",
+    "tool/collaboration-sdk-patches/apple-distribution.json": "6de058a8fbea3dc37a21075b55c9d7fc7ce0ef1e7093cf6943f2dac9de9631ce"
+  },
+  "passed": true,
+  "session": "86083 REAPED",
+  "archiveSha256": "966c198f042a092423ca7e5c55ca3dc69bf7d448ef8caf991c1b4e44d7e5b687",
+  "packageFiles": 45,
+  "expandedBytes": 1101750302,
+  "applicationLinked": false
+}

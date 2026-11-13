@@ -9,7 +9,11 @@ contains all45 frozen runtime files. See collaboration-sdk8-apple-distribution.m
 Package82309 REAPED. No publication or app activation yet. Main navigationc6debddb is
 accepted15517 and pushed. Phone92 was installed04:11UTC13Nov; never install91 or92 again.
 The older phone/native statuses below are historical and superseded by this section.
-Next: consume the exact Swift package and implement the actual Apple bridge.
+The exact local Swift consumer is now accepted:45 files/1101750302 expanded bytes,
+consumer86083 REAPED and8 new Python guards pass. The archive SHA remains966c198f...;
+see collaboration-sdk8-apple-consumer.md and its measurement. No download, publication,
+application link or native rebuild. Next: synchronous iOS identity datasource, typed Swift
+bridge and actual host checks; Main catalogue full96127 is active independently.
 
 
 Separate native Apple candidate43370071243/job131703523190 is FULLY ACCEPTED at
