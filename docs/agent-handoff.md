@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 10:56 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 10:57 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 User-authorized phone delivery is install-only: announce each install, select its serial,
 and never launch, drive, reset or uninstall the user's app. Physical iPhone interaction
@@ -26,6 +26,23 @@ methods. They are not applied or tested; inspect its state and actual prepared f
 a captured pass and one coalesced later demand. Finishing a pending-only pass must become idle.
 Never reapply this accepted command increment's historical preparation scripts. Push every commit
 and continue the long run. The user's phone remains on release92 until a validated visible update.
+
+## Accepted inbox Apple and portable control
+
+Run 43403331941 at exact 8a48212f21c0e1c18802997fe46aabd4c567fba7 is fully accepted: 19,059 cases.
+Portable 131811409481: 13,468; Apple 131811409579: 5,591.
+All preceding class/method/platform identities remain. The 5,959 prior browser cases use an
+explicitly verified Chrome156→157 suffix change; Apple/JVM identities remain exact.
+Raw replica transactions (14),
+inbox index (21), draft publication (22) and send publication (24) now have 81 additional actual
+Apple executions. The iOS host and 16 push-envelope fields pass. Both artifact digests, XML
+identities and complete successful logs are audited. Do not repeat this accepted control.
+Portable report c9d7abf15e340ca9b725b8ab5ef61d202c23e99ed790245fb71a36711962dea5.
+Apple report 41a1d9c7177c29eb511cc13fab089aa9262ac5bb83541a5108121753646410ff.
+Starter0b9e694 records the14 Apple storage cases for its ten identical generic source files;
+this is Mobile execution of the shared source, not a separate Starter application run.
+Source excludes the later reference-storage increment and command-progress work. Their native
+acceptance remains separate. No product Group graph, iPhone interaction or live rollout is claimed.
 
 ## Original inbox repair references locally accepted
 

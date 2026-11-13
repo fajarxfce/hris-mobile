@@ -1,0 +1,481 @@
+{
+  "portable": {
+    "accepted": true,
+    "sourceCommit": "8a48212f21c0e1c18802997fe46aabd4c567fba7",
+    "runId": 43403331941,
+    "jobId": 131811409481,
+    "counts": {
+      "desktopTest": 6468,
+      "testAndroidHostTest": 960,
+      "wasmJsBrowserTest": 6040
+    },
+    "artifactId": 14027517044,
+    "artifactBytes": 4287958,
+    "artifactSha256": "d44f45b877d12368f6b1984ecfbe9dd3379a1a03eeb3c568f0c64819b8106fa5",
+    "jobLogSha256": "ea0cf7b9a5df38d7d3ee1b19e643914607f912aeb9e78c3275cd8f355ac8da3d",
+    "previousExactCaseIdsRetained": false,
+    "previousMethodAndPlatformIdsRetained": true,
+    "browserEngineReview": {
+      "accepted": true,
+      "runId": 43403331941,
+      "sourceCommit": "8a48212f21c0e1c18802997fe46aabd4c567fba7",
+      "previousRun": 43379266527,
+      "oldArtifactSha256": "97c34d91359c0d81f7a103b4d18c1a0111093a5e29411b7079d50c2b21657db5",
+      "newArtifactSha256": "d44f45b877d12368f6b1984ecfbe9dd3379a1a03eeb3c568f0c64819b8106fa5",
+      "oldSuffix": "[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+      "newSuffix": "[wasmJs, browser, ChromeHeadless157.0.0.0, Linux0.0.0]",
+      "affectedReports": 504,
+      "priorBrowserCases": 5959,
+      "exactNonBrowserCases": 7347,
+      "previousExactCaseIdsRetained": false,
+      "previousMethodAndPlatformIdsRetained": true,
+      "allowedChange": "Only the exact trailing ChromeHeadless156.0.0.0 browser suffix changes to ChromeHeadless157.0.0.0; no test class, method, platform or report path change is permitted."
+    },
+    "newSharedMethods": 81,
+    "actualNew": [
+      {
+        "platform": "desktopTest",
+        "clazz": "ReplicaMutationsTest",
+        "methods": [
+          "bothPartitionsAndWakeSurviveRestart",
+          "callerCollectionMutationCannotChangeTheCapturedWrite",
+          "cancelledWritesLeaveEitherAllOrNoneCommitted",
+          "competingWritersCommitOnlyOneConsistentPair",
+          "eitherStaleCheckpointPreservesBothPartitionsAndWake",
+          "invalidBatchesAreRejectedBeforeAnyMutation",
+          "lostResponseReadbackCannotResurrectAnAcknowledgedWake",
+          "mixedStagingAndDeltaKeepPublishedVisibility",
+          "replacementAccountCannotWriteAndRenewedOwnerKeepsOriginals",
+          "replacementAndRemovalPublishBothPartitions",
+          "reusedGenerationRejectsTheWholeMutation",
+          "secondDatabaseConstraintFailureRollsBackFirstMutationAndWake",
+          "tombstonesVersionsAndTagsRetainTheirExistingSemantics",
+          "wakeCapacityOrReusedGenerationPreservesBothPartitions"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationSpaceInboxPolicyTest",
+        "methods": [
+          "equalTimesUseRetainedInsertionOrderAndAcknowledgedDisplayTimeDoesNotMoveIt",
+          "frozenOrClearedDraftCannotHideActualMessageActivity",
+          "historyCannotClaimPendingOrFailedAndSourceNamespacesStayDistinct",
+          "incomingActivityKeepsTheEditablePreviewWhileAdvancingRecency",
+          "invalidProjectionOrDuplicateCandidateCannotEnterAReadyPublication",
+          "nonTextContentKeepsItsKindAndEmptyMetadataHasNoInventedMessageReceipt"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationSpaceInboxStorageTest",
+        "methods": [
+          "acknowledgementsOutOfOrderNeverReplaceNewerPendingOrMoveAnchors",
+          "committedLostReplyReopensCoherentComponentsAndDoesNotDuplicateOnReadback",
+          "emptyIndexDoesNotCreateKeysAndReadsUseOnlyTheOwnedIndex",
+          "equalPublicationsAndDuplicateDatabaseEmissionsDoNotReplaceRowsOrCursors",
+          "exactCommandNamespacesCannotShareAnchorsAndExistingAnchorsCannotMove",
+          "finitePaginationEndsAndRevisionChangesExplicitlyRestartTheCapturedPage",
+          "frozenAndEmptyComposerSlotsDoNotBecomeEditablePreviews",
+          "hiddenLatestKeepsItsAnchorAndRevealsThePrecedingCandidateAfterRestart",
+          "indexAndCursorReopenForTheSameAccountButCannotCrossAccountOrGroup",
+          "missingKeysAndInvalidBoundsCannotCreateReplacementMaterial",
+          "mutableCallerListsAreCapturedBeforeStorageSuspension",
+          "pageQueriesStayBoundedAndNeverReadHistoryOrOpenPerConversationReaders",
+          "payloadSortAndTagDamageCannotPublishPartialPreviews",
+          "pendingAndDraftOutsideTheFirstPageJoinTheGloballyRankedList",
+          "staleConcurrentProposalsHaveOneWinnerAndRetryAllocatesTheNextOrdinal"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "SpaceInboxDraftPublicationTest",
+        "methods": [
+          "anotherCanonicalConversationOrChangedCreationFactCannotReplaceTheTarget",
+          "clearingEditorRetainsItsRevisionAndRevealsTheExistingMessage",
+          "exhaustedInsertionCounterCannotWrapOrPublishANewEditor",
+          "firstDraftAllocatesOnePositionAndAReplayReusesTheSameSlot",
+          "snapshotCaptureDetachesCandidateListsAndRejectsContradictoryRows"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "EditSpaceDraftInboxTest",
+        "methods": [
+          "cancellationDuringIndexAcquisitionEscapesBeforeAnyWrite",
+          "denialDuringIndexReadPreventsMetadataAcquisitionAndSourcePublication",
+          "emptySlotReplayNeedsNeitherMetadataNorAnotherWriteAndForeignRowsAreRejected",
+          "lostReplyWithMissingIndexPreservesTheUnprovenStorageFailure",
+          "oneIndependentIndexConflictRereadsWithoutChangingTheCapturedGesture",
+          "repeatedIndexContentionStopsAfterThreeAttemptsWithoutWritingTheSource",
+          "sourceAcknowledgementAloneCannotConfirmAnAbsentIndexedEditor",
+          "successfulEditingConfirmsTheSameSourceAndIndexedSlot"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationSpaceDraftIndexStorageTest",
+        "methods": [
+          "accountReplacementAtTheCommitFenceCannotRedirectEitherPartition",
+          "anExistingLegacySourceRepairsItsIndexWithoutReencryptingTheOriginalBody",
+          "anIndependentIndexConflictLeavesTheSourceUntouched",
+          "anIndependentSourceConflictCannotCommitAnOtherwiseCurrentIndexProposal",
+          "cancellationBeforeTheJointTransactionLeavesBothTargetsEmpty",
+          "draftPublicationCannotReplaceAnExistingMessagePreview",
+          "editingAndClearingPublishSourceAndIndexTogether",
+          "lostCommittedResponseReopensBothAndExactReplayDoesNotRewriteEither",
+          "simultaneousDifferentEditorsHaveOneCoherentWinnerThenRetryTheSameLoser"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "SpaceInboxComposerPublicationTest",
+        "methods": [
+          "aBackwardsClockPreservesConversationOrderAndTheActualMessageTime",
+          "aHiddenRetainedOriginalCannotBeRevivedBySubmissionReplay",
+          "anotherSendAtTheSameTimeGetsALaterDurablePosition",
+          "counterExhaustionCannotWrapOrReplaceAnExistingAnchor",
+          "mismatchedIndexVersionsAndUnprovenSourceAliasesAreRejected",
+          "replayRetainsANewerEditorAndActualSentEvidenceWithoutAllocatingAgain",
+          "theFirstGestureHasAPendingPreviewAndAnExplicitEmptyEditor"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "SubmitSpaceComposerInboxTest",
+        "methods": [
+          "aDifferentOriginalNamespaceCannotConfirmTheRetainedGroupGesture",
+          "aLostReplyWithUnreadableIndexKeepsTheOriginalFailureUntilExactReplay",
+          "aSourceOnlyAcknowledgementCannotConfirmAnAbsentPreviewAndReplayRepairsIt",
+          "anIndependentIndexConflictRetriesTheSameGestureWithoutDuplicatingIt",
+          "cancellationDuringAnchorAcquisitionCannotCommitAnyPartOfTheGesture",
+          "continuousContentionStopsAfterThreeAttemptsAndPreservesTheEditor",
+          "denialDuringAnchorAcquisitionStopsBeforeMetadataOrSourcePublication",
+          "thePendingPreviewIsDurableBeforeTheSchedulerHintRuns"
+        ]
+      },
+      {
+        "platform": "desktopTest",
+        "clazz": "CollaborationSpaceComposerIndexStorageTest",
+        "methods": [
+          "aLegacyOriginalRepairsItsMissingIndexWithoutReplacingOriginalBytesOrWake",
+          "aLostCommittedReplyAndLaterTypingReplayWithoutRewritingOrReplacingWake",
+          "accountReplacementAtCommitCannotWriteIntoEitherOldPartition",
+          "anIndependentEditorWriteCannotBeOverwrittenByAnIndexProposal",
+          "anIndependentIndexWritePreventsEveryPartOfTheSourceHandoff",
+          "cancellationBeforeTheTransactionKeepsBothSourcesAndWakeAbsent",
+          "confirmingAnEarlierOriginalKeepsTheNewestPendingPreviewInPlace",
+          "theOriginalEditorPendingPreviewAndWakeCommitTogether",
+          "twoConversationsHaveOneCoherentWinnerAndTheOtherCanRetry"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserReplicaMutationsTest",
+        "methods": [
+          "bothPartitionsAndWakeSurviveRestart",
+          "callerCollectionMutationCannotChangeTheCapturedWrite",
+          "cancelledWritesLeaveEitherAllOrNoneCommitted",
+          "competingWritersCommitOnlyOneConsistentPair",
+          "eitherStaleCheckpointPreservesBothPartitionsAndWake",
+          "invalidBatchesAreRejectedBeforeAnyMutation",
+          "lostResponseReadbackCannotResurrectAnAcknowledgedWake",
+          "mixedStagingAndDeltaKeepPublishedVisibility",
+          "replacementAccountCannotWriteAndRenewedOwnerKeepsOriginals",
+          "replacementAndRemovalPublishBothPartitions",
+          "reusedGenerationRejectsTheWholeMutation",
+          "secondDatabaseConstraintFailureRollsBackFirstMutationAndWake",
+          "tombstonesVersionsAndTagsRetainTheirExistingSemantics",
+          "wakeCapacityOrReusedGenerationPreservesBothPartitions"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "CollaborationSpaceInboxPolicyTest",
+        "methods": [
+          "equalTimesUseRetainedInsertionOrderAndAcknowledgedDisplayTimeDoesNotMoveIt",
+          "frozenOrClearedDraftCannotHideActualMessageActivity",
+          "historyCannotClaimPendingOrFailedAndSourceNamespacesStayDistinct",
+          "incomingActivityKeepsTheEditablePreviewWhileAdvancingRecency",
+          "invalidProjectionOrDuplicateCandidateCannotEnterAReadyPublication",
+          "nonTextContentKeepsItsKindAndEmptyMetadataHasNoInventedMessageReceipt"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserCollaborationSpaceInboxStorageTest",
+        "methods": [
+          "acknowledgementsOutOfOrderNeverReplaceNewerPendingOrMoveAnchors",
+          "committedLostReplyReopensCoherentComponentsAndDoesNotDuplicateOnReadback",
+          "emptyIndexDoesNotCreateKeysAndReadsUseOnlyTheOwnedIndex",
+          "equalPublicationsAndDuplicateDatabaseEmissionsDoNotReplaceRowsOrCursors",
+          "exactCommandNamespacesCannotShareAnchorsAndExistingAnchorsCannotMove",
+          "finitePaginationEndsAndRevisionChangesExplicitlyRestartTheCapturedPage",
+          "frozenAndEmptyComposerSlotsDoNotBecomeEditablePreviews",
+          "hiddenLatestKeepsItsAnchorAndRevealsThePrecedingCandidateAfterRestart",
+          "indexAndCursorReopenForTheSameAccountButCannotCrossAccountOrGroup",
+          "missingKeysAndInvalidBoundsCannotCreateReplacementMaterial",
+          "mutableCallerListsAreCapturedBeforeStorageSuspension",
+          "pageQueriesStayBoundedAndNeverReadHistoryOrOpenPerConversationReaders",
+          "payloadSortAndTagDamageCannotPublishPartialPreviews",
+          "pendingAndDraftOutsideTheFirstPageJoinTheGloballyRankedList",
+          "staleConcurrentProposalsHaveOneWinnerAndRetryAllocatesTheNextOrdinal"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SpaceInboxDraftPublicationTest",
+        "methods": [
+          "anotherCanonicalConversationOrChangedCreationFactCannotReplaceTheTarget",
+          "clearingEditorRetainsItsRevisionAndRevealsTheExistingMessage",
+          "exhaustedInsertionCounterCannotWrapOrPublishANewEditor",
+          "firstDraftAllocatesOnePositionAndAReplayReusesTheSameSlot",
+          "snapshotCaptureDetachesCandidateListsAndRejectsContradictoryRows"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "EditSpaceDraftInboxTest",
+        "methods": [
+          "cancellationDuringIndexAcquisitionEscapesBeforeAnyWrite",
+          "denialDuringIndexReadPreventsMetadataAcquisitionAndSourcePublication",
+          "emptySlotReplayNeedsNeitherMetadataNorAnotherWriteAndForeignRowsAreRejected",
+          "lostReplyWithMissingIndexPreservesTheUnprovenStorageFailure",
+          "oneIndependentIndexConflictRereadsWithoutChangingTheCapturedGesture",
+          "repeatedIndexContentionStopsAfterThreeAttemptsWithoutWritingTheSource",
+          "sourceAcknowledgementAloneCannotConfirmAnAbsentIndexedEditor",
+          "successfulEditingConfirmsTheSameSourceAndIndexedSlot"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserCollaborationSpaceDraftIndexStorageTest",
+        "methods": [
+          "accountReplacementAtTheCommitFenceCannotRedirectEitherPartition",
+          "anExistingLegacySourceRepairsItsIndexWithoutReencryptingTheOriginalBody",
+          "anIndependentIndexConflictLeavesTheSourceUntouched",
+          "anIndependentSourceConflictCannotCommitAnOtherwiseCurrentIndexProposal",
+          "cancellationBeforeTheJointTransactionLeavesBothTargetsEmpty",
+          "draftPublicationCannotReplaceAnExistingMessagePreview",
+          "editingAndClearingPublishSourceAndIndexTogether",
+          "lostCommittedResponseReopensBothAndExactReplayDoesNotRewriteEither",
+          "simultaneousDifferentEditorsHaveOneCoherentWinnerThenRetryTheSameLoser"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SpaceInboxComposerPublicationTest",
+        "methods": [
+          "aBackwardsClockPreservesConversationOrderAndTheActualMessageTime",
+          "aHiddenRetainedOriginalCannotBeRevivedBySubmissionReplay",
+          "anotherSendAtTheSameTimeGetsALaterDurablePosition",
+          "counterExhaustionCannotWrapOrReplaceAnExistingAnchor",
+          "mismatchedIndexVersionsAndUnprovenSourceAliasesAreRejected",
+          "replayRetainsANewerEditorAndActualSentEvidenceWithoutAllocatingAgain",
+          "theFirstGestureHasAPendingPreviewAndAnExplicitEmptyEditor"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "SubmitSpaceComposerInboxTest",
+        "methods": [
+          "aDifferentOriginalNamespaceCannotConfirmTheRetainedGroupGesture",
+          "aLostReplyWithUnreadableIndexKeepsTheOriginalFailureUntilExactReplay",
+          "aSourceOnlyAcknowledgementCannotConfirmAnAbsentPreviewAndReplayRepairsIt",
+          "anIndependentIndexConflictRetriesTheSameGestureWithoutDuplicatingIt",
+          "cancellationDuringAnchorAcquisitionCannotCommitAnyPartOfTheGesture",
+          "continuousContentionStopsAfterThreeAttemptsAndPreservesTheEditor",
+          "denialDuringAnchorAcquisitionStopsBeforeMetadataOrSourcePublication",
+          "thePendingPreviewIsDurableBeforeTheSchedulerHintRuns"
+        ]
+      },
+      {
+        "platform": "wasmJsBrowserTest",
+        "clazz": "BrowserCollaborationSpaceComposerIndexStorageTest",
+        "methods": [
+          "aLegacyOriginalRepairsItsMissingIndexWithoutReplacingOriginalBytesOrWake",
+          "aLostCommittedReplyAndLaterTypingReplayWithoutRewritingOrReplacingWake",
+          "accountReplacementAtCommitCannotWriteIntoEitherOldPartition",
+          "anIndependentEditorWriteCannotBeOverwrittenByAnIndexProposal",
+          "anIndependentIndexWritePreventsEveryPartOfTheSourceHandoff",
+          "cancellationBeforeTheTransactionKeepsBothSourcesAndWakeAbsent",
+          "confirmingAnEarlierOriginalKeepsTheNewestPendingPreviewInPlace",
+          "theOriginalEditorPendingPreviewAndWakeCommitTogether",
+          "twoConversationsHaveOneCoherentWinnerAndTheOtherCanRetry"
+        ]
+      }
+    ],
+    "reportManifestSha256": "c9d7abf15e340ca9b725b8ab5ef61d202c23e99ed790245fb71a36711962dea5"
+  },
+  "apple": {
+    "accepted": true,
+    "sourceCommit": "8a48212f21c0e1c18802997fe46aabd4c567fba7",
+    "runId": 43403331941,
+    "jobId": 131811409579,
+    "counts": {
+      "iosSimulatorArm64Test": 5591
+    },
+    "artifactId": 14029527766,
+    "artifactBytes": 899553,
+    "artifactSha256": "62b68d7554dacafa3bca9b1a2bc68a799dde204730c7c39f32bbcf19a8eb688c",
+    "jobLogSha256": "d67540e68ab8f45cd4f92b0508a8da8a1bedbfdb06cfde9b9abab28ca2ab2dea",
+    "previousExactCaseIdsRetained": true,
+    "previousMethodAndPlatformIdsRetained": true,
+    "browserEngineReview": null,
+    "newSharedMethods": 81,
+    "actualNew": [
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleReplicaMutationsTest",
+        "methods": [
+          "bothPartitionsAndWakeSurviveRestart",
+          "callerCollectionMutationCannotChangeTheCapturedWrite",
+          "cancelledWritesLeaveEitherAllOrNoneCommitted",
+          "competingWritersCommitOnlyOneConsistentPair",
+          "eitherStaleCheckpointPreservesBothPartitionsAndWake",
+          "invalidBatchesAreRejectedBeforeAnyMutation",
+          "lostResponseReadbackCannotResurrectAnAcknowledgedWake",
+          "mixedStagingAndDeltaKeepPublishedVisibility",
+          "replacementAccountCannotWriteAndRenewedOwnerKeepsOriginals",
+          "replacementAndRemovalPublishBothPartitions",
+          "reusedGenerationRejectsTheWholeMutation",
+          "secondDatabaseConstraintFailureRollsBackFirstMutationAndWake",
+          "tombstonesVersionsAndTagsRetainTheirExistingSemantics",
+          "wakeCapacityOrReusedGenerationPreservesBothPartitions"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "CollaborationSpaceInboxPolicyTest",
+        "methods": [
+          "equalTimesUseRetainedInsertionOrderAndAcknowledgedDisplayTimeDoesNotMoveIt",
+          "frozenOrClearedDraftCannotHideActualMessageActivity",
+          "historyCannotClaimPendingOrFailedAndSourceNamespacesStayDistinct",
+          "incomingActivityKeepsTheEditablePreviewWhileAdvancingRecency",
+          "invalidProjectionOrDuplicateCandidateCannotEnterAReadyPublication",
+          "nonTextContentKeepsItsKindAndEmptyMetadataHasNoInventedMessageReceipt"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleCollaborationSpaceInboxStorageTest",
+        "methods": [
+          "acknowledgementsOutOfOrderNeverReplaceNewerPendingOrMoveAnchors",
+          "committedLostReplyReopensCoherentComponentsAndDoesNotDuplicateOnReadback",
+          "emptyIndexDoesNotCreateKeysAndReadsUseOnlyTheOwnedIndex",
+          "equalPublicationsAndDuplicateDatabaseEmissionsDoNotReplaceRowsOrCursors",
+          "exactCommandNamespacesCannotShareAnchorsAndExistingAnchorsCannotMove",
+          "finitePaginationEndsAndRevisionChangesExplicitlyRestartTheCapturedPage",
+          "frozenAndEmptyComposerSlotsDoNotBecomeEditablePreviews",
+          "hiddenLatestKeepsItsAnchorAndRevealsThePrecedingCandidateAfterRestart",
+          "indexAndCursorReopenForTheSameAccountButCannotCrossAccountOrGroup",
+          "missingKeysAndInvalidBoundsCannotCreateReplacementMaterial",
+          "mutableCallerListsAreCapturedBeforeStorageSuspension",
+          "pageQueriesStayBoundedAndNeverReadHistoryOrOpenPerConversationReaders",
+          "payloadSortAndTagDamageCannotPublishPartialPreviews",
+          "pendingAndDraftOutsideTheFirstPageJoinTheGloballyRankedList",
+          "staleConcurrentProposalsHaveOneWinnerAndRetryAllocatesTheNextOrdinal"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SpaceInboxDraftPublicationTest",
+        "methods": [
+          "anotherCanonicalConversationOrChangedCreationFactCannotReplaceTheTarget",
+          "clearingEditorRetainsItsRevisionAndRevealsTheExistingMessage",
+          "exhaustedInsertionCounterCannotWrapOrPublishANewEditor",
+          "firstDraftAllocatesOnePositionAndAReplayReusesTheSameSlot",
+          "snapshotCaptureDetachesCandidateListsAndRejectsContradictoryRows"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "EditSpaceDraftInboxTest",
+        "methods": [
+          "cancellationDuringIndexAcquisitionEscapesBeforeAnyWrite",
+          "denialDuringIndexReadPreventsMetadataAcquisitionAndSourcePublication",
+          "emptySlotReplayNeedsNeitherMetadataNorAnotherWriteAndForeignRowsAreRejected",
+          "lostReplyWithMissingIndexPreservesTheUnprovenStorageFailure",
+          "oneIndependentIndexConflictRereadsWithoutChangingTheCapturedGesture",
+          "repeatedIndexContentionStopsAfterThreeAttemptsWithoutWritingTheSource",
+          "sourceAcknowledgementAloneCannotConfirmAnAbsentIndexedEditor",
+          "successfulEditingConfirmsTheSameSourceAndIndexedSlot"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleCollaborationSpaceDraftIndexStorageTest",
+        "methods": [
+          "accountReplacementAtTheCommitFenceCannotRedirectEitherPartition",
+          "anExistingLegacySourceRepairsItsIndexWithoutReencryptingTheOriginalBody",
+          "anIndependentIndexConflictLeavesTheSourceUntouched",
+          "anIndependentSourceConflictCannotCommitAnOtherwiseCurrentIndexProposal",
+          "cancellationBeforeTheJointTransactionLeavesBothTargetsEmpty",
+          "draftPublicationCannotReplaceAnExistingMessagePreview",
+          "editingAndClearingPublishSourceAndIndexTogether",
+          "lostCommittedResponseReopensBothAndExactReplayDoesNotRewriteEither",
+          "simultaneousDifferentEditorsHaveOneCoherentWinnerThenRetryTheSameLoser"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SpaceInboxComposerPublicationTest",
+        "methods": [
+          "aBackwardsClockPreservesConversationOrderAndTheActualMessageTime",
+          "aHiddenRetainedOriginalCannotBeRevivedBySubmissionReplay",
+          "anotherSendAtTheSameTimeGetsALaterDurablePosition",
+          "counterExhaustionCannotWrapOrReplaceAnExistingAnchor",
+          "mismatchedIndexVersionsAndUnprovenSourceAliasesAreRejected",
+          "replayRetainsANewerEditorAndActualSentEvidenceWithoutAllocatingAgain",
+          "theFirstGestureHasAPendingPreviewAndAnExplicitEmptyEditor"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "SubmitSpaceComposerInboxTest",
+        "methods": [
+          "aDifferentOriginalNamespaceCannotConfirmTheRetainedGroupGesture",
+          "aLostReplyWithUnreadableIndexKeepsTheOriginalFailureUntilExactReplay",
+          "aSourceOnlyAcknowledgementCannotConfirmAnAbsentPreviewAndReplayRepairsIt",
+          "anIndependentIndexConflictRetriesTheSameGestureWithoutDuplicatingIt",
+          "cancellationDuringAnchorAcquisitionCannotCommitAnyPartOfTheGesture",
+          "continuousContentionStopsAfterThreeAttemptsAndPreservesTheEditor",
+          "denialDuringAnchorAcquisitionStopsBeforeMetadataOrSourcePublication",
+          "thePendingPreviewIsDurableBeforeTheSchedulerHintRuns"
+        ]
+      },
+      {
+        "platform": "iosSimulatorArm64Test",
+        "clazz": "AppleCollaborationSpaceComposerIndexStorageTest",
+        "methods": [
+          "aLegacyOriginalRepairsItsMissingIndexWithoutReplacingOriginalBytesOrWake",
+          "aLostCommittedReplyAndLaterTypingReplayWithoutRewritingOrReplacingWake",
+          "accountReplacementAtCommitCannotWriteIntoEitherOldPartition",
+          "anIndependentEditorWriteCannotBeOverwrittenByAnIndexProposal",
+          "anIndependentIndexWritePreventsEveryPartOfTheSourceHandoff",
+          "cancellationBeforeTheTransactionKeepsBothSourcesAndWakeAbsent",
+          "confirmingAnEarlierOriginalKeepsTheNewestPendingPreviewInPlace",
+          "theOriginalEditorPendingPreviewAndWakeCommitTogether",
+          "twoConversationsHaveOneCoherentWinnerAndTheOtherCanRetry"
+        ]
+      }
+    ],
+    "reportManifestSha256": "41a1d9c7177c29eb511cc13fab089aa9262ac5bb83541a5108121753646410ff"
+  },
+  "accepted": true,
+  "runId": 43403331941,
+  "sourceCommit": "8a48212f21c0e1c18802997fe46aabd4c567fba7",
+  "totalCases": 19059,
+  "newSharedMethods": 81,
+  "newRawTransactionAppleMethodsIncluded": true,
+  "originalRepairReferenceMethodsIncluded": false,
+  "productGraphActivated": false,
+  "liveChanged": false,
+  "phoneInstalled": false,
+  "starterSharedAppleEvidence": {
+    "commit": "0b9e694d7038adf7afae57cad70687c2b1faa588",
+    "genericSourceCommit": "36fa855c58772d4863d27ba6c4e28123dea9a441",
+    "actualSharedStorageAppleCasesInMobile": 14,
+    "independentStarterAppleExecution": false,
+    "url": "https://github.com/fajarxfce/compose-fluent-starter/blob/0b9e694d7038adf7afae57cad70687c2b1faa588/docs/measurements/replica-atomic-mutations-apple-mobile-2026-11-13.json"
+  }
+}
