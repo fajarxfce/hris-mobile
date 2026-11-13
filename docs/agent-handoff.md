@@ -16,22 +16,27 @@ uses successful exact active/archive command reads and keeps ambiguous or unprov
 explicitly unresolved. It allocates no anchor, changes no command and owns no retry or I/O.
 Three drafts are already applied/accepted; do not rerun preparation/application scripts.
 
-Current .work/space-inbox-edit-provenance-2026-11-13 has14 APPLIED source/test paths,
-20 new shared methods (12 pure/8 actual storage). Focused1/session53119 REAPED exit0/37 assertions,
-but acceptance correctly REJECTED new compiler warnings: a fixture extension named raw was
-shadowed and therefore checked history instead of inbox bytes; one assertion was redundant.
-Both test-only issues are corrected. Focused2/session28154 RUNNING on source5404/
-daca364f1ace2e10a9fdb6992c0f78e72816a12d3dc5eecf8c5945334db2f5ef.
-Full16587 is NOT started or accepted. Preserve focused1 evidence; do not label it accepted.
-Preparation/application/format scripts are used; current actual source supersedes early drafts.
-Reap focused2, run accept-focused.py focused-2, then full gate before accepting these sources.
+Current .work/space-inbox-edit-provenance-2026-11-13 has14 APPLIED source/test paths.
+Focused2/session28154 REAPED PASS37 in212.223s on source5404/
+daca364f1ace2e10a9fdb6992c0f78e72816a12d3dc5eecf8c5945334db2f5ef. First focused53119 is
+REAPED but REJECTED despite37 passing assertions: a shadowed fixture read history instead of
+inbox bytes; one redundant assertion warned. Both are corrected and focused2 accepted. Preserve
+that first attempt as rejected evidence. Full16587/session89667 is RUNNING, not accepted.
+Reap full, run accept-full.py full-1, then record/commit/push before applying later changes.
 
-Next .work/command-insert-projection-2026-11-13 has five raw database source DRAFTS ONLY.
-Actual composer handoff stores originals in replicas, so it cannot atomically publish an actual
-edit command. Draft insertAndMutate reuses the command ledger and source/index replica transaction
-with a wake. It preserves immutable replay without repeating projection/wake. Tests/review/apply
-are still required; do not copy unvalidated drafts into either Mobile or Starter. Generic raw
-storage changes, once proved in Mobile, must port to Starter. No product graph activation.
+Next .work/command-insert-projection-2026-11-13 has nine reviewed source/test DRAFTS ONLY:
+five generic core database changes,15 shared cases and two SQLite fault injections. Gate scripts
+are prepared for focused47/full16619, not run. Node syntax-check passed, not Kotlin/runtime proof.
+Draft insertAndMutate retains one actual command, prepared source/index mutations and a fresh
+wake in one transaction. Active/archive replay never rewrites a projection or renews a wake;
+source/index/wake/resource/capacity conflicts must retain nothing. Existing raw mutation/archival
+uses the same browser transaction. All five base files match Starter byte-for-byte. After Mobile
+validation, port nine generic files and tests to Starter; no HRIS policy belongs in that port.
+Preparation scripts are already used; apply.py is NOT used. Read review.md before application.
+Actual edit authoring still needs authenticated immutable handoff origin in the command so an
+old single-ledger command cannot be mistaken for joint publication. A later pending edit can
+replace the current inbox pointer, so replay cannot infer original handoff from that pointer.
+No repository/authoring/use-case/graph activation is included in these raw drafts yet.
 
 The optional pending-edit pointer retains actual Group/Company command coordinates, exact
 original target, local creation time and first index publication revision. It carries no second
@@ -56,7 +61,7 @@ already retained. Company content can predate binding; finite catalog/history ba
 coverage are still required. No UC-to-UC/Repo-to-Repo calls, per-room permanent stream or VM policy.
 Read docs/collaboration-space-inbox-index-plan.md and .work/space-inbox-history-source-policy-2026-11-13/review.md.
 
-Control 43486239620 at 7fedb33ef8c215838dcee9fbc915af25d862f5e1 is dispatched; audit its existing portable/Apple jobs without redispatching.
+Control 43486239620 at 7fedb33ef8c215838dcee9fbc915af25d862f5e1 has portable14,235 accepted (audit44615 REAPED); Apple is pending. Do not redispatch.
 It covers snapshot17 + conditional publication16 + original association18 + Company source8,
 59 new shared methods (expected20,274 total/6,039 Apple), and EXCLUDES these later26 source-policy
 methods. Keep exact control artifacts and do not confuse Apple compilation with execution.
