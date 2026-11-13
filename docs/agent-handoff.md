@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 19:13 UTC. Continue beyond checkpoints; push every commit.
+Updated 13 November 2026, 19:16 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -16,11 +16,23 @@ uses successful exact active/archive command reads and keeps ambiguous or unprov
 explicitly unresolved. It allocates no anchor, changes no command and owns no retry or I/O.
 Three drafts are already applied/accepted; do not rerun preparation/application scripts.
 
-Next .work/space-inbox-edit-provenance-2026-11-13 has14 UNAPPLIED source/test drafts and20 shared
-methods (12 pure/8 storage), with focused37/full16587 gates prepared. Read its review.md and
-review current drafts before application; preparation is already used. It adds a body-free
-actual edit-command/target pointer, stamped by index revision without moving original placement.
-Atomic command authoring and outcome release remain separate; raw clearing is not edit success.
+Current .work/space-inbox-edit-provenance-2026-11-13 has14 APPLIED source/test paths,
+20 new shared methods (12 pure/8 actual storage). Formatter49409 is REAPED PASS36.718s;
+focused37/session53119 is RUNNING; full16587 is NOT started or accepted. Source5404/
+19c9bdc0fc3d89252f33b4d1e3177d5e2d760c9bd7b9916e7b4a09529b3a690d. Preparation/application/format
+scripts are already used. Read state.json, review.md and current actual sources; draft files
+predate formatting. Reap the focused process before accepting or starting full.
+
+The optional pending-edit pointer retains actual Group/Company command coordinates, exact
+original target, local creation time and first index publication revision. It carries no second
+body and allocates no placement ordinal. Same-operation metadata/text stays immutable; receipt
+changes keep the pointer. Stored/captured revisions reject future provenance. Hidden/deleted
+previews cannot revive while retaining a stamp. Old payloads without the field still decode.
+Tests cover maximal text with an independent draft, replay, receipt updates, stale/consecutive
+edits, hiding/deletion and cancellation after commit. These changes are NOT yet validated.
+Atomic edit-command/index authoring and outcome release remain required; raw pointer removal is
+not proof of provider application/rejection/supersession. No use case, UI, graph or live rollout.
+
 Then implement admitted history preview publication in existing incoming owners. Use the same
 binding-selected source as ObserveCollaborationSpaceThread; Group recovery copies of LEGACY rooms
 cannot overwrite actual Company hiding/edits. Keep Group/Company command identity independent from
