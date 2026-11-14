@@ -1,39 +1,33 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 08:02 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 08:07 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active admitted inbox page verification
+## Admitted retained inbox pages locally accepted
 
-Product owner is accepted and pushed: Mobile5ef039ebdde3c2ef09110e067144a4762bea115d /
-Group5b2dfe6f594c05d09be1a75b7f5e08dd1c18650a. Focused84/full17543,15362 fresh/2181 unchanged,
-source5554/515dd7afe8c45a8a3a416e693950cd66f1c74dcee895595ce501e6c42107ee8e.
+Mobile .work/history-inbox-product-page-2026-11-14 is accepted:7 paths,17 shared and1 actual SQLite
+addition. Focused42/full17578 (15397 fresh /2181 unchanged)
+preserve all17543 prior identities plus35 executions. Source5559/e657f7b60238182ab111039612c76bf2e419238955da23ba5f192447c1dde4af;
+reportscc4716e8dde6069906ef569d32a2a1a944436a9a03001fb31899837335a0b19b. The observer bounds50 local rows, copies lists before suspension,
+checks current admission, preserves pending/draft facts and exposes terminal/Restart without retries.
+Real DI submit/edit and SQLite reopen preserve the exact page without native acquisition.
 
-The admitted page7 package is APPLIED. Focused1/session95572 was reaped1 after a test-only
-compilation failure at three assertEquals collection types; zero tests ran. Explicit generic
-types now fix those assertions without changing production code or weakening checks. Failed
-source/result evidence is retained in test-inference-correction.json and included by the recorder.
-Focused2/session45474 is reaped0 and accepted42,341.396s, result
-ebdbd67f23cfe0d1d97dfc42a14effde795f93c61f9a46378f2c60b20aaf62c0.
-Source5559/e657f7b60238182ab111039612c76bf2e419238955da23ba5f192447c1dde4af.
-Full17578 is RUNNING73806/full-1 in .work/history-inbox-product-page-2026-11-14.
-Reap/verify before changing captured source. Seventeen shared cases and one actual SQLite
-pending/draft reopen case; no automatic pagination, native acquisition or UI activation.
+Next apply Mobile .work/history-inbox-labels-2026-11-14 after this commit/push:8 reviewed drafts,
+18 shared+1 actual SQLite case, focused45/full17615 gates prepared UNRUN. The window workspace
+.work/history-inbox-window-2026-11-14 contains10 UNREVIEWED/UNAPPLIED drafts,8 pure and9 raw storage
+cases with three platform wrappers. Admission UC, review and gates remain; no window execution.
 
-Next labels8 remains reviewed/formatted UNAPPLIED with18 shared+1 actual50-contact SQLite case,
-focus45/full17615 and record/commit gates prepared UNRUN. Apply after page17578 accepted/pushed.
-Read-only retained-list investigation confirms Paging3.5.3 cross-platform artifacts and its
-current-viewport refresh-key contract. Existing ReplicaQuery supports reverse before; an anchored
-window can be considered without changing raw query bounds. No paging dependency or UI source was
-added. .work/history-inbox-window-2026-11-14 now has10 UNREVIEWED/UNAPPLIED drafts: anchor/window
-contract, raw encrypted reader reusing existing codec/keys,8 pure policy cases,9 raw storage
-contract cases and three platform wrappers. No admission UC, execution or gates exist yet. It
-probes one anchor then reads before/anchor/after with at most104 raw candidates; around refresh
-must preserve the final anchor position/generation. Equal opposite-direction boundary cursors can
-be valid for a one-row center. Review snapshots, races, cancellation and bounds before applying.
- Preserve phone92/live/GroupOFF, failed Apple evidence and all54 OPEN PRD groups. Continue.
+Next integrate bounded visible label/contact enrichment and retained Group inbox presentation with
+existing warm thread navigation. Use canonical local metadata and published contacts. Raw
+observeQueries is bounded1..4; do not silently expand it or scan the entire directory. Measure finite
+indexed lookups before adding another raw contract. Keep loading out of already retained rows,
+retain known exhaustion, and use stable conversation keys. ui-ux-pro-max and compose-component-design
+were read for this review; actual UI tests/screenshots and new Apple execution remain outstanding.
+
+Phone92/live unchanged; GroupOFF/V117-140 undeployed. No Starter port. All54 PRD groups stay OPEN.
+Continue the long run; push every commit; one compiler OR emulator; no agents.
 
 ## Local inbox product owner locally accepted
 

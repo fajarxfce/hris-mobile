@@ -19,6 +19,86 @@ import kotlinx.coroutines.flow.*
 /** Actual application DI, admitted operations, independent keys and SQLite; no native transport. */
 class CollaborationSpaceInboxHistoryTurnIntegrationTest {
     @Test
+    fun admittedInboxPageReopensPendingMessageAndIndependentDraftWithoutNativeAcquisition() =
+        runBlocking {
+            val f = HistoryTurnStorageFixture()
+            try {
+                f.initialize()
+                val original =
+                    CollaborationDraft(
+                        f.conversation.id,
+                        UUID.randomUUID().toString(),
+                        "Offline original",
+                        Instant.fromEpochMilliseconds(2000),
+                    )
+                val submission =
+                    CollaborationComposerSubmission(
+                        original,
+                        UUID.randomUUID().toString(),
+                        original.savedAt,
+                    )
+                assertEquals(
+                    AppResult.Success(submission),
+                    f.base.koin.get<SubmitCollaborationSpaceComposer>()(f.access, null, submission),
+                )
+                val pending =
+                    assertIs<CollaborationSpaceInboxPage.Items>(
+                        assertIs<AppResult.Success<CollaborationSpaceInboxPage>>(
+                                withTimeout(5_000) {
+                                    f.base.koin.get<ObserveCollaborationSpaceInboxPage>()(f.access)
+                                        .first()
+                                }
+                            )
+                            .value
+                    )
+                assertEquals(
+                    CollaborationMessageDelivery.PENDING,
+                    pending.entries.single().newest?.preview?.delivery,
+                )
+                assertNull(pending.next)
+                val drafts = f.base.koin.get<CollaborationSpaceDraftRepository>()
+                val current =
+                    assertIs<AppResult.Success<CollaborationDraft?>>(
+                            drafts.get(f.access, f.conversation.id)
+                        )
+                        .value
+                val draft =
+                    CollaborationDraft(
+                        f.conversation.id,
+                        UUID.randomUUID().toString(),
+                        "Independent next message",
+                        Instant.fromEpochMilliseconds(3000),
+                    )
+                assertEquals(
+                    AppResult.Success(draft),
+                    f.base.koin.get<EditCollaborationSpaceDraft>()(f.access, current, draft),
+                )
+                val before =
+                    withTimeout(5_000) {
+                        f.base.koin.get<ObserveCollaborationSpaceInboxPage>()(f.access).first()
+                    }
+                val row =
+                    assertIs<CollaborationSpaceInboxPage.Items>(
+                            assertIs<AppResult.Success<CollaborationSpaceInboxPage>>(before).value
+                        )
+                        .entries
+                        .single()
+                assertEquals(draft, row.draft?.value)
+                assertEquals(pending.entries.single().newest, row.newest)
+                f.base.reopen()
+                val after =
+                    withTimeout(5_000) {
+                        f.base.koin.get<ObserveCollaborationSpaceInboxPage>()(f.access).first()
+                    }
+                assertEquals(before, after)
+                assertEquals(0, f.base.sdk.childOpens)
+                assertEquals(0, f.base.sdk.deliveries)
+            } finally {
+                f.base.close()
+            }
+        }
+
+    @Test
     fun applicationInboxFactoryFindsItsLocalRootAndCompletesWithoutNativeAcquisition() =
         runBlocking {
             val f = HistoryTurnStorageFixture()

@@ -4246,4 +4246,12 @@ class CollaborationDataModule {
         sessions: SessionRepository,
         server: IdentityServer,
     ) = ObserveLocalCollaborationSpace(roots, directory, sessions, server)
+
+    @Factory
+    fun observeSpaceInboxPage(
+        inbox: CollaborationSpaceInboxRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ObserveCollaborationSpaceInboxPage(inbox, directory, sessions, server)
 }
