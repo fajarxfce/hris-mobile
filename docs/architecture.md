@@ -1,5 +1,7 @@
 # Architecture
 
+[Admitted history source operations](collaboration-history-inbox-source-admission.md) owns lifecycle, pending windows and exact source recovery.
+
 [Retained inbox repair bootstrap](collaboration-inbox-repair-bootstrap-demand.md) retains existing demand across unchanged owner restarts.
 
 [Admitted history inbox handoff](collaboration-history-inbox-progress-admission.md) checks current local ownership around atomic cursor/reference retention.

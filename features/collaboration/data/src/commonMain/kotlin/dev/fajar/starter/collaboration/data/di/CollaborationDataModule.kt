@@ -4146,4 +4146,64 @@ class CollaborationDataModule {
         sessions: SessionRepository,
         server: IdentityServer,
     ) = RetainCollaborationSpaceInboxHistoryChanges(progress, directory, sessions, server)
+
+    @Factory
+    fun prepareSpaceInboxHistorySource(
+        progress: CollaborationSpaceInboxHistorySourceRepository,
+        inbox: CollaborationSpaceInboxRepository,
+        bindings: CollaborationSpaceRoomBindingRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) =
+        PrepareCollaborationSpaceInboxHistorySource(
+            progress,
+            inbox,
+            bindings,
+            directory,
+            sessions,
+            server,
+        )
+
+    @Factory
+    fun readSpaceInboxHistoryPending(
+        progress: CollaborationSpaceInboxHistorySourceRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpaceInboxHistoryPending(progress, directory, sessions, server)
+
+    @Factory
+    fun retainSpaceInboxHistoryPending(
+        progress: CollaborationSpaceInboxHistorySourceRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = RetainCollaborationSpaceInboxHistoryPending(progress, directory, sessions, server)
+
+    @Factory
+    fun completeSpaceInboxHistoryPending(
+        progress: CollaborationSpaceInboxHistorySourceRepository,
+        inbox: CollaborationSpaceInboxRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = CompleteCollaborationSpaceInboxHistoryPending(progress, inbox, directory, sessions, server)
+
+    @Factory
+    fun readSpaceInboxHistorySource(
+        progress: CollaborationSpaceInboxHistorySourceRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpaceInboxHistorySource(progress, directory, sessions, server)
+
+    @Factory
+    fun restartSpaceInboxHistorySource(
+        progress: CollaborationSpaceInboxHistorySourceRepository,
+        inbox: CollaborationSpaceInboxRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = RestartCollaborationSpaceInboxHistorySource(progress, inbox, directory, sessions, server)
 }

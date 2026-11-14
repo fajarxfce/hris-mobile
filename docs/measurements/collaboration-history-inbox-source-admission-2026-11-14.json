@@ -1,0 +1,99 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistoryPendingPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistorySourceLifecyclePolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CompleteCollaborationSpaceInboxHistoryPending.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationSpaceInboxHistorySource.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceInboxHistoryPending.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceInboxHistorySource.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RestartCollaborationSpaceInboxHistorySource.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RetainCollaborationSpaceInboxHistoryPending.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/PrepareSpaceInboxHistorySourceTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistoryPendingAdmissionTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistoryPendingPolicyTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistorySourceLifecyclePolicyTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistorySourceRecoveryTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 74,
+    "elapsedSeconds": 375.809,
+    "sourceFiles": 5507,
+    "sourceManifestSha256": "89bc36ef2535fce6061b9f2dff5754558140293528c88e304deb13ca7c1543eb",
+    "resultSha256": "77dfbccbdeced07059cd415db3175315626b16762750fa9dce916dd1ddf776c6",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "PrepareSpaceInboxHistorySourceTest": 8,
+      "SpaceInboxHistoryHandoffPolicyTest": 13,
+      "SpaceInboxHistoryPendingAdmissionTest": 12,
+      "SpaceInboxHistoryPendingPolicyTest": 12,
+      "SpaceInboxHistorySourceLifecyclePolicyTest": 7,
+      "SpaceInboxHistorySourceRecoveryTest": 10,
+      "RetainSpaceInboxHistoryChangesTest": 10
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T04:45:43.938872+00:00",
+    "elapsedSeconds": 1016.196,
+    "sourceFiles": 5507,
+    "freshCounts": {
+      "tests": 15055,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 154739074,
+      "sha256": "f0a3b8dab529d0e98d26e4b40c8c787b2baf8735e8d353ed764ff02b5ed27ad4"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 17236,
+    "newCases": 98,
+    "freshTests": 15055,
+    "reusedUnaffectedTests": 2181,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "89bc36ef2535fce6061b9f2dff5754558140293528c88e304deb13ca7c1543eb",
+    "reportManifestSha256": "78844ce85db76bf169cbbc6ccfec32f90a5a00f97dd9a0e9195aa5d999d62dd6",
+    "nativeClaim": "Forty-nine shared source lifecycle, pending admission and recovery cases. Cohesive admitted source operations; no global owner activation."
+  },
+  "newSharedMethods": 49,
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "ownerActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "failedFocusedAttempts": [
+    {
+      "attempt": "focused-1",
+      "session": 28332,
+      "reaped": true,
+      "exitCode": 1,
+      "startedAt": "2026-11-14T04:31:52.486391+00:00",
+      "elapsedSeconds": 154.143,
+      "freshCounts": {
+        "tests": 72,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "14b6cea761227d538d66747f11afbbdc8b86ac814f78f27790540cbefe4fd4f6",
+      "resultSha256": "535268524112578d8312cd64acc2711af440e4e8df3e3eb967a42f0fb5e0e336",
+      "rootCause": "Nullable Long revision plus Elvis Int zero produces boxed Integer on absent checkpoint; JVM bytecode tests instanceof Long and rejects the successfully initialized result. Use Long zero for revision comparison.",
+      "diagnosticSha256": "3e32bab210b3f25de4340f38adea2a3f439a8941f116cff2d6773d4ebac6bfb9",
+      "warningCorrection": "Remove redundant second non-null assertion after pending window has already been asserted non-null.",
+      "paths": [
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationSpaceInboxHistorySource.kt",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistoryPendingAdmissionTest.kt"
+      ],
+      "existingAssertionsPreserved": true
+    }
+  ]
+}

@@ -1,40 +1,41 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 04:56 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 05:03 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active history source admission verification
+## Admitted history source operations locally accepted
 
-The combined15 source/test paths in .work/history-inbox-source-admission-2026-11-14 are APPLIED.
-Focused1 (session28332, reaped) failed:72 tests,3 initial-preparation failures; app graph not reached.
-JVM bytecode confirmed nullable Long revision with Elvis Int zero rejects the successfully saved
-initial checkpoint. The comparison now uses0L; existing regression assertions are unchanged. A
-redundant pending-window non-null assertion was removed. Failed sources/reports and correction
-evidence are preserved. Corrected source5507/89bc36ef2535fce6061b9f2dff5754558140293528c88e304deb13ca7c1543eb;
-focused2/session29298 REAPED and ACCEPTED74 in375.809s, result
-77dfbccbdeced07059cd415db3175315626b16762750fa9dce916dd1ddf776c6. Candidate warnings are clear and prior
-case IDs retained. Full1/session47934 is RUNNING, expected17236; full acceptance is not yet claimed.
-Reap full1, audit full source/report identities, then record acceptance. Record the failed
-attempt in final Git evidence before source commit/push and the corresponding Group evidence.
-The old lifecycle/pending/recovery standalone gates remain superseded and disabled.
+Mobile .work/history-inbox-source-admission-2026-11-14 is accepted:15 paths,49 shared additions.
+Focused74/full17236 (15055 fresh /2181 unchanged) preserve all17138
+prior identities plus98 executions. Source5507/89bc36ef2535fce6061b9f2dff5754558140293528c88e304deb13ca7c1543eb;
+reports78844ce85db76bf169cbbc6ccfec32f90a5a00f97dd9a0e9195aa5d999d62dd6. Source lifecycle, pending admission and recovery are tested
+as one cohesive capability. The former lifecycle6/pending8/recovery5 standalone workspaces were
+never applied or run and are superseded; do not execute their old standalone gates. Six admitted
+use cases preserve exact ownership, finite windows, source/index CAS, unresolved references and
+uncertain-write recovery. No global history worker or product consumer was activated.
 
 Next .work/history-inbox-owner-inputs-2026-11-14 has14 reviewed/formatted UNAPPLIED draft files
-affecting15 paths, including one observer rename. Eleven shared additions combine typed repair
-signals with bounded admitted source enumeration; focused47/full17258 and record/commit gates
-are prepared UNRUN. The standalone signals/enumeration workspaces were never applied or tested;
-their old gates are disabled. No17242 acceptance exists. Apply only after current acceptance/push.
-Global queue work has five local UNAPPLIED entity/policy/test drafts with18 unrun shared cases;
-review, codec/repository, admission and owner integration are still missing. See the design doc.
+affecting15 source paths,11 shared cases and focused47/full17258 plus all gates prepared UNRUN.
+It combines typed repair signals with admitted bounded source enumeration. Prior standalone
+signals/enumeration gates were never run and are disabled; no17242 acceptance exists. Apply/reap
+only after this package is committed/pushed. Then implement global state/atomic cursor retention and fair finite
+continuation under the existing command repair lifetime. Design is retained in
+history-inbox-global-owner-2026-11-14/review.md and docs/collaboration-history-global-owner-design.md.
+Retain completed pass ID with its trigger; never reuse that ID for later demand. Global cursor
+writes must respect the current TWO-operation raw limit. Review retained page queues with one
+source guard per acknowledgement and index guards at capture/final completion. Use actual
+completed repair demand for history retry timing and one shared subscription. Distinguish actual
+handoff progress from Restart/deferred outcomes so a failing round cannot schedule itself forever.
+Inspect and finish an older retained source pass before preparing a newer captured interval.
+Do not add polling/per-room observers or move orchestration into UI/VMs. Incoming completion,
+thread/list/UI and SDK8 Apple application activation still require end-to-end evidence.
 
-Global owner remains DESIGN ONLY. ReplicaMutation supports at most TWO operations per transaction.
-The earlier index+many-source guard proposal cannot use that API. Review retained page queues
-with one source guard per global acknowledgement, index guards for capture/final completion,
-and explicit destination-generation races. Do not silently lift the raw transaction limit.
-See the global-owner design document for remaining admission, fairness and completion work.
-Bootstrap17138 is still the latest accepted local baseline. No phone/live changes; Phone92 installed,
-GroupOFF and V117-140 undeployed. All54 PRD groups remain open; continue beyond checkpoints.
+Earlier history handoff/source storage/bootstrap and Starter092fbe6f remain accepted. Actual new
+Apple execution is outstanding; preserve failed hosted evidence and blocked fixture payload.
+Phone92 remains installed; no phone/live change. GroupOFF/V117-140 undeployed. All54 PRD groups
+remain open. Continue beyond checkpoints, push each commit, one compiler OR emulator, no agents.
 
 ## Inbox repair bootstrap locally accepted
 
