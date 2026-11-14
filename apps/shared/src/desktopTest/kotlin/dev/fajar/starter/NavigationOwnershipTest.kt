@@ -1,6 +1,7 @@
 @file:OptIn(
     androidx.compose.ui.test.ExperimentalTestApi::class,
     androidx.compose.ui.ExperimentalComposeUiApi::class,
+    androidx.compose.ui.InternalComposeUiApi::class,
 )
 
 package dev.fajar.starter
@@ -11,7 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.LocalBackGestureDispatcher
+import androidx.compose.ui.backhandler.LocalCompatNavigationEventDispatcherOwner
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.*
@@ -167,7 +168,7 @@ class NavigationOwnershipTest {
                 CompositionLocalProvider(
                     LocalViewModelStoreOwner provides owner,
                     LocalLifecycleOwner provides owner,
-                    LocalBackGestureDispatcher provides backDispatcher,
+                    LocalCompatNavigationEventDispatcherOwner provides backDispatcher,
                 ) {
                     val navigation = rememberScopedNavigationState()
                     controller = navigation.controller
@@ -208,7 +209,10 @@ class NavigationOwnershipTest {
             }
         } finally {
             compose.mainClock.autoAdvance = true
-            compose.runOnIdle { owner.close() }
+            compose.runOnIdle {
+                owner.close()
+                backDispatcher.close()
+            }
         }
     }
 

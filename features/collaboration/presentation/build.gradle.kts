@@ -12,6 +12,8 @@ kotlin.sourceSets {
         implementation(projects.core.localization)
         implementation(projects.core.presentation)
         implementation(projects.core.observability)
+        implementation(libs.paging.common)
+        implementation(libs.paging.compose)
         implementation(libs.datetime)
         implementation(libs.fluent.icons.extended)
         implementation(libs.lifecycle.compose)
@@ -32,7 +34,7 @@ kotlin.sourceSets {
 kotlin {
     sourceSets.getByName("desktopTest").dependencies {
         implementation(compose.desktop.currentOs)
-        implementation(compose.desktop.uiTestJUnit4)
+        implementation(libs.compose.ui.test.junit4)
         implementation(libs.coroutines.swing)
         implementation(projects.core.settings.domain)
     }

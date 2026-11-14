@@ -1,11 +1,14 @@
-@file:OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
+@file:OptIn(
+    androidx.compose.ui.ExperimentalComposeUiApi::class,
+    androidx.compose.ui.InternalComposeUiApi::class,
+)
 
 package dev.fajar.starter
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.LocalBackGestureDispatcher
+import androidx.compose.ui.backhandler.LocalCompatNavigationEventDispatcherOwner
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -40,7 +43,7 @@ class NetworkInspectionUiTest {
             CompositionLocalProvider(
                 LocalAppLanguage provides AppLanguage.English,
                 LocalLifecycleOwner provides owner,
-                LocalBackGestureDispatcher provides back,
+                LocalCompatNavigationEventDispatcherOwner provides back,
             ) {
                 AppTheme {
                     Box(Modifier.size(375.dp, 720.dp)) {
@@ -70,7 +73,10 @@ class NetworkInspectionUiTest {
             compose.onNodeWithContentDescription("Back").performClick()
             compose.runOnIdle { assertEquals(1, exits) }
         } finally {
-            compose.runOnIdle { owner.lifecycle.currentState = Lifecycle.State.DESTROYED }
+            compose.runOnIdle {
+                owner.lifecycle.currentState = Lifecycle.State.DESTROYED
+                back.close()
+            }
             runBlocking { inspection.close() }
         }
     }
@@ -85,7 +91,7 @@ class NetworkInspectionUiTest {
                 LocalAppLanguage provides AppLanguage.Indonesian,
                 LocalDensity provides Density(1f, 2f),
                 LocalLifecycleOwner provides owner,
-                LocalBackGestureDispatcher provides back,
+                LocalCompatNavigationEventDispatcherOwner provides back,
             ) {
                 AppTheme {
                     Box(Modifier.size(320.dp, 640.dp)) { NetworkInspectionScreen(inspection) {} }
@@ -100,7 +106,10 @@ class NetworkInspectionUiTest {
             compose.onNodeWithText("Search requests").assertIsDisplayed()
             compose.onNodeWithText("Bersihkan").assertIsDisplayed().assertHeightIsAtLeast(48.dp)
         } finally {
-            compose.runOnIdle { owner.lifecycle.currentState = Lifecycle.State.DESTROYED }
+            compose.runOnIdle {
+                owner.lifecycle.currentState = Lifecycle.State.DESTROYED
+                back.close()
+            }
             runBlocking { inspection.close() }
         }
     }

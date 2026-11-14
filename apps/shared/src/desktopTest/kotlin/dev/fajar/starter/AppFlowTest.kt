@@ -1,4 +1,7 @@
-@file:OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
+@file:OptIn(
+    androidx.compose.ui.ExperimentalComposeUiApi::class,
+    androidx.compose.ui.InternalComposeUiApi::class,
+)
 
 package dev.fajar.starter
 
@@ -6,7 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.LocalBackGestureDispatcher
+import androidx.compose.ui.backhandler.LocalCompatNavigationEventDispatcherOwner
 import androidx.compose.ui.graphics.asSkiaBitmap
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.SemanticsActions
@@ -20,8 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import dev.fajar.starter.app.StarterApp
 import dev.fajar.starter.app.di.applicationNetworkModule
 import dev.fajar.starter.app.di.createAppContainer
@@ -4981,24 +4987,32 @@ class AppFlowTest {
         val visible = mutableStateOf(true)
         try {
             compose.setContent {
-                val lifecycleOwner = remember {
-                    object : LifecycleOwner {
-                        override val lifecycle =
-                            LifecycleRegistry(this).apply { currentState = Lifecycle.State.RESUMED }
+                if (visible.value) {
+                    val lifecycleOwner = remember {
+                        object : LifecycleOwner, ViewModelStoreOwner {
+                            override val viewModelStore = ViewModelStore()
+                            override val lifecycle =
+                                LifecycleRegistry(this).apply {
+                                    currentState = Lifecycle.State.RESUMED
+                                }
+                        }
                     }
-                }
-                DisposableEffect(lifecycleOwner) {
-                    onDispose { lifecycleOwner.lifecycle.currentState = Lifecycle.State.DESTROYED }
-                }
-                val hostState = lifecycleState.value
-                SideEffect { lifecycleOwner.lifecycle.currentState = hostState }
-                CompositionLocalProvider(
-                    LocalDensity provides Density(LocalDensity.current.density, fontScale),
-                    LocalLifecycleOwner provides lifecycleOwner,
-                    LocalBackGestureDispatcher provides backDispatcher,
-                ) {
-                    if (visible.value)
+                    DisposableEffect(lifecycleOwner) {
+                        onDispose {
+                            lifecycleOwner.lifecycle.currentState = Lifecycle.State.DESTROYED
+                            lifecycleOwner.viewModelStore.clear()
+                        }
+                    }
+                    val hostState = lifecycleState.value
+                    SideEffect { lifecycleOwner.lifecycle.currentState = hostState }
+                    CompositionLocalProvider(
+                        LocalDensity provides Density(LocalDensity.current.density, fontScale),
+                        LocalLifecycleOwner provides lifecycleOwner,
+                        LocalViewModelStoreOwner provides lifecycleOwner,
+                        LocalCompatNavigationEventDispatcherOwner provides backDispatcher,
+                    ) {
                         Box(Modifier.size(420.dp, 760.dp)) { StarterApp(container, incomingLinks) }
+                    }
                 }
             }
             test(container.koin)
@@ -5018,6 +5032,7 @@ class AppFlowTest {
         } finally {
             compose.runOnIdle { visible.value = false }
             compose.waitForIdle()
+            compose.runOnIdle { backDispatcher.close() }
             container.close()
             directory.deleteRecursively()
         }

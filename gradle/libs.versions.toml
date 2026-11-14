@@ -1,6 +1,7 @@
 [versions]
+paging = "3.5.3"
 kotlin = "2.3.21"
-compose = "1.9.3"
+compose = "1.10.3"
 agp = "9.1.0"
 android-ndk = "28.2.13676358"
 desugar-jdk = "2.1.5"
@@ -13,9 +14,10 @@ datetime = "0.7.1"
 js-joda-timezone = "2.23.0"
 serialization = "1.10.0"
 ktor = "3.3.3"
-lifecycle = "2.9.5"
-android-lifecycle = "2.9.4"
+lifecycle = "2.10.0"
+android-lifecycle = "2.10.0"
 navigation = "2.9.1"
+navigation-event = "1.0.2"
 fluent = "v0.1.0"
 activity = "1.11.0"
 biometric = "1.1.0"
@@ -44,6 +46,8 @@ matrix-sdk = "26.10.23-hris.8"
 network-inspector = "0.1.0-SNAPSHOT"
 
 [libraries]
+paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
+paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
 inspector-core = { module = "dev.fajar.inspector:core", version.ref = "network-inspector" }
 inspector-ktor = { module = "dev.fajar.inspector:ktor", version.ref = "network-inspector" }
 inspector-compose = { module = "dev.fajar.inspector:compose", version.ref = "network-inspector" }
@@ -121,5 +125,7 @@ android-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", v
 lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycle" }
 lifecycle-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
+navigation-event = { module = "androidx.navigationevent:navigationevent", version.ref = "navigation-event" }
+compose-ui-test-junit4 = { module = "org.jetbrains.compose.ui:ui-test-junit4", version.ref = "compose" }
 navigation-common = { module = "org.jetbrains.androidx.navigation:navigation-common", version.ref = "navigation" }
 android-activity = { module = "androidx.activity:activity-compose", version.ref = "activity" }

@@ -1,5 +1,7 @@
 # Architecture
 
+[Retained inbox paging](collaboration-inbox-paging.md) preserves local pages, visible identity and pending/draft previews.
+
 [Anchored local inbox windows](collaboration-inbox-window.md) reads bounded local windows around the visible conversation under current admission.
 
 [Bounded visible inbox labels](collaboration-inbox-labels.md) resolves canonical peers and public names through bounded owned local readers.

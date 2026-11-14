@@ -1100,4 +1100,11 @@
     <string name="chat_copy_unavailable_en">These messages could not be copied.</string>
     <string name="chat_messages_unavailable_en">Messages are unavailable right now.</string>
     <string name="chat_draft_unavailable_en">Your draft is unavailable right now.</string>
+    <string name="chat_preview_photo_en">Photo</string>
+    <string name="chat_preview_video_en">Video</string>
+    <string name="chat_preview_audio_en">Audio</string>
+    <string name="chat_preview_file_en">File</string>
+    <string name="chat_preview_sticker_en">Sticker</string>
+    <string name="chat_preview_unavailable_en">Message unavailable</string>
+    <string name="chat_contact_label_en">Contact</string>
 </resources>

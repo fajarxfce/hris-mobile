@@ -1,46 +1,28 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 10:54 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 11:03 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active retained inbox paging verification
+## Retained inbox paging locally accepted
 
-Focused verification is accepted: 138 cases, including all existing app navigation/disposal
-assertions and the new Paging/UI coverage. Both Apple test-source compilations pass. The three
-light, 2x dark and landscape screenshots still match the independently inspected captures.
+Mobile .work/history-inbox-paging-2026-11-14 is accepted: 25 shared and 14 desktop UI additions,
+plus extended actual DI resolution/disposal. Focused 138/full 17,748 (17748 fresh /
+0 unchanged) retain 17,684 prior identities plus 64 executions.
+Source5591/dfdb4ea69b671559be88506f41c9fe6129ff54153a8dd8afe8767c74b7b51b36; reports13e442a65a495c5ad42d45dec064d3996ee2023652c9e89d8dfb3be992c1d619.
+Paging keeps one local generation, refreshes around a conversation identity and parks unchanged
+Changed/failure inputs. Retained rows, known exhaustion, pending/draft previews and visible labels
+remain independent of transport. Screenshot recording and inspection are documented separately.
 
-Full1 passed 10,736 tests with no failures, errors or skips, then Gradle stopped at its Web lock
-check before browser tests. The normal kotlinWasmUpgradePackageLock task succeeded in 47.524s.
-Its only change is the two imported local Skiko workspace versions, 0.9.22-2 to 0.9.37-4;
-external npm packages and integrity hashes remain unchanged. Full1 is preserved as unsuccessful.
-
-Full2 is RUNNING against the final 26-path source: 5,591 inputs / dfdb4ea69b671559be88506f41c9fe6129ff54153a8dd8afe8767c74b7b51b36.
-The Web lock check now passes; 10,736 desktop/host tests have passed and browser work is running.
-All tests are forced after the Compose/Lifecycle upgrade. Final expectation: 17,748 tests,
-retaining every prior identity plus 64 executions. No full acceptance is claimed yet.
-The original runner PID is 3189735. Its unified-exec session identifier was lost during output
-truncation; do not start a duplicate. Observe its final result and process exit before editing
-source or starting another compiler/emulator. Scripts and immutable inputs are in
-.work/history-inbox-paging-2026-11-14. The accepted focus differs only by the reviewed Web lock.
-
-Next accept/record/push Mobile and Group evidence, then apply the REQUIRED generic Starter port.
-Starter .work/compose-paging-compatibility-port-2026-11-14 has seven UNAPPLIED drafts plus its own
-pending verification metadata (eight final paths). All independent resolver/verification/build/
-publication scripts are prepared but UNRUN. Require all 1,049 prior test identities freshly run,
-Android variants/lint/Web/Apple compilation and actual screenshot inspection. Keep Inspector pinned.
-
-Continue Group root/contact integration afterward. A synthetic 5,000-contact SQLite measurement
-is drafted but UNAPPLIED/UNRUN in .work/history-inbox-product-routing-2026-11-14. Source inspection
-corrected earlier notes: directory capacity is 10,000, acquisition pages contain 50 contacts,
-and raw storage pages contain 200. Measure initial/unchanged/reopened reads, exact contact lookup
-and search using a retained snapshot before choosing another index. Reuse Home swipe tabs/FAB.
-
-Phone 92 and live are unchanged; Group OFF, V117–140 undeployed. All 54 PRD groups stay OPEN.
-Paging remains an unused feature entry until app-root integration. No Apple runtime, phone
-latency or rollout claim. Preserve blocked SQLite fixture payload and failed hosted Apple evidence.
-Continue beyond checkpoints; push every commit; one compiler OR emulator; no subagents.
+Next connect the reviewed Group inbox entry to the combined contact/chat hub and explicit
+account/Group navigation owner. Complete incoming/native application integration, then measure
+actual list/thread rendering and navigation on the emulator. Keep server Group rollout OFF until
+end-to-end acceptance; preserve current live data and original queues. Source tests are not a
+claim of device latency or full PRD completion. Phone 92/live unchanged; V117-140 undeployed.
+SDK 8 Apple application consumer and new hosted Apple execution remain open. Port the validated Compose/Lifecycle versions to Starter with independent full checks before product rollout.
+All 54 PRD groups remain OPEN. Continue beyond checkpoints; push every commit; one compiler OR
+emulator; no agents. Preserve the blocked SQLite fixture payload and failed Apple evidence.
 
 ## Anchored local inbox windows locally accepted
 

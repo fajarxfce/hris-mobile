@@ -1,30 +1,45 @@
-@file:OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
-
 package dev.fajar.starter.fixtures
 
-import androidx.compose.ui.backhandler.BackGestureDispatcher
+import androidx.navigationevent.NavigationEvent
+import androidx.navigationevent.NavigationEventDispatcher
+import androidx.navigationevent.NavigationEventDispatcherOwner
+import androidx.navigationevent.NavigationEventInput
 
 /** Drives the same callbacks as a platform gesture, including cancellation and fallback. */
-class TestBackDispatcher : BackGestureDispatcher() {
+class TestBackDispatcher : NavigationEventDispatcherOwner, AutoCloseable {
     var unhandled = 0
         private set
 
-    val canHandleBack: Boolean
-        get() = activeListener?.active == true
+    var canHandleBack = false
+        private set
 
-    fun pressBack() {
-        val listener = activeListener?.takeIf { it.active }
-        if (listener == null) {
-            unhandled++
-            return
+    override val navigationEventDispatcher = NavigationEventDispatcher { unhandled++ }
+
+    private val input =
+        object : NavigationEventInput() {
+            override fun onHasEnabledHandlersChanged(hasEnabledHandlers: Boolean) {
+                canHandleBack = hasEnabledHandlers
+            }
+
+            fun pressBack() {
+                dispatchOnBackStarted(NavigationEvent())
+                dispatchOnBackCompleted()
+            }
+
+            fun cancelBack() {
+                check(canHandleBack)
+                dispatchOnBackStarted(NavigationEvent())
+                dispatchOnBackCancelled()
+            }
         }
-        listener.onStarted()
-        listener.onCompleted()
+
+    init {
+        navigationEventDispatcher.addInput(input)
     }
 
-    fun cancelBack() {
-        val listener = checkNotNull(activeListener?.takeIf { it.active })
-        listener.onStarted()
-        listener.onCancelled()
-    }
+    fun pressBack() = input.pressBack()
+
+    fun cancelBack() = input.cancelBack()
+
+    override fun close() = navigationEventDispatcher.dispose()
 }
