@@ -1,7 +1,36 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 16:45 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 17:18 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
+
+## Generic Android resource port linked
+
+Starter [e9b4ff500baf62f2642871c6705d64b35bd1d2e1](https://github.com/fajarxfce/compose-fluent-starter/commit/e9b4ff500baf62f2642871c6705d64b35bd1d2e1) independently accepts the one-line Compose Android
+resource convention port. It preserves all1,052 prior cases (568 fresh /
+484 exact unchanged), verifies both languages in dev/staging/prod APKs,
+and passes actual production cold start/process reopen with two inspected screenshots.
+Full/session66562 and startup/session36477 reaped0; emulator stopped.
+Source 47a1b986dc011fcb3537dbbfd9a975ee111bff963a61e80a5a337ce2d222161b; reports 16db517eb2e8b47e9af6dd87a832fcb1cfe4224b9b4de041cc77e483b99aab13.
+Pinned Inspector and its existing gradlew.bat difference remain unchanged. No HRIS policy port,
+physical phone interaction or new Apple runtime claim. Do not rerun accepted checks.
+
+Phone93 is installed and device bytes match the validated artifact; no new phone request is
+pending. Continue the recipient destination proof already implemented in ten uncommitted paths:
+domain message intent/provenance policy and Submit, data codec/DI, a Submit fixture, two new
+domain suites and four additions to the existing real message-storage contract. This source
+adds optional authenticated recipient origin and exact canonical readback after source retirement;
+it has not completed full acceptance and is not in phone93. Its Mobile workspace is
+/home/fajar/hris/hris-mobile/.work/space-recipient-destination-proof-2026-11-14. Read state.json for the reaped focused result;
+on failure fix/retest first, otherwise accept-focused.py then full.py full1 and accept.py.
+Expect44 additional executions while preserving all17,931 prior IDs. Publish/push only after
+the exact full source gate passes. Prepared publish.py records Mobile and Group evidence.
+
+Then implement bounded canonical transfer and exact source/index retirement, pending-recipient
+inbox rows, rapid Send ownership and product routing. GroupOFF/V117–140 undeployed/all54 PRD groups
+OPEN. Keep AppViewModel window-owned and Group outside Company scope. Continue beyond checkpoints,
+push every commit, one compiler OR emulator, no subagents. Preserve the blocked SQLite fixture
+payload, failed Apple proof and protected employee stores.
+
 
 ## Release93 delivered
 

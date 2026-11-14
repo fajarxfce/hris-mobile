@@ -809,3 +809,14 @@ and lint pass. Five desktop captures were inspected. 732 artifacts were independ
 HRIS Paging, Matrix adapters, account policy and product UI remain in Mobile.
 See [exact evidence](https://github.com/fajarxfce/compose-fluent-starter/blob/712ca99a42d4cb48aee25b3a2a51724ed2fa8530/docs/measurements/compose-platform-alignment-2026-11-14.json).
 No new Apple execution, phone installation or live rollout.
+
+## Independent Starter port — 14 November 2026
+
+Starter [e9b4ff500baf62f2642871c6705d64b35bd1d2e1](https://github.com/fajarxfce/compose-fluent-starter/commit/e9b4ff500baf62f2642871c6705d64b35bd1d2e1) independently accepts the one-line Compose Android
+resource convention port. It preserves all1,052 prior cases (568 fresh /
+484 exact unchanged), verifies both languages in dev/staging/prod APKs,
+and passes actual production cold start/process reopen with two inspected screenshots.
+Full/session66562 and startup/session36477 reaped0; emulator stopped.
+Source 47a1b986dc011fcb3537dbbfd9a975ee111bff963a61e80a5a337ce2d222161b; reports 16db517eb2e8b47e9af6dd87a832fcb1cfe4224b9b4de041cc77e483b99aab13.
+Pinned Inspector and its existing gradlew.bat difference remain unchanged. No HRIS policy port,
+physical phone interaction or new Apple runtime claim. Do not rerun accepted checks.
