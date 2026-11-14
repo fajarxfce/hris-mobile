@@ -22,7 +22,16 @@ import kotlin.js.Promise
             row.onsuccess = () => {
                 if (!row.result) return;
                 value.checkpoint = {handle:{scope, partition, generation}, revision:row.result.revision, payload:row.result.checkpoint, published:true};
-                queries.forEach(({tag = null, after = null, before = null, limit = 50}, index) => {
+                queries.forEach(({tag = null, after = null, before = null, limit = 50, id = null}, index) => {
+                    if (id != null) {
+                        const record = tx.objectStore('replica_documents').get([ownerKey, partition, generation, id]);
+                        record.onsuccess = () => {
+                            if (record.result?.payload == null) return;
+                            const {id, version, sortKey, payload, tags = []} = record.result;
+                            value.pages[index] = [{id, version, sortKey, payload, tags}];
+                        };
+                        return;
+                    }
                     const prefix = tag == null ? [ownerKey, partition, generation] : [ownerKey, partition, generation, tag];
                     const range = before == null
                         ? IDBKeyRange.bound([...prefix, after ?? ''], [...prefix, '\uffff'], after != null)

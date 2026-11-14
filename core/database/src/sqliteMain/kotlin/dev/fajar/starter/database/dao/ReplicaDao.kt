@@ -617,7 +617,13 @@ abstract class ReplicaDao {
             ),
             queries.map { query ->
                 val documents =
-                    if (query.before != null && query.tag == null)
+                    if (query.id != null)
+                        listOfNotNull(
+                            record(ownerKey, partition, active, query.id)?.takeIf {
+                                it.payload != null
+                            }
+                        )
+                    else if (query.before != null && query.tag == null)
                         precedingRecords(ownerKey, partition, active, query.before, query.limit)
                     else if (query.before != null)
                         precedingTaggedRecords(

@@ -68,6 +68,10 @@ fun validateReplicaQueries(queries: List<ReplicaQuery>) {
         validateReplicaPage(it.after, it.limit)
         validateReplicaPage(it.before, it.limit)
         it.tag?.let(::validateReplicaTag)
+        it.id?.let { id ->
+            validateReplicaGeneration(id)
+            require(it.tag == null && it.after == null && it.before == null)
+        }
     }
 }
 
