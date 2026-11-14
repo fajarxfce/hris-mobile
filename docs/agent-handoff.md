@@ -1,9 +1,35 @@
 # Agent continuation — communications long run
 
-Updated 13 November 2026, 23:46 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 00:05 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Active authenticated history reader verification
+
+Twelve reader source/test paths are APPLIED in Mobile .work/history-local-change-enumeration-2026-11-13.
+Focused55 is accepted (session82043 REAPED0):15 new actual-storage methods,38 retained Company/Group
+methods and2 assembled graph tests; Apple source/test compilation completed. Source5458/
+81df21f5b1beca49abb482462817cc56549b3d7bb60a180948d4278180d1c534;
+result3b6d15d2c1e1acda0b4bb38cb9e039a3b3e911fc043d9178b100c5c3526774d3.
+Full16898 is RUNNING session52064 in full-1. Do not change its source inputs. Reap, audit, then
+record/commit/push this increment; record-acceptance.py and commit.py are prepared and unused.
+Starter092fbe6f is independently accepted1049 and pushed/linked; do not rerun its completed gate.
+
+Next .work/history-local-change-signal-2026-11-13 has12 formatted UNAPPLIED drafts and13 new shared
+storage method drafts. Existing Group/Company writes atomically retain one account-owned signal
+with source facts; exact replay does not signal. The repository observes the published checkpoint,
+not polling or per-room observers. The marker contains no message/account payload and grants no
+admission/completion authority. Seven old fault boundaries now exercise mutate while all38 old
+methods remain. Focused68/full16924 scripts are prepared, NOT RUN; record/commit scripts pending.
+Read its review.md and the Git incremental history plan before applying after reader acceptance.
+
+The existing repair owner still needs admitted catalog/history reads, durable finite source progress,
+unresolved handoff and fair continuation across turn budgets. Company content can predate binding;
+already-materialized incoming work needs proven durable index handoff before completion. No product
+UI, phone or live change here. Phone92 installed; live GroupOFF; all54 PRD groups remain OPEN.
+Preserve the failed Apple control and separate blocked fixture gate payload below. Continue beyond
+checkpoints, one local compiler OR emulator, and push every commit. No subagents.
 
 ## Incremental local replica pages locally accepted
 

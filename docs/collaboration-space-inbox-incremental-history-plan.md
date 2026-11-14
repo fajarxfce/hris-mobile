@@ -45,7 +45,7 @@ blocked payload. Do not change inputs of an active verification process.
 
 Current raw storage acceptance:21 paths, focused176, browser171 and full16868. The initial full run failed4 browser cases; concrete cursor JSON and a complete browser9 predecessor fixture corrected them. All original cases and failed identities remain. Focused non-browser inputs are byte-identical across the two browser-only fixes. See replica-change-pages.md and its exact-source measurement. Independent Starter1049 is accepted and pushed at 092fbe6f70475efe950c697d3b7c6ec46b1fb267; its21 generic files are byte-identical. The next HRIS increment may proceed.
 
-The authenticated history reader has12 reviewed/formatted unapplied drafts and15 shared storage methods. Its focused55/full16898 gates have not run. Admitted local access, durable progress, existing incoming/repair integration and UI activation remain pending.
+The authenticated history reader has12 reviewed/formatted unapplied drafts and15 shared storage methods. Its focused55 is accepted and full16898 is running52064. Admitted local access, durable progress, existing incoming/repair integration and UI activation remain pending.
 
 ## Existing owner follow-up — not implemented
 
@@ -87,3 +87,42 @@ large interval is visited, a hot room alongside cold rooms, unresolved reference
 originals, denied/replaced account, joined cancellation, and no request loop for exact replay.
 This review selects no new production entity/schema yet. It is a concrete integration checklist,
 not acceptance or an active observer. Keep use-case orchestration out of repositories/ViewModels.
+
+## Account-owned history change signal — unapplied draft
+
+Prerequisite: authenticated history reader full16898 accepted, committed and pushed. Do not apply
+while its compiler is running. No generic Starter delta, server deployment or phone release.
+
+The existing Group/Company history repositories publish source facts and one coalesced account
+signal using ReplicaStore.mutate. First insert uses Replace, later effective changes use Commit;
+the second mutation replaces an exact observed signal checkpoint. Both share the raw account
+scope. Contention returns false without either write; unknown/lost replies remain failures and
+cancellation propagates. Existing no-op branches retain their checkpoint ownership check and do
+not write the signal. No new retry policy has been introduced.
+
+CollaborationHistorySignal maps only a fixed protocol marker and fresh opaque generation.
+Its account-owned partition has no identity, chat body, provider status or secret payload. It is
+an invalidation hint, not authenticated content, access permission or completed repair evidence.
+The existing content codec still authenticates all retained history. Signal reads require no
+key acquisition. A malformed existing marker fails instead of silently replacing a new format.
+
+StoredCollaborationHistorySignalRepository observes one published account checkpoint and maps it
+through safeStorageFlow. Multiple Groups of the same account receive the same coarse hint; their
+own use cases must admit access and enumerate only actual canonical sources. Company writes can
+precede Group binding. No per-conversation collector, polling timer, transport or new worker.
+Private publishHistoryChange methods in the two repositories coordinate raw source/signal I/O;
+the protocol object performs mapping only. There are no repository-to-repository dependencies.
+
+Thirteen new shared actual-storage method drafts cover absence without keys, restart/login,
+pre-binding Company changes, no-op/hide replay, edits/redaction, source and signal contention,
+lost replies, pre/post-commit cancellation, changed account, malformed metadata and an active
+observer's committed source visibility and cancellation. Seven old fault-injection overrides in
+the existing22 Company and16 Group history methods now intercept mutate, preserving every old
+method and failure scenario at the actual write boundary. App graph resolution is also covered.
+Other history/traversal/inbox contracts remain in the full gate; no old checks are removed.
+
+Twelve formatted reviewed source/test drafts; focused68/full16924 gates prepared but not run.
+The original raw history reader's active source remains unchanged. Captured source enumeration,
+durable progress and unresolved handoff plus fair bounded continuation under the existing Group
+repair owner are still required before the list/product graph can use this signal. Old history
+and first binding also require startup/catalog demand; a future signal does not backfill itself.
