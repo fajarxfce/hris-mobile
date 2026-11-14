@@ -1,5 +1,5 @@
 {
-  "status": "focused2 running; first compilation failure preserved",
+  "status": "focused2 accepted; full running",
   "sourcePaths": 9,
   "newSharedMethods": 9,
   "priorMethodsRetained": 37,
@@ -8,7 +8,7 @@
   "applySession": 42283,
   "applyReaped": true,
   "focusedSession": 58439,
-  "focusedReaped": false,
+  "focusedReaped": true,
   "expectedFocused": 48,
   "expectedFull": 17138,
   "lifecycleDraftPaths": 6,
@@ -32,5 +32,25 @@
       "failedReaped": true,
       "failedResultSha256": "000577df125934a25649310d446cd93cbfe7e3fe73197b489f9e47c5ff63600e"
     }
-  ]
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 48,
+    "elapsedSeconds": 204.334,
+    "sourceFiles": 5494,
+    "sourceManifestSha256": "f2912883f10e756f2460032c2973ae6193c8348069ec5d7400ce0dba5ca51ff7",
+    "resultSha256": "428a015a9dc82898a7028c56188b002e3debb68d991e2db82f66d5046d1afd83",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceInboxRepairWorkerTest": 12,
+      "ChangeSpaceInboxRepairProgressTest": 13,
+      "SpaceInboxRepairDemandPolicyTest": 8,
+      "SpaceInboxRepairProgressPolicyTest": 13
+    },
+    "priorCaseIdsRetained": true
+  },
+  "fullSession": 20844,
+  "fullReaped": false,
+  "globalOwnerDesign": "docs/collaboration-history-global-owner-design.md",
+  "globalOwnerImplemented": false
 }

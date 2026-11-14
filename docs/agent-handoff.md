@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 04:12 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 04:16 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -18,8 +18,9 @@ f2912883f10e756f2460032c2973ae6193c8348069ec5d7400ce0dba5ca51ff7. Focused1/sessi
 34 domain cases passed, then app test compilation failed at WorkerTest:295 because the new saved
 cursor list required explicit String? element type. Production was not changed. Original source,
 result and one-line correction remain in .work and the acceptance recorder preserves this failed
-attempt. Focused2/session58439 is RUNNING (expected48), with full17138 prepared UNRUN. Reap,
-audit then run full, record/commit/push mobile before Group. Do not change source during the run.
+attempt. Focused2/session58439 REAPED0 and accepted48 in204.334s; result428a015a9dc82898a7028c56188b002e3debb68d991e2db82f66d5046d1afd83.
+Full1/session20844 is RUNNING (expected17138). Reap/audit then record/commit/push mobile before
+Group. Do not change source during the run.
 
 
 Next source lifecycle6 and pending admission8 are reviewed/formatted UNAPPLIED drafts with all
@@ -42,6 +43,10 @@ current-source inspection for older-pass recovery and explicit raw Restart that 
 work without removing references. DI/graph baselines refer to pending8 drafts. All these drafts
 remain unvalidated/unactivated. Then implement global captured triggers, admitted source metadata
 enumeration and finite fair continuation under the existing command repair owner.
+
+Global owner design is recorded in docs/collaboration-history-global-owner-design.md and mobile .work/history-inbox-global-owner-2026-11-14. No global source/gates exist yet.
+It documents checked global/source cursor commits, completed repair signals, bounded catalog
+rounds, failure parking and fair command service. Do not treat this design as implemented.
 
 ## Admitted history inbox handoff locally accepted
 
