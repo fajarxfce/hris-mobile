@@ -1,9 +1,7 @@
-# Global history progress — reviewed draft, not activated
+# Global history progress — locally accepted, not activated
 
-Current status:23 APPLIED paths; focused59 locally accepted; full17372 running in session21524.
-Full source acceptance is pending. Application lifetime activation remains open. The next finite
-turn adapter/selection package has14 UNAPPLIED drafts and42 shared cases UNRUN; its actual storage
-integration and parent lifetime scheduler still require review and evidence.
+Current status: global persistence, policies and admitted operations are locally accepted.
+See [validation](collaboration-history-global-progress.md) for exact evidence. Application worker and product consumers remain inactive.
 
 ## Durable state and finite continuation
 
@@ -57,7 +55,7 @@ Desktop/browser execute the shared cases; the Apple wrapper is a compilation gat
 Two existing DI tests resolve the repository and three added use cases without starting work.
 The new deferred flag also roundtrips through actual storage and reopening.
 
-Focused59 is accepted; full17372 is running and must be reaped/audited before acceptance. Previous failed hosted Apple evidence and the unrelated
+Focused59/full17372 are locally accepted for these source changes. Previous failed hosted Apple evidence and the unrelated
 blocked fixture preparation payload remain unchanged. Do not recreate that blocked payload.
 
 ## Next application integration

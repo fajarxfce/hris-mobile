@@ -1,32 +1,35 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 05:54 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 05:59 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active global history progress verification
+## Global history progress locally accepted
 
-Global progress .work/history-inbox-global-owner-2026-11-14 is APPLIED:23 source paths,
-57 shared additions. Apply42212 is reaped. Focused1/session5423 REAPED0/ACCEPTED59,418.513s;
-source5532/ab7d052809346a2c3397b5431f06efa39cd597dec40cc49909b43b251fa36780, result
-a802a6cc2d4ada23dc2eb0bbe1af121ca477c7d4091268af7340bc25460fbc2a. Full1/session21524 RUNNING,
-expected17372; not accepted yet. Reap/audit before recording/committing source. Gates are prepared.
-Latest accepted production is Mobile6af5974d/full17258 and Groupa46af1dc, both pushed.
+Mobile .work/history-inbox-global-owner-2026-11-14 is accepted:23 paths,57 shared additions.
+Focused59/full17372 (15191 fresh /2181 unchanged) preserve all17258
+prior identities plus114 executions. Source5532/ab7d052809346a2c3397b5431f06efa39cd597dec40cc49909b43b251fa36780;
+reports64804afcbc577a9bc02bf1105da4941faba0de70800dfa6183d6bf48457caaaa. Captured/completed pass identity, bounded queues and exact source
+or destination guards survive reopening and competing writes. Catalog failures remain unfinished
+through healthy rounds. Failed-only rounds park; unknown prior state or raw Restart cannot claim
+forward progress. One metadata-only admitted destination observer is bound, not activated.
 
-Next .work/history-inbox-owner-turn-2026-11-14 has14 formatted UNAPPLIED paths and42 shared cases
-UNRUN. Pure global/source/page selection, one finite turn worker and DI/graph drafts exist. The
-worker maps selected actions to admitted use cases without subscriptions, timers or transports.
-Failed attempts consume their lane budget; one source inspection after an uncertain operation
-preserves the other lane's actual version. The raw policy permits one reset then one fresh read.
-No application lifetime activation exists. Actual storage integration, parent mailbox/fairness,
-review and validation remain open. Do not apply as an unreviewed standalone selector package.
-The current design is retained in the owner-turn design document in each repository.
+Next .work/history-inbox-owner-turn-2026-11-14 contains15 reviewed/formatted UNAPPLIED paths,42
+shared and3 actual SQLite integration cases. Focused63/full17459 and record/commit gates are
+prepared UNRUN. Apply after this source/evidence is committed and pushed. Parent mailbox/lifetime
+activation remains next, after this finite execution contract is verified.
+Integrate under the existing account/Group repair lifetime while preserving command service and
+one typed repair observation. Read actual source state before each
+visit; finish older source intervals before starting a newer pass. Reacquire current observations
+after contention rather than replaying an old opaque trigger. Yield after bounded useful progress;
+never poll or self-schedule unchanged failed work. Product incoming completion, thread/list/UI
+integration and SDK8 Apple application activation still require end-to-end evidence.
 
-Keep one repair signal observation, cancel/join account ownership and service command input
-between bounded history steps. Do not let self-produced metadata restart failed work. Preserve
-exact source/index/global guards and current admission. Phone92/live remain unchanged;
-GroupOFF/V117-140 undeployed. Actual new Apple execution and all54 PRD groups remain open.
+Phone92 remains installed; no phone/live change. GroupOFF/V117-140 remain undeployed. Earlier owner
+inputs17258 and Starter092fbe6f remain accepted. Preserve failed hosted Apple evidence and the
+blocked fixture payload; actual new Apple execution remains outstanding. All54 PRD groups stay
+open. Continue beyond checkpoints; push every commit; one compiler OR emulator; no agents.
 
 ## History owner inputs locally accepted
 

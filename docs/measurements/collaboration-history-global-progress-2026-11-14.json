@@ -1,0 +1,81 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/inbox/CollaborationSpaceInboxHistoryProgressCodec.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/inbox/CollaborationSpaceInboxHistoryProgressDto.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceInboxHistoryProgressRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxHistoryProgressStorageContract.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxHistoryProgressStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceInboxHistoryProgressStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceInboxHistoryProgressStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistoryChange.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistoryProgress.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistoryBatchPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistoryMutationPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistoryProgressPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceInboxHistoryProgressRepository.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ChangeCollaborationSpaceInboxHistoryProgress.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceInboxDestination.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceInboxHistoryProgress.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceInboxDestinationTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistoryBatchPolicyTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistoryMutationPolicyTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistoryProgressAdmissionTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistoryProgressPolicyTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 59,
+    "elapsedSeconds": 418.513,
+    "sourceFiles": 5532,
+    "sourceManifestSha256": "ab7d052809346a2c3397b5431f06efa39cd597dec40cc49909b43b251fa36780",
+    "resultSha256": "a802a6cc2d4ada23dc2eb0bbe1af121ca477c7d4091268af7340bc25460fbc2a",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceInboxHistoryProgressStorageTest": 14,
+      "SpaceInboxHistoryBatchPolicyTest": 13,
+      "SpaceInboxHistoryMutationPolicyTest": 6,
+      "SpaceInboxHistoryProgressAdmissionTest": 10,
+      "SpaceInboxHistoryProgressPolicyTest": 8,
+      "ObserveSpaceInboxDestinationTest": 6
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T05:42:16.439130+00:00",
+    "elapsedSeconds": 1007.143,
+    "sourceFiles": 5532,
+    "freshCounts": {
+      "tests": 15191,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153958388,
+      "sha256": "c8bacdb7597670006e8567ed7a5042c88b6697ca35adda9e2f472c0e9cf015d6"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 17372,
+    "newCases": 114,
+    "freshTests": 15191,
+    "reusedUnaffectedTests": 2181,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "ab7d052809346a2c3397b5431f06efa39cd597dec40cc49909b43b251fa36780",
+    "reportManifestSha256": "64804afcbc577a9bc02bf1105da4941faba0de70800dfa6183d6bf48457caaaa",
+    "nativeClaim": "Fifty-seven shared global history progress regressions; global worker and product consumers remain inactive."
+  },
+  "newSharedMethods": 57,
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "ownerActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "failedFocusedAttempts": []
+}

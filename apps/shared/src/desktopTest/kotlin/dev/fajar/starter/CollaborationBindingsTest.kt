@@ -731,6 +731,12 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<CompleteCollaborationSpaceInboxHistoryPending>())
                 assertNotNull(container.koin.get<ReadCollaborationSpaceInboxHistorySource>())
                 assertNotNull(container.koin.get<ReadCollaborationSpaceInboxHistorySources>())
+                assertNotNull(
+                    container.koin.get<CollaborationSpaceInboxHistoryProgressRepository>()
+                )
+                assertNotNull(container.koin.get<ReadCollaborationSpaceInboxHistoryProgress>())
+                assertNotNull(container.koin.get<ChangeCollaborationSpaceInboxHistoryProgress>())
+                assertNotNull(container.koin.get<ObserveCollaborationSpaceInboxDestination>())
                 assertNotNull(container.koin.get<RestartCollaborationSpaceInboxHistorySource>())
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceHistoryChanges>())
                 assertSame<Any>(

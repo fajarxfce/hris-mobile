@@ -1,5 +1,7 @@
 # Architecture
 
+[Retained global history progress](collaboration-history-global-progress.md) retains bounded source rounds with exact atomic guards.
+
 [Retained history owner inputs](collaboration-history-owner-inputs.md) keeps request and completion identities in one admitted observation.
 
 [Admitted history source operations](collaboration-history-inbox-source-admission.md) owns lifecycle, pending windows and exact source recovery.

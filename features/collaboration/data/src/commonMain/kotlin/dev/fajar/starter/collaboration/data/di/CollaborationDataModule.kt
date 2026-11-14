@@ -4207,6 +4207,30 @@ class CollaborationDataModule {
     ) = ReadCollaborationSpaceInboxHistorySources(progress, directory, sessions, server)
 
     @Factory
+    fun readSpaceInboxHistoryProgress(
+        progress: CollaborationSpaceInboxHistoryProgressRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpaceInboxHistoryProgress(progress, directory, sessions, server)
+
+    @Factory
+    fun changeSpaceInboxHistoryProgress(
+        progress: CollaborationSpaceInboxHistoryProgressRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ChangeCollaborationSpaceInboxHistoryProgress(progress, directory, sessions, server)
+
+    @Factory
+    fun observeSpaceInboxDestination(
+        progress: CollaborationSpaceInboxHistoryProgressRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ObserveCollaborationSpaceInboxDestination(progress, directory, sessions, server)
+
+    @Factory
     fun restartSpaceInboxHistorySource(
         progress: CollaborationSpaceInboxHistorySourceRepository,
         inbox: CollaborationSpaceInboxRepository,
