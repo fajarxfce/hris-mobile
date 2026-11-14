@@ -792,3 +792,13 @@ Shared Apple execution of all15 atomic command/projection methods is linked in S
 ## Incremental local replica pages — 13 November 2026
 
 Starter 092fbe6f70475efe950c697d3b7c6ec46b1fb267 independently passes1049 cases for21 byte-identical Mobile source/schema/test files. The port retains all1022 prior cases plus27 executions, covers SQLite13 and browser12/7 migration, and includes Android variants, lint, Web and Apple compilation. Actual new Apple execution remains separate. See [source and report evidence](measurements/replica-change-starter-link-2026-11-13.json). Authenticated HRIS history mapping and owner policy stay downstream.
+
+## Verified generic Compose alignment — 14 November 2026
+
+[Starter 712ca99a](https://github.com/fajarxfce/compose-fluent-starter/commit/712ca99a42d4cb48aee25b3a2a51724ed2fa8530)
+ports eight generic version/test/verification/lock files from Mobile caa59e48. All 1,049 prior
+tests run freshly with preserved identities; Android variants, production Web, Apple compilation
+and lint pass. Five desktop captures were inspected. 732 artifacts were independently verified;
+HRIS Paging, Matrix adapters, account policy and product UI remain in Mobile.
+See [exact evidence](https://github.com/fajarxfce/compose-fluent-starter/blob/712ca99a42d4cb48aee25b3a2a51724ed2fa8530/docs/measurements/compose-platform-alignment-2026-11-14.json).
+No new Apple execution, phone installation or live rollout.
