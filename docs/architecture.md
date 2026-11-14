@@ -1,5 +1,10 @@
 # Architecture
 
+[Finite recipient transfer](collaboration-recipient-transfer.md)
+
+Finite local transfer requires exact canonical command and inbox acknowledgement before conditional source retirement.
+
+
 
 [Recipient destination proof](collaboration-recipient-destination-proof.md)
 

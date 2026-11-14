@@ -730,6 +730,26 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun transferSpaceRecipientSubmission(
+        outbox: CollaborationSpaceRecipientOutboxRepository,
+        messages: CollaborationSpaceMessageRepository,
+        metadata: CollaborationSpaceConversationMetadataRepository,
+        inbox: CollaborationSpaceInboxRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) =
+        TransferCollaborationSpaceRecipientSubmission(
+            outbox,
+            messages,
+            metadata,
+            inbox,
+            directory,
+            sessions,
+            server,
+        )
+
+    @Factory
     fun observeSpaceComposer(
         drafts: CollaborationSpaceDraftRepository,
         outbox: CollaborationSpaceComposerOutboxRepository,

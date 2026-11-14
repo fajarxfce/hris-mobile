@@ -195,6 +195,60 @@ class EncryptedCollaborationSpaceRecipientOutboxRepository(
             }
         }
 
+    override suspend fun remove(
+        access: CollaborationSpaceLocalAccess,
+        expected: CollaborationSpaceRecipientSubmission,
+    ): AppResult<Boolean> =
+        withContext(Dispatchers.Default) {
+            val result =
+                safeStorageCall<Boolean?> {
+                    require(validCollaborationSpaceRecipientSubmission(expected))
+                    require(
+                        validCollaborationSpaceRecipientCoordinates(
+                            access,
+                            expected.original.peerAccountId,
+                        )
+                    )
+                    val scope = spaceHistoryScope(access)
+                    val partition = recipientDraftPartition(access)
+                    val id = recipientSubmissionId(expected.id)
+                    repeat(3) {
+                        currentCoroutineContext().ensureActive()
+                        val raw = replicas.observeDocument(scope, partition, id).first()
+                        val documents = capture(raw.documents, 1)
+                        require(documents.all { it.id == id })
+                        val retained = decode(access, raw.checkpoint, documents).singleOrNull()
+                        if (replicas.checkpoint(scope, partition) != raw.checkpoint) return@repeat
+                        if (retained != expected) return@safeStorageCall false
+                        val checkpoint = requireNotNull(raw.checkpoint)
+                        val revision = checkpoint.revision + 1
+                        require(revision in 0 until 9_007_199_254_740_991L)
+                        val next =
+                            keys.use { key, _ ->
+                                CollaborationSpaceRecipientDraftCodec(access, cipher, key)
+                                    .checkpoint(checkpoint.handle.generation, revision)
+                            }
+                        currentCoroutineContext().ensureActive()
+                        if (
+                            replicas.commit(
+                                checkpoint.handle,
+                                checkpoint.revision,
+                                next,
+                                listOf(ReplicaDocument(id, revision, id, null)),
+                                true,
+                            )
+                        )
+                            return@safeStorageCall true
+                    }
+                    null
+                }
+            when (result) {
+                is AppResult.Failed -> result
+                is AppResult.Success ->
+                    result.value?.let { AppResult.Success(it) } ?: busyRecipientOutbox()
+            }
+        }
+
     /**
      * Freeze bounded adapter collections before any suspension, including the content-key lease.
      */

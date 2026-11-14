@@ -27,4 +27,14 @@ interface CollaborationSpaceRecipientOutboxRepository {
         after: String? = null,
         limit: Int = 8,
     ): AppResult<CollaborationSpaceRecipientSubmissionPage>
+
+    /**
+     * Remove only the compared original. The use case must prove destination/index retention first.
+     * Preserve editing slots, other originals and the current recovery wake. False is not
+     * acknowledgement; uncertain outcomes require an exact readback by the owning use case.
+     */
+    suspend fun remove(
+        access: CollaborationSpaceLocalAccess,
+        expected: CollaborationSpaceRecipientSubmission,
+    ): AppResult<Boolean>
 }

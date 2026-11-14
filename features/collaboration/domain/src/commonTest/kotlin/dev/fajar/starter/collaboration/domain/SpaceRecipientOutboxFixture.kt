@@ -100,6 +100,11 @@ internal class SpaceRecipientOutboxFixture {
                 limit: Int,
             ): AppResult<CollaborationSpaceRecipientSubmissionPage> =
                 error("Submission must not scan recovery pages")
+
+            override suspend fun remove(
+                access: CollaborationSpaceLocalAccess,
+                expected: CollaborationSpaceRecipientSubmission,
+            ): AppResult<Boolean> = error("Submission cannot retire its source")
         }
 
     fun submit() =

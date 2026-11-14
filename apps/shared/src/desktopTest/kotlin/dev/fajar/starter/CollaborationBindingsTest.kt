@@ -545,6 +545,7 @@ class CollaborationBindingsTest {
                     container.koin.get<CollaborationSpaceRecipientOutboxRepository>(),
                 )
                 assertNotNull(container.koin.get<SubmitCollaborationSpaceRecipientComposer>())
+                assertNotNull(container.koin.get<TransferCollaborationSpaceRecipientSubmission>())
                 assertNotNull(container.koin.get<ReplayCollaborationSpaceConversationOpen>())
                 assertNotNull(container.koin.get<ResolveCollaborationSpaceRoomRequest>())
                 assertNotNull(container.koin.get<ReplayCollaborationSpaceRoomRequest>())
