@@ -1,5 +1,7 @@
 # Architecture
 
+[Recipient local projection](collaboration-recipient-projection.md) scopes decoded source facts to one collector; domain owns admission and raw storage remains policy-free.
+
 [Exact published reads](replica-exact-queries.md) combine primary-key identities and bounded indexed pages in one owned raw transaction.
 
 [Recipient editing ownership](collaboration-recipient-editor.md) keeps captured UI writes in a route-owned serial editor, admission/readback in use cases, and one cancellable draft observation in the ViewModel. Explicit reacquisition joins the previous reader.

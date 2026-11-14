@@ -1,58 +1,36 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 20:31 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 21:12 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 
-## Exact published replica queries accepted
+## Local recipient projection accepted
 
-ReplicaQuery can select an exact document ID beside other bounded indexed pages under one
-published checkpoint. SQLite and IndexedDB use their existing primary-key reads and transaction;
-missing/tombstoned identities stay absent, staging stays hidden and account ownership stays exact.
-This enables a narrow recipient draft/source-marker frame without enumerating every peer draft.
-No migration, network call or feature policy was added.
+A repository and admitted domain observer now expose the exact local recipient draft and
+bounded retained originals. One collector owns an immutable source cache keyed by authenticated
+source generation/version. Typing does not reload/decrypt originals; replacement, failure and
+cancellation clear the cache. Coherent raw header/inventory frames cannot mix revisions. Copying
+the inventory before first() cancels its producer preserves buffers released in finally.
 
-Validation: 18,177 cases (6756 fresh on this source across focused/full gates / 11421 exact unchanged), preserving all 18,169 prior IDs plus 8. Focused 179/session95425 and full/session55670 reaped 0. Source e69e55f42ad5f7f68afd4b3d882621a2235b51b871481ca92b27a439277d39c7; reports a372eda15290ca4febe332a16b4917d42d32e2c99114749580631876cecf8112.
-Read [storage contract](replica-exact-queries.md).
+Validation: 18,217 cases (16028 fresh / 2189 exact unchanged), preserving all 18,177 prior IDs plus 40. Focused 22/session3240 and full/session62241 reaped 0. Source 329cd86a3d2e39a0e1c7fd7a3abc42cf0bf0f80510a91b92be9aa0a39e4f2cb8; reports 7ff3c3a98d13503299390f63bdfe547c14278521438e37fee3e48f8dccf7ec2f.
+Read [projection ownership and validation](collaboration-recipient-projection.md).
 
-Starter `c7323ce89dd4da2eed61db6ab8deefd230296c63` independently accepts the exact eight generic paths with 1,060 cases (512 fresh / 548 exact unchanged), preserving all 1,052 prior IDs plus 8. Full session 63612 reaped 0. Android variants, production Web, SQLite/browser and Apple source compilation passed; no new device runtime claim.
+No product route consumes this pre-transfer projection yet. Reuse the existing immutable encrypted
+peer/canonical ConversationMetadata mapping; do not add a duplicate association store. Next add its
+admitted observation and combine canonical commands/history with pending recipient originals,
+preserve independent editor/index continuity, and acknowledge provisional rows only with exact
+represented proof. The existing recipient composer from fed7419f remains accepted but is not wired
+to this projection. See collaboration-recipient-projection-review.md and collaboration-recipient-product-review.md.
 
-Next implement
-the recipient projection in collaboration-recipient-projection-review.md: coherent draft/marker,
-bounded authenticated original cache, exact source-version invalidation, and admission/cancellation.
-Reuse the existing immutable peer/canonical metadata mapping; its admitted observation/history and independent draft continuity are required before activating a
-recipient product route or retiring provisional rows. The component from fed7419f remains accepted.
+A separate integration gap remains: PrepareCollaborationSpaceConversation has no Group application
+consumer. After explicit retained Send, a finite owner must prepare a missing Open command when
+current discovery is available. Existing command delivery then owns remote setup. Passive room
+opening, typing and ordinary admission renewal must not trigger that work. Preserve offline Send,
+bounded/deduplicated peers, immutable commands and cancellation; no use-case-to-use-case calls.
 
-Phone 93 is installed and predates these changes. Group OFF; V117–140 undeployed; all 54 PRD groups
-remain OPEN. Preserve the blocked SQLite preparation, failed Apple evidence and protected stores.
-
-## Recipient editor and read ownership accepted
-
-RecipientComposerViewModel now binds the admitted local draft observer and existing recipient
-Edit/Submit use cases to a typed serial editor. Each Send captures independently and clears input
-immediately; later typing survives held/uncertain writes. Failed writes idle until explicit retry.
-The editor is fixed to its recipient/account/Group and never aliases a peer as a conversation ID.
-
-A stale-reader reopening after write denial was reproduced before fixing it. One request-flow
-switch now cancels and joins superseded readers, checks request identity, and keeps at most one
-reader during repeated reacquisition. Hidden denial/account replacement redacts; disposal fences
-late writes. Actual generated application DI resolves the component.
-
-Validation: 18,169 cases (2145 fresh / 16024 exact unchanged), all18,125 prior IDs preserved plus44. Focused24/session30653 and full/session57802 reaped0. Source 6465a40adb649e9a39969ec7531596b2c583966ba8eb0144153e5150cdf2f66c; reports 604e57dedf0caed64d058a097da14d69e01e173c2c699e8c947c1d230146f0ad.
-Read [implementation and reproduced race](collaboration-recipient-editor.md).
-
-The local recipient transfer owner from1592cf6a remains integrated; read collaboration-recipient-owner.md.
-This new composer component has no active product route and cannot yet reconstruct pending bubbles
-after process restart. Next follow the raw-query/projection review in collaboration-recipient-projection-review.md,
-add durable recipient pending/history projection, feed retained ordering
-and exact represented-original acknowledgements, then canonical association and draft continuity.
-Continue the bounded list/identity design in collaboration-recipient-product-review.md before
-activating contact navigation, complete company filters and Group rollout. Do not disguise peer IDs
-as conversation IDs, duplicate rows on handoff, or load all5,000 employees to merge pending entries.
-
-The full PRD/delivery.json is in `/home/fajar/hris/.worktrees/communication-space/docs/collaboration/`.
-Keep account/Group root outside Company scope. Phone93 remains installed from2eb833f4 and predates
-this component. Starter e9b4ff50 remains independently accepted with1,052. GroupOFF/V117–140
-undeployed/all54 PRD groups OPEN. Preserve blocked SQLite preparation, failed Apple and protected stores.
+The generic exact-query primitive from d889a9af is independently accepted in Starter c7323ce with
+1,060 cases; the linked source/docs are already pushed. This recipient policy is Mobile-only.
+Phone 93 remains installed from 2eb833f4 and predates this component. Group OFF; V117–140 undeployed;
+all 54 PRD groups OPEN. Continue the PRD; preserve blocked SQLite preparation and failed Apple evidence.
 
 ## Delivered build and loop diagnosis
 
