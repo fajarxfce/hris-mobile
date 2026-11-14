@@ -30,8 +30,8 @@
     }
   },
   "focusedSession": 44144,
-  "focusedReaped": false,
-  "fullStarted": false,
+  "focusedReaped": true,
+  "fullStarted": true,
   "candidateSourceFiles": 5492,
   "candidateSourceManifestSha256": "27f1122613b3812a77eeb9ba6f306537c19f17f6b63c20b0f88b2a2a18f440cf",
   "nextUnappliedPaths": 4,
@@ -66,5 +66,24 @@
     ],
     "testMethodsRemoved": 0
   },
-  "nextAllGatesPrepared": true
+  "nextAllGatesPrepared": true,
+  "focusedAccepted": {
+    "accepted": true,
+    "tests": 41,
+    "elapsedSeconds": 207.514,
+    "sourceFiles": 5492,
+    "sourceManifestSha256": "27f1122613b3812a77eeb9ba6f306537c19f17f6b63c20b0f88b2a2a18f440cf",
+    "resultSha256": "e0c40189bbeb28e4a30f1fa209b6f717d064380e301696fc076ee348814d6713",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceInboxHistorySourceStorageTest": 16,
+      "ConfirmSpaceHistoryChangesTest": 10,
+      "SpaceInboxHistoryHandoffPolicyTest": 13
+    },
+    "priorCaseIdsRetained": true
+  },
+  "fullSession": 5785,
+  "fullReaped": false,
+  "fullAccepted": false,
+  "bootstrapDemandFinding": "Existing first inventory creates a fresh repair request even on unchanged reopen; distinguish it before global history integration."
 }

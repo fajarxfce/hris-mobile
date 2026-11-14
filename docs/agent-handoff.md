@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 03:16 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 03:22 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -16,8 +16,8 @@ Focused3/78645 built and passed41, including Apple compilation, but its acceptan
 a new unnecessary safe-call warning. Source version is now captured before an explicit null check.
 All originals/corrections/reports are preserved; no method or gate was removed or relaxed.
 
-Focused4/session44144 is RUNNING. Source5492/
-27f1122613b3812a77eeb9ba6f306537c19f17f6b63c20b0f88b2a2a18f440cf. Full17100 has not started.
+Focused4/session44144 is REAPED and ACCEPTED41 (207.514s). Source5492/
+27f1122613b3812a77eeb9ba6f306537c19f17f6b63c20b0f88b2a2a18f440cf. Full17100/session5785 is RUNNING; reap and audit before recording.
 Reap and audit before full, then record/commit/push Mobile and linked Group evidence. The recorder
 retains both failed attempts and the successful-but-unaccepted focused3 evidence. Storage writes
 source cursor/reference outcomes atomically against the current index; no global worker activated.
@@ -29,6 +29,10 @@ and pushed; REAP before capture. Then admitted source lifecycle/pending-referenc
 global captured demand/fair finite continuation remain. Never relabel an unfinished old window as
 completion of a newer trigger; see review.md. Preserve the existing command lane without a new
 polling scheduler/per-room observer. Incoming completion and thread/list/UI activation remain.
+The old command repair worker emits Request(random UUID) on every first inventory because
+previous==null requires a scan. Separate bootstrap recovery from real history demand before
+using latestDemand as a global history trigger; preserve atomic archival and overflow recovery.
+The exact finding and open tests are in the next admission review.md.
 
 Phone92 stays installed; no phone/live change. Actual new Apple execution remains outstanding.
 Continue beyond checkpoints, push every commit, one compiler OR emulator, no subagents.
