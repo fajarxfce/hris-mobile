@@ -29,13 +29,42 @@
       "testMethodsRemoved": 0
     }
   },
-  "focusedSession": 11866,
+  "focusedSession": 44144,
   "focusedReaped": false,
   "fullStarted": false,
   "candidateSourceFiles": 5492,
-  "candidateSourceManifestSha256": "baf98e39d87d111fb111f5281da4ace4561a9fde6151449c72ea604981894187",
+  "candidateSourceManifestSha256": "27f1122613b3812a77eeb9ba6f306537c19f17f6b63c20b0f88b2a2a18f440cf",
   "nextUnappliedPaths": 4,
   "nextSharedMethods": 10,
   "phoneChanged": false,
-  "liveChanged": false
+  "liveChanged": false,
+  "secondFailedAttempt": {
+    "failedAttempt": "focused-2",
+    "session": 11866,
+    "reaped": true,
+    "tests": 39,
+    "failures": 1,
+    "cause": "New test expected Failed for a stale storage owner; established ReplicaDao checkpoint and existing repair tests return exact null",
+    "change": "Assert exact null for stale read/write and different account; restore admitted account and verify original checkpoint and pending reference unchanged",
+    "productionChanged": false,
+    "changedPaths": [
+      "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxHistorySourceStorageContract.kt"
+    ],
+    "testMethodsRemoved": 0
+  },
+  "intermediateValidation": {
+    "attempt": "focused-3",
+    "session": 78645,
+    "reaped": true,
+    "buildExitCode": 0,
+    "testsPassed": 41,
+    "accepted": false,
+    "acceptanceReason": "New candidate compiler warning: unnecessary safe call after source presence check",
+    "change": "Capture nullable source version once and explicitly reject null before comparing generation/revision",
+    "changedPaths": [
+      "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistoryHandoffPolicy.kt"
+    ],
+    "testMethodsRemoved": 0
+  },
+  "nextAllGatesPrepared": true
 }
