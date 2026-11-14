@@ -1,32 +1,40 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 01:44 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 01:58 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
 ## Checked publication receipts in progress — NOT accepted
 
-The admitted history reader is accepted/pushed (Mobile3fc162c0, Group411bf1ad).
-Mobile .work/history-inbox-publication-receipt-2026-11-14 has14 applied source/test paths.
-Three rejected focused attempts remain recorded: fixture override types (0 tests), unresolved-only
-projection routing (30 tests/5 failed), then method length (0 tests). Current focused-4/session22672
-is RUNNING against source5476/7ed0568e725e2e9508f54ffa15f3b5e262e2a59aacb5cf17f07dbba17b76fbe3.
-Do not treat it as accepted or start another compiler until the process is reaped.
+The admitted history reader remains accepted/pushed (Mobile3fc162c0, Group411bf1ad).
+Mobile .work/history-inbox-publication-receipt-2026-11-14 has14 applied source/test paths,
+20 new shared methods and all46 prior publisher/storage methods. Focused68/session24114 is
+REAPED and ACCEPTED:182.979s, source5476/0149f6c03806be356a7c507419ddd9f1c7194da8f6960f15b0cb4fb1cb635675,
+result4c866ccbf19ca639aaa232c0cdde0f7d36b598ff70fcab6568ea92ff689b873a.
+Full17010/session16204 is RUNNING. Reap before auditing/recording or applying later sources.
 
-A concurrent review identified a separate empty-pair ABA gap: independent absence reads can
-observe source/index absence at different instants while the pair is never jointly absent.
-Two actual-storage test drafts are in absence-review, UNAPPLIED/UNRUN. Reproduce before replacing
-that branch with an owned conditional no-op transaction. Do not publish false completion evidence.
-Update focused/full method counts after adding these cases; current66/17006 counts predate them.
+Three rejected focused attempts and intermediate focused66 remain preserved. Two added actual
+storage regressions reproduced the empty-pair ABA bug (red-absence-1/session65222,2/2 expected
+failures). Separate reads previously confirmed absence at different instants. The correction uses
+one owned transaction to Check source absence and conditionally Replace an already-absent index
+with null. Expected-null cannot remove an existing/staging generation. The new focused68 passes
+both races. No content key, source/index record, wake or history signal is created by this check.
+After full acceptance: record evidence, commit/push mobile, then commit/push Group evidence.
 
-.work/history-binding-invalidation-2026-11-14 has3 reviewed/formatted UNAPPLIED drafts,6 new shared
-methods and all46 prior binding/preparation methods. New binding, history signal and existing wake
-commit atomically; exact replay stays silent. Focused79/full17018 gates are prepared, not run;
-its expected full baseline must increase when the two empty-pair regression cases are admitted.
-Return afterward to durable history progress: one initial state draft only, no implementation.
-Continue beyond checkpoints, push every commit. One compiler OR emulator. No subagents.
-Phone92 remains installed; no phone or live activation. Actual new Apple execution remains open.
+Next .work/history-binding-invalidation-2026-11-14 has3 reviewed/formatted UNAPPLIED drafts,
+6 new shared methods and all46 prior binding/preparation methods. Focused79/full17022 and
+record/commit gates are prepared, not run. New binding, history signal and existing wake commit
+atomically; exact replay stays silent. Apply only after receipt source acceptance and push.
+
+Then .work/history-empty-page-confirmation-2026-11-14 has4 initial UNAPPLIED drafts (use case,
+10 shared tests, DI and graph assertion). Formatted once; review/gates remain incomplete.
+It confirms empty-reference pages without invented events, using their opaque source token and
+exact canonical owner plus source generation/window coverage. It does not advance durable progress.
+Then return to history-inbox-progress-2026-11-14: one initial state draft/review only. Atomic
+cursor/unresolved handoff and fair finite continuation under the existing repair owner remain open.
+One compiler OR emulator, no subagents. Phone92 remains installed; no phone/live activation.
+All54 PRD groups remain open. Continue beyond checkpoints and push every commit.
 
 ## Admitted canonical history changes locally accepted
 

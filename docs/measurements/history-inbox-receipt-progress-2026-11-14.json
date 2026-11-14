@@ -1,56 +1,58 @@
 {
-  "status": "in_progress_not_accepted",
-  "checkedPublicationPaths": 14,
-  "initialFocusedRuns": [
-    {
-      "directory": "focused-1",
-      "startedAt": "2026-11-14T01:33:32.782402+00:00",
-      "elapsedSeconds": 125.965,
-      "exitCode": 1,
-      "freshCounts": {
-        "tests": 0,
-        "failures": 0,
-        "errors": 0,
-        "skipped": 0
-      }
+  "status": "focused_accepted_full_running",
+  "focused": {
+    "accepted": true,
+    "tests": 68,
+    "elapsedSeconds": 182.979,
+    "sourceFiles": 5476,
+    "sourceManifestSha256": "0149f6c03806be356a7c507419ddd9f1c7194da8f6960f15b0cb4fb1cb635675",
+    "resultSha256": "4c866ccbf19ca639aaa232c0cdde0f7d36b598ff70fcab6568ea92ff689b873a",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceHistoryInboxStorageTest": 22,
+      "CollaborationCompanyHistoryInboxStorageTest": 14,
+      "PublishSpaceInboxHistoryReceiptTest": 8,
+      "PublishSpaceInboxHistoryTest": 22
     },
-    {
-      "directory": "focused-2",
-      "startedAt": "2026-11-14T01:36:21.368939+00:00",
-      "elapsedSeconds": 123.356,
-      "exitCode": 1,
-      "freshCounts": {
-        "tests": 30,
-        "failures": 5,
-        "errors": 0,
-        "skipped": 0
-      }
-    },
-    {
-      "directory": "focused-3",
-      "startedAt": "2026-11-14T01:39:17.982444+00:00",
-      "elapsedSeconds": 65.991,
-      "exitCode": 1,
-      "freshCounts": {
-        "tests": 0,
-        "failures": 0,
-        "errors": 0,
-        "skipped": 0
-      }
-    }
-  ],
-  "focusedRunning": {
-    "directory": "focused-4",
-    "session": 22672,
-    "expectedTests": 66
+    "priorCaseIdsRetained": true
   },
-  "emptyPairRace": "Two actual-storage regression drafts prepared, not applied/run. Separate absence reads may miss alternating source/index replacements; conditional no-op transaction planned.",
+  "full": {
+    "directory": "full-1",
+    "session": 16204,
+    "expectedTests": 17010,
+    "reaped": false
+  },
+  "emptyPairRace": {
+    "reproduced": true,
+    "session": 65222,
+    "reaped": true,
+    "sourceManifestSha256": "01038ad4ab8c55669e8c45430a9872548716f6cae2988c617b325687916a4775",
+    "resultSha256": "d7e6f640f4916477e7ab09bdcd8eccc7bba4b902db28f06413da6056f68fa257",
+    "elapsedSeconds": 71.765,
+    "failures": [
+      {
+        "classname": "dev.fajar.starter.collaboration.data.CollaborationCompanyHistoryInboxStorageTest",
+        "name": "alternatingAbsentPartitionsCannotConfirmAnEmptyPair[desktop]",
+        "message": "java.lang.AssertionError: expected:<Success(value=null)> but was:<Success(value=CollaborationHistoryInboxReceipt([redacted]))>"
+      },
+      {
+        "classname": "dev.fajar.starter.collaboration.data.CollaborationSpaceHistoryInboxStorageTest",
+        "name": "alternatingAbsentPartitionsCannotConfirmAnEmptyPair[desktop]",
+        "message": "java.lang.AssertionError: expected:<Success(value=null)> but was:<Success(value=CollaborationHistoryInboxReceipt([redacted]))>"
+      }
+    ]
+  },
   "nextBinding": {
     "paths": 3,
     "newSharedMethods": 6,
-    "priorMethods": 46,
     "focused": 79,
-    "full": 17018,
+    "full": 17022,
+    "applied": false
+  },
+  "nextEmptyPage": {
+    "paths": 4,
+    "newSharedMethods": 10,
+    "reviewComplete": false,
     "applied": false
   },
   "phone": 92,
