@@ -1,9 +1,39 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 06:29 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 06:40 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Active shared repair lifetime diagnosis
+
+Finite history turns are committed/pushed: Mobile ad5ea10e64c9709eccfeb0ff0016333c3ffdfad6 and
+Group 95e638e6ff17d8943998d6c0b244c1f43a02913e, accepted focused63/full17459. The next
+.work/history-inbox-owner-lifetime-2026-11-14 is APPLIED on9 source paths and remains uncommitted.
+It shares command/history collection with19 new shared cases and1 actual SQLite case. Do not
+claim acceptance: focused1 executed55 with1 failed existing SQLite cancellation test. No production
+correction has been made yet. Failed source5549/c55a18227b891b541dc17d689186801d0aeb0821584accfe786d0cb75b0c2a6a;
+result1e9607ae7c80b0724eff292e008b40b0c46f74c5e34b6c2f6126b557d8851087.
+
+The original assertion is unchanged except for a redacted failure message. Isolated diagnostic1
+reproduced the failure: Conflict/client.collaboration_inbox_busy. Source5549/
+deccb98142d47b45f56873a696d9bbd47c8fb34904ec1771e679b2a5f4d74546;
+resultd62aa9971c7a8df1c5c636ebf090da56070e6effbc57d7e4d6aba4e1af4a76ce.
+Diagnostic2 is running to distinguish the command lane from history. Its test callback records
+only redacted Failure kind/code; current source5549/
+62a4d84da1916a4283c619e3dc8ecd534b8197c0717d773cf08574adf51e95b0. Inspect/reap session97318 before
+further source edits. Full17498 has NOT run. Preserve all55 focused identities and old assertions,
+then correct the actual contention/ownership cause, rerun focused and full, record failures,
+commit and push. Do not hide the failure by relaxing the cancellation test or adding blanket retries.
+
+Next product-owner workspace .work/history-inbox-product-owner-2026-11-14 has4 UNAPPLIED domain
+drafts/10 UNRUN cases, no application wiring or gates. Current local account/root admission must
+be independent of native readiness/credential age/HR company. Null handoffs close the old owner
+before a replacement account/root waits for admission. Current admission/root/session checks and
+late cancellation still need review. Do not apply before shared-lifetime diagnosis is resolved.
+
+Phone92/live unchanged; GroupOFF/V117-140 undeployed. No new Apple execution or Starter port.
+Continue long run after this diagnosis; push each commit; one compiler OR emulator; no agents.
 
 ## Finite history turns locally accepted
 
