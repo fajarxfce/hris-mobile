@@ -1,40 +1,34 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 06:55 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 07:12 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active shared repair lifetime verification
+## Shared command/history lifetime locally accepted
 
-Finite-turn prerequisite remains accepted and pushed: Mobile ad5ea10e /Group95e638e6,
-focused63/full17459. The shared-lifetime package is APPLIED on9 source paths and uncommitted.
-Focused3 is now accepted59, including every prior command and actual SQLite integration identity.
-Source5549/09176a696a0c01faa24c93761661828c5f17a97b2620c8b1004e1bfe50e65a9f;
-result7ff5568a5770f07ef249ad577372a637ae89959c793cc1edd96e21989e6fb187.
-Full17506 is RUNNING in .work/history-inbox-owner-lifetime-2026-11-14/full-1, session47037.
-Reap and verify before editing captured source. Do not claim full acceptance yet.
+Mobile .work/history-inbox-owner-lifetime-2026-11-14 is accepted:9 source paths,23 shared additions
+and1 actual SQLite collected-owner case. Focused59/full17506 (15325 fresh /
+2181 unchanged) preserve all17459 prior identities plus47 executions.
+Source5549/09176a696a0c01faa24c93761661828c5f17a97b2620c8b1004e1bfe50e65a9f; reports34dc2544e5c0c6f52f43a73e64cb010c5b7278d1dbc42fed26a5e700af305da6.
+The collected repair worker shares five observations through immutable latest inputs. Commands
+receive service between finite history steps, and command results precede suspended history.
+Recovery is consumed once; unchanged failed input and physical revisions cannot schedule loops.
+Cancellation joins every observation and rejects late results. Existing command13 and all six
+previous actual integration identities remain. New actual SQLite completion/reopen is included.
 
-The original focused1 cancellation failure and two isolated diagnostics identified history
-Conflict/client.collaboration_inbox_busy leaking through the shared command result. Exact
-conditional-write contention now has a domain Contended state: progress stays parked, without
-inventing completion or a command failure, until real input/explicit owner recovery. Other
-conflicts, storage errors and denials remain failures. Focused2 found another boundary error:
-history Success could precede command inventory initialization. Combined output now waits for
-an actual command outcome. Four added shared regressions preserve these boundaries;23 shared
-and1 actual SQLite addition total. Old assertions remain intact. Failed source/results and
-corrections are retained in contention-correction.json and will be included in final Git evidence.
+Next .work/history-inbox-product-owner-2026-11-14 contains12 reviewed UNAPPLIED paths,16 shared
+and5 desktop additions. Focused84/full17543 gates are prepared UNRUN; apply only after this source
+and evidence are committed/pushed. It connects the collected factory to an actual application
+account/Group owner. Current applied code still has only factory/test consumers of the repair worker. Product ownership must remain independent
+from native readiness and credentials age, cancel/join before identity/Group replacement, and
+share the existing durable root/admission observation. Then complete incoming/thread/list/UI
+integration and measure end-to-end behavior. Do not activate live Group rollout prematurely.
 
-Next .work/history-inbox-product-owner-2026-11-14 contains12 reviewed/formatted UNAPPLIED drafts,
-16 shared and5 desktop additions; focused84/full17543 gates are prepared UNRUN. Recording/commit
-gates still need preparation. The product observer uses session/root/directory admission directly,
-independent of native readiness, credential age and selected HR company. Null handoffs close old
-ownership before waiting for new facts; one process child cancels/joins repair on replacement.
-DI/start/close wiring, domain/app lifecycle tests and actual SQLite clear/restore cases are drafted.
-Apply only after the shared-lifetime source/evidence is accepted, committed and pushed.
-
-Phone92/live unchanged; GroupOFF/V117-140 undeployed. No new Apple execution, device action or
-Starter port. Continue the long run after verification; push every commit; one compiler OR emulator.
+Phone92/live unchanged; GroupOFF/V117-140 undeployed. Starter092fbe6f remains accepted and needs no
+port. Preserve failed hosted Apple evidence and the blocked fixture payload. New Apple execution
+and SDK8 Apple app activation remain open. All54 PRD groups remain open. Continue beyond
+checkpoints; push every commit; one compiler OR emulator; no agents.
 
 ## Finite history turns locally accepted
 

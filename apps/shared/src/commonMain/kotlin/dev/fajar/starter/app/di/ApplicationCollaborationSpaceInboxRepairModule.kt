@@ -64,9 +64,19 @@ internal fun applicationCollaborationSpaceInboxRepairModule() = module {
         val reference = inject<ReadCollaborationSpaceInboxRepair>()
         val reconcile = inject<ReconcileCollaborationSpaceInboxOriginal>()
         val seed = inject<SeedCollaborationSpaceInboxOriginal>()
+        val historySignals = inject<ObserveCollaborationSpaceHistoryChanges>()
+        val catalog = inject<ObserveCollaborationSpaceConversationCatalog>()
+        val destination = inject<ObserveCollaborationSpaceInboxDestination>()
+        val historyTurn = inject<CollaborationSpaceInboxHistoryTurnWorker>()
         CollaborationSpaceInboxRepairWorker(
             messages = { messages.value(it) },
             signals = { requests.value(it) },
+            historySignals = { historySignals.value(it) },
+            catalog = { catalog.value(it) },
+            destination = { destination.value(it) },
+            historyTurn = { access, frame, passId, recover ->
+                historyTurn.value(access, frame.trigger, frame.destination, passId, recover)
+            },
             readProgress = { progress.value(it) },
             changeProgress = { access, mutation -> change.value(access, mutation) },
             readPage = { access, after, limit -> page.value(access, after, limit) },

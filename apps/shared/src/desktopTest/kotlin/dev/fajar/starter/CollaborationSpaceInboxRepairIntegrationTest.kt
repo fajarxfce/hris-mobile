@@ -1,5 +1,6 @@
 package dev.fajar.starter
 
+import dev.fajar.starter.app.work.CollaborationSpaceInboxHistoryTurnWorker
 import dev.fajar.starter.app.work.CollaborationSpaceInboxRepairWorker
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
@@ -8,6 +9,7 @@ import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.fixtures.CollaborationWorkerFixture
 import java.util.UUID
+import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.test.*
 import kotlin.time.Instant
 import kotlinx.coroutines.*
@@ -72,6 +74,7 @@ class CollaborationSpaceInboxRepairIntegrationTest {
                 val reconcile = f.koin.get<ReconcileCollaborationSpaceInboxOriginal>()
                 val observedQueued = CompletableDeferred<Unit>()
                 val outcomes = Channel<AppResult<Unit>>(Channel.UNLIMITED)
+                val historyFailures = ConcurrentLinkedQueue<Failure>()
                 val worker =
                     CollaborationSpaceInboxRepairWorker(
                         messages = { local ->
@@ -99,6 +102,27 @@ class CollaborationSpaceInboxRepairIntegrationTest {
                                 .distinctUntilChanged()
                         },
                         signals = { requests(it) },
+                        historySignals = {
+                            f.koin.get<ObserveCollaborationSpaceHistoryChanges>()(it)
+                        },
+                        catalog = {
+                            f.koin.get<ObserveCollaborationSpaceConversationCatalog>()(it)
+                        },
+                        destination = {
+                            f.koin.get<ObserveCollaborationSpaceInboxDestination>()(it)
+                        },
+                        historyTurn = { local, frame, passId, recover ->
+                            val result =
+                                f.koin.get<CollaborationSpaceInboxHistoryTurnWorker>()(
+                                    local,
+                                    frame.trigger,
+                                    frame.destination,
+                                    passId,
+                                    recover,
+                                )
+                            if (result is AppResult.Failed) historyFailures.add(result.failure)
+                            result
+                        },
                         readProgress = { readProgress(it) },
                         changeProgress = { local, change -> changeProgress(local, change) },
                         readPage = { local, after, limit -> readPage(local, after, limit) },
@@ -194,7 +218,11 @@ class CollaborationSpaceInboxRepairIntegrationTest {
                         .value
                 assertNull(repaired.entry?.newest)
                 assertEquals(submission.nextDraft, repaired.draft?.value)
-                assertFalse(outcomes.tryReceive().getOrNull() is AppResult.Failed)
+                val remainingOutcome = outcomes.tryReceive().getOrNull()
+                assertFalse(
+                    remainingOutcome is AppResult.Failed,
+                    "$remainingOutcome; history failures: $historyFailures",
+                )
                 assertEquals(0, f.sdk.childOpens)
                 assertEquals(0, f.sdk.deliveries)
                 running.cancelAndJoin()

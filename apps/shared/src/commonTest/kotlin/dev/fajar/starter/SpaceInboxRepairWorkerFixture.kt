@@ -1,5 +1,6 @@
 package dev.fajar.starter
 
+import dev.fajar.starter.app.work.CollaborationSpaceInboxHistoryTurnWorker
 import dev.fajar.starter.app.work.CollaborationSpaceInboxRepairWorker
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
@@ -43,6 +44,50 @@ internal class SpaceInboxRepairWorkerFixture {
         MutableStateFlow<AppResult<CollaborationSpaceInboxRepairSignals>>(
             AppResult.Success(CollaborationSpaceInboxRepairSignals(null, null))
         )
+    val historySignals = MutableStateFlow<AppResult<String?>>(AppResult.Success(null))
+    val catalog =
+        MutableStateFlow<AppResult<CollaborationSpaceConversationCatalogVersion?>>(
+            AppResult.Success(null)
+        )
+    val destination =
+        MutableStateFlow<AppResult<CollaborationSpaceInboxVersion?>>(AppResult.Success(null))
+    var observeHistory: () -> Flow<AppResult<String?>> = { historySignals }
+    val historyStarts = mutableMapOf<String, Int>()
+    val historyStops = mutableMapOf<String, Int>()
+    val historyCalls = mutableListOf<Pair<CollaborationSpaceInboxHistoryFrame, Boolean>>()
+    var onHistoryTurn:
+        suspend (CollaborationSpaceInboxHistoryFrame, Boolean) -> AppResult<
+                CollaborationSpaceInboxHistoryTurnWorker.Outcome
+            > =
+        { _, _ ->
+            AppResult.Success(CollaborationSpaceInboxHistoryTurnWorker.Outcome.Idle)
+        }
+
+    fun advancedHistory() =
+        AppResult.Success(
+            CollaborationSpaceInboxHistoryTurnWorker.Outcome.Advanced(
+                CollaborationSpaceInboxHistoryCheckpoint(
+                    CollaborationSpaceInboxHistoryProgressVersion(id(700), 0),
+                    CollaborationSpaceInboxHistoryProgress(
+                        CollaborationSpaceInboxHistoryTrigger(null, null, null, null),
+                        null,
+                        null,
+                    ),
+                ),
+                null,
+            )
+        )
+
+    private fun <T> observedMetadata(name: String, source: Flow<AppResult<T>>) = flow {
+        historyStarts[name] = (historyStarts[name] ?: 0) + 1
+        try {
+            emitAll(source)
+        } finally {
+            historyStops[name] = (historyStops[name] ?: 0) + 1
+        }
+    }
+
+    var commandSource: () -> Flow<AppResult<List<CollaborationSpaceMessageRecord>>> = { records }
     var progress: CollaborationSpaceInboxRepairProgress? = null
     var generation = 100
     val references = linkedMapOf(reference.intent.id to reference)
@@ -101,50 +146,32 @@ internal class SpaceInboxRepairWorkerFixture {
 
     fun worker() =
         CollaborationSpaceInboxRepairWorker(
-            messages = { owner ->
+            messages = ::observeCommands,
+            signals = ::observeRequests,
+            historySignals = { owner ->
                 assertEquals(access, owner)
-                flow {
-                    commandStarts++
-                    try {
-                        emitAll(records)
-                    } finally {
-                        commandStops++
-                    }
-                }
+                observedMetadata("history", observeHistory())
             },
-            signals = { owner ->
+            catalog = { owner ->
                 assertEquals(access, owner)
-                flow {
-                    requestStarts++
-                    try {
-                        emitAll(demand)
-                    } finally {
-                        requestStops++
-                    }
-                }
+                observedMetadata("catalog", catalog)
+            },
+            destination = { owner ->
+                assertEquals(access, owner)
+                observedMetadata("destination", destination)
+            },
+            historyTurn = { owner, frame, passId, recover ->
+                assertEquals(access, owner)
+                assertTrue(validCollaborationSpaceConversationId(passId))
+                historyCalls += frame to recover
+                onHistoryTurn(frame, recover)
             },
             readProgress = { owner ->
                 assertEquals(access, owner)
                 progressReads++
                 AppResult.Success(progress)
             },
-            changeProgress = { owner, change ->
-                assertEquals(access, owner)
-                changes += change
-                val next = collaborationSpaceInboxRepairProgress(progress, change, id(generation++))
-                if (next is AppResult.Success) {
-                    progress = next.value
-                    demand.value =
-                        AppResult.Success(
-                            CollaborationSpaceInboxRepairSignals(
-                                next.value.latestDemand,
-                                next.value.completedDemand,
-                            )
-                        )
-                    afterChange(change)
-                }
-                next
-            },
+            changeProgress = ::change,
             readPage = { owner, after, limit ->
                 assertEquals(access, owner)
                 assertEquals(16, limit)
@@ -179,4 +206,53 @@ internal class SpaceInboxRepairWorkerFixture {
                 onReconcile(original)
             },
         )
+
+    private fun observeCommands(
+        owner: CollaborationSpaceLocalAccess
+    ): Flow<AppResult<List<CollaborationSpaceMessageRecord>>> {
+        assertEquals(access, owner)
+        return flow {
+            commandStarts++
+            try {
+                emitAll(commandSource())
+            } finally {
+                commandStops++
+            }
+        }
+    }
+
+    private fun observeRequests(
+        owner: CollaborationSpaceLocalAccess
+    ): Flow<AppResult<CollaborationSpaceInboxRepairSignals>> {
+        assertEquals(access, owner)
+        return flow {
+            requestStarts++
+            try {
+                emitAll(demand)
+            } finally {
+                requestStops++
+            }
+        }
+    }
+
+    private suspend fun change(
+        owner: CollaborationSpaceLocalAccess,
+        change: CollaborationSpaceInboxRepairProgressChange,
+    ): AppResult<CollaborationSpaceInboxRepairProgress> {
+        assertEquals(access, owner)
+        changes += change
+        val next = collaborationSpaceInboxRepairProgress(progress, change, id(generation++))
+        if (next is AppResult.Success) {
+            progress = next.value
+            demand.value =
+                AppResult.Success(
+                    CollaborationSpaceInboxRepairSignals(
+                        next.value.latestDemand,
+                        next.value.completedDemand,
+                    )
+                )
+            afterChange(change)
+        }
+        return next
+    }
 }

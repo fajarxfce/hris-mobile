@@ -1,0 +1,90 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationCollaborationSpaceInboxRepairModule.kt",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationSpaceInboxRepairWorker.kt",
+    "apps/shared/src/commonTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxRepairLifetimeTest.kt",
+    "apps/shared/src/commonTest/kotlin/dev/fajar/starter/SpaceInboxRepairWorkerFixture.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxHistoryTurnIntegrationTest.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxRepairIntegrationTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistorySchedule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistorySchedulePolicy.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistorySchedulePolicyTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 59,
+    "elapsedSeconds": 215.224,
+    "sourceFiles": 5549,
+    "sourceManifestSha256": "09176a696a0c01faa24c93761661828c5f17a97b2620c8b1004e1bfe50e65a9f",
+    "resultSha256": "7ff5568a5770f07ef249ad577372a637ae89959c793cc1edd96e21989e6fb187",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceInboxHistoryTurnIntegrationTest": 4,
+      "CollaborationSpaceInboxHistoryTurnWorkerTest": 14,
+      "CollaborationSpaceInboxRepairLifetimeTest": 14,
+      "CollaborationSpaceInboxRepairWorkerTest": 13,
+      "CollaborationSpaceInboxRepairIntegrationTest": 3,
+      "SpaceInboxHistorySchedulePolicyTest": 9
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T06:55:13.012436+00:00",
+    "elapsedSeconds": 1003.774,
+    "sourceFiles": 5549,
+    "freshCounts": {
+      "tests": 15325,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 154823066,
+      "sha256": "5dc34dc3d1af689b3f59529e1fd857d6e9c30053aa3f2e35d027d4dd1fda03f0"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 17506,
+    "newCases": 47,
+    "freshTests": 15325,
+    "reusedUnaffectedTests": 2181,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "09176a696a0c01faa24c93761661828c5f17a97b2620c8b1004e1bfe50e65a9f",
+    "reportManifestSha256": "34dc2544e5c0c6f52f43a73e64cb010c5b7278d1dbc42fed26a5e700af305da6",
+    "nativeClaim": "Twenty-three shared scheduler/lifetime cases and one new actual collected-owner SQLite case; product consumers remain inactive."
+  },
+  "newSharedMethods": 23,
+  "newDesktopIntegrationCases": 1,
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "collectedRepairWorkerIntegratesHistory": true,
+  "productOwnerActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "failedAttemptsAndCorrection": {
+    "originalFocusedResultSha256": "1e9607ae7c80b0724eff292e008b40b0c46f74c5e34b6c2f6126b557d8851087",
+    "diagnostic1ResultSha256": "d62aa9971c7a8df1c5c636ebf090da56070e6effbc57d7e4d6aba4e1af4a76ce",
+    "diagnostic2ResultSha256": "6f7ac4bae59d09ac5033144723ecc4d5b4478e9cedd71849676ed065e16e592a",
+    "originalSourceSha256": "c55a18227b891b541dc17d689186801d0aeb0821584accfe786d0cb75b0c2a6a",
+    "diagnostic1SourceSha256": "deccb98142d47b45f56873a696d9bbd47c8fb34904ec1771e679b2a5f4d74546",
+    "diagnostic2SourceSha256": "62a4d84da1916a4283c619e3dc8ecd534b8197c0717d773cf08574adf51e95b0",
+    "observedFailure": "Conflict/client.collaboration_inbox_busy was returned by the history turn and reported through the shared repair output during the existing successful cancellation integration.",
+    "correction": "Domain classifies only the exact conditional-write conflict as Contended. It stops continuation, retains durable progress and produces no completion/failure outcome for that history turn. Real input or explicit recovery is still required; no timer/retry added. All other failures remain observable and command failures retain priority.",
+    "newSharedCases": 3,
+    "existingAssertionRelaxed": false,
+    "secondFocused": {
+      "resultSha256": "21a08881d73ad2ad8c6459433811179c850aa459cbed125b3ff34219f2e86926",
+      "sourceManifestSha256": "e28fa3d42dbc6ccad71b2e219ef16379e4af3548bea9d7715d414262a8679574",
+      "executedTests": 58,
+      "failedTests": 1,
+      "failure": "The existing retired-original integration received Success while command completedDemand was still null.",
+      "cause": "The shared output fell back to history Success before any command result existed. Independent metadata can initialize before command inventory.",
+      "correction": "Do not emit a combined result before command initialization has produced its own outcome. History remains independently serviceable; its success never acknowledges command work.",
+      "newSharedCases": 1
+    }
+  }
+}

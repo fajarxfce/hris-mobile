@@ -1,6 +1,7 @@
 package dev.fajar.starter
 
 import dev.fajar.starter.app.work.CollaborationSpaceInboxHistoryTurnWorker
+import dev.fajar.starter.app.work.CollaborationSpaceInboxRepairWorker
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.*
@@ -9,12 +10,69 @@ import dev.fajar.starter.fixtures.CollaborationWorkerFixture
 import java.util.UUID
 import kotlin.test.*
 import kotlin.time.Instant
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 /** Actual application DI, admitted operations, independent keys and SQLite; no native transport. */
 class CollaborationSpaceInboxHistoryTurnIntegrationTest {
+    @Test
+    fun collectedOwnerCompletesBothLocalLanesAndAnUnchangedReopenRetainsTheSamePass() =
+        runBlocking {
+            val f = HistoryTurnStorageFixture()
+            var running: Job? = null
+            try {
+                f.initialize()
+                running = launch {
+                    f.base.koin.get<CollaborationSpaceInboxRepairWorker>()(f.access).collect()
+                }
+                val completed =
+                    withTimeout(10_000) {
+                        var retained: CollaborationSpaceInboxHistoryCheckpoint? = null
+                        while (
+                            retained?.progress?.completed == null || retained.progress.pass != null
+                        ) {
+                            delay(10)
+                            retained =
+                                success(
+                                    f.base.koin.get<ReadCollaborationSpaceInboxHistoryProgress>()(
+                                        f.access
+                                    )
+                                )
+                        }
+                        retained
+                    }
+                running.cancelAndJoin()
+                running = null
+                val source = f.source()
+                assertTrue(source.progress.historyComplete)
+                assertTrue(assertNotNull(source.progress.pendingWindow).complete)
+                f.base.reopen()
+                assertEquals(completed, f.global())
+                val idle = CompletableDeferred<Unit>()
+                val reopening =
+                    f.reopeningWorker { result ->
+                        assertEquals(
+                            AppResult.Success(
+                                CollaborationSpaceInboxHistoryTurnWorker.Outcome.Idle
+                            ),
+                            result,
+                        )
+                        idle.complete(Unit)
+                    }
+                running = launch { reopening(f.access).collect() }
+                withTimeout(10_000) { idle.await() }
+                running.cancelAndJoin()
+                running = null
+                assertEquals(completed, f.global())
+                assertEquals(source, f.source())
+                assertEquals(0, f.base.sdk.childOpens)
+                assertEquals(0, f.base.sdk.deliveries)
+            } finally {
+                running?.cancelAndJoin()
+                f.base.close()
+            }
+        }
+
     @Test
     fun aBoundRoomCompletesItsEmptyLocalHistoryAndReopensWithoutAnotherPass() = runBlocking {
         val f = HistoryTurnStorageFixture()
@@ -184,6 +242,44 @@ private class HistoryTurnStorageFixture {
             )
         if (withBinding) bind()
     }
+
+    /** Real callbacks with one test observation of the completed history turn. */
+    fun reopeningWorker(
+        onHistory: (AppResult<CollaborationSpaceInboxHistoryTurnWorker.Outcome>) -> Unit
+    ) =
+        CollaborationSpaceInboxRepairWorker(
+            messages = { base.koin.get<ObserveCollaborationSpaceMessages>()(it) },
+            signals = { base.koin.get<ObserveCollaborationSpaceInboxRepairSignals>()(it) },
+            historySignals = { base.koin.get<ObserveCollaborationSpaceHistoryChanges>()(it) },
+            catalog = { base.koin.get<ObserveCollaborationSpaceConversationCatalog>()(it) },
+            destination = { base.koin.get<ObserveCollaborationSpaceInboxDestination>()(it) },
+            historyTurn = { local, frame, passId, recover ->
+                base.koin.get<CollaborationSpaceInboxHistoryTurnWorker>()(
+                        local,
+                        frame.trigger,
+                        frame.destination,
+                        passId,
+                        recover,
+                    )
+                    .also(onHistory)
+            },
+            readProgress = { base.koin.get<ReadCollaborationSpaceInboxRepairProgress>()(it) },
+            changeProgress = { local, change ->
+                base.koin.get<ChangeCollaborationSpaceInboxRepairProgress>()(local, change)
+            },
+            readPage = { local, after, limit ->
+                base.koin.get<ReadCollaborationSpaceInboxRepairs>()(local, after, limit)
+            },
+            readReference = { local, chat, original ->
+                base.koin.get<ReadCollaborationSpaceInboxRepair>()(local, chat, original)
+            },
+            seed = { local, original ->
+                base.koin.get<SeedCollaborationSpaceInboxOriginal>()(local, original)
+            },
+            reconcile = { local, original ->
+                base.koin.get<ReconcileCollaborationSpaceInboxOriginal>()(local, original)
+            },
+        )
 
     suspend fun bind() {
         assertEquals(

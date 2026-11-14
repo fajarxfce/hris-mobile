@@ -1,5 +1,7 @@
 # Architecture
 
+[Shared inbox repair lifetime](collaboration-inbox-repair-lifetime.md) services commands between bounded history turns under one collected owner.
+
 [Finite history turns](collaboration-history-owner-turn.md) executes domain-selected bounded local work through admitted operations.
 
 [Retained global history progress](collaboration-history-global-progress.md) retains bounded source rounds with exact atomic guards.

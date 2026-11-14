@@ -21,6 +21,17 @@ class CollaborationSpaceInboxRepairWorker(
         (CollaborationSpaceLocalAccess) -> Flow<AppResult<List<CollaborationSpaceMessageRecord>>>,
     private val signals:
         (CollaborationSpaceLocalAccess) -> Flow<AppResult<CollaborationSpaceInboxRepairSignals>>,
+    private val historySignals: (CollaborationSpaceLocalAccess) -> Flow<AppResult<String?>>,
+    private val catalog:
+        (CollaborationSpaceLocalAccess) -> Flow<
+                AppResult<CollaborationSpaceConversationCatalogVersion?>
+            >,
+    private val destination:
+        (CollaborationSpaceLocalAccess) -> Flow<AppResult<CollaborationSpaceInboxVersion?>>,
+    private val historyTurn:
+        suspend (
+            CollaborationSpaceLocalAccess, CollaborationSpaceInboxHistoryFrame, String, Boolean,
+        ) -> AppResult<CollaborationSpaceInboxHistoryTurnWorker.Outcome>,
     private val readProgress:
         suspend (CollaborationSpaceLocalAccess) -> AppResult<
                 CollaborationSpaceInboxRepairProgress?
@@ -46,105 +57,182 @@ class CollaborationSpaceInboxRepairWorker(
             CollaborationSpaceLocalAccess, CollaborationSpaceInboxRepairReference,
         ) -> AppResult<Boolean>,
 ) {
-    /** Failed turns park their durable progress until new demand or an explicit owner restart. */
+    /** One latest snapshot per input; slow metadata never prevents command service. */
     operator fun invoke(access: CollaborationSpaceLocalAccess): Flow<AppResult<Unit>> =
         flow {
-                var previous: List<CollaborationSpaceMessageRecord>? = null
-                var receivedRequest = false
-                var previousRequest: String? = null
-                var seedRecoveryPending = false
-                var seedFailure: Failure? = null
-                combine(messages(access), signals(access), ::Input).conflate().collect { input ->
-                    val records = input.messages
-                    val request = input.signals
-                    if (records is AppResult.Failed || request is AppResult.Failed) {
-                        emit(
-                            if (records is AppResult.Failed) records
-                            else request as AppResult.Failed
-                        )
-                        return@collect
-                    }
-                    val current = (records as AppResult.Success).value
-                    val selected = collaborationSpaceInboxRepairDemand(access, previous, current)
-                    if (selected is AppResult.Failed) {
-                        emit(selected)
-                        return@collect
-                    }
-                    val demand = (selected as AppResult.Success).value
-                    val seedSelection =
-                        collaborationSpaceInboxSeedDemand(
-                            access,
-                            previous,
-                            current,
-                            seedRecoveryPending,
-                        )
-                    if (seedSelection is AppResult.Failed) {
-                        emit(seedSelection)
-                        return@collect
-                    }
-                    val originals = (seedSelection as AppResult.Success).value
-                    val signal = (request as AppResult.Success).value.latestDemand
-                    val initializing = !receivedRequest
-                    val requested = initializing || previousRequest != signal
-                    receivedRequest = true
-                    previousRequest = signal
-                    previous = requireNotNull(collaborationSpaceMessageInventory(access, current))
-                    if (
-                        !requested &&
-                            !demand.requiresScan &&
-                            demand.targets.isEmpty() &&
-                            originals.isEmpty()
-                    )
-                        return@collect
-                    if (originals.isNotEmpty()) seedRecoveryPending = true
-                    val result =
-                        withTimeoutOrNull(30.seconds) {
-                            if (demand.requiresScan || initializing) {
-                                val retained =
-                                    changeProgress(
-                                        access,
-                                        if (demand.requiresScan) Request(Uuid.random().toString())
-                                        else EnsureInitialized(Uuid.random().toString()),
-                                    )
-                                if (retained is AppResult.Failed) return@withTimeoutOrNull retained
-                                previousRequest = (retained as AppResult.Success).value.latestDemand
-                            }
-                            for (original in originals) {
-                                currentCoroutineContext().ensureActive()
-                                val seeded = seed(access, original)
-                                if (seeded is AppResult.Failed) {
-                                    seedFailure = seeded.failure
-                                    return@withTimeoutOrNull seeded
+                coroutineScope {
+                    val inputs = MutableStateFlow(Inputs())
+                    val observations =
+                        listOf(
+                            launch {
+                                messages(access).collect { value ->
+                                    inputs.update { it.copy(messages = value) }
                                 }
-                                yield()
+                            },
+                            launch {
+                                signals(access).collect { value ->
+                                    inputs.update { it.copy(signals = value) }
+                                }
+                            },
+                            launch {
+                                historySignals(access).collect { value ->
+                                    inputs.update { it.copy(history = value) }
+                                }
+                            },
+                            launch {
+                                catalog(access).collect { value ->
+                                    inputs.update { it.copy(catalog = value) }
+                                }
+                            },
+                            launch {
+                                destination(access).collect { value ->
+                                    inputs.update { it.copy(destination = value) }
+                                }
+                            },
+                        )
+                    val commands = CommandSession(access)
+                    val history = HistorySession(access)
+                    var consumed: Inputs? = null
+                    var lastCommand: Input? = null
+                    var commandOutcome: AppResult<Unit>? = null
+                    try {
+                        while (true) {
+                            val input =
+                                if (history.continuing) inputs.value
+                                else inputs.first { it != consumed }
+                            val command = input.command()
+                            if (command != null && command != lastCommand) {
+                                lastCommand = command
+                                commands.process(command)?.let { result ->
+                                    currentCoroutineContext().ensureActive()
+                                    commandOutcome = result
+                                    emit(
+                                        if (result is AppResult.Failed) result
+                                        else
+                                            history.outcome?.takeIf { it is AppResult.Failed }
+                                                ?: result
+                                    )
+                                }
                             }
-                            if (originals.isNotEmpty()) {
-                                seedRecoveryPending = false
-                                seedFailure = null
+                            currentCoroutineContext().ensureActive()
+                            // A command arriving during a write takes its turn before another
+                            // history step.
+                            val latest = inputs.value
+                            if (latest.command() != lastCommand) {
+                                consumed = input
+                                continue
                             }
-                            for (target in demand.targets) {
-                                currentCoroutineContext().ensureActive()
-                                val read =
-                                    readReference(access, target.conversationId, target.messageId)
-                                if (read is AppResult.Failed) return@withTimeoutOrNull read
-                                val reference = (read as AppResult.Success).value ?: continue
-                                val repaired = reconcile(access, reference)
-                                if (repaired is AppResult.Failed) return@withTimeoutOrNull repaired
-                                yield()
-                            }
-                            if (requested || demand.requiresScan) repairPasses(access)
-                            else AppResult.Success(Unit)
+                            consumed = latest
+                            history.process(latest.frame())
+                            currentCoroutineContext().ensureActive()
+                            val outcome =
+                                when {
+                                    commandOutcome == null -> null
+                                    commandOutcome is AppResult.Failed -> commandOutcome
+                                    history.outcome is AppResult.Failed -> history.outcome
+                                    else -> commandOutcome
+                                }
+                            if (outcome != null) emit(outcome)
+                            yield()
                         }
-                    val outcome = result ?: unfinished()
-                    if (seedRecoveryPending && outcome is AppResult.Failed)
-                        seedFailure = seedFailure ?: outcome.failure
-                    emit(
-                        if (outcome is AppResult.Failed) outcome
-                        else seedFailure?.let { AppResult.Failed(it) } ?: outcome
-                    )
+                    } finally {
+                        observations.forEach { it.cancel() }
+                        // coroutineScope joins every child before this collected lifetime finishes.
+                    }
                 }
             }
             .distinctUntilChanged()
+
+    /** Ephemeral seed/request state belongs to this one command inventory subscription. */
+    private inner class CommandSession(val access: CollaborationSpaceLocalAccess) {
+        var previous: List<CollaborationSpaceMessageRecord>? = null
+        var receivedRequest = false
+        var previousRequest: String? = null
+        var seedRecoveryPending = false
+        var seedFailure: Failure? = null
+
+        suspend fun process(input: Input): AppResult<Unit>? {
+            val records = input.messages
+            val request = input.signals
+            if (records is AppResult.Failed || request is AppResult.Failed) {
+                return if (records is AppResult.Failed) records else request as AppResult.Failed
+            }
+            val current = (records as AppResult.Success).value
+            val selected = collaborationSpaceInboxRepairDemand(access, previous, current)
+            if (selected is AppResult.Failed) {
+                return selected
+            }
+            val demand = (selected as AppResult.Success).value
+            val seedSelection =
+                collaborationSpaceInboxSeedDemand(access, previous, current, seedRecoveryPending)
+            if (seedSelection is AppResult.Failed) {
+                return seedSelection
+            }
+            val originals = (seedSelection as AppResult.Success).value
+            val signal = (request as AppResult.Success).value.latestDemand
+            val initializing = !receivedRequest
+            val requested = initializing || previousRequest != signal
+            receivedRequest = true
+            previousRequest = signal
+            previous = requireNotNull(collaborationSpaceMessageInventory(access, current))
+            if (
+                !requested &&
+                    !demand.requiresScan &&
+                    demand.targets.isEmpty() &&
+                    originals.isEmpty()
+            )
+                return null
+            if (originals.isNotEmpty()) seedRecoveryPending = true
+            val outcome = execute(demand, originals, requested, initializing) ?: unfinished()
+            if (seedRecoveryPending && outcome is AppResult.Failed)
+                seedFailure = seedFailure ?: outcome.failure
+            return if (outcome is AppResult.Failed) outcome
+            else seedFailure?.let { AppResult.Failed(it) } ?: outcome
+        }
+
+        private suspend fun execute(
+            demand: CollaborationSpaceInboxRepairDemand,
+            originals: List<CollaborationSpaceMessageIntent>,
+            requested: Boolean,
+            initializing: Boolean,
+        ): AppResult<Unit>? =
+            withTimeoutOrNull(30.seconds) {
+                if (demand.requiresScan || initializing) {
+                    val retained =
+                        changeProgress(
+                            access,
+                            if (demand.requiresScan) Request(Uuid.random().toString())
+                            else EnsureInitialized(Uuid.random().toString()),
+                        )
+                    if (retained is AppResult.Failed) return@withTimeoutOrNull retained
+                    previousRequest = (retained as AppResult.Success).value.latestDemand
+                }
+                for (original in originals) {
+                    currentCoroutineContext().ensureActive()
+                    val seeded = seed(access, original)
+                    if (seeded is AppResult.Failed) {
+                        seedFailure = seeded.failure
+                        return@withTimeoutOrNull seeded
+                    }
+                    yield()
+                }
+                if (originals.isNotEmpty()) {
+                    seedRecoveryPending = false
+                    seedFailure = null
+                }
+                for (target in demand.targets) {
+                    currentCoroutineContext().ensureActive()
+                    val read = readReference(access, target.conversationId, target.messageId)
+                    if (read is AppResult.Failed) return@withTimeoutOrNull read
+                    val reference = (read as AppResult.Success).value ?: continue
+                    val repaired = reconcile(access, reference)
+                    if (repaired is AppResult.Failed) return@withTimeoutOrNull repaired
+                    yield()
+                }
+                if (requested || demand.requiresScan) repairPasses(access)
+                else AppResult.Success(Unit)
+            }
+    }
 
     /**
      * A captured pass and at most one coalesced later request; every page advances after its rows.
@@ -205,6 +293,107 @@ class CollaborationSpaceInboxRepairWorker(
 
     private fun unfinished() =
         collaborationRecoveryFailure("client.collaboration_inbox_busy", FailureKind.Unavailable)
+
+    /** Domain scheduling consumes recovery before entering a suspended finite history turn. */
+    private inner class HistorySession(val access: CollaborationSpaceLocalAccess) {
+        var schedule = CollaborationSpaceInboxHistorySchedule()
+        val continuing
+            get() = schedule.continuing
+
+        var outcome: AppResult<Unit>? = null
+
+        suspend fun process(frame: AppResult<CollaborationSpaceInboxHistoryFrame>?) {
+            if (frame == null) return
+            if (frame is AppResult.Failed) {
+                schedule = suspendCollaborationSpaceInboxHistorySchedule(schedule)
+                outcome = frame
+                return
+            }
+            val selected =
+                scheduleCollaborationSpaceInboxHistory(schedule, (frame as AppResult.Success).value)
+            if (selected is AppResult.Failed) {
+                schedule =
+                    completeCollaborationSpaceInboxHistorySchedule(
+                        schedule,
+                        CollaborationSpaceInboxHistoryTurnStatus.Failed,
+                    )
+                outcome = selected
+                return
+            }
+            val decision = (selected as AppResult.Success).value
+            if (decision is CollaborationSpaceInboxHistoryScheduleDecision.Wait) return
+            decision as CollaborationSpaceInboxHistoryScheduleDecision.Run
+            schedule = decision.consumed
+            val result =
+                withTimeoutOrNull(5.seconds) {
+                    historyTurn(
+                        access,
+                        decision.frame,
+                        Uuid.random().toString(),
+                        decision.recoverParked,
+                    )
+                } ?: unfinished()
+            currentCoroutineContext().ensureActive()
+            val status =
+                when (result) {
+                    is AppResult.Failed ->
+                        collaborationSpaceInboxHistoryFailureStatus(result.failure)
+                    is AppResult.Success ->
+                        when (result.value) {
+                            CollaborationSpaceInboxHistoryTurnWorker.Outcome.Idle ->
+                                CollaborationSpaceInboxHistoryTurnStatus.Idle
+                            is CollaborationSpaceInboxHistoryTurnWorker.Outcome.Advanced ->
+                                CollaborationSpaceInboxHistoryTurnStatus.Advanced
+                        }
+                }
+            schedule = completeCollaborationSpaceInboxHistorySchedule(schedule, status)
+            outcome =
+                when {
+                    status == CollaborationSpaceInboxHistoryTurnStatus.Contended -> null
+                    result is AppResult.Failed -> result
+                    else -> AppResult.Success(Unit)
+                }
+        }
+    }
+
+    /** Null fields are unobserved; Success(null) is an observed missing durable value. */
+    private data class Inputs(
+        val messages: AppResult<List<CollaborationSpaceMessageRecord>>? = null,
+        val signals: AppResult<CollaborationSpaceInboxRepairSignals>? = null,
+        val history: AppResult<String?>? = null,
+        val catalog: AppResult<CollaborationSpaceConversationCatalogVersion?>? = null,
+        val destination: AppResult<CollaborationSpaceInboxVersion?>? = null,
+    ) {
+        fun command(): Input? =
+            if (messages != null && signals != null) Input(messages, signals) else null
+
+        fun frame(): AppResult<CollaborationSpaceInboxHistoryFrame>? {
+            if (
+                messages is AppResult.Failed &&
+                    collaborationSpaceDirectoryResponseClosesRead(messages.failure)
+            )
+                return messages
+            val failure =
+                listOf(signals, history, catalog, destination)
+                    .filterIsInstance<AppResult.Failed>()
+                    .firstOrNull()
+            if (failure != null) return failure
+            if (signals == null || history == null || catalog == null || destination == null)
+                return null
+            val version = (destination as AppResult.Success).value
+            return AppResult.Success(
+                CollaborationSpaceInboxHistoryFrame(
+                    CollaborationSpaceInboxHistoryTrigger(
+                        (history as AppResult.Success).value,
+                        (catalog as AppResult.Success).value,
+                        (signals as AppResult.Success).value.completedDemand,
+                        version?.generation,
+                    ),
+                    version,
+                )
+            )
+        }
+    }
 
     private data class Input(
         val messages: AppResult<List<CollaborationSpaceMessageRecord>>,
