@@ -1,9 +1,27 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 08:07 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 08:08 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Active visible inbox labels verification
+
+Page7 is accepted/pushed Mobile12b0d9654cfcf45f6a974e6e1e2d7fbb95beecd2 /
+Groupdc387f9f6eea0d2b9bba60d7337b59925ad25516. Focused42/full17578,15397 fresh/2181
+unchanged, source5559/e657f7b60238182ab111039612c76bf2e419238955da23ba5f192447c1dde4af.
+
+Mobile .work/history-inbox-labels-2026-11-14 is APPLIED8; focused45 is RUNNING99672/focused-1.
+Source5565/fbaa48c2409d5e3119b1d046ad4c1e1472d7b7c9b0bb687d282597cd4091b7e0. No accepted
+label results yet. Reap, verify then full17615; record/commit/push Mobile and Group before continuing.
+Eighteen shared plus one actual50-contact local SQLite test; timing is resolution plus collection
+teardown, not UI/phone rendering. No full directory scan, raw-bound expansion or native acquisition.
+
+Next .work/history-inbox-window-2026-11-14 contains10 formatted UNREVIEWED/UNAPPLIED drafts with
+8 pure policy and9 raw-storage cases/three platform wrappers. Admission UC/review/gates remain.
+Anchored refresh must keep the visible conversation, terminate old cursors, and stay bounded.
+Keep Group UI/rollout OFF, phone92/live unchanged, failed Apple evidence and all54 PRD groups OPEN.
+Continue beyond checkpoints; one compiler OR emulator; no agents.
 
 ## Admitted retained inbox pages locally accepted
 
