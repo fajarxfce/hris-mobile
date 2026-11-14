@@ -1,9 +1,41 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 03:38 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 03:48 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Active admitted history handoff verification
+
+Source progress15 is committed/pushed as mobile0c69c9ac16adc583f2b83cfe243b4d961bfc9137 and
+Group979a5aa664cc25c1097e55d877d1c294febf9b84. Full17100 accepted (14919 fresh/2181 unchanged),
+source5492/27f1122613b3812a77eeb9ba6f306537c19f17f6b63c20b0f88b2a2a18f440cf.
+
+Current .work/history-inbox-progress-admission-2026-11-14 has4 APPLIED paths,10 shared methods.
+Apply33625 REAPED; focused1/96599 REAPED and accepted35 in367.061s. Source5494/
+b1f05716f6100afef1fd623da663056705e7650dee9f69c2fa7771b286ce9221; resultc018ec845d9c559c0da8fd4ad3d4be7888f84c5710731b4968364ca284aa4846.
+Full1/session83144 is RUNNING, expected17120. Reap then audit all17100 prior identities plus20
+new executions, record/commit and push mobile before linked Group evidence. Do not change source
+during this run. No failed validation attempt for this change. Apple compilation is not execution.
+
+Next .work/inbox-repair-bootstrap-demand-2026-11-14 has9 reviewed/formatted UNAPPLIED paths,
+9 shared additions and37 prior methods retained. Focused48/full17138 and record/commit gates are
+prepared UNRUN. First observation ensures existing progress instead of creating another request;
+live overflow and atomic archival/seeding still create real requests. Formatter69074 REAPED.
+Apply only after current admission4 accepted/pushed and compiler idle; REAP before capture.
+
+Then .work/history-inbox-source-lifecycle-2026-11-14 has6 formatted UNAPPLIED drafts: preparation
+policy/use case,15 shared tests, factory and graph assertion. Formatter24290 REAPED; final review
+and gates are still pending. Same pass/index reuses progress without writing; later passes require
+both lanes complete, and destination replacement clears traversal positions while leaving retained
+references untouched. No speculative source acquisition or implicit retry. Plan focused40/full17168
+after bootstrap17138. Pending-reference admission/handoff, explicit raw Restart, retained global
+trigger and fair owner integration remain. Review completed repair demand as the history retry
+trigger to avoid racing command publication. No polling scheduler or permanent per-room observer.
+
+All54 PRD groups remain open. Phone92 remains installed; no phone/live changes. GroupOFF and
+V117-140 undeployed. Preserve failed hosted Apple evidence and blocked fixture payload. Continue
+beyond checkpoints; push each commit. One compiler OR emulator, no subagents.
 
 ## Durable history inbox source progress locally accepted
 
