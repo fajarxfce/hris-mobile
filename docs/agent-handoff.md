@@ -1,9 +1,34 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 07:12 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 07:16 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Active local inbox product ownership verification
+
+Shared lifetime is accepted and pushed: Mobile81ea4d725b3e95edbf1408109146491e521f0d46 /
+Group2405f474f9403d6ddee033db16c9f83b8e4f1c74. Focused59/full17506 preserve all prior
+identities;15325 fresh/2181 unaffected, source5549/09176a696a0c01faa24c93761661828c5f17a97b2620c8b1004e1bfe50e65a9f.
+
+Product ownership is APPLIED on12 paths in .work/history-inbox-product-owner-2026-11-14.
+Focused84 is running79322/focused-1; full17543 is prepared UNRUN. Captured source5554/
+515dd7afe8c45a8a3a416e693950cd66f1c74dcee895595ce501e6c42107ee8e. Reap/verify before
+editing source. The local account/root/admission observer is independent of SDK readiness,
+credential age and selected HR company. Application lifetime owns one child; replacement and
+logout cancel/join old repair before another owner.16 shared+5 desktop cases are being checked.
+Do not claim acceptance until the focused/full gates pass; failed evidence must remain recorded.
+
+Next .work/history-inbox-product-page-2026-11-14 contains7 formatted UNAPPLIED drafts,17 shared
+and1 actual SQLite pending/draft-reopen addition. Focus42/full17578 gates are prepared UNRUN;
+source/test review and recording/commit gates still need completion. One admitted local index page
+bounds50 rows, copies lists before suspension, preserves pending/draft positions, latches denial
+and exposes exhaustion/Restart without automatic pagination. Product label/contact enrichment and
+UI remain next; canonical indexed lookups exist, avoid full directory scans or unbounded room
+subscriptions. Apply only after product owner acceptance, commit and push.
+
+Phone92/live unchanged; GroupOFF/V117-140 undeployed. No Starter change, new Apple execution or
+phone action. All54 PRD groups remain OPEN. Continue the long run after these checkpoints.
 
 ## Shared command/history lifetime locally accepted
 
