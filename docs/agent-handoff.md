@@ -1,9 +1,28 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 05:03 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 05:08 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Active history owner input verification
+
+The combined .work/history-inbox-owner-inputs-2026-11-14 package is APPLIED:15 source paths,
+11 shared additions. Apply32562 is reaped. Focused1/session7359 failed at test compilation before
+any tests: three new collection assertions needed explicit AppResult/nullable Pair types. No
+production code changed for the correction. Failed source5511/ee338bdf2832fe689d04a0bde5406a89faf0e4578275fb873178e62f37ab829a
+and result90879106290f5a1bebca60c23160df72e69b4728623fbf3b296d8a614a5874a2 remain recorded.
+Corrected source5511/60a0e25b8db4c76a3e8b07714747c1fedf44cf21ebb34775751747ad864ee2bf;
+focused2/session97204 RUNNING, expected47. Full17258 NOT RUN. Reap/audit focused2 before full.
+All record/commit gates are prepared and include failed-attempt evidence. Former standalone
+signals/enumeration gates remain disabled; no intermediate17242 acceptance exists.
+
+Latest accepted production baseline is Mobilec97d7d4d/full17236, Groupbbb67ab0, both pushed.
+Global owner work has13 formatted UNAPPLIED paths with31 shared test drafts. Entity/queue policies,
+contract, encrypted codec/DTO, raw two-operation repository and storage wrappers exist only in
+.work/history-inbox-global-owner-2026-11-14/draft. Review, admitted global operations, DI, gates and
+worker/consumer integration remain open. Preserve the raw TWO-operation limit and source/index
+races; never treat these drafts as tested. Phone92/live remain unchanged; all54 groups stay open.
 
 ## Admitted history source operations locally accepted
 

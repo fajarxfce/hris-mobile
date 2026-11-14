@@ -1,5 +1,14 @@
 # Global inbox history owner — design only, not implemented
 
+Current local draft status:13 formatted UNAPPLIED paths,18 pure policy cases and13 actual-storage
+contract cases (desktop/browser wrappers, Apple compile wrapper), all UNRUN. Entity/queue policies,
+repository contract, encrypted DTO/codec and raw repository implementation exist only in draft/.
+Review, admitted global operations, DI and all validation/activation gates are still missing.
+The repository uses exactly one Check plus one global write, snapshots queue DTOs before its first
+suspension, reads destination metadata without entries, and never emits history/repair demand.
+These are draft claims to verify; they do not describe accepted production behavior.
+
+
 Prerequisites are source progress, admitted raw handoff, bootstrap demand separation, source
 lifecycle, pending admission and source inspection/Restart. Initial global state in
 history-inbox-progress-2026-11-14/design/global-and-source-state-before-split.kt is insufficient
