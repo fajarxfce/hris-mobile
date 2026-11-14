@@ -1,0 +1,46 @@
+{
+  "bindingMobileCommit": "73c593131b47958341ac288cfa343c39c28d1e52",
+  "bindingGroupCommit": "f7eac454e4b2b9ae8f46174ec8300c6a439d436b",
+  "focused": {
+    "accepted": true,
+    "tests": 57,
+    "elapsedSeconds": 368.249,
+    "sourceFiles": 5478,
+    "sourceManifestSha256": "5dca92fd7d075e3c70239c8c8aaee94067068a3ae5388c264a27fc196b72efbc",
+    "resultSha256": "0a4a662bf17d95a5eecf776e7dba852d0a91db93cc066ace392537e05ffefc99",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "ConfirmSpaceHistoryChangesTest": 10,
+      "PublishSpaceInboxHistoryReceiptTest": 8,
+      "PublishSpaceInboxHistoryTest": 22,
+      "ReadSpaceHistoryChangesTest": 15
+    },
+    "priorCaseIdsRetained": true
+  },
+  "fullSession": 53502,
+  "fullReaped": false,
+  "fullAccepted": false,
+  "nextUnappliedDraftPaths": 15,
+  "nextSharedMethods": 29,
+  "nextDrafts": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "e43be26afe9eab048a24c7ed23cc08104c1286dd80b69777296f471faa1bfa3d",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceInboxHistorySourceStorageTest.kt": "9d5639d2c85faf5e8e404cacec02ff3b45eeb6114a2f1c922e53213f7a7a9da9",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceInboxHistorySourceStorageTest.kt": "7587a0f1ddc69baf1c2a69673d0a9396583015e4698e85ca81ed81625a10e4dd",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxHistorySourceStorageTest.kt": "8f2445b9d3069bc38fc90302d1f6293217181fedd6b5f3c001bb3ab571c3fbb6",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxHistorySourceStorageContract.kt": "954480962a77d2d359a34356670d018c9c3bf79da4b5d260629e9bbfd53e1088",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/inbox/CollaborationSpaceInboxHistorySourceDto.kt": "7d6ed4b2cd954fd7afaeec2aeb5a023703a6e085b2e66db73ab5976732381e60",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/inbox/CollaborationSpaceInboxHistorySourceCodec.kt": "a026b30e9c5208f6619b2142e6b02999018b412ca9a3c394196aa72df7f7f234",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceInboxHistorySourceRepository.kt": "89bd5ac13838c57e5e2f8b11ce59916ca7314d247bd053e7a8f00a0cef647379",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistoryHandoffPolicyTest.kt": "8d4a99d9b7b7261e64b5eaf1019083bf71e1cc6c388503338bd2595bcbae6f2f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistoryHandoff.kt": "225b51f1ae14ca358211e831f3ec32c25298b8aec996220ba43d703295000d1c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistorySourceMutation.kt": "306563c530ca54f954f7a22832b68557ea55d9c00210f7b43717e9c19d143444",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistorySourceProgress.kt": "c0ead85cd807babe99efb3f7144a1e9844e75cce52c7607f20909d387d887f33",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistorySourceProgressPolicy.kt": "35c9724f2a6e7fe930236e24e2b991cb351fc925f8daf3f9b732b17b39e0dcf9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistoryHandoffPolicy.kt": "54a2378ea0af7a25b962fe98521a3a4380a59be68bb91c461a408e187c2691b9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceInboxHistorySourceRepository.kt": "264fdafc68451a242fca3c2b9f60fc6f175b1b15ab5952fa12edf0e1bb5c2816"
+  },
+  "nextGatesRun": false,
+  "phoneInstalledBuild": 92,
+  "phoneChanged": false,
+  "liveChanged": false
+}
