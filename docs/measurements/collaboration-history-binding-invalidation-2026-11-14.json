@@ -1,0 +1,77 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceRoomBindingRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingPreparationStorageContract.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingStorageContract.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 79,
+    "elapsedSeconds": 220.045,
+    "sourceFiles": 5476,
+    "sourceManifestSha256": "aa6c9acfddf8faf4a0c10cfaa7d6b95f4b30459665a5d8edf4484934272038a0",
+    "resultSha256": "4c573c6a3513dc2057118b8cd41f9b256aa96848ec9f5b3de8f359554648a6f7",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceConversationCatalogStorageTest": 12,
+      "CollaborationSpaceRoomBindingPreparationStorageTest": 14,
+      "CollaborationSpaceRoomBindingStorageTest": 38,
+      "CollaborationHistorySignalStorageTest": 13
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T02:18:31.084751+00:00",
+    "elapsedSeconds": 689.922,
+    "sourceFiles": 5476,
+    "freshCounts": {
+      "tests": 5596,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153509789,
+      "sha256": "397da77684e40bec5cffc1793f11750466b66a2e7fec0185f0b51070a3feef56"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 17022,
+    "newCases": 12,
+    "freshTests": 5596,
+    "reusedUnaffectedTests": 11426,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "aa6c9acfddf8faf4a0c10cfaa7d6b95f4b30459665a5d8edf4484934272038a0",
+    "reportManifestSha256": "f8e9eee1b32ebfce2a9c281aa7544f4ee377f64959b07c71971b8ea233289771",
+    "nativeClaim": "New binding, history invalidation, and recovery wake publish atomically;6 new shared cases preserve existing binding/preparation methods. Consumer integration remains open."
+  },
+  "newSharedMethods": 6,
+  "priorBindingPreparationMethods": 46,
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "ownerActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "fullImpactReview": {
+    "reviewedBeforeFullRun": true,
+    "changedPaths": [
+      "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceRoomBindingRepository.kt",
+      "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingPreparationStorageContract.kt",
+      "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingStorageContract.kt"
+    ],
+    "freshRequired": [
+      "features/collaboration/data/",
+      "apps/shared/",
+      "apps/collaboration-proof/"
+    ],
+    "unchangedIndependentModules": [
+      "features/collaboration/domain",
+      "features/collaboration/presentation"
+    ],
+    "basis": "Reviewed both Gradle dependency declarations: neither module depends on collaboration data. Exact source/baseline report hashes and all prior identities remain required; full :check and target tasks still run."
+  }
+}

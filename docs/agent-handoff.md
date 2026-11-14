@@ -1,34 +1,34 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 02:21 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 02:33 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active binding history invalidation verification
+## Binding history invalidation locally accepted
 
-Receipts are fully accepted/pushed: Mobile64c09850, Groupf3fa5128. Local full17010 preserves every
-prior case and includes the reproduced/fixed empty-pair ABA race; see the receipt evidence below.
+Mobile .work/history-binding-invalidation-2026-11-14 is accepted:3 paths,6 new shared methods.
+Focused79/full17022 (5596 fresh /11426 unchanged) preserve all17010
+prior identities plus12 executions. Source5476/aa6c9acfddf8faf4a0c10cfaa7d6b95f4b30459665a5d8edf4484934272038a0;
+reportsf8e9eee1b32ebfce2a9c281aa7544f4ee377f64959b07c71971b8ea233289771. Newly bound rooms now signal old source availability atomically
+with the existing recovery wake; exact replay is silent. No history or catalog content is copied.
 
-Mobile .work/history-binding-invalidation-2026-11-14 has3 APPLIED source/test paths,6 shared additions.
-Focused79/session12418 is REAPED and ACCEPTED:220.045s, source5476/
-aa6c9acfddf8faf4a0c10cfaa7d6b95f4b30459665a5d8edf4484934272038a0;
-result4c573c6a3513dc2057118b8cd41f9b256aa96848ec9f5b3de8f359554648a6f7.
-Full17022/session26238 is RUNNING. Reap before audit/record/source commit. The full-impact review
-was done before execution: all3 changes are in data, and Gradle confirms domain/presentation do
-not depend on data. Their exact unchanged baseline reports may remain; data and importing app
-graphs must run freshly. Full :check/platform targets and all prior identities remain required.
+Next .work/history-empty-page-confirmation-2026-11-14 has4 reviewed/formatted UNAPPLIED drafts,
+10 new shared methods and all focused57/full17042/record/commit gates prepared but unrun. It
+confirms empty raw reference pages using their opaque source token and actual binding, without
+invented event IDs. Apply and REAP before capture after this binding source is accepted/pushed.
+Then implement durable progress from .work/history-inbox-progress-2026-11-14: it still holds only
+one initial state draft and review. Use checked receipts and actual source identity to guard
+cursor/unresolved handoff against destination replacement. Complete each fixed raw interval only
+after publication or durable unresolved handoff. Empty pages need no invented event. Remember
+completed demand and continue finite unfinished windows fairly under the existing Group repair
+owner; no new polling scheduler or per-room observer. Incoming completion and thread/list/UI
+activation remain open. Never assume this local signal itself proves completed history work.
 
-After acceptance, record/commit/push Mobile, then linked Group evidence. Next apply
-.work/history-empty-page-confirmation-2026-11-14:4 reviewed/formatted UNAPPLIED paths,10 shared
-methods, focused57/full17042 and record/commit gates prepared but UNRUN. Reap apply before capture.
-It checks empty-page source/index facts under current admission without inventing event IDs.
-Then .work/history-inbox-progress-2026-11-14 has ONE initial unapplied entity draft/review, now with
-explicit progress CAS versions and destination-generation demand. No repository/codec/worker exists.
-Review the proposed global checkpoint plus per-conversation progress/reference partitions and
-atomic cursor/unresolved handoff. Continue finite windows fairly under the existing repair owner.
-Phone92 stays installed; no phone/live changes. Actual new Apple execution remains open.
-Continue beyond checkpoints and push every commit. One compiler OR emulator; no subagents.
+Receipts, admitted changes, source signals and Starter092fbe6f remain accepted. Actual new Apple
+execution remains outstanding; preserve failed hosted evidence and the blocked fixture payload.
+Phone92 remains installed; no phone or live change. GroupOFF/V117-140 undeployed. All54 PRD groups
+remain open. Continue beyond checkpoints, push every commit, one compiler OR emulator, no subagents.
 
 ## Checked history publication receipts locally accepted
 

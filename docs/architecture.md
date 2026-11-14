@@ -1,5 +1,7 @@
 # Architecture
 
+[Binding history invalidation](collaboration-history-binding-invalidation.md) publishes new room availability and recovery wake atomically.
+
 [Checked history publication receipts](collaboration-history-inbox-receipts.md) expose the actual source and destination versions of conditional publication.
 
 [Admitted canonical history changes](collaboration-history-changes-admission.md) preserve exact local source ownership and finite cursor windows.

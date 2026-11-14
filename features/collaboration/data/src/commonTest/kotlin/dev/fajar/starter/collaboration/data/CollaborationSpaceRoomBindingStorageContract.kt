@@ -1,7 +1,9 @@
 package dev.fajar.starter.collaboration.data
 
+import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.data.identity.*
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationSpaceRoomBindingRepository
+import dev.fajar.starter.collaboration.data.repositories.StoredCollaborationHistorySignalRepository
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
@@ -83,6 +85,16 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
         database.replicas
             .observe(spaceRoomBindingScope(access), spaceRoomBindingPartition(access), limit = 200)
             .first()
+
+    private suspend fun CollaborationHistoryFixture.historySignal(
+        access: CollaborationSpaceLocalAccess = local()
+    ): String? =
+        assertIs<AppResult.Success<String?>>(
+                StoredCollaborationHistorySignalRepository(database.replicas)
+                    .observe(access)
+                    .first()
+            )
+            .value
 
     private suspend fun CollaborationHistoryFixture.assertBinding(
         value: CollaborationSpaceRoomBinding,
@@ -380,12 +392,14 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
         assertTrue(latest.pending)
         assertNotEquals(pending.generation, latest.generation)
         val raw = f.rawBindings()
+        val signal = f.historySignal()
         for (value in listOf(first, second, third)) {
             f.assertBinding(value)
             assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), value))
         }
         assertEquals(latest, f.database.workWakes.get(key))
         assertEquals(raw, f.rawBindings())
+        assertEquals(signal, f.historySignal())
     }
 
     @Test
@@ -395,6 +409,7 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
         }
         val value = binding(f.local())
         assertEquals(AppResult.Success(false), f.bindings().retain(f.local(), value))
+        assertNull(f.historySignal())
         assertNull(f.rawBindings().checkpoint)
         assertTrue(f.rawBindings().documents.isEmpty())
         assertNull(f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY))
@@ -410,13 +425,21 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
     fun fullRecoveryCapacityPreservesBindingsCreatedBeforeProducerWakes() = withDatabase { f ->
         val historicalStore =
             object : ReplicaStore by f.database.replicas {
-                override suspend fun replace(
+                override suspend fun mutate(
                     scope: ReplicaScope,
-                    partition: String,
-                    expected: ReplicaCheckpoint?,
-                    snapshot: ReplicaSnapshot?,
+                    mutations: List<ReplicaMutation>,
                     wake: WorkWakeRequest?,
-                ) = f.database.replicas.replace(scope, partition, expected, snapshot)
+                ): Boolean {
+                    assertEquals(2, mutations.size)
+                    val original = assertIs<ReplicaMutation.Replace>(mutations.first())
+                    // Recreate the previous binding protocol, before either signal or wake.
+                    return f.database.replicas.replace(
+                        scope,
+                        original.partition,
+                        original.expected,
+                        original.snapshot,
+                    )
+                }
             }
         val historical = binding(f.local(), legacy = true)
         assertEquals(
@@ -424,6 +447,7 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
             f.bindings(historicalStore).retain(f.local(), historical),
         )
         val before = f.rawBindings()
+        assertNull(f.historySignal())
         repeat(32) { index ->
             assertNotNull(f.database.workWakes.request("occupied.$index", "generation-$index", 32))
         }
@@ -432,6 +456,7 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
             f.bindings().retain(f.local(), binding(f.local(), 2)),
         )
         assertEquals(before, f.rawBindings())
+        assertNull(f.historySignal())
         f.assertBinding(historical)
         assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), historical))
         assertNull(f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY))
@@ -670,25 +695,19 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
             var writes = 0
             val firstRace =
                 object : ReplicaStore by f.database.replicas {
-                    override suspend fun replace(
+                    override suspend fun mutate(
                         scope: ReplicaScope,
-                        partition: String,
-                        expected: ReplicaCheckpoint?,
-                        snapshot: ReplicaSnapshot?,
+                        mutations: List<ReplicaMutation>,
                         wake: WorkWakeRequest?,
                     ): Boolean {
                         writes++
+                        assertEquals(2, mutations.size)
+                        assertIs<ReplicaMutation.Replace>(mutations[0])
                         assertEquals(
                             AppResult.Success(true),
                             f.bindings().retain(f.local(), second),
                         )
-                        return f.database.replicas.replace(
-                            scope,
-                            partition,
-                            expected,
-                            snapshot,
-                            wake,
-                        )
+                        return f.database.replicas.mutate(scope, mutations, wake)
                     }
                 }
             assertEquals(AppResult.Success(false), f.bindings(firstRace).retain(f.local(), first))
@@ -696,26 +715,18 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
             f.assertBinding(second)
             val appendRace =
                 object : ReplicaStore by f.database.replicas {
-                    override suspend fun commit(
-                        handle: ReplicaHandle,
-                        expectedRevision: Long,
-                        checkpoint: String,
-                        documents: List<ReplicaDocument>,
-                        publish: Boolean,
+                    override suspend fun mutate(
+                        scope: ReplicaScope,
+                        mutations: List<ReplicaMutation>,
                         wake: WorkWakeRequest?,
                     ): Boolean {
                         writes++
-                        assertEquals(2, documents.size)
-                        assertTrue(publish)
+                        assertEquals(2, mutations.size)
+                        val bindingMutation = assertIs<ReplicaMutation.Commit>(mutations[0])
+                        assertEquals(2, bindingMutation.documents.size)
+                        assertTrue(bindingMutation.publish)
                         assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), third))
-                        return f.database.replicas.commit(
-                            handle,
-                            expectedRevision,
-                            checkpoint,
-                            documents,
-                            publish,
-                            wake,
-                        )
+                        return f.database.replicas.mutate(scope, mutations, wake)
                     }
                 }
             assertEquals(AppResult.Success(false), f.bindings(appendRace).retain(f.local(), first))
@@ -734,38 +745,14 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
         withDatabase { f ->
             fun lossyStore(): ReplicaStore =
                 object : ReplicaStore by f.database.replicas {
-                    override suspend fun replace(
+                    override suspend fun mutate(
                         scope: ReplicaScope,
-                        partition: String,
-                        expected: ReplicaCheckpoint?,
-                        snapshot: ReplicaSnapshot?,
+                        mutations: List<ReplicaMutation>,
                         wake: WorkWakeRequest?,
                     ): Boolean {
-                        check(
-                            f.database.replicas.replace(scope, partition, expected, snapshot, wake)
-                        )
-                        throw CancellationException("Lost publication response")
-                    }
-
-                    override suspend fun commit(
-                        handle: ReplicaHandle,
-                        expectedRevision: Long,
-                        checkpoint: String,
-                        documents: List<ReplicaDocument>,
-                        publish: Boolean,
-                        wake: WorkWakeRequest?,
-                    ): Boolean {
-                        check(
-                            f.database.replicas.commit(
-                                handle,
-                                expectedRevision,
-                                checkpoint,
-                                documents,
-                                publish,
-                                wake,
-                            )
-                        )
-                        throw CancellationException("Lost append response")
+                        assertEquals(2, mutations.size)
+                        check(f.database.replicas.mutate(scope, mutations, wake))
+                        throw CancellationException("Lost binding and signal publication response")
                     }
                 }
             for (index in 1..2) {
@@ -774,9 +761,11 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
                     f.bindings(lossyStore()).retain(f.local(), value)
                 }
                 val before = f.rawBindings()
+                val signal = f.historySignal()
                 f.reopen()
                 f.assertBinding(value)
                 assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), value))
+                assertEquals(signal, f.historySignal())
                 assertEquals(before.documents, f.rawBindings().documents)
                 assertEquals(before.checkpoint?.payload, f.rawBindings().checkpoint?.payload)
             }
@@ -787,34 +776,14 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
         val foreign = f.access.copy(sessionId = "other-login", accountId = historyId(9920))
         val store =
             object : ReplicaStore by f.database.replicas {
-                override suspend fun replace(
+                override suspend fun mutate(
                     scope: ReplicaScope,
-                    partition: String,
-                    expected: ReplicaCheckpoint?,
-                    snapshot: ReplicaSnapshot?,
+                    mutations: List<ReplicaMutation>,
                     wake: WorkWakeRequest?,
                 ): Boolean {
+                    assertEquals(2, mutations.size)
                     f.activate(foreign)
-                    return f.database.replicas.replace(scope, partition, expected, snapshot, wake)
-                }
-
-                override suspend fun commit(
-                    handle: ReplicaHandle,
-                    expectedRevision: Long,
-                    checkpoint: String,
-                    documents: List<ReplicaDocument>,
-                    publish: Boolean,
-                    wake: WorkWakeRequest?,
-                ): Boolean {
-                    f.activate(foreign)
-                    return f.database.replicas.commit(
-                        handle,
-                        expectedRevision,
-                        checkpoint,
-                        documents,
-                        publish,
-                        wake,
-                    )
+                    return f.database.replicas.mutate(scope, mutations, wake)
                 }
             }
         val first = binding(f.local())
@@ -1424,6 +1393,166 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
         assertIs<AppResult.Failed>(reader.page(f.local()))
         f.activate()
         f.assertBinding(value)
+    }
+
+    @Test
+    fun newBindingSignalsItsPublishedPairAndWakeWhileExactReplayStaysSilent() = withDatabase { f ->
+        coroutineScope {
+            val access = f.local()
+            val values = Channel<AppResult<String?>>(8)
+            val job = launch {
+                StoredCollaborationHistorySignalRepository(f.database.replicas)
+                    .observe(access)
+                    .collect { values.send(it) }
+            }
+            try {
+                assertEquals(AppResult.Success(null), values.receive())
+                assertNull(f.keys.read())
+                var previous: String? = null
+                for (index in 1..2) {
+                    val value = binding(access, index, legacy = index == 2)
+                    assertEquals(AppResult.Success(true), f.bindings().retain(access, value))
+                    val signal =
+                        assertNotNull(assertIs<AppResult.Success<String?>>(values.receive()).value)
+                    assertNotEquals(previous, signal)
+                    f.assertBinding(value)
+                    assertTrue(
+                        assertNotNull(
+                                f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY)
+                            )
+                            .pending
+                    )
+                    val raw = f.rawBindings()
+                    assertEquals(AppResult.Success(true), f.bindings().retain(access, value))
+                    assertEquals(signal, f.historySignal())
+                    assertEquals(raw, f.rawBindings())
+                    previous = signal
+                }
+                yield()
+                assertTrue(values.tryReceive().isFailure)
+            } finally {
+                job.cancelAndJoin()
+                values.close()
+            }
+        }
+    }
+
+    @Test
+    fun competingHistorySignalCannotPublishFirstOrAppendedBindingOrWake() = withDatabase { f ->
+        for (index in 1..2) {
+            val before = f.rawBindings()
+            val beforeWake = f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY)
+            var writes = 0
+            val replacement = historyId(15000 + index)
+            val store =
+                object : ReplicaStore by f.database.replicas {
+                    override suspend fun mutate(
+                        scope: ReplicaScope,
+                        mutations: List<ReplicaMutation>,
+                        wake: WorkWakeRequest?,
+                    ): Boolean {
+                        writes++
+                        assertEquals(2, mutations.size)
+                        val signal = assertIs<ReplicaMutation.Replace>(mutations.last())
+                        assertEquals(CollaborationHistorySignal.PARTITION, signal.partition)
+                        assertTrue(
+                            f.database.replicas.replace(
+                                scope,
+                                signal.partition,
+                                signal.expected,
+                                CollaborationHistorySignal.snapshot(replacement),
+                            )
+                        )
+                        return f.database.replicas.mutate(scope, mutations, wake)
+                    }
+                }
+            val value = binding(f.local(), index)
+            assertEquals(AppResult.Success(false), f.bindings(store).retain(f.local(), value))
+            assertEquals(1, writes)
+            assertEquals(before, f.rawBindings())
+            assertEquals(
+                beforeWake,
+                f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY),
+            )
+            assertEquals(replacement, f.historySignal())
+            assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), value))
+            f.assertBinding(value)
+            assertNotEquals(replacement, f.historySignal())
+        }
+    }
+
+    @Test
+    fun malformedHistorySignalCannotBeOverwrittenByBindingPublication() = withDatabase { f ->
+        val scope = spaceRoomBindingScope(f.local())
+        assertTrue(
+            f.database.replicas.replace(
+                scope,
+                CollaborationHistorySignal.PARTITION,
+                null,
+                ReplicaSnapshot(historyId(15010), "invalid-signal-payload", emptyList()),
+            )
+        )
+        val raw = f.database.replicas.checkpoint(scope, CollaborationHistorySignal.PARTITION)
+        assertIs<AppResult.Failed>(f.bindings().retain(f.local(), binding(f.local())))
+        assertEquals(
+            raw,
+            f.database.replicas.checkpoint(scope, CollaborationHistorySignal.PARTITION),
+        )
+        assertNull(f.rawBindings().checkpoint)
+        assertNull(f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY))
+    }
+
+    @Test
+    fun cancellationBeforeAtomicWritePreservesBindingSignalAndRecoveryWake() = withDatabase { f ->
+        for (index in 1..2) {
+            val entered = CompletableDeferred<Unit>()
+            val store =
+                object : ReplicaStore by f.database.replicas {
+                    override suspend fun mutate(
+                        scope: ReplicaScope,
+                        mutations: List<ReplicaMutation>,
+                        wake: WorkWakeRequest?,
+                    ): Boolean {
+                        assertEquals(2, mutations.size)
+                        entered.complete(Unit)
+                        awaitCancellation()
+                    }
+                }
+            val before = f.rawBindings()
+            val signal = f.historySignal()
+            val wake = f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY)
+            val value = binding(f.local(), index)
+            coroutineScope {
+                val job = launch { f.bindings(store).retain(f.local(), value) }
+                entered.await()
+                job.cancelAndJoin()
+            }
+            assertEquals(before, f.rawBindings())
+            assertEquals(signal, f.historySignal())
+            assertEquals(wake, f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY))
+            assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), value))
+        }
+    }
+
+    @Test
+    fun bindingDemandSurvivesRenewalAndIsSharedOnlyWithinItsOwnedAccount() = withDatabase { f ->
+        val access = f.local()
+        val value = binding(access)
+        assertEquals(AppResult.Success(true), f.bindings().retain(access, value))
+        val original = assertNotNull(f.historySignal())
+        val renewed =
+            f.access.copy(sessionId = "renewed-binding-signal", companyId = historyId(15020))
+        f.reopen(renewed)
+        val current = f.local(renewed)
+        assertEquals(original, f.historySignal(current))
+        assertNull(f.historySignal(access))
+        assertEquals(original, f.historySignal(current.copy(spaceId = historyId(15021))))
+        assertNull(f.historySignal(current.copy(accountId = historyId(15022))))
+        assertNull(f.historySignal(current.copy(audience = "https://other.example.test/")))
+        val raw = f.rawBindings(current)
+        assertEquals(AppResult.Success(true), f.bindings().retain(current, value))
+        assertEquals(original, f.historySignal(current))
+        assertEquals(raw, f.rawBindings(current))
     }
 
     private fun withDatabase(block: suspend (CollaborationHistoryFixture) -> Unit) = runTest {

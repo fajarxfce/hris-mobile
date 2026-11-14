@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data
 
 import dev.fajar.starter.collaboration.data.datasources.MemoryCollaborationSpaceDirectoryAdmissionSource
+import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.data.identity.*
 import dev.fajar.starter.collaboration.data.repositories.*
 import dev.fajar.starter.collaboration.domain.entities.*
@@ -26,6 +27,92 @@ import kotlinx.coroutines.test.runTest
 
 abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
+
+    @Test
+    fun bindingRevealsOldCompanyHistoryWithoutChangingItsKnownCatalogOrSource() =
+        withDatabase { f ->
+            val binding = f.binding()
+            val position = assertNotNull(binding.original).conversation.position
+            val company =
+                CollaborationLocalAccess(
+                    f.access.sessionId,
+                    f.access.audience,
+                    f.access.accountId,
+                    position.companyId,
+                )
+            assertEquals(AppResult.Success(true), f.metadata().retain(f.access, f.conversation()))
+            assertEquals(
+                AppResult.Success(true),
+                f.history.repository.merge(
+                    company,
+                    position.conversationId,
+                    binding.room.roomId,
+                    listOf(f.history.event()),
+                ),
+            )
+            val catalog =
+                EncryptedCollaborationSpaceConversationCatalogRepository(
+                    f.history.database.replicas,
+                    f.history.cipher,
+                    f.history.keys,
+                )
+            val catalogBefore = catalog.observeVersion(f.access).first()
+            assertNotNull(
+                assertIs<AppResult.Success<CollaborationSpaceConversationCatalogVersion?>>(
+                        catalogBefore
+                    )
+                    .value
+            )
+            val sourceBefore =
+                f.history.database.replicas
+                    .observe(
+                        historyScope(company),
+                        historyPartition(company, position.conversationId),
+                        limit = 200,
+                    )
+                    .first()
+            assertNotNull(sourceBefore.checkpoint)
+            assertTrue(sourceBefore.documents.isNotEmpty())
+            val signal = StoredCollaborationHistorySignalRepository(f.history.database.replicas)
+            val original =
+                assertNotNull(
+                    assertIs<AppResult.Success<String?>>(signal.observe(f.access).first()).value
+                )
+            val keys = f.history.keys.read()
+            coroutineScope {
+                val values = Channel<AppResult<String?>>(8)
+                val job = launch { signal.observe(f.access).collect { values.send(it) } }
+                try {
+                    assertEquals(AppResult.Success(original), values.receive())
+                    assertEquals(AppResult.Success(true), f.bindings().retain(f.access, binding))
+                    val next =
+                        assertNotNull(assertIs<AppResult.Success<String?>>(values.receive()).value)
+                    assertNotEquals(original, next)
+                    assertEquals(catalogBefore, catalog.observeVersion(f.access).first())
+                    assertEquals(
+                        sourceBefore,
+                        f.history.database.replicas
+                            .observe(
+                                historyScope(company),
+                                historyPartition(company, position.conversationId),
+                                limit = 200,
+                            )
+                            .first(),
+                    )
+                    assertEquals(keys, f.history.keys.read())
+                    assertEquals(
+                        AppResult.Success(binding),
+                        f.bindings().getByConversation(f.access, binding.conversation.id),
+                    )
+                    assertEquals(AppResult.Success(true), f.bindings().retain(f.access, binding))
+                    assertEquals(AppResult.Success(next), signal.observe(f.access).first())
+                    assertEquals(0, f.roomReads + f.originalReads)
+                } finally {
+                    job.cancelAndJoin()
+                    values.close()
+                }
+            }
+        }
 
     @Test
     fun canonicalParticipantsReopenExactOriginalIdentityAndSelectedProviderWithoutTransport() =
@@ -673,6 +760,17 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                         publications++
                         throw IllegalStateException("Lost publication response")
                     }
+
+                    override suspend fun mutate(
+                        scope: ReplicaScope,
+                        mutations: List<ReplicaMutation>,
+                        wake: WorkWakeRequest?,
+                    ): Boolean {
+                        assertEquals(2, mutations.size)
+                        check(f.history.database.replicas.mutate(scope, mutations, wake))
+                        publications++
+                        throw IllegalStateException("Lost binding publication response")
+                    }
                 }
             assertEquals(AppResult.Success(f.binding()), f.prepare(store)(f.conversation()))
             assertEquals(2, publications)
@@ -699,23 +797,16 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
         withDatabase { f ->
             val store =
                 object : ReplicaStore by f.history.database.replicas {
-                    override suspend fun replace(
+                    override suspend fun mutate(
                         scope: ReplicaScope,
-                        partition: String,
-                        expected: ReplicaCheckpoint?,
-                        snapshot: ReplicaSnapshot?,
+                        mutations: List<ReplicaMutation>,
                         wake: WorkWakeRequest?,
                     ): Boolean {
-                        val saved =
-                            f.history.database.replicas.replace(
-                                scope,
-                                partition,
-                                expected,
-                                snapshot,
-                                wake,
-                            )
-                        if (partition == spaceRoomBindingPartition(f.access) && saved)
-                            throw CancellationException("Lost binding response")
+                        assertEquals(2, mutations.size)
+                        val binding = assertIs<ReplicaMutation.Replace>(mutations.first())
+                        assertEquals(spaceRoomBindingPartition(f.access), binding.partition)
+                        val saved = f.history.database.replicas.mutate(scope, mutations, wake)
+                        if (saved) throw CancellationException("Lost binding response")
                         return saved
                     }
                 }
@@ -753,22 +844,16 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                 )
             val store =
                 object : ReplicaStore by f.history.database.replicas {
-                    override suspend fun replace(
+                    override suspend fun mutate(
                         scope: ReplicaScope,
-                        partition: String,
-                        expected: ReplicaCheckpoint?,
-                        snapshot: ReplicaSnapshot?,
+                        mutations: List<ReplicaMutation>,
                         wake: WorkWakeRequest?,
                     ): Boolean {
-                        val saved =
-                            f.history.database.replicas.replace(
-                                scope,
-                                partition,
-                                expected,
-                                snapshot,
-                                wake,
-                            )
-                        if (saved && partition == spaceRoomBindingPartition(f.access))
+                        assertEquals(2, mutations.size)
+                        val binding = assertIs<ReplicaMutation.Replace>(mutations.first())
+                        assertEquals(spaceRoomBindingPartition(f.access), binding.partition)
+                        val saved = f.history.database.replicas.mutate(scope, mutations, wake)
+                        if (saved)
                             assertEquals(
                                 AppResult.Success(true),
                                 f.directory().restrict(f.access, denied),

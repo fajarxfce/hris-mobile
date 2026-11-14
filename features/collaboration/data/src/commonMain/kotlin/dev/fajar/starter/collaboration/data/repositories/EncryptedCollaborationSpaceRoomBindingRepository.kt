@@ -3,6 +3,7 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.history.CollaborationHistoryKeys
+import dev.fajar.starter.collaboration.data.history.CollaborationHistorySignal
 import dev.fajar.starter.collaboration.data.identity.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
@@ -82,53 +83,54 @@ class EncryptedCollaborationSpaceRoomBindingRepository(
             val ids = codec.ids(binding)
             val page = replicas.workingDocuments(scope, partition, ids)
             val checkpoint = page.checkpoint
-            if (checkpoint == null) {
-                require(page.documents.isEmpty())
-                val generation = Uuid.random().toString()
-                val snapshot =
-                    ReplicaSnapshot(
-                        generation,
-                        codec.checkpoint(generation, 0),
-                        codec.documents(generation, 0, binding),
+            val mutation =
+                if (checkpoint == null) {
+                    require(page.documents.isEmpty())
+                    val generation = Uuid.random().toString()
+                    ReplicaMutation.Replace(
+                        partition,
+                        null,
+                        ReplicaSnapshot(
+                            generation,
+                            codec.checkpoint(generation, 0),
+                            codec.documents(generation, 0, binding),
+                        ),
                     )
-                currentCoroutineContext().ensureActive()
-                return@use replicas.replace(
-                    scope,
-                    partition,
-                    null,
-                    snapshot,
-                    WorkWakeRequest(
-                        CollaborationSpaceRecoveryWake.WORK_KEY,
-                        Uuid.random().toString(),
-                        SPACE_RECOVERY_WAKE_MAX_KEYS,
-                    ),
-                )
-            }
-            codec.validate(checkpoint)
-            require(page.documents.all { it.id in ids })
-            if (page.documents.isNotEmpty()) {
-                val same = codec.pair(checkpoint, page.documents) == binding
-                // Recheck ownership/revision after suspended decryption without writing or
-                // retrying.
-                return@use same && replicas.checkpoint(scope, partition) == checkpoint
-            }
-            require(checkpoint.revision < 9_007_199_254_740_991L)
-            val revision = checkpoint.revision + 1
-            val payload = codec.checkpoint(checkpoint.handle.generation, revision)
-            val documents = codec.documents(checkpoint.handle.generation, revision, binding)
+                } else {
+                    codec.validate(checkpoint)
+                    require(page.documents.all { it.id in ids })
+                    if (page.documents.isNotEmpty()) {
+                        val same = codec.pair(checkpoint, page.documents) == binding
+                        // Exact replay does not renew either history demand or recovery wake.
+                        return@use same && replicas.checkpoint(scope, partition) == checkpoint
+                    }
+                    require(checkpoint.revision < 9_007_199_254_740_991L)
+                    val revision = checkpoint.revision + 1
+                    ReplicaMutation.Commit(
+                        checkpoint.handle,
+                        checkpoint.revision,
+                        codec.checkpoint(checkpoint.handle.generation, revision),
+                        codec.documents(checkpoint.handle.generation, revision, binding),
+                        publish = true,
+                    )
+                }
+            // A newly bound room can expose history acquired before canonical metadata existed.
+            // Publish demand with the binding so an open account owner cannot miss that source.
+            val signal = replicas.checkpoint(scope, CollaborationHistorySignal.PARTITION)
+            signal?.let { CollaborationHistorySignal.generation(scope, it) }
+            val next = CollaborationHistorySignal.snapshot(Uuid.random().toString())
             currentCoroutineContext().ensureActive()
-            replicas.commit(
-                checkpoint.handle,
-                checkpoint.revision,
-                payload,
-                documents,
-                publish = true,
-                wake =
-                    WorkWakeRequest(
-                        CollaborationSpaceRecoveryWake.WORK_KEY,
-                        Uuid.random().toString(),
-                        SPACE_RECOVERY_WAKE_MAX_KEYS,
-                    ),
+            replicas.mutate(
+                scope,
+                listOf(
+                    mutation,
+                    ReplicaMutation.Replace(CollaborationHistorySignal.PARTITION, signal, next),
+                ),
+                WorkWakeRequest(
+                    CollaborationSpaceRecoveryWake.WORK_KEY,
+                    Uuid.random().toString(),
+                    SPACE_RECOVERY_WAKE_MAX_KEYS,
+                ),
             )
         }
     }
