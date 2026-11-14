@@ -1,39 +1,40 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 06:40 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 06:55 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active shared repair lifetime diagnosis
+## Active shared repair lifetime verification
 
-Finite history turns are committed/pushed: Mobile ad5ea10e64c9709eccfeb0ff0016333c3ffdfad6 and
-Group 95e638e6ff17d8943998d6c0b244c1f43a02913e, accepted focused63/full17459. The next
-.work/history-inbox-owner-lifetime-2026-11-14 is APPLIED on9 source paths and remains uncommitted.
-It shares command/history collection with19 new shared cases and1 actual SQLite case. Do not
-claim acceptance: focused1 executed55 with1 failed existing SQLite cancellation test. No production
-correction has been made yet. Failed source5549/c55a18227b891b541dc17d689186801d0aeb0821584accfe786d0cb75b0c2a6a;
-result1e9607ae7c80b0724eff292e008b40b0c46f74c5e34b6c2f6126b557d8851087.
+Finite-turn prerequisite remains accepted and pushed: Mobile ad5ea10e /Group95e638e6,
+focused63/full17459. The shared-lifetime package is APPLIED on9 source paths and uncommitted.
+Focused3 is now accepted59, including every prior command and actual SQLite integration identity.
+Source5549/09176a696a0c01faa24c93761661828c5f17a97b2620c8b1004e1bfe50e65a9f;
+result7ff5568a5770f07ef249ad577372a637ae89959c793cc1edd96e21989e6fb187.
+Full17506 is RUNNING in .work/history-inbox-owner-lifetime-2026-11-14/full-1, session47037.
+Reap and verify before editing captured source. Do not claim full acceptance yet.
 
-The original assertion is unchanged except for a redacted failure message. Isolated diagnostic1
-reproduced the failure: Conflict/client.collaboration_inbox_busy. Source5549/
-deccb98142d47b45f56873a696d9bbd47c8fb34904ec1771e679b2a5f4d74546;
-resultd62aa9971c7a8df1c5c636ebf090da56070e6effbc57d7e4d6aba4e1af4a76ce.
-Diagnostic2 is running to distinguish the command lane from history. Its test callback records
-only redacted Failure kind/code; current source5549/
-62a4d84da1916a4283c619e3dc8ecd534b8197c0717d773cf08574adf51e95b0. Inspect/reap session97318 before
-further source edits. Full17498 has NOT run. Preserve all55 focused identities and old assertions,
-then correct the actual contention/ownership cause, rerun focused and full, record failures,
-commit and push. Do not hide the failure by relaxing the cancellation test or adding blanket retries.
+The original focused1 cancellation failure and two isolated diagnostics identified history
+Conflict/client.collaboration_inbox_busy leaking through the shared command result. Exact
+conditional-write contention now has a domain Contended state: progress stays parked, without
+inventing completion or a command failure, until real input/explicit owner recovery. Other
+conflicts, storage errors and denials remain failures. Focused2 found another boundary error:
+history Success could precede command inventory initialization. Combined output now waits for
+an actual command outcome. Four added shared regressions preserve these boundaries;23 shared
+and1 actual SQLite addition total. Old assertions remain intact. Failed source/results and
+corrections are retained in contention-correction.json and will be included in final Git evidence.
 
-Next product-owner workspace .work/history-inbox-product-owner-2026-11-14 has4 UNAPPLIED domain
-drafts/10 UNRUN cases, no application wiring or gates. Current local account/root admission must
-be independent of native readiness/credential age/HR company. Null handoffs close the old owner
-before a replacement account/root waits for admission. Current admission/root/session checks and
-late cancellation still need review. Do not apply before shared-lifetime diagnosis is resolved.
+Next .work/history-inbox-product-owner-2026-11-14 contains12 reviewed/formatted UNAPPLIED drafts,
+16 shared and5 desktop additions; focused84/full17543 gates are prepared UNRUN. Recording/commit
+gates still need preparation. The product observer uses session/root/directory admission directly,
+independent of native readiness, credential age and selected HR company. Null handoffs close old
+ownership before waiting for new facts; one process child cancels/joins repair on replacement.
+DI/start/close wiring, domain/app lifecycle tests and actual SQLite clear/restore cases are drafted.
+Apply only after the shared-lifetime source/evidence is accepted, committed and pushed.
 
-Phone92/live unchanged; GroupOFF/V117-140 undeployed. No new Apple execution or Starter port.
-Continue long run after this diagnosis; push each commit; one compiler OR emulator; no agents.
+Phone92/live unchanged; GroupOFF/V117-140 undeployed. No new Apple execution, device action or
+Starter port. Continue the long run after verification; push every commit; one compiler OR emulator.
 
 ## Finite history turns locally accepted
 
