@@ -1,9 +1,32 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 05:34 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 05:54 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Active global history progress verification
+
+Global progress .work/history-inbox-global-owner-2026-11-14 is APPLIED:23 source paths,
+57 shared additions. Apply42212 is reaped. Focused1/session5423 REAPED0/ACCEPTED59,418.513s;
+source5532/ab7d052809346a2c3397b5431f06efa39cd597dec40cc49909b43b251fa36780, result
+a802a6cc2d4ada23dc2eb0bbe1af121ca477c7d4091268af7340bc25460fbc2a. Full1/session21524 RUNNING,
+expected17372; not accepted yet. Reap/audit before recording/committing source. Gates are prepared.
+Latest accepted production is Mobile6af5974d/full17258 and Groupa46af1dc, both pushed.
+
+Next .work/history-inbox-owner-turn-2026-11-14 has14 formatted UNAPPLIED paths and42 shared cases
+UNRUN. Pure global/source/page selection, one finite turn worker and DI/graph drafts exist. The
+worker maps selected actions to admitted use cases without subscriptions, timers or transports.
+Failed attempts consume their lane budget; one source inspection after an uncertain operation
+preserves the other lane's actual version. The raw policy permits one reset then one fresh read.
+No application lifetime activation exists. Actual storage integration, parent mailbox/fairness,
+review and validation remain open. Do not apply as an unreviewed standalone selector package.
+The current design is retained in the owner-turn design document in each repository.
+
+Keep one repair signal observation, cancel/join account ownership and service command input
+between bounded history steps. Do not let self-produced metadata restart failed work. Preserve
+exact source/index/global guards and current admission. Phone92/live remain unchanged;
+GroupOFF/V117-140 undeployed. Actual new Apple execution and all54 PRD groups remain open.
 
 ## History owner inputs locally accepted
 
