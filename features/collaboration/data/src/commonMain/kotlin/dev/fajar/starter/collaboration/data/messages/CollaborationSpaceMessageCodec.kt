@@ -50,8 +50,18 @@ internal data class SpaceMessageIntentDto(
     val forwarded: Boolean = false,
     val editTarget: MessageEditTargetDto? = null,
     val inboxOrigin: SpaceEditInboxOriginDto? = null,
+    val recipientOrigin: SpaceRecipientOriginDto? = null,
 ) {
     override fun toString() = "SpaceMessageIntentDto([redacted])"
+}
+
+@Serializable
+internal data class SpaceRecipientOriginDto(
+    val peerAccountId: String,
+    val draftSavedAt: String,
+    val nextRevision: String,
+) {
+    override fun toString() = "SpaceRecipientOriginDto([redacted])"
 }
 
 internal fun CollaborationSpaceMessageIntent.toSpaceMessageDto(
@@ -71,6 +81,9 @@ internal fun CollaborationSpaceMessageIntent.toSpaceMessageDto(
         forwarded,
         editTarget?.toMessageEditDto(),
         inboxOrigin?.let(::SpaceEditInboxOriginDto),
+        recipientOrigin?.let {
+            SpaceRecipientOriginDto(it.peerAccountId, it.draftSavedAt.toString(), it.nextRevision)
+        },
     )
 }
 
@@ -88,6 +101,13 @@ internal fun SpaceMessageIntentDto.toSpaceMessageIntent(
             forwarded,
             editTarget?.toDomain(),
             inboxOrigin?.domain(),
+            recipientOrigin?.let {
+                CollaborationSpaceRecipientOrigin(
+                    it.peerAccountId,
+                    Instant.parse(it.draftSavedAt),
+                    it.nextRevision,
+                )
+            },
         )
         .also { require(validCollaborationSpaceMessageIntent(access, it)) }
 }

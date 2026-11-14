@@ -1,7 +1,30 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 17:18 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 17:42 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
+
+## Recipient destination proof accepted
+
+Recipient destination proof is accepted: 17,975 validated cases
+(15794 fresh / 2181 exact unchanged), preserving all 17,931 prior
+identities plus 44 executions. Focused64/session65652 and
+full/session6014 reaped0. Source d0f14f38b6426842ce0e43903c29a5a1d145ff5d5cf95a1e16c267c5c24f47eb;
+reports 42e2058c5be03d5aac866720c2e5ea13f37a48d34d4f2dae3cba6b5e6896fe50. Ten paths add authenticated recipient provenance and bounded
+Submit readback after source retirement. No transfer consumer or product activation.
+
+Continue bounded canonical transfer and conditional source retirement only after exact command
+and inbox acknowledgement. The destination is EncryptedCollaborationSpaceMessageRepository;
+its insert preserves canonical typing and atomically binds the immutable target by original ID.
+Do not use the editor-clearing composer handoff. Never retarget an uncertain original from new
+peer metadata. Pending inbox rows, rapid Send ownership, product routing, complete company
+membership filtering and explicit Group rollout remain. Read collaboration-recipient-destination-proof.md.
+
+Starter resource port e9b4ff500baf62f2642871c6705d64b35bd1d2e1 is independently accepted/pushed with 1,052,
+both languages inside three variants and actual production startup/reopen. Phone 93 remains
+installed with verified bytes; this subsequent source is not in that APK. Group OFF/V117–140
+undeployed/all 54 PRD groups OPEN. Continue beyond checkpoints, push each commit, one compiler
+OR emulator, no subagents. Preserve the blocked SQLite fixture and failed Apple proof.
+
 
 ## Generic Android resource port linked
 

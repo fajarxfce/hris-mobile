@@ -22,8 +22,18 @@ data class CollaborationSpaceMessageIntent(
     val forwarded: Boolean = false,
     val editTarget: CollaborationEditTarget? = null,
     val inboxOrigin: CollaborationSpaceEditInboxOrigin? = null,
+    val recipientOrigin: CollaborationSpaceRecipientOrigin? = null,
 ) {
     override fun toString() = "CollaborationSpaceMessageIntent([redacted])"
+}
+
+/** Captured peer/editor facts retained with the canonical original through terminal archival. */
+data class CollaborationSpaceRecipientOrigin(
+    val peerAccountId: String,
+    val draftSavedAt: Instant,
+    val nextRevision: String,
+) {
+    override fun toString() = "CollaborationSpaceRecipientOrigin([redacted])"
 }
 
 /** Logical ownership remains separate from the original physical device in staging/sent states. */

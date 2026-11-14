@@ -715,10 +715,19 @@ class CollaborationDataModule {
     fun submitSpaceRecipientComposer(
         outbox: CollaborationSpaceRecipientOutboxRepository,
         drafts: CollaborationSpaceRecipientDraftRepository,
+        messages: CollaborationSpaceMessageRepository,
         directory: CollaborationSpaceDirectoryRepository,
         sessions: SessionRepository,
         server: IdentityServer,
-    ) = SubmitCollaborationSpaceRecipientComposer(outbox, drafts, directory, sessions, server)
+    ) =
+        SubmitCollaborationSpaceRecipientComposer(
+            outbox,
+            drafts,
+            messages,
+            directory,
+            sessions,
+            server,
+        )
 
     @Factory
     fun observeSpaceComposer(

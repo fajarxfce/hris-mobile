@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.first
 class SubmitCollaborationSpaceRecipientComposer(
     private val outbox: CollaborationSpaceRecipientOutboxRepository,
     private val drafts: CollaborationSpaceRecipientDraftRepository,
+    private val messages: CollaborationSpaceMessageRepository,
     private val directory: CollaborationSpaceDirectoryRepository,
     private val sessions: SessionRepository,
     private val server: IdentityServer,
@@ -42,6 +43,9 @@ class SubmitCollaborationSpaceRecipientComposer(
             (existing as AppResult.Success).value?.let {
                 return if (it == submission) AppResult.Success(submission) else changedDraft()
             }
+            val destination = retainedDestination()
+            if (destination is AppResult.Failed) return destination
+            if ((destination as AppResult.Success).value) return AppResult.Success(submission)
             val editing = drafts.get(access, submission.original.peerAccountId)
             admitted().let { if (it is AppResult.Failed) return it }
             if (editing is AppResult.Failed) return editing
@@ -80,12 +84,30 @@ class SubmitCollaborationSpaceRecipientComposer(
             val saved = (confirmed as AppResult.Success).value
             if (saved == submission) return AppResult.Success(submission)
             if (saved != null) return changedDraft()
+            val transferred = retainedDestination()
+            if (transferred is AppResult.Failed)
+                return denial?.let { AppResult.Failed(it) }
+                    ?: if (transferred.failure.kind == FailureKind.Storage && interrupted != null)
+                        AppResult.Failed(interrupted)
+                    else transferred
+            if ((transferred as AppResult.Success).value) return AppResult.Success(submission)
             if (interrupted != null) return AppResult.Failed(interrupted)
             return if (
                 (written as AppResult.Success).value ==
                     CollaborationComposerHandoffResult.CAPACITY_EXCEEDED
             )
                 collaborationRecoveryFailure("client.command_queue_full", FailureKind.Storage)
+            else changedDraft()
+        }
+
+        /** A finite exact lookup closes the race with recovery retiring the source first. */
+        private suspend fun retainedDestination(): AppResult<Boolean> {
+            val read = messages.get(access, submission.id)
+            admitted().let { if (it is AppResult.Failed) return it }
+            if (read is AppResult.Failed) return read
+            val record = (read as AppResult.Success).value ?: return AppResult.Success(false)
+            return if (matchesCollaborationSpaceRecipientSubmission(access, record, submission))
+                AppResult.Success(true)
             else changedDraft()
         }
 

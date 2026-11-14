@@ -1,6 +1,12 @@
 # Architecture
 
 
+[Recipient destination proof](collaboration-recipient-destination-proof.md)
+
+Authenticated provenance confirms the original gesture after local source retirement.
+
+
+
 [Retained new-recipient messages](collaboration-recipient-outbox.md)
 
 Explicit Send is distinct from working drafts and canonical delivery.

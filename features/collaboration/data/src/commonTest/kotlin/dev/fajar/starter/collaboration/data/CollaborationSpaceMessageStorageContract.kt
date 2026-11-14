@@ -19,6 +19,7 @@ import kotlin.uuid.Uuid
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
 
 abstract class CollaborationSpaceMessageStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
@@ -100,6 +101,130 @@ abstract class CollaborationSpaceMessageStorageContract {
             previous = readMessage(value.id)
         }
         return previous
+    }
+
+    private fun recipientIntent(access: CollaborationSpaceLocalAccess, index: Int = 1) =
+        intent(access, index)
+            .copy(
+                replyToEventId = null,
+                recipientOrigin =
+                    CollaborationSpaceRecipientOrigin(
+                        historyId(9400),
+                        Instant.parse("2026-11-14T00:00:00.123456789Z"),
+                        historyId(9401),
+                    ),
+            )
+
+    @Test
+    fun recipientOriginSurvivesEncryptedStorageAndDatabaseReopen() = withDatabase { f ->
+        val value = recipientIntent(f.local())
+        assertEquals(
+            AppResult.Success(CollaborationMessageInsertion.STORED),
+            f.messages().insert(f.local(), value),
+        )
+        val raw = f.rawMessages().single()
+        assertFalse(raw.request.contains(assertNotNull(value.recipientOrigin).peerAccountId))
+        assertFalse(raw.request.contains(value.text))
+        f.reopen(f.access.copy(sessionId = "recipient-reopened"))
+        assertEquals(
+            value,
+            f.readMessage(value.id, f.local().copy(sessionId = "recipient-reopened")).intent,
+        )
+    }
+
+    @Test
+    fun competingRecipientTargetsRetainOnlyOneImmutableDestinationAndWake() = withDatabase { f ->
+        val first = recipientIntent(f.local())
+        val other = first.copy(conversationId = historyId(9402))
+        val one = f.messages()
+        val two = f.messages()
+        val outcomes = coroutineScope {
+            listOf(async { one.insert(f.local(), first) }, async { two.insert(f.local(), other) })
+                .awaitAll()
+        }
+        assertEquals(1, outcomes.count { it is AppResult.Success })
+        assertEquals(1, outcomes.count { it is AppResult.Failed })
+        val kept = f.readMessage(first.id)
+        assertTrue(kept.intent in listOf(first, other))
+        val raw = f.rawMessages()
+        val wake = assertNotNull(f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY))
+        assertTrue(
+            f.database.workWakes.acknowledge(
+                CollaborationSpaceRecoveryWake.WORK_KEY,
+                wake.generation,
+            )
+        )
+        val acknowledged = f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY)
+        val origin = assertNotNull(kept.intent.recipientOrigin)
+        for (changed in
+            listOf(
+                kept.intent.copy(conversationId = historyId(9403)),
+                kept.intent.copy(recipientOrigin = origin.copy(peerAccountId = historyId(9404))),
+                kept.intent.copy(recipientOrigin = origin.copy(nextRevision = historyId(9405))),
+                kept.intent.copy(recipientOrigin = null),
+            )) assertIs<AppResult.Failed>(f.messages().insert(f.local(), changed))
+        assertEquals(raw, f.rawMessages())
+        assertEquals(
+            acknowledged,
+            f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY),
+        )
+    }
+
+    @Test
+    fun recipientProofSurvivesCompletionCancellationAndTerminalReplay() = withDatabase { f ->
+        val first = recipientIntent(f.local())
+        val sent = f.retainSentRecord(first)
+        val completion = CollaborationSpaceMessageCompletion(sent, listOf("\$sent-${first.id}"))
+        assertEquals(
+            AppResult.Success(true),
+            f.messages().archiveCompletion(f.local(), completion, f.repairRequest()),
+        )
+        val second = recipientIntent(f.local(), 2)
+        assertEquals(
+            AppResult.Success(CollaborationMessageInsertion.STORED),
+            f.messages().insert(f.local(), second),
+        )
+        val queued = f.readMessage(second.id)
+        assertEquals(
+            AppResult.Success(true),
+            f.messages().cancel(f.local(), queued, f.repairRequest()),
+        )
+        f.reopen(f.access.copy(sessionId = "recipient-terminal-reopen"))
+        val access = f.local().copy(sessionId = "recipient-terminal-reopen")
+        assertEquals(sent, f.readMessage(first.id, access))
+        assertEquals(
+            queued.copy(state = CollaborationMessageState.Cancelled),
+            f.readMessage(second.id, access),
+        )
+        val before = f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY)
+        for (value in listOf(first, second)) {
+            assertEquals(
+                AppResult.Success(CollaborationMessageInsertion.STORED),
+                f.messages().insert(access, value),
+            )
+            assertIs<AppResult.Failed>(
+                f.messages().insert(access, value.copy(conversationId = historyId(9406)))
+            )
+        }
+        assertTrue(f.rawMessages(access).isEmpty())
+        assertEquals(before, f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY))
+    }
+
+    @Test
+    fun legacyRequestEncodingOmitsRecipientOriginAndCannotBeRetrofitted() = withDatabase { f ->
+        val value = intent(f.local()).copy(replyToEventId = null)
+        val encoded = Json.encodeToString(value.toSpaceMessageDto(f.local()))
+        assertFalse(encoded.contains("recipientOrigin"))
+        val decoded =
+            Json.decodeFromString<SpaceMessageIntentDto>(encoded).toSpaceMessageIntent(f.local())
+        assertEquals(value, decoded)
+        assertNull(decoded.recipientOrigin)
+        assertEquals(
+            AppResult.Success(CollaborationMessageInsertion.STORED),
+            f.messages().insert(f.local(), value),
+        )
+        assertIs<AppResult.Failed>(f.messages().insert(f.local(), recipientIntent(f.local())))
+        assertEquals(value, f.readMessage(value.id).intent)
     }
 
     @Test
