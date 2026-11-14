@@ -181,3 +181,56 @@ source identity, retained destination generation and atomic unresolved handoff. 
 replacement, denied/replaced account, cancellation, hot-room fairness, old content before binding,
 empty pages and unchanged reopen need behavior tests. These are open design obligations, not
 implemented guarantees. Keep all scheduling/admission policy in use cases and the existing owner.
+
+
+## Admitted history draft and publication gap — 14 November
+
+
+Prerequisite: accept and push atomic source signal. Ten paths: four new domain source files,
+23 shared use-case tests in two classes with two fixtures, data DI, and existing app graph assertions.
+No changes to storage, native runtime, product worker, UI, phone or live server.
+
+ReadCollaborationSpaceHistoryChanges admits account/session/audience and Group access around
+binding and source reads, selects the actual immutable Company/Group namespace, and acquires one
+bounded page (1..16). It freezes references before later admission can suspend. The pure policy
+checks exact owner, generation, frozen interval, bounded opaque source revision and advancing continuation. Revision encoding
+remains in storage; domain uses only the typed window for cursor arithmetic. Empty
+reference pages can continue; absent/restart remain explicit. Source acquisition never completes
+repair. A foreign cursor cannot be reused in another namespace or conversation.
+
+ObserveCollaborationSpaceHistoryChanges owns one local account signal under Group admission,
+retains confirmed denial through failed revalidation, joins cancelled subscriptions, and restarts
+only after admitted ownership. Token rotation does not replace unchanged readers. No scan, key
+creation, network request, timer or permanent per-room observer.
+
+Tests cover both physical namespaces and offline credentials, invalid bounds, missing binding,
+wrong cursor ownership, denial/replacement during suspension, malformed or non-advancing pages,
+empty continuation, saved After intervals, mutable responses, explicit absence/restart, failure
+without retry, cancellation/late completion, signal denial/reopen, slow consumers and disposal.
+Expected focused53 and full16970 (all16924 previous identities +46 shared desktop/browser cases).
+Apple source/test compilation will be checked separately from actual Apple execution.
+
+Then return to durable owner progress design in .work/history-inbox-progress-2026-11-14. The
+existing Group repair owner still needs source-bound publication proof, destination generation,
+atomic cursor/unresolved handoff and fair finite continuation. These contracts alone activate none
+of those consumers. No progress completion may be inferred from reading a page or signal.
+
+
+The admitted reader/signal contracts are drafted separately in
+.work/history-changes-admission-2026-11-14 (10 paths,23 methods, no apply yet). They select the
+actual immutable namespace, validate typed cursor windows, and leave the source revision token
+opaque. They do not solve durable publication completion.
+
+CollaborationHistoryInboxWriter currently returns Boolean. On a first index publication the
+codec allocates the destination generation internally; the publisher cannot know it from its
+proposal. Reading it afterward cannot prove it is the generation written if replacement raced.
+The conditional publication contract therefore needs to expose the actual committed version
+(including confirmed no-op), with conflict/uncertain failure still explicit. Only six existing
+source/test files currently override or call publishInbox; changing the contract is tractable.
+
+PublishCollaborationSpaceInboxHistory also returns only retained/unresolved IDs and exits before
+reading the index when no originals resolve. Durable source cursor handoff needs explicit source
+identity and destination generation even for unresolved-only work. Do not parse the opaque
+sourceRevision in domain to infer generation. Typed source version/proof and atomic unresolved
+handoff must be designed together before marking raw intervals complete. Empty raw pages must
+not invent an event to fit the publisher's existing1..16-ID API.

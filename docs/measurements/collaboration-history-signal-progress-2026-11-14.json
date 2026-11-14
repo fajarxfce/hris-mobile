@@ -27,7 +27,7 @@
   "liveChanged": false,
   "latestAttempt": {
     "accepted": false,
-    "status": "corrected-focused-running",
+    "status": "corrected-focused-accepted-full2-running",
     "failedFull": {
       "accepted": false,
       "sourceManifestSha256": "2460b28cd6c81d75aa2946fbc265e70017eacf3c860c3da8c83a97c878ce0764",
@@ -191,6 +191,36 @@
     "focusedSession": 14880,
     "expectedFocused": 125,
     "expectedFull": 16924,
-    "productionChangedForCorrection": false
+    "productionChangedForCorrection": false,
+    "focused": {
+      "accepted": true,
+      "tests": 125,
+      "elapsedSeconds": 153.053,
+      "sourceFiles": 5465,
+      "sourceManifestSha256": "6f2851928f25306470dd64a8ff16bcb9d8e7fde717fdf801151735d7de14d186",
+      "resultSha256": "adc24b12fa26cf8d6c7a0d410749658ab8fac752c2d39d602c39b5b42982dc6c",
+      "classes": {
+        "CollaborationBindingsTest": 2,
+        "CollaborationLocalVisibilityStorageTest": 10,
+        "CollaborationMessageEditStorageTest": 14,
+        "CollaborationSpaceMessageEditStorageTest": 17,
+        "CollaborationHistoryChangesStorageTest": 15,
+        "CollaborationHistorySignalStorageTest": 13,
+        "CollaborationHistoryStorageTest": 22,
+        "CollaborationSpaceHistoryInboxStorageTest": 16,
+        "CollaborationSpaceHistoryStorageTest": 16
+      },
+      "priorCaseIdsRetained": true
+    },
+    "focusedSessionReaped": true,
+    "fullDirectory": "full-2",
+    "fullSession": 63538,
+    "fullAccepted": false,
+    "nextDraft": {
+      "paths": 10,
+      "sharedMethods": 23,
+      "applied": false,
+      "verificationRun": false
+    }
   }
 }

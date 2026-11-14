@@ -1,30 +1,35 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 00:39 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 00:53 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
 ## Active atomic history signal verification
 
-The first full run (61916, REAPED exit1) failed eight existing delete/edit storage tests.
-It is FAILED, not accepted. Their fault injectors overrode the former single commit operation;
-production now uses an atomic source-plus-signal mutation. Eleven interceptors in three shared
-contracts now target that real boundary. All41 methods and prior failure/cancellation/competition
-assertions remain; the bulk deletion test also checks the source mutation and <=150 document bound.
-No production change was made for this correction. The original focused84 evidence and failed
-full1 source/reports remain in .work/history-local-change-signal-2026-11-13.
+Corrected focused125 is accepted (14880 REAPED0,153.053s), including all41 existing delete/edit
+methods and the eight cases that failed in full1. Source5465/6f2851928f25306470dd64a8ff16bcb9d8e7fde717fdf801151735d7de14d186;
+resultadc24b12fa26cf8d6c7a0d410749658ab8fac752c2d39d602c39b5b42982dc6c. The first full run61916 remains FAILED8;
+three shared test files corrected11 old fault injectors to target the actual atomic mutation.
+No production source changed for that correction. All original logs/source snapshots remain.
 
-There are now16 applied paths,13 new shared methods. Corrected focused125 is RUNNING14880 in
-focused-2. Source5465/6f2851928f25306470dd64a8ff16bcb9d8e7fde717fdf801151735d7de14d186. Reap and audit before
-full-2 (expected16924), then record and commit the implementation. Never label the failed run green.
+Corrected full16924 is RUNNING63538 in .work/history-local-change-signal-2026-11-13/full-2.
+Do not modify its16 applied paths until reaped/audited. Then run record-acceptance.py/commit.py
+and push both Mobile and Group evidence. No product consumer, phone or live activation here.
 
-Reader50e585dd/Group61cf0901 and generic raw changes/Starter092fbe6f remain accepted and pushed.
-Next .work/history-inbox-progress-2026-11-14 holds only an initial unapplied domain state draft:
-review finite catalog/source progress and durable unresolved handoff under the existing Group repair
-owner. No new polling queue or per-room observer. Unchanged reopen must reuse completed demand.
-Phone92 remains installed, live GroupOFF/V117-140 undeployed, and all54 PRD groups remain open.
-Continue beyond checkpoints, push every commit, one compiler OR emulator, no subagents.
+Next .work/history-changes-admission-2026-11-14 contains10 reviewed/formatted UNAPPLIED paths,
+23 shared methods, and prepared apply/capture/focused/full/record/commit scripts. All are unrun.
+Read/ObserveCollaborationSpaceHistoryChanges enforce canonical actual Company/Group source,
+local admission around suspension, detached bounded pages and one owned signal subscription.
+The domain policy uses typed windows for arithmetic and keeps the source revision token opaque.
+After signal acceptance/push, apply and REAP before capture; expectedfocused53/full16970.
+
+Then return to .work/history-inbox-progress-2026-11-14:one initial UNAPPLIED state draft and review.
+The Boolean inbox writer cannot expose its allocated destination generation; checked publication
+proof and atomic cursor/unresolved handoff are required before owner completion. No guessed
+revision parsing, artificial event for empty pages, extra polling queue or per-room observer.
+Phone92 remains installed, live GroupOFF/V117-140 undeployed, all54 PRD groups open. Continue,
+push every commit, one compiler OR emulator, no subagents.
 
 ## Authenticated history change pages locally accepted
 
