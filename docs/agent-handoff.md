@@ -1,9 +1,35 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 11:40 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 12:01 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Local contact measurement accepted; continue product integration
+
+Mobile .work/history-inbox-product-routing-2026-11-14 adds one desktop SQLite measurement test.
+Focused1 passes; root :check preserves all 17,748 prior identities plus one new case:
+17,749 validated (10544 fresh / 7205 exact unchanged).
+Source be18ecf7becb5a2bee8f2307e7667d89d201ffe78622a4027e6f9c9c03d35ab1; reports b9e31b05f51cc48897a7c5e8b3e2f0b575a98951a411c9568157c4bd559ebb54.
+No production code changed. Do not rerun this accepted measurement without a new reason.
+
+The focused synthetic 5,000-contact read uses 25 pages / 5,001 decryptions: 97–185 ms on this host;
+five retained-snapshot searches take 15 ms total, exact contact lookup 4 ms. Retain one admitted
+account/Group snapshot and filter locally. These are host samples, not Android frame measurements.
+Capacity is 10,000, acquisition pages 50, raw pages 200. Eight public company labels may be
+truncated; omitted membership is not a negative company-filter match.
+
+Next implement local Group contacts and the root navigation owner outside Company scope, then
+connect the accepted inbox entry to the existing swipe hub/FAB. Keep ViewModels on state and
+use-case results, domain on policy, repositories on datasource coordination. Cancel obsolete
+search and clear obsolete account/Group stores. Test retained data, no API calls from local
+search, account replacement, denial, disposal and actual app navigation before phone delivery.
+Read the investigation in review.md; no product-routing source has been applied yet.
+
+Starter 712ca99 is independently accepted/pushed (1,049 fresh tests), and Mobile inbox caa59e48
+is accepted/pushed (17,748 fresh tests). Phone 92/live unchanged; Group OFF/V117–140 undeployed.
+All 54 communications PRD groups remain OPEN. Continue beyond checkpoints; push every commit;
+one compiler OR emulator; no agents. Preserve blocked SQLite fixture and failed Apple evidence.
 
 ## Generic Starter platform port accepted and pushed
 
@@ -25,10 +51,7 @@ No new Apple runtime, phone installation or live rollout is claimed.
 
 Mobile source caa59e487a1caa59a4b8b8ee46c0fd8e48dc25ad remains accepted with 17,748 fresh tests;
 Group counterpart 70c1335187adde9df20ac7a1c295d2ad00fe6e74. Continue rather than repeat it.
-Next apply/run the prepared synthetic 5,000-contact SQLite measurement in
-.work/history-inbox-product-routing-2026-11-14 (apply-measurement.py then run-measurement.py).
-It remains UNAPPLIED/UNRUN at this documentation checkpoint. Capacity is 10,000, acquisition 50,
-raw pages 200. Record actual read/decrypt counts and timing before selecting the contact strategy.
+The local contact measurement is now accepted; see the current checkpoint above.
 Then implement Group root/contact ownership outside Company ScopedNavHost and retain the existing
 swipe tabs, search/filter placement and FAB. Read review.md for the company-label truncation edge:
 omitted membership in hasMoreCompanies must not silently become a negative filter match.
@@ -52,7 +75,7 @@ account/Group navigation owner. Complete incoming/native application integration
 actual list/thread rendering and navigation on the emulator. Keep server Group rollout OFF until
 end-to-end acceptance; preserve current live data and original queues. Source tests are not a
 claim of device latency or full PRD completion. Phone 92/live unchanged; V117-140 undeployed.
-SDK 8 Apple application consumer and new hosted Apple execution remain open. Port the validated Compose/Lifecycle versions to Starter with independent full checks before product rollout.
+SDK 8 Apple application consumer and new hosted Apple execution remain open. The generic Compose/Lifecycle port is independently accepted and pushed as Starter 712ca99.
 All 54 PRD groups remain OPEN. Continue beyond checkpoints; push every commit; one compiler OR
 emulator; no agents. Preserve the blocked SQLite fixture payload and failed Apple evidence.
 

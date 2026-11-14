@@ -1,0 +1,98 @@
+{
+  "accepted": true,
+  "sourceManifestSha256": "be18ecf7becb5a2bee8f2307e7667d89d201ffe78622a4027e6f9c9c03d35ab1",
+  "validatedTests": 17749,
+  "priorCaseIdsPreserved": true,
+  "newCases": 1,
+  "freshTests": 10544,
+  "reusedUnchangedTests": 7205,
+  "focused": {
+    "startedAt": "2026-11-14T11:41:23.528069+00:00",
+    "elapsedSeconds": 209.349,
+    "exitCode": 0,
+    "sourceFiles": 5592,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "TEST-dev.fajar.starter.collaboration.data.SpaceDirectoryLocalReadMeasurementTest.xml": {
+      "bytes": 531,
+      "sha256": "2f531f93c70a1182df48be42b3f45e024aba40c28ae8d3b6aa7021fbc95fcd3c"
+    },
+    "space-directory-5000.json": {
+      "bytes": 516,
+      "sha256": "f37d9a8ceee41c68efcb48c8413e246344713064dbadbc9324a58b60fdc527af"
+    },
+    "tests": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "measurements": {
+      "initialNanoseconds": 185008407,
+      "initialPages": 25,
+      "initialDocuments": 5000,
+      "initialDecryptions": 5001,
+      "unchangedNanoseconds": 125503379,
+      "unchangedPages": 25,
+      "unchangedDocuments": 5000,
+      "unchangedDecryptions": 5001,
+      "fiveRetainedSearchesNanoseconds": 14670476,
+      "selectedNanoseconds": 3929769,
+      "selectedPages": 1,
+      "selectedDocuments": 1,
+      "selectedDecryptions": 2,
+      "reopenedNanoseconds": 96642840,
+      "reopenedPages": 25,
+      "reopenedDocuments": 5000,
+      "reopenedDecryptions": 5001
+    }
+  },
+  "full": {
+    "startedAt": "2026-11-14T11:45:49.558697+00:00",
+    "elapsedSeconds": 934.217,
+    "exitCode": 0,
+    "sourceFiles": 5592,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "TEST-dev.fajar.starter.collaboration.data.SpaceDirectoryLocalReadMeasurementTest.xml": {
+      "bytes": 532,
+      "sha256": "ed394b37b29e593d4aba3b7adbfffeb39022f8a2b1b43b2c0d49ecde2b7ad281"
+    },
+    "space-directory-5000.json": {
+      "bytes": 514,
+      "sha256": "845577f39e1d4577545e65f6708b1b05d3881dbbf9e488aefcced674044fa3c9"
+    },
+    "tests": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "measurements": {
+      "initialNanoseconds": 70292997,
+      "initialPages": 25,
+      "initialDocuments": 5000,
+      "initialDecryptions": 5001,
+      "unchangedNanoseconds": 73438213,
+      "unchangedPages": 25,
+      "unchangedDocuments": 5000,
+      "unchangedDecryptions": 5001,
+      "fiveRetainedSearchesNanoseconds": 16409384,
+      "selectedNanoseconds": 1443334,
+      "selectedPages": 1,
+      "selectedDocuments": 1,
+      "selectedDecryptions": 2,
+      "reopenedNanoseconds": 57874683,
+      "reopenedPages": 25,
+      "reopenedDocuments": 5000,
+      "reopenedDecryptions": 5001
+    }
+  },
+  "reportManifestSha256": "b9e31b05f51cc48897a7c5e8b3e2f0b575a98951a411c9568157c4bd559ebb54",
+  "decision": "Retain one owned account/Group directory snapshot; pure local search uses it. A fresh full repository observation still reads25 pages/decrypts5001 values; no extra name index justified by this host measurement. Phone rendering remains unmeasured.",
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "sourcePath": "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/SpaceDirectoryLocalReadMeasurementTest.kt",
+  "productRoutingApplied": false,
+  "starterPort": "712ca99a42d4cb48aee25b3a2a51724ed2fa8530"
+}
