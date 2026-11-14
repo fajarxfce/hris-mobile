@@ -1,9 +1,48 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 09:11 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 09:20 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Active retained inbox paging verification
+
+Window15 is accepted and pushed: Mobilefb8fccef74e8afbcff049ae18e463923a9938f70,
+Groupb9b0a012097e2e1a3562248bc3233950ef12605e. Focused62/full17684,15503fresh+2181unchanged,
+source5578/60860464898fd61f4c9128074f70106d2f762a245ff93c639947beb510fde1d3;
+reports2649bb5dc9b92b3511005acf4b7b8474347ec4b2508d1f8d36664d7729d10d1a.
+Full1/session68107 reaped0,996.797s,started2026-11-14T08:55:07.337517+00:00. No rerun needed.
+
+Paging .work/history-inbox-paging-2026-11-14 now has19 APPLIED reviewed source paths and a pending
+verification-metadata change. No UI test/capture/full acceptance yet. Expected focused39/full17745:
+24shared+13desktop UI additions, existing DI binding extension,61 new executions. The source/VM
+keeps local pages, current admission, viewport identity, bounded labels and pending/draft previews.
+UI is still unused by the app root; screenshots must be recorded and independently inspected.
+
+Dependency-resolution1/session89893 reaped1 in12.62s: application-only init task registered in the
+included inspector build. Fixed root-scoped registration and disabled configuration cache for the
+ad hoc resolver. Only metadata ordering changed; exact captured bytes restored. Resolution2/session3963
+reaped0 in106.343s but acceptance STOPPED on131 new dependency artifacts. Actual Android Paging3.5.3
+requires Compose UI1.10 and Lifecycle2.10; root metadata alone had hidden those requirements.
+Official stable3.4.0–3.4.2 have the same UI requirement;3.3.6 lacks required Wasm/Compose targets.
+Do not downgrade declared requirements or accept an unreviewed platform upgrade.
+
+Reviewed alignment is now applied: Compose Multiplatform1.10.3 and KMP/Android Lifecycle2.10.0,
+keeping Kotlin2.3.21. Resolution3/session26731 is RUNNING, not accepted. Source input is frozen;
+reap before editing. It must preserve inspector sources and prior verification hashes/policy.
+Review the introduced component list, populate reviewed-dependency-components.json with exact
+approved coordinates, then accept-dependencies.py independently verifies official artifact bytes
+(including Native file aliases). Capture/focused/full require accepted metadata. Full gate forces
+all platform tests because the shared Compose/Lifecycle stack changed. Generic version/metadata
+changes now REQUIRE a Starter port after Mobile passes; keep HRIS UI out of Starter.
+
+Next reap/verify dependencies, capture, run focused UI/DI/Apple-source tests, inspect literal PNGs,
+then full verification and atomic Mobile/Group commits with pushes. Record any failures without
+weakening assertions. Before product activation, finish Group root/contact ownership and measure
+real app navigation in the emulator. Read-only findings: .work/history-inbox-product-routing-2026-11-14.
+The current Home hub already owns swipe tabs/FAB; Company navigation scope must not own Group state.
+Phone92/live unchanged; GroupOFF/V117-140 undeployed. All54 PRD groups OPEN. Continue beyond
+checkpoints; one compiler OR emulator; no agents; preserve blocked fixture payload/Apple evidence.
 
 ## Anchored local inbox windows locally accepted
 
