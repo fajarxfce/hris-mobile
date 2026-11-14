@@ -1,9 +1,26 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 12:01 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 12:38 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
-Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
-mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Local contacts and Group root ownership accepted
+
+Updated 14 November 2026, 12:38 UTC. Local contact/root ownership is accepted: 17,779 tests
+(2030 fresh / 15749 exact unchanged), preserving all 17,749 prior
+identities plus 30 executions. Focused17/session3401 and full2/session31412 reaped0.
+Source 0a08d3fec7ac2c21d6508f0fe21f823748b446dfc41d0e4d46c0a93ad1ffe6cc; reports b167a1c44d2411f80e8a5278b69273ece7feb00d2be323dbe6f8b2f00ef5e1d7.
+
+Continue with the unapplied composition/page/navigation drafts in
+.work/space-contacts-root-2026-11-14/next-draft. The root must wrap Company scope, with a distinct
+lifetime after same-account readmission. Test outgoing composition/queued preparation against a
+closed root before activation. Full company filtering still requires complete membership facts;
+eight display labels plus hasMoreCompanies cannot imply negative membership. Keep shared app state
+at the window owner if introducing another NavHost; do not accidentally move its ViewModelStore.
+
+No app route activation, phone or live change. Phone92 remains installed; GroupOFF/V117–140 remain
+undeployed. All54 communications PRD groups remain OPEN. Continue beyond checkpoints, push each
+commit, one compiler OR emulator, no agents. Preserve blocked SQLite fixture and failed Apple proof.
+
 
 ## Local contact measurement accepted; continue product integration
 

@@ -980,6 +980,27 @@ class CollaborationBindingsTest {
                         },
                     )
                     screens.put(
+                        "space-root",
+                        container.koin.get<
+                            dev.fajar.starter.collaboration.presentation.navigation.SpaceChatRootOwner
+                        >(),
+                    )
+                    screens.put(
+                        "space-contacts",
+                        container.koin.get<
+                            dev.fajar.starter.collaboration.presentation.spacecontacts.SpaceContactsViewModel
+                        > {
+                            parametersOf(
+                                CollaborationSpaceLocalAccess(
+                                    "session",
+                                    "https://example.test/",
+                                    "account",
+                                    "group",
+                                )
+                            )
+                        },
+                    )
+                    screens.put(
                         "space-inbox",
                         container.koin.get<
                             dev.fajar.starter.collaboration.presentation.spaceinbox.SpaceChatInboxViewModel

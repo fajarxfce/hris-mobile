@@ -1,0 +1,65 @@
+{
+  "accepted": true,
+  "validatedTests": 17779,
+  "newCases": 30,
+  "freshTests": 2030,
+  "reusedUnchangedTests": 15749,
+  "priorCaseIdsPreserved": true,
+  "sourceManifestSha256": "0a08d3fec7ac2c21d6508f0fe21f823748b446dfc41d0e4d46c0a93ad1ffe6cc",
+  "reportManifestSha256": "b167a1c44d2411f80e8a5278b69273ece7feb00d2be323dbe6f8b2f00ef5e1d7",
+  "full": {
+    "startedAt": "2026-11-14T12:19:35.713268+00:00",
+    "elapsedSeconds": 945.338,
+    "exitCode": 0,
+    "sourceFiles": 5599,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true
+  },
+  "browser": {
+    "startedAt": "2026-11-14T12:35:34.480512+00:00",
+    "elapsedSeconds": 140.994,
+    "exitCode": 0,
+    "sourceFiles": 5599,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true
+  },
+  "productActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "focused": {
+    "tests": 17,
+    "session": 3401,
+    "reaped": true
+  },
+  "failedAttempts": {
+    "focused": [
+      {
+        "folder": "focused1",
+        "session": 52879,
+        "reaped": true,
+        "exitCode": 1,
+        "tests": 14,
+        "passed": 13,
+        "failed": 1,
+        "reason": "Replacement test root flow completed immediately; domain correctly clears root on normal source completion. Keep replacement source live after release."
+      }
+    ],
+    "full": [
+      {
+        "folder": "full1",
+        "session": 3649,
+        "reaped": true,
+        "exitCode": 1,
+        "testsStarted": false,
+        "reason": "Validation command referenced nonexistent apps:web project. Corrected to existing apps:shared:compileKotlinWasmJs; no source changed."
+      }
+    ]
+  },
+  "scope": "Retained local contacts and root resource owner only; no app navigation activation",
+  "remaining": [
+    "Compose root integration and outgoing route disposal",
+    "Complete company-filter membership contract",
+    "Combined hub/contact route activation",
+    "Actual Android frame measurements and meaningful phone delivery"
+  ]
+}

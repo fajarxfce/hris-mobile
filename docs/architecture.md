@@ -1,5 +1,11 @@
 # Architecture
 
+
+[Retained Group contacts and root ownership](collaboration-contact-root.md)
+
+One admitted account/Group store survives Company selection and closes on replacement or denial.
+
+
 [Measured local contact snapshots](collaboration-contact-snapshot.md) guide retained account/Group presentation without per-search acquisition.
 
 [Retained inbox paging](collaboration-inbox-paging.md) preserves local pages, visible identity and pending/draft previews.
