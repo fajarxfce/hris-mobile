@@ -1,0 +1,144 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/inbox/CollaborationSpaceInboxHistorySourceCodec.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/inbox/CollaborationSpaceInboxHistorySourceDto.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceInboxHistorySourceRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxHistorySourceStorageContract.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxHistorySourceStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceInboxHistorySourceStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceInboxHistorySourceStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistoryHandoff.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistorySourceMutation.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistorySourceProgress.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistoryHandoffPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistorySourceProgressPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceInboxHistorySourceRepository.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistoryHandoffPolicyTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 41,
+    "elapsedSeconds": 207.514,
+    "sourceFiles": 5492,
+    "sourceManifestSha256": "27f1122613b3812a77eeb9ba6f306537c19f17f6b63c20b0f88b2a2a18f440cf",
+    "resultSha256": "e0c40189bbeb28e4a30f1fa209b6f717d064380e301696fc076ee348814d6713",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceInboxHistorySourceStorageTest": 16,
+      "ConfirmSpaceHistoryChangesTest": 10,
+      "SpaceInboxHistoryHandoffPolicyTest": 13
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T03:18:56.340020+00:00",
+    "elapsedSeconds": 985.168,
+    "sourceFiles": 5492,
+    "freshCounts": {
+      "tests": 14919,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 154721139,
+      "sha256": "2b8d63fc420a6ac4d7b0ca39d9bcbadf8160a3979915c552994a9f1d3a1ad015"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 17100,
+    "newCases": 58,
+    "freshTests": 14919,
+    "reusedUnaffectedTests": 2181,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "27f1122613b3812a77eeb9ba6f306537c19f17f6b63c20b0f88b2a2a18f440cf",
+    "reportManifestSha256": "bba86c1550de533063128d8b205e1fc3d1f864271d62eab7ef7a388aa15b3ded",
+    "nativeClaim": "Atomic per-source cursor/reference storage and checked handoff policy.29 shared additions; global progress and admitted owner integration remain open."
+  },
+  "newSharedMethods": 29,
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "ownerActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "failedAttempts": [
+    {
+      "attempt": "focused-1",
+      "session": 44592,
+      "reaped": true,
+      "sourceManifestSha256": "1accec19ea30b9bb4a6d0eff7e25f6a8b5a7dff9ba573e6f0fad18d8f4abc676",
+      "resultSha256": "a7568efb208d1ccc2be01c07b32b0e15c55e869b745e0a6c8a627efaf6460aea",
+      "elapsedSeconds": 204.68,
+      "passedDomainTests": 23,
+      "cause": "Cross-module nullable pending cursor could not be smart-cast",
+      "correction": {
+        "failedAttempt": "focused-1",
+        "session": 44592,
+        "reaped": true,
+        "testsPassed": 23,
+        "cause": "Kotlin smart cast cannot use public nullable property from a separate module",
+        "change": "Capture pending after locally before raw query and ordering validation",
+        "changedPaths": [
+          "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceInboxHistorySourceRepository.kt"
+        ],
+        "testMethodsRemoved": 0
+      }
+    },
+    {
+      "attempt": "focused-2",
+      "session": 11866,
+      "reaped": true,
+      "sourceManifestSha256": "baf98e39d87d111fb111f5281da4ace4561a9fde6151449c72ea604981894187",
+      "resultSha256": "e1723a40c803365ac25570fdd073a928db2d2088fcebb7f0804d435157b7b3d0",
+      "elapsedSeconds": 150.701,
+      "tests": 39,
+      "failures": 1,
+      "cause": "New stale-owner assertion did not match established exact-null raw storage contract",
+      "correction": {
+        "failedAttempt": "focused-2",
+        "session": 11866,
+        "reaped": true,
+        "tests": 39,
+        "failures": 1,
+        "cause": "New test expected Failed for a stale storage owner; established ReplicaDao checkpoint and existing repair tests return exact null",
+        "change": "Assert exact null for stale read/write and different account; restore admitted account and verify original checkpoint and pending reference unchanged",
+        "productionChanged": false,
+        "changedPaths": [
+          "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxHistorySourceStorageContract.kt"
+        ],
+        "testMethodsRemoved": 0
+      }
+    }
+  ],
+  "intermediateValidation": [
+    {
+      "attempt": "focused-3",
+      "session": 78645,
+      "reaped": true,
+      "accepted": false,
+      "sourceManifestSha256": "751201c99f2584763740b65ee106270df03784b487f4ba6a032bb1e32c301bb3",
+      "resultSha256": "12caad1f803358c64bdc3c8fd83e1242a02002aca12235d040728166be0b5f08",
+      "elapsedSeconds": 282.028,
+      "testsPassed": 41,
+      "correction": {
+        "attempt": "focused-3",
+        "session": 78645,
+        "reaped": true,
+        "buildExitCode": 0,
+        "testsPassed": 41,
+        "accepted": false,
+        "acceptanceReason": "New candidate compiler warning: unnecessary safe call after source presence check",
+        "change": "Capture nullable source version once and explicitly reject null before comparing generation/revision",
+        "changedPaths": [
+          "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistoryHandoffPolicy.kt"
+        ],
+        "testMethodsRemoved": 0
+      }
+    }
+  ]
+}

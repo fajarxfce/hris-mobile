@@ -1,41 +1,48 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 03:22 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 03:38 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active history source progress verification
+## Durable history inbox source progress locally accepted
 
-Empty confirmation is accepted/pushed: Mobile4cdfd71d, Group894bd6fc, full17042. The next source
-persistence slice has15 APPLIED paths and29 shared additions. Original apply17271 was REAPED.
-Focused1/44592 failed data compilation after23 passing domain cases; pending cursor capture fixed
-the cross-module smart cast. Focused2/11866 ran39 with1 incorrect new stale-owner assertion; it
-now requires the established exact-null read/write fence and verifies restoration preserves data.
-Focused3/78645 built and passed41, including Apple compilation, but its acceptance audit rejected
-a new unnecessary safe-call warning. Source version is now captured before an explicit null check.
-All originals/corrections/reports are preserved; no method or gate was removed or relaxed.
+Mobile .work/history-inbox-progress-2026-11-14 is accepted:15 paths,29 shared additions.
+Focused41/full17100 (14919 fresh /2181 unchanged) preserve all17042
+prior identities plus58 executions. Source5492/27f1122613b3812a77eeb9ba6f306537c19f17f6b63c20b0f88b2a2a18f440cf;
+reportsbba86c1550de533063128d8b205e1fc3d1f864271d62eab7ef7a388aa15b3ded. Encrypted per-source cursors and unresolved outcomes commit
+atomically against the current inbox checkpoint. Captured pending intervals survive restart and
+exclude later insertions. Index replacement is explicit; a checked policy proposal alone is not
+proof that progress reached storage. No global worker or product consumer was activated.
 
-Focused4/session44144 is REAPED and ACCEPTED41 (207.514s). Source5492/
-27f1122613b3812a77eeb9ba6f306537c19f17f6b63c20b0f88b2a2a18f440cf. Full17100/session5785 is RUNNING; reap and audit before recording.
-Reap and audit before full, then record/commit/push Mobile and linked Group evidence. The recorder
-retains both failed attempts and the successful-but-unaccepted focused3 evidence. Storage writes
-source cursor/reference outcomes atomically against the current index; no global worker activated.
+Next .work/history-inbox-progress-admission-2026-11-14 has4 UNAPPLIED formatted raw-history
+handoff drafts: owning use case,10 shared admission tests, data factory and graph resolution.
+All4 paths are reviewed/formatted; focused35/full17120 and recorder/commit gates are prepared
+but unrun. It freezes outcomes before suspension, writes
+once under current admission, and validates the exact returned checkpoint. Apply only after this source/evidence is committed and pushed; REAP before capture.
+Then implement admitted source lifecycle and pending-reference read/handoff around this repository,
+with current account/Group checks before and after suspension. Then retain global demand and
+finite catalog/source rounds under the existing Group repair owner, preserving its command lane.
+The original initial global state is in design/global-and-source-state-before-split.kt and still
+requires schema/transition review. Preserve completed trigger identity across restart, coalesce
+later history/catalog/repair demand, observe index generation under one owned lifetime, and yield
+fairly after finite progress. No new polling scheduler or permanent per-room observation.
+Incoming completion, thread/list/UI activation and end-to-end evidence remain open.
 
-Next .work/history-inbox-progress-admission-2026-11-14 has4 reviewed/formatted UNAPPLIED paths:
-admitted raw-history handoff,10 shared tests, factory and graph assertion. All focused35/full17120
-and recorder/commit gates are prepared but UNRUN. Apply after current source/evidence is accepted
-and pushed; REAP before capture. Then admitted source lifecycle/pending-reference handoff and
-global captured demand/fair finite continuation remain. Never relabel an unfinished old window as
-completion of a newer trigger; see review.md. Preserve the existing command lane without a new
-polling scheduler/per-room observer. Incoming completion and thread/list/UI activation remain.
-The old command repair worker emits Request(random UUID) on every first inventory because
-previous==null requires a scan. Separate bootstrap recovery from real history demand before
-using latestDemand as a global history trigger; preserve atomic archival and overflow recovery.
-The exact finding and open tests are in the next admission review.md.
+A separate root-cause draft in .work/inbox-repair-bootstrap-demand-2026-11-14 has9 formatted
+UNAPPLIED paths and9 new shared tests (37 prior methods retained). First demand observation
+currently creates a new durable Request on every unchanged collector restart. The draft separates
+EnsureInitialized from actual changes: existing pending/active/completed progress is retained;
+live inventory overflow and atomic command archival still request genuine work. Final review and
+all application/validation/record gates remain open. Apply after the admitted raw-handoff change.
+Before global history activation, review completed repair demand as a trigger: latest demand alone
+can race command publication and leave unresolved history without a later retry.
 
-Phone92 stays installed; no phone/live change. Actual new Apple execution remains outstanding.
-Continue beyond checkpoints, push every commit, one compiler OR emulator, no subagents.
+Empty confirmation, binding invalidation, receipts and Starter092fbe6f remain accepted. Actual new
+Apple execution remains outstanding; preserve failed hosted evidence and the blocked fixture
+payload. Phone92 stays installed; no phone/live change. GroupOFF/V117-140 undeployed. All54 PRD
+groups remain open. Continue beyond checkpoints and push every commit; one compiler OR emulator,
+no subagents.
 
 ## Admitted empty history-page confirmation locally accepted
 

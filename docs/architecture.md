@@ -1,5 +1,7 @@
 # Architecture
 
+[Durable history inbox source progress](collaboration-history-inbox-progress.md) retains bounded cursor/reference handoff against the current inbox checkpoint.
+
 [Admitted empty history-page confirmation](collaboration-history-empty-page-confirmation.md) checks exact source and destination facts before empty-page progress.
 
 [Binding history invalidation](collaboration-history-binding-invalidation.md) publishes new room availability and recovery wake atomically.
