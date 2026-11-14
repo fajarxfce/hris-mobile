@@ -1,5 +1,7 @@
 # Architecture
 
+[Recipient destination observation](collaboration-recipient-destination.md) retains one immutable association within its admitted collector and never initiates setup or delivery.
+
 [Recipient local projection](collaboration-recipient-projection.md) scopes decoded source facts to one collector; domain owns admission and raw storage remains policy-free.
 
 [Exact published reads](replica-exact-queries.md) combine primary-key identities and bounded indexed pages in one owned raw transaction.

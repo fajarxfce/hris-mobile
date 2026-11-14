@@ -1,5 +1,7 @@
 # Product integration after recipient owner acceptance
 
+The [admitted destination observer](collaboration-recipient-destination.md) is now implemented and validated. Command/history composition, editor/index continuity, finite new-recipient setup and active product routes remain required. Earlier requests for a new association store or its missing observer are superseded.
+
 The [local draft/original projection](collaboration-recipient-projection.md) is now implemented and validated. Canonical association observation/history composition, editor/index continuity, new-recipient setup ownership and product routes below remain required. Earlier raw-projection proposals are superseded by this implementation.
 
 The existing encrypted ConversationMetadata repository already retains the immutable peer-to-canonical mapping. Reuse it; do not add a second association store. The unresolved work is its admitted observation, command/history composition, independent editor/index continuity and finite new-recipient setup after Send. See the updated recipient projection review. Earlier references below to defining an association are superseded by this trace.

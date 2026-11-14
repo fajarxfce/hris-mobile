@@ -1,5 +1,7 @@
 # Recipient projection after exact-query acceptance
 
+The [admitted destination observer](collaboration-recipient-destination.md) is now implemented and validated. Command/history composition, editor/index continuity, finite new-recipient setup and active product routes remain required. Earlier requests for a new association store or its missing observer are superseded.
+
 The [local draft/original projection](collaboration-recipient-projection.md) is now implemented and validated. Canonical association observation/history composition, editor/index continuity, new-recipient setup ownership and product routes below remain required. Earlier raw-projection proposals are superseded by this implementation.
 
 The [exact published query capability](replica-exact-queries.md) is accepted. The following repository/domain work remains unapplied; it does not activate a product route.

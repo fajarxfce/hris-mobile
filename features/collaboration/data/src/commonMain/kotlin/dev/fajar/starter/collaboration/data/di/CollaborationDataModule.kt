@@ -696,6 +696,22 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun observeSpaceRecipientDestination(
+        catalog: CollaborationSpaceConversationCatalogRepository,
+        metadata: CollaborationSpaceConversationMetadataRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) =
+        ObserveCollaborationSpaceRecipientDestination(
+            catalog,
+            metadata,
+            directory,
+            sessions,
+            server,
+        )
+
+    @Factory
     fun observeSpaceRecipientProjection(
         projections: CollaborationSpaceRecipientProjectionRepository,
         directory: CollaborationSpaceDirectoryRepository,

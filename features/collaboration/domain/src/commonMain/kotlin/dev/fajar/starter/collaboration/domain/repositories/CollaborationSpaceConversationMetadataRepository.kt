@@ -15,7 +15,12 @@ interface CollaborationSpaceConversationMetadataRepository {
         peerAccountId: String,
     ): AppResult<CollaborationSpaceConversationMetadata?>
 
-    /** Atomic conversation/peer indexes. Identical input preserves ciphertext and revision. */
+    /**
+     * Atomic conversation/peer indexes. Identical input preserves ciphertext and revision. A
+     * retained pair is immutable for the lifetime of its published catalog generation; another peer
+     * or conversation cannot rebind either index. Catalog revisions only append immutable pairs.
+     * Replacing/removing the partition invalidates all previous associations.
+     */
     suspend fun retain(
         access: CollaborationSpaceLocalAccess,
         conversation: CollaborationSpaceConversation,

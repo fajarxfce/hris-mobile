@@ -1,0 +1,89 @@
+{
+  "accepted": true,
+  "validatedTests": 18249,
+  "newCases": 32,
+  "freshTests": 16060,
+  "reusedUnchangedTests": 2189,
+  "priorCaseIdsPreserved": true,
+  "sourceManifestSha256": "65143daa17e2a530b378ee838487cf8e81061f5d2e86c2f53960d70b6080e2dc",
+  "reportManifestSha256": "cafdfc4bf81eaba352e1975edcec73bcd65cc5efc8bd03819bfc7402df1b87e4",
+  "full": {
+    "startedAt": "2026-11-14T21:21:47.265062+00:00",
+    "elapsedSeconds": 1136.495,
+    "exitCode": 0,
+    "sourceFiles": 5688,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "apk": {
+      "path": ".work/space-recipient-destination-2026-11-14/full1/accepted-proof.apk",
+      "bytes": 155833763,
+      "sha256": "f716c8ec8151f10a264d1460b20d48e7dde6150741ef2a55ba1c3562e0db2faf"
+    }
+  },
+  "recipientDestinationObserverIntegrated": true,
+  "productActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "baseline": "d4134a90f5fcedeb32fdb23247f6cf2c1d417166",
+  "sourcePaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceConversationMetadataRepository.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceRecipientDestination.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveCollaborationSpaceRecipientDestinationTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRecipientDestinationFixture.kt"
+  ],
+  "focused": {
+    "tests": 18,
+    "session": 12659,
+    "directory": "focus2",
+    "reaped": true
+  },
+  "fullSession": 62325,
+  "priorAttempts": [
+    {
+      "directory": "focus1",
+      "session": 14829,
+      "reaped": true,
+      "exitCode": 1,
+      "reason": "Production, format and architecture compiled; seven test-only list assertion type-inference failures prevented domain/DI test execution. Specify the expected AppResult<Metadata?> list type without changing assertions."
+    }
+  ],
+  "validationCommand": [
+    "xvfb-run",
+    "-a",
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    ":apps:collaboration-proof:assembleDebug",
+    ":apps:collaboration-proof:testDebugUnitTest",
+    ":check",
+    ":formatCheck",
+    ":architectureCheck",
+    ":detekt",
+    ":apps:android:compileDevReleaseKotlin",
+    ":apps:android:lintDevRelease",
+    ":apps:shared:compileKotlinWasmJs",
+    ":apps:shared:compileKotlinIosArm64",
+    ":features:collaboration:domain:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:data:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:presentation:compileTestKotlinIosSimulatorArm64",
+    ":apps:shared:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:domain:wasmJsBrowserTest",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:presentation:wasmJsBrowserTest",
+    ":apps:shared:wasmJsBrowserTest",
+    "-PcollaborationProofAbi=x86_64",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=93",
+    "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx3072m",
+    "-Pkotlin.compiler.execution.strategy=in-process",
+    "-Pkotlin.incremental=false"
+  ],
+  "phoneVersionCode": 93
+}

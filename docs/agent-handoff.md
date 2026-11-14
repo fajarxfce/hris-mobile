@@ -1,36 +1,40 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 21:12 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 21:41 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 
-## Local recipient projection accepted
+## Recipient canonical destination observation accepted
 
-A repository and admitted domain observer now expose the exact local recipient draft and
-bounded retained originals. One collector owns an immutable source cache keyed by authenticated
-source generation/version. Typing does not reload/decrypt originals; replacement, failure and
-cancellation clear the cache. Coherent raw header/inventory frames cannot mix revisions. Copying
-the inventory before first() cancels its producer preserves buffers released in finally.
+ObserveCollaborationSpaceRecipientDestination reuses immutable encrypted peer/canonical metadata.
+One admitted collector retains a resolved pair through unrelated monotonic catalog updates; an
+absent peer reacts only to changed publications. A stable post-lookup catalog witness rejects
+racing results. Generation replacement, regression, absence, failure and ownership loss invalidate
+the cache. Observation starts no setup, SDK, network acquisition or delivery and has no retry timer.
+Source/parent completion, disposal and denial/readmission are covered by the common tests.
 
-Validation: 18,217 cases (16028 fresh / 2189 exact unchanged), preserving all 18,177 prior IDs plus 40. Focused 22/session3240 and full/session62241 reaped 0. Source 329cd86a3d2e39a0e1c7fd7a3abc42cf0bf0f80510a91b92be9aa0a39e4f2cb8; reports 7ff3c3a98d13503299390f63bdfe547c14278521438e37fee3e48f8dccf7ec2f.
-Read [projection ownership and validation](collaboration-recipient-projection.md).
+Validation: 18,249 cases (16060 fresh / 2189 exact unchanged), preserving all 18,217 prior identities plus 32. Focused 18/session12659 and full/session62325 reaped 0. Source 65143daa17e2a530b378ee838487cf8e81061f5d2e86c2f53960d70b6080e2dc; reports cafdfc4bf81eaba352e1975edcec73bcd65cc5efc8bd03819bfc7402df1b87e4.
+Read [destination observation](collaboration-recipient-destination.md).
 
-No product route consumes this pre-transfer projection yet. Reuse the existing immutable encrypted
-peer/canonical ConversationMetadata mapping; do not add a duplicate association store. Next add its
-admitted observation and combine canonical commands/history with pending recipient originals,
-preserve independent editor/index continuity, and acknowledge provisional rows only with exact
-represented proof. The existing recipient composer from fed7419f remains accepted but is not wired
-to this projection. See collaboration-recipient-projection-review.md and collaboration-recipient-product-review.md.
+Recipient source projection from d4134a90 remains accepted and pushed with 18,217 cases;
+see collaboration-recipient-projection.md. Neither component has an active product route yet.
+Next compose canonical commands/history with retained recipient originals and preserve exact
+provenance through source retirement. Reuse the existing exact active/archived record observation
+mechanism rather than duplicating an unbounded reader or aliasing peer IDs as conversation IDs.
+Retain independent editor/index continuity before provisional acknowledgement and product activation.
+A shared progress prototype and 14 additional tests are prepared but UNAPPLIED/UNTESTED in
+`.work/recipient-progress-preparation-2026-11-14`; its apply.py requires this packet to be accepted
+and both commits pushed first. Preserve the 20 existing canonical progress tests and actual DI.
 
-A separate integration gap remains: PrepareCollaborationSpaceConversation has no Group application
-consumer. After explicit retained Send, a finite owner must prepare a missing Open command when
-current discovery is available. Existing command delivery then owns remote setup. Passive room
-opening, typing and ordinary admission renewal must not trigger that work. Preserve offline Send,
-bounded/deduplicated peers, immutable commands and cancellation; no use-case-to-use-case calls.
+PrepareCollaborationSpaceConversation still needs a finite application owner after explicit
+retained Send and current discovery. Passive room opening, typing and ordinary admission renewal
+must not trigger setup. Follow collaboration-recipient-projection-review.md and
+collaboration-recipient-product-review.md, then actual root/contact/thread navigation, rendered
+interaction/screenshots, complete company filters and independent rollout acceptance.
 
-The generic exact-query primitive from d889a9af is independently accepted in Starter c7323ce with
-1,060 cases; the linked source/docs are already pushed. This recipient policy is Mobile-only.
-Phone 93 remains installed from 2eb833f4 and predates this component. Group OFF; V117–140 undeployed;
-all 54 PRD groups OPEN. Continue the PRD; preserve blocked SQLite preparation and failed Apple evidence.
+Starter c7323ce remains independently accepted with 1,060 cases. Recipient policy stays Mobile-only.
+Phone 93 remains installed from 2eb833f4 and predates these components. Group OFF; V117–140
+undeployed; all 54 PRD groups OPEN. Continue the long run beyond this checkpoint, preserving blocked
+SQLite preparation, failed Apple evidence and protected stores below.
 
 ## Delivered build and loop diagnosis
 
