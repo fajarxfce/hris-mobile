@@ -17,10 +17,12 @@ startup evidence without an authenticated employee account, not a chat latency c
 ARM64 APK124,333,455bytes has SHA256
 `d8001bd137fdd08d3d3b112519eef226ee38ba78c35c6b29cba51b019fc3700c`.
 [Exact evidence](measurements/collaboration-release92-2026-11-12.json) records both
-artifacts, source, native suite, screenshots and startup. The20:26UTC phone connection
-still timed out, so installation is pending. Deliver with the prepared install-only
-script after announcing it; preserve the existing identity and app data. Release92
-supersedes uninstalled91. The last confirmed phone installation remains89.
+artifacts, source, native suite, screenshots and startup. The original20:26UTC connection
+timed out; installation subsequently succeeded on13 November at04:11UTC. The device APK
+SHA-256 matched the validated ARM64 artifact, identity/data were preserved, and the app
+was neither launched nor driven. A read-only ADB check on14 November at14:27UTC again
+confirmed versionCode92 on10.77.77.3:5555. Release92 supersedes uninstalled91.
+The measurement's installation record contains the accepted device-byte verification.
 
 Live Group stays disabled. Organization chat presentation, pending-message composition,
 Apple SDK runtime and call/meeting acceptance continue separately. All54 PRD groups remain open.

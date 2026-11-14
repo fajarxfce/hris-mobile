@@ -1,0 +1,67 @@
+{
+  "accepted": true,
+  "validatedTests": 17877,
+  "newCases": 74,
+  "freshTests": 15675,
+  "reusedUnchangedTests": 2202,
+  "priorCaseIdsPreserved": true,
+  "sourceManifestSha256": "56fbe020e1f1f13107bd3fac5cf83ecb7cb7f7e81348c604d8dce3b5b3b82af8",
+  "reportManifestSha256": "5bce3766fffdd7fcd5715f718d8cacb9f4d8653638a19cd8d1fc78c55bb251eb",
+  "full": {
+    "startedAt": "2026-11-14T14:14:19.583985+00:00",
+    "elapsedSeconds": 1006.52,
+    "exitCode": 0,
+    "sourceFiles": 5621,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true
+  },
+  "productActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "baseline": "dec49658efd50afe95e815c2dd80330f99c55e61",
+  "sourcePaths": [
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceRecipientDraft.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceRecipientDraftPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceRecipientDraftRepository.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationSpaceRecipientDraftCodec.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceRecipientDraftRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRecipientDraftStorageContract.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/EditCollaborationSpaceRecipientDraft.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceRecipientDraft.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRecipientDraftFixture.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/EditCollaborationSpaceRecipientDraftTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveCollaborationSpaceRecipientDraftTest.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRecipientDraftStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceRecipientDraftStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceRecipientDraftStorageTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt"
+  ],
+  "focused": {
+    "tests": 39,
+    "directory": "focused2",
+    "session": 24195,
+    "reaped": true
+  },
+  "fullSession": 72571,
+  "failedAttempts": [
+    {
+      "directory": "focused1",
+      "session": 1335,
+      "reaped": true,
+      "testsStarted": false,
+      "reason": "Two expected-list assertions needed explicit nullable AppResult element types; domain test compilation stopped before execution."
+    }
+  ],
+  "offlineSendImplemented": false,
+  "phoneVersionCheck": {
+    "checkedAt": "2026-11-14T14:27:40.468395+00:00",
+    "serial": "10.77.77.3:5555",
+    "exitCode": 0,
+    "versionFields": [
+      "versionCode=92 minSdk=24 targetSdk=36",
+      "versionName=1.0.0"
+    ],
+    "interaction": "read-only package version; no launch or install"
+  }
+}

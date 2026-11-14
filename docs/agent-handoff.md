@@ -1,7 +1,32 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 13:54 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 14:32 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
+
+## Durable recipient drafts accepted
+
+Recipient working copies are locally accepted: 17,877 validated cases
+(15675 fresh /2202 exact unchanged), preserving all17,803 prior
+identities plus74 executions (24 domain+13 storage methods on desktop/browser). Focused39/session
+24195 and full1/session72571 reaped0. Source 56fbe020e1f1f13107bd3fac5cf83ecb7cb7f7e81348c604d8dce3b5b3b82af8;
+reports 5bce3766fffdd7fcd5715f718d8cacb9f4d8653638a19cd8d1fc78c55bb251eb. Actual DI resolves the repository and both domain operations.
+Sixteen source paths preserve exact empty/replay revisions, owned content keys, bounded CAS,
+source disposal and admission. No UI, offline Send, canonical handoff or product activation.
+
+Continue with a peer-addressed original message queue and bounded canonical handoff, then the
+new-contact entry and inbox projection. Multiple offline sends need distinct retained originals;
+do not repurpose a peer/setup-command ID as a canonical conversation ID or discard source text
+before destination retention is proven. Existing canonical draft conflicts require explicit handling.
+Read collaboration-recipient-drafts.md and the navigation-stack-identity measurement's remaining
+integration review. Keep Group navigation outside Company lifetime and AppViewModel at the window.
+Company filtering needs complete memberships; Group/legacy selection needs an explicit rollout input.
+
+Starterbd13df78622b42a237ff5d847ba4a7034dc3dcfe is already accepted/pushed with1052; do not rerun it.
+This recipient capability stays in HRIS. Phone92/GroupOFF/V117–140 undeployed remain. All54 PRD groups
+OPEN. Continue beyond checkpoints, push each commit, one compiler OR emulator, no agents. Preserve
+the blocked SQLite fixture payload and failed hosted Apple evidence. Apple source/test compilation
+is not new Apple runtime acceptance.
+
 
 ## Generic independent navigation port accepted and pushed
 

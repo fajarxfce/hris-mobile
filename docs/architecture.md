@@ -1,6 +1,12 @@
 # Architecture
 
 
+[Durable new-recipient drafts](collaboration-recipient-drafts.md)
+
+Peer-addressed working copies are distinct from canonical conversation drafts and sending.
+
+
+
 [Independent retained navigation stacks](navigation-stack-identity.md)
 
 Stable stack keys isolate window-owned navigation stores and saved state.
