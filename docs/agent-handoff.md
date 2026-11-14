@@ -1,9 +1,30 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 01:00 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 01:01 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Active admitted history change verification
+
+Atomic signal19f1c9b5/Group2d1ad20f are accepted and pushed: focused125/full16924. Full1's eight
+fault-injection failures and the precise test-only correction remain recorded in Git evidence.
+The corrected full retained all prior cases (14743 fresh /2181 unchanged), with no failures.
+
+Mobile .work/history-changes-admission-2026-11-14 now has10 APPLIED paths and23 new shared methods.
+Apply38053 was REAPED before source capture. Source5473/8f396255e1d5bb3196571302b0f9afd3eb183efc7306f0f02b7fcc505c02ee16.
+Focused53 RUNNING13297 in focused-1; reap/audit before full16970. Prepared record/commit scripts
+are unrun. These contracts select actual canonical Company/Group history, acquire one bounded
+local page under current admission, and own one signal subscription without a scan or network.
+Typed windows carry cursor arithmetic; source revision encoding stays opaque in domain.
+
+Next durable owner work remains in .work/history-inbox-progress-2026-11-14:one initial unapplied
+state draft plus review. The publisher must expose actual committed source/index evidence before
+atomic cursor/unresolved handoff. Do not infer generation by parsing opaque revision strings or
+mark an interval complete from acquisition. Use the existing Group repair owner, finite fair
+continuation and durable completed demand; no new polling worker/per-room observer.
+Phone92 remains installed; no product graph/UI or live deployment here. All54 PRD groups open.
+Continue and push every commit, one compiler OR emulator, no subagents.
 
 ## Atomic history signal locally accepted
 

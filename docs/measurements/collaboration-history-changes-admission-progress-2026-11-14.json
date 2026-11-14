@@ -1,0 +1,29 @@
+{
+  "accepted": false,
+  "status": "focused-running",
+  "sourceFiles": 5473,
+  "sourceManifestSha256": "8f396255e1d5bb3196571302b0f9afd3eb183efc7306f0f02b7fcc505c02ee16",
+  "appliedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceHistoryChangesRead.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationHistoryChangesPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceHistoryChanges.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceHistoryChanges.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceHistoryChangesTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadSpaceHistoryChangesTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceHistoryChangesFixture.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceHistorySignalFixture.kt"
+  ],
+  "sharedMethods": 23,
+  "applySession": 38053,
+  "applyReaped": true,
+  "focusedSession": 13297,
+  "expectedFocused": 53,
+  "expectedFull": 16970,
+  "sourcePrerequisiteCommit": "19f1c9b500cbff22013f052675bbc0ae72634101",
+  "groupPrerequisiteCommit": "2d1ad20fe7a709cdc60ffee7b212ac7daabb5c35",
+  "ownerActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false
+}
