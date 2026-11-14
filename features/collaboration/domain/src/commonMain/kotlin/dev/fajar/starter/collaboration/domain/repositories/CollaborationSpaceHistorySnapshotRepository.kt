@@ -22,14 +22,16 @@ interface CollaborationSpaceHistorySnapshotRepository {
 
     /**
      * Publish a prepared inbox projection only while the captured source revision remains current.
-     * Source bytes/revision, draft and repair references remain unchanged. False requires fresh
-     * source/index acquisition; operational failures are not retried by this repository.
+     * A null projection confirms an unchanged source/index pair without creating either partition.
+     * Source bytes/revision, draft and repair references remain unchanged. Null requires fresh
+     * source/index acquisition; operational failures are not retried. A receipt exposes the actual
+     * committed versions, never a read-back guess. A null source token requires source absence.
      */
     suspend fun publishInbox(
         access: CollaborationSpaceLocalAccess,
         conversationId: String,
         roomId: String,
-        sourceRevision: String,
-        publication: CollaborationSpaceInboxPublication,
-    ): AppResult<Boolean>
+        sourceRevision: String?,
+        publication: CollaborationHistoryInboxProposal,
+    ): AppResult<CollaborationHistoryInboxReceipt?>
 }

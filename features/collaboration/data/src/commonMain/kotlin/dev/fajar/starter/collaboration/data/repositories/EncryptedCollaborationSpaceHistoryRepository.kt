@@ -126,41 +126,63 @@ class EncryptedCollaborationSpaceHistoryRepository(
         access: CollaborationSpaceLocalAccess,
         conversationId: String,
         roomId: String,
-        sourceRevision: String,
-        publication: CollaborationSpaceInboxPublication,
-    ): AppResult<Boolean> {
-        val captured = publication.copy(activities = publication.activities.toList())
+        sourceRevision: String?,
+        publication: CollaborationHistoryInboxProposal,
+    ): AppResult<CollaborationHistoryInboxReceipt?> {
+        val captured =
+            publication.copy(
+                projection =
+                    publication.projection?.let { it.copy(activities = it.activities.toList()) }
+            )
         return withContext(Dispatchers.Default) {
             safeStorageCall {
-                require(sourceRevision.length in 1..128)
-                require(validCollaborationSpaceInboxPublication(captured))
-                require(captured.entry.conversationId == conversationId)
-                require(captured.draft == null && captured.repair == null)
+                require(sourceRevision == null || sourceRevision.length in 1..128)
+                require(validCollaborationHistoryInboxProposal(captured))
+                require(captured.conversationId == conversationId)
                 validateHistoryRoom(roomId)
                 val scope = spaceHistoryScope(access)
-                val sourcePartition = spaceHistoryPartition(access, conversationId)
-                val source =
-                    replicas.checkpoint(scope, sourcePartition) ?: return@safeStorageCall false
+                val partition = spaceHistoryPartition(access, conversationId)
+                val raw = replicas.checkpoint(scope, partition)
                 if (
-                    !source.published ||
-                        source.handle.generation + ":" + source.revision != sourceRevision
+                    raw?.published == false ||
+                        raw?.let { it.handle.generation + ":" + it.revision } != sourceRevision
                 )
-                    return@safeStorageCall false
-                keys.use { content, index ->
-                    CollaborationHistoryCodec(
-                            access,
-                            conversationId,
-                            roomId,
-                            cipher,
-                            content,
-                            index,
+                    return@safeStorageCall null
+                if (raw == null && captured.projection != null) return@safeStorageCall null
+                if (raw == null && captured.expected == null) {
+                    // Conditional null-to-null replacement confirms index absence without
+                    // deleting any retained generation. Both absence checks share one transaction.
+                    currentCoroutineContext().ensureActive()
+                    val confirmed =
+                        replicas.mutate(
+                            scope,
+                            listOf(
+                                ReplicaMutation.Check(partition, null),
+                                ReplicaMutation.Replace(spaceInboxPartition(access), null, null),
+                            ),
                         )
-                        .checkpoint(source)
+                    currentCoroutineContext().ensureActive()
+                    return@safeStorageCall if (confirmed)
+                        CollaborationHistoryInboxReceipt(null, null)
+                    else null
+                }
+                keys.use { content, index ->
+                    raw?.let {
+                        CollaborationHistoryCodec(
+                                access,
+                                conversationId,
+                                roomId,
+                                cipher,
+                                content,
+                                index,
+                            )
+                            .checkpoint(it)
+                    }
                     CollaborationHistoryInboxWriter(
                             replicas,
                             CollaborationSpaceInboxCodec(access, cipher, content, index),
                         )
-                        .publish(access, source, captured)
+                        .publish(access, partition, raw, captured)
                 }
             }
         }

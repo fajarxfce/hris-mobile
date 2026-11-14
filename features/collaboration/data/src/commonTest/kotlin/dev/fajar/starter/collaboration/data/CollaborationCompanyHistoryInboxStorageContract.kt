@@ -197,14 +197,20 @@ abstract class CollaborationCompanyHistoryInboxStorageContract {
                     f.base.access.copy(accountId = historyId(9999)),
                     f.source,
                     revision,
-                    proposal,
+                    CollaborationHistoryInboxProposal(f.target, proposal.expected, proposal),
                 )
         )
         assertEquals(key, f.base.keys.read())
         f.base.keys.write(null)
         assertIs<AppResult.Failed>(f.repository().snapshot(f.source, listOf(f.event.eventId)))
         assertIs<AppResult.Failed>(
-            f.repository().publishInbox(f.base.access, f.source, revision, proposal)
+            f.repository()
+                .publishInbox(
+                    f.base.access,
+                    f.source,
+                    revision,
+                    CollaborationHistoryInboxProposal(f.target, proposal.expected, proposal),
+                )
         )
         assertNull(f.base.keys.read())
         assertNull(
@@ -300,9 +306,16 @@ abstract class CollaborationCompanyHistoryInboxStorageContract {
         assertNull(value.revision)
         assertNull(value.events.single().original)
         assertNull(f.base.keys.read())
+        val proposal = f.proposal()
         assertEquals(
-            AppResult.Success(false),
-            f.repository().publishInbox(f.base.access, f.source, "absent", f.proposal()),
+            AppResult.Success(null),
+            f.repository()
+                .publishInbox(
+                    f.base.access,
+                    f.source,
+                    "absent",
+                    CollaborationHistoryInboxProposal(f.target, proposal.expected, proposal),
+                ),
         )
         assertIs<AppResult.Failed>(f.repository().snapshot(f.source, emptyList()))
         assertIs<AppResult.Failed>(
@@ -312,6 +325,289 @@ abstract class CollaborationCompanyHistoryInboxStorageContract {
         assertNull(f.rawSource().checkpoint)
         assertNull(f.inbox().entry)
     }
+
+    @Test
+    fun alternatingAbsentPartitionsCannotConfirmAnEmptyPair() = withDatabase { f ->
+        val database = f.base.database
+        val scope = historyScope(f.source.access)
+        val sourcePartition = historyPartition(f.source.access, f.source.conversationId)
+        val indexPartition = spaceInboxPartition(f.base.access)
+        assertTrue(
+            database.replicas.replace(
+                scope,
+                indexPartition,
+                null,
+                ReplicaSnapshot(historyId(15401), "raw-index-presence", emptyList()),
+            )
+        )
+        var sourceReads = 0
+        var swaps = 0
+        val store =
+            object : ReplicaStore by database.replicas {
+                override suspend fun checkpoint(
+                    scope: ReplicaScope,
+                    partition: String,
+                ): ReplicaCheckpoint? {
+                    val value = database.replicas.checkpoint(scope, partition)
+                    if (partition == sourcePartition && sourceReads++ == 0) {
+                        assertNull(value)
+                        val index =
+                            assertNotNull(database.replicas.checkpoint(scope, indexPartition))
+                        assertTrue(
+                            database.replicas.mutate(
+                                scope,
+                                listOf(
+                                    ReplicaMutation.Replace(
+                                        sourcePartition,
+                                        null,
+                                        ReplicaSnapshot(
+                                            historyId(15402),
+                                            "raw-source-presence",
+                                            emptyList(),
+                                        ),
+                                    ),
+                                    ReplicaMutation.Replace(indexPartition, index, null),
+                                ),
+                            )
+                        )
+                        swaps++
+                    } else if (partition == indexPartition && value == null) {
+                        val source =
+                            assertNotNull(database.replicas.checkpoint(scope, sourcePartition))
+                        assertTrue(
+                            database.replicas.mutate(
+                                scope,
+                                listOf(
+                                    ReplicaMutation.Replace(sourcePartition, source, null),
+                                    ReplicaMutation.Replace(
+                                        indexPartition,
+                                        null,
+                                        ReplicaSnapshot(
+                                            historyId(15403),
+                                            "raw-index-presence",
+                                            emptyList(),
+                                        ),
+                                    ),
+                                ),
+                            )
+                        )
+                        swaps++
+                    }
+                    return value
+                }
+            }
+        // Every owned transaction leaves one partition present; there is never an empty pair.
+        assertEquals(
+            AppResult.Success(null),
+            f.repository(store)
+                .publishInbox(
+                    f.base.access,
+                    f.source,
+                    null,
+                    CollaborationHistoryInboxProposal(f.target, null, null),
+                ),
+        )
+        assertTrue(swaps >= 1)
+        assertNull(f.base.keys.read())
+        assertTrue(
+            database.replicas.checkpoint(scope, sourcePartition) != null ||
+                database.replicas.checkpoint(scope, indexPartition) != null
+        )
+    }
+
+    @Test
+    fun anAbsentPairReturnsAnAbsentReceiptWithoutCreatingKeys() = withDatabase { f ->
+        val value =
+            f.repository()
+                .publishInbox(
+                    f.base.access,
+                    f.source,
+                    null,
+                    CollaborationHistoryInboxProposal(f.target, null, null),
+                )
+        assertEquals(AppResult.Success(CollaborationHistoryInboxReceipt(null, null)), value)
+        assertNull(f.base.keys.read())
+        assertNull(f.rawSource().checkpoint)
+        assertNull(f.indexRaw().checkpoint)
+    }
+
+    @Test
+    fun sourceOnlyConfirmationReturnsItsVersionWithoutCreatingAnIndex() = withDatabase { f ->
+        f.merge()
+        val before = f.rawSource()
+        val source = assertNotNull(before.checkpoint)
+        val value =
+            assertIs<AppResult.Success<CollaborationHistoryInboxReceipt?>>(
+                    f.repository()
+                        .publishInbox(
+                            f.base.access,
+                            f.source,
+                            assertNotNull(f.snapshot().revision),
+                            CollaborationHistoryInboxProposal(f.target, null, null),
+                        )
+                )
+                .value
+        assertEquals(
+            CollaborationHistoryInboxReceipt(
+                CollaborationHistorySourceVersion(source.handle.generation, source.revision),
+                null,
+            ),
+            value,
+        )
+        assertEquals(before, f.rawSource())
+        assertNull(f.indexRaw().checkpoint)
+    }
+
+    @Test
+    fun committedReceiptUsesTheWrittenGenerationEvenIfTheIndexIsRemovedBeforeTheReply() =
+        withDatabase { f ->
+            f.merge()
+            val source = f.rawSource()
+            val proposal = f.proposal()
+            var written: CollaborationSpaceInboxVersion? = null
+            val store =
+                object : ReplicaStore by f.base.database.replicas {
+                    override suspend fun mutate(
+                        scope: ReplicaScope,
+                        mutations: List<ReplicaMutation>,
+                        wake: WorkWakeRequest?,
+                    ): Boolean {
+                        val mutation = assertIs<ReplicaMutation.Replace>(mutations.last())
+                        written =
+                            CollaborationSpaceInboxVersion(
+                                assertNotNull(mutation.snapshot).generation,
+                                0,
+                                proposal.lastOrdinal,
+                            )
+                        assertTrue(f.base.database.replicas.mutate(scope, mutations, wake))
+                        val partition = spaceInboxPartition(f.base.access)
+                        val current =
+                            assertNotNull(f.base.database.replicas.checkpoint(scope, partition))
+                        assertTrue(
+                            f.base.database.replicas.replace(scope, partition, current, null)
+                        )
+                        return true
+                    }
+                }
+            val receipt =
+                assertNotNull(
+                    assertIs<AppResult.Success<CollaborationHistoryInboxReceipt?>>(
+                            f.repository(store)
+                                .publishInbox(
+                                    f.base.access,
+                                    f.source,
+                                    assertNotNull(f.snapshot().revision),
+                                    CollaborationHistoryInboxProposal(
+                                        f.target,
+                                        proposal.expected,
+                                        proposal,
+                                    ),
+                                )
+                        )
+                        .value
+                )
+            assertEquals(assertNotNull(written), receipt.destination)
+            assertNull(f.indexRaw().checkpoint)
+            assertEquals(source, f.rawSource())
+        }
+
+    @Test
+    fun checkedNoOpPreservesTheIndexAndSourceSignalAndRejectsAStaleVersion() = withDatabase { f ->
+        f.merge()
+        assertEquals(AppResult.Success(true), f.publish(f.proposal()))
+        val version = assertNotNull(f.inbox().version)
+        val index = f.indexRaw()
+        val source = f.rawSource()
+        val signal =
+            f.base.database.replicas.checkpoint(
+                spaceHistoryScope(f.base.access),
+                CollaborationHistorySignal.PARTITION,
+            )
+        val receipt =
+            assertNotNull(
+                assertIs<AppResult.Success<CollaborationHistoryInboxReceipt?>>(
+                        f.repository()
+                            .publishInbox(
+                                f.base.access,
+                                f.source,
+                                assertNotNull(f.snapshot().revision),
+                                CollaborationHistoryInboxProposal(f.target, version, null),
+                            )
+                    )
+                    .value
+            )
+        assertEquals(version, receipt.destination)
+        assertEquals(
+            AppResult.Success(null),
+            f.repository()
+                .publishInbox(
+                    f.base.access,
+                    f.source,
+                    assertNotNull(f.snapshot().revision),
+                    CollaborationHistoryInboxProposal(
+                        f.target,
+                        version.copy(revision = version.revision + 1),
+                        null,
+                    ),
+                ),
+        )
+        assertEquals(index, f.indexRaw())
+        assertEquals(source, f.rawSource())
+        assertEquals(
+            signal,
+            f.base.database.replicas.checkpoint(
+                spaceHistoryScope(f.base.access),
+                CollaborationHistorySignal.PARTITION,
+            ),
+        )
+    }
+
+    @Test
+    fun aSourceChangeDuringNoOpConfirmationReturnsConflictWithoutAnIndexWrite() =
+        withDatabase { f ->
+            f.merge()
+            val revision = assertNotNull(f.snapshot().revision)
+            val original = f.repository()
+            var changed = false
+            val store =
+                object : ReplicaStore by f.base.database.replicas {
+                    override suspend fun checkpoint(
+                        scope: ReplicaScope,
+                        partition: String,
+                    ): ReplicaCheckpoint? {
+                        if (!changed && partition == spaceInboxPartition(f.base.access)) {
+                            changed = true
+                            assertEquals(
+                                AppResult.Success(true),
+                                original.merge(
+                                    f.source.access,
+                                    f.source.conversationId,
+                                    f.source.roomId,
+                                    listOf(
+                                        f.event.copy(
+                                            eventId = "\$receipt-competitor",
+                                            logicalId = historyId(9876),
+                                        )
+                                    ),
+                                ),
+                            )
+                        }
+                        return f.base.database.replicas.checkpoint(scope, partition)
+                    }
+                }
+            assertEquals(
+                AppResult.Success(null),
+                f.repository(store)
+                    .publishInbox(
+                        f.base.access,
+                        f.source,
+                        revision,
+                        CollaborationHistoryInboxProposal(f.target, null, null),
+                    ),
+            )
+            assertTrue(changed)
+            assertNull(f.indexRaw().checkpoint)
+        }
 
     private fun <T> success(value: AppResult<T>) = assertIs<AppResult.Success<T>>(value).value
 
@@ -358,10 +654,42 @@ abstract class CollaborationCompanyHistoryInboxStorageContract {
 
         suspend fun inbox() = success(index().conversation(base.access, target))
 
+        suspend fun indexRaw() =
+            base.database.replicas
+                .observe(
+                    spaceHistoryScope(base.access),
+                    spaceInboxPartition(base.access),
+                    limit = 100,
+                )
+                .first()
+
         suspend fun publish(
             value: CollaborationSpaceInboxPublication,
             repository: EncryptedCollaborationHistoryRepository = repository(),
-        ) = repository.publishInbox(base.access, source, assertNotNull(snapshot().revision), value)
+        ): AppResult<Boolean> {
+            return when (
+                val result =
+                    repository.publishInbox(
+                        base.access,
+                        source,
+                        assertNotNull(snapshot().revision),
+                        CollaborationHistoryInboxProposal(target, value.expected, value),
+                    )
+            ) {
+                is AppResult.Failed -> result
+                is AppResult.Success -> {
+                    val receipt = result.value ?: return AppResult.Success(false)
+                    val raw = assertNotNull(rawSource().checkpoint)
+                    assertEquals(
+                        CollaborationHistorySourceVersion(raw.handle.generation, raw.revision),
+                        receipt.source,
+                    )
+                    assertEquals(inbox().version, receipt.destination)
+                    assertNotNull(receipt.destination)
+                    AppResult.Success(true)
+                }
+            }
+        }
 
         suspend fun proposal(): CollaborationSpaceInboxPublication {
             val current = inbox()

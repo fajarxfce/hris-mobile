@@ -3,7 +3,7 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.history.*
-import dev.fajar.starter.collaboration.data.inbox.CollaborationSpaceInboxCodec
+import dev.fajar.starter.collaboration.data.inbox.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationCompanyHistoryChangesRepository
@@ -131,37 +131,63 @@ class EncryptedCollaborationHistoryRepository(
     override suspend fun publishInbox(
         access: CollaborationSpaceLocalAccess,
         source: CollaborationSpaceHistoryLocation.Original,
-        sourceRevision: String,
-        publication: CollaborationSpaceInboxPublication,
-    ): AppResult<Boolean> {
-        val captured = publication.copy(activities = publication.activities.toList())
+        sourceRevision: String?,
+        publication: CollaborationHistoryInboxProposal,
+    ): AppResult<CollaborationHistoryInboxReceipt?> {
+        val captured =
+            publication.copy(
+                projection =
+                    publication.projection?.let { it.copy(activities = it.activities.toList()) }
+            )
         return withContext(Dispatchers.Default) {
             safeStorageCall {
-                require(sourceRevision.length in 1..128)
-                require(validCollaborationSpaceInboxPublication(captured))
-                require(captured.draft == null && captured.repair == null)
+                require(sourceRevision == null || sourceRevision.length in 1..128)
+                require(validCollaborationHistoryInboxProposal(captured))
                 validateHistoryRoom(source.roomId)
                 val scope = historyScope(source.access)
                 require(scope == spaceHistoryScope(access))
                 val partition = historyPartition(source.access, source.conversationId)
-                val raw = replicas.checkpoint(scope, partition) ?: return@safeStorageCall false
-                if (!raw.published || raw.handle.generation + ":" + raw.revision != sourceRevision)
-                    return@safeStorageCall false
-                keys.use { content, index ->
-                    CollaborationHistoryCodec(
-                            source.access,
-                            source.conversationId,
-                            source.roomId,
-                            cipher,
-                            content,
-                            index,
+                val raw = replicas.checkpoint(scope, partition)
+                if (
+                    raw?.published == false ||
+                        raw?.let { it.handle.generation + ":" + it.revision } != sourceRevision
+                )
+                    return@safeStorageCall null
+                if (raw == null && captured.projection != null) return@safeStorageCall null
+                if (raw == null && captured.expected == null) {
+                    // Conditional null-to-null replacement confirms index absence without
+                    // deleting any retained generation. Both absence checks share one transaction.
+                    currentCoroutineContext().ensureActive()
+                    val confirmed =
+                        replicas.mutate(
+                            scope,
+                            listOf(
+                                ReplicaMutation.Check(partition, null),
+                                ReplicaMutation.Replace(spaceInboxPartition(access), null, null),
+                            ),
                         )
-                        .checkpoint(raw)
+                    currentCoroutineContext().ensureActive()
+                    return@safeStorageCall if (confirmed)
+                        CollaborationHistoryInboxReceipt(null, null)
+                    else null
+                }
+                keys.use { content, index ->
+                    raw?.let {
+                        CollaborationHistoryCodec(
+                                source.access,
+                                source.conversationId,
+                                source.roomId,
+                                cipher,
+                                content,
+                                index,
+                            )
+                            .checkpoint(it)
+                    }
                     CollaborationHistoryInboxWriter(
                             replicas,
                             CollaborationSpaceInboxCodec(access, cipher, content, index),
                         )
-                        .publish(access, raw, captured)
+                        .publish(access, partition, raw, captured)
                 }
             }
         }

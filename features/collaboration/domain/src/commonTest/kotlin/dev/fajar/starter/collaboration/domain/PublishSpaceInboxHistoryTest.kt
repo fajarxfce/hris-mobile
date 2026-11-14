@@ -33,7 +33,10 @@ class PublishSpaceInboxHistoryTest {
         assertTrue(value.retainedEventIds.isEmpty())
         assertEquals(listOf(f.base.original.primaryEventId), value.unresolvedEventIds)
         assertTrue(f.publications.isEmpty())
-        assertFalse("index" in f.boundaries)
+        assertTrue("index" in f.boundaries)
+        assertEquals(0, f.commits)
+        assertNull(value.receipt.destination)
+        assertEquals(f.sourceVersion, value.receipt.source)
     }
 
     @Test

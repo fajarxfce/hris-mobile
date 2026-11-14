@@ -55,10 +55,30 @@ class PublishCollaborationSpaceInboxHistory(
                 val acquired = readSource()
                 if (acquired is AppResult.Failed) return acquired
                 val source = (acquired as AppResult.Success).value ?: return@repeat
-                if (source.originals.isEmpty()) return completed(source.snapshot, eventIds)
-                val captured = readIndex(source)
+                val currentIndex =
+                    inbox.conversation(access, conversationId, maxOf(2, source.originals.size + 1))
+                val captured =
+                    when (currentIndex) {
+                        is AppResult.Failed -> currentIndex
+                        is AppResult.Success ->
+                            captureCollaborationSpaceInboxConversation(
+                                conversationId,
+                                currentIndex.value,
+                            )
+                    }
+                current().let { if (it is AppResult.Failed) return it }
                 if (captured is AppResult.Failed) return captured
-                val index = (captured as AppResult.Success).value ?: return@repeat
+                val conversation = (captured as AppResult.Success).value
+                if (source.originals.isEmpty()) {
+                    // Unresolved-only work confirms metadata; there is no activity projection.
+                    val confirmed = publish(source, source.snapshot, conversation.version, null)
+                    if (confirmed is AppResult.Failed) return confirmed
+                    val receipt = (confirmed as AppResult.Success).value ?: return@repeat
+                    return completed(source, source.snapshot, eventIds, receipt)
+                }
+                val anchored = readIndexAnchors(source, conversation)
+                if (anchored is AppResult.Failed) return anchored
+                val index = (anchored as AppResult.Success).value ?: return@repeat
                 val evidence = readOperationEvidence(index)
                 if (evidence is AppResult.Failed) return evidence
                 val coherent = (evidence as AppResult.Success).value ?: return@repeat
@@ -75,36 +95,50 @@ class PublishCollaborationSpaceInboxHistory(
                     )
                 if (prepared is AppResult.Failed) return prepared
                 val projection = (prepared as AppResult.Success).value
-                val proposed = projection.publication
-                if (proposed == null) return completed(coherent, projection.unresolvedEventIds)
-                val revision = coherent.revision ?: return unavailableHistoryInbox()
-                current().let { if (it is AppResult.Failed) return it }
-                val saved =
-                    when (val location = source.location) {
-                        is CollaborationSpaceHistoryLocation.Space ->
-                            history.publishInbox(
-                                access,
-                                location.conversationId,
-                                location.roomId,
-                                revision,
-                                proposed,
-                            )
-                        is CollaborationSpaceHistoryLocation.Original ->
-                            companyHistory.publishInbox(access, location, revision, proposed)
-                    }
-                current().let { if (it is AppResult.Failed) return it }
-                // Lost responses remain failures. A later admitted invocation confirms a no-op;
-                // this batch must not complete an incoming reference on an uncertain write.
+                val saved = publish(source, coherent, index.anchors.version, projection.publication)
                 if (saved is AppResult.Failed) return saved
-                if ((saved as AppResult.Success).value)
-                    return completed(coherent, projection.unresolvedEventIds)
+                val receipt = (saved as AppResult.Success).value ?: return@repeat
+                return completed(source, coherent, projection.unresolvedEventIds, receipt)
             }
             return unavailableHistoryInbox(FailureKind.Conflict)
         }
 
+        private suspend fun publish(
+            source: HistorySource,
+            snapshot: CollaborationSpaceHistorySnapshot,
+            expected: CollaborationSpaceInboxVersion?,
+            projection: CollaborationSpaceInboxPublication?,
+        ): AppResult<CollaborationHistoryInboxReceipt?> {
+            val target = CollaborationHistoryInboxProposal(conversationId, expected, projection)
+            if (!validCollaborationHistoryInboxProposal(target)) return unavailableHistoryInbox()
+            current().let { if (it is AppResult.Failed) return it }
+            val saved =
+                when (val location = source.location) {
+                    is CollaborationSpaceHistoryLocation.Space ->
+                        history.publishInbox(
+                            access,
+                            location.conversationId,
+                            location.roomId,
+                            snapshot.revision,
+                            target,
+                        )
+                    is CollaborationSpaceHistoryLocation.Original ->
+                        companyHistory.publishInbox(access, location, snapshot.revision, target)
+                }
+            current().let { if (it is AppResult.Failed) return it }
+            // A lost reply remains a failure; only later admitted replay can confirm the write.
+            if (saved is AppResult.Failed) return saved
+            val receipt = (saved as AppResult.Success).value ?: return AppResult.Success(null)
+            if (!validCollaborationHistoryInboxReceipt(target, snapshot.revision != null, receipt))
+                return unavailableHistoryInbox()
+            return AppResult.Success(receipt)
+        }
+
         private fun completed(
+            source: HistorySource,
             snapshot: CollaborationSpaceHistorySnapshot,
             unresolvedOriginals: List<String>,
+            receipt: CollaborationHistoryInboxReceipt,
         ): AppResult<CollaborationSpaceInboxHistoryCommit> {
             val unresolved =
                 snapshot.events
@@ -115,6 +149,8 @@ class PublishCollaborationSpaceInboxHistory(
                     .toSet()
             return AppResult.Success(
                 CollaborationSpaceInboxHistoryCommit(
+                    collaborationHistoryChangeOwner(source.location),
+                    receipt,
                     eventIds.filterNot { it in unresolved },
                     eventIds.filter { it in unresolved },
                 )
@@ -224,7 +260,10 @@ class PublishCollaborationSpaceInboxHistory(
             )
         }
 
-        private suspend fun readIndex(source: HistorySource): AppResult<HistoryIndex?> {
+        private suspend fun readIndexAnchors(
+            source: HistorySource,
+            conversation: CollaborationSpaceInboxConversation,
+        ): AppResult<HistoryIndex?> {
             val changes = mutableListOf<CollaborationSpaceInboxHistoryUpdate>()
             val candidates = linkedMapOf<String, List<CollaborationSpaceInboxSource>>()
             for (original in source.originals) {
@@ -261,20 +300,8 @@ class PublishCollaborationSpaceInboxHistory(
                         (identity as AppResult.Success).value,
                     )
             }
-            val currentIndex = inbox.conversation(access, conversationId, source.originals.size + 1)
-            val captured =
-                when (currentIndex) {
-                    is AppResult.Failed -> currentIndex
-                    is AppResult.Success ->
-                        captureCollaborationSpaceInboxConversation(
-                            conversationId,
-                            currentIndex.value,
-                        )
-                }
-            current().let { if (it is AppResult.Failed) return it }
-            if (captured is AppResult.Failed) return captured
-            val conversation = (captured as AppResult.Success).value
-            val read = readAnchors(candidates.values.flatten().distinct(), conversation.version)
+            val requested = candidates.values.flatten().distinct()
+            val read = readAnchors(requested, conversation.version)
             if (read is AppResult.Failed) return read
             val anchors = (read as AppResult.Success).value ?: return AppResult.Success(null)
             val excluded = mutableSetOf<CollaborationSpaceInboxSource>()

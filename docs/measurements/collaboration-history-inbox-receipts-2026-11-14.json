@@ -1,0 +1,168 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationHistoryInboxWriter.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationHistoryRepository.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceHistoryRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationCompanyHistoryInboxStorageContract.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceHistoryInboxStorageContract.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationHistoryInboxReceipt.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistoryCommit.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationHistoryInboxReceiptPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationCompanyHistorySnapshotRepository.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceHistorySnapshotRepository.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PublishCollaborationSpaceInboxHistory.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/PublishSpaceInboxHistoryReceiptTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/PublishSpaceInboxHistoryTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistoryAdmissionFixture.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 68,
+    "elapsedSeconds": 182.979,
+    "sourceFiles": 5476,
+    "sourceManifestSha256": "0149f6c03806be356a7c507419ddd9f1c7194da8f6960f15b0cb4fb1cb635675",
+    "resultSha256": "4c866ccbf19ca639aaa232c0cdde0f7d36b598ff70fcab6568ea92ff689b873a",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceHistoryInboxStorageTest": 22,
+      "CollaborationCompanyHistoryInboxStorageTest": 14,
+      "PublishSpaceInboxHistoryReceiptTest": 8,
+      "PublishSpaceInboxHistoryTest": 22
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T01:55:41.807591+00:00",
+    "elapsedSeconds": 975.248,
+    "sourceFiles": 5476,
+    "freshCounts": {
+      "tests": 14829,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153509789,
+      "sha256": "1761497123d39f65bc68231009fcc3e9360319176ae1794ca61ff6b234e2522e"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 17010,
+    "newCases": 40,
+    "freshTests": 14829,
+    "reusedUnaffectedTests": 2181,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "0149f6c03806be356a7c507419ddd9f1c7194da8f6960f15b0cb4fb1cb635675",
+    "reportManifestSha256": "d136012572812dafeeb2eb99ba324b766f25b9d787ce0d288dcfeb27e4549f15",
+    "nativeClaim": "Checked physical source and actual destination receipts;20 new shared methods and retained publisher/storage cases. Durable owner progress and product activation remain open."
+  },
+  "newSharedMethods": 20,
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "ownerActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "failedAttempts": [
+    {
+      "directory": "focused-1",
+      "resultSha256": "b5f3bfbfd257c7e6d2eeae9c987e5737cee781f420cdb379467bc7f3f1c547fd",
+      "sourceManifestSha256": "dfdf83f63781b12782c2688afb89f5bc120383fa2466a3c68753ad03572e6168",
+      "startedAt": "2026-11-14T01:33:32.782402+00:00",
+      "elapsedSeconds": 125.965,
+      "counts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "correction": {
+        "path": "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistoryAdmissionFixture.kt",
+        "methodsRemoved": 0,
+        "productionChanged": false,
+        "reason": "Inbox fixture seed/publish retain original publication contract; only publishInbox uses new proposal"
+      }
+    },
+    {
+      "directory": "focused-2",
+      "resultSha256": "9d3cba2658b68bd2d1eb6dab4dbd296181e553d484632b3fc762ef7c8d7941a3",
+      "sourceManifestSha256": "d0f3d3566f6d5b05019480af39795bc302b210e91b8f908d8414080e8220c12c",
+      "startedAt": "2026-11-14T01:36:21.368939+00:00",
+      "elapsedSeconds": 123.356,
+      "counts": {
+        "tests": 30,
+        "failures": 5,
+        "errors": 0,
+        "skipped": 0
+      },
+      "correction": {
+        "failedSession": 4370,
+        "tests": 30,
+        "failures": 5,
+        "productionChanged": true,
+        "path": "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PublishCollaborationSpaceInboxHistory.kt",
+        "reason": "After validating retained conversation metadata, unresolved-only work must reach checked no-op without calling the nonempty activity projection policy",
+        "methodsRemoved": 0
+      }
+    },
+    {
+      "directory": "focused-3",
+      "resultSha256": "d51f866f2a8704feef39b3c8df0e1c2118a597f0e12f22b0ac4ab82aa702f400",
+      "sourceManifestSha256": "59344263473b01514ae825a797ac5b40be6f46be6cb6f9f283c4b41b5aba8046",
+      "startedAt": "2026-11-14T01:39:17.982444+00:00",
+      "elapsedSeconds": 65.991,
+      "counts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "correction": {
+        "failedSession": 2674,
+        "tests": 0,
+        "reason": "Detekt rejected readIndex length102. Moved metadata read/capture and unresolved-only branching into existing run orchestration; anchored source resolution remains separate. No suppression, weakened threshold or new helper.",
+        "productionChanged": true,
+        "methodsRemoved": 0
+      }
+    }
+  ],
+  "emptyPairRaceReproduction": {
+    "reproduced": true,
+    "session": 65222,
+    "reaped": true,
+    "sourceManifestSha256": "01038ad4ab8c55669e8c45430a9872548716f6cae2988c617b325687916a4775",
+    "resultSha256": "d7e6f640f4916477e7ab09bdcd8eccc7bba4b902db28f06413da6056f68fa257",
+    "elapsedSeconds": 71.765,
+    "failures": [
+      {
+        "classname": "dev.fajar.starter.collaboration.data.CollaborationCompanyHistoryInboxStorageTest",
+        "name": "alternatingAbsentPartitionsCannotConfirmAnEmptyPair[desktop]",
+        "message": "java.lang.AssertionError: expected:<Success(value=null)> but was:<Success(value=CollaborationHistoryInboxReceipt([redacted]))>"
+      },
+      {
+        "classname": "dev.fajar.starter.collaboration.data.CollaborationSpaceHistoryInboxStorageTest",
+        "name": "alternatingAbsentPartitionsCannotConfirmAnEmptyPair[desktop]",
+        "message": "java.lang.AssertionError: expected:<Success(value=null)> but was:<Success(value=CollaborationHistoryInboxReceipt([redacted]))>"
+      }
+    ]
+  },
+  "priorFocused66": {
+    "accepted": true,
+    "tests": 66,
+    "elapsedSeconds": 416.838,
+    "sourceFiles": 5476,
+    "sourceManifestSha256": "7ed0568e725e2e9508f54ffa15f3b5e262e2a59aacb5cf17f07dbba17b76fbe3",
+    "resultSha256": "0bd339195a604b1d2d9d78c84ffb3f0bff04326ab8c55e819a9531c0180f600e",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationCompanyHistoryInboxStorageTest": 13,
+      "CollaborationSpaceHistoryInboxStorageTest": 21,
+      "PublishSpaceInboxHistoryTest": 22,
+      "PublishSpaceInboxHistoryReceiptTest": 8
+    },
+    "priorCaseIdsRetained": true
+  }
+}

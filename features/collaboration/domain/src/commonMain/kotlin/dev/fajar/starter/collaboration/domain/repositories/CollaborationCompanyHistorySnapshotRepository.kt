@@ -16,11 +16,15 @@ interface CollaborationCompanyHistorySnapshotRepository {
         editOperations: List<CollaborationHistoryEditOperation> = emptyList(),
     ): AppResult<CollaborationSpaceHistorySnapshot?>
 
-    /** Source and destination keep independent namespaces within the same local account. */
+    /**
+     * Source and destination keep independent namespaces within the same local account. Null is
+     * contention, not a completed write. A null projection confirms the exact unchanged pair; a
+     * null source token requires absence. Receipts expose the actual versions observed/written.
+     */
     suspend fun publishInbox(
         access: CollaborationSpaceLocalAccess,
         source: CollaborationSpaceHistoryLocation.Original,
-        sourceRevision: String,
-        publication: CollaborationSpaceInboxPublication,
-    ): AppResult<Boolean>
+        sourceRevision: String?,
+        publication: CollaborationHistoryInboxProposal,
+    ): AppResult<CollaborationHistoryInboxReceipt?>
 }

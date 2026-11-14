@@ -15,7 +15,10 @@ internal class SpaceInboxHistoryAdmissionFixture(
     val access = base.access
     val id = base.conversationId
     val createdAt = base.thread.room.binding.conversation.createdAt.toEpochMilliseconds()
-    var revision = "source:1"
+    var revision: String? = "source:1"
+    var sourceVersion = CollaborationHistorySourceVersion("b9000000-0000-4000-8000-000000000001", 1)
+    var receiptOverride: CollaborationHistoryInboxReceipt? = null
+    val proposals = mutableListOf<CollaborationHistoryInboxProposal>()
     val originalByEvent = linkedMapOf(base.original.primaryEventId to base.original)
     val operations =
         linkedMapOf<CollaborationHistoryEditOperation, List<CollaborationEditEvidence>>()
@@ -90,50 +93,61 @@ internal class SpaceInboxHistoryAdmissionFixture(
     }
 
     suspend fun publish(
-        sourceRevision: String,
-        publication: CollaborationSpaceInboxPublication,
-    ): AppResult<Boolean> {
-        publications += publication
+        sourceRevision: String?,
+        publication: CollaborationHistoryInboxProposal,
+    ): AppResult<CollaborationHistoryInboxReceipt?> {
+        proposals += publication
+        publication.projection?.let { publications += it }
         boundary("publish")
         if (writeConflicts > 0) {
             writeConflicts--
-            return AppResult.Success(false)
+            return AppResult.Success(null)
         }
         if (sourceRevision != revision || publication.expected != current.version)
-            return AppResult.Success(false)
-        assertNull(publication.draft)
-        assertNull(publication.repair)
-        val unchanged =
-            publication.entry == current.entry &&
-                publication.activities.all { activityBySource[it.source] == it }
-        if (unchanged) noops++
+            return AppResult.Success(null)
+        val projection = publication.projection
+        if (projection == null) noops++
         else {
-            commits++
-            publication.activities.forEach { activityBySource[it.source] = it }
-            val version =
-                CollaborationSpaceInboxVersion(
-                    base.generation,
-                    (current.version?.revision ?: -1) + 1,
-                    publication.lastOrdinal,
-                )
-            val candidates =
-                activityBySource.values
-                    .filter { it.preview != null }
-                    .sortedWith { a, b ->
-                        -compareCollaborationSpaceInboxPositions(a.position, b.position)
-                    }
-            current =
-                CollaborationSpaceInboxConversation(
-                    version,
-                    publication.entry,
-                    current.draft,
-                    candidates,
-                )
+            assertNull(projection.draft)
+            assertNull(projection.repair)
+            val unchanged =
+                projection.entry == current.entry &&
+                    projection.activities.all { activityBySource[it.source] == it }
+            if (unchanged) noops++
+            else {
+                commits++
+                projection.activities.forEach { activityBySource[it.source] = it }
+                val version =
+                    CollaborationSpaceInboxVersion(
+                        base.generation,
+                        (current.version?.revision ?: -1) + 1,
+                        projection.lastOrdinal,
+                    )
+                val candidates =
+                    activityBySource.values
+                        .filter { it.preview != null }
+                        .sortedWith { a, b ->
+                            -compareCollaborationSpaceInboxPositions(a.position, b.position)
+                        }
+                current =
+                    CollaborationSpaceInboxConversation(
+                        version,
+                        projection.entry,
+                        current.draft,
+                        candidates,
+                    )
+            }
         }
         lostResponse?.let {
             return AppResult.Failed(it)
         }
-        return AppResult.Success(true)
+        return AppResult.Success(
+            receiptOverride
+                ?: CollaborationHistoryInboxReceipt(
+                    sourceVersion.takeIf { revision != null },
+                    current.version,
+                )
+        )
     }
 
     val history =
@@ -156,9 +170,9 @@ internal class SpaceInboxHistoryAdmissionFixture(
                 access: CollaborationSpaceLocalAccess,
                 conversationId: String,
                 roomId: String,
-                sourceRevision: String,
-                publication: CollaborationSpaceInboxPublication,
-            ): AppResult<Boolean> {
+                sourceRevision: String?,
+                publication: CollaborationHistoryInboxProposal,
+            ): AppResult<CollaborationHistoryInboxReceipt?> {
                 assertIs<CollaborationSpaceHistoryLocation.Space>(base.location)
                 assertEquals(this@SpaceInboxHistoryAdmissionFixture.access, access)
                 assertEquals(id, conversationId)
@@ -181,9 +195,9 @@ internal class SpaceInboxHistoryAdmissionFixture(
             override suspend fun publishInbox(
                 access: CollaborationSpaceLocalAccess,
                 source: CollaborationSpaceHistoryLocation.Original,
-                sourceRevision: String,
-                publication: CollaborationSpaceInboxPublication,
-            ): AppResult<Boolean> {
+                sourceRevision: String?,
+                publication: CollaborationHistoryInboxProposal,
+            ): AppResult<CollaborationHistoryInboxReceipt?> {
                 assertEquals(this@SpaceInboxHistoryAdmissionFixture.access, access)
                 assertEquals(base.location, source)
                 return this@SpaceInboxHistoryAdmissionFixture.publish(sourceRevision, publication)

@@ -1,40 +1,41 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 01:58 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 02:12 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Checked publication receipts in progress — NOT accepted
+## Checked history publication receipts locally accepted
 
-The admitted history reader remains accepted/pushed (Mobile3fc162c0, Group411bf1ad).
-Mobile .work/history-inbox-publication-receipt-2026-11-14 has14 applied source/test paths,
-20 new shared methods and all46 prior publisher/storage methods. Focused68/session24114 is
-REAPED and ACCEPTED:182.979s, source5476/0149f6c03806be356a7c507419ddd9f1c7194da8f6960f15b0cb4fb1cb635675,
-result4c866ccbf19ca639aaa232c0cdde0f7d36b598ff70fcab6568ea92ff689b873a.
-Full17010/session16204 is RUNNING. Reap before auditing/recording or applying later sources.
+Mobile .work/history-inbox-publication-receipt-2026-11-14 is accepted:14 paths,20 new shared methods.
+Focused68/full17010 (14829 fresh /2181 unchanged) preserve all16970
+prior identities plus40 executions. Source5476/0149f6c03806be356a7c507419ddd9f1c7194da8f6960f15b0cb4fb1cb635675;
+reportsd136012572812dafeeb2eb99ba324b766f25b9d787ce0d288dcfeb27e4549f15. Conditional writes and checked no-ops expose actual source/index
+versions, including first-index generation. Unresolved-only work captures index metadata, and an
+entirely absent pair creates no keys or records. Snapshot tokens remain opaque in domain.
 
-Three rejected focused attempts and intermediate focused66 remain preserved. Two added actual
-storage regressions reproduced the empty-pair ABA bug (red-absence-1/session65222,2/2 expected
-failures). Separate reads previously confirmed absence at different instants. The correction uses
-one owned transaction to Check source absence and conditionally Replace an already-absent index
-with null. Expected-null cannot remove an existing/staging generation. The new focused68 passes
-both races. No content key, source/index record, wake or history signal is created by this check.
-After full acceptance: record evidence, commit/push mobile, then commit/push Group evidence.
+Next .work/history-binding-invalidation-2026-11-14 has3 reviewed/formatted UNAPPLIED paths,
+6 new shared storage methods and all46 prior binding/preparation methods retained. It publishes
+one account history signal atomically with a NEW binding and its existing recovery wake; exact
+replay stays silent. This closes old Company history discovery after canonical metadata is already
+known. Its focused79/full17022 and record/commit gates are prepared but unrun. Apply, REAP, then
+capture after this receipt source is committed/pushed.
+Then .work/history-empty-page-confirmation-2026-11-14 has4 reviewed/formatted UNAPPLIED drafts,
+10 shared test methods and prepared focused57/full17042/record/commit gates, none run. It confirms
+empty raw pages with their opaque source token and exact binding, without invented event IDs.
+Apply only after binding source acceptance/push, then implement durable owner progress from
+.work/history-inbox-progress-2026-11-14. It still holds
+one initial unapplied state draft and review, not an implementation. Use the typed source owner and
+receipt to guard atomic cursor/unresolved handoff against destination replacement. Complete raw
+intervals through window.throughRevision only after confirmed publication or durable handoff;
+empty raw pages need no invented event. Retain captured windows and completed demand through
+restart, and visit unfinished sources fairly under the existing Group repair owner. No new polling
+queue or permanent per-room observer. Incoming completion and thread/list/UI activation remain.
 
-Next .work/history-binding-invalidation-2026-11-14 has3 reviewed/formatted UNAPPLIED drafts,
-6 new shared methods and all46 prior binding/preparation methods. Focused79/full17022 and
-record/commit gates are prepared, not run. New binding, history signal and existing wake commit
-atomically; exact replay stays silent. Apply only after receipt source acceptance and push.
-
-Then .work/history-empty-page-confirmation-2026-11-14 has4 initial UNAPPLIED drafts (use case,
-10 shared tests, DI and graph assertion). Formatted once; review/gates remain incomplete.
-It confirms empty-reference pages without invented events, using their opaque source token and
-exact canonical owner plus source generation/window coverage. It does not advance durable progress.
-Then return to history-inbox-progress-2026-11-14: one initial state draft/review only. Atomic
-cursor/unresolved handoff and fair finite continuation under the existing repair owner remain open.
-One compiler OR emulator, no subagents. Phone92 remains installed; no phone/live activation.
-All54 PRD groups remain open. Continue beyond checkpoints and push every commit.
+Admitted history reads, atomic source signals, generic raw changes and Starter092fbe6f are accepted.
+Actual new Apple execution remains outstanding; preserve the failed control and blocked fixture
+payload. Phone92 remains installed, live GroupOFF/V117-140 undeployed. All54 PRD groups open.
+Continue beyond checkpoints, push every commit, one compiler OR emulator, no subagents.
 
 ## Admitted canonical history changes locally accepted
 

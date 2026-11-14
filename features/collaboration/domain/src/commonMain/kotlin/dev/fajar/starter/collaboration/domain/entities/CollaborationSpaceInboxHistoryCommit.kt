@@ -5,6 +5,8 @@ package dev.fajar.starter.collaboration.domain.entities
  * retain durable incoming/backfill ownership; this result neither acknowledges nor discards them.
  */
 data class CollaborationSpaceInboxHistoryCommit(
+    val owner: CollaborationHistoryChangeOwner,
+    val receipt: CollaborationHistoryInboxReceipt,
     val retainedEventIds: List<String>,
     val unresolvedEventIds: List<String>,
 ) {

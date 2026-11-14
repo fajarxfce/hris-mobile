@@ -1,5 +1,7 @@
 # Architecture
 
+[Checked history publication receipts](collaboration-history-inbox-receipts.md) expose the actual source and destination versions of conditional publication.
+
 [Admitted canonical history changes](collaboration-history-changes-admission.md) preserve exact local source ownership and finite cursor windows.
 
 [Atomic local history invalidation](collaboration-history-change-signal.md) publishes one owned signal with effective source mutations.
