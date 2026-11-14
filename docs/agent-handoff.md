@@ -1,7 +1,40 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 14:32 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 15:16 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
+
+## Recipient originals retained locally
+
+Recipient original storage is locally accepted: 17,931 validated cases
+(17567 fresh / 364 exact unchanged), preserving all 17,877 prior
+identities plus 54 executions (14 domain and 13 storage methods on desktop/browser). Focused
+29/session43264 and full/session72895 reaped0. Source
+55fdae5066feb4e6c3aff6f2a78fcc51797fba34a7a9f7449206b4e640ac1119; reports 0c04795fbf789e15b77ac42ad59138fd02c78de703e17b1cb773b71fa48d8aaf.
+Fifteen source paths atomically retain each Send, clear its compared editor and publish the
+recovery wake. Exact replay preserves later typing; original ID/body/time remain caller-captured.
+Actual app DI resolves the new repository and use case. No UI or canonical delivery activation.
+
+First finish the user-requested release93. Mobile .work/release-phone-2026-11-14-build93 contains
+prepared build/verify/startup/accept/install scripts. Group .work/recipient-outbox-release93-2026-11-14
+contains the ten-scenario native runner and host precompiler. Its Mobile proof APK is full1/accepted-proof.apk.
+These native/release gates are not executed yet. After the source commit/push, compile the Group
+host, run/accept the isolated native suite, prepare release inputs, build/verify x86, run/inspect
+release startup, build/verify ARM64, accept release and announce install-only to10.77.77.3:5555.
+Record/push each result. No further source change while packaging this accepted revision.
+
+Then continue bounded canonical import that preserves existing destination typing, durable source
+acknowledgement, pending-recipient inbox rows and the new-contact route. Read
+collaboration-recipient-outbox.md. Preserve source until exact destination retention is proven;
+do not call the editor-clearing canonical handoff to overwrite another draft. Keep Group root
+outside Company lifetime; AppViewModel remains window-owned. Explicit rollout selection and
+complete company memberships remain. Starterbd13df78 is already accepted/pushed with1,052.
+
+Phone92 was confirmed read-only at14:27UTC on14 November. The transport and SDK idle-loop fixes
+are ancestors of its source; existing3-minute native evidence is not a new phone traffic capture.
+No new APK, phone UI or live change. GroupOFF, V117–140 undeployed and all54 PRD groups OPEN.
+Continue beyond checkpoints and push every commit. One compiler OR emulator, no subagents.
+Preserve the blocked SQLite fixture payload and failed hosted Apple evidence.
+
 
 ## Durable recipient drafts accepted
 

@@ -1,6 +1,12 @@
 # Architecture
 
 
+[Retained new-recipient messages](collaboration-recipient-outbox.md)
+
+Explicit Send is distinct from working drafts and canonical delivery.
+
+
+
 [Durable new-recipient drafts](collaboration-recipient-drafts.md)
 
 Peer-addressed working copies are distinct from canonical conversation drafts and sending.
