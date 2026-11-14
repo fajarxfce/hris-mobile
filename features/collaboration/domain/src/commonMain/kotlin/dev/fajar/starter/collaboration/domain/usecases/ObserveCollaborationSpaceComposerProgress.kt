@@ -21,19 +21,74 @@ class ObserveCollaborationSpaceComposerProgress(
         access: CollaborationSpaceLocalAccess,
         originals: Flow<List<CollaborationComposerSubmission>>,
     ): Flow<AppResult<List<CollaborationSpaceComposerMessageProgress>>> =
-        flow { emitAll(Observation(access, originals).observe()) }.distinctUntilChanged()
+        flow {
+                emitAll(
+                    Observation(
+                            access,
+                            originals,
+                            intent = { original ->
+                                if (validCollaborationComposerSubmission(original))
+                                    collaborationSpaceComposerIntent(access, original)
+                                else null
+                            },
+                            progress = ::CollaborationSpaceComposerMessageProgress,
+                        )
+                        .observe()
+                )
+            }
+            .distinctUntilChanged()
+
+    /** Recipient provenance stays distinct; the retained pair supplies its real canonical ID. */
+    fun recipients(
+        access: CollaborationSpaceLocalAccess,
+        conversation: CollaborationSpaceConversationMetadata,
+        originals: Flow<List<CollaborationSpaceRecipientSubmission>>,
+    ): Flow<AppResult<List<CollaborationSpaceRecipientMessageProgress>>> =
+        flow {
+                if (!validCollaborationSpaceConversationMetadata(access, conversation)) {
+                    emit(invalidDraft())
+                    return@flow
+                }
+                emitAll(
+                    Observation(
+                            access,
+                            originals,
+                            intent = { original ->
+                                if (
+                                    validCollaborationSpaceRecipientConversation(
+                                        access,
+                                        original,
+                                        conversation,
+                                    )
+                                )
+                                    collaborationSpaceRecipientMessageIntent(
+                                        access,
+                                        original,
+                                        conversation.id,
+                                    )
+                                else null
+                            },
+                            progress = ::CollaborationSpaceRecipientMessageProgress,
+                        )
+                        .observe()
+                )
+            }
+            .distinctUntilChanged()
 
     /** One collector owns admission, its finite mailbox and all exact-record readers. */
-    private inner class Observation(
+    private inner class Observation<Original, Progress>(
         val access: CollaborationSpaceLocalAccess,
-        val originals: Flow<List<CollaborationComposerSubmission>>,
+        val originals: Flow<List<Original>>,
+        val intent: (Original) -> CollaborationSpaceMessageIntent?,
+        val progress: (Original, CollaborationSpaceMessageRecord?) -> Progress,
     ) {
         var denial: Failure? = null
 
         @OptIn(ExperimentalCoroutinesApi::class)
-        fun observe(): Flow<AppResult<List<CollaborationSpaceComposerMessageProgress>>> =
+        fun observe(): Flow<AppResult<List<Progress>>> =
             sessions
                 .observe()
+                .onCompletion { cause -> if (cause == null) emit(AppResult.Success(null)) }
                 .map { identity ->
                     when (identity) {
                         is AppResult.Failed -> identity
@@ -46,7 +101,19 @@ class ObserveCollaborationSpaceComposerProgress(
                     when (owned) {
                         is AppResult.Failed -> flowOf(AppResult.Failed(denial ?: owned.failure))
                         is AppResult.Success ->
-                            directory.observeAdmission(access).map { admission(it, reopen = true) }
+                            directory
+                                .observeAdmission(access)
+                                .map { admission(it, reopen = true) }
+                                .onCompletion { cause ->
+                                    if (cause == null)
+                                        emit(
+                                            denial?.let { AppResult.Failed(it) }
+                                                ?: collaborationRecoveryFailure(
+                                                    "client.collaboration_revalidation_required",
+                                                    FailureKind.Unavailable,
+                                                )
+                                        )
+                                }
                     }
                 }
                 .buffer(0)
@@ -61,28 +128,26 @@ class ObserveCollaborationSpaceComposerProgress(
                 .distinctUntilChanged()
 
         private fun captureOriginals(
-            values: List<CollaborationComposerSubmission>
-        ): AppResult<List<CollaborationComposerSubmission>> {
+            values: List<Original>
+        ): AppResult<List<CapturedOriginal<Original>>> {
             val detached = values.take(129)
-            if (
-                detached.size > 128 ||
-                    detached.map { it.id }.distinct().size != detached.size ||
-                    detached.any {
-                        !validCollaborationComposerSubmission(it) ||
-                            !validCollaborationSpaceMessageIntent(
-                                access,
-                                collaborationSpaceComposerIntent(access, it),
-                            )
-                    }
-            )
-                return invalidDraft()
-            return AppResult.Success(detached)
+            if (detached.size > 128) return invalidDraft()
+            val captured = buildList {
+                for (original in detached) {
+                    val command = intent(original) ?: return invalidDraft()
+                    if (!validCollaborationSpaceMessageIntent(access, command))
+                        return invalidDraft()
+                    add(CapturedOriginal(original, command))
+                }
+            }
+            if (captured.map { it.id }.distinct().size != captured.size) return invalidDraft()
+            return AppResult.Success(captured)
         }
 
         private fun captureRecord(
-            original: CollaborationComposerSubmission,
+            original: CapturedOriginal<Original>,
             read: AppResult<CollaborationSpaceMessageRecord?>,
-        ): AppResult<CollaborationSpaceComposerMessageProgress> =
+        ): AppResult<Progress> =
             when (read) {
                 is AppResult.Failed -> read
                 is AppResult.Success -> {
@@ -98,65 +163,62 @@ class ObserveCollaborationSpaceComposerProgress(
                                 "client.collaboration_invalid_response",
                                 FailureKind.Unexpected,
                             )
-                        record != null &&
-                            record.intent != collaborationSpaceComposerIntent(access, original) ->
+                        record != null && record.intent != original.intent ->
                             collaborationRecoveryFailure(
                                 "client.collaboration_composer_changed",
                                 FailureKind.Storage,
                             )
-                        else ->
-                            AppResult.Success(
-                                CollaborationSpaceComposerMessageProgress(original, record)
-                            )
+                        else -> AppResult.Success(progress(original.value, record))
                     }
                 }
             }
 
-        private fun content(): Flow<AppResult<List<CollaborationSpaceComposerMessageProgress>>> =
-            flow {
-                val admitted = current()
-                if (admitted is AppResult.Failed) {
-                    emit(admitted)
-                    return@flow
+        private fun content(): Flow<AppResult<List<Progress>>> = flow {
+            val admitted = current()
+            if (admitted is AppResult.Failed) {
+                emit(admitted)
+                return@flow
+            }
+            coroutineScope {
+                val input = Channel<ProgressInput<Original, Progress>>(32)
+                val records = Records(this, input)
+                val requested = launch {
+                    originals.map(::captureOriginals).distinctUntilChanged().collect {
+                        input.send(ProgressInput.Originals<Original, Progress>(it))
+                    }
                 }
-                coroutineScope {
-                    val input = Channel<ProgressInput>(32)
-                    val records = Records(this, input)
-                    val requested = launch {
-                        originals.map(::captureOriginals).distinctUntilChanged().collect {
-                            input.send(ProgressInput.Originals(it))
+                var published: AppResult<List<Progress>>? = null
+                try {
+                    for (event in input) {
+                        records.update(event)
+                        val result = records.snapshot() ?: continue
+                        if (result == published) continue
+                        val allowed = current()
+                        if (allowed is AppResult.Failed) {
+                            emit(allowed)
+                            break
                         }
+                        emit(result)
+                        published = result
                     }
-                    var published: AppResult<List<CollaborationSpaceComposerMessageProgress>>? =
-                        null
-                    try {
-                        for (event in input) {
-                            records.update(event)
-                            val result = records.snapshot() ?: continue
-                            if (result == published) continue
-                            val allowed = current()
-                            if (allowed is AppResult.Failed) {
-                                emit(allowed)
-                                break
-                            }
-                            emit(result)
-                            published = result
-                        }
-                    } finally {
-                        requested.cancel()
-                        records.cancel()
-                        input.cancel()
-                    }
+                } finally {
+                    requested.cancel()
+                    records.cancel()
+                    input.cancel()
                 }
             }
+        }
 
         /** Only this mailbox consumer mutates the table; children publish captured results. */
-        private inner class Records(val scope: CoroutineScope, val input: Channel<ProgressInput>) {
-            val active = mutableMapOf<String, RecordRead>()
-            var ordered = emptyList<RecordRead>()
+        private inner class Records(
+            val scope: CoroutineScope,
+            val input: Channel<ProgressInput<Original, Progress>>,
+        ) {
+            val active = mutableMapOf<String, RecordRead<Original, Progress>>()
+            var ordered = emptyList<RecordRead<Original, Progress>>()
             var invalid: AppResult.Failed? = null
 
-            suspend fun update(event: ProgressInput) {
+            suspend fun update(event: ProgressInput<Original, Progress>) {
                 when (event) {
                     is ProgressInput.Record -> {
                         if (active[event.reader.original.id] === event.reader)
@@ -166,9 +228,7 @@ class ObserveCollaborationSpaceComposerProgress(
                 }
             }
 
-            private suspend fun replace(
-                requested: AppResult<List<CollaborationComposerSubmission>>
-            ) {
+            private suspend fun replace(requested: AppResult<List<CapturedOriginal<Original>>>) {
                 val originals = (requested as? AppResult.Success)?.value.orEmpty()
                 val next = originals.associateBy { it.id }
                 for (read in active.values.toList()) {
@@ -181,7 +241,7 @@ class ObserveCollaborationSpaceComposerProgress(
                 invalid = requested as? AppResult.Failed
                 for (original in originals) {
                     if (original.id in active) continue
-                    val read = RecordRead(original)
+                    val read = RecordRead<Original, Progress>(original)
                     active[original.id] = read
                     read.job =
                         scope.launch {
@@ -193,7 +253,7 @@ class ObserveCollaborationSpaceComposerProgress(
                 ordered = originals.map { active.getValue(it.id) }
             }
 
-            fun snapshot(): AppResult<List<CollaborationSpaceComposerMessageProgress>>? {
+            fun snapshot(): AppResult<List<Progress>>? {
                 invalid?.let {
                     return it
                 }
@@ -260,17 +320,28 @@ class ObserveCollaborationSpaceComposerProgress(
     }
 }
 
-private class RecordRead(val original: CollaborationComposerSubmission) {
-    var job: Job? = null
-    var value: AppResult<CollaborationSpaceComposerMessageProgress>? = null
+private data class CapturedOriginal<Original>(
+    val value: Original,
+    val intent: CollaborationSpaceMessageIntent,
+) {
+    val id: String
+        get() = intent.id
+
+    override fun toString() = "CapturedOriginal([redacted])"
 }
 
-private sealed interface ProgressInput {
-    data class Originals(val value: AppResult<List<CollaborationComposerSubmission>>) :
-        ProgressInput
+private class RecordRead<Original, Progress>(val original: CapturedOriginal<Original>) {
+    var job: Job? = null
+    var value: AppResult<Progress>? = null
+}
 
-    data class Record(
-        val reader: RecordRead,
-        val value: AppResult<CollaborationSpaceComposerMessageProgress>,
-    ) : ProgressInput
+private sealed interface ProgressInput<Original, Progress> {
+    data class Originals<Original, Progress>(
+        val value: AppResult<List<CapturedOriginal<Original>>>
+    ) : ProgressInput<Original, Progress>
+
+    data class Record<Original, Progress>(
+        val reader: RecordRead<Original, Progress>,
+        val value: AppResult<Progress>,
+    ) : ProgressInput<Original, Progress>
 }

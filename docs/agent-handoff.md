@@ -1,40 +1,44 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 21:41 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 22:06 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 
-## Recipient canonical destination observation accepted
+## Shared exact recipient message progress accepted
 
-ObserveCollaborationSpaceRecipientDestination reuses immutable encrypted peer/canonical metadata.
-One admitted collector retains a resolved pair through unrelated monotonic catalog updates; an
-absent peer reacts only to changed publications. A stable post-lookup catalog witness rejects
-racing results. Generation replacement, regression, absence, failure and ownership loss invalidate
-the cache. Observation starts no setup, SDK, network acquisition or delivery and has no retry timer.
-Source/parent completion, disposal and denial/readmission are covered by the common tests.
+ObserveCollaborationSpaceComposerProgress now serves both its unchanged canonical composer API
+and an explicit recipients entry point. One bounded, privately typed observation owns capture,
+mailbox and exact active/terminal record readers. Existing policies preserve the real canonical
+pair and complete recipient provenance; no peer alias or invented canonical draft is introduced.
+Adding an original keeps existing readers; removal/replacement joins obsolete ones. Both APIs now
+redact when session/admission observation ends. Failure never adds a timed retry or delivery wake.
 
-Validation: 18,249 cases (16060 fresh / 2189 exact unchanged), preserving all 18,217 prior identities plus 32. Focused 18/session12659 and full/session62325 reaped 0. Source 65143daa17e2a530b378ee838487cf8e81061f5d2e86c2f53960d70b6080e2dc; reports cafdfc4bf81eaba352e1975edcec73bcd65cc5efc8bd03819bfc7402df1b87e4.
-Read [destination observation](collaboration-recipient-destination.md).
+Validation: 18,277 cases (16088 fresh / 2189 exact unchanged), preserving all 18,249 prior identities plus 28. Focused 36/session5825 and full/session87885 reaped 0. Source 8161070c9cba2453bb7b6db2170f0c2f2328c8f349567c451f80f4b12efeaada; reports c4d905257f1d17c9e14561c4aa151e3ffd46db619a6d6cb5fc38a9c78d3fbc1e.
+Read [shared exact message progress](collaboration-recipient-progress.md). The 20 existing canonical
+progress/lifetime cases remain unchanged; 14 new cases cover recipient proof, bounds, independent
+readers, ownership, failure and source completion. Actual application DI resolves the same use case.
 
-Recipient source projection from d4134a90 remains accepted and pushed with 18,217 cases;
-see collaboration-recipient-projection.md. Neither component has an active product route yet.
-Next compose canonical commands/history with retained recipient originals and preserve exact
-provenance through source retirement. Reuse the existing exact active/archived record observation
-mechanism rather than duplicating an unbounded reader or aliasing peer IDs as conversation IDs.
-Retain independent editor/index continuity before provisional acknowledgement and product activation.
-A shared progress prototype and 14 additional tests are prepared but UNAPPLIED/UNTESTED in
-`.work/recipient-progress-preparation-2026-11-14`; its apply.py requires this packet to be accepted
-and both commits pushed first. Preserve the 20 existing canonical progress tests and actual DI.
+The recipient source projection from d4134a90 and admitted canonical destination observer remain
+accepted and pushed. None of these components has an active recipient product route yet. Next
+compose pending originals and canonical history rows using exact command/history evidence, preserve
+stable bubble identity through source retirement, and feed represented-original acknowledgement
+only after the displayed projection can retain the message. Preserve independent recipient and
+canonical drafts plus bounded global inbox ordering before activating product navigation.
+An UNAPPLIED/UNTESTED display-continuity sketch is in
+`.work/recipient-presentation-preparation-2026-11-14`; read review.md before use. It contains 14 formatted but uncompiled/unrun tests. Review the retained-record/snapshot checks
+and projection responsibility/length before applying, run those tests plus the 27 unchanged
+canonical presentation/row cases, then add real row identity and ViewModel/root integration. Do not treat the sketch as accepted code.
+UI reuse findings are in `.work/recipient-ui-review-2026-11-14/notes.md` and the product review.
 
-PrepareCollaborationSpaceConversation still needs a finite application owner after explicit
+PrepareCollaborationSpaceConversation still needs finite application ownership after explicit
 retained Send and current discovery. Passive room opening, typing and ordinary admission renewal
-must not trigger setup. Follow collaboration-recipient-projection-review.md and
-collaboration-recipient-product-review.md, then actual root/contact/thread navigation, rendered
+must not initiate setup. Follow collaboration-recipient-projection-review.md and
+collaboration-recipient-product-review.md, then root/contact/thread navigation, rendered
 interaction/screenshots, complete company filters and independent rollout acceptance.
 
 Starter c7323ce remains independently accepted with 1,060 cases. Recipient policy stays Mobile-only.
 Phone 93 remains installed from 2eb833f4 and predates these components. Group OFF; V117–140
-undeployed; all 54 PRD groups OPEN. Continue the long run beyond this checkpoint, preserving blocked
-SQLite preparation, failed Apple evidence and protected stores below.
+undeployed; all 54 PRD groups OPEN. Continue beyond this checkpoint; preserve blocked SQLite
+preparation, failed Apple evidence and protected stores below.
 
 ## Delivered build and loop diagnosis
 
