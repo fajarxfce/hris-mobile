@@ -1,6 +1,12 @@
 # Architecture
 
 
+[Retained contact browsing and search](collaboration-contact-surfaces.md)
+
+Independent projections and viewports share one admitted Group directory.
+
+
+
 [Group root composition and contact UI](collaboration-space-root-composition.md)
 
 Closed roots stop preparation and outgoing effects; the contact list preserves local viewport identity.

@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.collaboration.domain.entities.CollaborationSpaceContactCompany
 import dev.fajar.starter.collaboration.presentation.spacecontacts.SpaceContactsState
+import dev.fajar.starter.collaboration.presentation.spacecontacts.SpaceContactsSurface
 import dev.fajar.starter.collaboration.presentation.spacecontacts.pages.SpaceContactsPage
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppTheme
@@ -72,7 +73,7 @@ class SpaceContactsVisualTest {
                                 SpaceContactsState(
                                     contacts = people,
                                     loading = false,
-                                    visible = true,
+                                    visible = SpaceContactsSurface.Directory,
                                 ),
                                 rememberLazyListState(),
                                 {},

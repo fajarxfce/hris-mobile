@@ -1,0 +1,68 @@
+{
+  "accepted": true,
+  "validatedTests": 17800,
+  "newCases": 12,
+  "freshTests": 2051,
+  "reusedUnchangedTests": 15749,
+  "priorCaseIdsPreserved": true,
+  "sourceManifestSha256": "71447406ce31f810ba5fff9cec1d9c5e766d335c43e4ef956914546ada60514e",
+  "reportManifestSha256": "e71d6157217b5bfb8aa2b0821c76071bf7c9bc40e760ea2b4e64574e6138faf7",
+  "full": {
+    "startedAt": "2026-11-14T13:16:09.326769+00:00",
+    "elapsedSeconds": 549.145,
+    "exitCode": 0,
+    "sourceFiles": 5606,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true
+  },
+  "screenshots": {
+    "light": {
+      "bytes": 28915,
+      "sha256": "8e7fe051c204ccf2d3d28affae2dd6add127b4958eb69c82011882eba635346a",
+      "dimensions": [
+        375,
+        780
+      ]
+    },
+    "dark-large": {
+      "bytes": 44784,
+      "sha256": "85f0a573e3d26ce9c31385ebc91b2a1ef76d3cb06bf28b4632a67f2c48edecf8",
+      "dimensions": [
+        375,
+        780
+      ]
+    },
+    "landscape": {
+      "bytes": 28996,
+      "sha256": "acdbc1beea0b5b537fa1ec8da371565e188b50cdbcad74393525c16651c2654b",
+      "dimensions": [
+        760,
+        375
+      ]
+    }
+  },
+  "inspected": true,
+  "productActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "baseline": "3c886eacefcd1c495402ce3fc80dd6134894be99",
+  "sourcePaths": [
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/SpaceChatInboxContent.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/SpaceChatNavigation.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/SpaceContactsContent.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacecontacts/SpaceContactsState.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacecontacts/SpaceContactsViewModel.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacecontacts/pages/SpaceContactsPage.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/SpaceContactsViewModelTest.kt",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/SpaceContactsNavigationTest.kt",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/SpaceContactsPageTest.kt",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/SpaceContactsVisualTest.kt"
+  ],
+  "focused": {
+    "tests": 42,
+    "session": 36113,
+    "reaped": true,
+    "directory": "focused1"
+  },
+  "fullSession": 29801
+}

@@ -26,7 +26,7 @@ class SpaceContactsPageTest {
                         SpaceContactsState(
                             contacts = f.contacts,
                             loading = false,
-                            visible = true,
+                            visible = SpaceContactsSurface.Directory,
                             failure = f.thread.storage,
                         ),
                         rememberLazyListState(),
@@ -38,7 +38,10 @@ class SpaceContactsPageTest {
             onNodeWithText("Bima").assertIsDisplayed().performClick()
             assertEquals(
                 listOf<SpaceContactsEvent>(
-                    SpaceContactsEvent.ContactSelected(f.contacts[1].accountId)
+                    SpaceContactsEvent.ContactSelected(
+                        f.contacts[1].accountId,
+                        SpaceContactsSurface.Directory,
+                    )
                 ),
                 events,
             )
@@ -56,22 +59,33 @@ class SpaceContactsPageTest {
                 mutableStateOf(
                     SpaceContactsState(
                         query = "Ana",
-                        contacts = f.contacts,
+                        searchResults = f.contacts,
                         loading = false,
-                        visible = true,
+                        visible = SpaceContactsSurface.Search,
                     )
                 )
             setContent {
                 AppTheme(reduceMotion = true) {
-                    SpaceContactsPage(state, rememberLazyListState(), events::add, search = {})
+                    SpaceContactsPage(
+                        state,
+                        rememberLazyListState(),
+                        events::add,
+                        search = {},
+                        surface = SpaceContactsSurface.Search,
+                    )
                 }
             }
             onNodeWithText("Bima").assertIsNotEnabled()
-            runOnIdle { state = state.copy(appliedQuery = "Ana", contacts = listOf(f.contacts[2])) }
+            runOnIdle {
+                state = state.copy(appliedQuery = "Ana", searchResults = listOf(f.contacts[2]))
+            }
             onNodeWithText("Ana").assertIsEnabled().performClick()
             assertEquals(
                 listOf<SpaceContactsEvent>(
-                    SpaceContactsEvent.ContactSelected(f.contacts[2].accountId)
+                    SpaceContactsEvent.ContactSelected(
+                        f.contacts[2].accountId,
+                        SpaceContactsSurface.Search,
+                    )
                 ),
                 events,
             )
@@ -90,7 +104,11 @@ class SpaceContactsPageTest {
                 }
             var state by
                 mutableStateOf(
-                    SpaceContactsState(contacts = contacts, loading = false, visible = true)
+                    SpaceContactsState(
+                        contacts = contacts,
+                        loading = false,
+                        visible = SpaceContactsSurface.Directory,
+                    )
                 )
             setContent {
                 AppTheme(reduceMotion = true) {

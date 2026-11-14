@@ -23,7 +23,10 @@ fun SpaceContactsPage(
     search: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     bottomPadding: Dp = 8.dp,
+    surface: SpaceContactsSurface = SpaceContactsSurface.Directory,
 ) {
+    val contacts =
+        if (surface == SpaceContactsSurface.Directory) state.contacts else state.searchResults
     AppLazyPage(
         modifier,
         state = list,
@@ -36,7 +39,7 @@ fun SpaceContactsPage(
             item("restricted") {
                 Box(Modifier.padding(24.dp)) { AppFeedback(failureText(state.restriction)) }
             }
-        } else if (state.contacts.isEmpty()) {
+        } else if (contacts.isEmpty()) {
             item("empty") {
                 Box(Modifier.padding(24.dp)) {
                     when {
@@ -47,11 +50,14 @@ fun SpaceContactsPage(
                 }
             }
         } else {
-            items(state.contacts, key = { it.accountId }, contentType = { "contact" }) { contact ->
+            items(contacts, key = { it.accountId }, contentType = { "contact" }) { contact ->
                 ChatPersonRow(
                     contact.displayName,
-                    { onEvent(SpaceContactsEvent.ContactSelected(contact.accountId)) },
-                    enabled = state.visible && state.query == state.appliedQuery,
+                    { onEvent(SpaceContactsEvent.ContactSelected(contact.accountId, surface)) },
+                    enabled =
+                        state.visible == surface &&
+                            (surface == SpaceContactsSurface.Directory ||
+                                state.query == state.appliedQuery),
                     supporting =
                         if (contact.companies.isEmpty()) null
                         else {

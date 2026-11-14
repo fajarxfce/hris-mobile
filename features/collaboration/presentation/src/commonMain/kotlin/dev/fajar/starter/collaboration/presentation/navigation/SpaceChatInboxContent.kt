@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -21,17 +20,18 @@ import kotlinx.datetime.toLocalDateTime
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
-/** The caller supplies an account/Group store and the existing warm thread navigation owner. */
+/** One admitted Group handle binds inbox and warm threads to the same root store. */
 @Composable
 fun SpaceChatInboxContent(
-    graph: SpaceChatNavigationOwner,
-    viewModelOwner: ViewModelStoreOwner,
+    root: SpaceChatRoot,
     onConversation: (String) -> Unit,
     modifier: Modifier = Modifier,
     active: Boolean = true,
     bottomPadding: Dp = 8.dp,
 ) {
-    if (graph.closed) return
+    if (!root.isOpen) return
+    val graph = root.graph
+    val viewModelOwner = root.store
     key(graph.access, viewModelOwner) {
         val model =
             koinViewModel<SpaceChatInboxViewModel>(

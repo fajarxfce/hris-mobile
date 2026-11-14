@@ -23,6 +23,7 @@ class SpaceContactsViewModel(
     ) {
     private val snapshots = MutableStateFlow<CollaborationSpaceDirectorySnapshot?>(null)
     private val queries = MutableStateFlow("")
+    private var displayedSnapshot: CollaborationSpaceDirectorySnapshot? = null
 
     init {
         on<SpaceContactsEvent.Entered>(::onEntered)
@@ -47,9 +48,11 @@ class SpaceContactsViewModel(
                     is AppResult.Failed -> {
                         if (collaborationSpaceDirectoryResponseClosesRead(result.failure)) {
                             snapshots.value = null
+                            displayedSnapshot = null
                             updateState {
                                 it.copy(
                                     contacts = emptyList(),
+                                    searchResults = emptyList(),
                                     loading = false,
                                     failure = result.failure,
                                     restriction = result.failure,
@@ -71,9 +74,15 @@ class SpaceContactsViewModel(
         combine(snapshots, queries) { snapshot, query -> snapshot to query }
             .collectLatest { (snapshot, query) ->
                 if (snapshot == null) return@collectLatest
-                val selected =
+                val retainedDirectory =
+                    state.value.contacts.takeIf { displayedSnapshot === snapshot }
+                val (directory, selected) =
                     withContext(Dispatchers.Default) {
-                        selectCollaborationSpaceDirectory(snapshot, query)
+                        val directory =
+                            retainedDirectory ?: selectCollaborationSpaceDirectory(snapshot, "")
+                        directory to
+                            if (query.isBlank()) directory
+                            else selectCollaborationSpaceDirectory(snapshot, query)
                     }
                 currentCoroutineContext().ensureActive()
                 if (
@@ -81,19 +90,25 @@ class SpaceContactsViewModel(
                         queries.value == query &&
                         state.value.restriction == null
                 ) {
+                    displayedSnapshot = snapshot
                     updateState {
-                        it.copy(contacts = selected, appliedQuery = query, loading = false)
+                        it.copy(
+                            contacts = directory,
+                            searchResults = selected,
+                            appliedQuery = query,
+                            loading = false,
+                        )
                     }
                 }
             }
     }
 
     private fun onEntered(event: SpaceContactsEvent.Entered) {
-        updateState { it.copy(visible = true) }
+        updateState { it.copy(visible = event.surface) }
     }
 
     private fun onStopped(event: SpaceContactsEvent.Stopped) {
-        updateState { it.copy(visible = false) }
+        updateState { if (it.visible == event.surface) it.copy(visible = null) else it }
     }
 
     private fun onQueryChanged(event: SpaceContactsEvent.QueryChanged) {
@@ -105,15 +120,21 @@ class SpaceContactsViewModel(
 
     private fun onContactSelected(event: SpaceContactsEvent.ContactSelected) {
         val current = state.value
+        val displayed =
+            if (event.surface == SpaceContactsSurface.Directory) current.contacts
+            else current.searchResults
         if (
-            !current.visible ||
+            current.visible != event.surface ||
                 current.loading ||
                 current.restriction != null ||
-                current.query != current.appliedQuery ||
-                current.contacts.none { it.accountId == event.accountId }
+                (event.surface == SpaceContactsSurface.Search &&
+                    current.query != current.appliedQuery) ||
+                displayed.none { it.accountId == event.accountId }
         )
             return
-        updateState { it.copy(visible = false) }
-        viewModelScope.launch { emitEffect(SpaceContactsEffect.OpenContact(event.accountId)) }
+        updateState { it.copy(visible = null) }
+        viewModelScope.launch {
+            emitEffect(SpaceContactsEffect.OpenContact(event.accountId, event.surface))
+        }
     }
 }

@@ -8,8 +8,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable data class SpaceChatThreadRoute(val conversationId: String)
 
-/** The caller owns a separate account/Group graph, shared with visible-list preparation. */
-fun NavGraphBuilder.spaceChatThreadRoutes(owner: SpaceChatNavigationOwner, onBack: () -> Unit) {
+/** Application routes share the exact root used by contacts, inbox and visible-list preparation. */
+fun NavGraphBuilder.spaceChatThreadRoutes(root: SpaceChatRoot, onBack: () -> Unit) {
+    spaceChatThreadRoutes(root.graph, onBack)
+}
+
+internal fun NavGraphBuilder.spaceChatThreadRoutes(
+    owner: SpaceChatNavigationOwner,
+    onBack: () -> Unit,
+) {
     composable<SpaceChatThreadRoute> { entry ->
         if (owner.closed) return@composable
         val conversationId = entry.toRoute<SpaceChatThreadRoute>().conversationId

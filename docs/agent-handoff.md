@@ -1,7 +1,30 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 13:03 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 13:25 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
+
+## Retained contact browsing and search accepted
+
+Mobile contact browse/search is accepted: 17,800 validated cases
+(2051 fresh / 15749 exact unchanged), preserving all17,788 prior
+identities plus12 executions (5 shared x2, 2 desktop). Focused42/session36113 and
+full1/session29801 reaped0. Source 71447406ce31f810ba5fff9cec1d9c5e766d335c43e4ef956914546ada60514e;
+reports e71d6157217b5bfb8aa2b0821c76071bf7c9bc40e760ea2b4e64574e6138faf7. Three fresh contact images match the accepted inspection.
+
+One retained directory serves independent browse/search projections and viewports. Root-bound
+inbox/contact/thread entries prevent mismatched graph/store ownership. Resumed surface events and
+effects reject obsolete navigation. No application route, phone or live activation.
+
+Next review/apply .work/navigation-stack-identity-2026-11-14:2 unapplied files,3 desktop integration
+tests, no runs yet. Concurrent Group/Company navigation must use independent stable owner keys;
+keep AppViewModel at the window. Port the generic foundation to Starter after Mobile acceptance.
+Then implement durable new-contact drafts and canonical conversation handoff; do not invent IDs.
+Complete company filtering remains unresolved; truncated display labels are not membership facts.
+
+Phone92/GroupOFF/V117–140 undeployed remain. All54 PRD groups OPEN. Continue beyond checkpoints;
+push each commit; one compiler OR emulator; no agents. Preserve the blocked SQLite fixture payload
+and failed hosted Apple evidence. Full/source compilation does not prove Apple runtime acceptance.
+
 
 ## Group root composition and contact UI accepted
 
