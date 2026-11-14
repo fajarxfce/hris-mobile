@@ -20,14 +20,35 @@ abstract class CollaborationSpaceHistoryInboxStorageContract {
     fun publicationPreservesSourceCiphertextAndIsVisibleAfterReopening() = withDatabase { f ->
         f.merge(f.event())
         val history = f.raw()
+        val signal =
+            assertNotNull(
+                f.database.replicas.checkpoint(
+                    spaceHistoryScope(f.access),
+                    CollaborationHistorySignal.PARTITION,
+                )
+            )
         val key = f.keys.read()
         val proposal = f.proposal()
         assertEquals(AppResult.Success(true), f.publish(proposal))
         assertEquals(history, f.raw())
+        assertEquals(
+            signal,
+            f.database.replicas.checkpoint(
+                spaceHistoryScope(f.access),
+                CollaborationHistorySignal.PARTITION,
+            ),
+        )
         assertEquals(proposal.entry, f.inbox().entry)
         f.reopen()
         assertEquals(proposal.entry, f.inbox().entry)
         assertEquals(history, f.raw())
+        assertEquals(
+            signal,
+            f.database.replicas.checkpoint(
+                spaceHistoryScope(f.access),
+                CollaborationHistorySignal.PARTITION,
+            ),
+        )
         assertEquals(key, f.keys.read())
     }
 

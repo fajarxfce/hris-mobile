@@ -349,13 +349,25 @@ class EncryptedCollaborationSpaceHistoryRepository(
                         codec.checkpoint(generation, revision, count, previous?.hiddenRules ?: 0)
                     currentCoroutineContext().ensureActive()
                     if (raw == null)
-                        replicas.replace(
+                        publishHistoryChange(
                             scope,
-                            partition,
-                            null,
-                            ReplicaSnapshot(generation, checkpoint, documents),
+                            ReplicaMutation.Replace(
+                                partition,
+                                null,
+                                ReplicaSnapshot(generation, checkpoint, documents),
+                            ),
                         )
-                    else replicas.commit(raw.handle, raw.revision, checkpoint, documents, true)
+                    else
+                        publishHistoryChange(
+                            scope,
+                            ReplicaMutation.Commit(
+                                raw.handle,
+                                raw.revision,
+                                checkpoint,
+                                documents,
+                                true,
+                            ),
+                        )
                 }
             } catch (_: CollaborationHistoryPreparationChanged) {
                 currentCoroutineContext().ensureActive()
@@ -497,17 +509,20 @@ class EncryptedCollaborationSpaceHistoryRepository(
                     currentCoroutineContext().ensureActive()
                     if (documents.isEmpty()) replicas.checkpoint(scope, partition) == raw
                     else
-                        replicas.commit(
-                            raw.handle,
-                            raw.revision,
-                            codec.checkpoint(
-                                raw.handle.generation,
-                                revision,
-                                previous.count,
-                                previous.hiddenRules,
+                        publishHistoryChange(
+                            scope,
+                            ReplicaMutation.Commit(
+                                raw.handle,
+                                raw.revision,
+                                codec.checkpoint(
+                                    raw.handle.generation,
+                                    revision,
+                                    previous.count,
+                                    previous.hiddenRules,
+                                ),
+                                documents,
+                                true,
                             ),
-                            documents,
-                            true,
                         )
                 }
             } catch (_: CollaborationHistoryPreparationChanged) {
@@ -515,6 +530,24 @@ class EncryptedCollaborationSpaceHistoryRepository(
             }
         }
         false
+    }
+
+    /** Source facts and their account-owned local invalidation commit or roll back together. */
+    private suspend fun publishHistoryChange(
+        scope: ReplicaScope,
+        source: ReplicaMutation,
+    ): Boolean {
+        val signal = replicas.checkpoint(scope, CollaborationHistorySignal.PARTITION)
+        signal?.let { CollaborationHistorySignal.generation(scope, it) }
+        val next = CollaborationHistorySignal.snapshot(Uuid.random().toString())
+        currentCoroutineContext().ensureActive()
+        return replicas.mutate(
+            scope,
+            listOf(
+                source,
+                ReplicaMutation.Replace(CollaborationHistorySignal.PARTITION, signal, next),
+            ),
+        )
     }
 
     private suspend fun <T> withKey(

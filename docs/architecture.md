@@ -1,5 +1,7 @@
 # Architecture
 
+[Atomic local history invalidation](collaboration-history-change-signal.md) publishes one owned signal with effective source mutations.
+
 [Authenticated history change pages](collaboration-history-changes.md) retain exact source identity and bounded local references.
 
 [Incremental local replica pages](replica-change-pages.md) enumerate bounded published changes independently of source versions.

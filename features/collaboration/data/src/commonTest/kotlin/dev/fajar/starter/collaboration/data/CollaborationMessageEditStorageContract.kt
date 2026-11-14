@@ -295,23 +295,13 @@ abstract class CollaborationMessageEditStorageContract {
         val winner = edit(original, 2)
         val store =
             object : ReplicaStore by f.database.replicas {
-                override suspend fun commit(
-                    handle: ReplicaHandle,
-                    expectedRevision: Long,
-                    checkpoint: String,
-                    documents: List<ReplicaDocument>,
-                    publish: Boolean,
+                override suspend fun mutate(
+                    scope: ReplicaScope,
+                    mutations: List<ReplicaMutation>,
                     wake: WorkWakeRequest?,
                 ): Boolean {
                     f.edits(winner)
-                    return f.database.replicas.commit(
-                        handle,
-                        expectedRevision,
-                        checkpoint,
-                        documents,
-                        publish,
-                        wake,
-                    )
+                    return f.database.replicas.mutate(scope, mutations, wake)
                 }
             }
         assertEquals(
@@ -332,12 +322,9 @@ abstract class CollaborationMessageEditStorageContract {
         val before = f.raw()
         val cancelled =
             object : ReplicaStore by f.database.replicas {
-                override suspend fun commit(
-                    handle: ReplicaHandle,
-                    expectedRevision: Long,
-                    checkpoint: String,
-                    documents: List<ReplicaDocument>,
-                    publish: Boolean,
+                override suspend fun mutate(
+                    scope: ReplicaScope,
+                    mutations: List<ReplicaMutation>,
                     wake: WorkWakeRequest?,
                 ): Boolean {
                     throw CancellationException("Cancel before admission")
@@ -350,25 +337,15 @@ abstract class CollaborationMessageEditStorageContract {
         assertEquals(before, f.raw())
         val switched =
             object : ReplicaStore by f.database.replicas {
-                override suspend fun commit(
-                    handle: ReplicaHandle,
-                    expectedRevision: Long,
-                    checkpoint: String,
-                    documents: List<ReplicaDocument>,
-                    publish: Boolean,
+                override suspend fun mutate(
+                    scope: ReplicaScope,
+                    mutations: List<ReplicaMutation>,
                     wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(
                         f.access.copy(sessionId = "foreign-login", accountId = historyId(1234))
                     )
-                    return f.database.replicas.commit(
-                        handle,
-                        expectedRevision,
-                        checkpoint,
-                        documents,
-                        publish,
-                        wake,
-                    )
+                    return f.database.replicas.mutate(scope, mutations, wake)
                 }
             }
         assertEquals(

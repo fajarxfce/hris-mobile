@@ -1,0 +1,235 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationHistorySignal.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationHistoryRepository.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceHistoryRepository.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/StoredCollaborationHistorySignalRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationHistorySignalStorageContract.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationHistoryStorageContract.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationLocalVisibilityStorageContract.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationMessageEditStorageContract.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceHistoryInboxStorageContract.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceHistoryStorageContract.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceMessageEditStorageContract.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationHistorySignalStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationHistorySignalStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationHistorySignalStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationHistorySignalRepository.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 125,
+    "elapsedSeconds": 153.053,
+    "sourceFiles": 5465,
+    "sourceManifestSha256": "6f2851928f25306470dd64a8ff16bcb9d8e7fde717fdf801151735d7de14d186",
+    "resultSha256": "adc24b12fa26cf8d6c7a0d410749658ab8fac752c2d39d602c39b5b42982dc6c",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationLocalVisibilityStorageTest": 10,
+      "CollaborationMessageEditStorageTest": 14,
+      "CollaborationSpaceMessageEditStorageTest": 17,
+      "CollaborationHistoryChangesStorageTest": 15,
+      "CollaborationHistorySignalStorageTest": 13,
+      "CollaborationHistoryStorageTest": 22,
+      "CollaborationSpaceHistoryInboxStorageTest": 16,
+      "CollaborationSpaceHistoryStorageTest": 16
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T00:42:41.610514+00:00",
+    "elapsedSeconds": 1029.311,
+    "sourceFiles": 5465,
+    "freshCounts": {
+      "tests": 14743,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153499838,
+      "sha256": "a724c62b1547662fb39bf7a4832d4e2f4bd7d6c58841e26d6e5a20e367fcee72"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16924,
+    "newCases": 26,
+    "freshTests": 14743,
+    "reusedUnaffectedTests": 2181,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "6f2851928f25306470dd64a8ff16bcb9d8e7fde717fdf801151735d7de14d186",
+    "reportManifestSha256": "51328a866856fca327dba4dc721b9bd85f23434f0a6f055d2a14f662b9139749",
+    "nativeClaim": "Atomic account-owned history invalidation and source publication;13 shared storage methods and all38 previous writer cases. Existing owner integration, durable cursor progress and product activation remain open."
+  },
+  "newSharedStorageMethods": 13,
+  "previousWriterMethodsRetained": 38,
+  "previousDeleteEditMethodsRetained": 41,
+  "failedFullAttempt": {
+    "accepted": false,
+    "sourceManifestSha256": "2460b28cd6c81d75aa2946fbc265e70017eacf3c860c3da8c83a97c878ce0764",
+    "resultSha256": "03d5d580f2530f67a273edca3bb80c7b54a5bd3fd8267211428ca5562e5a789b",
+    "freshCounts": {
+      "tests": 2709,
+      "failures": 8,
+      "errors": 0,
+      "skipped": 0
+    },
+    "failures": [
+      {
+        "report": "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageTest.xml",
+        "test": "bulkDeletionIsBoundedAtomicAndRetryAfterLostCommitResponseIsIdempotent[desktop]",
+        "type": "java.lang.AssertionError",
+        "message": "java.lang.AssertionError: Expected value to be of type <dev.fajar.starter.common.result.AppResult$Failed (Kotlin reflection is not available)>, actual <class dev.fajar.starter.common.result.AppResult$Success (Kotlin reflection is not available)>.",
+        "frames": [
+          "at dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageContract$bulkDeletionIsBoundedAtomicAndRetryAfterLostCommitResponseIsIdempotent$1.invokeSuspend(CollaborationLocalVisibilityStorageContract.kt:126)",
+          "at dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageContract.withDatabase(CollaborationLocalVisibilityStorageContract.kt:378)",
+          "at dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageContract.bulkDeletionIsBoundedAtomicAndRetryAfterLostCommitResponseIsIdempotent(CollaborationLocalVisibilityStorageContract.kt:99)"
+        ]
+      },
+      {
+        "report": "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageTest.xml",
+        "test": "concurrentHistoryCommitReturnsConflictAndARepeatPreservesBothFacts[desktop]",
+        "type": "java.lang.AssertionError",
+        "message": "java.lang.AssertionError: expected:<Success(value=false)> but was:<Success(value=true)>",
+        "frames": [
+          "at dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageContract$concurrentHistoryCommitReturnsConflictAndARepeatPreservesBothFacts$1.invokeSuspend(CollaborationLocalVisibilityStorageContract.kt:188)",
+          "at dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageContract.withDatabase(CollaborationLocalVisibilityStorageContract.kt:378)",
+          "at dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageContract.concurrentHistoryCommitReturnsConflictAndARepeatPreservesBothFacts(CollaborationLocalVisibilityStorageContract.kt:165)"
+        ]
+      },
+      {
+        "report": "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageTest.xml",
+        "test": "cancellationAndAccountReplacementCannotPartiallyHideSelection[desktop]",
+        "type": "kotlinx.coroutines.test.UncompletedCoroutinesError",
+        "message": "kotlinx.coroutines.test.UncompletedCoroutinesError: After waiting for 1m, the test body did not run to completion",
+        "frames": []
+      },
+      {
+        "report": "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationMessageEditStorageTest.xml",
+        "test": "cancellationAndOwnerReplacementBeforeCommitCannotPublishARevision[desktop]",
+        "type": "java.lang.AssertionError",
+        "message": "java.lang.AssertionError: Expected an exception of class java.util.concurrent.CancellationException to be thrown, but was completed successfully with the result: <Success(value=true)>.",
+        "frames": [
+          "at dev.fajar.starter.collaboration.data.CollaborationMessageEditStorageContract$cancellationAndOwnerReplacementBeforeCommitCannotPublishARevision$1.invokeSuspend(CollaborationMessageEditStorageContract.kt:346)",
+          "at dev.fajar.starter.collaboration.data.CollaborationMessageEditStorageContract.withDatabase(CollaborationMessageEditStorageContract.kt:537)",
+          "at dev.fajar.starter.collaboration.data.CollaborationMessageEditStorageContract.cancellationAndOwnerReplacementBeforeCommitCannotPublishARevision(CollaborationMessageEditStorageContract.kt:329)"
+        ]
+      },
+      {
+        "report": "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationMessageEditStorageTest.xml",
+        "test": "checkpointCompetitorWinsWithoutHalfOfTheLosingRevisionOrPointer[desktop]",
+        "type": "java.lang.AssertionError",
+        "message": "java.lang.AssertionError: expected:<Success(value=false)> but was:<Success(value=true)>",
+        "frames": [
+          "at dev.fajar.starter.collaboration.data.CollaborationMessageEditStorageContract$checkpointCompetitorWinsWithoutHalfOfTheLosingRevisionOrPointer$1.invokeSuspend(CollaborationMessageEditStorageContract.kt:317)",
+          "at dev.fajar.starter.collaboration.data.CollaborationMessageEditStorageContract.withDatabase(CollaborationMessageEditStorageContract.kt:537)",
+          "at dev.fajar.starter.collaboration.data.CollaborationMessageEditStorageContract.checkpointCompetitorWinsWithoutHalfOfTheLosingRevisionOrPointer(CollaborationMessageEditStorageContract.kt:292)"
+        ]
+      },
+      {
+        "report": "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceMessageEditStorageTest.xml",
+        "test": "cancellationAndOwnerReplacementBeforeCommitCannotPublishARevision[desktop]",
+        "type": "java.lang.AssertionError",
+        "message": "java.lang.AssertionError: Expected an exception of class java.util.concurrent.CancellationException to be thrown, but was completed successfully with the result: <Success(value=true)>.",
+        "frames": [
+          "at dev.fajar.starter.collaboration.data.CollaborationSpaceMessageEditStorageContract$cancellationAndOwnerReplacementBeforeCommitCannotPublishARevision$1.invokeSuspend(CollaborationSpaceMessageEditStorageContract.kt:305)",
+          "at dev.fajar.starter.collaboration.data.CollaborationSpaceMessageEditStorageContract.withDatabase(CollaborationSpaceMessageEditStorageContract.kt:628)",
+          "at dev.fajar.starter.collaboration.data.CollaborationSpaceMessageEditStorageContract.cancellationAndOwnerReplacementBeforeCommitCannotPublishARevision(CollaborationSpaceMessageEditStorageContract.kt:288)"
+        ]
+      },
+      {
+        "report": "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceMessageEditStorageTest.xml",
+        "test": "lostCommitResponseAndCancellationKeepOneRevisionAcrossRestartAndReplay[desktop]",
+        "type": "java.lang.AssertionError",
+        "message": "java.lang.AssertionError: Expected value to be of type <dev.fajar.starter.common.result.AppResult$Failed (Kotlin reflection is not available)>, actual <class dev.fajar.starter.common.result.AppResult$Success (Kotlin reflection is not available)>.",
+        "frames": [
+          "at dev.fajar.starter.collaboration.data.CollaborationSpaceMessageEditStorageContract$lostCommitResponseAndCancellationKeepOneRevisionAcrossRestartAndReplay$1.invokeSuspend(CollaborationSpaceMessageEditStorageContract.kt:579)",
+          "at dev.fajar.starter.collaboration.data.CollaborationSpaceMessageEditStorageContract.withDatabase(CollaborationSpaceMessageEditStorageContract.kt:628)",
+          "at dev.fajar.starter.collaboration.data.CollaborationSpaceMessageEditStorageContract.lostCommitResponseAndCancellationKeepOneRevisionAcrossRestartAndReplay(CollaborationSpaceMessageEditStorageContract.kt:544)"
+        ]
+      },
+      {
+        "report": "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceMessageEditStorageTest.xml",
+        "test": "checkpointCompetitorWinsWithoutHalfOfTheLosingRevisionOrPointer[desktop]",
+        "type": "java.lang.AssertionError",
+        "message": "java.lang.AssertionError: expected:<Success(value=false)> but was:<Success(value=true)>",
+        "frames": [
+          "at dev.fajar.starter.collaboration.data.CollaborationSpaceMessageEditStorageContract$checkpointCompetitorWinsWithoutHalfOfTheLosingRevisionOrPointer$1.invokeSuspend(CollaborationSpaceMessageEditStorageContract.kt:276)",
+          "at dev.fajar.starter.collaboration.data.CollaborationSpaceMessageEditStorageContract.withDatabase(CollaborationSpaceMessageEditStorageContract.kt:628)",
+          "at dev.fajar.starter.collaboration.data.CollaborationSpaceMessageEditStorageContract.checkpointCompetitorWinsWithoutHalfOfTheLosingRevisionOrPointer(CollaborationSpaceMessageEditStorageContract.kt:251)"
+        ]
+      }
+    ]
+  },
+  "testCorrections": {
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationLocalVisibilityStorageContract.kt": {
+      "previousSha256": "81bf55801c4adf7eefe6988fca7b98add7f14255c4db09c6050324f2ced4669d",
+      "retainedMethods": [
+        "deletionSurvivesRestartAndRenewedLoginWithoutDeletingOriginalEvidence",
+        "hideBeforeHistoryImportKeepsRetriesAndRedactionsHidden",
+        "eventOnlySelectionLearnsOriginalLogicalIdentityAndKeepsOtherSendersVisible",
+        "bulkDeletionIsBoundedAtomicAndRetryAfterLostCommitResponseIsIdempotent",
+        "conflictingSenderOrLogicalIdentityRollsBackTheEntireSelection",
+        "concurrentHistoryCommitReturnsConflictAndARepeatPreservesBothFacts",
+        "visibilityChangesNotifyObserversAndNeverExposePlaintextIndexes",
+        "tamperedHiddenRulesAndUnexpectedHiddenQueryRowsFailClosed",
+        "cancellationAndAccountReplacementCannotPartiallyHideSelection",
+        "missingKeyCannotReplaceVisibilityOnlyPartitionAndInvalidReadsCreateNothing"
+      ],
+      "correctedInterceptors": 4
+    },
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationMessageEditStorageContract.kt": {
+      "previousSha256": "f08a27be2e0a600c1680bbde2dad4d20885af562d2ed589b6986f70712759ba6",
+      "retainedMethods": [
+        "replacementFactsRetainTheirOwnIdentityAcrossRestartAndRedactionWithoutCreatingMissingKeys",
+        "replacementFactReadCannotMixCheckpointsOrPublishAfterLogoutOrCancellation",
+        "revisionsSurviveRestartWithoutChangingOriginalReceiptIdentityOrOrdering",
+        "olderAndIneligibleRevisionsDoNotReplaceTheNewestAndConflictsRollbackEveryWrite",
+        "redactionFallsBackAcrossRetainedRevisionsAndNeverBecomesOriginalSendEvidence",
+        "redactionBeforeReplacementAndOriginalRedactionRemainClosedAcrossReplayAndRestart",
+        "localHideRemainsIndependentOfEditsFallbackAndQuotePublication",
+        "checkpointCompetitorWinsWithoutHalfOfTheLosingRevisionOrPointer",
+        "cancellationAndOwnerReplacementBeforeCommitCannotPublishARevision",
+        "tiedServerTimesRecoverByEventIdentityAcrossOpaqueIndexPages",
+        "absentTargetWrongRoomAndMalformedBatchesDoNotCreateOrOverwriteOwnedFacts",
+        "firstObservedRetryKeepsItsOrderingWhileAnEarlierTargetsEditRemainsValid",
+        "newlyAcquiredEarlierAliasesNarrowTheWindowAndReprojectRetainedRevisions",
+        "legacyHistoriesIndexEveryRetainedAliasBeforeApplyingAnEdit"
+      ],
+      "correctedInterceptors": 3
+    },
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceMessageEditStorageContract.kt": {
+      "previousSha256": "e1e56394175d2d12b42f5353577bc92c492874cfafce050b3084f0669b9a2f4b",
+      "retainedMethods": [
+        "replacementFactsRetainTheirOwnIdentityAcrossRestartAndRedactionWithoutCreatingMissingKeys",
+        "replacementFactReadCannotMixCheckpointsOrPublishAfterLogoutOrCancellation",
+        "revisionsSurviveRestartWithoutChangingOriginalReceiptIdentityOrOrdering",
+        "olderAndIneligibleRevisionsDoNotReplaceTheNewestAndConflictsRollbackEveryWrite",
+        "redactionFallsBackAcrossRetainedRevisionsAndNeverBecomesOriginalSendEvidence",
+        "redactionBeforeReplacementAndOriginalRedactionRemainClosedAcrossReplayAndRestart",
+        "checkpointCompetitorWinsWithoutHalfOfTheLosingRevisionOrPointer",
+        "cancellationAndOwnerReplacementBeforeCommitCannotPublishARevision",
+        "tiedServerTimesRecoverByEventIdentityAcrossOpaqueIndexPages",
+        "absentTargetWrongRoomAndMalformedBatchesDoNotCreateOrOverwriteOwnedFacts",
+        "firstObservedRetryKeepsItsOrderingWhileAnEarlierTargetsEditRemainsValid",
+        "newlyAcquiredEarlierAliasesNarrowTheWindowAndReprojectRetainedRevisions",
+        "olderEncodedMessagesIndexEveryRetainedAliasBeforeApplyingAnEdit",
+        "companyAndSpaceReplacementsWithTheSameIdsRemainIndependent",
+        "anotherSpaceCannotReadOrApplyTheRetainedReplacement",
+        "lostCommitResponseAndCancellationKeepOneRevisionAcrossRestartAndReplay",
+        "callerMutationAfterCaptureCannotReplaceTheSubmittedRevision"
+      ],
+      "correctedInterceptors": 4
+    }
+  },
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "ownerActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false
+}

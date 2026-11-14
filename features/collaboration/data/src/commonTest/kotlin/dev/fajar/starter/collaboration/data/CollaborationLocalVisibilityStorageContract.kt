@@ -101,25 +101,18 @@ abstract class CollaborationLocalVisibilityStorageContract {
             for (batch in events.chunked(16)) f.merge(*batch.toTypedArray())
             val store =
                 object : ReplicaStore by f.database.replicas {
-                    override suspend fun commit(
-                        handle: ReplicaHandle,
-                        expectedRevision: Long,
-                        checkpoint: String,
-                        documents: List<ReplicaDocument>,
-                        publish: Boolean,
+                    override suspend fun mutate(
+                        scope: ReplicaScope,
+                        mutations: List<ReplicaMutation>,
                         wake: WorkWakeRequest?,
                     ): Boolean {
-                        assertTrue(documents.size <= 150)
-                        assertTrue(
-                            f.database.replicas.commit(
-                                handle,
-                                expectedRevision,
-                                checkpoint,
-                                documents,
-                                publish,
-                                wake,
-                            )
-                        )
+                        assertEquals(2, mutations.size)
+                        val source = assertIs<ReplicaMutation.Commit>(mutations.first())
+                        assertEquals(assertNotNull(f.raw().checkpoint).handle, source.handle)
+                        assertTrue(source.documents.size <= 150)
+                        val signal = assertIs<ReplicaMutation.Replace>(mutations.last())
+                        assertEquals(CollaborationHistorySignal.PARTITION, signal.partition)
+                        assertTrue(f.database.replicas.mutate(scope, mutations, wake))
                         error("Lost local commit response")
                     }
                 }
@@ -166,23 +159,13 @@ abstract class CollaborationLocalVisibilityStorageContract {
         f.merge(f.event())
         val store =
             object : ReplicaStore by f.database.replicas {
-                override suspend fun commit(
-                    handle: ReplicaHandle,
-                    expectedRevision: Long,
-                    checkpoint: String,
-                    documents: List<ReplicaDocument>,
-                    publish: Boolean,
+                override suspend fun mutate(
+                    scope: ReplicaScope,
+                    mutations: List<ReplicaMutation>,
                     wake: WorkWakeRequest?,
                 ): Boolean {
                     f.merge(f.event(2))
-                    return f.database.replicas.commit(
-                        handle,
-                        expectedRevision,
-                        checkpoint,
-                        documents,
-                        publish,
-                        wake,
-                    )
+                    return f.database.replicas.mutate(scope, mutations, wake)
                 }
             }
         assertEquals(
@@ -282,12 +265,9 @@ abstract class CollaborationLocalVisibilityStorageContract {
         val entered = CompletableDeferred<Unit>()
         val store =
             object : ReplicaStore by f.database.replicas {
-                override suspend fun commit(
-                    handle: ReplicaHandle,
-                    expectedRevision: Long,
-                    checkpoint: String,
-                    documents: List<ReplicaDocument>,
-                    publish: Boolean,
+                override suspend fun mutate(
+                    scope: ReplicaScope,
+                    mutations: List<ReplicaMutation>,
                     wake: WorkWakeRequest?,
                 ): Boolean {
                     entered.complete(Unit)
@@ -310,23 +290,13 @@ abstract class CollaborationLocalVisibilityStorageContract {
         assertEquals(before, f.raw())
         val replaced =
             object : ReplicaStore by f.database.replicas {
-                override suspend fun commit(
-                    handle: ReplicaHandle,
-                    expectedRevision: Long,
-                    checkpoint: String,
-                    documents: List<ReplicaDocument>,
-                    publish: Boolean,
+                override suspend fun mutate(
+                    scope: ReplicaScope,
+                    mutations: List<ReplicaMutation>,
                     wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(f.access.copy(sessionId = "another", accountId = historyId(777)))
-                    return f.database.replicas.commit(
-                        handle,
-                        expectedRevision,
-                        checkpoint,
-                        documents,
-                        publish,
-                        wake,
-                    )
+                    return f.database.replicas.mutate(scope, mutations, wake)
                 }
             }
         assertEquals(

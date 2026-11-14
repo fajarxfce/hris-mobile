@@ -254,23 +254,13 @@ abstract class CollaborationSpaceMessageEditStorageContract {
         val winner = edit(original, 2)
         val store =
             object : ReplicaStore by f.database.replicas {
-                override suspend fun commit(
-                    handle: ReplicaHandle,
-                    expectedRevision: Long,
-                    checkpoint: String,
-                    documents: List<ReplicaDocument>,
-                    publish: Boolean,
+                override suspend fun mutate(
+                    scope: ReplicaScope,
+                    mutations: List<ReplicaMutation>,
                     wake: WorkWakeRequest?,
                 ): Boolean {
                     f.edits(winner)
-                    return f.database.replicas.commit(
-                        handle,
-                        expectedRevision,
-                        checkpoint,
-                        documents,
-                        publish,
-                        wake,
-                    )
+                    return f.database.replicas.mutate(scope, mutations, wake)
                 }
             }
         assertEquals(
@@ -291,12 +281,9 @@ abstract class CollaborationSpaceMessageEditStorageContract {
         val before = f.raw()
         val cancelled =
             object : ReplicaStore by f.database.replicas {
-                override suspend fun commit(
-                    handle: ReplicaHandle,
-                    expectedRevision: Long,
-                    checkpoint: String,
-                    documents: List<ReplicaDocument>,
-                    publish: Boolean,
+                override suspend fun mutate(
+                    scope: ReplicaScope,
+                    mutations: List<ReplicaMutation>,
                     wake: WorkWakeRequest?,
                 ): Boolean {
                     throw CancellationException("Cancel before admission")
@@ -309,25 +296,15 @@ abstract class CollaborationSpaceMessageEditStorageContract {
         assertEquals(before, f.raw())
         val switched =
             object : ReplicaStore by f.database.replicas {
-                override suspend fun commit(
-                    handle: ReplicaHandle,
-                    expectedRevision: Long,
-                    checkpoint: String,
-                    documents: List<ReplicaDocument>,
-                    publish: Boolean,
+                override suspend fun mutate(
+                    scope: ReplicaScope,
+                    mutations: List<ReplicaMutation>,
                     wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(
                         f.access.copy(sessionId = "foreign-login", accountId = historyId(1234))
                     )
-                    return f.database.replicas.commit(
-                        handle,
-                        expectedRevision,
-                        checkpoint,
-                        documents,
-                        publish,
-                        wake,
-                    )
+                    return f.database.replicas.mutate(scope, mutations, wake)
                 }
             }
         assertEquals(
@@ -548,24 +525,12 @@ abstract class CollaborationSpaceMessageEditStorageContract {
                 val replacement = edit(original, if (cancel) 2 else 1)
                 val store =
                     object : ReplicaStore by f.database.replicas {
-                        override suspend fun commit(
-                            handle: ReplicaHandle,
-                            expectedRevision: Long,
-                            checkpoint: String,
-                            documents: List<ReplicaDocument>,
-                            publish: Boolean,
+                        override suspend fun mutate(
+                            scope: ReplicaScope,
+                            mutations: List<ReplicaMutation>,
                             wake: WorkWakeRequest?,
                         ): Boolean {
-                            assertTrue(
-                                f.database.replicas.commit(
-                                    handle,
-                                    expectedRevision,
-                                    checkpoint,
-                                    documents,
-                                    publish,
-                                    wake,
-                                )
-                            )
+                            assertTrue(f.database.replicas.mutate(scope, mutations, wake))
                             if (cancel) throw CancellationException("Lost successful response")
                             error("Lost successful response")
                         }

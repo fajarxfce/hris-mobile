@@ -70,12 +70,9 @@ abstract class CollaborationHistoryStorageContract {
                             return f.database.replicas.checkpoint(scope, partition)
                         }
 
-                        override suspend fun commit(
-                            handle: ReplicaHandle,
-                            expectedRevision: Long,
-                            checkpoint: String,
-                            documents: List<ReplicaDocument>,
-                            publish: Boolean,
+                        override suspend fun mutate(
+                            scope: ReplicaScope,
+                            mutations: List<ReplicaMutation>,
                             wake: WorkWakeRequest?,
                         ): Boolean = error("Replayed history must not commit")
                     }
@@ -596,25 +593,15 @@ abstract class CollaborationHistoryStorageContract {
         var arrived = 0
         val store =
             object : ReplicaStore by f.database.replicas {
-                override suspend fun commit(
-                    handle: ReplicaHandle,
-                    expectedRevision: Long,
-                    checkpoint: String,
-                    documents: List<ReplicaDocument>,
-                    publish: Boolean,
+                override suspend fun mutate(
+                    scope: ReplicaScope,
+                    mutations: List<ReplicaMutation>,
                     wake: WorkWakeRequest?,
                 ): Boolean {
                     arrived++
                     if (arrived == 2) ready.complete(Unit)
                     ready.await()
-                    return f.database.replicas.commit(
-                        handle,
-                        expectedRevision,
-                        checkpoint,
-                        documents,
-                        publish,
-                        wake,
-                    )
+                    return f.database.replicas.mutate(scope, mutations, wake)
                 }
             }
         val results = coroutineScope {
@@ -646,24 +633,12 @@ abstract class CollaborationHistoryStorageContract {
             val event = f.event(if (cancel) 3 else 2)
             val store =
                 object : ReplicaStore by f.database.replicas {
-                    override suspend fun commit(
-                        handle: ReplicaHandle,
-                        expectedRevision: Long,
-                        checkpoint: String,
-                        documents: List<ReplicaDocument>,
-                        publish: Boolean,
+                    override suspend fun mutate(
+                        scope: ReplicaScope,
+                        mutations: List<ReplicaMutation>,
                         wake: WorkWakeRequest?,
                     ): Boolean {
-                        assertTrue(
-                            f.database.replicas.commit(
-                                handle,
-                                expectedRevision,
-                                checkpoint,
-                                documents,
-                                publish,
-                                wake,
-                            )
-                        )
+                        assertTrue(f.database.replicas.mutate(scope, mutations, wake))
                         if (cancel) throw CancellationException("Fixture cancellation")
                         error("Fixture response lost")
                     }
@@ -687,23 +662,13 @@ abstract class CollaborationHistoryStorageContract {
         val other = f.access.copy(sessionId = "other", accountId = historyId(8000))
         val store =
             object : ReplicaStore by f.database.replicas {
-                override suspend fun commit(
-                    handle: ReplicaHandle,
-                    expectedRevision: Long,
-                    checkpoint: String,
-                    documents: List<ReplicaDocument>,
-                    publish: Boolean,
+                override suspend fun mutate(
+                    scope: ReplicaScope,
+                    mutations: List<ReplicaMutation>,
                     wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(other)
-                    return f.database.replicas.commit(
-                        handle,
-                        expectedRevision,
-                        checkpoint,
-                        documents,
-                        publish,
-                        wake,
-                    )
+                    return f.database.replicas.mutate(scope, mutations, wake)
                 }
             }
         assertEquals(

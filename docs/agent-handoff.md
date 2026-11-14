@@ -1,35 +1,39 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 00:53 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 01:00 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active atomic history signal verification
+## Atomic history signal locally accepted
 
-Corrected focused125 is accepted (14880 REAPED0,153.053s), including all41 existing delete/edit
-methods and the eight cases that failed in full1. Source5465/6f2851928f25306470dd64a8ff16bcb9d8e7fde717fdf801151735d7de14d186;
-resultadc24b12fa26cf8d6c7a0d410749658ab8fac752c2d39d602c39b5b42982dc6c. The first full run61916 remains FAILED8;
-three shared test files corrected11 old fault injectors to target the actual atomic mutation.
-No production source changed for that correction. All original logs/source snapshots remain.
+Mobile .work/history-local-change-signal-2026-11-13 is accepted:16 paths,13 shared actual-storage
+methods and all38 previous writer methods. Focused125/full16924 (14743 fresh /
+2181 unchanged) retain all16898 previous identities plus26 executions.
+Source5465/6f2851928f25306470dd64a8ff16bcb9d8e7fde717fdf801151735d7de14d186; reports51328a866856fca327dba4dc721b9bd85f23434f0a6f055d2a14f662b9139749.
+Group/actual Company source mutations and one account-owned observable signal commit together;
+exact replay does not renew demand. The marker is an invalidation hint with no secret/content
+payload or authorization meaning. The repository observes published local metadata only. Existing
+failure/cancellation/concurrency tests target the new atomic boundary without dropping methods.
 
-Corrected full16924 is RUNNING63538 in .work/history-local-change-signal-2026-11-13/full-2.
-Do not modify its16 applied paths until reaped/audited. Then run record-acceptance.py/commit.py
-and push both Mobile and Group evidence. No product consumer, phone or live activation here.
+Next .work/history-changes-admission-2026-11-14 contains10 reviewed/formatted UNAPPLIED paths:
+admitted canonical one-page reads and one owned signal observation,23 shared test methods,
+data DI and app graph assertions. Prepare/capture its baseline after this source is committed;
+focused53/full16970 are expected, not yet run. See review.md for exact namespace, admission,
+freeze and cancellation constraints. No product worker is activated by those contracts.
+Then return to .work/history-inbox-progress-2026-11-14 (one initial UNAPPLIED domain state draft,
+not an implementation). Integrate durable per-source windows/unresolved handoff and fair bounded
+continuation into the existing Group inbox repair owner. Keep completed
+source-signal/catalog versions so unchanged reopen performs no full rescan. Resume existing finite
+windows across process/turn limits; newer messages belong to later intervals. An unresolved alias
+must not block later originals or produce immediate retries. No new polling queue/per-room observer.
+Incoming completion needs proven atomic handoff including old Company content before binding.
+Then thread/list/graph and UI evidence remain. This capability alone activates no product consumer.
 
-Next .work/history-changes-admission-2026-11-14 contains10 reviewed/formatted UNAPPLIED paths,
-23 shared methods, and prepared apply/capture/focused/full/record/commit scripts. All are unrun.
-Read/ObserveCollaborationSpaceHistoryChanges enforce canonical actual Company/Group source,
-local admission around suspension, detached bounded pages and one owned signal subscription.
-The domain policy uses typed windows for arithmetic and keeps the source revision token opaque.
-After signal acceptance/push, apply and REAP before capture; expectedfocused53/full16970.
-
-Then return to .work/history-inbox-progress-2026-11-14:one initial UNAPPLIED state draft and review.
-The Boolean inbox writer cannot expose its allocated destination generation; checked publication
-proof and atomic cursor/unresolved handoff are required before owner completion. No guessed
-revision parsing, artificial event for empty pages, extra polling queue or per-room observer.
-Phone92 remains installed, live GroupOFF/V117-140 undeployed, all54 PRD groups open. Continue,
-push every commit, one compiler OR emulator, no subagents.
+No generic Starter port is needed for HRIS source signaling; Starter092fbe6f retains independent1049.
+Actual new Apple execution remains outstanding; preserve the failed control/fixture-filter boundary
+below. Phone92 remains installed and live GroupOFF. All54 PRD groups remain open. Continue and push
+all commits; no subagents and one local compiler OR emulator.
 
 ## Authenticated history change pages locally accepted
 
