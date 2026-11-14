@@ -1,37 +1,30 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 00:33 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 00:39 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
 ## Active atomic history signal verification
 
-Mobile .work/history-local-change-signal-2026-11-13 has13 APPLIED source/test paths. Focused84 is
-accepted (14816 REAPED0):13 new storage methods, all38 old writer methods,16 index publication
-methods,15 history change methods and2 graph tests. Apple source/test compilation completed.
-Source5465/2460b28cd6c81d75aa2946fbc265e70017eacf3c860c3da8c83a97c878ce0764;
-result3fb466e0ea96ded6d76154ace75d2758b21d18d75370c6dcd398555873a59ee6.
-Full16924 is RUNNING61916 in full-1. Do not change its inputs. Reap and audit before running the
-prepared record-acceptance.py/commit.py; push every resulting commit. The index-publication test
-also proves that projecting history does not renew the source signal or feed an observer loop.
+The first full run (61916, REAPED exit1) failed eight existing delete/edit storage tests.
+It is FAILED, not accepted. Their fault injectors overrode the former single commit operation;
+production now uses an atomic source-plus-signal mutation. Eleven interceptors in three shared
+contracts now target that real boundary. All41 methods and prior failure/cancellation/competition
+assertions remain; the bulk deletion test also checks the source mutation and <=150 document bound.
+No production change was made for this correction. The original focused84 evidence and failed
+full1 source/reports remain in .work/history-local-change-signal-2026-11-13.
 
-Reader50e585dd/Group61cf0901 are accepted and pushed with focused55/full16898; raw changes and
-Starter092fbe6f are accepted/pushed/linked. Do not rerun their historical gates. Current signal
-code remains HRIS-only. No product owner, UI, phone or live activation has been made here.
+There are now16 applied paths,13 new shared methods. Corrected focused125 is RUNNING14880 in
+focused-2. Source5465/6f2851928f25306470dd64a8ff16bcb9d8e7fde717fdf801151735d7de14d186. Reap and audit before
+full-2 (expected16924), then record and commit the implementation. Never label the failed run green.
 
-Next .work/history-inbox-progress-2026-11-14 contains ONE initial UNAPPLIED domain state draft
-and review.md, not a reviewed implementation. There are no repository/codec/usecase/worker/tests
-or gates yet. It sketches captured trigger/catalog pass, unfinished source windows, destination
-index generation and bounded pending-reference intervals. Review its semantics before extending.
-The existing Group repair owner must visit unfinished sources fairly, retain unresolved work
-before cursor completion, and remember completed signal/catalog versions for unchanged reopen.
-Publication proof must match the actual source; empty-reference pages need no invented event.
-Keep within the existing owner, with no new polling scheduler or permanent per-room observer.
-
-Phone92 remains installed; live GroupOFF/V117-140 undeployed; all54 PRD groups remain OPEN.
-Preserve the separate failed Apple control and blocked fixture gate payload below. One local
-compiler OR emulator, no subagents. Continue beyond checkpoints and maintain Git handoffs.
+Reader50e585dd/Group61cf0901 and generic raw changes/Starter092fbe6f remain accepted and pushed.
+Next .work/history-inbox-progress-2026-11-14 holds only an initial unapplied domain state draft:
+review finite catalog/source progress and durable unresolved handoff under the existing Group repair
+owner. No new polling queue or per-room observer. Unchanged reopen must reuse completed demand.
+Phone92 remains installed, live GroupOFF/V117-140 undeployed, and all54 PRD groups remain open.
+Continue beyond checkpoints, push every commit, one compiler OR emulator, no subagents.
 
 ## Authenticated history change pages locally accepted
 
