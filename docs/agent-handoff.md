@@ -14,10 +14,12 @@ No migration, network call or feature policy was added.
 Validation: 18,177 cases (6756 fresh on this source across focused/full gates / 11421 exact unchanged), preserving all 18,169 prior IDs plus 8. Focused 179/session95425 and full/session55670 reaped 0. Source e69e55f42ad5f7f68afd4b3d882621a2235b51b871481ca92b27a439277d39c7; reports a372eda15290ca4febe332a16b4917d42d32e2c99114749580631876cecf8112.
 Read [storage contract](replica-exact-queries.md).
 
-Next port these eight generic paths to Starter after this Mobile acceptance. Then implement
+Starter `c7323ce89dd4da2eed61db6ab8deefd230296c63` independently accepts the exact eight generic paths with 1,060 cases (512 fresh / 548 exact unchanged), preserving all 1,052 prior IDs plus 8. Full session 63612 reaped 0. Android variants, production Web, SQLite/browser and Apple source compilation passed; no new device runtime claim.
+
+Next implement
 the recipient projection in collaboration-recipient-projection-review.md: coherent draft/marker,
 bounded authenticated original cache, exact source-version invalidation, and admission/cancellation.
-Canonical association/history and independent draft continuity are required before activating a
+Reuse the existing immutable peer/canonical metadata mapping; its admitted observation/history and independent draft continuity are required before activating a
 recipient product route or retiring provisional rows. The component from fed7419f remains accepted.
 
 Phone 93 is installed and predates these changes. Group OFF; V117–140 undeployed; all 54 PRD groups

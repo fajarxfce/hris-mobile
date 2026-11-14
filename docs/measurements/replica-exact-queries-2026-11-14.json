@@ -82,5 +82,13 @@
     "-Pkotlin.incremental=false"
   ],
   "phoneVersionCode": 93,
-  "starterPort": "pending"
+  "starterPort": {
+    "commit": "c7323ce89dd4da2eed61db6ab8deefd230296c63",
+    "validatedTests": 1060,
+    "freshTests": 512,
+    "reusedUnchangedTests": 548,
+    "sourceManifestSha256": "681bbbffcfa9fb2d5bb639b7f28dc97243cd1e795fd0c515d47bfc044f374964",
+    "reportManifestSha256": "ba75e416e1c8f1ef3d846d4df5996516358d0b83d4f3c3dd2c6e5f29dd5f7753",
+    "fullSession": 63612
+  }
 }

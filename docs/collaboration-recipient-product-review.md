@@ -1,5 +1,7 @@
 # Product integration after recipient owner acceptance
 
+The existing encrypted ConversationMetadata repository already retains the immutable peer-to-canonical mapping. Reuse it; do not add a second association store. The unresolved work is its admitted observation, command/history composition, independent editor/index continuity and finite new-recipient setup after Send. See the updated recipient projection review. Earlier references below to defining an association are superseded by this trace.
+
 The [typed recipient editor and MVI consumer](collaboration-recipient-editor.md) are now implemented and tested. The durable pending/history projection, canonical association, represented-original acknowledgement and active product routes below remain required.
 
 Read-only trace, not an implemented route or schema proposal.
