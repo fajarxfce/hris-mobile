@@ -1,0 +1,98 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationCollaborationSpaceInboxRepairModule.kt",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationSpaceInboxHistoryTurnWorker.kt",
+    "apps/shared/src/commonTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxHistoryTurnWorkerTest.kt",
+    "apps/shared/src/commonTest/kotlin/dev/fajar/starter/SpaceInboxHistoryTurnFixture.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxHistoryTurnIntegrationTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistoryPageStep.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistorySourceStep.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxHistoryStep.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistoryPageStepPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistorySourceStepPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistoryStepPolicy.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistoryPageStepPolicyTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistorySourceStepPolicyTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxHistoryStepPolicyTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 63,
+    "elapsedSeconds": 374.739,
+    "sourceFiles": 5545,
+    "sourceManifestSha256": "ff854dfca13af1795aafa986a2335a8569bf69f30e5807fcef21eb84770ff6b1",
+    "resultSha256": "00471e34dd6513502724da8aad7e7427b272d3163d2c8e0724b8f3bd23358789",
+    "classes": {
+      "CollaborationSpaceInboxHistoryTurnIntegrationTest": 3,
+      "CollaborationSpaceInboxHistoryTurnWorkerTest": 14,
+      "CollaborationSpaceInboxRepairIntegrationTest": 3,
+      "CollaborationSpaceInboxRepairWorkerTest": 13,
+      "CollaborationBindingsTest": 2,
+      "SpaceInboxHistoryPageStepPolicyTest": 8,
+      "SpaceInboxHistorySourceStepPolicyTest": 9,
+      "SpaceInboxHistoryStepPolicyTest": 11
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T06:12:28.770219+00:00",
+    "elapsedSeconds": 987.879,
+    "sourceFiles": 5545,
+    "freshCounts": {
+      "tests": 15278,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 154810022,
+      "sha256": "bda369dbd673133a6b992f5f9248dabda7a2652778bfd836463f6d7d1d2bf2c3"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 17459,
+    "newCases": 87,
+    "freshTests": 15278,
+    "reusedUnaffectedTests": 2181,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "ff854dfca13af1795aafa986a2335a8569bf69f30e5807fcef21eb84770ff6b1",
+    "reportManifestSha256": "f288c4af12742129924f467ae8a4903123375a6e357f7bf7391fdab25b26a77c",
+    "nativeClaim": "Forty-two shared finite-turn cases and three actual application SQLite cases; parent lifetime and product consumers remain inactive."
+  },
+  "newSharedMethods": 42,
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "ownerActivated": false,
+  "finiteTurnBound": true,
+  "actualDesktopIntegrationCases": 3,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "failedFocusedAttempts": [
+    {
+      "failedFocusedDirectory": "focused-1",
+      "failedFocusedSession": 25698,
+      "failedFocusedReaped": true,
+      "startedAt": "2026-11-14T06:00:45.756759+00:00",
+      "elapsedSeconds": 65.929,
+      "sourceFiles": 5545,
+      "sourceManifestSha256": "ca1226cd8d421be58353bf07d9edfc1c1a019d95fad850420663a4f8dd1efc93",
+      "resultSha256": "6cdbb42831ae8ffc9d297fde825acd3c5384b11a682632bcd5ea8f44cdb6b2bd",
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reason": "Detekt LongMethod in test fixture worker():198 lines, maximum100. No tests executed.",
+      "correction": "Extract five named fake operations; retain all assertions and callbacks. Production sources unchanged.",
+      "changedTestPaths": [
+        "apps/shared/src/commonTest/kotlin/dev/fajar/starter/SpaceInboxHistoryTurnFixture.kt"
+      ]
+    }
+  ]
+}

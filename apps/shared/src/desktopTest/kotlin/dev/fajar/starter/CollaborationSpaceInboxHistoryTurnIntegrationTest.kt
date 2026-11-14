@@ -1,0 +1,250 @@
+package dev.fajar.starter
+
+import dev.fajar.starter.app.work.CollaborationSpaceInboxHistoryTurnWorker
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.repositories.*
+import dev.fajar.starter.collaboration.domain.usecases.*
+import dev.fajar.starter.common.result.*
+import dev.fajar.starter.fixtures.CollaborationWorkerFixture
+import java.util.UUID
+import kotlin.test.*
+import kotlin.time.Instant
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
+
+/** Actual application DI, admitted operations, independent keys and SQLite; no native transport. */
+class CollaborationSpaceInboxHistoryTurnIntegrationTest {
+    @Test
+    fun aBoundRoomCompletesItsEmptyLocalHistoryAndReopensWithoutAnotherPass() = runBlocking {
+        val f = HistoryTurnStorageFixture()
+        try {
+            f.initialize()
+            val frame = f.frame()
+            f.drain(frame)
+            val global = f.global()
+            val source = f.source()
+            assertNotNull(global.progress.completed)
+            assertTrue(source.progress.historyComplete)
+            assertTrue(assertNotNull(source.progress.pendingWindow).complete)
+            f.base.reopen()
+            assertEquals(frame, f.frame())
+            assertEquals(global, f.global())
+            assertEquals(source, f.source())
+            assertEquals(
+                AppResult.Success(CollaborationSpaceInboxHistoryTurnWorker.Outcome.Idle),
+                f.turn(frame),
+            )
+            assertEquals(global, f.global())
+            assertEquals(0, f.base.sdk.childOpens)
+            assertEquals(0, f.base.sdk.deliveries)
+        } finally {
+            f.base.close()
+        }
+    }
+
+    @Test
+    fun failedPreparationParksAcrossReopenAndActualBindingPublicationResumesIt() = runBlocking {
+        val f = HistoryTurnStorageFixture()
+        try {
+            f.initialize(withBinding = false)
+            val first = f.frame()
+            f.drain(first, allowDeferrals = true)
+            val parked = f.global()
+            assertNull(parked.progress.completed)
+            assertEquals(
+                CollaborationSpaceInboxHistoryTraversal.Parked,
+                parked.progress.pass?.traversal,
+            )
+            assertTrue(assertNotNull(parked.progress.pass).catalogDeferred)
+            f.base.reopen()
+            assertEquals(parked, f.global())
+            assertEquals(
+                AppResult.Success(CollaborationSpaceInboxHistoryTurnWorker.Outcome.Idle),
+                f.turn(first),
+            )
+            f.bind()
+            val available = f.frame()
+            assertNotEquals(first.first.historySignal, available.first.historySignal)
+            f.drain(available)
+            assertEquals(available.first, f.global().progress.completed?.trigger)
+            assertNull(f.global().progress.pass)
+            assertTrue(f.source().progress.historyComplete)
+            assertEquals(0, f.base.sdk.childOpens)
+            assertEquals(0, f.base.sdk.deliveries)
+        } finally {
+            f.base.close()
+        }
+    }
+
+    @Test
+    fun aPreparedSourceSurvivesInterruptionBeforeItsGlobalQueueAcknowledgement() = runBlocking {
+        val f = HistoryTurnStorageFixture()
+        try {
+            f.initialize()
+            val frame = f.frame()
+            assertIs<AppResult.Success<CollaborationSpaceInboxHistoryTurnWorker.Outcome>>(
+                f.turn(frame)
+            )
+            assertIs<AppResult.Success<CollaborationSpaceInboxHistoryTurnWorker.Outcome>>(
+                f.turn(frame)
+            )
+            val queued = f.global()
+            val pass = assertNotNull(queued.progress.pass)
+            assertEquals(
+                listOf(f.conversation.id),
+                assertIs<CollaborationSpaceInboxHistoryTraversal.Catalog>(pass.traversal)
+                    .batch
+                    ?.remaining,
+            )
+            val prepared =
+                success(
+                    f.base.koin.get<PrepareCollaborationSpaceInboxHistorySource>()(
+                        f.access,
+                        f.conversation.id,
+                        pass.id,
+                    )
+                )
+            f.base.reopen()
+            assertEquals(queued, f.global())
+            assertEquals(prepared, f.source())
+            f.drain(frame)
+            val completed = f.source()
+            assertEquals(prepared.version.generation, completed.version.generation)
+            assertTrue(completed.progress.historyComplete)
+            assertTrue(assertNotNull(completed.progress.pendingWindow).complete)
+            assertNull(f.global().progress.pass)
+            assertEquals(0, f.base.sdk.childOpens)
+            assertEquals(0, f.base.sdk.deliveries)
+        } finally {
+            f.base.close()
+        }
+    }
+}
+
+private class HistoryTurnStorageFixture {
+    val base = CollaborationWorkerFixture()
+    lateinit var access: CollaborationSpaceLocalAccess
+    lateinit var conversation: CollaborationSpaceConversation
+    lateinit var binding: CollaborationSpaceRoomBinding
+
+    suspend fun initialize(withBinding: Boolean = true) {
+        base.initialize()
+        val session = base.session
+        val parent =
+            CollaborationNativeParent(
+                session.id,
+                session.binding.audience,
+                session.user.id,
+                session.binding.serverId,
+            )
+        val owner = CollaborationSpaceOwner(parent, UUID.randomUUID().toString())
+        access = owner.localDirectoryAccess()
+        val pair = listOf(access.accountId, UUID.randomUUID().toString()).sorted()
+        val at = Instant.fromEpochMilliseconds(1000)
+        conversation =
+            CollaborationSpaceConversation(
+                owner,
+                UUID.randomUUID().toString(),
+                pair[0],
+                pair[1],
+                access.accountId,
+                at,
+                0,
+            )
+        assertEquals(
+            AppResult.Success(true),
+            base.koin
+                .get<CollaborationSpaceRootRepository>()
+                .retain(parent.localSpaceAccountAccess(), CollaborationSpaceRoot(owner.spaceId)),
+        )
+        assertEquals(
+            AppResult.Success(true),
+            base.koin
+                .get<CollaborationSpaceConversationMetadataRepository>()
+                .retain(access, conversation),
+        )
+        binding =
+            CollaborationSpaceRoomBinding(
+                CollaborationSpaceConversationMetadata(
+                    access.spaceId,
+                    conversation.id,
+                    pair[0],
+                    pair[1],
+                    access.accountId,
+                    at,
+                    0,
+                ),
+                CollaborationSpacePublishedRoom(
+                    "!history:example.test",
+                    "example.test",
+                    CollaborationSpaceRoomOrigin.SPACE,
+                    at,
+                ),
+            )
+        if (withBinding) bind()
+    }
+
+    suspend fun bind() {
+        assertEquals(
+            AppResult.Success(true),
+            base.koin.get<CollaborationSpaceRoomBindingRepository>().retain(access, binding),
+        )
+    }
+
+    suspend fun frame():
+        Pair<CollaborationSpaceInboxHistoryTrigger, CollaborationSpaceInboxVersion?> {
+        val history =
+            success(base.koin.get<ObserveCollaborationSpaceHistoryChanges>()(access).first())
+        val catalog =
+            success(base.koin.get<ObserveCollaborationSpaceConversationCatalog>()(access).first())
+        val repair =
+            success(base.koin.get<ObserveCollaborationSpaceInboxRepairSignals>()(access).first())
+        val destination =
+            success(base.koin.get<ObserveCollaborationSpaceInboxDestination>()(access).first())
+        return CollaborationSpaceInboxHistoryTrigger(
+            history,
+            catalog,
+            repair.completedDemand,
+            destination?.generation,
+        ) to destination
+    }
+
+    suspend fun turn(
+        frame: Pair<CollaborationSpaceInboxHistoryTrigger, CollaborationSpaceInboxVersion?>
+    ) =
+        base.koin.get<CollaborationSpaceInboxHistoryTurnWorker>()(
+            access,
+            frame.first,
+            frame.second,
+            UUID.randomUUID().toString(),
+            false,
+        )
+
+    suspend fun drain(
+        frame: Pair<CollaborationSpaceInboxHistoryTrigger, CollaborationSpaceInboxVersion?>,
+        allowDeferrals: Boolean = false,
+    ) =
+        withTimeout(15_000) {
+            repeat(32) {
+                when (val outcome = success(turn(frame))) {
+                    CollaborationSpaceInboxHistoryTurnWorker.Outcome.Idle -> return@withTimeout
+                    is CollaborationSpaceInboxHistoryTurnWorker.Outcome.Advanced ->
+                        if (!allowDeferrals) assertNull(outcome.deferredFailure)
+                }
+            }
+            fail("The finite history pass did not terminate")
+        }
+
+    suspend fun global() =
+        assertNotNull(success(base.koin.get<ReadCollaborationSpaceInboxHistoryProgress>()(access)))
+
+    suspend fun source() =
+        assertNotNull(
+            success(
+                base.koin.get<ReadCollaborationSpaceInboxHistorySource>()(access, conversation.id)
+            )
+        )
+}
+
+private fun <T> success(result: AppResult<T>) = assertIs<AppResult.Success<T>>(result).value

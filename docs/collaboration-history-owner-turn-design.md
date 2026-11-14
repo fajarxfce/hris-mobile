@@ -1,4 +1,9 @@
-# Finite history owner integration — draft only
+# Finite history turns — locally accepted, parent activation pending
+
+The finite turn implementation passed focused63/full17459. See [evidence](collaboration-history-owner-turn.md).
+Application lifetime/mailbox activation and product consumers remain open. Earlier draft notes
+below retain design rationale; current acceptance is described by the linked capability.
+
 
 Fourteen formatted UNAPPLIED paths now contain global/source/page selection, one finite turn
 worker,42 new shared test drafts, and DI/graph wiring. No validation gates or application lifetime

@@ -420,6 +420,11 @@ class CollaborationBindingsTest {
                     >()
                 )
                 assertNotNull(container.koin.get<ReadCollaborationSpaceConversationCatalog>())
+                assertNotNull(
+                    container.koin.get<
+                        dev.fajar.starter.app.work.CollaborationSpaceInboxHistoryTurnWorker
+                    >()
+                )
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceConversationCatalog>())
                 assertSame(possession, container.koin.get<CollaborationSdkPossessionRepository>())
                 assertSame(container.koin.get<IdentityServer>(), possessionServer)

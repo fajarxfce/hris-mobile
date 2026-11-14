@@ -1,9 +1,38 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 05:59 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 06:29 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Finite history turns locally accepted
+
+Mobile .work/history-inbox-owner-turn-2026-11-14 is accepted:15 source paths,42 shared and3 actual
+SQLite application additions. Focused63/full17459 (15278 fresh /2181
+unchanged) preserve all17372 prior identities plus87 executions. Source5545/
+ff854dfca13af1795aafa986a2335a8569bf69f30e5807fcef21eb84770ff6b1; reportsf288c4af12742129924f467ae8a4903123375a6e357f7bf7391fdab25b26a77c. One domain-selected step uses
+admitted operations, retains exact queue outcomes and bounds source lanes/reset. Failed operations
+inspect actual source state once before the other lane; uncertain writes are never blindly replayed.
+The finite turn factory is bound. The existing application repair lifetime does not invoke it yet.
+
+Next .work/history-inbox-owner-lifetime-2026-11-14 contains9 reviewed UNAPPLIED paths,19 shared
+and1 actual SQLite addition, with focused55/full17498 prepared UNRUN. Apply after this package
+is committed/pushed. It integrates an immutable latest-input state under the collected account/Group
+repair worker. The worker currently has factory/test consumers only; product activation is separate. Share one
+typed repair stream and one history/catalog/destination metadata subscription. Service command
+input between bounded history steps. Compare destination generation, consume explicit recovery
+once per lifetime, and cancel/join every child on ownership replacement. Self-produced progress
+or unchanged failed input must not reschedule itself. Preserve command worker13 and existing
+integration3 identities; add actual lifetime/fairness, denial, cancellation and backlog evidence.
+Then activate incoming completion and thread/list/UI consumers with measured end-to-end results.
+
+Phone92 and live unchanged; GroupOFF/V117-140 undeployed. Starter092fbe6f stays accepted with no
+port required. Preserve failed hosted Apple evidence and the blocked fixture payload; actual new
+Apple execution and SDK8 Apple application activation remain open. All54 PRD groups remain open.
+Continue beyond checkpoints; push every commit; one local compiler OR emulator; no agents.
+
+Earlier sections below are historical snapshots. Their old UNAPPLIED/next-step instructions are
+superseded by the current section above; do not reapply or rerun accepted packages.
 
 ## Global history progress locally accepted
 
