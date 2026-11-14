@@ -1,0 +1,58 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RetainCollaborationSpaceInboxHistoryChanges.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/RetainSpaceInboxHistoryChangesTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 35,
+    "elapsedSeconds": 367.061,
+    "sourceFiles": 5494,
+    "sourceManifestSha256": "b1f05716f6100afef1fd623da663056705e7650dee9f69c2fa7771b286ce9221",
+    "resultSha256": "c018ec845d9c559c0da8fd4ad3d4be7888f84c5710731b4968364ca284aa4846",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "RetainSpaceInboxHistoryChangesTest": 10,
+      "SpaceInboxHistoryHandoffPolicyTest": 13,
+      "ConfirmSpaceHistoryChangesTest": 10
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T03:47:00.254030+00:00",
+    "elapsedSeconds": 1004.186,
+    "sourceFiles": 5494,
+    "freshCounts": {
+      "tests": 14939,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 154723817,
+      "sha256": "9cd946b1a8157cafb11bb0adda197811093f31d1090d66952ffa906692fd4d84"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 17120,
+    "newCases": 20,
+    "freshTests": 14939,
+    "reusedUnaffectedTests": 2181,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "b1f05716f6100afef1fd623da663056705e7650dee9f69c2fa7771b286ce9221",
+    "reportManifestSha256": "e4a1f2a63e431049a668948839885468cac021ee919adc58ed1ce9e579e723a9",
+    "nativeClaim": "Ten shared admitted raw-history cursor/reference handoff cases. Source lifecycle, pending lane and worker integration remain open."
+  },
+  "newSharedMethods": 10,
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "ownerActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false
+}

@@ -4138,4 +4138,12 @@ class CollaborationDataModule {
             build,
             Clock.System,
         )
+
+    @Factory
+    fun retainSpaceInboxHistoryChanges(
+        progress: CollaborationSpaceInboxHistorySourceRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = RetainCollaborationSpaceInboxHistoryChanges(progress, directory, sessions, server)
 }

@@ -1,5 +1,7 @@
 # Architecture
 
+[Admitted history inbox handoff](collaboration-history-inbox-progress-admission.md) checks current local ownership around atomic cursor/reference retention.
+
 [Durable history inbox source progress](collaboration-history-inbox-progress.md) retains bounded cursor/reference handoff against the current inbox checkpoint.
 
 [Admitted empty history-page confirmation](collaboration-history-empty-page-confirmation.md) checks exact source and destination facts before empty-page progress.
