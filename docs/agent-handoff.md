@@ -1,7 +1,31 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 16:24 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 16:45 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
+
+## Release93 delivered
+
+Release93 is validated and updated in place on10.77.77.3:5555. Device-byte hash
+1097c710ff0296282f5a9113b7a4b7412017758e233d42d9b189db4ced14f07c matches the accepted ARM64 artifact. Source 2eb833f460cf46fa2f1170bbb1656b5cd9144f27;
+17,931 source cases plus10 current-source SDK8 native scenarios; inspected actual
+release startup/reopen, both ABIs, same signer/DEX,16KiB alignment and zero lint issues.
+No phone UI, account reset or live change. Read collaboration-release93.md and its measurement.
+
+First independently port the accepted Android resource convention to Starter, using its prepared
+.work/compose-android-resources-port-2026-11-14. Verify packaged locale assets and actual app startup.
+Then continue the communications plan beyond this checkpoint. Recipient originals now persist locally,
+but canonical transfer and new Group product routes remain pending. Investigate the existing
+CollaborationSpaceMessageRepository.insert destination first: it preserves canonical typing and
+retains the immutable original with its wake. Keep the recipient source until exact destination
+and inbox acknowledgement; preserve ID/body/time and stop on target conflict. Do not overwrite an
+independent canonical draft. Reuse existing reconciliation policies without use-case-to-use-case
+calls. Full company filtering and explicit Group rollout selection remain. GroupOFF/V117–140
+undeployed; all54 PRD groups OPEN. Keep AppViewModel window-owned and Group outside Company scope.
+
+Phone93 supersedes92. Starterbd13df78 remains accepted/pushed with1,052; no HRIS recipient policy
+port is needed. Push every commit, one compiler OR emulator, no subagents. Preserve protected
+employee stores, the blocked SQLite fixture payload and failed hosted Apple evidence.
+
 
 ## Android Compose resource packaging recovered
 

@@ -1,0 +1,263 @@
+{
+  "accepted": true,
+  "at": "2026-11-14T16:43:57.680402+00:00",
+  "versionCode": 93,
+  "sourceCommit": "2eb833f460cf46fa2f1170bbb1656b5cd9144f27",
+  "apkSha256": "1097c710ff0296282f5a9113b7a4b7412017758e233d42d9b189db4ced14f07c",
+  "bytes": 125491323,
+  "sdk": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.8",
+  "sourceManifestSha256": "f815e404649dccda02b7da6b0969de93a2369328a64cc1343ce5ee309294ae80",
+  "fullSourceTests": 17931,
+  "nativeProofCases": 10,
+  "releaseStartupAccepted": true,
+  "sameExecutableDexAcrossAbis": true,
+  "nonDebuggable": true,
+  "samePreviouslyInstalledSigner": true,
+  "lintIssues": 0,
+  "phoneInstalled": true,
+  "phoneUiTouched": false,
+  "liveGroupChanged": false,
+  "limitations": [
+    "Native encrypted-chat scenarios use the dedicated x86 proof; release startup uses the actual x86 product without an employee account.",
+    "ARM64 product runtime, retained employee-account upgrade and chat latency are not claimed by the emulator startup.",
+    "Live Group remains disabled on schema116.4. Native Apple SDK8 execution and all54 PRD acceptance groups remain separate."
+  ],
+  "installation": {
+    "startedAt": "2026-11-14T16:44:09.605120+00:00",
+    "confirmed": true,
+    "serial": "10.77.77.3:5555",
+    "phoneUiTouched": false,
+    "freshInstall": false,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "versionCode": 93,
+    "installedSha256": "1097c710ff0296282f5a9113b7a4b7412017758e233d42d9b189db4ced14f07c",
+    "installedBytesMatch": true,
+    "verificationMethod": "Device SHA-256 equals validated local APK",
+    "existingIdentityPreserved": true,
+    "elapsedSeconds": 31.205
+  },
+  "native": {
+    "tests": 10,
+    "counts": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sdk": "26.10.23-hris.8",
+    "apkSha256": "04c4889069031467bf026dae2587c0eb103b10724698abe43790eb257dda3195",
+    "nativeLibrarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+    "mobileSourceManifestSha256": "f815e404649dccda02b7da6b0969de93a2369328a64cc1343ce5ee309294ae80",
+    "groupSourceManifestSha256": "7e4c32bb578f148fcbd21c62a8302436bcf1abfb534fc0b561aab9510642b300",
+    "cases": [
+      "dev.fajar.hris.NativeAccountReplacementTest.nativeAccountReplacementRetiresHeldReplyAndPreservesOriginalEncryptedHistory()",
+      "dev.fajar.hris.NativeEventReadsTest.completedIncomingReferencesRemainExhaustedAcrossOfflineReopen()",
+      "dev.fajar.hris.NativeEventReadsTest.exactEncryptedEventsSurviveOriginalRuntimeAdoptionWithoutPresentationRelabeling()",
+      "dev.fajar.hris.NativeEventReadsTest.nativeIncomingHintsPreserveExactSyncPositionsAndObserveStoredKeys()",
+      "dev.fajar.hris.NativeEventReadsTest.nativeIncomingReceiptSurvivesLostReplyForegroundAndOfflineReopen()",
+      "dev.fajar.hris.NativeEventReadsTest.registeredIncomingWorkerRetainsContentBeforeEofAndStopsAcrossOfflineReopen()",
+      "dev.fajar.hris.NativeSpaceLateKeysTest.realKeyDuringLostReceiptReplySurvivesQuietObservationAndOfflineReopen()",
+      "dev.fajar.hris.NativeSpaceLateKeysTest.retainedLateKeyRecoveryDrainsThroughRegisteredWorkerAfterProcessLoss()",
+      "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.newSpaceOriginalSharesTheQueueWithoutChangingCompanyOwnershipAfterProcessDeath()",
+      "dev.fajar.hris.NativeSpaceOriginalDeliveryTest.originalQueueSurvivesLostProjectionAndOfflineRecipientWithoutReplacement()"
+    ],
+    "reportHashes": {
+      "TEST-dev.fajar.hris.NativeEventReadsTest.xml": "a0cba361288df27e85c175d89b314b4ebf698e8f1b7d216f71acd89deedc1776",
+      "TEST-dev.fajar.hris.NativeSpaceLateKeysTest.xml": "7b91619b32c1c9a3eb061ed75c66b9717293db9d2c3c1ae2b9e188005055ea2f",
+      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": "522e482bc8b4a2a89f4488657e9b83f56ba0da2ec1fda7141aff361b316ac08c",
+      "TEST-dev.fajar.hris.NativeAccountReplacementTest.xml": "53a6fed936490c49014a2694f060503a27f871684beeeb023142b76d63df6882"
+    },
+    "noCompilationDuringEmulator": true,
+    "emulatorStopped": true,
+    "quietWindows": [
+      {
+        "scenario": "late",
+        "durationMillis": 30008,
+        "nonSyncRequests": 0,
+        "syncRequests": 3
+      },
+      {
+        "scenario": "lateRecovery",
+        "durationMillis": 30008,
+        "nonSyncRequests": 0,
+        "syncRequests": 3
+      }
+    ]
+  },
+  "startup": {
+    "startedAt": "2026-11-14T16:40:43.108771+00:00",
+    "passed": true,
+    "sourceCommit": "2eb833f460cf46fa2f1170bbb1656b5cd9144f27",
+    "apkSha256": "e03dd83320de2e9c887459700ab56bdcd3d89cec0ed6ff49bba88db1412b69ae",
+    "versionCode": 93,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "freshIsolatedUserdata": true,
+    "phoneTouched": false,
+    "authenticatedAccountUsed": false,
+    "chatSendAttempted": false,
+    "bootSeconds": 38.856,
+    "launches": [
+      {
+        "phase": "cold",
+        "pid": "2957",
+        "processStayedAlive": true,
+        "activityPresent": true,
+        "launchTimingMillis": {
+          "TotalTime": 3733,
+          "WaitTime": 3748
+        },
+        "screenshotSha256": "4fe3948e1c2f7859f987b8968ae04597917ce91a6ac6cde3045c652b563ab331"
+      },
+      {
+        "phase": "reopened",
+        "pid": "3631",
+        "processStayedAlive": true,
+        "activityPresent": true,
+        "launchTimingMillis": {
+          "TotalTime": 2646,
+          "WaitTime": 2679
+        },
+        "screenshotSha256": "1b48dcbcf563b8512bd2ffaad3fc9be7bcf830b96c7521a50ff450523fafb012"
+      }
+    ],
+    "installedBytesMatch": true,
+    "noFatalExceptionObserved": true,
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "emulatorStopped": true,
+    "elapsedSeconds": 91.288
+  },
+  "visual": {
+    "accepted": true,
+    "inspectedAt": "2026-11-14T16:42:35.954553+00:00",
+    "screenshotSha256": "4fe3948e1c2f7859f987b8968ae04597917ce91a6ac6cde3045c652b563ab331",
+    "screenshots": {
+      "cold": "4fe3948e1c2f7859f987b8968ae04597917ce91a6ac6cde3045c652b563ab331",
+      "reopened": "1b48dcbcf563b8512bd2ffaad3fc9be7bcf830b96c7521a50ff450523fafb012"
+    },
+    "observations": [
+      "Both actual release screenshots were opened and inspected.",
+      "Localized onboarding renders the HRIS heading, Employee services text, Skip, page indicator and Continue action.",
+      "No blank product surface or error dialog in either cold or reopened capture."
+    ],
+    "authenticatedChatMeasured": false
+  },
+  "x86": {
+    "acceptedArtifact": true,
+    "sourceCommit": "2eb833f460cf46fa2f1170bbb1656b5cd9144f27",
+    "artifact": ".work/release-phone-2026-11-14-build93-resources/hris-mobile-dev-release-1.0.0-93-x86_64.apk",
+    "bytes": 139237556,
+    "sha256": "e03dd83320de2e9c887459700ab56bdcd3d89cec0ed6ff49bba88db1412b69ae",
+    "dexSha256": "7c9531c5e1ba9c2cb16a8821492ac99edb7da81d827f10ee48ebcddd35a8c4e7",
+    "abi": "x86_64",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 93,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "signatureVerified": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "samePreviouslyInstalledSigner": true,
+    "zipAligned16KiB": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "inspectorAndIncomingSourcesPresent": true,
+    "lintIssues": 0,
+    "sdk": {
+      "nativeSha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+      "nativeBytes": 111331328,
+      "elfClass": "ELF64",
+      "requiredElfAlignment": 16384,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "requiredSymbolsPresent": true,
+      "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.8",
+      "publicationReleaseId": 441121763,
+      "aarSha256": "6eebe8dab124541783d2b1d746cf30ea4b8dd2a599980cccb823927780678717",
+      "strippedNativeMatchesVerifiedSdk": true
+    },
+    "composeResourceAssetsVerified": {
+      "composeResources/dev.fajar.starter.localization.resources/values/strings_en.commonMain.cvr": {
+        "bytes": 72218,
+        "sha256": "fc216772d1011e834b4aff3c896a10a2ed43a2ad613ae257c193ad769e126df7"
+      },
+      "composeResources/dev.fajar.starter.localization.resources/values/strings_id.commonMain.cvr": {
+        "bytes": 74462,
+        "sha256": "2dd70dccfd651df0e7b8c96a9279596348c4dca49dfdf970b7e1882b5c8ffa75"
+      }
+    }
+  },
+  "arm64": {
+    "acceptedArtifact": true,
+    "sourceCommit": "2eb833f460cf46fa2f1170bbb1656b5cd9144f27",
+    "artifact": ".work/release-phone-2026-11-14-build93-resources/hris-mobile-dev-release-1.0.0-93-arm64-v8a.apk",
+    "bytes": 125491323,
+    "sha256": "1097c710ff0296282f5a9113b7a4b7412017758e233d42d9b189db4ced14f07c",
+    "dexSha256": "7c9531c5e1ba9c2cb16a8821492ac99edb7da81d827f10ee48ebcddd35a8c4e7",
+    "abi": "arm64-v8a",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 93,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "signatureVerified": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "samePreviouslyInstalledSigner": true,
+    "zipAligned16KiB": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "inspectorAndIncomingSourcesPresent": true,
+    "lintIssues": 0,
+    "sdk": {
+      "nativeSha256": "27ad4f7c31fcca109aa0d7635b2e20e0e76a2a81bdbbfe0bf158f389ef274869",
+      "nativeBytes": 97549328,
+      "elfClass": "ELF64",
+      "requiredElfAlignment": 16384,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "requiredSymbolsPresent": true,
+      "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.8",
+      "publicationReleaseId": 441121763,
+      "aarSha256": "6eebe8dab124541783d2b1d746cf30ea4b8dd2a599980cccb823927780678717",
+      "strippedNativeMatchesVerifiedSdk": true
+    },
+    "composeResourceAssetsVerified": {
+      "composeResources/dev.fajar.starter.localization.resources/values/strings_en.commonMain.cvr": {
+        "bytes": 72218,
+        "sha256": "fc216772d1011e834b4aff3c896a10a2ed43a2ad613ae257c193ad769e126df7"
+      },
+      "composeResources/dev.fajar.starter.localization.resources/values/strings_id.commonMain.cvr": {
+        "bytes": 74462,
+        "sha256": "2dd70dccfd651df0e7b8c96a9279596348c4dca49dfdf970b7e1882b5c8ffa75"
+      }
+    }
+  },
+  "resourcePackaging": {
+    "verifiedAssets": {
+      "composeResources/dev.fajar.starter.localization.resources/values/strings_en.commonMain.cvr": {
+        "bytes": 72218,
+        "sha256": "fc216772d1011e834b4aff3c896a10a2ed43a2ad613ae257c193ad769e126df7"
+      },
+      "composeResources/dev.fajar.starter.localization.resources/values/strings_id.commonMain.cvr": {
+        "bytes": 74462,
+        "sha256": "2dd70dccfd651df0e7b8c96a9279596348c4dca49dfdf970b7e1882b5c8ffa75"
+      }
+    },
+    "earlierCandidateInstalled": false,
+    "sourceEvidence": "docs/measurements/android-compose-resources-2026-11-14.json"
+  }
+}
