@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 08:15 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 08:20 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -10,19 +10,23 @@ mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs
 Page7 is accepted/pushed Mobile12b0d9654cfcf45f6a974e6e1e2d7fbb95beecd2 /
 Groupdc387f9f6eea0d2b9bba60d7337b59925ad25516, focused42/full17578.
 
-Mobile .work/history-inbox-labels-2026-11-14 is APPLIED8. Focused1/session99672 reaped1 with45
+Mobile .work/history-inbox-labels-2026-11-14 is APPLIED9. Focused1/session99672 reaped1 with45
 cases/one failure: the actual fixture supplied directory contacts in conversation order, violating
 strict ascending accountId order. Encrypted append rejected the fixture before label observation.
-Only fixture publication is sorted now; production/assertions unchanged. Failed evidence is in
-directory-ordering-correction.json and the recorder preserves it. Focused2 is RUNNING38368; source
-5565/fb989fdfbbed7646b8aa3186caa038e87dec1479fd025e74d35e0858b561442b. Reap/verify before full17615.
-No accepted label results yet; no source edits during the run.
+Only fixture publication was sorted. Focused2/session38368 reaped1 with45/1: initial label
+resolution passed, but reopening timed out because CollaborationWorkerFixture omitted persistent
+directory credentials. The fixture now retains its own independent MemoryCredentialStore and
+passes it to every container open, matching existing Android/iOS/web/desktop entry points.
+No production behavior, timeout or assertion was relaxed. Both failed source/result records are
+preserved in directory-ordering-correction.json and directory-key-retention-correction.json.
+Focused3 is RUNNING47136; source5565/adca54094d8a31911e8a53a7274803e12a450e703f8414617d310ab7743f8f76.
+Reap/verify before full17615. No accepted label results yet; no source edits during the run.
 
 Window .work/history-inbox-window-2026-11-14 has15 formatted UNAPPLIED drafts,34 shared+1 actual
 SQLite addition, focused62/full17684 run gates prepared UNRUN. It includes finite admitted reads,
 one bounded missing-anchor fallback, reverse/around queries, detached lists/tags and cancellation.
 The shared actual fixture is rebased for the contact-order correction; reformat/review/hash rebase
-before applying. Recorder preparation remains. Then retained Group inbox UI/Paging integration and
+completed and all gates/recorder prepared UNRUN. Then retained Group inbox UI/Paging integration and
 actual viewport/render measurements. GroupOFF, phone92/live unchanged; all54 PRD groups OPEN.
 Continue beyond checkpoints; one compiler OR emulator; no agents.
 
