@@ -1,44 +1,44 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 22:06 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 22:18 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 
-## Shared exact recipient message progress accepted
+## Recipient display continuity accepted
 
-ObserveCollaborationSpaceComposerProgress now serves both its unchanged canonical composer API
-and an explicit recipients entry point. One bounded, privately typed observation owns capture,
-mailbox and exact active/terminal record readers. Existing policies preserve the real canonical
-pair and complete recipient provenance; no peer alias or invented canonical draft is introduced.
-Adding an original keeps existing readers; removal/replacement joins obsolete ones. Both APIs now
-redact when session/admission observation ends. Failure never adds a timed retry or delivery wake.
+RecipientChatPresentation preserves the exact recipient gesture through independent source,
+command-progress and history publications. Bounded source capture validates the real canonical
+pair, all current/retained original proofs and physical history ownership before selecting display
+status. Stale queued facts cannot downgrade Sent or revive cancellation/represented history.
+Unknown canonical association does not prevent retaining an actual pending gesture. No canonical
+draft/ID is invented, and the pure projection never acknowledges storage, delivers or prepares.
+The canonical composer uses the same representation predicate with an explicit record argument.
 
-Validation: 18,277 cases (16088 fresh / 2189 exact unchanged), preserving all 18,249 prior identities plus 28. Focused 36/session5825 and full/session87885 reaped 0. Source 8161070c9cba2453bb7b6db2170f0c2f2328c8f349567c451f80f4b12efeaada; reports c4d905257f1d17c9e14561c4aa151e3ffd46db619a6d6cb5fc38a9c78d3fbc1e.
-Read [shared exact message progress](collaboration-recipient-progress.md). The 20 existing canonical
-progress/lifetime cases remain unchanged; 14 new cases cover recipient proof, bounds, independent
-readers, ownership, failure and source completion. Actual application DI resolves the same use case.
+Validation: 18,305 cases (2173 fresh / 16132 exact unchanged), preserving all 18,277 prior identities plus 28. Focused 41/session43235 and full/session85114 reaped 0. Source 46f7c4b31f1573dcc7a9e495a20d48f5031087e553be5ad68b0be1d5145769b3; reports 8e1280ad18bdc11d04d6e56c6d7f202a8fdfe16008a4c79e041cce849e476da0.
+Read [recipient display continuity](collaboration-recipient-presentation.md). Fourteen new common
+cases and the 27 unchanged canonical composer/row cases passed. Apple source compilation is not
+Apple runtime acceptance. Shared recipient progress 4f6676f1, destination 2c93bc95 and local source
+d4134a90 remain independently accepted and pushed.
 
-The recipient source projection from d4134a90 and admitted canonical destination observer remain
-accepted and pushed. None of these components has an active recipient product route yet. Next
-compose pending originals and canonical history rows using exact command/history evidence, preserve
-stable bubble identity through source retirement, and feed represented-original acknowledgement
-only after the displayed projection can retain the message. Preserve independent recipient and
-canonical drafts plus bounded global inbox ordering before activating product navigation.
-An UNAPPLIED/UNTESTED display-continuity sketch is in
-`.work/recipient-presentation-preparation-2026-11-14`; read review.md before use. It contains 14 formatted but uncompiled/unrun tests. Review the retained-record/snapshot checks
-and projection responsibility/length before applying, run those tests plus the 27 unchanged
-canonical presentation/row cases, then add real row identity and ViewModel/root integration. Do not treat the sketch as accepted code.
-UI reuse findings are in `.work/recipient-ui-review-2026-11-14/notes.md` and the product review.
+Next: implement actual recipient bubble identity through association and history, then connect
+ViewModel/editor/root routes. An UNAPPLIED/UNTESTED seven-file prototype with 13 common row tests
+is in `.work/recipient-rows-preparation-2026-11-14`; read review.md and require current source hashes
+before applying. It reuses the canonical history join and keeps actual canonical action coordinates
+separate from the stable recipient-route bubble key. No route is active and no visual performance
+claim has been measured. Tests must retain all 27 canonical and 14 recipient presentation cases.
+The earlier `.work/recipient-presentation-preparation-2026-11-14` is now APPLIED and superseded by
+the accepted source; do not replay its apply script.
 
-PrepareCollaborationSpaceConversation still needs finite application ownership after explicit
-retained Send and current discovery. Passive room opening, typing and ordinary admission renewal
-must not initiate setup. Follow collaboration-recipient-projection-review.md and
-collaboration-recipient-product-review.md, then root/contact/thread navigation, rendered
-interaction/screenshots, complete company filters and independent rollout acceptance.
+Independent recipient/canonical drafts and bounded global inbox ordering still require explicit
+product integration. PrepareCollaborationSpaceConversation needs finite application ownership
+after retained Send/current discovery; passive opening, typing and ordinary renewal cannot trigger
+setup. Follow collaboration-recipient-projection-review.md and collaboration-recipient-product-review.md.
+Use the reviewed existing bubble/composer components, then rendered interactions/screenshots,
+complete company filters and independent rollout acceptance.
 
-Starter c7323ce remains independently accepted with 1,060 cases. Recipient policy stays Mobile-only.
-Phone 93 remains installed from 2eb833f4 and predates these components. Group OFF; V117–140
-undeployed; all 54 PRD groups OPEN. Continue beyond this checkpoint; preserve blocked SQLite
-preparation, failed Apple evidence and protected stores below.
+Starter c7323ce remains independently accepted with 1,060 cases. HRIS recipient policy stays Mobile-only.
+Phone 93 is installed from 2eb833f4 and predates this change. Group OFF; V117–140 undeployed;
+all 54 PRD groups OPEN. Continue beyond checkpoints and preserve blocked SQLite preparation,
+failed Apple evidence, protected stores and phone install-only authorization below.
 
 ## Delivered build and loop diagnosis
 

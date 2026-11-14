@@ -107,7 +107,7 @@ internal fun projectSpaceChatComposer(
                 record = record,
                 reviewRequired = stored[original.id]?.reviewRequired ?: old?.reviewRequired ?: false,
             )
-        if (retired[original.id] != null || spaceComposerRepresented(item, thread))
+        if (retired[original.id] != null || isSpaceChatCommandRepresented(item.record, thread))
             retired[original.id] = item
         else remaining += item
     }
@@ -154,11 +154,11 @@ internal fun selectSpaceComposerDisplayRecord(
 /**
  * Provider aliases and immutable origin prove this Group original; another namespace's UUID cannot.
  */
-private fun spaceComposerRepresented(
-    item: SpaceChatPendingSubmission,
+internal fun isSpaceChatCommandRepresented(
+    record: CollaborationSpaceMessageRecord?,
     thread: CollaborationSpaceThreadSnapshot?,
 ): Boolean {
-    val record = item.record ?: return false
+    if (record == null) return false
     if (record.state == CollaborationMessageState.Cancelled) return true
     val sent = record.state as? CollaborationMessageState.Sent ?: return false
     val origin = sent.origin ?: return false
