@@ -1,50 +1,46 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 09:23 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 09:45 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
 ## Active retained inbox paging verification
 
-Window15 is accepted and pushed: Mobilefb8fccef74e8afbcff049ae18e463923a9938f70,
-Groupb9b0a012097e2e1a3562248bc3233950ef12605e. Focused62/full17684,15503fresh+2181unchanged,
-source5578/60860464898fd61f4c9128074f70106d2f762a245ff93c639947beb510fde1d3;
-reports2649bb5dc9b92b3511005acf4b7b8474347ec4b2508d1f8d36664d7729d10d1a.
-Full1/session68107 reaped0,996.797s,started2026-11-14T08:55:07.337517+00:00. No rerun needed.
+Window15 remains accepted/pushed (Mobilefb8fccef /Groupb9b0a012), full17684; no rerun.
+Paging now has25 reviewed applied source paths,5591 inputs/414c642029c09dc7f088186ce6fdbb2920d8aafb21fdb4e15536a31b8bb0eaa8.
+Focused1/session84310 reaped1:37 new presentation cases passed; existing desktop fixtures used
+removed BackGestureDispatcher APIs. Focused2/session21602 reaped1 in158.289s:39 presentation
+cases passed, but ui-backhandler exposes NavigationEventDispatcher only as a runtime dependency.
+The four test fixtures now drive the actual NavigationEventDispatcher, preserve Back/cancellation/
+fallback assertions, and dispose their inputs. apps/shared desktopTest explicitly declares the
+already verified navigationevent1.0.2 dependency. Production navigation is unchanged.
 
-Paging .work/history-inbox-paging-2026-11-14 now has19 APPLIED reviewed source paths and a pending
-verification-metadata change. No UI test/capture/full acceptance yet. Expected focused39/full17745:
-24shared+13desktop UI additions, existing DI binding extension,61 new executions. The source/VM
-keeps local pages, current admission, viewport identity, bounded labels and pending/draft previews.
-UI is still unused by the app root; screenshots must be recorded and independently inspected.
+Reviewed corrections retain rows when continuation fails, offer retry only during that failure,
+and clear the obsolete failed-load marker after successful explicit retry. Original37-case
+screenshots had transparent empty canvases; only the screenshot host needed an opaque background.
+All three corrected actual PNGs were inspected (light,2x dark text,landscape); names/dates remain
+readable, bounded previews ellipsize, empty canvas matches the theme. See local visual-review1/2
+and preserved failed attempts; passing UI cases are not full integration/device acceptance.
 
-Dependency-resolution1/session89893 reaped1 in12.62s: application-only init task registered in the
-included inspector build. Fixed root-scoped registration and disabled configuration cache for the
-ad hoc resolver. Only metadata ordering changed; exact captured bytes restored. Resolution2/session3963
-reaped0 in106.343s but acceptance STOPPED on131 new dependency artifacts. Actual Android Paging3.5.3
-requires Compose UI1.10 and Lifecycle2.10; root metadata alone had hidden those requirements.
-Official stable3.4.0–3.4.2 have the same UI requirement;3.3.6 lacks required Wasm/Compose targets.
-Do not downgrade declared requirements or accept an unreviewed platform upgrade.
+Focused3/session12447 is RUNNING, expected138 (25 shared,14 UI,99 existing app/DI/navigation/inspector).
+Full expected17748 preserves17684 prior identities plus64 executions; force every desktop/browser
+suite because Compose/Lifecycle changed. Do not edit frozen source while the compiler runs.
+Compose1.10.3, Lifecycle2.10.0 and Paging3.5.3 are intentional compatible versions; all689 added
+artifacts across341 exact coordinates were independently fetched and verified. Metadata SHA
+a5cb920b0e54f2ab8101b71edf514f82947d4d5506be40aab51ffd96e44b141e.
+No full acceptance yet; do not mark it complete from39 passing presentation cases.
 
-Reviewed alignment is now applied: Compose Multiplatform1.10.3 and KMP/Android Lifecycle2.10.0,
-keeping Kotlin2.3.21. Resolution3/session26731 REAPED0 in145.788s. All689 introduced artifacts across341 reviewed
-coordinates were independently fetched from official Google/Maven repositories and SHA-256 checked,
-including Native file aliases. Prior checksums/policy and inspector sources are unchanged.
-Dependency metadata a5cb920b0e54f2ab8101b71edf514f82947d4d5506be40aab51ffd96e44b141e is accepted.
-Captured20 source paths,5591 inputs/914261067c16c3be61d22c7dd5ef618302ad0899dc9a98021a552b37820df468.
-Focused1/session84310 is RUNNING, expected39, not accepted. Do not edit captured inputs or start
-another compiler/emulator until reaped. No UI test result or screenshot is accepted yet. Full gate forces
-all platform tests because the shared Compose/Lifecycle stack changed. Generic version/metadata
-changes now REQUIRE a Starter port after Mobile passes; keep HRIS UI out of Starter.
-
-Next reap/accept focused UI/DI/Apple-source tests, inspect literal PNGs,
-then full verification and atomic Mobile/Group commits with pushes. Record any failures without
-weakening assertions. Before product activation, finish Group root/contact ownership and measure
-real app navigation in the emulator. Read-only findings: .work/history-inbox-product-routing-2026-11-14.
-The current Home hub already owns swipe tabs/FAB; Company navigation scope must not own Group state.
-Phone92/live unchanged; GroupOFF/V117-140 undeployed. All54 PRD groups OPEN. Continue beyond
-checkpoints; one compiler OR emulator; no agents; preserve blocked fixture payload/Apple evidence.
+After focus/full acceptance, record atomic Mobile/Group evidence and push each commit. REQUIRED
+Starter port is drafted under Starter .work/compose-paging-compatibility-port-2026-11-14:6 unapplied
+paths for versions, desktop dependency and4 generic fixtures; independently resolve only Starter
+artifacts and force all1049 prior tests/Android/Web/Apple compilation. Keep pinnedInspector742a2d1c.
+Then complete Group root/contact ownership and measured emulator navigation. The Home hub already
+has swipe tabs/FAB; Group state must sit outside Company scope. Group directory local observation
+needs current-admission/late-result review before UI consumption. Never fetch remote contacts on
+text changes or ordinary local opens. Phone92/live unchanged; GroupOFF/V117-140 undeployed.
+All54 PRD groups OPEN. Continue beyond checkpoints, one compiler OR emulator, no subagents.
+Preserve the blocked SQLite fixture payload and failed hosted Apple evidence; no retry/repackaging.
 
 ## Anchored local inbox windows locally accepted
 

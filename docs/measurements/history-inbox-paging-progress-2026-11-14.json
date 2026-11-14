@@ -1,0 +1,75 @@
+{
+  "status": "Focused3/session12447 running, expected138; explicit desktop test dependency added, no full acceptance",
+  "focusedSession": 12447,
+  "focusedDirectory": "focused3",
+  "expectedFocused": 138,
+  "expectedFull": 17748,
+  "paths": 25,
+  "failedFocusedAttempts": [
+    {
+      "directory": "focused1",
+      "session": 84310,
+      "reaped": true,
+      "exitCode": 1,
+      "resultSha256": "c58b4204094913427382513d2a45740363f21c61f873f3e1d5489ed2dadc129b",
+      "tests": {
+        "tests": 37,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reason": "37 new presentation cases passed; four existing desktop fixture files use removed BackGestureDispatcher/LocalBackGestureDispatcher. Migrate test input to NavigationEventDispatcher while preserving back/cancel/fallback and listener disposal assertions. Visual review separately found transparent screenshot canvas."
+    },
+    {
+      "directory": "focused2",
+      "session": 21602,
+      "reaped": true,
+      "exitCode": 1,
+      "resultSha256": "bac375f563f09f053c6ba30cd80665d9eeb798f60bf0d241202b7ccf0e1ef84e",
+      "tests": {
+        "tests": 39,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reason": "39 presentation cases pass. ui-backhandler1.10.3 declares navigationevent1.0.2 only in its runtime variant, so the new explicit test input needs its own desktopTest dependency. Official module variants verified; no test assertion changes."
+    }
+  ],
+  "foundationUpgrade": {
+    "composeFrom": "1.9.3",
+    "composeTo": "1.10.3",
+    "kmpLifecycleFrom": "2.9.5",
+    "androidLifecycleFrom": "2.9.4",
+    "lifecycleTo": "2.10.0",
+    "reason": "Official all-target Paging3.5.3 Android variant requires Compose UI1.10 and lifecycle2.10; use compatible official platform versions instead of forcing lower dependencies."
+  },
+  "navigationCompatibility": {
+    "files": [
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/AppFlowTest.kt",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/NavigationOwnershipTest.kt",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/NetworkInspectionUiTest.kt",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/TestBackDispatcher.kt"
+    ],
+    "existingTests": {
+      "NavigationOwnershipTest": 5,
+      "NetworkInspectionUiTest": 2,
+      "AppFlowTest": 90
+    },
+    "productionNavigationChanged": false,
+    "source": "Official ui-backhandler1.10.3 and navigationevent1.0.2 source APIs",
+    "owner": "TestBackDispatcher implements NavigationEventDispatcherOwner and closes dispatcher at test host disposal",
+    "dependency": "desktopTest implementation(androidx.navigationevent:navigationevent:1.0.2); required API is a runtime-only transitive dependency of ui-backhandler"
+  },
+  "inspectedScreenshotHashes": {
+    "light": "7a7040dc98bbd08af2abe8e71aa20874d5fa7ac92f7961af793d78b9fd4776ee",
+    "dark-large-text": "ceecaddd8ec1d684b42b2b02ca06fcc6783443d0219cfcef53a82a971142cbdd",
+    "landscape": "7d56fdb1728d3901ad99fac0c2046c917e2d7bb96a2168134716892228abff40"
+  },
+  "requiresStarterPort": true,
+  "accepted": false,
+  "sourceManifestSha256": "414c642029c09dc7f088186ce6fdbb2920d8aafb21fdb4e15536a31b8bb0eaa8",
+  "sourceFiles": 5591,
+  "phoneInstalled": false,
+  "groupRoutesActivated": false,
+  "liveChanged": false
+}
