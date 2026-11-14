@@ -1,45 +1,27 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 18:35 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 19:34 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 
-## Finite recipient transfer accepted
+## Local recipient transfer owner accepted
 
-Finite recipient transfer is accepted: 18,035 validated cases
-(15854 fresh / 2181 exact unchanged), preserving all17,975 prior
-identities plus60 executions. Focused69/session68788 and
-full/session88030 reaped0. Source 536262225d5b5c972c43ce49dac60e8431a308bf68cd514265222b30b9b23749;
-reports 95bd93062b345ebec8a9a90ae148b06734cd9bc96ec87b2f61ae15e0cf9bb331. One finite operation inserts/readbacks the immutable canonical
-original, probes existing inbox acknowledgement without writes, then conditionally retires the
-exact source. Missing metadata/index stays pending; later typing/wakes are preserved. No active
-recipient-transfer owner or product route yet. Read collaboration-recipient-transfer.md.
+The account/Group inbox lifetime now owns bounded recipient transfer on all platforms, independently
+of native Matrix readiness. A separate encrypted source version prevents editor typing from waking
+transfer. Finite passes preserve fairness; waiting messages react only to their relevant catalog/index
+change, and own source writes settle without cancelling and restarting the current pass.
 
-Next implement bounded source observation and fair finite recipient turns under the existing
-local account/Group inbox lifetime, including Web. Unchanged failures must idle; source/catalog/
-index changes permit another bounded pass. Do not use native recovery as the sole owner. Then
-pending recipient inbox rows, rapid Send ownership, new-contact routing, complete company filters
-and explicit Group rollout. Keep AppViewModel window-owned and Group outside Company scope.
+Validation: 18,125 cases (15944 fresh / 2181 exact unchanged), all18,035 prior IDs preserved plus90 executions. Focused127/session96178 and full/session56002 reaped0. Source a374f62d63853d2f187fc30cfcf8d9ed99efca075b92597c365300e821aa6263; reports d3d2f9d8600fec644b04faf7c857a4eb6b0a13f0183335793fcd5312d78cb7fd.
+Read [implementation and validation](collaboration-recipient-owner.md).
 
-Phone93 remains installed from2eb833f4 with verified bytes; this source is not in its APK.
-Starter resource port e9b4ff500baf62f2642871c6705d64b35bd1d2e1 remains independently accepted/pushed with1,052.
-GroupOFF/V117–140 undeployed/all54 PRD groups OPEN. Continue beyond checkpoints, push each commit,
-one compiler OR emulator, no subagents. Preserve blocked SQLite preparation and failed Apple proof.
+Continue the PRD and delivery.json in `/home/fajar/hris/.worktrees/communication-space/docs/collaboration/`.
+Next: pending-recipient list projection, rapid Send ownership, actual new-contact navigation,
+complete company filters and explicit Group rollout. The [product boundary review](collaboration-recipient-product-review.md)
+records the current canonical-only list/route contracts; do not pass peer IDs as conversation IDs
+or load all employees to merge pending rows. Keep the account/Group root outside Company scope.
 
-[Next recipient owner implementation plan](collaboration-recipient-owner-plan.md).
-
-## Work still required
-
-Continue the communication PRD at `/home/fajar/hris/.worktrees/communication-space/docs/collaboration/prd.md`
-and its delivery.json. All 54 acceptance groups remain OPEN; P0/P1 are in progress and P2–P8
-remain planned. Local source prerequisites do not complete end-to-end chat, voice/video, meetings,
-encrypted backup, platform notifications, company membership filters or live Group rollout.
-
-The next recipient owner must be local to the account/Group, including Web, and independent of
-native device/session preparation. Keep changes driven by retained source/catalog/index facts;
-unchanged failure must idle. The prepared Mobile transfer workspace contains the detailed
-`owner-integration-review.md`: source-marker options, legacy upgrade, exact raw write sites,
-bounded/fair passes, own-write feedback and required tests. Do not mistake that review for applied
-source. Combine the marker, observation, finite worker and actual owning DI into a coherent change.
+Phone93 remains installed from2eb833f4; this later source is not in that APK. Starter resource port
+e9b4ff50 remains independently accepted/pushed with1,052. GroupOFF/V117–140 undeployed/all54 PRD
+groups OPEN. Preserve blocked SQLite preparation, failed Apple evidence and protected stores.
 
 ## Delivered build and loop diagnosis
 

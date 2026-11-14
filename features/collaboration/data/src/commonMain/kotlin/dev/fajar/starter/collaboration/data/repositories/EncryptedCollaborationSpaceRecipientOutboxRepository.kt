@@ -13,7 +13,7 @@ import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.*
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.*
 import org.koin.core.annotation.*
 
 @Single
@@ -23,6 +23,38 @@ class EncryptedCollaborationSpaceRecipientOutboxRepository(
     @Named("collaboration-history-content-key") private val credentials: AtomicCredentialStore,
 ) : CollaborationSpaceRecipientOutboxRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
+
+    override fun observeVersion(
+        access: CollaborationSpaceLocalAccess
+    ): Flow<AppResult<CollaborationSpaceRecipientOutboxVersion?>> =
+        safeStorageFlow(
+                flow {
+                    emitAll(
+                        replicas.observeDocument(
+                            spaceHistoryScope(access),
+                            recipientDraftPartition(access),
+                            RECIPIENT_OUTBOX_VERSION_ID,
+                        )
+                    )
+                },
+                mapValue = { raw ->
+                    val documents = capture(raw.documents, 1)
+                    require(
+                        documents.all { it.id == RECIPIENT_OUTBOX_VERSION_ID && it.tags.isEmpty() }
+                    )
+                    val checkpoint = raw.checkpoint
+                    if (checkpoint == null) {
+                        require(documents.isEmpty())
+                        null
+                    } else
+                        keys.use { key, _ ->
+                            CollaborationSpaceRecipientOutboxVersionCodec(access, cipher, key)
+                                .decode(checkpoint, documents.singleOrNull())
+                        }
+                },
+            )
+            .distinctUntilChanged()
+            .flowOn(Dispatchers.Default)
 
     override suspend fun handoff(
         access: CollaborationSpaceLocalAccess,
@@ -38,22 +70,24 @@ class EncryptedCollaborationSpaceRecipientOutboxRepository(
                     val id = recipientSubmissionId(submission.id)
                     repeat(3) {
                         currentCoroutineContext().ensureActive()
-                        val raw =
-                            replicas.workingDocuments(
-                                scope,
-                                partition,
-                                listOf(submission.original.peerAccountId, id),
+                        val ids =
+                            listOf(
+                                submission.original.peerAccountId,
+                                id,
+                                RECIPIENT_OUTBOX_VERSION_ID,
                             )
-                        val documents = capture(raw.documents, 2)
+                        val raw = replicas.workingDocuments(scope, partition, ids)
                         val checkpoint = raw.checkpoint
                         if (checkpoint?.published == false)
                             return@safeStorageCall CollaborationComposerHandoffResult.CHANGED
-                        require(checkpoint != null || documents.isEmpty())
+                        val visible =
+                            CollaborationSpaceRecipientSnapshotCodec.working(raw, ids.toSet())
+                                .documents
                         val outcome =
                             keys.use(create = checkpoint == null) { key, _ ->
                                 val codec =
                                     CollaborationSpaceRecipientHandoffCodec(access, cipher, key)
-                                val source = codec.source(checkpoint, documents, submission)
+                                val source = codec.source(checkpoint, visible, submission)
                                 if (replicas.checkpoint(scope, partition) != checkpoint)
                                     return@use null
                                 if (source.retained != null)
@@ -67,23 +101,22 @@ class EncryptedCollaborationSpaceRecipientOutboxRepository(
                                         .observeQueries(
                                             scope,
                                             partition,
-                                            listOf(ReplicaQuery(RECIPIENT_OUTBOX_TAG, limit = 129)),
+                                            listOf(
+                                                ReplicaQuery(
+                                                    RECIPIENT_OUTBOX_TAG,
+                                                    limit =
+                                                        COLLABORATION_SPACE_RECIPIENT_CAPACITY + 1,
+                                                )
+                                            ),
                                         )
                                         .first()
                                 require(inventory.pages.size == 1)
-                                val active = capture(inventory.pages.single(), 129)
-                                require(
-                                    active.all {
-                                        it.tags == setOf(RECIPIENT_OUTBOX_TAG) &&
-                                            it.id ==
-                                                recipientSubmissionId(
-                                                    it.id.removePrefix("submission:")
-                                                ) &&
-                                            it.sortKey == it.id
-                                    }
-                                )
+                                val active =
+                                    CollaborationSpaceRecipientSnapshotCodec.inventory(
+                                        inventory.pages.single()
+                                    )
                                 if (inventory.checkpoint != checkpoint) return@use null
-                                if (active.size >= 128)
+                                if (active >= COLLABORATION_SPACE_RECIPIENT_CAPACITY)
                                     return@use CollaborationComposerHandoffResult.CAPACITY_EXCEEDED
                                 val snapshot = codec.replacement(checkpoint, submission)
                                 val wake =
@@ -158,7 +191,7 @@ class EncryptedCollaborationSpaceRecipientOutboxRepository(
     ): AppResult<CollaborationSpaceRecipientSubmissionPage> =
         withContext(Dispatchers.Default) {
             val result = safeStorageCall {
-                require(limit in 1..8)
+                require(limit in 1..COLLABORATION_SPACE_RECIPIENT_PAGE_LIMIT)
                 val scope = spaceHistoryScope(access)
                 val partition = recipientDraftPartition(access)
                 val anchor = after?.let(::recipientSubmissionId)
@@ -214,27 +247,55 @@ class EncryptedCollaborationSpaceRecipientOutboxRepository(
                     val id = recipientSubmissionId(expected.id)
                     repeat(3) {
                         currentCoroutineContext().ensureActive()
-                        val raw = replicas.observeDocument(scope, partition, id).first()
-                        val documents = capture(raw.documents, 1)
-                        require(documents.all { it.id == id })
-                        val retained = decode(access, raw.checkpoint, documents).singleOrNull()
+                        val raw =
+                            replicas.workingDocuments(
+                                scope,
+                                partition,
+                                listOf(id, RECIPIENT_OUTBOX_VERSION_ID),
+                            )
+                        val visible =
+                            CollaborationSpaceRecipientSnapshotCodec.working(
+                                    raw,
+                                    setOf(id, RECIPIENT_OUTBOX_VERSION_ID),
+                                )
+                                .documents
+                        val retained =
+                            decode(access, raw.checkpoint, visible.filter { it.id == id })
+                                .singleOrNull()
                         if (replicas.checkpoint(scope, partition) != raw.checkpoint) return@repeat
                         if (retained != expected) return@safeStorageCall false
                         val checkpoint = requireNotNull(raw.checkpoint)
                         val revision = checkpoint.revision + 1
                         require(revision in 0 until 9_007_199_254_740_991L)
-                        val next =
+                        val replacement =
                             keys.use { key, _ ->
-                                CollaborationSpaceRecipientDraftCodec(access, cipher, key)
-                                    .checkpoint(checkpoint.handle.generation, revision)
+                                val versions =
+                                    CollaborationSpaceRecipientOutboxVersionCodec(
+                                        access,
+                                        cipher,
+                                        key,
+                                    )
+                                versions.decode(
+                                    checkpoint,
+                                    visible.singleOrNull { it.id == RECIPIENT_OUTBOX_VERSION_ID },
+                                )
+                                val next =
+                                    CollaborationSpaceRecipientDraftCodec(access, cipher, key)
+                                        .checkpoint(checkpoint.handle.generation, revision)
+                                next to
+                                    versions.encode(
+                                        checkpoint.handle.generation,
+                                        revision,
+                                        revision,
+                                    )
                             }
                         currentCoroutineContext().ensureActive()
                         if (
                             replicas.commit(
                                 checkpoint.handle,
                                 checkpoint.revision,
-                                next,
-                                listOf(ReplicaDocument(id, revision, id, null)),
+                                replacement.first,
+                                listOf(ReplicaDocument(id, revision, id, null), replacement.second),
                                 true,
                             )
                         )

@@ -2,9 +2,15 @@ package dev.fajar.starter.collaboration.domain.repositories
 
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.result.AppResult
+import kotlinx.coroutines.flow.Flow
 
 /** Encrypted local originals. No discovery, scheduling, canonical allocation or transport. */
 interface CollaborationSpaceRecipientOutboxRepository {
+    /** Only retained original mutations advance this signal; typing preserves its logical value. */
+    fun observeVersion(
+        access: CollaborationSpaceLocalAccess
+    ): Flow<AppResult<CollaborationSpaceRecipientOutboxVersion?>>
+
     /**
      * Retain the exact original, clear its expected editor and publish a recovery wake atomically.
      * At most 128 outstanding originals per Group. Exact replay preserves later typing and wake. A

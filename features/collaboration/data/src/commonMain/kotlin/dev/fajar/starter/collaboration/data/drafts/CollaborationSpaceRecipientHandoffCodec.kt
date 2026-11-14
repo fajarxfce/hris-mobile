@@ -15,6 +15,7 @@ internal class CollaborationSpaceRecipientHandoffCodec(
 ) {
     private val drafts = CollaborationSpaceRecipientDraftCodec(access, cipher, key)
     private val originals = CollaborationSpaceRecipientSubmissionCodec(access, cipher, key)
+    private val versions = CollaborationSpaceRecipientOutboxVersionCodec(access, cipher, key)
 
     data class Source(
         val editor: CollaborationSpaceRecipientDraft?,
@@ -27,10 +28,18 @@ internal class CollaborationSpaceRecipientHandoffCodec(
         submission: CollaborationSpaceRecipientSubmission,
     ): Source {
         val id = recipientSubmissionId(submission.id)
-        require(documents.size <= 2 && documents.map { it.id }.distinct().size == documents.size)
+        require(documents.size <= 3 && documents.map { it.id }.distinct().size == documents.size)
         require(checkpoint != null || documents.isEmpty())
-        if (checkpoint != null) drafts.checkpoint(checkpoint)
-        require(documents.all { it.id in setOf(submission.original.peerAccountId, id) })
+        if (checkpoint != null)
+            versions.decode(
+                checkpoint,
+                documents.singleOrNull { it.id == RECIPIENT_OUTBOX_VERSION_ID },
+            )
+        require(
+            documents.all {
+                it.id in setOf(submission.original.peerAccountId, id, RECIPIENT_OUTBOX_VERSION_ID)
+            }
+        )
         return Source(
             documents
                 .singleOrNull { it.id == submission.original.peerAccountId }
@@ -54,6 +63,7 @@ internal class CollaborationSpaceRecipientHandoffCodec(
             listOf(
                 drafts.encode(generation, revision, submission.nextDraft),
                 originals.encode(generation, revision, submission),
+                versions.encode(generation, revision, revision),
             ),
         )
     }

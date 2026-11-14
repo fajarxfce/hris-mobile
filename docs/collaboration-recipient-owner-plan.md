@@ -1,8 +1,6 @@
-# Recipient transfer owner — next implementation
+# Recipient transfer owner — design
 
-This is a plan, not an active worker or a completed product route. The accepted per-original
-transfer operation is the prerequisite. Keep Group rollout OFF until its separate product and
-live gates pass.
+This implementation plan is now fulfilled by the [accepted local owner](collaboration-recipient-owner.md). The design constraints below remain the rationale. Product routes and live Group rollout still require their separate gates.
 
 ## Separate original changes from typing
 

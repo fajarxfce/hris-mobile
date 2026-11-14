@@ -546,6 +546,13 @@ class CollaborationBindingsTest {
                 )
                 assertNotNull(container.koin.get<SubmitCollaborationSpaceRecipientComposer>())
                 assertNotNull(container.koin.get<TransferCollaborationSpaceRecipientSubmission>())
+                assertNotNull(container.koin.get<ObserveCollaborationSpaceRecipientOutboxVersion>())
+                assertNotNull(container.koin.get<ReadCollaborationSpaceRecipientPending>())
+                assertNotNull(
+                    container.koin.get<
+                        dev.fajar.starter.app.work.CollaborationSpaceRecipientTransferWorker
+                    >()
+                )
                 assertNotNull(container.koin.get<ReplayCollaborationSpaceConversationOpen>())
                 assertNotNull(container.koin.get<ResolveCollaborationSpaceRoomRequest>())
                 assertNotNull(container.koin.get<ReplayCollaborationSpaceRoomRequest>())

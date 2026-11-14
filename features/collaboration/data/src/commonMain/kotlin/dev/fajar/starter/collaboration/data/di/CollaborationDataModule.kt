@@ -730,6 +730,22 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun observeSpaceRecipientOutboxVersion(
+        outbox: CollaborationSpaceRecipientOutboxRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ObserveCollaborationSpaceRecipientOutboxVersion(outbox, directory, sessions, server)
+
+    @Factory
+    fun readSpaceRecipientPending(
+        outbox: CollaborationSpaceRecipientOutboxRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpaceRecipientPending(outbox, directory, sessions, server)
+
+    @Factory
     fun transferSpaceRecipientSubmission(
         outbox: CollaborationSpaceRecipientOutboxRepository,
         messages: CollaborationSpaceMessageRepository,

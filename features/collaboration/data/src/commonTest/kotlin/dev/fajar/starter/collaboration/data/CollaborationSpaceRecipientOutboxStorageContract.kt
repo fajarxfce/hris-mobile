@@ -565,8 +565,19 @@ abstract class CollaborationSpaceRecipientOutboxStorageContract {
             assertEquals(AppResult.Success(later), f.drafts().get(f.access, later.peerAccountId))
             val after = f.database.replicas.observe(scope, partition, limit = 128).first()
             assertEquals(
-                before.documents.filter { it.id != recipientSubmissionId(first.id) },
-                after.documents,
+                before.documents.filter {
+                    it.id !in setOf(recipientSubmissionId(first.id), RECIPIENT_OUTBOX_VERSION_ID)
+                },
+                after.documents.filter { it.id != RECIPIENT_OUTBOX_VERSION_ID },
+            )
+            assertEquals(
+                AppResult.Success(
+                    CollaborationSpaceRecipientOutboxVersion(
+                        after.checkpoint!!.handle.generation,
+                        after.checkpoint!!.revision,
+                    )
+                ),
+                f.outbox().observeVersion(f.access).first(),
             )
             assertEquals(wake, f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY))
             assertEquals(key, f.keys.read())
@@ -865,11 +876,11 @@ abstract class CollaborationSpaceRecipientOutboxStorageContract {
         for (changed in changes) {
             val store =
                 object : ReplicaStore by f.database.replicas {
-                    override fun observeDocument(
+                    override suspend fun workingDocuments(
                         scope: ReplicaScope,
                         partition: String,
-                        id: String,
-                    ) = flowOf(changed)
+                        ids: List<String>,
+                    ) = changed
                 }
             assertIs<AppResult.Failed>(f.outbox(store).remove(f.access, sent))
         }

@@ -79,10 +79,26 @@ class EncryptedCollaborationSpaceRecipientDraftRepository(
                     repeat(3) {
                         currentCoroutineContext().ensureActive()
                         val page =
-                            replicas
-                                .observeDocument(scope, partition, replacement.peerAccountId)
-                                .first()
-                        val current = decode(access, replacement.peerAccountId, page)
+                            replicas.workingDocuments(
+                                scope,
+                                partition,
+                                listOf(replacement.peerAccountId, RECIPIENT_OUTBOX_VERSION_ID),
+                            )
+                        val visible =
+                            CollaborationSpaceRecipientSnapshotCodec.working(
+                                    page,
+                                    setOf(replacement.peerAccountId, RECIPIENT_OUTBOX_VERSION_ID),
+                                )
+                                .documents
+                        val current =
+                            decode(
+                                access,
+                                replacement.peerAccountId,
+                                page.copy(
+                                    documents =
+                                        visible.filter { it.id == replacement.peerAccountId }
+                                ),
+                            )
                         if (replicas.checkpoint(scope, partition) != page.checkpoint) return@repeat
                         if (current == replacement) return@safeStorageCall true
                         if (current != expected) return@safeStorageCall false
@@ -97,20 +113,47 @@ class EncryptedCollaborationSpaceRecipientDraftRepository(
                                 require(revision in 0 until 9_007_199_254_740_991L)
                                 val checkpoint = codec.checkpoint(generation, revision)
                                 val document = codec.encode(generation, revision, replacement)
+                                val versions =
+                                    CollaborationSpaceRecipientOutboxVersionCodec(
+                                        access,
+                                        cipher,
+                                        content,
+                                    )
+                                val marker =
+                                    visible.singleOrNull { it.id == RECIPIENT_OUTBOX_VERSION_ID }
+                                val sourceRevision =
+                                    raw?.let { versions.decode(it, marker).revision }
+                                // First creation/legacy upgrade preserves the logical source token.
+                                // An existing marker stays byte-for-byte unchanged while typing.
+                                val replacementDocuments =
+                                    listOf(document) +
+                                        if (marker == null)
+                                            listOf(
+                                                versions.encode(
+                                                    generation,
+                                                    revision,
+                                                    sourceRevision,
+                                                )
+                                            )
+                                        else emptyList()
                                 currentCoroutineContext().ensureActive()
                                 if (raw == null)
                                     replicas.replace(
                                         scope,
                                         partition,
                                         null,
-                                        ReplicaSnapshot(generation, checkpoint, listOf(document)),
+                                        ReplicaSnapshot(
+                                            generation,
+                                            checkpoint,
+                                            replacementDocuments,
+                                        ),
                                     )
                                 else
                                     replicas.commit(
                                         raw.handle,
                                         raw.revision,
                                         checkpoint,
-                                        listOf(document),
+                                        replacementDocuments,
                                         true,
                                     )
                             }

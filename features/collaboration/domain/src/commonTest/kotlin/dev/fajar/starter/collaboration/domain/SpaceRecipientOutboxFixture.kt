@@ -66,6 +66,11 @@ internal class SpaceRecipientOutboxFixture {
         }
     val outbox =
         object : CollaborationSpaceRecipientOutboxRepository {
+            override fun observeVersion(
+                access: CollaborationSpaceLocalAccess
+            ): Flow<AppResult<CollaborationSpaceRecipientOutboxVersion?>> =
+                error("Submission does not own source observation")
+
             override suspend fun get(
                 access: CollaborationSpaceLocalAccess,
                 id: String,
