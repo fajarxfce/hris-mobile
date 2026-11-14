@@ -1,37 +1,41 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 01:22 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 01:29 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active admitted history change verification
+## Admitted canonical history changes locally accepted
 
-Atomic signal19f1c9b5/Group2d1ad20f are accepted/pushed with focused125/full16924.
-Mobile .work/history-changes-admission-2026-11-14 has10 APPLIED paths and23 new shared methods.
-Corrected focused53 is accepted (94205 REAPED0,385.432s), including15 admitted read cases,
-8 owned signal cases,28 real-storage cases and2 graph tests. Source5473/a90a344cfa4945b400b150a59d01c5a3bd43796a23ea2ddaefa306b824e93ce6;
-result8718fc1b66e763d8b7ecefc9269adcb44b96d099e8a35c4af4ee6610d66927f8. First focused13297 remains a failed compile (three generic test
-assertions, zero executions); one test-file correction preserved all methods and production bytes.
-
-Full16970 RUNNING81002 in full-1. Do not change its inputs. Reap/audit, then use the prepared
-record-acceptance.py/commit.py and push every resulting commit. Native/product activation is separate.
+Mobile .work/history-changes-admission-2026-11-14 is accepted:10 paths,23 shared methods.
+Focused53/full16970 (14789 fresh /2181 unchanged) preserve
+all16924 prior identities plus46 executions. Source5473/a90a344cfa4945b400b150a59d01c5a3bd43796a23ea2ddaefa306b824e93ce6;
+reportse67af118df52e93266edd8036ec099780fa296f24124ec8e8150c07b9d8f131a. Exact canonical Company/Group source selection, frozen bounded
+pages and one admitted signal observer are bound into the app graph. No worker is activated.
 
 Next .work/history-inbox-publication-receipt-2026-11-14 contains14 reviewed/formatted UNAPPLIED
-source/test paths,18 new shared methods and all46 previous publisher/storage methods. Its typed
-receipt exposes the actual source and committed destination versions; explicit no-op/absence
-confirmation writes nothing and an entirely absent pair creates no keys. The publisher retains
-source owner and unresolved IDs. Old storage fixtures additionally verify versions on success.
-Apply/capture/focused66/full17006/record/commit gates are prepared but UNRUN. Apply only after this
-reader is accepted/pushed, and REAP apply before capture. Tests include an index removed before
-the successful commit reply, proving no read-back guess. Source/test review is in review.md.
+source/test paths with18 new shared methods and all46 prior publisher/storage methods retained.
+Apply/capture/focused66/full17006/record/commit gates are prepared but unrun. It replaces Boolean
+publication results with checked typed receipts and supports explicit no-op/absence confirmation;
+read review.md, then apply and REAP before capture after this source is accepted and pushed.
+Then return
+to .work/history-inbox-progress-2026-11-14. It still contains ONE initial unapplied
+domain state draft and updated review.md, not a storage/worker implementation. The existing history
+inbox publication returns Boolean and cannot expose a first-write destination generation; its
+contract must provide checked publication evidence. Source revision is opaque: do not parse it in
+domain to infer a generation. Unresolved-only results also need explicit source/destination facts.
+The canonical catalog watches metadata only; new bindings currently write a separate partition and
+WorkWake. Before owner integration, new binding publication must also invalidate available local
+history atomically (or supply an owned binding-version source); exact replay must remain silent.
+No per-room observer or polling bridge to the non-observable WorkWakeStore.
+Then implement atomic cursor/unresolved handoff and fair finite catalog/source continuation under
+the existing Group repair owner. Retain completed demand so unchanged reopen does not rescan.
+No additional polling scheduler/per-room observer; empty raw pages need no invented event.
 
-Then implement durable cursor/unresolved handoff and fair bounded continuation under the existing
-Group repair owner. .work/history-inbox-progress-2026-11-14 remains one initial unapplied state
-draft, not an implementation. Compare typed source and destination generation before progress
-completion. No new polling queue/per-room observer; empty raw pages need no invented event.
-Phone92 remains installed, live GroupOFF/V117-140 undeployed, all54 PRD groups open. Continue,
-push every commit, one compiler OR emulator, no subagents.
+Atomic source signal, raw changes and Starter092fbe6f remain accepted/pushed. Actual new Apple
+execution remains outstanding; preserve the failed hosted control and blocked fixture payload.
+Phone92 remains installed; live GroupOFF and V117-140 undeployed; all54 PRD groups remain open.
+Continue beyond checkpoints and push every commit. One compiler OR emulator, no subagents.
 
 ## Atomic history signal locally accepted
 

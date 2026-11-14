@@ -1,5 +1,7 @@
 # Architecture
 
+[Admitted canonical history changes](collaboration-history-changes-admission.md) preserve exact local source ownership and finite cursor windows.
+
 [Atomic local history invalidation](collaboration-history-change-signal.md) publishes one owned signal with effective source mutations.
 
 [Authenticated history change pages](collaboration-history-changes.md) retain exact source identity and bounded local references.

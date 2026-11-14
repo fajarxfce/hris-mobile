@@ -1884,6 +1884,32 @@ class CollaborationDataModule {
     ) = ReadCollaborationSpaceConversationCatalog(catalog, directory, sessions, server)
 
     @Factory
+    fun readSpaceHistoryChanges(
+        history: CollaborationSpaceHistoryChangesRepository,
+        companyHistory: CollaborationCompanyHistoryChangesRepository,
+        bindings: CollaborationSpaceRoomBindingRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) =
+        ReadCollaborationSpaceHistoryChanges(
+            history,
+            companyHistory,
+            bindings,
+            directory,
+            sessions,
+            server,
+        )
+
+    @Factory
+    fun observeSpaceHistoryChanges(
+        signals: CollaborationHistorySignalRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ObserveCollaborationSpaceHistoryChanges(signals, directory, sessions, server)
+
+    @Factory
     fun observeSpaceConversationCatalog(
         catalog: CollaborationSpaceConversationCatalogRepository,
         directory: CollaborationSpaceDirectoryRepository,

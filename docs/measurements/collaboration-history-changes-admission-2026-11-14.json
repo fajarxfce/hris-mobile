@@ -1,0 +1,73 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceHistoryChangesRead.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationHistoryChangesPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceHistoryChanges.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceHistoryChanges.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceHistoryChangesTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadSpaceHistoryChangesTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceHistoryChangesFixture.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceHistorySignalFixture.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 53,
+    "elapsedSeconds": 385.432,
+    "sourceFiles": 5473,
+    "sourceManifestSha256": "a90a344cfa4945b400b150a59d01c5a3bd43796a23ea2ddaefa306b824e93ce6",
+    "resultSha256": "8718fc1b66e763d8b7ecefc9269adcb44b96d099e8a35c4af4ee6610d66927f8",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationHistorySignalStorageTest": 13,
+      "CollaborationHistoryChangesStorageTest": 15,
+      "ObserveSpaceHistoryChangesTest": 8,
+      "ReadSpaceHistoryChangesTest": 15
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T01:12:29.436790+00:00",
+    "elapsedSeconds": 971.578,
+    "sourceFiles": 5473,
+    "freshCounts": {
+      "tests": 14789,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153506303,
+      "sha256": "636703081c2dd3af25792fbdb3fab396f32c1d7cd75d18097231888de10859ea"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16970,
+    "newCases": 46,
+    "freshTests": 14789,
+    "reusedUnaffectedTests": 2181,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "a90a344cfa4945b400b150a59d01c5a3bd43796a23ea2ddaefa306b824e93ce6",
+    "reportManifestSha256": "e67af118df52e93266edd8036ec099780fa296f24124ec8e8150c07b9d8f131a",
+    "nativeClaim": "Admitted bounded canonical history reads and one owned signal observation;23 shared methods. Durable owner progress and product activation remain open."
+  },
+  "newSharedMethods": 23,
+  "failedCompileCorrection": {
+    "path": "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadSpaceHistoryChangesTest.kt",
+    "previousSha256": "f47e43d4998b8851dbd84e4b3c8ee878dae20185257c4c559191fecaad168239",
+    "reason": "Explicit generic expected types for two call-list assertions; compare failed result rather than unrelated success payload types",
+    "failedRun": "focused-1",
+    "testsExecuted": 0,
+    "testMethodsUnchanged": 15
+  },
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "ownerActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false
+}
