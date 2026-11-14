@@ -16,6 +16,9 @@ data class CollaborationSpaceInboxRepairProgress(
 }
 
 sealed interface CollaborationSpaceInboxRepairProgressChange {
+    /** Bootstrap a missing pass; an existing request, cursor or completion remains unchanged. */
+    data class EnsureInitialized(val demand: String) : CollaborationSpaceInboxRepairProgressChange
+
     /** A caller creates a fresh non-reused ID for new demand; exact latest replay is harmless. */
     data class Request(val demand: String) : CollaborationSpaceInboxRepairProgressChange
 

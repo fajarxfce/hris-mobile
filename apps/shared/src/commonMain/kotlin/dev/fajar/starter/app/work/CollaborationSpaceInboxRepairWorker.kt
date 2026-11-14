@@ -3,6 +3,8 @@
 package dev.fajar.starter.app.work
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.entities.CollaborationSpaceInboxRepairProgressChange.EnsureInitialized
+import dev.fajar.starter.collaboration.domain.entities.CollaborationSpaceInboxRepairProgressChange.Request
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.common.result.*
 import kotlin.time.Duration.Companion.seconds
@@ -81,7 +83,8 @@ class CollaborationSpaceInboxRepairWorker(
                     }
                     val originals = (seedSelection as AppResult.Success).value
                     val signal = (request as AppResult.Success).value
-                    val requested = !receivedRequest || previousRequest != signal
+                    val initializing = !receivedRequest
+                    val requested = initializing || previousRequest != signal
                     receivedRequest = true
                     previousRequest = signal
                     previous = requireNotNull(collaborationSpaceMessageInventory(access, current))
@@ -95,13 +98,12 @@ class CollaborationSpaceInboxRepairWorker(
                     if (originals.isNotEmpty()) seedRecoveryPending = true
                     val result =
                         withTimeoutOrNull(30.seconds) {
-                            if (demand.requiresScan) {
+                            if (demand.requiresScan || initializing) {
                                 val retained =
                                     changeProgress(
                                         access,
-                                        CollaborationSpaceInboxRepairProgressChange.Request(
-                                            Uuid.random().toString()
-                                        ),
+                                        if (demand.requiresScan) Request(Uuid.random().toString())
+                                        else EnsureInitialized(Uuid.random().toString()),
                                     )
                                 if (retained is AppResult.Failed) return@withTimeoutOrNull retained
                                 previousRequest = (retained as AppResult.Success).value.latestDemand

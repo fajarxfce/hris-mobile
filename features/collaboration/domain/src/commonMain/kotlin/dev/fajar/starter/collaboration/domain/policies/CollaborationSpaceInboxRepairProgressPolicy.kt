@@ -36,6 +36,15 @@ fun collaborationSpaceInboxRepairProgress(
         )
     val next =
         when (change) {
+            is CollaborationSpaceInboxRepairProgressChange.EnsureInitialized -> {
+                if (!validCollaborationMessageId(change.demand))
+                    return collaborationRecoveryFailure(
+                        "client.collaboration_invalid_request",
+                        FailureKind.Validation,
+                    )
+                if (current != null) return AppResult.Success(current)
+                CollaborationSpaceInboxRepairProgress(generation, change.demand, null, null)
+            }
             is CollaborationSpaceInboxRepairProgressChange.Request -> {
                 if (!validCollaborationMessageId(change.demand))
                     return collaborationRecoveryFailure(

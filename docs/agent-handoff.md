@@ -1,44 +1,39 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 04:21 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 04:30 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active inbox repair bootstrap verification
+## Inbox repair bootstrap locally accepted
 
-Admitted raw history handoff4 is committed/pushed as mobiled920094551cfd31b686abced907c0483a499f545
-and Groupcc5a1dea039f36bd242e11e50c60cff65a25ba8b. Focused35/full17120 accepted,14939 fresh/2181
-unchanged. Source5494/b1f05716f6100afef1fd623da663056705e7650dee9f69c2fa7771b286ce9221;
-reportse4a1f2a63e431049a668948839885468cac021ee919adc58ed1ce9e579e723a9.
-
-Current .work/inbox-repair-bootstrap-demand-2026-11-14 has9 APPLIED reviewed/formatted paths,
-9 shared additions with37 prior methods retained. Apply42283 REAPED. Source5494/
-f2912883f10e756f2460032c2973ae6193c8348069ec5d7400ce0dba5ca51ff7. Focused1/session40704 REAPED1:
-34 domain cases passed, then app test compilation failed at WorkerTest:295 because the new saved
-cursor list required explicit String? element type. Production was not changed. Original source,
-result and one-line correction remain in .work and the acceptance recorder preserves this failed
-attempt. Focused2/session58439 REAPED0 and accepted48 in204.334s; result428a015a9dc82898a7028c56188b002e3debb68d991e2db82f66d5046d1afd83.
-Full1/session20844 is RUNNING (expected17138). Reap/audit then record/commit/push mobile before
-Group. Do not change source during the run.
-
+Mobile .work/inbox-repair-bootstrap-demand-2026-11-14 is accepted:9 paths,9 shared additions.
+Focused48/full17138 (14957 fresh /2181 unchanged) preserve all17120
+prior identities plus18 executions. Source5494/f2912883f10e756f2460032c2973ae6193c8348069ec5d7400ce0dba5ca51ff7;
+reports10732bd481cd52237474f34e389f51404e7594b072032fe30eb59a728aa75ec6. An unchanged owner restart now reuses existing repair progress.
+Missing progress initializes once; current real requests win contention. Atomic archival/seeding,
+observed terminal targets and live overflow retain their actual mutation-driven demand. The
+existing repair worker changed; no global history worker or product consumer was activated.
 
 Next .work/history-inbox-source-admission-2026-11-14 consolidates lifecycle6/pending8/recovery5
-into15 unique reviewed/formatted UNAPPLIED paths and49 shared methods. All13 new source/test
-files retain exact reviewed provenance; final DI/graph files include all six use cases. Focused74/
-full17236 and record/commit gates are prepared UNRUN against bootstrap17138. Earlier standalone
-counts17168/17216 were plans only. Their workspaces are marked superseded and their gates must
-not run. Apply the combined package only after bootstrap acceptance/push; REAP before capture.
+into15 unique reviewed/formatted UNAPPLIED paths,49 shared methods, focused74/full17236 and
+record/commit gates prepared UNRUN. The former standalone workspaces were never applied or run;
+do not execute their superseded gates. Apply the combined package after bootstrap acceptance/push;
+REAP before capture. Then implement retained global demand and fair catalog/source continuation under the existing repair lifetime.
+Keep active raw windows attached to their original pass, preserve unresolved insertion positions,
+and explicitly reset traversal after destination/source replacement. A completed raw window cannot
+be relabeled as covering a later trigger. Empty pending completion checks index metadata without
+fabricated event IDs or source receipts. Review completed repair demand as the history retry
+trigger: latestDemand can arrive before command publication finishes. Yield between finite rounds
+and never self-requeue work without progress. Incoming completion, thread/list/UI activation,
+SDK8 Apple application activation and end-to-end evidence remain open.
+Global owner storage/transition constraints remain [design only](collaboration-history-global-owner-design.md);
+retain completed pass IDs and guard global cursor commits with authenticated source checkpoints.
 
-The package handles unchanged source preparation, frozen pending references and empty completion,
-current-source inspection and explicit raw Restart. It preserves unresolved records and current
-admission throughout. Global state/atomic cursor retention, admitted source enumeration, shared
-repair-completion observation and fair owner integration remain design-only. No source/runtime
-changes from the combined drafts. Phone92 and live state remain unchanged.
-
-Global owner design is recorded in docs/collaboration-history-global-owner-design.md and mobile .work/history-inbox-global-owner-2026-11-14. No global source/gates exist yet.
-It documents checked global/source cursor commits, completed repair signals, bounded catalog
-rounds, failure parking and fair command service. Do not treat this design as implemented.
+Raw admitted handoff/source persistence and Starter092fbe6f remain accepted. Preserve failed
+hosted Apple evidence and the blocked fixture payload; actual new Apple execution is open.
+Phone92 remains installed, no phone/live change; GroupOFF/V117-140 undeployed. All54 PRD groups
+remain open. Continue beyond checkpoints, push every commit, one compiler OR emulator, no agents.
 
 ## Admitted history inbox handoff locally accepted
 

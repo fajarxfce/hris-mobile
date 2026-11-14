@@ -11,6 +11,65 @@ import kotlinx.coroutines.test.*
 
 class CollaborationSpaceInboxRepairWorkerTest {
     @Test
+    fun unchangedReopenKeepsCompletedDemandAndDoesNotReadAnotherRepairPage() = runTest {
+        val f = SpaceInboxRepairWorkerFixture()
+        val first = backgroundScope.launch { f.worker()(f.access).collect() }
+        runCurrent()
+        val completed = assertNotNull(f.progress)
+        assertEquals(completed.latestDemand, completed.completedDemand)
+        first.cancelAndJoin()
+        val pages = f.pages.toList()
+        val second = backgroundScope.launch { f.worker()(f.access).collect() }
+        runCurrent()
+        assertEquals(completed, f.progress)
+        assertEquals(pages, f.pages)
+        assertEquals(
+            0,
+            f.changes.count { it is CollaborationSpaceInboxRepairProgressChange.Request },
+        )
+        assertEquals(
+            2,
+            f.changes.count { it is CollaborationSpaceInboxRepairProgressChange.EnsureInitialized },
+        )
+        second.cancelAndJoin()
+        assertEquals(2, f.commandStops)
+        assertEquals(2, f.requestStops)
+    }
+
+    @Test
+    fun aLiveTargetOverflowStillCreatesOneRealRequestAfterBootstrap() = runTest {
+        val f = SpaceInboxRepairWorkerFixture()
+        val job = backgroundScope.launch { f.worker()(f.access).collect() }
+        runCurrent()
+        f.records.value =
+            AppResult.Success(
+                (0 until 128).map { n ->
+                    f.queued.copy(intent = f.queued.intent.copy(id = f.id(1000 + n)))
+                }
+            )
+        runCurrent()
+        f.records.value =
+            AppResult.Success(
+                (0 until 128).map { n ->
+                    f.sent.copy(intent = f.sent.intent.copy(id = f.id(2000 + n)))
+                }
+            )
+        runCurrent()
+        assertEquals(128, f.lookups.size)
+        assertEquals(2, f.pages.size)
+        assertEquals(
+            1,
+            f.changes.count { it is CollaborationSpaceInboxRepairProgressChange.Request },
+        )
+        assertEquals(
+            1,
+            f.changes.count { it is CollaborationSpaceInboxRepairProgressChange.EnsureInitialized },
+        )
+        assertEquals(f.progress?.latestDemand, f.progress?.completedDemand)
+        job.cancelAndJoin()
+    }
+
+    @Test
     fun aPendingOnlyStartupPassCompletesAndStaysIdleWithoutTimersOrDuplicateObservers() = runTest {
         val f = SpaceInboxRepairWorkerFixture()
         val job = backgroundScope.launch { f.worker()(f.access).collect() }
@@ -23,7 +82,7 @@ class CollaborationSpaceInboxRepairWorkerTest {
         assertEquals(reads, f.progressReads)
         assertEquals(
             1,
-            f.changes.count { it is CollaborationSpaceInboxRepairProgressChange.Request },
+            f.changes.count { it is CollaborationSpaceInboxRepairProgressChange.EnsureInitialized },
         )
         assertEquals(1, f.commandStarts)
         assertEquals(1, f.requestStarts)
@@ -98,7 +157,7 @@ class CollaborationSpaceInboxRepairWorkerTest {
         assertEquals(2, f.pages.size)
         assertEquals(
             1,
-            f.changes.count { it is CollaborationSpaceInboxRepairProgressChange.Request },
+            f.changes.count { it is CollaborationSpaceInboxRepairProgressChange.EnsureInitialized },
         )
         job.cancelAndJoin()
     }
@@ -123,7 +182,7 @@ class CollaborationSpaceInboxRepairWorkerTest {
         assertEquals(f.progress?.latestDemand, f.progress?.completedDemand)
         assertEquals(
             1,
-            f.changes.count { it is CollaborationSpaceInboxRepairProgressChange.Request },
+            f.changes.count { it is CollaborationSpaceInboxRepairProgressChange.EnsureInitialized },
         )
         job.cancelAndJoin()
     }
@@ -203,7 +262,7 @@ class CollaborationSpaceInboxRepairWorkerTest {
         assertEquals(1, f.reconciled.size)
         assertEquals(
             1,
-            f.changes.count { it is CollaborationSpaceInboxRepairProgressChange.Request },
+            f.changes.count { it is CollaborationSpaceInboxRepairProgressChange.EnsureInitialized },
         )
         assertNotNull(f.progress?.pass)
         job.cancelAndJoin()
@@ -233,7 +292,12 @@ class CollaborationSpaceInboxRepairWorkerTest {
         failSecond = false
         val second = backgroundScope.launch { f.worker()(f.access).collect() }
         runCurrent()
+        assertEquals(listOf<String?>("saved"), f.pages)
+        val resumed = f.progress
+        f.request()
+        runCurrent()
         assertEquals(listOf("saved", null, "saved"), f.pages)
+        assertNotEquals(resumed?.latestDemand, f.progress?.latestDemand)
         assertEquals(f.progress?.latestDemand, f.progress?.completedDemand)
         second.cancelAndJoin()
         assertEquals(2, f.commandStarts)
@@ -270,7 +334,7 @@ class CollaborationSpaceInboxRepairWorkerTest {
         assertEquals(256, f.pages.size)
         assertEquals(
             1,
-            f.changes.count { it is CollaborationSpaceInboxRepairProgressChange.Request },
+            f.changes.count { it is CollaborationSpaceInboxRepairProgressChange.EnsureInitialized },
         )
         job.cancelAndJoin()
     }

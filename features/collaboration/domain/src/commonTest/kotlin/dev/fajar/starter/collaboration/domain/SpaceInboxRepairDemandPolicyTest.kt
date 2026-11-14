@@ -8,9 +8,10 @@ import kotlin.test.*
 class SpaceInboxRepairDemandPolicyTest {
     @Test
     fun firstObservationRequestsOneFinitePassAndUnchangedEmptySnapshotsAreIdle() {
+        // Bootstrap now ensures retained progress separately; observation itself is not new demand.
         val f = SpaceInboxCommandFixture()
         assertEquals(
-            AppResult.Success(CollaborationSpaceInboxRepairDemand(emptyList(), true)),
+            AppResult.Success(CollaborationSpaceInboxRepairDemand(emptyList(), false)),
             collaborationSpaceInboxRepairDemand(f.access, null, emptyList()),
         )
         assertEquals(

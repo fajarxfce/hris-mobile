@@ -8,6 +8,72 @@ import kotlinx.coroutines.test.runTest
 
 class ChangeSpaceInboxRepairProgressTest {
     @Test
+    fun bootstrapOfAnExistingRequestDoesNotWriteOrScan() = runTest {
+        val f = SpaceInboxRepairUseCaseFixture()
+        val original = f.initial.copy(completedDemand = f.initial.latestDemand, pass = null)
+        f.stored = original
+        assertEquals(
+            AppResult.Success(original),
+            f.change()(
+                f.access,
+                CollaborationSpaceInboxRepairProgressChange.EnsureInitialized(f.id(20)),
+            ),
+        )
+        assertTrue(f.replacements.isEmpty())
+        assertTrue(f.requests.isEmpty())
+        assertEquals(0, f.base.native.pageCalls)
+    }
+
+    @Test
+    fun aConcurrentRealRequestWinsOverMissingProgressBootstrap() = runTest {
+        val f = SpaceInboxRepairUseCaseFixture()
+        f.stored = null
+        val genuine = f.initial.copy(generation = f.id(30), latestDemand = f.id(31))
+        f.onReplace = { expected, _ ->
+            assertNull(expected)
+            f.stored = genuine
+            AppResult.Success(null)
+        }
+        assertEquals(
+            AppResult.Success(genuine),
+            f.change()(
+                f.access,
+                CollaborationSpaceInboxRepairProgressChange.EnsureInitialized(f.id(20)),
+            ),
+        )
+        assertEquals(2, f.checkpointReads)
+        assertEquals(1, f.replacements.size)
+        assertEquals(genuine, f.stored)
+    }
+
+    @Test
+    fun bootstrapResponseLossDoesNotCreateANewerRequestOnReopen() = runTest {
+        val f = SpaceInboxRepairUseCaseFixture()
+        f.stored = null
+        f.onReplace = { _, next ->
+            f.stored = next
+            AppResult.Failed(f.base.storageFailure)
+        }
+        assertEquals(
+            AppResult.Failed(f.base.storageFailure),
+            f.change()(
+                f.access,
+                CollaborationSpaceInboxRepairProgressChange.EnsureInitialized(f.id(20)),
+            ),
+        )
+        val retained = assertNotNull(f.stored)
+        assertEquals(
+            AppResult.Success(retained),
+            f.change()(
+                f.access,
+                CollaborationSpaceInboxRepairProgressChange.EnsureInitialized(f.id(21)),
+            ),
+        )
+        assertEquals(f.id(20), retained.latestDemand)
+        assertEquals(1, f.replacements.size)
+    }
+
+    @Test
     fun requestingAgainPreservesTheCapturedPassAndExactReplayDoesNotRewrite() = runTest {
         val f = SpaceInboxRepairUseCaseFixture()
         val captured = CollaborationSpaceInboxRepairPass(f.initial.latestDemand, "page-two")

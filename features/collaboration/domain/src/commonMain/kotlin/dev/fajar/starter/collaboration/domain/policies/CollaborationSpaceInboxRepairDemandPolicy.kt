@@ -40,9 +40,6 @@ fun collaborationSpaceInboxRepairDemand(
             .map { CollaborationSpaceInboxRepairTarget(it.intent.conversationId, it.intent.id) }
             .distinct()
     return AppResult.Success(
-        CollaborationSpaceInboxRepairDemand(
-            targets.take(128),
-            previous == null || targets.size > 128,
-        )
+        CollaborationSpaceInboxRepairDemand(targets.take(128), targets.size > 128)
     )
 }

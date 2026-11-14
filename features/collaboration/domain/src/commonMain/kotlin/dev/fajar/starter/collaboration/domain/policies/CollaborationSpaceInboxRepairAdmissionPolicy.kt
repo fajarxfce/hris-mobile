@@ -49,6 +49,8 @@ fun validCollaborationSpaceInboxRepairProgressChange(
     change: CollaborationSpaceInboxRepairProgressChange
 ): Boolean =
     when (change) {
+        is CollaborationSpaceInboxRepairProgressChange.EnsureInitialized ->
+            validCollaborationMessageId(change.demand)
         is CollaborationSpaceInboxRepairProgressChange.Request ->
             validCollaborationMessageId(change.demand)
         CollaborationSpaceInboxRepairProgressChange.Begin -> true

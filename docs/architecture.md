@@ -1,5 +1,7 @@
 # Architecture
 
+[Retained inbox repair bootstrap](collaboration-inbox-repair-bootstrap-demand.md) retains existing demand across unchanged owner restarts.
+
 [Admitted history inbox handoff](collaboration-history-inbox-progress-admission.md) checks current local ownership around atomic cursor/reference retention.
 
 [Durable history inbox source progress](collaboration-history-inbox-progress.md) retains bounded cursor/reference handoff against the current inbox checkpoint.

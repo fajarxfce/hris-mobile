@@ -185,6 +185,76 @@ class SpaceInboxRepairProgressPolicyTest {
         )
     }
 
+    @Test
+    fun bootstrapCreatesAMissingRequestWithoutStartingOrCompletingItsPass() {
+        val result =
+            next(null, CollaborationSpaceInboxRepairProgressChange.EnsureInitialized(id(1)), 2)
+        assertEquals(id(1), result.latestDemand)
+        assertEquals(id(2), result.generation)
+        assertNull(result.completedDemand)
+        assertNull(result.pass)
+    }
+
+    @Test
+    fun bootstrapPreservesExistingPendingActiveAndCompletedProgressExactly() {
+        val pending = next(null, CollaborationSpaceInboxRepairProgressChange.Request(id(1)), 2)
+        val active = active()
+        val done = active.copy(pass = null, completedDemand = active.latestDemand)
+        for (current in listOf(pending, active, done)) {
+            assertEquals(
+                current,
+                next(
+                    current,
+                    CollaborationSpaceInboxRepairProgressChange.EnsureInitialized(id(90)),
+                    91,
+                ),
+            )
+            assertEquals(
+                current,
+                next(
+                    current,
+                    CollaborationSpaceInboxRepairProgressChange.EnsureInitialized(id(92)),
+                    93,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun bootstrapCannotReplaceAGenuineRequestThatArrivedBeforeItsRetry() {
+        val old = active()
+        val genuine = next(old, CollaborationSpaceInboxRepairProgressChange.Request(id(10)), 11)
+        val result =
+            next(genuine, CollaborationSpaceInboxRepairProgressChange.EnsureInitialized(id(12)), 13)
+        assertEquals(genuine, result)
+        assertEquals(old.pass, result.pass)
+        assertEquals(id(10), result.latestDemand)
+    }
+
+    @Test
+    fun malformedBootstrapCoordinatesAreRejectedEvenForAnExistingPass() {
+        for (current in listOf(null, active())) {
+            assertEquals(
+                FailureKind.Validation,
+                failure(
+                        current,
+                        CollaborationSpaceInboxRepairProgressChange.EnsureInitialized("invalid"),
+                    )
+                    .kind,
+            )
+        }
+        assertFalse(
+            validCollaborationSpaceInboxRepairProgressChange(
+                CollaborationSpaceInboxRepairProgressChange.EnsureInitialized("invalid")
+            )
+        )
+        assertTrue(
+            validCollaborationSpaceInboxRepairProgressChange(
+                CollaborationSpaceInboxRepairProgressChange.EnsureInitialized(id(1))
+            )
+        )
+    }
+
     private fun active(): CollaborationSpaceInboxRepairProgress {
         val requested = next(null, CollaborationSpaceInboxRepairProgressChange.Request(id(1)), 2)
         val begun = next(requested, CollaborationSpaceInboxRepairProgressChange.Begin, 3)
