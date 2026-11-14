@@ -1,8 +1,8 @@
 {
   "accepted": false,
-  "status": "focused-running",
+  "status": "corrected-focused-running",
   "sourceFiles": 5473,
-  "sourceManifestSha256": "8f396255e1d5bb3196571302b0f9afd3eb183efc7306f0f02b7fcc505c02ee16",
+  "sourceManifestSha256": "a90a344cfa4945b400b150a59d01c5a3bd43796a23ea2ddaefa306b824e93ce6",
   "appliedPaths": [
     "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
     "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
@@ -18,12 +18,27 @@
   "sharedMethods": 23,
   "applySession": 38053,
   "applyReaped": true,
-  "focusedSession": 13297,
+  "focusedSession": 94205,
   "expectedFocused": 53,
   "expectedFull": 16970,
   "sourcePrerequisiteCommit": "19f1c9b500cbff22013f052675bbc0ae72634101",
   "groupPrerequisiteCommit": "2d1ad20fe7a709cdc60ffee7b212ac7daabb5c35",
   "ownerActivated": false,
   "phoneInstalled": false,
-  "liveChanged": false
+  "liveChanged": false,
+  "focusedDirectory": "focused-2",
+  "failedCompileCorrection": {
+    "path": "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadSpaceHistoryChangesTest.kt",
+    "previousSha256": "f47e43d4998b8851dbd84e4b3c8ee878dae20185257c4c559191fecaad168239",
+    "reason": "Explicit generic expected types for two call-list assertions; compare failed result rather than unrelated success payload types",
+    "failedRun": "focused-1",
+    "testsExecuted": 0,
+    "testMethodsUnchanged": 15
+  },
+  "nextReceiptDraft": {
+    "paths": 9,
+    "applied": false,
+    "testsPrepared": false,
+    "reviewed": false
+  }
 }

@@ -234,3 +234,36 @@ identity and destination generation even for unresolved-only work. Do not parse 
 sourceRevision in domain to infer generation. Typed source version/proof and atomic unresolved
 handoff must be designed together before marking raw intervals complete. Empty raw pages must
 not invent an event to fit the publisher's existing1..16-ID API.
+
+
+## Checked publication receipt drafts — 14 November
+
+
+Prerequisite: admitted history changes accepted and pushed. Nine production drafts now exist:
+receipt/proposal and result entities, pure proposal/receipt policy, two repository contracts,
+two repository implementations, raw writer and admitted publisher. Tests have NOT been adapted
+or added; source review, formatting and all gates are still absent. Do not apply.
+
+Replace the current Boolean history-to-inbox result with a nullable typed receipt: null denotes
+conflict, failure denotes an uncertain/failed operation, and success contains the actual physical
+source and destination versions. Do not read back the destination after a write to guess which
+generation was committed. The writer already owns the prepared raw mutation and can return its
+generation/revision/lastOrdinal after confirmed success, or the checked old version on replay.
+
+An explicit null projection checks an expected source/index pair without writing. It supports
+unresolved-only work and must not create missing history, an index, or content keys. Source absence
+needs a null expected opaque snapshot token; non-null tokens retain the existing exact raw check.
+The proposal carries the canonical conversation even when no entry can be published. A non-null
+projection must match that conversation and expected index, and requires an existing source.
+
+PublishCollaborationSpaceInboxHistory must read/capture the index for unresolved-only batches,
+then request either a checked no-op or the existing conditional projection. Its output must carry
+the exact canonical source owner plus receipt, alongside retained/unresolved event IDs. Source
+version is typed; the snapshot comparison token remains opaque in domain. No invented event for
+empty raw pages, no source-signal write during index publication, no additional owner or timer.
+
+Required tests include first index generation, semantic replay, source/index conflict, uncertain
+write, cancellation before/after commit, account replacement, source or index absence, wrong target
+or owner, unresolved-only no-write/no-key behavior, and unchanged source signal. Existing publisher
+and real-storage contract method identities must remain. Durable progress storage and consumer
+integration follow only after this contract is proven.

@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 01:01 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 01:10 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -12,13 +12,22 @@ fault-injection failures and the precise test-only correction remain recorded in
 The corrected full retained all prior cases (14743 fresh /2181 unchanged), with no failures.
 
 Mobile .work/history-changes-admission-2026-11-14 now has10 APPLIED paths and23 new shared methods.
-Apply38053 was REAPED before source capture. Source5473/8f396255e1d5bb3196571302b0f9afd3eb183efc7306f0f02b7fcc505c02ee16.
-Focused53 RUNNING13297 in focused-1; reap/audit before full16970. Prepared record/commit scripts
-are unrun. These contracts select actual canonical Company/Group history, acquire one bounded
+Apply38053 was REAPED before source capture. Source5473/a90a344cfa4945b400b150a59d01c5a3bd43796a23ea2ddaefa306b824e93ce6.
+Focused1 (13297 REAPED1) failed compilation at three generic test assertion sites; zero tests ran.
+One test-file correction made expected types explicit; all15 methods and production code remain.
+Original source/logs are preserved. Corrected focused53 RUNNING94205 in focused-2; reap/audit
+before full16970. Prepared record/commit scripts are unrun. These contracts select actual canonical Company/Group history, acquire one bounded
 local page under current admission, and own one signal subscription without a scan or network.
 Typed windows carry cursor arithmetic; source revision encoding stays opaque in domain.
 
-Next durable owner work remains in .work/history-inbox-progress-2026-11-14:one initial unapplied
+Next .work/history-inbox-publication-receipt-2026-11-14 contains NINE unapplied production drafts:
+receipt/proposal and result entities, pure policy, two repository contracts/implementations, raw
+writer and admitted publisher. Tests are NOT adapted or added; formatting, review and gates are
+absent. Do not apply these partial drafts. Their intended receipt reports actual physical source
+and destination versions; a null projection checks the unchanged pair without creating records.
+The current Boolean contract remains active in source. No product consumer is enabled here.
+
+Then durable owner work remains in .work/history-inbox-progress-2026-11-14:one initial unapplied
 state draft plus review. The publisher must expose actual committed source/index evidence before
 atomic cursor/unresolved handoff. Do not infer generation by parsing opaque revision strings or
 mark an interval complete from acquisition. Use the existing Group repair owner, finite fair
