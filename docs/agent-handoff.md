@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 08:08 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 08:15 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -8,19 +8,22 @@ mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs
 ## Active visible inbox labels verification
 
 Page7 is accepted/pushed Mobile12b0d9654cfcf45f6a974e6e1e2d7fbb95beecd2 /
-Groupdc387f9f6eea0d2b9bba60d7337b59925ad25516. Focused42/full17578,15397 fresh/2181
-unchanged, source5559/e657f7b60238182ab111039612c76bf2e419238955da23ba5f192447c1dde4af.
+Groupdc387f9f6eea0d2b9bba60d7337b59925ad25516, focused42/full17578.
 
-Mobile .work/history-inbox-labels-2026-11-14 is APPLIED8; focused45 is RUNNING99672/focused-1.
-Source5565/fbaa48c2409d5e3119b1d046ad4c1e1472d7b7c9b0bb687d282597cd4091b7e0. No accepted
-label results yet. Reap, verify then full17615; record/commit/push Mobile and Group before continuing.
-Eighteen shared plus one actual50-contact local SQLite test; timing is resolution plus collection
-teardown, not UI/phone rendering. No full directory scan, raw-bound expansion or native acquisition.
+Mobile .work/history-inbox-labels-2026-11-14 is APPLIED8. Focused1/session99672 reaped1 with45
+cases/one failure: the actual fixture supplied directory contacts in conversation order, violating
+strict ascending accountId order. Encrypted append rejected the fixture before label observation.
+Only fixture publication is sorted now; production/assertions unchanged. Failed evidence is in
+directory-ordering-correction.json and the recorder preserves it. Focused2 is RUNNING38368; source
+5565/fb989fdfbbed7646b8aa3186caa038e87dec1479fd025e74d35e0858b561442b. Reap/verify before full17615.
+No accepted label results yet; no source edits during the run.
 
-Next .work/history-inbox-window-2026-11-14 contains10 formatted UNREVIEWED/UNAPPLIED drafts with
-8 pure policy and9 raw-storage cases/three platform wrappers. Admission UC/review/gates remain.
-Anchored refresh must keep the visible conversation, terminate old cursors, and stay bounded.
-Keep Group UI/rollout OFF, phone92/live unchanged, failed Apple evidence and all54 PRD groups OPEN.
+Window .work/history-inbox-window-2026-11-14 has15 formatted UNAPPLIED drafts,34 shared+1 actual
+SQLite addition, focused62/full17684 run gates prepared UNRUN. It includes finite admitted reads,
+one bounded missing-anchor fallback, reverse/around queries, detached lists/tags and cancellation.
+The shared actual fixture is rebased for the contact-order correction; reformat/review/hash rebase
+before applying. Recorder preparation remains. Then retained Group inbox UI/Paging integration and
+actual viewport/render measurements. GroupOFF, phone92/live unchanged; all54 PRD groups OPEN.
 Continue beyond checkpoints; one compiler OR emulator; no agents.
 
 ## Admitted retained inbox pages locally accepted
