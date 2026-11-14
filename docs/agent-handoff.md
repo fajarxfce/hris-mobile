@@ -1,9 +1,30 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 04:30 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 04:39 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Active history source admission verification
+
+The combined15 source/test paths in .work/history-inbox-source-admission-2026-11-14 are APPLIED.
+Focused1 (session28332, reaped) failed:72 tests,3 initial-preparation failures; app graph not reached.
+JVM bytecode confirmed nullable Long revision with Elvis Int zero rejects the successfully saved
+initial checkpoint. The comparison now uses0L; existing regression assertions are unchanged. A
+redundant pending-window non-null assertion was removed. Failed sources/reports and correction
+evidence are preserved. Corrected source5507/89bc36ef2535fce6061b9f2dff5754558140293528c88e304deb13ca7c1543eb;
+focused2/session29298 RUNNING, expected74. Full17236 is NOT RUN; do not claim acceptance.
+Reap focused2, audit candidate warnings and exact case IDs, then run/accept full. Record the failed
+attempt in final Git evidence before source commit/push and the corresponding Group evidence.
+The old lifecycle/pending/recovery standalone gates remain superseded and disabled.
+
+Global owner remains DESIGN ONLY. ReplicaMutation supports at most TWO operations per transaction.
+The earlier index+many-source guard proposal cannot use that API. Review retained page queues
+with one source guard per global acknowledgement, index guards for capture/final completion,
+and explicit destination-generation races. Do not silently lift the raw transaction limit.
+See the global-owner design document for remaining admission, fairness and completion work.
+Bootstrap17138 is still the latest accepted local baseline. No phone/live changes; Phone92 installed,
+GroupOFF and V117-140 undeployed. All54 PRD groups remain open; continue beyond checkpoints.
 
 ## Inbox repair bootstrap locally accepted
 

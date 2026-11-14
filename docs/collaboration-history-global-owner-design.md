@@ -108,7 +108,32 @@ bounded progression; a raw Restart alone does not authorize automatic continuati
 Global storage checks the actual resulting source checkpoints before retaining those outcomes.
 
 A reconstructed global pass must finish each older source interval before starting its later
-interval. Current-source inspection and explicit Restart now exist only as five reviewed drafts
-in .work/history-inbox-source-recovery-2026-11-14, with tests/gates unrun. Admitted source metadata
+interval. Current-source inspection and explicit Restart are included in the applied combined15 package
+in .work/history-inbox-source-admission-2026-11-14; focused verification is still in progress. Admitted source metadata
 enumeration, typed shared repair signals, global storage/policy and owner activation still require
 implementation. Do not collapse these pending obligations into an implemented claim.
+
+## Confirmed raw transaction bound; revise the early batch proposal
+
+ReplicaMutation.kt currently requires mutations.size in1..2. A global write plus index and16
+source guards cannot fit that established contract. Earlier multi-source atomic-guard wording is
+a design requirement to resolve, not an available API or an instruction to lift the limit.
+
+Prefer reviewing a retained bounded page queue: capture up to16 canonical source IDs and its
+opaque next cursor, then acknowledge each prepared/visited source with one source Check plus the
+global progress write. Source inspection is already part of the admitted operations package.
+Only advance beyond the captured page after every queued item has a durable outcome. Missing
+bindings are explicit deferred outcomes; their eventual publication emits history invalidation.
+
+Trigger capture, destination replacement and final pass completion can instead use one index
+Check plus the global write. Intermediate source acknowledgements belong explicitly to their
+captured destination generation; if the index changes between source and global commits, they
+must never count as completion of the new generation. A current index guard at final completion,
+and observed replacement on owner restart, must force reconstruction. Verify these races before
+selecting this design. Round flags retain unfinished/advanced outcomes across the bounded queue;
+failed-only rounds park and restarts alone do not create useful-progress demand.
+
+If a larger atomic read set ultimately proves necessary, change it as an explicit bounded generic
+contract with actual desktop/browser and Apple compilation tests, then port the proven foundation
+to Starter. Do not bypass the limit with an opaque helper or silently increase write fan-out.
+No transaction contract, global entity, repository, policy or worker has been changed here.
