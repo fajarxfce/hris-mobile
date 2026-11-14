@@ -151,3 +151,33 @@ These are constraints for the next implementation, not implemented progress stor
 The existing index-publication/reopen test also verifies that projecting a source into the inbox
 does not renew its source signal. This guards against an observer feeding its own writes back
 into an endless repair loop. All existing index-publication method identities remain.
+
+## Durable history progress — initial design, not accepted
+
+Prerequisite: atomic source signal source accepted/pushed. One domain entity draft exists. No
+repository, policy, codec, use-case/worker binding, test or gate has been prepared. Do not apply.
+
+The intended owner is the existing CollaborationSpaceInboxRepairWorker. Preserve its original
+command lane. Add durable catalog discovery and unfinished-source records under this same owner;
+no new worker, timer or permanent per-room observation. Complete one finite catalog pass, then
+visit bounded pages of unfinished sources in rounds. Each source consumes at most one pending
+reference page and one changed-history page per visit. Unresolved references retain their original
+insertion positions and do not immediately retry in the same captured pending interval.
+
+Global completion remembers the captured history signal/catalog/original repair signal tuple.
+Unchanged reopen resumes durable work or stays idle. A changed tuple requests a later pass without
+restarting current finite source windows. Per-source identity retains the actual Company/Group
+owner and destination index generation. Index replacement must rebuild even without new history.
+An empty-reference page can advance raw progress without inventing a publication event.
+
+Before code is extended, review pending-window persistence/validation (the draft now represents an explicit
+generation/upper bound and completed empty interval), destination-generation change notification, source activation/read pagination, exact source-bound publication proof and atomic
+cursor/unresolved handoff. Existing publisher accepts only event IDs and returns IDs, so it cannot
+yet prove another caller's source window. Canonical binding repository preserves an existing pair
+immutably; do not add expensive speculative per-read binding queries without a real invariant.
+
+A separate cursor commit after confirmed index publication is replay-safe only with a proven
+source identity, retained destination generation and atomic unresolved handoff. Lost responses,
+replacement, denied/replaced account, cancellation, hot-room fairness, old content before binding,
+empty pages and unchanged reopen need behavior tests. These are open design obligations, not
+implemented guarantees. Keep all scheduling/admission policy in use cases and the existing owner.

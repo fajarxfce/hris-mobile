@@ -1,0 +1,28 @@
+{
+  "focusedAccepted": {
+    "accepted": true,
+    "tests": 84,
+    "elapsedSeconds": 342.075,
+    "sourceFiles": 5465,
+    "sourceManifestSha256": "2460b28cd6c81d75aa2946fbc265e70017eacf3c860c3da8c83a97c878ce0764",
+    "resultSha256": "3fb466e0ea96ded6d76154ace75d2758b21d18d75370c6dcd398555873a59ee6",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationHistorySignalStorageTest": 13,
+      "CollaborationHistoryStorageTest": 22,
+      "CollaborationSpaceHistoryInboxStorageTest": 16,
+      "CollaborationSpaceHistoryStorageTest": 16,
+      "CollaborationHistoryChangesStorageTest": 15
+    },
+    "priorCaseIdsRetained": true
+  },
+  "fullAccepted": false,
+  "fullSession": 61916,
+  "fullWorkspace": ".work/history-local-change-signal-2026-11-13/full-1",
+  "nextDraftWorkspace": ".work/history-inbox-progress-2026-11-14",
+  "nextDraftFiles": 1,
+  "nextDraftReviewed": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false
+}
