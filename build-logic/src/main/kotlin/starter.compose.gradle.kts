@@ -1,7 +1,7 @@
 import org.gradle.api.artifacts.VersionCatalogsExtension
 
 plugins {
-    id("starter.android.library")
+    id("starter.android.resources")
     id("org.jetbrains.compose")
     id("org.jetbrains.kotlin.plugin.compose")
 }

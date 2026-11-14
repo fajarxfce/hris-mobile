@@ -813,6 +813,10 @@ ownership at composition boundaries.
 
 ## Build logic and DI
 
+The Compose convention enables Android resources through the existing resource convention.
+Generated Kotlin accessors require their corresponding variant assets at runtime; see
+[Android Compose resource packaging](android-compose-resources.md).
+
 Convention plugins configure Kotlin targets, Android, Compose, serialization, and KSP.
 Pure domain modules publish JVM, iOS, and Wasm variants without applying an Android plugin.
 Android consumers use their JVM variant. UI/data modules additionally publish Android AARs.

@@ -1,7 +1,39 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 15:16 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 16:24 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
+
+## Android Compose resource packaging recovered
+
+The Android resource packaging fix is source-accepted with17,931 preserved cases
+(567 fresh /17364 exact unchanged), focused session7593
+and full session70933 reaped0. One convention line enables the existing Android
+resource pipeline for Compose modules. Both locale files are checked inside the current proof APK.
+Read android-compose-resources.md and its measurement. Source f815e404649dccda02b7da6b0969de93a2369328a64cc1343ce5ee309294ae80;
+reports 13356264190b4cf4908e682acad0a8040d24d6feb8b52aef4ac08e6dfed380e7.
+
+The first full run/session88780 hit its2400-second runner deadline before the last browser
+targets. Its17,193 passing cases and exact reports are retained; it is not relabelled as a
+successful full run. Full2 uses identical sources and an appropriate5400-second deadline.
+
+The original release93 candidate crashed in real MainActivity with missing Compose CVR assets.
+It was never installed. Its native suite passed but did not render the localized product UI;
+preserve both successful native evidence and failed product startup. Phone92 remains installed.
+
+First push this source commit, then finish the user's requested installation using
+.work/release-phone-2026-11-14-build93-resources, not the first build93 directory.
+Group .work/compose-resources-release93-2026-11-14 contains the new current-source native suite.
+Compile its host only if necessary; keep native execution separate from compiler work. Accept
+all10 cases, prepare release inputs, build/verify x86, inspect actual cold/reopened screenshots,
+build/verify ARM64 and announce install-only to10.77.77.3:5555. Keep the same signer/data and
+confirm installed bytes. Do not drive phone UI or relabel old evidence as current acceptance.
+
+Then independently port the generic convention fix to Starter and continue canonical recipient
+handoff/product routing. Starterbd13df78 has not yet received this resource fix. The recipient
+transfer review is .work/space-recipient-outbox-2026-11-14/canonical-transfer-review.md.
+GroupOFF/V117–140 undeployed; all54 PRD groups OPEN. Keep every commit pushed, one compiler OR
+emulator, no subagents. Preserve protected stores, blocked SQLite fixture and failed Apple proof.
+
 
 ## Recipient originals retained locally
 

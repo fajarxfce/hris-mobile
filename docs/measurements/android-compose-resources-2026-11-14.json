@@ -1,0 +1,197 @@
+{
+  "accepted": true,
+  "sourceManifestSha256": "f815e404649dccda02b7da6b0969de93a2369328a64cc1343ce5ee309294ae80",
+  "reportManifestSha256": "13356264190b4cf4908e682acad0a8040d24d6feb8b52aef4ac08e6dfed380e7",
+  "validatedTests": 17931,
+  "freshTests": 567,
+  "reusedUnchangedTests": 17364,
+  "priorCaseIdsPreserved": true,
+  "carriedPassingTestsFromSameSource": 17193,
+  "freshTestsAcrossSameSourceAttempts": 17760,
+  "reusedUnchangedBaselineTests": 171,
+  "earlierValidationAttempt": {
+    "overallAccepted": false,
+    "reason": "Runner timeout before remaining browser tasks completed",
+    "result": {
+      "startedAt": "2026-11-14T15:40:05.298676+00:00",
+      "elapsedSeconds": 2400.002,
+      "exitCode": -15,
+      "sourceFiles": 5634,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true
+    },
+    "partialReportManifestSha256": "45a08b4e457fdb1a694caef84cc02ef706397911fd22e395367bd4a4fe4de319",
+    "freshPassingCases": 17193
+  },
+  "sourcePaths": [
+    "build-logic/src/main/kotlin/starter.compose.gradle.kts"
+  ],
+  "full": {
+    "startedAt": "2026-11-14T16:21:20.469089+00:00",
+    "elapsedSeconds": 171.277,
+    "exitCode": 0,
+    "sourceFiles": 5634,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "apk": {
+      "path": ".work/compose-android-resources-2026-11-14/full2/accepted-proof.apk",
+      "bytes": 150828146,
+      "sha256": "04c4889069031467bf026dae2587c0eb103b10724698abe43790eb257dda3195"
+    }
+  },
+  "focused": {
+    "startedAt": "2026-11-14T15:38:29.268095+00:00",
+    "elapsedSeconds": 59.437,
+    "exitCode": 0,
+    "sourceFiles": 5634,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      "--dependency-verification",
+      "strict",
+      ":core:localization:mergeAndroidMainAssets",
+      "-PcollaborationProofAbi=x86_64",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=93",
+      "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx3072m",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "-Pkotlin.incremental=false"
+    ]
+  },
+  "androidResourceAssets": {
+    "composeResources/dev.fajar.starter.localization.resources/values/strings_en.commonMain.cvr": {
+      "bytes": 72218,
+      "sha256": "fc216772d1011e834b4aff3c896a10a2ed43a2ad613ae257c193ad769e126df7"
+    },
+    "composeResources/dev.fajar.starter.localization.resources/values/strings_id.commonMain.cvr": {
+      "bytes": 74462,
+      "sha256": "2dd70dccfd651df0e7b8c96a9279596348c4dca49dfdf970b7e1882b5c8ffa75"
+    }
+  },
+  "failedReleaseCandidate": {
+    "sourceCommit": "89af671b7e4064b460f50caddd31a95a77d98a5e",
+    "artifact": {
+      "acceptedArtifact": true,
+      "sourceCommit": "89af671b7e4064b460f50caddd31a95a77d98a5e",
+      "artifact": ".work/release-phone-2026-11-14-build93/hris-mobile-dev-release-1.0.0-93-x86_64.apk",
+      "bytes": 139198450,
+      "sha256": "e33223e3a3fbbd53f8008aed8324ca218a3cde9209a0e7aa9907dd02e3c53099",
+      "dexSha256": "b2f4feed9ed1799f5db2e8d7db5408c70569ddd2d79b0fd32e2e95285c67283a",
+      "abi": "x86_64",
+      "applicationId": "dev.fajar.hris.mobile.dev",
+      "versionCode": 93,
+      "versionName": "1.0.0",
+      "debuggable": false,
+      "signatureVerified": true,
+      "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+      "samePreviouslyInstalledSigner": true,
+      "zipAligned16KiB": true,
+      "compiledBackupExclusionsVerified": true,
+      "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66",
+      "privateApiVerifiedInDex": true,
+      "fixtureEndpointsAbsent": true,
+      "firebaseDevAppMatches": true,
+      "inspectorAndIncomingSourcesPresent": true,
+      "lintIssues": 0,
+      "sdk": {
+        "nativeSha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+        "nativeBytes": 111331328,
+        "elfClass": "ELF64",
+        "requiredElfAlignment": 16384,
+        "loadAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ],
+        "requiredSymbolsPresent": true,
+        "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.8",
+        "publicationReleaseId": 441121763,
+        "aarSha256": "6eebe8dab124541783d2b1d746cf30ea4b8dd2a599980cccb823927780678717",
+        "strippedNativeMatchesVerifiedSdk": true
+      }
+    },
+    "firstStartup": {
+      "startedAt": "2026-11-14T15:31:46.045133+00:00",
+      "passed": false,
+      "sourceCommit": "89af671b7e4064b460f50caddd31a95a77d98a5e",
+      "apkSha256": "e33223e3a3fbbd53f8008aed8324ca218a3cde9209a0e7aa9907dd02e3c53099",
+      "versionCode": 93,
+      "memoryMiB": 2560,
+      "cores": 2,
+      "freshIsolatedUserdata": true,
+      "phoneTouched": false,
+      "authenticatedAccountUsed": false,
+      "chatSendAttempted": false,
+      "bootSeconds": 44.988,
+      "failureCategory": "AssertionError",
+      "emulatorStopped": true,
+      "elapsedSeconds": 76.325
+    },
+    "secondAttemptPreflight": {
+      "at": "2026-11-14T15:34:16.811750+00:00",
+      "passed": false,
+      "failureCategory": "OSError",
+      "reason": "Port 5563 in TIME_WAIT after the stopped prior emulator; no listening process",
+      "emulatorStarted": false,
+      "phoneTouched": false
+    },
+    "diagnosticStartup": {
+      "startedAt": "2026-11-14T15:34:24.999659+00:00",
+      "passed": false,
+      "sourceCommit": "89af671b7e4064b460f50caddd31a95a77d98a5e",
+      "apkSha256": "e33223e3a3fbbd53f8008aed8324ca218a3cde9209a0e7aa9907dd02e3c53099",
+      "versionCode": 93,
+      "memoryMiB": 2560,
+      "cores": 2,
+      "freshIsolatedUserdata": true,
+      "phoneTouched": false,
+      "authenticatedAccountUsed": false,
+      "chatSendAttempted": false,
+      "bootSeconds": 45.018,
+      "failureCategory": "AssertionError",
+      "emulatorStopped": true,
+      "elapsedSeconds": 93.886
+    },
+    "failure": "org.jetbrains.compose.resources.MissingResourceException",
+    "missingPath": "composeResources/dev.fajar.starter.localization.resources/values/strings_en.commonMain.cvr",
+    "processExitReason": "APP CRASH(EXCEPTION)",
+    "diagnosticLogSha256": "24eeddfaff8846fda191e1fddebe765a4b14b3c604b530cda603bc577b69845a",
+    "installedOnPhone": false
+  },
+  "phoneVersion": 92,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "passivePhoneObservation": {
+    "startedAt": "2026-11-14T16:13:21.648727+00:00",
+    "versionCode": 92,
+    "serial": "10.77.77.3:5555",
+    "uiTouched": false,
+    "messageSent": false,
+    "passiveLogcatOnly": true,
+    "observedSeconds": 45.001,
+    "logLines": 2,
+    "observedPatterns": {
+      "transport": 0,
+      "defaultKey": 0,
+      "sync": 0,
+      "fatalException": 0,
+      "text403": 0
+    },
+    "limitation": "Logcat is not a complete network capture; absent log lines do not prove absent HTTP requests.",
+    "captureSession": 89286,
+    "captureReaped": true,
+    "captureExitCode": 0
+  },
+  "currentSourceNativeAccepted": false,
+  "productReleaseStartupAccepted": false,
+  "starterPortAccepted": false
+}

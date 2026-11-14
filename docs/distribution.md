@@ -66,6 +66,11 @@ app registrations. Separate hosts can publish their own selected files directly.
 
 ## Android
 
+Validate the real product APK as well as any native test host. In particular, inspect the
+packaged Compose locale assets and cold-start/reopen the product activity before phone
+delivery. A successful compile or specialized Matrix host can miss absent UI resources.
+[The release93 packaging regression](android-compose-resources.md) records this boundary.
+
 Environment variables:
 
 | Variable | Value |
