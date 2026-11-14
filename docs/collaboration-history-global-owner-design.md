@@ -81,3 +81,34 @@ alongside healthy rooms, command service under history backlog, denial/account r
 cancellation at each suspension. Test actual atomic storage on desktop/browser/Apple compilation;
 actual new Apple execution remains a separate outstanding gate. Product/thread/list and incoming
 completion integration are not implemented by this design.
+
+## Additional transition constraints before implementation
+
+Retain completed pass ID together with its trigger, not only completed trigger. Reusing that ID
+for later demand would make already-completed per-source checkpoints falsely look current. Begin
+must reject reuse of a completed pass ID; exact replay of an existing active pass may be unchanged.
+This changes the original initial global-state draft and requires explicit schema tests.
+
+Use explicit expected global checkpoints for mutations without implicit CAS retry. Trigger IDs
+are opaque and cannot order stale input; a failed old request must reacquire current signals before
+trying again. A changed destination generation supersedes active traversal; mere index revision
+advancement must not generate new history demand.
+
+Before a catalog/source cursor advances, retain bounded authenticated source checkpoint guards
+in the same raw global transaction. A catalog page with missing bindings can defer those entries
+because binding publication already signals availability. Never advance past a claimed prepared
+source solely on an earlier return value if its checkpoint has since been replaced.
+
+Round bookkeeping must distinguish monotonic handoff progress from Restart/deferred outcomes.
+Source cursor enumeration alone is not evidence of useful progress: otherwise a round containing
+only failed rooms will loop forever. Application orchestration maps specific admitted actions to
+explicit domain visit outcomes; domain policy owns whether another finite round is warranted.
+Raw/pending handoff advances its captured interval; old-complete to current-pass preparation is
+bounded progression; a raw Restart alone does not authorize automatic continuation indefinitely.
+Global storage checks the actual resulting source checkpoints before retaining those outcomes.
+
+A reconstructed global pass must finish each older source interval before starting its later
+interval. Current-source inspection and explicit Restart now exist only as five reviewed drafts
+in .work/history-inbox-source-recovery-2026-11-14, with tests/gates unrun. Admitted source metadata
+enumeration, typed shared repair signals, global storage/policy and owner activation still require
+implementation. Do not collapse these pending obligations into an implemented claim.

@@ -52,5 +52,11 @@
   "fullSession": 20844,
   "fullReaped": false,
   "globalOwnerDesign": "docs/collaboration-history-global-owner-design.md",
-  "globalOwnerImplemented": false
+  "globalOwnerImplemented": false,
+  "nextWorkspace": "history-inbox-source-admission-2026-11-14",
+  "nextDraftPaths": 15,
+  "nextSharedMethods": 49,
+  "nextFocused": 74,
+  "nextFull": 17236,
+  "standaloneDraftGatesSuperseded": true
 }

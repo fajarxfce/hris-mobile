@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 04:16 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 04:21 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -23,26 +23,18 @@ Full1/session20844 is RUNNING (expected17138). Reap/audit then record/commit/pus
 Group. Do not change source during the run.
 
 
-Next source lifecycle6 and pending admission8 are reviewed/formatted UNAPPLIED drafts with all
-application/focused/full/record/commit gates prepared UNRUN. Lifecycle expects40/17168, pending
-expects54/17216. Pending DI/graph observation hashes refer to lifecycle drafts. Apply sequentially
-only after prerequisite acceptance/push and REAP before capture. Latest pending formatter60933
-reaped. No raw Restart or global owner activation is implemented. If reconstructed global state
-finds an unfinished older source pass, inspect/resume it under admission, complete its two lanes,
-then prepare the newer pass; do not repeatedly submit the same conflicting newer ID. The eventual
-owner still needs that admitted source-inspection path. Preserve completed repair signal timing
-when retrying unresolved history; no polling or permanent per-room observation.
+Next .work/history-inbox-source-admission-2026-11-14 consolidates lifecycle6/pending8/recovery5
+into15 unique reviewed/formatted UNAPPLIED paths and49 shared methods. All13 new source/test
+files retain exact reviewed provenance; final DI/graph files include all six use cases. Focused74/
+full17236 and record/commit gates are prepared UNRUN against bootstrap17138. Earlier standalone
+counts17168/17216 were plans only. Their workspaces are marked superseded and their gates must
+not run. Apply the combined package only after bootstrap acceptance/push; REAP before capture.
 
-Phone92 remains installed; no phone/live change. GroupOFF/V117-140 undeployed; all54 PRD groups
-remain open. Preserve hosted Apple failures and blocked fixture payload. Continue beyond
-checkpoints, push each commit, one compiler OR emulator, no subagents.
-
-After pending8, .work/history-inbox-source-recovery-2026-11-14 has5 reviewed/formatted UNAPPLIED
-paths,10 shared cases, focused32/full17236 and record/commit gates prepared UNRUN. It adds admitted
-current-source inspection for older-pass recovery and explicit raw Restart that recaptures pending
-work without removing references. DI/graph baselines refer to pending8 drafts. All these drafts
-remain unvalidated/unactivated. Then implement global captured triggers, admitted source metadata
-enumeration and finite fair continuation under the existing command repair owner.
+The package handles unchanged source preparation, frozen pending references and empty completion,
+current-source inspection and explicit raw Restart. It preserves unresolved records and current
+admission throughout. Global state/atomic cursor retention, admitted source enumeration, shared
+repair-completion observation and fair owner integration remain design-only. No source/runtime
+changes from the combined drafts. Phone92 and live state remain unchanged.
 
 Global owner design is recorded in docs/collaboration-history-global-owner-design.md and mobile .work/history-inbox-global-owner-2026-11-14. No global source/gates exist yet.
 It documents checked global/source cursor commits, completed repair signals, bounded catalog
