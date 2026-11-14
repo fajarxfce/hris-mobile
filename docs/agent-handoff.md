@@ -1,31 +1,34 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 02:51 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 02:58 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active empty-page confirmation verification
+## Admitted empty history-page confirmation locally accepted
 
-Binding source73c59313 and Groupf7eac454 are accepted/pushed. Empty-page confirmation has4 APPLIED
-paths and10 shared cases. Focused57/session27960 is REAPED and ACCEPTED (368.249s); source5478/
-5dca92fd7d075e3c70239c8c8aaee94067068a3ae5388c264a27fc196b72efbc. Full17042/session53502 is RUNNING.
-Reap, audit, record, commit/push Mobile and linked Group evidence before applying the next slice.
+Mobile .work/history-empty-page-confirmation-2026-11-14 is accepted:4 paths,10 new shared methods.
+Focused57/full17042 (14861 fresh /2181 unchanged) preserve all17022
+prior identities plus20 executions. Source5478/5dca92fd7d075e3c70239c8c8aaee94067068a3ae5388c264a27fc196b72efbc;
+reportsefbfa5495269a7f1d4daa9cc88fb07acebfe2353325f7e454f0948f1a168b260. Empty raw pages and absence can now be confirmed through the
+actual canonical namespace without invented event IDs. The opaque token stays opaque; typed
+source version must cover the original frozen window. The operation does not advance a cursor.
 
-Next .work/history-inbox-progress-2026-11-14 now has15 UNAPPLIED source/test drafts,29 shared
-methods (13 policy +16 actual storage), with capture/run/audit gates prepared for focused41/full17100.
-Final review and record/commit preparation remain; no gate was run for these drafts. The source
-repository, encrypted DTO/codec, bounded source/pending pages, checked handoff policy and app graph
-assertion are drafted. Scope is per-source persistence, not global worker activation. Original global
-state remains under design/global-and-source-state-before-split.kt. Source mutation atomically checks
-the current index and retains cursor plus unresolved outcomes. Pending insertion positions survive
-replay; source checkpoint CAS prevents stale deletion after reinsertion. No invented event IDs.
+Next .work/history-inbox-progress-2026-11-14 has15 UNAPPLIED drafts: source repository/codec,
+checked cursor handoff policy, bounded source/pending pages,13 domain and16 shared storage cases,
+and app graph assertion. All15 paths are reviewed/formatted; focused41/full17100 and record/commit gates are prepared
+but unrun. Apply only after this source/evidence is committed and
+pushed, then REAP before capture. Original global state remains in design/, not production code.
+Next complete admitted source lifecycle/handoff, retained global triggers, and fair continuation
+under the existing Group repair owner. Check destination generation and atomically retain cursor
+with unresolved references; finish fixed raw intervals through their own upper bound. Preserve
+command service, avoid polling/per-room observers, and retain completed demand through restart.
+Incoming completion and thread/list/UI activation remain open.
 
-After source persistence, admitted lifecycle/handoff use cases, global captured demand, fair finite
-continuation in the existing repair owner, incoming completion and thread/list activation remain.
-Preserve command service; no extra polling queue or permanent per-room observer. Phone92 remains
-installed, no phone/live changes. Apple compilation is separate from actual new Apple execution.
-Continue beyond checkpoints and push every commit. One compiler OR emulator; no subagents.
+Receipts, binding invalidation and Starter092fbe6f remain accepted. Actual new Apple execution is
+outstanding; preserve failed hosted evidence and the blocked fixture payload. Phone92 stays
+installed; no phone/live change. GroupOFF/V117-140 undeployed. All54 PRD groups remain open.
+Continue beyond checkpoints, push every commit, one compiler OR emulator, no subagents.
 
 ## Binding history invalidation locally accepted
 

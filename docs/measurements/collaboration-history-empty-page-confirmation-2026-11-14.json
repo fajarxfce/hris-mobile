@@ -1,0 +1,59 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ConfirmCollaborationSpaceHistoryChanges.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ConfirmSpaceHistoryChangesTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 57,
+    "elapsedSeconds": 368.249,
+    "sourceFiles": 5478,
+    "sourceManifestSha256": "5dca92fd7d075e3c70239c8c8aaee94067068a3ae5388c264a27fc196b72efbc",
+    "resultSha256": "0a4a662bf17d95a5eecf776e7dba852d0a91db93cc066ace392537e05ffefc99",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "ConfirmSpaceHistoryChangesTest": 10,
+      "PublishSpaceInboxHistoryReceiptTest": 8,
+      "PublishSpaceInboxHistoryTest": 22,
+      "ReadSpaceHistoryChangesTest": 15
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T02:40:39.839054+00:00",
+    "elapsedSeconds": 1008.004,
+    "sourceFiles": 5478,
+    "freshCounts": {
+      "tests": 14861,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153515485,
+      "sha256": "51182f26c123b8f03cfbb8851eab94ebdf8bd8aea616e74ba1cfe71b7b15a229"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 17042,
+    "newCases": 20,
+    "freshTests": 14861,
+    "reusedUnaffectedTests": 2181,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "5dca92fd7d075e3c70239c8c8aaee94067068a3ae5388c264a27fc196b72efbc",
+    "reportManifestSha256": "efbfa5495269a7f1d4daa9cc88fb07acebfe2353325f7e454f0948f1a168b260",
+    "nativeClaim": "Ten shared admitted empty-page confirmation cases; actual namespace and typed source coverage remain independent from durable cursor completion. No owner activation."
+  },
+  "newSharedMethods": 10,
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "ownerActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false
+}

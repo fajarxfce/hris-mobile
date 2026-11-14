@@ -1902,6 +1902,26 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun confirmSpaceHistoryChanges(
+        history: CollaborationSpaceHistorySnapshotRepository,
+        companyHistory: CollaborationCompanyHistorySnapshotRepository,
+        inbox: CollaborationSpaceInboxRepository,
+        bindings: CollaborationSpaceRoomBindingRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) =
+        ConfirmCollaborationSpaceHistoryChanges(
+            history,
+            companyHistory,
+            inbox,
+            bindings,
+            directory,
+            sessions,
+            server,
+        )
+
+    @Factory
     fun observeSpaceHistoryChanges(
         signals: CollaborationHistorySignalRepository,
         directory: CollaborationSpaceDirectoryRepository,
