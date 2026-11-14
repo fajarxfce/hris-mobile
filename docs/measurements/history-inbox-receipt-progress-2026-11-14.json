@@ -1,0 +1,59 @@
+{
+  "status": "in_progress_not_accepted",
+  "checkedPublicationPaths": 14,
+  "initialFocusedRuns": [
+    {
+      "directory": "focused-1",
+      "startedAt": "2026-11-14T01:33:32.782402+00:00",
+      "elapsedSeconds": 125.965,
+      "exitCode": 1,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "directory": "focused-2",
+      "startedAt": "2026-11-14T01:36:21.368939+00:00",
+      "elapsedSeconds": 123.356,
+      "exitCode": 1,
+      "freshCounts": {
+        "tests": 30,
+        "failures": 5,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "directory": "focused-3",
+      "startedAt": "2026-11-14T01:39:17.982444+00:00",
+      "elapsedSeconds": 65.991,
+      "exitCode": 1,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "focusedRunning": {
+    "directory": "focused-4",
+    "session": 22672,
+    "expectedTests": 66
+  },
+  "emptyPairRace": "Two actual-storage regression drafts prepared, not applied/run. Separate absence reads may miss alternating source/index replacements; conditional no-op transaction planned.",
+  "nextBinding": {
+    "paths": 3,
+    "newSharedMethods": 6,
+    "priorMethods": 46,
+    "focused": 79,
+    "full": 17018,
+    "applied": false
+  },
+  "phone": 92,
+  "liveChanged": false,
+  "actualNewAppleExecution": false
+}
