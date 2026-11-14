@@ -1,9 +1,38 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 08:42 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 08:55 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Active anchored inbox window verification
+
+Window15 is applied and captured in Mobile .work/history-inbox-window-2026-11-14. Focused1/session87799
+REAPED0 and accepted62 in431.014s, started2026-11-14T08:47:20.655879+00:00. Source5578/
+60860464898fd61f4c9128074f70106d2f762a245ff93c639947beb510fde1d3; result
+5c2c6f32f7b62339ae6cf20eafcc0ac460dab1b27d1bd67241f2857bf23310cb. Full1/session68107 is RUNNING;
+expected17684 with69 new executions, NOT ACCEPTED. Do not edit captured sources or start another
+compiler/emulator until reaped. Then accept-full, record, commit Mobile/push/reap, Group/push/reap.
+
+Combined .work/history-inbox-paging-2026-11-14 now contains19 REVIEWED/UNAPPLIED source drafts,
+24 shared and13 desktop UI cases plus an extension to existing real DI resolution/disposal.
+Added real Pager insertion/viewport identity+offset coverage and explicit English acknowledgement
+semantics. Finite windows, publication invalidation, visible labels, ownership, cancellation,
+restriction and root modifiers were reviewed. Gated apply/capture/focused39/full17745 and recorder/
+commit scripts are PREPARED UNRUN. Full baseline must come from accepted window17684 first.
+The read-only official Paging3.5.3 metadata for Android/JVM/iOS/Wasm was fetched and hashed; its
+platform variants are published. Actual dependency resolution and strict Gradle verification
+remain UNVERIFIED. resolve-dependencies.gradle is prepared but UNRUN. Before capture, resolve the
+new dependencies, compare any added verification hashes against official artifacts, and include
+that reviewed metadata change in candidate/observation manifests. No new dependency applied yet.
+
+UI is still unused by the app root. No draft test or screenshot has executed. Expected artifacts
+are features/collaboration/presentation/build/reports/screenshots/space-inbox-rows-{light,
+dark-large-text,landscape}.png; recording and actual inspection must be checked separately.
+Next complete Group hub/contact ownership and actual measured app navigation after these gates.
+Phone92/live unchanged; GroupOFF/V117-140 undeployed; no new Apple execution or Starter port.
+All54 PRD groups remain OPEN. Continue the long run, push every commit, one compiler OR emulator,
+no agents. Preserve failed Apple evidence and the blocked SQLite fixture payload.
 
 ## Bounded visible inbox labels locally accepted
 
