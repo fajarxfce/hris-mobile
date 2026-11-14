@@ -124,5 +124,53 @@
   "verifiedDependencyArtifacts": 692,
   "phoneInstalled": false,
   "groupRoutesActivated": false,
-  "liveChanged": false
+  "liveChanged": false,
+  "full1": {
+    "exitCode": 1,
+    "freshCounts": {
+      "tests": 10736,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "elapsedSeconds": 1210.927,
+    "resultSha256": "61be19e0757c9c28de877ecc9f26159945330e6b50dd91a08664950aeffe4fe6",
+    "reason": "Web local Skiko lock needed normal version alignment before browser work"
+  },
+  "full2": {
+    "status": "running",
+    "sourceFiles": 5591,
+    "sourceManifestSha256": "dfdb4ea69b671559be88506f41c9fe6129ff54153a8dd8afe8767c74b7b51b36",
+    "paths": 26,
+    "expectedTests": 17748,
+    "runnerPid": 3189735,
+    "sessionIdUnavailable": true,
+    "fullAcceptance": false
+  },
+  "webLockReview": {
+    "reviewed": true,
+    "fromVersion": "0.9.22-2",
+    "toVersion": "0.9.37-4",
+    "exactTextReplacement": true,
+    "changedPackageEntries": 7,
+    "externalNpmPackagesUnchanged": true,
+    "beforeSha256": "3f894db15afb64112e1e747b5efb65059315ef79017d3cc659405de11df4e9dc",
+    "expectedSha256": "39a5324743f76d88007b546ace48f215906ca4f287465752871d5a57ee08d63f",
+    "reason": "Skiko0.9.37.4 is already part of the verified Compose1.10.3 runtime. Only its two imported local npm workspace links, names and versions change; no external registry package or integrity value changes."
+  },
+  "starterPort": {
+    "draftFiles": 7,
+    "finalFiles": 8,
+    "applied": false,
+    "fullAcceptance": false
+  },
+  "nextMeasurement": {
+    "syntheticContacts": 5000,
+    "policyCapacity": 10000,
+    "acquisitionPageSize": 50,
+    "rawPageSize": 200,
+    "drafted": true,
+    "applied": false,
+    "executed": false
+  }
 }

@@ -1,56 +1,46 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 10:23 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 10:54 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
 ## Active retained inbox paging verification
 
-Focused5/session23951 REAPED0 and accepted:138 cases,231.872s,started
-2026-11-14T10:18:36.828580+00:00. All90 AppFlow,5 navigation,2 inspector,2 actual DI,
-25 shared and14 UI cases pass. Both Apple presentation/application test-source compilation pass.
-Source5591/e7f41875766ae01081ec29cb88695abe8525e629e68c4913940e2a7f2bb3861c; focused resultdc0b64cb8bc8b363fad665485ab426984d0f2be44d176b507a73ace322d53dd3.
-Three opaque screenshots exactly match the separately inspected light/2x dark/landscape captures.
-Full1/session74903 is RUNNING on the SAME frozen25-path source. Expected17748 retains17684 prior
-identities plus64 executions. All prior desktop/browser tests are forced due the framework upgrade;
-Android/lint/Web/Apple compile/quality checks included. Reap before edits/another compiler/emulator.
-Do not claim full acceptance, actual Apple runtime, device latency or installed feature from this.
+Focused verification is accepted: 138 cases, including all existing app navigation/disposal
+assertions and the new Paging/UI coverage. Both Apple test-source compilations pass. The three
+light, 2x dark and landscape screenshots still match the independently inspected captures.
 
-Window15 is accepted/pushed (Mobilefb8fccef /Groupb9b0a012), full17684; no rerun.
-Paging remains an unused feature entry until Group root/contact integration. Retained windows,
-known exhaustion, pending/draft previews, visible labels and failed continuation retry are covered.
-Compose1.10.3/Lifecycle2.10.0/Paging3.5.3 are intentionally compatible; Kotlin remains2.3.21.
-692 artifacts across341 coordinates are verified. Original689 compile/runtime artifacts omitted
-3 custom Compose resource zips. Their modules were already verified; iOS device/simulator/Wasm
-zip bytes independently match declared module SHA256/size. Metadata now
-17b6def09147fc73a99e2021441361ef5eb9a5081d2a0d9aebd7f422728c7a05; all prior checksums/policy unchanged.
+Full1 passed 10,736 tests with no failures, errors or skips, then Gradle stopped at its Web lock
+check before browser tests. The normal kotlinWasmUpgradePackageLock task succeeded in 47.524s.
+Its only change is the two imported local Skiko workspace versions, 0.9.22-2 to 0.9.37-4;
+external npm packages and integrity hashes remain unchanged. Full1 is preserved as unsuccessful.
 
-Preserved failures: focused1/84310 reaped1,37 UI cases passed but removed Back fixture APIs;
-focused2/21602 reaped1,39 passed but navigationevent was only a runtime transitive dependency;
-focused3/12447 reaped1 in833.016s,139 actual/136 passed/3 failed after fixture application closure;
-focused4/83172 reaped1 in872.973s,138 passed but native resource checksum was missing.
-Three failed AppFlow assertions proved the new Compose test-host lifetime: official ui-test1.10
-supplies DefaultArchitectureComponentsOwner until the outer test ends. The fixture now owns and
-clears its lifecycle/ViewModelStore inside its visible application. All90 test bodies/assertions
-remain unchanged. Back fixtures use actual NavigationEventDispatcher1.0.2/compatibility owner
-with disposal; desktopTest declares its dependency. Deprecated JUnit accessors now use the same
-verified catalog coordinate. Production navigation/ownership is unchanged. Exact app test selectors
-avoid accidentally including NativeLinkAppFlowTest. Superseded alias-only apply/proof was NOT RUN.
+Full2 is RUNNING against the final 26-path source: 5,591 inputs / dfdb4ea69b671559be88506f41c9fe6129ff54153a8dd8afe8767c74b7b51b36.
+The Web lock check now passes; 10,736 desktop/host tests have passed and browser work is running.
+All tests are forced after the Compose/Lifecycle upgrade. Final expectation: 17,748 tests,
+retaining every prior identity plus 64 executions. No full acceptance is claimed yet.
+The original runner PID is 3189735. Its unified-exec session identifier was lost during output
+truncation; do not start a duplicate. Observe its final result and process exit before editing
+source or starting another compiler/emulator. Scripts and immutable inputs are in
+.work/history-inbox-paging-2026-11-14. The accepted focus differs only by the reviewed Web lock.
 
-Next reap/full accept, record/push atomic Mobile+Group evidence, then REQUIRED Starter port.
-Starter .work/compose-paging-compatibility-port-2026-11-14 has6 UNAPPLIED drafts and captured
-1049 prior cases/1094 inputs. Apply, independent resolver/checksum verifier, capture/full gate,
-acceptance and publication scripts are PREPARED UNRUN. Resolver explicitly includes3 target
-resource tasks; final7 source paths include its own metadata. Preserve pinnedInspector742a2d1c.
-All1049 prior tests must run freshly, all3 Android variants/lint/Web/Apple source checks pass,
-and actual screenshots must be inspected before publication. No HRIS UI/policy belongs there.
-Then finish Group root/contact ownership and measured emulator navigation; measure5000 local
-contacts before choosing search projection/index. Reuse current Home swipe tabs/FAB. Do not
-fetch remote contacts on local opens/search or derive Group access from HR-company selection.
-Phone92/live unchanged; GroupOFF/V117-140 undeployed. All54 PRD groups OPEN. Continue beyond
-checkpoints; push every commit; one compiler OR emulator; no agents. Preserve blocked SQLite
-fixture payload and failed hosted Apple evidence; never retry/repackage the blocked payload.
+Next accept/record/push Mobile and Group evidence, then apply the REQUIRED generic Starter port.
+Starter .work/compose-paging-compatibility-port-2026-11-14 has seven UNAPPLIED drafts plus its own
+pending verification metadata (eight final paths). All independent resolver/verification/build/
+publication scripts are prepared but UNRUN. Require all 1,049 prior test identities freshly run,
+Android variants/lint/Web/Apple compilation and actual screenshot inspection. Keep Inspector pinned.
+
+Continue Group root/contact integration afterward. A synthetic 5,000-contact SQLite measurement
+is drafted but UNAPPLIED/UNRUN in .work/history-inbox-product-routing-2026-11-14. Source inspection
+corrected earlier notes: directory capacity is 10,000, acquisition pages contain 50 contacts,
+and raw storage pages contain 200. Measure initial/unchanged/reopened reads, exact contact lookup
+and search using a retained snapshot before choosing another index. Reuse Home swipe tabs/FAB.
+
+Phone 92 and live are unchanged; Group OFF, V117–140 undeployed. All 54 PRD groups stay OPEN.
+Paging remains an unused feature entry until app-root integration. No Apple runtime, phone
+latency or rollout claim. Preserve blocked SQLite fixture payload and failed hosted Apple evidence.
+Continue beyond checkpoints; push every commit; one compiler OR emulator; no subagents.
 
 ## Anchored local inbox windows locally accepted
 
