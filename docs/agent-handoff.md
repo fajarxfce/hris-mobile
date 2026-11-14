@@ -5,6 +5,42 @@ All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR em
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
+## Active generic Starter platform port
+
+Mobile caa59e487a1caa59a4b8b8ee46c0fd8e48dc25ad is accepted and pushed: 17,748 fresh tests.
+Matching Group evidence: 70c1335187adde9df20ac7a1c295d2ad00fe6e74. Do not repeat this Mobile gate.
+
+Starter .work/compose-paging-compatibility-port-2026-11-14 now has eight APPLIED generic paths.
+Its second full check is RUNNING: session 64288, check-full-2, source 1,094 inputs /
+e893dbc05f23a71a82e8a4ecd5fe1ebf08beaa3976717a592b7c502654db2ed6. All 1,049 prior cases
+are forced fresh, with three Android variants/lint, production Web and Apple compilation.
+Keep source frozen and one compiler OR emulator until the process is reaped.
+
+Independent dependency verification accepted 732 artifacts. The original 652 compile/resource
+artifacts were supplemented by 80 official POMs used by CycloneDX. Full1/session 51805 exited 1
+before any tests because that POM path was not yet verified; preserve its result. Final metadata:
+c8184c07e3530b24d0a4dd106cf4ca3be22b81d6c5432b2d8287dd77ae9691b0. Previous hashes/policy
+remain unchanged. Gradle also generated SDK6/JNA5.18.1 records from the configured Inspector
+Matrix adapter; actual root dependency audit across 27 Starter app configurations proves they
+are unused. Those two new components were omitted from Starter metadata; the pinned library
+already verifies their exact hashes itself. No new Matrix dependency belongs in Starter.
+
+Pinned Inspector 742a2d1c remains unchanged throughout these runs. Its gradlew.bat already had
+a line-ending difference before resolution; preserve that existing change. The independent full
+check and actual screenshot inspection are still required before publishing the port.
+
+After accepting/pushing Starter, link the exact commit here and continue contacts/root ownership.
+.work/history-inbox-product-routing-2026-11-14 holds an UNAPPLIED 5,000-contact SQLite measurement
+and guarded apply script. The real policy capacity is 10,000; acquisition pages are 50 and raw
+reads 200. The test measures initial/unchanged/reopened reads, exact contact lookup and retained
+search without latency thresholds. Run it before deciding another index. App-shell review
+confirms Company ScopedNavHost must not own Group state; the existing root owner is correct.
+Keep Company claim authorization separate, retain the existing swipe tabs/search/filter/FAB,
+and test account/Group replacement independently of Company selection. No routing source applied.
+
+Phone 92/live unchanged, Group OFF/V117–140 undeployed. All 54 PRD groups OPEN; continue beyond
+checkpoints, push every commit, no agents, preserve blocked SQLite fixture and failed Apple proof.
+
 ## Retained inbox paging locally accepted
 
 Mobile .work/history-inbox-paging-2026-11-14 is accepted: 25 shared and 14 desktop UI additions,
