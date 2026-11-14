@@ -1,9 +1,28 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 07:37 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 07:41 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Active admitted inbox page verification
+
+Product owner is accepted and pushed: Mobile5ef039ebdde3c2ef09110e067144a4762bea115d /
+Group5b2dfe6f594c05d09be1a75b7f5e08dd1c18650a. Focused84/full17543,15362 fresh/2181 unchanged,
+source5554/515dd7afe8c45a8a3a416e693950cd66f1c74dcee895595ce501e6c42107ee8e.
+
+The admitted page7 package is APPLIED and focused42 is RUNNING95572/focused-1 in
+.work/history-inbox-product-page-2026-11-14. Source5559/
+dd6adb3a3c72e4c63a5f459091e76c02c69cf35f4faf8ae8c8ff5abdf14b454a. Full17578 is prepared UNRUN.
+Reap/verify before changing captured source. Seventeen shared cases and one actual SQLite
+pending/draft reopen case; no automatic pagination, native acquisition or UI activation.
+
+Next labels8 remains reviewed/formatted UNAPPLIED with18 shared+1 actual50-contact SQLite case,
+focus45/full17615 and record/commit gates prepared UNRUN. Apply after page17578 accepted/pushed.
+Read-only retained-list investigation confirms Paging3.5.3 cross-platform artifacts and its
+current-viewport refresh-key contract. Existing ReplicaQuery supports reverse before; an anchored
+window can be considered without changing raw query bounds. No paging dependency or UI source was
+added. Preserve phone92/live/GroupOFF, failed Apple evidence and all54 OPEN PRD groups. Continue.
 
 ## Local inbox product owner locally accepted
 
