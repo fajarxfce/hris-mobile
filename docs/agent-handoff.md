@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 04:39 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 04:46 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -13,10 +13,17 @@ JVM bytecode confirmed nullable Long revision with Elvis Int zero rejects the su
 initial checkpoint. The comparison now uses0L; existing regression assertions are unchanged. A
 redundant pending-window non-null assertion was removed. Failed sources/reports and correction
 evidence are preserved. Corrected source5507/89bc36ef2535fce6061b9f2dff5754558140293528c88e304deb13ca7c1543eb;
-focused2/session29298 RUNNING, expected74. Full17236 is NOT RUN; do not claim acceptance.
-Reap focused2, audit candidate warnings and exact case IDs, then run/accept full. Record the failed
+focused2/session29298 REAPED and ACCEPTED74 in375.809s, result
+77dfbccbdeced07059cd415db3175315626b16762750fa9dce916dd1ddf776c6. Candidate warnings are clear and prior
+case IDs retained. Full1/session47934 is RUNNING, expected17236; full acceptance is not yet claimed.
+Reap full1, audit full source/report identities, then record acceptance. Record the failed
 attempt in final Git evidence before source commit/push and the corresponding Group evidence.
 The old lifecycle/pending/recovery standalone gates remain superseded and disabled.
+
+Next .work/inbox-repair-observed-signals-2026-11-14 has11 formatted UNAPPLIED draft files
+affecting12 paths including an observer rename. Three new shared cases distinguish latest and
+completed repair demand while preserving one admitted subscription and existing command behavior.
+Review/gate preparation still pending; apply only after the current package is accepted/pushed.
 
 Global owner remains DESIGN ONLY. ReplicaMutation supports at most TWO operations per transaction.
 The earlier index+many-source guard proposal cannot use that API. Review retained page queues
