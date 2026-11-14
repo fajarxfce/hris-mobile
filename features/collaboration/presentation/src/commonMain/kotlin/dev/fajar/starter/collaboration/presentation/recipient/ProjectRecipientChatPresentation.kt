@@ -84,14 +84,14 @@ internal fun projectRecipientChatPresentation(
 }
 
 /** One bounded, validated source frame before selecting statuses or retaining display rows. */
-private data class CapturedRecipientChatSources(
+internal data class CapturedRecipientChatSources(
     val commands: Map<String, CollaborationSpaceMessageRecord>,
     val originals: List<CollaborationSpaceRecipientSubmission>,
 ) {
     override fun toString() = "CapturedRecipientChatSources([redacted])"
 }
 
-private fun captureRecipientChatSources(
+internal fun captureRecipientChatSources(
     access: CollaborationSpaceLocalAccess,
     peerAccountId: String,
     conversation: CollaborationSpaceConversationMetadata?,

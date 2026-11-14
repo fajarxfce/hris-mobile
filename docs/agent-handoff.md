@@ -1,39 +1,39 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 22:18 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 22:35 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 
-## Recipient display continuity accepted
+## Stable recipient bubble rows accepted
 
-RecipientChatPresentation preserves the exact recipient gesture through independent source,
-command-progress and history publications. Bounded source capture validates the real canonical
-pair, all current/retained original proofs and physical history ownership before selecting display
-status. Stale queued facts cannot downgrade Sent or revive cancellation/represented history.
-Unknown canonical association does not prevent retaining an actual pending gesture. No canonical
-draft/ID is invented, and the pure projection never acknowledges storage, delivers or prepares.
-The canonical composer uses the same representation predicate with an explicit record argument.
+RecipientChatMessageIdentity keeps actual account/Group, peer and command/provider namespaces
+separate from canonical action coordinates. A captured message renders before canonical association;
+its stable key, original timestamp and route position survive real association, terminal status and
+exact physical history. No peer alias or canonical draft is invented. The recipient adapter reuses
+the bounded source capture, canonical command adapter and shared history join while respecting
+physical Company ownership, hidden/redacted content and ambiguous evidence.
 
-Validation: 18,305 cases (2173 fresh / 16132 exact unchanged), preserving all 18,277 prior identities plus 28. Focused 41/session43235 and full/session85114 reaped 0. Source 46f7c4b31f1573dcc7a9e495a20d48f5031087e553be5ad68b0be1d5145769b3; reports 8e1280ad18bdc11d04d6e56c6d7f202a8fdfe16008a4c79e041cce849e476da0.
-Read [recipient display continuity](collaboration-recipient-presentation.md). Fourteen new common
-cases and the 27 unchanged canonical composer/row cases passed. Apple source compilation is not
-Apple runtime acceptance. Shared recipient progress 4f6676f1, destination 2c93bc95 and local source
+Validation: 18,331 cases (2199 fresh / 16132 exact unchanged), preserving all 18,305 prior identities plus 26. Focused 54/session86323 and full/session62938 reaped 0. Source d9f5df9b0df286ed10fc1c8ca0da101ce8ef3750ef5a3bb515e5c1b3ae34bf2f; reports 2ada291712c8eca970a1853d7945a81e61d5f955301d0b4efc23b13c046946a9.
+Read [stable recipient bubble rows](collaboration-recipient-rows.md). Thirteen new common cases
+and the 14 recipient display / 27 canonical composer-row cases passed. The common logic checks
+are not rendered screenshots or measured Android frames. Apple source compilation is not Apple
+runtime acceptance. Recipient display fd041623, progress 4f6676f1, destination 2c93bc95 and source
 d4134a90 remain independently accepted and pushed.
 
-Next: implement actual recipient bubble identity through association and history, then connect
-ViewModel/editor/root routes. An UNAPPLIED/UNTESTED seven-file prototype with 13 common row tests
-is in `.work/recipient-rows-preparation-2026-11-14`; read review.md and require current source hashes
-before applying. It reuses the canonical history join and keeps actual canonical action coordinates
-separate from the stable recipient-route bubble key. No route is active and no visual performance
-claim has been measured. Tests must retain all 27 canonical and 14 recipient presentation cases.
-The earlier `.work/recipient-presentation-preparation-2026-11-14` is now APPLIED and superseded by
-the accepted source; do not replay its apply script.
+Next evolve the unused RecipientComposerViewModel into the actual recipient thread/editor owner;
+do not add two competing editor ViewModels linked by feedback events. Observe local source,
+destination, exact progress and real history with one bounded request lifetime, joined cancellation,
+late-result rejection and write-denial fencing. Bind latest retained submittedAt on reopen. Publish
+the coherent display/rows before acknowledging durable actor originals. Use the integration review
+in `.work/recipient-ui-review-2026-11-14/thread-integration-review.md` and the Git product review.
+The `.work/recipient-rows-preparation-2026-11-14` sketch is now APPLIED; actual accepted source is
+authoritative and its apply script must not be replayed. No recipient product route is active.
 
-Independent recipient/canonical drafts and bounded global inbox ordering still require explicit
-product integration. PrepareCollaborationSpaceConversation needs finite application ownership
-after retained Send/current discovery; passive opening, typing and ordinary renewal cannot trigger
-setup. Follow collaboration-recipient-projection-review.md and collaboration-recipient-product-review.md.
-Use the reviewed existing bubble/composer components, then rendered interactions/screenshots,
-complete company filters and independent rollout acceptance.
+Independent canonical/recipient drafts, bounded global inbox identity and the existing three-room
+navigation capacity still need product integration. PrepareCollaborationSpaceConversation needs
+finite application ownership after retained Send/current discovery; passive opening, typing and
+ordinary renewal must not initiate setup. Follow collaboration-recipient-projection-review.md and
+collaboration-recipient-product-review.md, then actual root/contact/thread navigation, rendered
+interactions/screenshots, complete company filters and independent rollout acceptance.
 
 Starter c7323ce remains independently accepted with 1,060 cases. HRIS recipient policy stays Mobile-only.
 Phone 93 is installed from 2eb833f4 and predates this change. Group OFF; V117–140 undeployed;

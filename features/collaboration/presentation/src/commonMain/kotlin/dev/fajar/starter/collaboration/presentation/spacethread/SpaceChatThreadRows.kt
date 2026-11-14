@@ -15,6 +15,25 @@ internal fun spaceChatThreadRows(
     composer: SpaceChatComposerPresentation,
     previous: List<SpaceChatMessageRow> = emptyList(),
 ): AppResult<List<SpaceChatMessageRow>> {
+    val outgoing = spaceChatOutgoingMessages(access, conversationId, thread, composer)
+    if (outgoing is AppResult.Failed) return outgoing
+    return joinSpaceChatThreadRows(
+        access,
+        conversationId,
+        thread,
+        (outgoing as AppResult.Success).value,
+        previous,
+    )
+}
+
+/** Joins validated outgoing facts to their physical history without changing storage ownership. */
+internal fun joinSpaceChatThreadRows(
+    access: CollaborationSpaceLocalAccess,
+    conversationId: String,
+    thread: CollaborationSpaceThreadSnapshot?,
+    commands: List<SpaceChatOutgoingMessage>,
+    previous: List<SpaceChatMessageRow> = emptyList(),
+): AppResult<List<SpaceChatMessageRow>> {
     val owner = access.messageOwner()
     if (
         previous.size > 1024 ||
@@ -51,12 +70,17 @@ internal fun spaceChatThreadRows(
                     history.page.messages.isNotEmpty()))
     )
         return invalidThreadProjection()
-    val outgoing = spaceChatOutgoingMessages(access, conversationId, thread, composer)
-    if (outgoing is AppResult.Failed) return outgoing
-    val commands = (outgoing as AppResult.Success).value
+    if (
+        commands.size > 512 ||
+            commands.map { it.identity }.distinct().size != commands.size ||
+            commands.any {
+                it.identity.owner != owner || it.identity.conversationId != conversationId
+            }
+    )
+        return invalidThreadProjection()
     val rows = mutableListOf<SpaceChatMessageRow>()
     val consumed = mutableSetOf<SpaceChatMessageIdentity>()
-    if (history != null && bound != null)
+    if (history != null)
         for (message in history.page.messages) {
             val matches = commands.filter { it.matchesHistory(history.location.roomId, message) }
             if (matches.size > 1) return invalidThreadProjection()

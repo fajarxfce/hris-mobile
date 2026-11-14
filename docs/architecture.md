@@ -1,5 +1,7 @@
 # Architecture
 
+[Stable recipient bubble rows](collaboration-recipient-rows.md) keeps recipient visual identity distinct from real canonical action coordinates while reusing the physical-history join.
+
 [Recipient display continuity](collaboration-recipient-presentation.md) validates one bounded source frame and keeps pure status selection outside ViewModel orchestration.
 
 [Shared exact recipient message progress](collaboration-recipient-progress.md) reuses one bounded observation and preserves distinct original types without setup or delivery.

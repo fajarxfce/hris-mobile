@@ -1,0 +1,90 @@
+{
+  "accepted": true,
+  "validatedTests": 18331,
+  "newCases": 26,
+  "freshTests": 2199,
+  "reusedUnchangedTests": 16132,
+  "priorCaseIdsPreserved": true,
+  "sourceManifestSha256": "d9f5df9b0df286ed10fc1c8ca0da101ce8ef3750ef5a3bb515e5c1b3ae34bf2f",
+  "reportManifestSha256": "2ada291712c8eca970a1853d7945a81e61d5f955301d0b4efc23b13c046946a9",
+  "full": {
+    "startedAt": "2026-11-14T22:24:10.069781+00:00",
+    "elapsedSeconds": 586.241,
+    "exitCode": 0,
+    "sourceFiles": 5700,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "apk": {
+      "path": ".work/space-recipient-rows-2026-11-14/full1/accepted-proof.apk",
+      "bytes": 155837130,
+      "sha256": "ba14bf8398ceea02f40e2d8557c345b03ac0cd8c1de963e61471c03aa2fccb27"
+    }
+  },
+  "recipientBubbleRowsIntegrated": true,
+  "productActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "baseline": "fd041623f9d32b1d69ed8160b804e5370833680b",
+  "sourcePaths": [
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/recipient/ProjectRecipientChatPresentation.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientChatMessageRow.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientChatOutgoingMessages.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientChatThreadRows.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/SpaceChatThreadRows.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientChatRowsFixture.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientChatThreadRowsTest.kt"
+  ],
+  "focused": {
+    "tests": 54,
+    "session": 86323,
+    "directory": "focus2",
+    "reaped": true
+  },
+  "fullSession": 62938,
+  "priorAttempts": [
+    {
+      "directory": "focus1",
+      "session": 50588,
+      "reaped": true,
+      "exitCode": 1,
+      "reason": "Production compile failed: recipient draft has no replyToEventId field. Formatting/architecture/detekt passed; tests did not execute. Use exact converted intent for known target and absent quote for the pre-target plain-text draft."
+    }
+  ],
+  "validationCommand": [
+    "xvfb-run",
+    "-a",
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    ":apps:collaboration-proof:assembleDebug",
+    ":apps:collaboration-proof:testDebugUnitTest",
+    ":check",
+    ":formatCheck",
+    ":architectureCheck",
+    ":detekt",
+    ":apps:android:compileDevReleaseKotlin",
+    ":apps:android:lintDevRelease",
+    ":apps:shared:compileKotlinWasmJs",
+    ":apps:shared:compileKotlinIosArm64",
+    ":features:collaboration:domain:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:data:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:presentation:compileTestKotlinIosSimulatorArm64",
+    ":apps:shared:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:domain:wasmJsBrowserTest",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:presentation:wasmJsBrowserTest",
+    ":apps:shared:wasmJsBrowserTest",
+    "-PcollaborationProofAbi=x86_64",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=93",
+    "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx3072m",
+    "-Pkotlin.compiler.execution.strategy=in-process",
+    "-Pkotlin.incremental=false"
+  ],
+  "phoneVersionCode": 93
+}
