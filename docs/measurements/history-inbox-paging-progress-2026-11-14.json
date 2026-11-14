@@ -1,7 +1,7 @@
 {
-  "status": "Focused3/session12447 running, expected138; explicit desktop test dependency added, no full acceptance",
-  "focusedSession": 12447,
-  "focusedDirectory": "focused3",
+  "status": "Focused4/session83172 running; explicit host disposal and test dependency aliases applied; no full acceptance",
+  "focusedSession": 83172,
+  "focusedDirectory": "focused4",
   "expectedFocused": 138,
   "expectedFull": 17748,
   "paths": 25,
@@ -33,6 +33,20 @@
         "skipped": 0
       },
       "reason": "39 presentation cases pass. ui-backhandler1.10.3 declares navigationevent1.0.2 only in its runtime variant, so the new explicit test input needs its own desktopTest dependency. Official module variants verified; no test assertion changes."
+    },
+    {
+      "directory": "focused3",
+      "session": 12447,
+      "reaped": true,
+      "exitCode": 1,
+      "resultSha256": "694d4ae3b0aaff238ef3ce9cfcd59915f8b6cc85c92f74a54eb7f298ac116e0a",
+      "tests": {
+        "tests": 139,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reason": "39 presentation, DI and navigation/inspector cases pass. AppFlow has3 failures after withApplication returns:2 retained workforce subscriptions remain and Employee ViewModel scope remains active. NativeLinkAppFlowTest also selected by wildcard *AppFlowTest, one additional existing passing method. Investigate the actual host ViewModelStore lifetime introduced by Compose1.10 test environment; preserve all assertions."
     }
   ],
   "foundationUpgrade": {
@@ -58,7 +72,9 @@
     "productionNavigationChanged": false,
     "source": "Official ui-backhandler1.10.3 and navigationevent1.0.2 source APIs",
     "owner": "TestBackDispatcher implements NavigationEventDispatcherOwner and closes dispatcher at test host disposal",
-    "dependency": "desktopTest implementation(androidx.navigationevent:navigationevent:1.0.2); required API is a runtime-only transitive dependency of ui-backhandler"
+    "dependency": "desktopTest implementation(androidx.navigationevent:navigationevent:1.0.2); required API is a runtime-only transitive dependency of ui-backhandler",
+    "applicationHost": "The withApplication fixture now supplies a lifecycle/ViewModelStoreOwner inside its visible content and clears it on disposal. Official ui-test1.10 source provides DefaultArchitectureComponentsOwner until the test block finishes; ui-test1.9 did not.",
+    "assertions": "All90 AppFlow bodies unchanged, including the3 previously failing disposal checks."
   },
   "inspectedScreenshotHashes": {
     "light": "7a7040dc98bbd08af2abe8e71aa20874d5fa7ac92f7961af793d78b9fd4776ee",
@@ -67,7 +83,7 @@
   },
   "requiresStarterPort": true,
   "accepted": false,
-  "sourceManifestSha256": "414c642029c09dc7f088186ce6fdbb2920d8aafb21fdb4e15536a31b8bb0eaa8",
+  "sourceManifestSha256": "25ff0cbfe91a370c913711bdeaf3f03f3dc873c65e56016bd4b3394cd0b347dc",
   "sourceFiles": 5591,
   "phoneInstalled": false,
   "groupRoutesActivated": false,

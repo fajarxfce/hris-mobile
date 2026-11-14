@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 09:45 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 10:02 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -8,39 +8,49 @@ mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs
 ## Active retained inbox paging verification
 
 Window15 remains accepted/pushed (Mobilefb8fccef /Groupb9b0a012), full17684; no rerun.
-Paging now has25 reviewed applied source paths,5591 inputs/414c642029c09dc7f088186ce6fdbb2920d8aafb21fdb4e15536a31b8bb0eaa8.
-Focused1/session84310 reaped1:37 new presentation cases passed; existing desktop fixtures used
-removed BackGestureDispatcher APIs. Focused2/session21602 reaped1 in158.289s:39 presentation
-cases passed, but ui-backhandler exposes NavigationEventDispatcher only as a runtime dependency.
-The four test fixtures now drive the actual NavigationEventDispatcher, preserve Back/cancellation/
-fallback assertions, and dispose their inputs. apps/shared desktopTest explicitly declares the
-already verified navigationevent1.0.2 dependency. Production navigation is unchanged.
+Paging has25 reviewed applied source paths,5591 inputs/25ff0cbfe91a370c913711bdeaf3f03f3dc873c65e56016bd4b3394cd0b347dc.
+Focused4/session83172 is RUNNING, expected138; full17748 has not run. Do not edit frozen source
+or start another compiler/emulator until reaped. One compiler, Gradle3GiB, one worker.
 
-Reviewed corrections retain rows when continuation fails, offer retry only during that failure,
-and clear the obsolete failed-load marker after successful explicit retry. Original37-case
-screenshots had transparent empty canvases; only the screenshot host needed an opaque background.
-All three corrected actual PNGs were inspected (light,2x dark text,landscape); names/dates remain
-readable, bounded previews ellipsize, empty canvas matches the theme. See local visual-review1/2
-and preserved failed attempts; passing UI cases are not full integration/device acceptance.
+Preserved failures: focused1/session84310 reaped1 (37 presentation cases passed; removed Back
+fixture API), focused2/session21602 reaped1 (39 passed; new dispatcher required an explicit
+runtime-only dependency on desktopTest). Focused3/session12447 REAPED1 in833.016s, started
+2026-11-14T09:44:36.590768+00:00:139 actual cases,136 passed/3 failed. Back/cancel/fallback,
+inspector, DI and all39 presentation cases pass;3 AppFlow assertions after withApplication
+returns expose retained workforce subscriptions and an active employee ViewModel scope.
+The wildcard *AppFlowTest also matched1 existing NativeLinkAppFlowTest case; focused4 uses
+exact application class names and returns to138 expected cases, without dropping any intended case.
 
-Focused3/session12447 is RUNNING, expected138 (25 shared,14 UI,99 existing app/DI/navigation/inspector).
-Full expected17748 preserves17684 prior identities plus64 executions; force every desktop/browser
-suite because Compose/Lifecycle changed. Do not edit frozen source while the compiler runs.
-Compose1.10.3, Lifecycle2.10.0 and Paging3.5.3 are intentional compatible versions; all689 added
-artifacts across341 exact coordinates were independently fetched and verified. Metadata SHA
-a5cb920b0e54f2ab8101b71edf514f82947d4d5506be40aab51ffd96e44b141e.
-No full acceptance yet; do not mark it complete from39 passing presentation cases.
+Root cause is confirmed in official Compose sources: ui-test1.10 supplies a
+DefaultArchitectureComponentsOwner through TestContext until the test block finishes;1.9 did not.
+AppViewModelOwner correctly reuses a supplied host owner. The fixture previously hid app content
+but assumed its root store was disposed. withApplication now owns an explicit lifecycle/store
+inside its visible content and destroys/clears it on fixture disposal. All90 AppFlow test bodies
+and the3 failed assertions are unchanged. Production navigation/root ownership was not altered.
+Four Back test fixtures drive NavigationEventDispatcher1.0.2 with explicit disposal and the
+Compose compatibility owner. The two deprecated uiTestJUnit4 build accessors now use the SAME
+verified org.jetbrains.compose.ui:ui-test-junit4:1.10.3 catalog coordinate. Both accepted focused
+and full runs must use the same final source manifest; superseded alias-only proof was NOT RUN.
 
-After focus/full acceptance, record atomic Mobile/Group evidence and push each commit. REQUIRED
-Starter port is drafted under Starter .work/compose-paging-compatibility-port-2026-11-14:6 unapplied
-paths for versions, desktop dependency and4 generic fixtures; independently resolve only Starter
-artifacts and force all1049 prior tests/Android/Web/Apple compilation. Keep pinnedInspector742a2d1c.
-Then complete Group root/contact ownership and measured emulator navigation. The Home hub already
-has swipe tabs/FAB; Group state must sit outside Company scope. Group directory local observation
-needs current-admission/late-result review before UI consumption. Never fetch remote contacts on
-text changes or ordinary local opens. Phone92/live unchanged; GroupOFF/V117-140 undeployed.
-All54 PRD groups OPEN. Continue beyond checkpoints, one compiler OR emulator, no subagents.
-Preserve the blocked SQLite fixture payload and failed hosted Apple evidence; no retry/repackaging.
+Three actual row screenshots (light,2x dark text,landscape) were inspected and archived in
+visual-review2; opaque canvas, visible names/dates and bounded previews.39 presentation cases
+cover retained rows, bounded local pages, known exhaustion, pending/draft priority and explicit
+failed continuation retry. Dependency checks accepted689 artifacts/341 coordinates; metadata
+SHA a5cb920b0e54f2ab8101b71edf514f82947d4d5506be40aab51ffd96e44b141e unchanged.
+Compose1.10.3/Lifecycle2.10.0/Paging3.5.3 are intentional compatible versions. Full gate must
+force all prior desktop/browser tests, Android/lint/Web/Apple source checks. Full timeout90min
+allows initial whole-platform rebuilding; do not confuse compilation with actual Apple runtime.
+
+After focused/full pass: record/push atomic Mobile and Group evidence, then REQUIRED Starter port.
+Starter .work/compose-paging-compatibility-port-2026-11-14 has6 UNAPPLIED drafts (versions,
+desktop dependency and4 fixtures), captured1049 prior cases/1094 inputs, gated apply,
+independent dependency resolver/checksum verifier, full runner/capture/acceptance PREPARED UNRUN.
+Preserve pinnedInspector742a2d1c; independently resolve only Starter artifacts; final7 paths
+include its metadata. Publish/docs gates remain to prepare. Keep HRIS policy/UI in Mobile.
+Then finish Group root/contacts and measured emulator navigation; investigate directory late
+results/current admission before consuming it. No remote reads on local opens or search changes.
+Phone92/live unchanged; GroupOFF/V117-140 undeployed. All54 PRD groups OPEN. Continue beyond
+checkpoints and push every commit. No agents. Preserve blocked SQLite payload and Apple failures.
 
 ## Anchored local inbox windows locally accepted
 
