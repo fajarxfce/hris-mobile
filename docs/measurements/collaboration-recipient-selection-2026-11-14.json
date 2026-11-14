@@ -1,0 +1,89 @@
+{
+  "accepted": true,
+  "validatedTests": 18405,
+  "newCases": 42,
+  "freshTests": 16216,
+  "reusedUnchangedTests": 2189,
+  "priorCaseIdsPreserved": true,
+  "sourceManifestSha256": "ea8bca4c4b35bbdbb604294f8271b3d1b1a2471685ed6de38df15a90b2087507",
+  "reportManifestSha256": "2839a0efeb1dc15d53f084f2757b522d27dd66815a8c51db1d45fb1ee7a54748",
+  "full": {
+    "startedAt": "2026-11-14T23:17:27.354552+00:00",
+    "elapsedSeconds": 1077.211,
+    "exitCode": 0,
+    "sourceFiles": 5709,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "apk": {
+      "path": ".work/space-recipient-selection-2026-11-14/full1/accepted-proof.apk",
+      "bytes": 155838441,
+      "sha256": "23f6ea02771b1a34939cf44b34d42b72a470171bc85e4ad30034d88e683282c0"
+    }
+  },
+  "recipientSelectionIntegrated": true,
+  "productActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "baseline": "4b3d19895efae15e29e5f5352b2a46861024169f",
+  "sourcePaths": [
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceThreadContext.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadCollaborationSpaceRecipientContextTest.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientChatSelection.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientChatThreadState.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientChatThreadViewModel.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientChatSelectionTest.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientChatThreadViewModelFixture.kt"
+  ],
+  "focused": {
+    "tests": 50,
+    "session": 4479,
+    "directory": "focus2",
+    "reaped": true
+  },
+  "fullSession": 73909,
+  "priorAttempts": [
+    {
+      "directory": "focus1",
+      "session": 25982,
+      "exitCode": 1,
+      "cause": "Four new tests read state/confirmed effects before StandardTestDispatcher dispatched typed onEvent handlers; one negative peer check accidentally used the real fixture peer chatId(990). Awaited posted handlers and used a distinct peer. Strengthened the text-bound case to require nine selected rows before asserting copy is unavailable. Production unchanged; existing assertions preserved."
+    }
+  ],
+  "validationCommand": [
+    "xvfb-run",
+    "-a",
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    ":apps:collaboration-proof:assembleDebug",
+    ":apps:collaboration-proof:testDebugUnitTest",
+    ":check",
+    ":formatCheck",
+    ":architectureCheck",
+    ":detekt",
+    ":apps:android:compileDevReleaseKotlin",
+    ":apps:android:lintDevRelease",
+    ":apps:shared:compileKotlinWasmJs",
+    ":apps:shared:compileKotlinIosArm64",
+    ":features:collaboration:domain:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:data:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:presentation:compileTestKotlinIosSimulatorArm64",
+    ":apps:shared:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:domain:wasmJsBrowserTest",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:presentation:wasmJsBrowserTest",
+    ":apps:shared:wasmJsBrowserTest",
+    "-PcollaborationProofAbi=x86_64",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=93",
+    "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx3072m",
+    "-Pkotlin.compiler.execution.strategy=in-process",
+    "-Pkotlin.incremental=false"
+  ],
+  "phoneVersionCode": 93
+}

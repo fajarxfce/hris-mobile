@@ -48,6 +48,40 @@ class ReadCollaborationSpaceThreadContext(
             )
     }
 
+    /** Admitted absence means no local association yet, never permission to invent a target. */
+    suspend fun recipient(
+        access: CollaborationSpaceLocalAccess,
+        peerAccountId: String,
+    ): AppResult<CollaborationSpaceConversationMetadata?> {
+        currentCoroutineContext().ensureActive()
+        if (!validCollaborationSpaceRecipientCoordinates(access, peerAccountId))
+            return collaborationRecoveryFailure(
+                "client.collaboration_conversation_unavailable",
+                FailureKind.Validation,
+            )
+        return withTimeoutOrNull(5_000) {
+            admitted(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            val captured = metadata.findByPeer(access, peerAccountId)
+            admitted(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            if (captured is AppResult.Failed) return@withTimeoutOrNull captured
+            val value = (captured as AppResult.Success).value
+            if (
+                value != null &&
+                    (!validCollaborationSpaceConversationMetadata(access, value) ||
+                        peerAccountId !in listOf(value.firstAccountId, value.secondAccountId))
+            )
+                collaborationRecoveryFailure(
+                    "client.collaboration_conversation_unavailable",
+                    FailureKind.Unavailable,
+                )
+            else captured
+        }
+            ?: collaborationRecoveryFailure(
+                "client.collaboration_recovery_timeout",
+                FailureKind.Timeout,
+            )
+    }
+
     /** Read admission between two current-session checks; a confirmed denial cannot be masked. */
     private suspend fun admitted(access: CollaborationSpaceLocalAccess): AppResult<Unit> {
         currentCoroutineContext().ensureActive()

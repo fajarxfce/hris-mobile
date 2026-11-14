@@ -22,6 +22,9 @@ data class RecipientChatThreadState(
     val progressFailure: Failure? = null,
     val projectionFailure: Failure? = null,
     val restriction: Failure? = null,
+    val selection: Set<RecipientChatMessageIdentity> = emptySet(),
+    val selectionLimitReached: Boolean = false,
+    val actionFailure: Failure? = null,
 ) {
     val canCompose
         get() = visible && editor.ready && restriction == null && !leaving
@@ -52,6 +55,13 @@ sealed interface RecipientChatThreadEvent {
         override fun toString() = "TextChanged([redacted])"
     }
 
+    data class MessageSelected(val identity: RecipientChatMessageIdentity) :
+        RecipientChatThreadEvent
+
+    data object SelectionCleared : RecipientChatThreadEvent
+
+    data object CopySelected : RecipientChatThreadEvent
+
     data object SendRequested : RecipientChatThreadEvent
 
     data object RetryRequested : RecipientChatThreadEvent
@@ -59,4 +69,8 @@ sealed interface RecipientChatThreadEvent {
 
 sealed interface RecipientChatThreadEffect {
     data class Back(val request: Long) : RecipientChatThreadEffect
+
+    data class CopyMessages(val request: Long, val text: String) : RecipientChatThreadEffect {
+        override fun toString() = "CopyMessages([redacted])"
+    }
 }

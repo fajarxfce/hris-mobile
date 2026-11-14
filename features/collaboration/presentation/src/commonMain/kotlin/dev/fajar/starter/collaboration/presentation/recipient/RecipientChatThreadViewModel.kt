@@ -26,6 +26,7 @@ class RecipientChatThreadViewModel(
     private val observeProgress: ObserveCollaborationSpaceComposerProgress,
     private val edit: EditCollaborationSpaceRecipientDraft,
     private val submit: SubmitCollaborationSpaceRecipientComposer,
+    private val readContext: ReadCollaborationSpaceThreadContext,
 ) :
     MviViewModel<RecipientChatThreadState, RecipientChatThreadEvent, RecipientChatThreadEffect>(
         RecipientChatThreadState()
@@ -37,6 +38,8 @@ class RecipientChatThreadViewModel(
     private var progress = emptyList<CollaborationSpaceRecipientMessageProgress>()
     private var editor: RecipientComposerEditingSession? = null
     private var editorGeneration = 0L
+    private var copySequence = 0L
+    private var pendingCopy: RecipientChatCopyRequest? = null
     private var departure: Job? = null
     private var departureId = 0L
     private var pendingDeparture: RecipientChatThreadEffect.Back? = null
@@ -48,6 +51,9 @@ class RecipientChatThreadViewModel(
         on<RecipientChatThreadEvent.Entered>(::onEntered)
         on<RecipientChatThreadEvent.Stopped>(::onStopped)
         on<RecipientChatThreadEvent.TextChanged>(::onTextChanged)
+        on<RecipientChatThreadEvent.MessageSelected>(::onMessageSelected)
+        on<RecipientChatThreadEvent.SelectionCleared>(::onSelectionCleared)
+        on<RecipientChatThreadEvent.CopySelected>(::onCopySelected)
         on<RecipientChatThreadEvent.SendRequested>(::onSendRequested)
         on<RecipientChatThreadEvent.RetryRequested>(::onRetryRequested)
         observeRequests()
@@ -82,6 +88,11 @@ class RecipientChatThreadViewModel(
 
     private fun onBackRequested(event: RecipientChatThreadEvent.BackRequested) {
         if (!state.value.visible || state.value.leaving) return
+        if (state.value.selecting) {
+            onSelectionCleared(RecipientChatThreadEvent.SelectionCleared)
+            return
+        }
+        pendingCopy = null
         val captured = RecipientChatThreadEffect.Back(++departureId)
         val generation = editorGeneration
         val current = editor
@@ -119,9 +130,102 @@ class RecipientChatThreadViewModel(
     /** Cancels the navigation wait/effect without cancelling an ordinary retained editor write. */
     private fun cancelDeparture() {
         pendingDeparture = null
+        onSelectionCleared(RecipientChatThreadEvent.SelectionCleared)
         departure?.cancel()
         departure = null
         discardPendingEffects()
+    }
+
+    private fun onMessageSelected(event: RecipientChatThreadEvent.MessageSelected) {
+        val current = state.value
+        if (
+            !current.visible ||
+                current.leaving ||
+                current.restriction != null ||
+                current.projectionFailure != null ||
+                current.rows.none { it.identity == event.identity }
+        )
+            return
+        pendingCopy = null
+        val selected = current.selection
+        when {
+            event.identity in selected ->
+                updateState {
+                    it.copy(selection = selected - event.identity, selectionLimitReached = false)
+                }
+            selected.size < RECIPIENT_CHAT_SELECTION_LIMIT ->
+                updateState {
+                    it.copy(selection = selected + event.identity, selectionLimitReached = false)
+                }
+            else -> updateState { it.copy(selectionLimitReached = true) }
+        }
+    }
+
+    private fun onSelectionCleared(event: RecipientChatThreadEvent.SelectionCleared) {
+        pendingCopy = null
+        updateState { it.copy(selection = emptySet(), selectionLimitReached = false) }
+    }
+
+    private fun onCopySelected(event: RecipientChatThreadEvent.CopySelected) {
+        val current = state.value
+        if (!current.canCopySelection) return
+        val selected = current.selectedRows.sortedBy { it.position }
+        val effect =
+            RecipientChatThreadEffect.CopyMessages(
+                ++copySequence,
+                selected.joinToString("\n\n") { requireNotNull(it.bubble.text) },
+            )
+        onSelectionCleared(RecipientChatThreadEvent.SelectionCleared)
+        pendingCopy = RecipientChatCopyRequest(effect, selected, editorGeneration)
+        updateState { it.copy(actionFailure = null) }
+        viewModelScope.launch { emitEffect(effect) }
+    }
+
+    /** The route checks current local ownership immediately before writing the clipboard. */
+    suspend fun confirmCopy(effect: RecipientChatThreadEffect.CopyMessages): Boolean {
+        val captured = pendingCopy ?: return false
+        if (
+            !viewModelScope.isActive ||
+                captured.effect != effect ||
+                !state.value.visible ||
+                state.value.leaving
+        )
+            return false
+        val context = readContext.recipient(access, peerAccountId)
+        currentCoroutineContext().ensureActive()
+        if (
+            !viewModelScope.isActive ||
+                pendingCopy != captured ||
+                captured.generation != editorGeneration ||
+                !state.value.visible ||
+                state.value.leaving
+        )
+            return false
+        pendingCopy = null
+        if (context is AppResult.Failed) {
+            if (collaborationSpaceDirectoryResponseClosesRead(context.failure))
+                restrict(context.failure)
+            else updateState { it.copy(actionFailure = context.failure) }
+            return false
+        }
+        val destination = (context as AppResult.Success).value
+        val current = state.value
+        return current.restriction == null &&
+            current.projectionFailure == null &&
+            captured.rows.all { requested ->
+                current.rows.any { row ->
+                    row.identity == requested.identity &&
+                        row.bubble.kind == requested.bubble.kind &&
+                        row.bubble.text == requested.bubble.text &&
+                        recipientChatCopyMatchesContext(
+                            access,
+                            peerAccountId,
+                            destination,
+                            row,
+                            current.messages,
+                        )
+                }
+            }
     }
 
     private fun onTextChanged(event: RecipientChatThreadEvent.TextChanged) {
@@ -336,6 +440,8 @@ class RecipientChatThreadViewModel(
             it.copy(
                 messages = messages,
                 rows = (rendered as AppResult.Success).value,
+                selection =
+                    it.selection.intersect(rendered.value.map { row -> row.identity }.toSet()),
                 projectionFailure = null,
             )
         }

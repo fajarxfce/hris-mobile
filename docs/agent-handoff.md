@@ -1,39 +1,50 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 23:07 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 23:35 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 
-## Recipient departure accepted
+## Recipient selection and copy accepted
 
-Explicit Back flushes local draft/retained-message writes before one confirmed navigation effect.
-It never waits for network acknowledgement. Failed local writes keep input and allow retry.
-Stop, route release, denial and disposal retire old navigation effects; ordinary stop preserves
-an independently owned editor write. A new Back can still leave a restricted page.
+Typed recipient selection is bounded to 50 rows; Back clears selection before leaving. Copy uses
+stable conversation order, a 65,536-character bound and one exact transient request. The existing
+ReadCollaborationSpaceThreadContext owns a finite explicit peer lookup with session/admission
+checks around local I/O. No API/setup/renewal/delivery is initiated. Before association, only the
+exact private recipient original can match; canonical rows need the real returned destination.
+Late denial, stop, release, new selection, departure, disposal and redaction reject stale copies.
 
-Validation: 18,363 cases (2231 fresh / 16132 exact unchanged), preserving all 18,351 prior identities plus 12. Focused 18/session45944 and full/session34413 reaped 0. Source baa0e9310cec08aaf318c69eba575cdba2d0b89076ad4fbf3799ac83b8489fb1; reports e6a541be5bed1a0229bc91100a8ff9abbccd9b45b793fe19fd8bcce8976d4fb9.
-Read [recipient departure](collaboration-recipient-departure.md). Six new common cases cover held
-writes, failure, cancellation and stale effects, alongside ten thread-consumer and two actual-DI
-controls. This validates state/lifetime behavior; rendered navigation and Android frame timing
-remain separate. Apple source compilation is not Apple runtime acceptance.
+Validation: 18,405 cases (16216 fresh / 2189 exact unchanged), preserving all 18,363 prior identities plus 42. Focused 50/session4479 and full/session73909 reaped 0. Source ea8bca4c4b35bbdbb604294f8271b3d1b1a2471685ed6de38df15a90b2087507; reports 2839a0efeb1dc15d53f084f2757b522d27dd66815a8c51db1d45fb1ee7a54748.
+Read [recipient selection](collaboration-recipient-selection.md). Nine domain and twelve presentation
+cases passed, with unchanged canonical context, recipient consumer/departure and actual-DI controls.
+The first focused run failed five new tests: four asserted before posted test events ran; one used
+the real fixture peer as a negative peer. Synchronization/distinct identity were corrected, and
+clipboard-bound selection was strengthened. Production was unchanged by that test correction.
+Keep the failed evidence separate. These are state/lifetime results, not rendered gesture or
+physical-device clipboard acceptance. Apple source compilation is not Apple runtime acceptance.
 
-The preceding thread consumer a9ee6a7d, rows 3e7c9f5d, display fd041623, progress 4f6676f1,
-destination 2c93bc95 and source d4134a90 remain accepted/pushed. The departure preparation is
-APPLIED and superseded by actual source. Do not replay its apply script or stale review text.
+Departure 4b3d1989, consumer a9ee6a7d, rows 3e7c9f5d, display fd041623, progress 4f6676f1,
+destination 2c93bc95 and source d4134a90 remain accepted/pushed. The selection implementation
+preparation is APPLIED and superseded by actual source, especially its corrected new tests.
 
-No active product route uses this consumer yet. Next implement bounded long-press selection and
-copy with fresh local context, then the actual page and root/contact/thread navigation. The route
-must confirm each Back effect immediately before navigating. Reuse ChatMessageBubble,
-ChatDayDivider and ChatComposerInput, and the existing bounded navigation owner. Keep one editor
-per route; preserve the old composer-only hidden-admission control through real root tests.
-Outgoing recipient drafts support plain text only: reply/forward/delete need durable operations.
-Independent canonical/recipient drafts, global pending/draft inbox identity, finite application
-setup after retained Send and company filters still require integration. Passive opening,
-typing and ordinary admission renewal cannot schedule setup. See recipient product/projection reviews.
+Next: `.work/recipient-page-implementation-2026-11-14` contains eight UNAPPLIED Kotlin files and
+review.md/base-sources.json: recipient page/composer, shared visual viewport, seven desktop UI
+cases, and existing quote/viewport call-site adjustments. It is uncompiled/unrun; screenshots
+have not been produced or viewed. Its apply.py is prepared and syntax checked, not run; it requires
+accepted/pushed selection and exact source hashes, then prepares focused17/full18,412 gates with
+three required actual screenshot reviews. Preserve canonical layout/focus/quote controls and validate
+rendered long press, selection, constrained layout, first frame, older anchor and input focus.
+Do not claim this preparation is active product UI.
 
-Starter c7323ce remains independently accepted with 1,060 cases. This is HRIS-specific policy.
-Phone 93 is installed from 2eb833f4 and predates these recipient changes. Group OFF; V117–140
-undeployed; all 54 PRD groups OPEN. Continue beyond checkpoints and preserve the blocked SQLite
-preparation, failed Apple evidence, protected stores and phone install-only boundary below.
+No recipient product route is active. Wire actual root/contact/thread routes into the SAME
+bounded Group navigation owner; confirm Back/Copy effects immediately before platform actions.
+Keep one editor per route, preserve the old hidden-admission control through real root tests,
+and never alias a peer ID to a conversation ID. Independent canonical/recipient drafts, global
+pending/draft inbox identity and finite setup after retained Send remain required. Passive
+opening/typing/renewal cannot initiate setup. Outgoing recipient reply/forward/delete still need
+durable operations. Follow recipient product/projection reviews and remaining rollout gates.
+
+Starter c7323ce stays accepted with 1,060 cases; HRIS policy stays Mobile-only. Phone93 is still
+installed from 2eb833f4. Group OFF; V117–140 undeployed; all 54 PRD groups OPEN. Continue beyond
+checkpoints and preserve the blocked SQLite preparation, failed Apple evidence and protected stores.
 
 ## Delivered build and loop diagnosis
 

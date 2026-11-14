@@ -1,5 +1,7 @@
 # Product integration after recipient owner acceptance
 
+The [recipient selection](collaboration-recipient-selection.md) now validates typed selection and confirmed local copying. Real page/root/navigation integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.
+
 The [recipient thread consumer](collaboration-recipient-departure.md) now validates local Back flushing and stale navigation cancellation. Selection/actions, real root/page/navigation integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.
 
 The [recipient thread consumer](collaboration-recipient-thread.md) is now validated, including joined source/destination/history/progress and one editor. Back/selection/actions, real root/page/navigation integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.

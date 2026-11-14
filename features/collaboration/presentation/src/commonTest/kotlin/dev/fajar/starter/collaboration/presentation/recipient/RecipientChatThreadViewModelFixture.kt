@@ -25,6 +25,8 @@ internal class RecipientChatThreadViewModelFixture {
     var maxSourceReaders = 0
     var beforeSource: suspend () -> Unit = {}
     var metadataReads = 0
+    var beforeMetadata: suspend () -> Unit = {}
+    var metadataAbsent = false
     var sourceFailure: Failure? = null
     val projection =
         object : CollaborationSpaceRecipientProjectionRepository {
@@ -78,7 +80,8 @@ internal class RecipientChatThreadViewModelFixture {
             ): AppResult<CollaborationSpaceConversationMetadata?> {
                 assertEquals(peer, peerAccountId)
                 metadataReads++
-                return AppResult.Success(metadataValue)
+                beforeMetadata()
+                return AppResult.Success(if (metadataAbsent) null else metadataValue)
             }
 
             override suspend fun getById(
@@ -241,6 +244,12 @@ internal class RecipientChatThreadViewModelFixture {
                 editor.outbox,
                 editor.drafts,
                 thread.content.commands,
+                editor.directory,
+                thread.base.sessions,
+                thread.base.server,
+            ),
+            ReadCollaborationSpaceThreadContext(
+                metadata,
                 editor.directory,
                 thread.base.sessions,
                 thread.base.server,
