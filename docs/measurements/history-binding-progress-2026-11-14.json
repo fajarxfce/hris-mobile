@@ -1,0 +1,54 @@
+{
+  "status": "focused_accepted_full_running",
+  "focused": {
+    "accepted": true,
+    "tests": 79,
+    "elapsedSeconds": 220.045,
+    "sourceFiles": 5476,
+    "sourceManifestSha256": "aa6c9acfddf8faf4a0c10cfaa7d6b95f4b30459665a5d8edf4484934272038a0",
+    "resultSha256": "4c573c6a3513dc2057118b8cd41f9b256aa96848ec9f5b3de8f359554648a6f7",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceConversationCatalogStorageTest": 12,
+      "CollaborationSpaceRoomBindingPreparationStorageTest": 14,
+      "CollaborationSpaceRoomBindingStorageTest": 38,
+      "CollaborationHistorySignalStorageTest": 13
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "session": 26238,
+    "directory": "full-1",
+    "expectedTests": 17022,
+    "reaped": false
+  },
+  "fullImpactReview": {
+    "reviewedBeforeFullRun": true,
+    "changedPaths": [
+      "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceRoomBindingRepository.kt",
+      "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingPreparationStorageContract.kt",
+      "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingStorageContract.kt"
+    ],
+    "freshRequired": [
+      "features/collaboration/data/",
+      "apps/shared/",
+      "apps/collaboration-proof/"
+    ],
+    "unchangedIndependentModules": [
+      "features/collaboration/domain",
+      "features/collaboration/presentation"
+    ],
+    "basis": "Reviewed both Gradle dependency declarations: neither module depends on collaboration data. Exact source/baseline report hashes and all prior identities remain required; full :check and target tasks still run."
+  },
+  "nextEmptyPage": {
+    "applied": false,
+    "paths": 4,
+    "newSharedMethods": 10,
+    "focused": 57,
+    "full": 17042,
+    "gatesPrepared": true
+  },
+  "phone": 92,
+  "liveChanged": false,
+  "actualNewAppleExecution": false
+}
