@@ -27,7 +27,7 @@ class RecipientChatThreadViewModel(
     private val edit: EditCollaborationSpaceRecipientDraft,
     private val submit: SubmitCollaborationSpaceRecipientComposer,
 ) :
-    MviViewModel<RecipientChatThreadState, RecipientChatThreadEvent, Nothing>(
+    MviViewModel<RecipientChatThreadState, RecipientChatThreadEvent, RecipientChatThreadEffect>(
         RecipientChatThreadState()
     ) {
     private val requests = MutableStateFlow<Long?>(null)
@@ -37,9 +37,14 @@ class RecipientChatThreadViewModel(
     private var progress = emptyList<CollaborationSpaceRecipientMessageProgress>()
     private var editor: RecipientComposerEditingSession? = null
     private var editorGeneration = 0L
+    private var departure: Job? = null
+    private var departureId = 0L
+    private var pendingDeparture: RecipientChatThreadEffect.Back? = null
 
     init {
         on<RecipientChatThreadEvent.Prepared>(::onPrepared)
+        on<RecipientChatThreadEvent.BackRequested>(::onBackRequested)
+        on<RecipientChatThreadEvent.RouteReleased>(::onRouteReleased)
         on<RecipientChatThreadEvent.Entered>(::onEntered)
         on<RecipientChatThreadEvent.Stopped>(::onStopped)
         on<RecipientChatThreadEvent.TextChanged>(::onTextChanged)
@@ -65,8 +70,58 @@ class RecipientChatThreadViewModel(
     }
 
     private fun onStopped(event: RecipientChatThreadEvent.Stopped) {
-        updateState { it.copy(visible = false) }
+        cancelDeparture()
+        updateState { it.copy(visible = false, leaving = false) }
         // A retained route keeps local readers so account/admission changes can redact it.
+    }
+
+    private fun onRouteReleased(event: RecipientChatThreadEvent.RouteReleased) {
+        cancelDeparture()
+        updateState { it.copy(visible = false, leaving = false) }
+    }
+
+    private fun onBackRequested(event: RecipientChatThreadEvent.BackRequested) {
+        if (!state.value.visible || state.value.leaving) return
+        val captured = RecipientChatThreadEffect.Back(++departureId)
+        val generation = editorGeneration
+        val current = editor
+        pendingDeparture = captured
+        updateState { it.copy(leaving = true) }
+        departure =
+            viewModelScope.launch {
+                try {
+                    val flushed = current?.flush() ?: true
+                    ensureActive()
+                    if (
+                        pendingDeparture != captured ||
+                            generation != editorGeneration ||
+                            !state.value.visible
+                    )
+                        return@launch
+                    if (flushed) emitEffect(captured)
+                    else {
+                        pendingDeparture = null
+                        updateState { it.copy(leaving = false) }
+                    }
+                } finally {
+                    if (departureId == captured.request) departure = null
+                }
+            }
+    }
+
+    /** The visible route confirms this exact effect immediately before calling navigation. */
+    fun confirmBack(effect: RecipientChatThreadEffect.Back): Boolean {
+        if (pendingDeparture != effect || !state.value.visible || !state.value.leaving) return false
+        pendingDeparture = null
+        return true
+    }
+
+    /** Cancels the navigation wait/effect without cancelling an ordinary retained editor write. */
+    private fun cancelDeparture() {
+        pendingDeparture = null
+        departure?.cancel()
+        departure = null
+        discardPendingEffects()
     }
 
     private fun onTextChanged(event: RecipientChatThreadEvent.TextChanged) {
@@ -78,7 +133,7 @@ class RecipientChatThreadViewModel(
     }
 
     private fun onRetryRequested(event: RecipientChatThreadEvent.RetryRequested) {
-        if (!state.value.visible) return
+        if (!state.value.visible || state.value.leaving) return
         if (state.value.restriction == null) editor?.retry()
         if (
             requests.value == null ||
@@ -290,6 +345,7 @@ class RecipientChatThreadViewModel(
     }
 
     private fun restrict(failure: Failure) {
+        cancelDeparture()
         requests.value = null
         originals.value = emptyList()
         progress = emptyList()
@@ -303,6 +359,7 @@ class RecipientChatThreadViewModel(
     }
 
     override fun onCleared() {
+        cancelDeparture()
         requests.value = null
         originals.value = emptyList()
         progress = emptyList()

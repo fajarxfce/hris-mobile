@@ -1,5 +1,7 @@
 # Architecture
 
+[Recipient departure](collaboration-recipient-departure.md) flushes route-owned local editing before exact confirmed navigation; domain retains storage and delivery policy.
+
 [Recipient thread consumer](collaboration-recipient-thread.md) keeps one serial editor and a joined read request in presentation; domain retains admission, storage and delivery policy.
 
 [Stable recipient bubble rows](collaboration-recipient-rows.md) keeps recipient visual identity distinct from real canonical action coordinates while reusing the physical-history join.

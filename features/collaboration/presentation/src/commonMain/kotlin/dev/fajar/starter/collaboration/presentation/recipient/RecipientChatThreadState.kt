@@ -8,6 +8,7 @@ import dev.fajar.starter.common.result.Failure
  */
 data class RecipientChatThreadState(
     val visible: Boolean = false,
+    val leaving: Boolean = false,
     val loading: Boolean = true,
     val editor: RecipientComposerEditingState = RecipientComposerEditingState(),
     val source: CollaborationSpaceRecipientProjection? = null,
@@ -23,7 +24,7 @@ data class RecipientChatThreadState(
     val restriction: Failure? = null,
 ) {
     val canCompose
-        get() = visible && editor.ready && restriction == null
+        get() = visible && editor.ready && restriction == null && !leaving
 
     val canSend
         get() =
@@ -37,6 +38,10 @@ data class RecipientChatThreadState(
 }
 
 sealed interface RecipientChatThreadEvent {
+    data object BackRequested : RecipientChatThreadEvent
+
+    data object RouteReleased : RecipientChatThreadEvent
+
     data object Prepared : RecipientChatThreadEvent
 
     data object Entered : RecipientChatThreadEvent
@@ -50,4 +55,8 @@ sealed interface RecipientChatThreadEvent {
     data object SendRequested : RecipientChatThreadEvent
 
     data object RetryRequested : RecipientChatThreadEvent
+}
+
+sealed interface RecipientChatThreadEffect {
+    data class Back(val request: Long) : RecipientChatThreadEffect
 }
