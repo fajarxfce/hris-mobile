@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 04:46 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 04:56 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -20,10 +20,13 @@ Reap full1, audit full source/report identities, then record acceptance. Record 
 attempt in final Git evidence before source commit/push and the corresponding Group evidence.
 The old lifecycle/pending/recovery standalone gates remain superseded and disabled.
 
-Next .work/inbox-repair-observed-signals-2026-11-14 has11 formatted UNAPPLIED draft files
-affecting12 paths including an observer rename. Three new shared cases distinguish latest and
-completed repair demand while preserving one admitted subscription and existing command behavior.
-Review/gate preparation still pending; apply only after the current package is accepted/pushed.
+Next .work/history-inbox-owner-inputs-2026-11-14 has14 reviewed/formatted UNAPPLIED draft files
+affecting15 paths, including one observer rename. Eleven shared additions combine typed repair
+signals with bounded admitted source enumeration; focused47/full17258 and record/commit gates
+are prepared UNRUN. The standalone signals/enumeration workspaces were never applied or tested;
+their old gates are disabled. No17242 acceptance exists. Apply only after current acceptance/push.
+Global queue work has five local UNAPPLIED entity/policy/test drafts with18 unrun shared cases;
+review, codec/repository, admission and owner integration are still missing. See the design doc.
 
 Global owner remains DESIGN ONLY. ReplicaMutation supports at most TWO operations per transaction.
 The earlier index+many-source guard proposal cannot use that API. Review retained page queues

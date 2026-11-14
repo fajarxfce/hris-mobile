@@ -137,3 +137,28 @@ If a larger atomic read set ultimately proves necessary, change it as an explici
 contract with actual desktop/browser and Apple compilation tests, then port the proven foundation
 to Starter. Do not bypass the limit with an opaque helper or silently increase write fan-out.
 No transaction contract, global entity, repository, policy or worker has been changed here.
+
+## First queue entity draft (unapplied, unverified)
+
+A draft now retains latest/completed/pass identity, a bounded page queue and distinct Catalog,
+Sources, Ready and Parked traversal states. attemptedTrigger records the real demand already
+consumed by this attempt: a failed round may consume a coalesced later demand once, but cannot
+restart itself forever merely because latest differs from the original captured trigger.
+Completion retains the original trigger; old raw/pending source intervals cannot be relabeled.
+
+One source Check guards a successful item acknowledgement; failed/deferred outcomes can use an
+index guard and never claim useful progress. Final completion requires a current index guard.
+Destination observation can belong to the global progress repository, which already coordinates
+raw index/source checkpoints for its own atomic write; do not decrypt recent inbox rows solely to
+observe generation. This entity draft has no policy, codec, repository, tests or owner activation.
+
+The local draft now also includes trigger/pass and finite-batch transition policies. They remain
+UNAPPLIED and unverified. A completed source round requires a separate current-index completion;
+failed-only rounds park, and attemptedTrigger permits at most one automatic retry for coalesced
+later demand. No codec, repository, admitted global operations, tests or application integration
+exists yet. Review malformed/replayed outcomes and two-operation storage guards before applying.
+
+Five global drafts now include18 shared policy cases (UNRUN). Trigger coalescing, completed-ID
+reuse, destination replacement, parked recovery, frozen page queues, ordered acknowledgements,
+failed-room fairness, Restart non-progress and one-time consumption of later demand are represented.
+These drafts still need source review, storage/admission implementation and full integration gates.
