@@ -1,173 +1,78 @@
-# Global inbox history owner — design only, not implemented
+# Global history progress — reviewed draft, not activated
 
-Current local draft status:13 formatted UNAPPLIED paths,18 pure policy cases and13 actual-storage
-contract cases (desktop/browser wrappers, Apple compile wrapper), all UNRUN. Entity/queue policies,
-repository contract, encrypted DTO/codec and raw repository implementation exist only in draft/.
-Review, admitted global operations, DI and all validation/activation gates are still missing.
-The repository uses exactly one Check plus one global write, snapshots queue DTOs before its first
-suspension, reads destination metadata without entries, and never emits history/repair demand.
-These are draft claims to verify; they do not describe accepted production behavior.
+Current status: 23 reviewed/formatted UNAPPLIED source paths, 57 new shared cases. Focused59 and
+full17372 gates, recording and commit scripts are prepared but UNRUN. Prerequisite owner inputs
+full17258 is still running. Source changes and application/consumer activation are separate gates.
 
+## Durable state and finite continuation
 
-Prerequisites are source progress, admitted raw handoff, bootstrap demand separation, source
-lifecycle, pending admission and source inspection/Restart. Initial global state in
-history-inbox-progress-2026-11-14/design/global-and-source-state-before-split.kt is insufficient
-for fair resumable rounds. Review schema and transitions before writing production code.
+Retain latest observed trigger, completed pass ID/trigger, and one captured active pass. Trigger
+facts are local history signal, catalog version, completed command-repair demand and destination
+index generation. Physical index revisions do not request another pass. All-null is a real first
+observation; completed unchanged reopen is quiet. Later demand cannot relabel an active interval,
+and later work must not reuse a completed pass ID. Destination replacement requires a fresh pass.
 
-## Retained demand and current destination
+Catalog and source traversals retain up to sixteen canonical IDs before source visits. The next
+cursor advances after each queued item has a durable outcome. Catalog empty pages with a next
+cursor continue; source empty pages with a next cursor are rejected. Opaque cursors are bounded.
+One failed source does not block healthy sources in the captured page or later source rounds.
 
-Use history signal, frozen catalog version, actual completed command-repair demand and destination
-index generation. latestDemand alone can trigger history before command publication completes.
-Do not add two independent subscriptions to the same repair progress: review returning typed
-latest/completed signals from the admitted observer and sharing one owner lifetime. Current
-ObserveCollaborationSpaceInboxRepairDemand deliberately emits only latestDemand; its existing
-command behavior must remain intact. The observer's denial latch/current admission remains required.
+A catalogDeferred flag survives page completion, healthy source progress and process restart.
+Missing preparation or a lost catalog continuation cannot disappear merely because that source
+is absent from the prepared-source enumeration. The pass parks instead of falsely completing.
+Explicit owner recovery or real new demand starts a fresh catalog attempt and clears the flag;
+unchanged observation does not. Required DTO fields reject malformed stored state.
 
-Retain latest trigger, completed trigger and active captured pass. All-null trigger is a real empty
-observation, distinct from never having completed a pass. Bootstrap once; unchanged reopen returns
-state without a write. New demand is coalesced without relabeling an active older captured interval.
-A changed destination generation invalidates active traversal explicitly. Catalog Page.changed and
-version changes require a later finite pass; never infer end from empty items with a continuation.
+Useful progress requires an authenticated before/after source position; an unknown before state
+and a raw Restart alone cannot justify another automatic round. Healthy advancement permits
+another fair round; failed-only rounds park. A newly coalesced trigger may be consumed once without
+rewriting the pass's original captured trigger. Ready cannot coexist with deferred preparation.
 
-Opaque signal IDs have no ordering. Global mutation uses an explicit expected checkpoint and no
-implicit CAS retry: an older captured request must not overwrite a later one after rereading it.
-On contention the owner must reacquire current signals/retained state, not blindly reapply stale
-input. Physical global version is independent of source-history/index versions.
+## Atomic storage and ownership
 
-## Atomic global cursor retention
+Preserve the existing raw TWO-operation limit. A mutation checks one exact source checkpoint and
+writes global progress, or checks destination metadata and writes global progress. Successful
+source acknowledgements use the source guard. Capture, deferred outcomes and final completion use
+the destination guard. Expected global generation/revision is conditional in the same transaction.
+Never lift the limit or claim that an earlier source read alone fences a later global write.
 
-A global repository can use raw ReplicaStore, ContentCipher, credential storage and existing
-history/index/source codecs; no repository-to-repository calls. Use a separate strict schema/key
-prefix that account incoming discovery ignores. Progress writes must not emit the history signal.
+The distinct encrypted owner partition authenticates account, audience, Group and physical
+version; it is not a canonical history source. Metadata-only destination observation does not
+read inbox rows. Missing metadata creates no key. Queue DTOs and admitted input/output snapshots
+are detached before suspension. Raw repository access uses ReplicaStore, cipher and credentials;
+there are no repository-to-repository or use-case-to-use-case calls.
 
-Global mutations should atomically check current index metadata, expected global checkpoint and
-bounded source checkpoints whose preparation/completion justifies advancing the global cursor.
-Per-source success alone cannot justify a global cursor if that source was replaced before the
-global commit. Decode/authenticate the exact source progress with the shared codec, then use raw
-Check mutations in the same transaction. Bound catalog/source pages and guarded sources to16.
-Preserve account/Group scope, absent-vs-present metadata, independent key retention, response loss,
-cancellation and exact competing writes. No global/schema implementation exists yet.
+Admitted read/change/observation preserve denial latching, current account/Group ownership, token
+rotation, cancellation and late results. Failed/uncertain mutation is not retried implicitly.
+No-op mutations still inspect actual expected state and their guard. Opaque trigger identities
+cannot order old requests: after contention the future owner must reacquire current observations.
 
-## Catalog phase and fair source rounds
+## Verification drafted
 
-Catalog discovery prepares bounded source metadata first. Missing immutable bindings are deferred;
-new binding publication already emits history invalidation. They must not block all other rooms.
-A reconstructed global pass may encounter unfinished older source passes: inspect/resume the exact
-old checkpoint, complete both lanes, then prepare the current pass and process its later interval.
-Never repeatedly call preparation with a newer ID against the unchanged unfinished older pass.
+43 domain cases cover state, queues, transition guards, admitted reads/writes and owned metadata
+observation. Fourteen actual-storage contract cases cover reopen, exact two-operation mutation,
+source/global/index races, lost responses, cancellation, keys, malformed ciphertext and ownership.
+Desktop/browser execute the shared cases; the Apple wrapper is a compilation gate only here.
+Two existing DI tests resolve the repository and three added use cases without starting work.
+The new deferred flag also roundtrips through actual storage and reopening.
 
-Retain catalog continuation, source continuation and explicit round outcome. A source needing
-another bounded page must yield to other sources; unresolved references are allowed to remain
-after a captured pending interval completes. One bad room cannot monopolize the account owner.
-A fully scanned round with only failures/no forward progress parks until real demand or explicit
-owner recovery, rather than scheduling itself. A completed finite pass records its captured
-trigger; a later captured trigger remains pending.
+All gates remain UNRUN for this draft. Previous failed hosted Apple evidence and the unrelated
+blocked fixture preparation payload remain unchanged. Do not recreate that blocked payload.
 
-Raw Restart is not monotonic forward progress by itself. Bound restarts, try a fresh bounded read
-within that source's budget, and do not let repeated generation resets continuously self-schedule
-new turns. Distinguish actual page advancement, restart and deferred failure. Preserve the exact
-checkpoint on turn deadline/cancellation; no fabricated completion or reference deletion.
+## Next application integration
 
-## Existing application lifetime
+Integrate bounded history turns into the existing account/Group repair lifetime, preserving
+command service and one typed repair-progress subscription. Keep business selection/continuation
+policy in domain; workers own jobs and route admitted outcomes. Do not call use cases from another
+use case or move orchestration into UI/VMs. Read actual source state before each visit, finish older
+source windows before preparing a later pass, and retain unresolved references and current cursors.
 
-Integrate with the existing CollaborationSpaceInboxRepairWorker/application module and command
-inventory. Current worker processes inputs serially with a30-second turn deadline; adding a second
-unbounded loop would delay command service. Review a finite owner turn/selection policy that
-prioritizes new admitted command input and yields history after bounded useful progress. Keep one
-account/Group lifetime, cancel/join on replacement, and explicitly own every subscription/job.
+Own and cancel/join metadata/history/catalog collectors on account replacement. A second permanent
+per-room observer, polling loop, native client or network acquisition is unnecessary. Yield after
+finite useful work so new commands are serviced. Explicit owner restart is distinct from a
+self-produced progress notification. Test fairness, finite restarts, failed rooms, cancellation,
+current denial, and interrupted recovery before activation. Incoming completion, thread/list/UI
+consumers and SDK8 Apple app activation still need end-to-end evidence.
 
-Observe index generation cheaply under that lifetime. Using observePage only to obtain generation
-would decrypt recent rows after every index mutation; consider a metadata-only repository contract
-instead of a new per-room observer. No polling, network acquisition, UI/VM orchestration, extra
-native runtime or provider credential changes belong in this local owner.
-
-## Required evidence before activation
-
-Exercise unchanged reopen, active-cursor recovery, later demand, commit loss, stale global/source
-CAS, index replacement, catalog empty continuation/change/restart, missing bindings, old source
-passes after global reconstruction, finite repeated source restarts, two-lane fairness, failed room
-alongside healthy rooms, command service under history backlog, denial/account replacement and
-cancellation at each suspension. Test actual atomic storage on desktop/browser/Apple compilation;
-actual new Apple execution remains a separate outstanding gate. Product/thread/list and incoming
-completion integration are not implemented by this design.
-
-## Additional transition constraints before implementation
-
-Retain completed pass ID together with its trigger, not only completed trigger. Reusing that ID
-for later demand would make already-completed per-source checkpoints falsely look current. Begin
-must reject reuse of a completed pass ID; exact replay of an existing active pass may be unchanged.
-This changes the original initial global-state draft and requires explicit schema tests.
-
-Use explicit expected global checkpoints for mutations without implicit CAS retry. Trigger IDs
-are opaque and cannot order stale input; a failed old request must reacquire current signals before
-trying again. A changed destination generation supersedes active traversal; mere index revision
-advancement must not generate new history demand.
-
-Before a catalog/source cursor advances, retain bounded authenticated source checkpoint guards
-in the same raw global transaction. A catalog page with missing bindings can defer those entries
-because binding publication already signals availability. Never advance past a claimed prepared
-source solely on an earlier return value if its checkpoint has since been replaced.
-
-Round bookkeeping must distinguish monotonic handoff progress from Restart/deferred outcomes.
-Source cursor enumeration alone is not evidence of useful progress: otherwise a round containing
-only failed rooms will loop forever. Application orchestration maps specific admitted actions to
-explicit domain visit outcomes; domain policy owns whether another finite round is warranted.
-Raw/pending handoff advances its captured interval; old-complete to current-pass preparation is
-bounded progression; a raw Restart alone does not authorize automatic continuation indefinitely.
-Global storage checks the actual resulting source checkpoints before retaining those outcomes.
-
-A reconstructed global pass must finish each older source interval before starting its later
-interval. Current-source inspection and explicit Restart are included in the applied combined15 package
-in .work/history-inbox-source-admission-2026-11-14; focused verification is still in progress. Admitted source metadata
-enumeration, typed shared repair signals, global storage/policy and owner activation still require
-implementation. Do not collapse these pending obligations into an implemented claim.
-
-## Confirmed raw transaction bound; revise the early batch proposal
-
-ReplicaMutation.kt currently requires mutations.size in1..2. A global write plus index and16
-source guards cannot fit that established contract. Earlier multi-source atomic-guard wording is
-a design requirement to resolve, not an available API or an instruction to lift the limit.
-
-Prefer reviewing a retained bounded page queue: capture up to16 canonical source IDs and its
-opaque next cursor, then acknowledge each prepared/visited source with one source Check plus the
-global progress write. Source inspection is already part of the admitted operations package.
-Only advance beyond the captured page after every queued item has a durable outcome. Missing
-bindings are explicit deferred outcomes; their eventual publication emits history invalidation.
-
-Trigger capture, destination replacement and final pass completion can instead use one index
-Check plus the global write. Intermediate source acknowledgements belong explicitly to their
-captured destination generation; if the index changes between source and global commits, they
-must never count as completion of the new generation. A current index guard at final completion,
-and observed replacement on owner restart, must force reconstruction. Verify these races before
-selecting this design. Round flags retain unfinished/advanced outcomes across the bounded queue;
-failed-only rounds park and restarts alone do not create useful-progress demand.
-
-If a larger atomic read set ultimately proves necessary, change it as an explicit bounded generic
-contract with actual desktop/browser and Apple compilation tests, then port the proven foundation
-to Starter. Do not bypass the limit with an opaque helper or silently increase write fan-out.
-No transaction contract, global entity, repository, policy or worker has been changed here.
-
-## First queue entity draft (unapplied, unverified)
-
-A draft now retains latest/completed/pass identity, a bounded page queue and distinct Catalog,
-Sources, Ready and Parked traversal states. attemptedTrigger records the real demand already
-consumed by this attempt: a failed round may consume a coalesced later demand once, but cannot
-restart itself forever merely because latest differs from the original captured trigger.
-Completion retains the original trigger; old raw/pending source intervals cannot be relabeled.
-
-One source Check guards a successful item acknowledgement; failed/deferred outcomes can use an
-index guard and never claim useful progress. Final completion requires a current index guard.
-Destination observation can belong to the global progress repository, which already coordinates
-raw index/source checkpoints for its own atomic write; do not decrypt recent inbox rows solely to
-observe generation. This entity draft has no policy, codec, repository, tests or owner activation.
-
-The local draft now also includes trigger/pass and finite-batch transition policies. They remain
-UNAPPLIED and unverified. A completed source round requires a separate current-index completion;
-failed-only rounds park, and attemptedTrigger permits at most one automatic retry for coalesced
-later demand. No codec, repository, admitted global operations, tests or application integration
-exists yet. Review malformed/replayed outcomes and two-operation storage guards before applying.
-
-Five global drafts now include18 shared policy cases (UNRUN). Trigger coalescing, completed-ID
-reuse, destination replacement, parked recovery, frozen page queues, ordered acknowledgements,
-failed-room fairness, Restart non-progress and one-time consumption of later demand are represented.
-These drafts still need source review, storage/admission implementation and full integration gates.
+Phone92 and live deployment remain unchanged. GroupOFF; V117–140 undeployed. All54 PRD acceptance
+groups remain open. Continue beyond checkpoints and push every commit, one compiler OR emulator.

@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 05:08 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 05:27 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -8,21 +8,29 @@ mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs
 ## Active history owner input verification
 
 The combined .work/history-inbox-owner-inputs-2026-11-14 package is APPLIED:15 source paths,
-11 shared additions. Apply32562 is reaped. Focused1/session7359 failed at test compilation before
-any tests: three new collection assertions needed explicit AppResult/nullable Pair types. No
-production code changed for the correction. Failed source5511/ee338bdf2832fe689d04a0bde5406a89faf0e4578275fb873178e62f37ab829a
-and result90879106290f5a1bebca60c23160df72e69b4728623fbf3b296d8a614a5874a2 remain recorded.
-Corrected source5511/60a0e25b8db4c76a3e8b07714747c1fedf44cf21ebb34775751747ad864ee2bf;
-focused2/session97204 RUNNING, expected47. Full17258 NOT RUN. Reap/audit focused2 before full.
-All record/commit gates are prepared and include failed-attempt evidence. Former standalone
-signals/enumeration gates remain disabled; no intermediate17242 acceptance exists.
+11 shared additions. Focused2/session97204 REAPED0 and ACCEPTED47; source5511/
+60a0e25b8db4c76a3e8b07714747c1fedf44cf21ebb34775751747ad864ee2bf, result
+29246113b85c9caa76f019f2a18fc21cdfd5f0d595878fce9c0ec51aa7e09c3f. Full1/session23657
+is RUNNING, expected17258. Reap and audit before accepting. Focused1/session7359 failed before
+tests due only to three new test collection type assertions; its source/result and correction
+remain recorded. No production behavior was changed for that correction. Standalone signals and
+enumeration gates remain disabled; there is no intermediate17242 acceptance.
 
-Latest accepted production baseline is Mobilec97d7d4d/full17236, Groupbbb67ab0, both pushed.
-Global owner work has13 formatted UNAPPLIED paths with31 shared test drafts. Entity/queue policies,
-contract, encrypted codec/DTO, raw two-operation repository and storage wrappers exist only in
-.work/history-inbox-global-owner-2026-11-14/draft. Review, admitted global operations, DI, gates and
-worker/consumer integration remain open. Preserve the raw TWO-operation limit and source/index
-races; never treat these drafts as tested. Phone92/live remain unchanged; all54 groups stay open.
+Latest accepted source baseline is Mobilec97d7d4d/full17236 and Groupbbb67ab0, both pushed.
+Global progress now has23 reviewed/formatted UNAPPLIED paths and57 shared cases in
+.work/history-inbox-global-owner-2026-11-14. Focused59/full17372 plus record/commit gates are
+prepared UNRUN. The draft includes encrypted bounded state, exact two-operation source/destination
+guards, admitted read/change/metadata observation and DI. Review caught and closed two draft bugs:
+unknown prior source state falsely counted as progress, and failed catalog preparation could be
+forgotten after healthy source rounds. Retained catalogDeferred now survives storage/reopening.
+These are draft changes, not accepted behavior. Apply only after owner inputs acceptance/push.
+
+Global application worker and incoming/thread/list consumers remain inactive. Keep orchestration
+and continuation policy in domain, preserve command service and one typed repair observation, and
+reacquire signals after global contention. No polling or per-room observers. Full current review
+is in docs/collaboration-history-global-owner-design.md (Mobile) and
+collaboration/mobile-history-global-owner-design.md (Group). Phone92 and live remain unchanged.
+GroupOFF/V117-140 undeployed; actual new Apple execution and all54 PRD acceptance groups stay open.
 
 ## Admitted history source operations locally accepted
 
