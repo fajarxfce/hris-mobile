@@ -482,6 +482,10 @@ class CollaborationBindingsTest {
                     container.koin.get<CollaborationSpaceHistoryRepository>(),
                     container.koin.get<CollaborationSpaceHistorySnapshotRepository>(),
                 )
+                assertSame<Any>(
+                    container.koin.get<CollaborationSpaceHistoryRepository>(),
+                    container.koin.get<CollaborationSpaceHistoryChangesRepository>(),
+                )
                 assertSame(
                     container.koin.get<CollaborationSpaceHistoryTraversalRepository>(),
                     container.koin.get<CollaborationSpaceHistoryTraversalRepository>(),
@@ -716,6 +720,10 @@ class CollaborationBindingsTest {
                 assertSame<Any>(
                     container.koin.get<CollaborationHistoryRepository>(),
                     container.koin.get<CollaborationCompanyHistorySnapshotRepository>(),
+                )
+                assertSame<Any>(
+                    container.koin.get<CollaborationHistoryRepository>(),
+                    container.koin.get<CollaborationCompanyHistoryChangesRepository>(),
                 )
                 assertNotNull(container.koin.get<CollaborationLocalVisibilityRepository>())
                 assertNotNull(container.koin.get<ObserveCollaborationHiddenMessages>())

@@ -1,0 +1,66 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationHistoryChangePageMapper.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationHistoryCoordinates.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationHistoryRepository.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceHistoryRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationHistoryChangesStorageContract.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationHistoryChangesStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationHistoryChangesStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationHistoryChangesStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationHistoryChanges.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationCompanyHistoryChangesRepository.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceHistoryChangesRepository.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 55,
+    "elapsedSeconds": 354.722,
+    "sourceFiles": 5458,
+    "sourceManifestSha256": "81df21f5b1beca49abb482462817cc56549b3d7bb60a180948d4278180d1c534",
+    "resultSha256": "3b6d15d2c1e1acda0b4bb38cb9e039a3b3e911fc043d9178b100c5c3526774d3",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationHistoryStorageTest": 22,
+      "CollaborationSpaceHistoryStorageTest": 16,
+      "CollaborationHistoryChangesStorageTest": 15
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T00:04:01.717556+00:00",
+    "elapsedSeconds": 1038.161,
+    "sourceFiles": 5458,
+    "freshCounts": {
+      "tests": 14717,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153500083,
+      "sha256": "5e7d03b5b090343b86f5bbbcc0cdd1e625d37e85fc0afa66e3252788044114e1"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 16898,
+    "newCases": 30,
+    "freshTests": 14717,
+    "reusedUnaffectedTests": 2181,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "81df21f5b1beca49abb482462817cc56549b3d7bb60a180948d4278180d1c534",
+    "reportManifestSha256": "b5d44e4f6297bc76fd251ebbc80492fcd004dba872ec7455ead761e89de1f12a",
+    "nativeClaim": "Bounded authenticated Group/Company history change pages;15 shared storage methods and same-instance graph checks. Durable publication/backfill owner integration remains open."
+  },
+  "newSharedStorageMethods": 15,
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "ownerActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false
+}

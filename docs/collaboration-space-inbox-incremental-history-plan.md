@@ -45,7 +45,7 @@ blocked payload. Do not change inputs of an active verification process.
 
 Current raw storage acceptance:21 paths, focused176, browser171 and full16868. The initial full run failed4 browser cases; concrete cursor JSON and a complete browser9 predecessor fixture corrected them. All original cases and failed identities remain. Focused non-browser inputs are byte-identical across the two browser-only fixes. See replica-change-pages.md and its exact-source measurement. Independent Starter1049 is accepted and pushed at 092fbe6f70475efe950c697d3b7c6ec46b1fb267; its21 generic files are byte-identical. The next HRIS increment may proceed.
 
-The authenticated history reader has12 reviewed/formatted unapplied drafts and15 shared storage methods. Its focused55 is accepted and full16898 is running52064. Admitted local access, durable progress, existing incoming/repair integration and UI activation remain pending.
+The authenticated history reader is locally accepted:12 paths,15 shared storage methods and focused55/full16898. See the current history-change capability and measurement; do not rerun its historical gates. Admitted local access, durable progress, existing incoming/repair integration and UI activation remain pending.
 
 ## Existing owner follow-up — not implemented
 
@@ -121,8 +121,33 @@ the existing22 Company and16 Group history methods now intercept mutate, preserv
 method and failure scenario at the actual write boundary. App graph resolution is also covered.
 Other history/traversal/inbox contracts remain in the full gate; no old checks are removed.
 
-Twelve formatted reviewed source/test drafts; focused68/full16924 gates prepared but not run.
+Thirteen reviewed source/test drafts; focused84/full16924 gates prepared but not run.
 The original raw history reader's active source remains unchanged. Captured source enumeration,
 durable progress and unresolved handoff plus fair bounded continuation under the existing Group
 repair owner are still required before the list/product graph can use this signal. Old history
 and first binding also require startup/catalog demand; a future signal does not backfill itself.
+
+Owner integration facts reviewed after preparing these drafts:
+- ReplicaStore.mutate accepts at most two partitions. Existing history publication already uses
+  a source Check and one inbox mutation. Do not casually add a third progress write to that call.
+- CollaborationSpaceInboxPublication and CollaborationSpaceInboxCodec currently encode entry,
+  draft, activities and Group-original repair only. No history cursor/unresolved record exists.
+- PublishCollaborationSpaceInboxHistory currently accepts canonical conversation plus references,
+  resolves the actual source itself, and returns only published/unresolved event IDs. A future
+  cursor-completion path must also bind publication proof to the exact supplied source owner;
+  equal event IDs in a replacement/Company source cannot complete another source's raw window.
+- A separate progress commit after confirmed index publication can safely replay an uncertain gap
+  only if cursor/unresolved handoff commit together and completion records the destination index
+  generation. Replaced index generation must cause source reconstruction even when history and
+  source signal did not change. Merely remembering the last source revision can lose projections.
+- Auxiliary-only source pages still need finite progress despite zero event references. The
+  current publisher accepts1..16 IDs, so it cannot be called with an invented event for that case.
+- Global pass completion must retain its captured signal/catalog version; per-source windows must
+  retain a finite upper bound and yield between rooms. Operational failure is distinct from more
+  successfully committed local work. Do not turn a page budget into either a permanent stall or
+  an immediate retry of the same failed cursor.
+These are constraints for the next implementation, not implemented progress storage or acceptance.
+
+The existing index-publication/reopen test also verifies that projecting a source into the inbox
+does not renew its source signal. This guards against an observer feeding its own writes back
+into an endless repair loop. All existing index-publication method identities remain.

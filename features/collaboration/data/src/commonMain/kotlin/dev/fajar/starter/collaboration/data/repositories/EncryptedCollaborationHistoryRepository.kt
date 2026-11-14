@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.data.inbox.CollaborationSpaceInboxCodec
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationCompanyHistoryChangesRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationCompanyHistorySnapshotRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationEditEvidenceRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationEditTargetRepository
@@ -29,6 +30,7 @@ class EncryptedCollaborationHistoryRepository(
     @Named("collaboration-history-content-key") private val credentials: AtomicCredentialStore,
 ) :
     CollaborationHistoryRepository,
+    CollaborationCompanyHistoryChangesRepository,
     CollaborationCompanyHistorySnapshotRepository,
     CollaborationMessageEditRepository,
     CollaborationEditEvidenceRepository,
@@ -36,6 +38,36 @@ class EncryptedCollaborationHistoryRepository(
     CollaborationLocalVisibilityRepository,
     CollaborationQuoteRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
+
+    override suspend fun changes(
+        source: CollaborationSpaceHistoryLocation.Original,
+        cursor: CollaborationHistoryChangeCursor?,
+        limit: Int,
+    ): AppResult<CollaborationHistoryChanges> =
+        withContext(Dispatchers.Default) {
+            safeStorageCall {
+                require(limit in 1..16)
+                val coordinates =
+                    CollaborationHistoryCoordinates.Company(source.access, source.conversationId)
+                val mapper = CollaborationHistoryChangePageMapper(coordinates, source.roomId)
+                when (
+                    val raw =
+                        replicas.changedDocuments(
+                            coordinates.scope,
+                            coordinates.partition,
+                            mapper.cursor(cursor),
+                            limit,
+                        )
+                ) {
+                    ReplicaChangePage.Absent -> CollaborationHistoryChanges.Absent
+                    ReplicaChangePage.Restart -> CollaborationHistoryChanges.Restart
+                    is ReplicaChangePage.Items ->
+                        withKey(source.access, source.conversationId, source.roomId) { codec ->
+                            mapper.page(raw, limit, codec)
+                        }
+                }
+            }
+        }
 
     override suspend fun snapshot(
         source: CollaborationSpaceHistoryLocation.Original,

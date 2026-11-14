@@ -1,35 +1,40 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 00:05 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 00:21 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active authenticated history reader verification
+## Authenticated history change pages locally accepted
 
-Twelve reader source/test paths are APPLIED in Mobile .work/history-local-change-enumeration-2026-11-13.
-Focused55 is accepted (session82043 REAPED0):15 new actual-storage methods,38 retained Company/Group
-methods and2 assembled graph tests; Apple source/test compilation completed. Source5458/
-81df21f5b1beca49abb482462817cc56549b3d7bb60a180948d4278180d1c534;
-result3b6d15d2c1e1acda0b4bb38cb9e039a3b3e911fc043d9178b100c5c3526774d3.
-Full16898 is RUNNING session52064 in full-1. Do not change its source inputs. Reap, audit, then
-record/commit/push this increment; record-acceptance.py and commit.py are prepared and unused.
-Starter092fbe6f is independently accepted1049 and pushed/linked; do not rerun its completed gate.
+Mobile .work/history-local-change-enumeration-2026-11-13 is accepted:12 paths,15 shared storage
+methods. Focused55/full16898 (14717 fresh /2181 unchanged)
+retain all16868 prior identities plus30 executions. Source5458/
+81df21f5b1beca49abb482462817cc56549b3d7bb60a180948d4278180d1c534; reportsb5d44e4f6297bc76fd251ebbc80492fcd004dba872ec7455ead761e89de1f12a.
+Existing Group and actual Company repositories map one bounded source page, authenticate all
+non-null rows and preserve stable cursor identity through login renewal. Null auxiliary revision
+tombstones receive structural validation only. Hidden/redacted originals and edit targets remain
+discoverable; empty-reference pages can still continue. No hidden acquisition loop or new observer.
+Same-instance DI checks pass. Actual new Apple execution and owner/product activation remain open.
 
-Next .work/history-local-change-signal-2026-11-13 has12 formatted UNAPPLIED drafts and13 new shared
-storage method drafts. Existing Group/Company writes atomically retain one account-owned signal
-with source facts; exact replay does not signal. The repository observes the published checkpoint,
-not polling or per-room observers. The marker contains no message/account payload and grants no
-admission/completion authority. Seven old fault boundaries now exercise mutate while all38 old
-methods remain. Focused68/full16924 scripts are prepared, NOT RUN; record/commit scripts pending.
-Read its review.md and the Git incremental history plan before applying after reader acceptance.
+Next apply .work/history-local-change-signal-2026-11-13 after committing/pushing this reader.
+It has13 reviewed/formatted UNAPPLIED paths,13 new actual-storage method drafts and all38 old
+writer methods retained. Focused84/full16924 and record/commit gates are prepared, none run.
+The signal is atomically retained with effective Group/Company source changes; its owned published
+metadata observer has no transport, key acquisition or timer. Exact replay creates no new demand.
+Then implement admitted finite enumeration and durable source progress under the existing incoming/
+repair owner. Read .work/space-inbox-history-admission-2026-11-13/owner-integration-review.md.
+Complete raw intervals only after checked index publication or durable unresolved handoff, using
+window.throughRevision rather than the newer current source revision. Recheck account/Group denial
+after suspension. Already-retained incoming references must reach the index before traversal
+completion; older Company history may predate canonical binding. Do not add another polling queue
+or permanent observer per room. Large finite backfills need owned continuation after a turn budget,
+without restarting the whole source on every new message. Thread/list/graph/UI evidence remains.
 
-The existing repair owner still needs admitted catalog/history reads, durable finite source progress,
-unresolved handoff and fair continuation across turn budgets. Company content can predate binding;
-already-materialized incoming work needs proven durable index handoff before completion. No product
-UI, phone or live change here. Phone92 installed; live GroupOFF; all54 PRD groups remain OPEN.
-Preserve the failed Apple control and separate blocked fixture gate payload below. Continue beyond
-checkpoints, one local compiler OR emulator, and push every commit. No subagents.
+The generic raw change port is accepted independently in Starter1049; no new generic port applies
+to these HRIS contracts. Keep the pinned Inspector and all failed/accepted artifacts. Apple
+control43517312645 remains failed overall; preserve its fixture/filter limitation below. Phone92
+remains installed, live GroupOFF. All54 PRD groups remain open. Continue and push every commit.
 
 ## Incremental local replica pages locally accepted
 

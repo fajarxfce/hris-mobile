@@ -50,6 +50,21 @@ internal sealed class CollaborationHistoryCoordinates(
             conversationId,
         )
 
+    fun changeOwner(roomId: String): CollaborationHistoryChangeOwner {
+        validateHistoryRoom(roomId)
+        return CollaborationHistoryChangeOwner(
+            audience,
+            accountId,
+            when (this) {
+                is Company -> CollaborationHistoryChangeOwnerKind.COMPANY
+                is Space -> CollaborationHistoryChangeOwnerKind.SPACE
+            },
+            ownerId,
+            conversationId,
+            roomId,
+        )
+    }
+
     fun indexFrame(roomId: String) =
         listOf("$namespace-index-v1", audience, accountId, ownerId, conversationId, roomId)
 
