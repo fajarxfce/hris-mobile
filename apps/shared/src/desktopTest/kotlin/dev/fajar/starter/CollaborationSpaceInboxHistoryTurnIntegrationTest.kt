@@ -1,5 +1,6 @@
 package dev.fajar.starter
 
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationInboxOwner
 import dev.fajar.starter.app.work.CollaborationSpaceInboxHistoryTurnWorker
 import dev.fajar.starter.app.work.CollaborationSpaceInboxRepairWorker
 import dev.fajar.starter.collaboration.domain.entities.*
@@ -7,14 +8,84 @@ import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.fixtures.CollaborationWorkerFixture
+import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import java.util.UUID
 import kotlin.test.*
 import kotlin.time.Instant
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
 /** Actual application DI, admitted operations, independent keys and SQLite; no native transport. */
 class CollaborationSpaceInboxHistoryTurnIntegrationTest {
+    @Test
+    fun applicationInboxFactoryFindsItsLocalRootAndCompletesWithoutNativeAcquisition() =
+        runBlocking {
+            val f = HistoryTurnStorageFixture()
+            var running: Job? = null
+            try {
+                f.initialize()
+                running = launch { f.base.koin.get<ApplicationCollaborationInboxOwner>().collect() }
+                val completed = f.awaitOwnerCompletion()
+                assertTrue(f.source().progress.historyComplete)
+                assertTrue(assertNotNull(f.source().progress.pendingWindow).complete)
+                running.cancelAndJoin()
+                running = null
+                f.base.reopen()
+                assertEquals(completed, f.global())
+                val located =
+                    withTimeout(5_000) {
+                        f.base.koin.get<ObserveLocalCollaborationSpace>()().first {
+                            it is AppResult.Success && it.value != null
+                        }
+                    }
+                assertEquals(AppResult.Success(f.access), located)
+                assertEquals(0, f.base.sdk.childOpens)
+                assertEquals(0, f.base.sdk.deliveries)
+            } finally {
+                running?.cancelAndJoin()
+                f.base.close()
+            }
+        }
+
+    @Test
+    fun actualSessionClearJoinsLocalRepairAndRestoredIdentityGetsOneNewOwner() = runBlocking {
+        val f = HistoryTurnStorageFixture()
+        var running: Job? = null
+        try {
+            f.initialize()
+            val started = Channel<CollaborationSpaceLocalAccess>(Channel.UNLIMITED)
+            val stopped = Channel<CollaborationSpaceLocalAccess>(Channel.UNLIMITED)
+            val owner =
+                ApplicationCollaborationInboxOwner(
+                    observe = { f.base.koin.get<ObserveLocalCollaborationSpace>()() },
+                    repair = { local ->
+                        f.base.koin.get<CollaborationSpaceInboxRepairWorker>()(local)
+                            .onStart { started.send(local) }
+                            .onCompletion { stopped.trySend(local).getOrThrow() }
+                    },
+                )
+            running = launch { owner.collect() }
+            assertEquals(f.access, withTimeout(5_000) { started.receive() })
+            f.awaitOwnerCompletion()
+            val sessions = f.base.koin.get<SessionRepository>()
+            assertEquals(AppResult.Success(true), sessions.clear(f.access.sessionId))
+            assertEquals(f.access, withTimeout(5_000) { stopped.receive() })
+            assertTrue(started.tryReceive().isFailure)
+            assertEquals(AppResult.Success(true), sessions.compareAndSet(null, f.base.session))
+            assertEquals(f.access, withTimeout(5_000) { started.receive() })
+            running.cancelAndJoin()
+            running = null
+            assertEquals(f.access, withTimeout(5_000) { stopped.receive() })
+            assertTrue(started.tryReceive().isFailure)
+            assertEquals(0, f.base.sdk.childOpens)
+            assertEquals(0, f.base.sdk.deliveries)
+        } finally {
+            running?.cancelAndJoin()
+            f.base.close()
+        }
+    }
+
     @Test
     fun collectedOwnerCompletesBothLocalLanesAndAnUnchangedReopenRetainsTheSamePass() =
         runBlocking {
@@ -330,6 +401,17 @@ private class HistoryTurnStorageFixture {
                 }
             }
             fail("The finite history pass did not terminate")
+        }
+
+    suspend fun awaitOwnerCompletion(): CollaborationSpaceInboxHistoryCheckpoint =
+        withTimeout(10_000) {
+            var retained: CollaborationSpaceInboxHistoryCheckpoint? = null
+            while (retained?.progress?.completed == null || retained.progress.pass != null) {
+                delay(10)
+                retained =
+                    success(base.koin.get<ReadCollaborationSpaceInboxHistoryProgress>()(access))
+            }
+            requireNotNull(retained)
         }
 
     suspend fun global() =

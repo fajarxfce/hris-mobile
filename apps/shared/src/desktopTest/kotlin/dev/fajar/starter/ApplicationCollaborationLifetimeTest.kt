@@ -27,6 +27,79 @@ import kotlinx.coroutines.test.*
 
 class ApplicationCollaborationLifetimeTest {
     @Test
+    fun localInboxStartsOnceAndOutlivesNativeCompanySelection() = runBlocking {
+        withFixture { f ->
+            var starts = 0
+            var active = 0
+            f.localInbox = {
+                starts++
+                active++
+                try {
+                    awaitCancellation()
+                } finally {
+                    active--
+                }
+            }
+            f.lifetime.start()
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            assertEquals(1, starts)
+            assertEquals(1, active)
+            f.workspace.value = AppResult.Success(null)
+            f.scheduler.runCurrent()
+            assertEquals(1, starts)
+            assertEquals(1, active)
+            f.lifetime.close()
+            f.scheduler.runCurrent()
+            assertEquals(0, active)
+        }
+    }
+
+    @Test
+    fun applicationCloseJoinsTheLocalInboxCleanup() = runBlocking {
+        withFixture { f ->
+            val release = f.gate()
+            var stopped = false
+            f.localInbox = {
+                try {
+                    awaitCancellation()
+                } finally {
+                    withContext(NonCancellable) { release.await() }
+                    stopped = true
+                }
+            }
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            val closing = async { f.lifetime.closeAndJoin() }
+            yield()
+            f.scheduler.runCurrent()
+            assertFalse(closing.isCompleted)
+            assertFalse(stopped)
+            release.complete(Unit)
+            f.scheduler.runCurrent()
+            withTimeout(5_000) { closing.await() }
+            assertTrue(stopped)
+        }
+    }
+
+    @Test
+    fun aLocalInboxExceptionDoesNotStopNativeOwnershipOrCreateAStartLoop() = runBlocking {
+        withFixture { f ->
+            var starts = 0
+            f.localInbox = {
+                starts++
+                error("Fixture inbox observation stopped")
+            }
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            assertFalse(f.lifetime.state.value is ApplicationCollaborationState.Stopped)
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            assertEquals(1, starts)
+        }
+    }
+
+    @Test
     fun groupReadinessSubscribesBeforeActivationAndClosesWithTheApplication() = runBlocking {
         withFixture { f ->
             var starts = 0
@@ -974,6 +1047,7 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, val selected:
     var readiness: () -> Flow<AppResult<Boolean>> = { emptyFlow() }
     var spaceReadiness: () -> Flow<AppResult<Boolean>> = { emptyFlow() }
     var incomingSources: suspend (StateFlow<ApplicationCollaborationState>) -> Unit = {}
+    var localInbox: suspend () -> Unit = {}
     var spaceRecoveryRequests = 0
     var onSpaceRecovery: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) }
     var maintainSession:
@@ -1023,6 +1097,7 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, val selected:
             observeReadiness = { readiness() },
             observeSpaceReadiness = { spaceReadiness() },
             collectSpaceIncoming = { incomingSources(it) },
+            collectLocalInbox = { localInbox() },
             requestSpaceRecovery = {
                 spaceRecoveryRequests++
                 onSpaceRecovery()

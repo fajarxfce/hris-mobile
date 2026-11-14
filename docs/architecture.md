@@ -1,5 +1,7 @@
 # Architecture
 
+[Local inbox product ownership](collaboration-inbox-product-owner.md) ties admitted local repair to application start and joined account replacement.
+
 [Shared inbox repair lifetime](collaboration-inbox-repair-lifetime.md) services commands between bounded history turns under one collected owner.
 
 [Finite history turns](collaboration-history-owner-turn.md) executes domain-selected bounded local work through admitted operations.

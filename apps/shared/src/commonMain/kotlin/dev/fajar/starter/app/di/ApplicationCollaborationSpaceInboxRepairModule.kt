@@ -1,5 +1,6 @@
 package dev.fajar.starter.app.di
 
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationInboxOwner
 import dev.fajar.starter.app.work.CollaborationSpaceInboxHistoryTurnWorker
 import dev.fajar.starter.app.work.CollaborationSpaceInboxRepairWorker
 import dev.fajar.starter.collaboration.domain.usecases.*
@@ -9,6 +10,14 @@ import org.koin.dsl.module
  * Local account/Group ownership only. Registering this factory starts no collector or transport.
  */
 internal fun applicationCollaborationSpaceInboxRepairModule() = module {
+    single {
+        val owner = inject<ObserveLocalCollaborationSpace>()
+        val repair = inject<CollaborationSpaceInboxRepairWorker>()
+        ApplicationCollaborationInboxOwner(
+            observe = { owner.value() },
+            repair = { repair.value(it) },
+        )
+    }
     factory {
         val progress = inject<ReadCollaborationSpaceInboxHistoryProgress>()
         val change = inject<ChangeCollaborationSpaceInboxHistoryProgress>()

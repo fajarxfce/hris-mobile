@@ -27,3 +27,16 @@ fun localCollaborationSpaceAccountAccess(
     )
         collaborationRecoveryFailure("client.session_changed", FailureKind.Unauthorized)
     else AppResult.Success(expected)
+
+/** Resolve the currently owned local account without native/platform or token-age admission. */
+fun currentCollaborationSpaceAccountAccess(
+    session: Session?,
+    audience: String,
+): AppResult<CollaborationSpaceAccountAccess?> {
+    if (session == null) return AppResult.Success(null)
+    return localCollaborationSpaceAccountAccess(
+        CollaborationSpaceAccountAccess(session.id, session.binding.audience, session.user.id),
+        session,
+        audience,
+    )
+}

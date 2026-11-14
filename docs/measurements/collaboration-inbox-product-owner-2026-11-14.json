@@ -1,0 +1,72 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/bootstrap/ApplicationCollaborationInboxOwner.kt",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/bootstrap/ApplicationCollaborationLifetime.kt",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationCollaborationModule.kt",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationCollaborationSpaceInboxRepairModule.kt",
+    "apps/shared/src/commonTest/kotlin/dev/fajar/starter/ApplicationCollaborationInboxOwnerTest.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/ApplicationCollaborationLifetimeTest.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxHistoryTurnIntegrationTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceAccountOwnership.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveLocalCollaborationSpace.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/LocalSpaceOwnerFixture.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveLocalCollaborationSpaceTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 84,
+    "elapsedSeconds": 382.131,
+    "sourceFiles": 5554,
+    "sourceManifestSha256": "515dd7afe8c45a8a3a416e693950cd66f1c74dcee895595ce501e6c42107ee8e",
+    "resultSha256": "19e596726645f0b9a572ed3bdda9add68e803c4ce25a56305635c8898a6b4e6f",
+    "classes": {
+      "ApplicationCollaborationLifetimeTest": 30,
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceInboxHistoryTurnIntegrationTest": 6,
+      "CollaborationSpaceInboxRepairIntegrationTest": 3,
+      "CollaborationSpaceInboxRepairLifetimeTest": 14,
+      "CollaborationSpaceInboxRepairWorkerTest": 13,
+      "ApplicationCollaborationInboxOwnerTest": 6,
+      "ObserveLocalCollaborationSpaceTest": 10
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T07:20:06.997572+00:00",
+    "elapsedSeconds": 1030.682,
+    "sourceFiles": 5554,
+    "freshCounts": {
+      "tests": 15362,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153975782,
+      "sha256": "ff616dbccfebf305a5fe20fc17d9cc29e2d001fe365786612939cb64765486b7"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 17543,
+    "newCases": 37,
+    "freshTests": 15362,
+    "reusedUnaffectedTests": 2181,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "515dd7afe8c45a8a3a416e693950cd66f1c74dcee895595ce501e6c42107ee8e",
+    "reportManifestSha256": "0d40fe928e01a0e2eec12599746321d635213e82b721c1e8d683198c722e48f0",
+    "nativeClaim": "Sixteen shared local product owner cases, three application lifecycle cases and two actual SQLite owner cases; Group routes and live rollout remain inactive."
+  },
+  "newSharedMethods": 16,
+  "newDesktopCases": 5,
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "localProductOwnerActivated": true,
+  "groupRoutesActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false
+}

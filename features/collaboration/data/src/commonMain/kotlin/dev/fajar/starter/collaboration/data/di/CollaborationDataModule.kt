@@ -4238,4 +4238,12 @@ class CollaborationDataModule {
         sessions: SessionRepository,
         server: IdentityServer,
     ) = RestartCollaborationSpaceInboxHistorySource(progress, inbox, directory, sessions, server)
+
+    @Factory
+    fun observeLocalSpace(
+        roots: CollaborationSpaceRootRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ObserveLocalCollaborationSpace(roots, directory, sessions, server)
 }

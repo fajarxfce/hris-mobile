@@ -1,43 +1,40 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 07:32 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 07:37 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active local inbox product ownership verification
+## Local inbox product owner locally accepted
 
-Shared lifetime accepted/pushed: Mobile81ea4d725b3e95edbf1408109146491e521f0d46 /
-Group2405f474f9403d6ddee033db16c9f83b8e4f1c74, focused59/full17506.
-Product owner is APPLIED on12 paths in .work/history-inbox-product-owner-2026-11-14.
-Focused1/session79322 is reaped0 and accepted84,382.131s, source5554/
-515dd7afe8c45a8a3a416e693950cd66f1c74dcee895595ce501e6c42107ee8e;
-result19e596726645f0b9a572ed3bdda9add68e803c4ce25a56305635c8898a6b4e6f.
-Full17543 is RUNNING28470/full-1. Reap/verify before changing captured source. Existing
-application/SQLite tests and new16 shared+5 desktop additions all passed focused verification.
-The process owns local repair independently of native readiness and selected HR company.
+Mobile .work/history-inbox-product-owner-2026-11-14 is accepted:12 source paths,16 shared additions
+and5 desktop additions. Focused84/full17543 (15362 fresh /2181
+unchanged) preserve all17506 prior identities plus37 executions. Source5554/
+515dd7afe8c45a8a3a416e693950cd66f1c74dcee895595ce501e6c42107ee8e; reports0d40fe928e01a0e2eec12599746321d635213e82b721c1e8d683198c722e48f0. Application start now collects one
+admitted local account/root owner independently of native readiness or HR company selection.
+Replacement/withdrawal cancels and joins the old repair; current admission/root/session checks
+reject stale positive results. Equal owners do not restart failed work. Application closeAndJoin
+owns all cleanup. Actual SQLite factory, session clear/restore and reopen cases are included.
 
-Next .work/history-inbox-product-page-2026-11-14 has7 reviewed/formatted UNAPPLIED paths,
-17 shared+1 actual SQLite addition. Focus42/full17578 and record/commit gates are prepared UNRUN.
-It admits one bounded recency page, preserves pending/draft facts, detaches lists before suspension,
-and exposes terminal/Restart without automatic pagination. Apply after owner17543 is accepted/pushed.
-Then .work/history-inbox-labels-2026-11-14 has8 reviewed/formatted UNAPPLIED paths,18 shared+1 actual
-SQLite addition, focus45/full17615 and record/commit gates prepared UNRUN. It uses exact visible-ID
-metadata/contact readers, bounded50, per-collector immutable-pair caching and joined cancellation.
-Partial labels omit unresolved rows; explicit absence/removal is different. Actual50-contact local
-initial/reopen duration samples are drafted, NOT run or measured yet. Apply after page17578.
+Next apply .work/history-inbox-product-page-2026-11-14 only after this source/evidence is
+committed/pushed:7 reviewed/formatted drafts,17 shared+1 actual SQLite addition, focused42/full17578
+and record/commit gates prepared UNRUN. Then .work/history-inbox-labels-2026-11-14 has8 reviewed
+UNAPPLIED drafts,18 shared+1 actual SQLite addition, focused45/full17615 and all gates prepared
+UNRUN. Label timing samples are drafted only. .work/history-inbox-retained-list-2026-11-14 records
+read-only Paging3.5.3 cross-platform/source-contract investigation and existing reverse query
+support. No dependency/UI code was added. Design/component skills were read; around-anchor refresh
+and retained scrolling still need implementation and measured UI evidence.
 
-UI investigation .work/history-inbox-retained-list-2026-11-14 has NO code/dependency change.
-Google Maven metadata confirms Paging common/compose3.5.3 supports Android/iOS/JVM/JS/WasmJS.
-Do not activate it without an anchored refresh contract: current inbox cursors fence revisions;
-blindly retrying them or refreshing to the first page can loop/jump. Existing raw ReplicaQuery
-already supports indexed reverse before and forward after with1..4 queries/400 rows. No new raw
-reverse API is needed. Investigate bounded current-conversation anchor windows and retain old UI
-while refreshing. ui-ux-pro-max/compose-component-design and references were read; existing
-HomeChatPage tabs/FAB and ChatPersonRow slots can be reused. No UI/emulator performance claim.
+Next complete the retained Group inbox/list product consumer and incoming completion before
+activating Group routes/rollout. Review the current PRD acceptance ledger and existing local index,
+thread navigation and SDK8 incoming adapters. Preserve pending/draft previews, stable timestamps,
+local-first first render, retained end-of-history and explicit account admission. Product UI needs
+measured emulator evidence and the applicable design/testing skills. SDK8 Apple app consumer and
+actual new Apple execution remain outstanding; do not relabel the failed historical hosted run.
 
-Phone92/live unchanged; GroupOFF/V117-140 undeployed. No Starter port/new Apple execution/phone
-activity. All54 PRD acceptance groups remain OPEN. Continue beyond checkpoints; push every commit.
+Phone92/live unchanged; GroupOFF/V117-140 undeployed. Starter092fbe6f remains accepted with no port.
+All54 PRD acceptance groups remain open. Continue beyond checkpoints, push each commit, one local
+compiler OR emulator, no agents. Device availability does not block authorized local work.
 
 ## Shared command/history lifetime locally accepted
 

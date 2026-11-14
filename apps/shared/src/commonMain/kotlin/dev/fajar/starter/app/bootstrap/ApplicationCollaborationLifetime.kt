@@ -34,6 +34,7 @@ class ApplicationCollaborationLifetime(
     private val requestSpaceRecovery: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) },
     private val collectSpaceIncoming: suspend (StateFlow<ApplicationCollaborationState>) -> Unit =
         {},
+    private val collectLocalInbox: suspend () -> Unit = {},
 ) : AutoCloseable {
     private val lifetime = SupervisorJob()
     private val scope = CoroutineScope(lifetime + dispatcher)
@@ -62,6 +63,25 @@ class ApplicationCollaborationLifetime(
                 // Session acquisition retains its own durable refresh; no host retry timer.
             }
         }
+
+    /** Local account facts remain owned on every platform independently of native readiness. */
+    private val localInboxSubscription = lazy {
+        scope.launch(start = CoroutineStart.UNDISPATCHED) {
+            try {
+                collectLocalInbox()
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                Diagnostics.record(
+                    Diagnostic(
+                        DiagnosticArea.Application,
+                        DiagnosticKind.OperationFailed,
+                        "ChatInboxObservationStopped",
+                    )
+                )
+            }
+        }
+    }
 
     /** Installed incoming sources stay observed while this process owns the native runtime. */
     private val incomingSourcesSubscription = lazy {
@@ -116,6 +136,7 @@ class ApplicationCollaborationLifetime(
 
     fun start() {
         if (!started.compareAndSet(false, true)) return
+        localInboxSubscription.value
         sessionMaintenance.start()
         incomingSourcesSubscription.value
         spaceReadinessSubscription.value
