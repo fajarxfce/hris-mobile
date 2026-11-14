@@ -1,0 +1,81 @@
+{
+  "accepted": true,
+  "validatedTests": 17803,
+  "newCases": 3,
+  "freshTests": 1216,
+  "reusedUnchangedTests": 16587,
+  "priorCaseIdsPreserved": true,
+  "sourceManifestSha256": "65cdf0d29c9d533ae3a786655b47154fe1536e66abd1691165405b6581757412",
+  "reportManifestSha256": "a67877a6a71a1a143054abc8f14648d8dcb1b822175994224526454c31078c4b",
+  "full": {
+    "startedAt": "2026-11-14T13:38:56.718889+00:00",
+    "elapsedSeconds": 383.68,
+    "exitCode": 0,
+    "sourceFiles": 5607,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true
+  },
+  "productActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "baseline": "8d694f7303a5e7a410abe7aa7b950f798a4dfca3",
+  "sourcePaths": [
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/navigation/ScopedNavigationState.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/IndependentNavigationStacksTest.kt"
+  ],
+  "focused": {
+    "tests": 8,
+    "session": 14896,
+    "reaped": true,
+    "directory": "focused4"
+  },
+  "fullSession": 3969,
+  "failedAttempts": [
+    {
+      "directory": "focused1",
+      "session": 50009,
+      "reaped": true,
+      "tests": 99,
+      "passed": 98,
+      "failed": 1,
+      "reason": "99 cases:98 passed; fresh-window fixture retained route but lost child counter after old owner cleanup."
+    },
+    {
+      "directory": "focused2",
+      "session": 38830,
+      "reaped": true,
+      "tests": 8,
+      "passed": 7,
+      "failed": 1,
+      "reason": "8 cases:7 passed; semantics showed group detail0. Exact upstream saveAll returns its mutable backing map and entry onCleared removes state after disposal; fixture must capture an independent OS-style value snapshot."
+    },
+    {
+      "directory": "focused3",
+      "session": 30212,
+      "reaped": true,
+      "tests": 8,
+      "passed": 6,
+      "failed": 2,
+      "reason": "Independent snapshot deliberately rejected an unhandled fixture value: MutableIntState. Copy its integer value into a new MutableIntState as Android parceling does."
+    }
+  ],
+  "fixtureInvestigation": {
+    "productionChangedForFailure": false,
+    "assertionsWeakened": false,
+    "reason": "Fresh-window test held live mutable saveable holder maps instead of an independent value snapshot before destroying the old owner.",
+    "sources": [
+      {
+        "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-saveable-desktop/1.10.5/runtime-saveable-desktop-1.10.5-sources.jar",
+        "sha256": "c431498c69a84ecd1e128774196228b89917a7093250efe95527d06bf46fa674",
+        "observation": "SaveableStateHolderImpl.saveAll returns savedStates directly; removeState removes inactive keys from that map."
+      },
+      {
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/androidx/navigation/navigation-compose/2.9.1/navigation-compose-2.9.1-sources.jar",
+        "sha256": "e72ac4e75c51d0a0218a3794c8d38f1fb7f31dc766669352bcd9a9d02e0a987c",
+        "observation": "BackStackEntryIdViewModel.onCleared calls saveableStateHolderRef.get()?.removeState(id)."
+      }
+    ]
+  },
+  "remainingContactEntry": "# New-contact entry after navigation ownership\n\nObserved implementation, not an activation claim:\n\n- PrepareCollaborationSpaceConversation reads the complete bounded128 active setup inventory,\n  then canonical metadata by peer. Existing originals and canonical references are reusable under\n  owned local access. Creating an original requires currently admitted discovery. It performs no\n  HTTP/SDK dispatch and reconciles an uncertain local insertion by that exact original ID.\n- ObserveCollaborationSpaceConversationCommands exposes owned local original facts. Its existing\n  contract alone is not a current Group directory gate or permission to show content.\n- CollaborationDraft and EditCollaborationSpaceDraft require a canonical conversationId. The\n  latter reads canonical metadata and publishes the draft and inbox atomically. Replacing that ID\n  with peerAccountId or setup-command ID violates the accepted contract.\n- EncryptedCollaborationDraftRepository commits the source draft and ready inbox through exactly\n  two raw partition mutations. It shares authenticated content-key ownership, but importing a new\n  peer draft must not silently enlarge the raw two-partition transaction bound.\n\nNext design and implement a distinct peer-addressed working draft with encrypted source ownership,\ncompare-and-set revisions, empty revision tombstones, bounded indexing, account/Group revocation,\nand process-reopen evidence. Keep it separate from a sent command. The user may compose before\ncurrent discovery is available. Setup submission retains one original and waits on its durable\nresult; it must not create another original after a lost response or retry UI recomposition.\n\nCanonical handoff must conserve both text and intent across competing writers and process death.\nDo not overwrite an existing canonical draft. A two-stage acknowledged copy can retain the source\nuntil the destination has proved the same revision/body; reconciliation must recognize exact\nreplay and surface competing text for review. Never delete the peer source before destination\npublication. A new contact row needs explicit peer identity rather than a fake conversation ID;\nreview bounded inbox merging before exposing pending new conversations there.\n\nThe entry ViewModel owns screen state and calls domain operations. Domain owns local admission,\noriginal selection, bounded reconciliation and handoff policy. Repository coordinates raw storage;\nno repository-to-repository dependency, UI scope in storage, or ViewModel provisioning helpers.\nActual phone/network/first-frame acceptance remains separate from host fixtures.\n",
+  "remainingGroupEntry": "# Product entry integration remaining after stable stack owners\n\nHomeChatPage already supplies swipeable Conversations/Contacts slots and the scroll-aware FAB.\nReuse those slots. Group contact/inbox entries now take the same SpaceChatRoot, and the canonical\nthread route takes that root as well. AppNavigation still resolves AppViewModel before its current\nCompany ScopedNavHost. Keep that window-level model at the same owner when adding any outer stack.\n\nA Group stack may wrap a root destination that renders the existing Company subtree; its identity\nmust include the admitted account/Group lifetime, not the selected Company. Its root owner must\nstill close outgoing graphs/effects before a replacement is usable. Avoid putting window state\ninto the outer destination's ViewModelStore. Tests must exercise actual root/company composition,\nrapid Back, a Company change while a Group thread is open, account replacement, root denial, and\nprocess restoration under mismatched ownership before activation.\n\nObserved gap: ObserveLocalCollaborationSpace emits null while acquiring a root, after a missing\nroot, or when its account/admission stream completes. Null is not a server feature-disabled fact.\nThere is currently no Group/legacy chat rollout decision in AppBuild or app composition. An\nexplicit rollout input must choose the legacy or Group experience; a Group denial/unknown root\nmust never silently select legacy Company chat. Do not add HTTP requests to composition to guess\nthat mode. This requires an explicit application integration decision, not an inferred fallback.\n\nNew-contact draft/original storage and canonical handoff remain described separately. Full company\nfiltering also still lacks complete memberships beyond the8 public labels; a visible filter must\nnot silently exclude omitted memberships. None of these product entries is activated by this\nnavigation ownership change. Phone92/live GroupOFF remain.\n"
+}

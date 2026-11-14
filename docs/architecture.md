@@ -1,6 +1,12 @@
 # Architecture
 
 
+[Independent retained navigation stacks](navigation-stack-identity.md)
+
+Stable stack keys isolate window-owned navigation stores and saved state.
+
+
+
 [Retained contact browsing and search](collaboration-contact-surfaces.md)
 
 Independent projections and viewports share one admitted Group directory.

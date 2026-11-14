@@ -2,6 +2,7 @@ package dev.fajar.starter.app.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.key
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -68,25 +69,31 @@ internal class NavigationViewModels : ViewModel(), ViewModelStoreOwner {
     }
 }
 
+/**
+ * Each concurrently retained stack needs a distinct stable [ownerKey] within its parent owner. Use
+ * [ScopedNavHost]'s scope for account/company changes, not a changing owner key. The parent owner
+ * retains and eventually clears all named stacks across composition recreation.
+ */
 @Composable
-fun rememberScopedNavigationState(): ScopedNavigationState {
-    val viewModels = viewModel { NavigationViewModels() }
-    lateinit var controller: NavHostController
-    // The SDK saver cannot validate an as-yet-unresolved account/company graph.
-    CompositionLocalProvider(LocalSaveableStateRegistry provides null) {
-        controller = rememberNavController()
+fun rememberScopedNavigationState(ownerKey: String? = null): ScopedNavigationState =
+    key(ownerKey) {
+        val viewModels = viewModel(key = ownerKey) { NavigationViewModels() }
+        lateinit var controller: NavHostController
+        // The SDK saver cannot validate an as-yet-unresolved account/company graph.
+        CompositionLocalProvider(LocalSaveableStateRegistry provides null) {
+            controller = rememberNavController()
+        }
+        rememberSaveable(
+            controller,
+            saver =
+                Saver<ScopedNavigationState, SavedState>(
+                    save = { it.save() },
+                    restore = { ScopedNavigationState(controller, viewModels, it) },
+                ),
+        ) {
+            ScopedNavigationState(controller, viewModels)
+        }
     }
-    return rememberSaveable(
-        controller,
-        saver =
-            Saver<ScopedNavigationState, SavedState>(
-                save = { it.save() },
-                restore = { ScopedNavigationState(controller, viewModels, it) },
-            ),
-    ) {
-        ScopedNavigationState(controller, viewModels)
-    }
-}
 
 // Version 3 removes the connection-only workspace recovery route from saved graphs.
 private const val NAVIGATION_FORMAT = 3

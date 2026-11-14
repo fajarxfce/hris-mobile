@@ -1,7 +1,29 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 13:25 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 13:45 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
+
+## Independent retained navigation stacks accepted
+
+Independent navigation stores are accepted: 17,803 validated cases
+(1216 fresh / 16587 exact unchanged), preserving all17,800 prior
+identities plus3 new desktop cases. Focused8/session14896 and full1/session3969 reaped0.
+Source 65cdf0d29c9d533ae3a786655b47154fe1536e66abd1691165405b6581757412; reports a67877a6a71a1a143054abc8f14648d8dcb1b822175994224526454c31078c4b.
+The first99/98, diagnostic8/7 and snapshot8/6 runs remain unsuccessful evidence. The fixture now snapshots
+mutable saved values before simulated window destruction; assertions and production behavior were
+not weakened. Two controllers retain independent navigation models and matching saved state.
+
+Next port the two generic files to Starter using its prepared
+.work/navigation-stack-identity-port-2026-11-14 and preserved format1. Refresh its drafts from this
+accepted source; tests there are not yet run. Then wire Group composition above Company routing,
+keeping AppViewModel at the window. New-contact drafts/original queue need explicit peer identity
+and a canonical handoff; read contact-entry-followup.md. Complete company filtering remains open.
+
+No app route, phone or live activation. Phone92/GroupOFF/V117–140 undeployed remain. All54 PRD groups
+OPEN. Continue beyond checkpoints; push each commit; one compiler OR emulator; no agents. Preserve
+the blocked SQLite fixture payload and failed hosted Apple evidence. Source compilation is not
+Apple runtime acceptance.
+
 
 ## Retained contact browsing and search accepted
 
