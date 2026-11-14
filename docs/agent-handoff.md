@@ -1,9 +1,37 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 04:04 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 04:06 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Active inbox repair bootstrap verification
+
+Admitted raw history handoff4 is committed/pushed as mobiled920094551cfd31b686abced907c0483a499f545
+and Groupcc5a1dea039f36bd242e11e50c60cff65a25ba8b. Focused35/full17120 accepted,14939 fresh/2181
+unchanged. Source5494/b1f05716f6100afef1fd623da663056705e7650dee9f69c2fa7771b286ce9221;
+reportse4a1f2a63e431049a668948839885468cac021ee919adc58ed1ce9e579e723a9.
+
+Current .work/inbox-repair-bootstrap-demand-2026-11-14 has9 APPLIED reviewed/formatted paths,
+9 shared additions with37 prior methods retained. Apply42283 REAPED. Source5494/
+1e59c7c77ee44f364137e0d067ba4a84dc4d275f523e2189dee72ca177b2b53c. Focused1/session40704 is RUNNING
+(expected48); full17138 and record/commit gates prepared UNRUN. Reap then audit focused; if accepted
+run full without source changes, reap/audit all17120 prior cases plus18 new executions, record,
+commit/push mobile then Group. No new failed attempt observed. Do not edit source during this run.
+
+Next source lifecycle6 and pending admission8 are reviewed/formatted UNAPPLIED drafts with all
+application/focused/full/record/commit gates prepared UNRUN. Lifecycle expects40/17168, pending
+expects54/17216. Pending DI/graph observation hashes refer to lifecycle drafts. Apply sequentially
+only after prerequisite acceptance/push and REAP before capture. Latest pending formatter60933
+reaped. No raw Restart or global owner activation is implemented. If reconstructed global state
+finds an unfinished older source pass, inspect/resume it under admission, complete its two lanes,
+then prepare the newer pass; do not repeatedly submit the same conflicting newer ID. The eventual
+owner still needs that admitted source-inspection path. Preserve completed repair signal timing
+when retrying unresolved history; no polling or permanent per-room observation.
+
+Phone92 remains installed; no phone/live change. GroupOFF/V117-140 undeployed; all54 PRD groups
+remain open. Preserve hosted Apple failures and blocked fixture payload. Continue beyond
+checkpoints, push each commit, one compiler OR emulator, no subagents.
 
 ## Admitted history inbox handoff locally accepted
 

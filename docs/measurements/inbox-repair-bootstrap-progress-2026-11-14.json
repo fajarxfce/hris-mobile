@@ -1,0 +1,20 @@
+{
+  "status": "focused validation running; not accepted",
+  "sourcePaths": 9,
+  "newSharedMethods": 9,
+  "priorMethodsRetained": 37,
+  "sourceFiles": 5494,
+  "sourceManifestSha256": "1e59c7c77ee44f364137e0d067ba4a84dc4d275f523e2189dee72ca177b2b53c",
+  "applySession": 42283,
+  "applyReaped": true,
+  "focusedSession": 40704,
+  "focusedReaped": false,
+  "expectedFocused": 48,
+  "expectedFull": 17138,
+  "lifecycleDraftPaths": 6,
+  "pendingDraftPaths": 8,
+  "futureGatesPrepared": true,
+  "phoneBuild": 92,
+  "phoneChanged": false,
+  "liveChanged": false
+}
