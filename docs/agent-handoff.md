@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 09:20 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 09:23 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -28,15 +28,17 @@ Official stable3.4.0–3.4.2 have the same UI requirement;3.3.6 lacks required W
 Do not downgrade declared requirements or accept an unreviewed platform upgrade.
 
 Reviewed alignment is now applied: Compose Multiplatform1.10.3 and KMP/Android Lifecycle2.10.0,
-keeping Kotlin2.3.21. Resolution3/session26731 is RUNNING, not accepted. Source input is frozen;
-reap before editing. It must preserve inspector sources and prior verification hashes/policy.
-Review the introduced component list, populate reviewed-dependency-components.json with exact
-approved coordinates, then accept-dependencies.py independently verifies official artifact bytes
-(including Native file aliases). Capture/focused/full require accepted metadata. Full gate forces
+keeping Kotlin2.3.21. Resolution3/session26731 REAPED0 in145.788s. All689 introduced artifacts across341 reviewed
+coordinates were independently fetched from official Google/Maven repositories and SHA-256 checked,
+including Native file aliases. Prior checksums/policy and inspector sources are unchanged.
+Dependency metadata a5cb920b0e54f2ab8101b71edf514f82947d4d5506be40aab51ffd96e44b141e is accepted.
+Captured20 source paths,5591 inputs/914261067c16c3be61d22c7dd5ef618302ad0899dc9a98021a552b37820df468.
+Focused1/session84310 is RUNNING, expected39, not accepted. Do not edit captured inputs or start
+another compiler/emulator until reaped. No UI test result or screenshot is accepted yet. Full gate forces
 all platform tests because the shared Compose/Lifecycle stack changed. Generic version/metadata
 changes now REQUIRE a Starter port after Mobile passes; keep HRIS UI out of Starter.
 
-Next reap/verify dependencies, capture, run focused UI/DI/Apple-source tests, inspect literal PNGs,
+Next reap/accept focused UI/DI/Apple-source tests, inspect literal PNGs,
 then full verification and atomic Mobile/Group commits with pushes. Record any failures without
 weakening assertions. Before product activation, finish Group root/contact ownership and measure
 real app navigation in the emulator. Read-only findings: .work/history-inbox-product-routing-2026-11-14.
