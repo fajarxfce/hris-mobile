@@ -1,7 +1,7 @@
 {
-  "status": "Focused4/session83172 running; explicit host disposal and test dependency aliases applied; no full acceptance",
-  "focusedSession": 83172,
-  "focusedDirectory": "focused4",
+  "status": "Focused138 accepted, same-source full1/session74903 RUNNING; all prior platform tests forced; no full acceptance",
+  "focusedSession": 23951,
+  "focusedDirectory": "focused5",
   "expectedFocused": 138,
   "expectedFull": 17748,
   "paths": 25,
@@ -47,6 +47,20 @@
         "skipped": 0
       },
       "reason": "39 presentation, DI and navigation/inspector cases pass. AppFlow has3 failures after withApplication returns:2 retained workforce subscriptions remain and Employee ViewModel scope remains active. NativeLinkAppFlowTest also selected by wildcard *AppFlowTest, one additional existing passing method. Investigate the actual host ViewModelStore lifetime introduced by Compose1.10 test environment; preserve all assertions."
+    },
+    {
+      "directory": "focused4",
+      "session": 83172,
+      "reaped": true,
+      "exitCode": 1,
+      "resultSha256": "b3e05c5f7471f666e1339fe5bc00a8919c212270fece0850c64824a20bb4a99b",
+      "tests": {
+        "tests": 138,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reason": "All138 targeted tests pass including the3 unchanged disposal assertions. iosSimulatorArm64ResolveResourcesFromDependencies stops on missing checksum for org.jetbrains.compose.components:components-resources-iosSimulatorArm64:1.10.3/library-1.10.3.kotlin_resources.zip. Compile-classpath artifact resolution had omitted custom Compose resource variants; verify all relevant target resources."
     }
   ],
   "foundationUpgrade": {
@@ -82,9 +96,32 @@
     "landscape": "7d56fdb1728d3901ad99fac0c2046c917e2d7bb96a2168134716892228abff40"
   },
   "requiresStarterPort": true,
+  "fullSession": 74903,
+  "fullDirectory": "full1",
+  "fullReaped": false,
   "accepted": false,
-  "sourceManifestSha256": "25ff0cbfe91a370c913711bdeaf3f03f3dc873c65e56016bd4b3394cd0b347dc",
+  "focused": {
+    "accepted": true,
+    "tests": 138,
+    "elapsedSeconds": 231.872,
+    "sourceFiles": 5591,
+    "sourceManifestSha256": "e7f41875766ae01081ec29cb88695abe8525e629e68c4913940e2a7f2bb3861c",
+    "resultSha256": "dc0b64cb8bc8b363fad665485ab426984d0f2be44d176b507a73ace322d53dd3",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "NavigationOwnershipTest": 5,
+      "NetworkInspectionUiTest": 2,
+      "AppFlowTest": 90,
+      "SpaceChatInboxRowTest": 9,
+      "SpaceInboxPagingLayoutTest": 5,
+      "SpaceInboxPagingSourceTest": 17,
+      "SpaceInboxViewModelTest": 8
+    },
+    "priorCaseIdsRetained": true
+  },
+  "sourceManifestSha256": "e7f41875766ae01081ec29cb88695abe8525e629e68c4913940e2a7f2bb3861c",
   "sourceFiles": 5591,
+  "verifiedDependencyArtifacts": 692,
   "phoneInstalled": false,
   "groupRoutesActivated": false,
   "liveChanged": false

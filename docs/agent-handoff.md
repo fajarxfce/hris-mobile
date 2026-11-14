@@ -1,56 +1,56 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 10:02 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 10:23 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
 ## Active retained inbox paging verification
 
-Window15 remains accepted/pushed (Mobilefb8fccef /Groupb9b0a012), full17684; no rerun.
-Paging has25 reviewed applied source paths,5591 inputs/25ff0cbfe91a370c913711bdeaf3f03f3dc873c65e56016bd4b3394cd0b347dc.
-Focused4/session83172 is RUNNING, expected138; full17748 has not run. Do not edit frozen source
-or start another compiler/emulator until reaped. One compiler, Gradle3GiB, one worker.
+Focused5/session23951 REAPED0 and accepted:138 cases,231.872s,started
+2026-11-14T10:18:36.828580+00:00. All90 AppFlow,5 navigation,2 inspector,2 actual DI,
+25 shared and14 UI cases pass. Both Apple presentation/application test-source compilation pass.
+Source5591/e7f41875766ae01081ec29cb88695abe8525e629e68c4913940e2a7f2bb3861c; focused resultdc0b64cb8bc8b363fad665485ab426984d0f2be44d176b507a73ace322d53dd3.
+Three opaque screenshots exactly match the separately inspected light/2x dark/landscape captures.
+Full1/session74903 is RUNNING on the SAME frozen25-path source. Expected17748 retains17684 prior
+identities plus64 executions. All prior desktop/browser tests are forced due the framework upgrade;
+Android/lint/Web/Apple compile/quality checks included. Reap before edits/another compiler/emulator.
+Do not claim full acceptance, actual Apple runtime, device latency or installed feature from this.
 
-Preserved failures: focused1/session84310 reaped1 (37 presentation cases passed; removed Back
-fixture API), focused2/session21602 reaped1 (39 passed; new dispatcher required an explicit
-runtime-only dependency on desktopTest). Focused3/session12447 REAPED1 in833.016s, started
-2026-11-14T09:44:36.590768+00:00:139 actual cases,136 passed/3 failed. Back/cancel/fallback,
-inspector, DI and all39 presentation cases pass;3 AppFlow assertions after withApplication
-returns expose retained workforce subscriptions and an active employee ViewModel scope.
-The wildcard *AppFlowTest also matched1 existing NativeLinkAppFlowTest case; focused4 uses
-exact application class names and returns to138 expected cases, without dropping any intended case.
+Window15 is accepted/pushed (Mobilefb8fccef /Groupb9b0a012), full17684; no rerun.
+Paging remains an unused feature entry until Group root/contact integration. Retained windows,
+known exhaustion, pending/draft previews, visible labels and failed continuation retry are covered.
+Compose1.10.3/Lifecycle2.10.0/Paging3.5.3 are intentionally compatible; Kotlin remains2.3.21.
+692 artifacts across341 coordinates are verified. Original689 compile/runtime artifacts omitted
+3 custom Compose resource zips. Their modules were already verified; iOS device/simulator/Wasm
+zip bytes independently match declared module SHA256/size. Metadata now
+17b6def09147fc73a99e2021441361ef5eb9a5081d2a0d9aebd7f422728c7a05; all prior checksums/policy unchanged.
 
-Root cause is confirmed in official Compose sources: ui-test1.10 supplies a
-DefaultArchitectureComponentsOwner through TestContext until the test block finishes;1.9 did not.
-AppViewModelOwner correctly reuses a supplied host owner. The fixture previously hid app content
-but assumed its root store was disposed. withApplication now owns an explicit lifecycle/store
-inside its visible content and destroys/clears it on fixture disposal. All90 AppFlow test bodies
-and the3 failed assertions are unchanged. Production navigation/root ownership was not altered.
-Four Back test fixtures drive NavigationEventDispatcher1.0.2 with explicit disposal and the
-Compose compatibility owner. The two deprecated uiTestJUnit4 build accessors now use the SAME
-verified org.jetbrains.compose.ui:ui-test-junit4:1.10.3 catalog coordinate. Both accepted focused
-and full runs must use the same final source manifest; superseded alias-only proof was NOT RUN.
+Preserved failures: focused1/84310 reaped1,37 UI cases passed but removed Back fixture APIs;
+focused2/21602 reaped1,39 passed but navigationevent was only a runtime transitive dependency;
+focused3/12447 reaped1 in833.016s,139 actual/136 passed/3 failed after fixture application closure;
+focused4/83172 reaped1 in872.973s,138 passed but native resource checksum was missing.
+Three failed AppFlow assertions proved the new Compose test-host lifetime: official ui-test1.10
+supplies DefaultArchitectureComponentsOwner until the outer test ends. The fixture now owns and
+clears its lifecycle/ViewModelStore inside its visible application. All90 test bodies/assertions
+remain unchanged. Back fixtures use actual NavigationEventDispatcher1.0.2/compatibility owner
+with disposal; desktopTest declares its dependency. Deprecated JUnit accessors now use the same
+verified catalog coordinate. Production navigation/ownership is unchanged. Exact app test selectors
+avoid accidentally including NativeLinkAppFlowTest. Superseded alias-only apply/proof was NOT RUN.
 
-Three actual row screenshots (light,2x dark text,landscape) were inspected and archived in
-visual-review2; opaque canvas, visible names/dates and bounded previews.39 presentation cases
-cover retained rows, bounded local pages, known exhaustion, pending/draft priority and explicit
-failed continuation retry. Dependency checks accepted689 artifacts/341 coordinates; metadata
-SHA a5cb920b0e54f2ab8101b71edf514f82947d4d5506be40aab51ffd96e44b141e unchanged.
-Compose1.10.3/Lifecycle2.10.0/Paging3.5.3 are intentional compatible versions. Full gate must
-force all prior desktop/browser tests, Android/lint/Web/Apple source checks. Full timeout90min
-allows initial whole-platform rebuilding; do not confuse compilation with actual Apple runtime.
-
-After focused/full pass: record/push atomic Mobile and Group evidence, then REQUIRED Starter port.
-Starter .work/compose-paging-compatibility-port-2026-11-14 has6 UNAPPLIED drafts (versions,
-desktop dependency and4 fixtures), captured1049 prior cases/1094 inputs, gated apply,
-independent dependency resolver/checksum verifier, full runner/capture/acceptance PREPARED UNRUN.
-Preserve pinnedInspector742a2d1c; independently resolve only Starter artifacts; final7 paths
-include its metadata. Publish/docs gates remain to prepare. Keep HRIS policy/UI in Mobile.
-Then finish Group root/contacts and measured emulator navigation; investigate directory late
-results/current admission before consuming it. No remote reads on local opens or search changes.
+Next reap/full accept, record/push atomic Mobile+Group evidence, then REQUIRED Starter port.
+Starter .work/compose-paging-compatibility-port-2026-11-14 has6 UNAPPLIED drafts and captured
+1049 prior cases/1094 inputs. Apply, independent resolver/checksum verifier, capture/full gate,
+acceptance and publication scripts are PREPARED UNRUN. Resolver explicitly includes3 target
+resource tasks; final7 source paths include its own metadata. Preserve pinnedInspector742a2d1c.
+All1049 prior tests must run freshly, all3 Android variants/lint/Web/Apple source checks pass,
+and actual screenshots must be inspected before publication. No HRIS UI/policy belongs there.
+Then finish Group root/contact ownership and measured emulator navigation; measure5000 local
+contacts before choosing search projection/index. Reuse current Home swipe tabs/FAB. Do not
+fetch remote contacts on local opens/search or derive Group access from HR-company selection.
 Phone92/live unchanged; GroupOFF/V117-140 undeployed. All54 PRD groups OPEN. Continue beyond
-checkpoints and push every commit. No agents. Preserve blocked SQLite payload and Apple failures.
+checkpoints; push every commit; one compiler OR emulator; no agents. Preserve blocked SQLite
+fixture payload and failed hosted Apple evidence; never retry/repackage the blocked payload.
 
 ## Anchored local inbox windows locally accepted
 
