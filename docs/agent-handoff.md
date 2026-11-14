@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 08:20 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 08:24 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -19,15 +19,20 @@ directory credentials. The fixture now retains its own independent MemoryCredent
 passes it to every container open, matching existing Android/iOS/web/desktop entry points.
 No production behavior, timeout or assertion was relaxed. Both failed source/result records are
 preserved in directory-ordering-correction.json and directory-key-retention-correction.json.
-Focused3 is RUNNING47136; source5565/adca54094d8a31911e8a53a7274803e12a450e703f8414617d310ab7743f8f76.
-Reap/verify before full17615. No accepted label results yet; no source edits during the run.
+Focused3/session47136 is reaped0 and accepted45,139.257s; source5565/adca54094d8a31911e8a53a7274803e12a450e703f8414617d310ab7743f8f76.
+Result11f3b032519b9774a5962e77af0cd8745a4b951c7985e53c14897e1ae5a3c816. Actual50-contact
+local samples150ms initial/110ms reopened include collection disposal; not UI/device performance.
+Full17615 is RUNNING15193/full-1. Reap/verify before source changes, record/commit/push.
 
 Window .work/history-inbox-window-2026-11-14 has15 formatted UNAPPLIED drafts,34 shared+1 actual
 SQLite addition, focused62/full17684 run gates prepared UNRUN. It includes finite admitted reads,
 one bounded missing-anchor fallback, reverse/around queries, detached lists/tags and cancellation.
 The shared actual fixture is rebased for the contact-order correction; reformat/review/hash rebase
 completed and all gates/recorder prepared UNRUN. Then retained Group inbox UI/Paging integration and
-actual viewport/render measurements. GroupOFF, phone92/live unchanged; all54 PRD groups OPEN.
+actual viewport/render measurements. Row UI workspace .work/history-inbox-row-ui-2026-11-14
+contains5 UNREVIEWED/UNAPPLIED drafts: plain retained row, localized media labels,8 UI cases including
+three screenshot variants. No UI execution or images yet. compose-ui-testing-patterns skill read.
+GroupOFF, phone92/live unchanged; all54 PRD groups OPEN.
 Continue beyond checkpoints; one compiler OR emulator; no agents.
 
 ## Admitted retained inbox pages locally accepted
