@@ -50,6 +50,7 @@ private fun SpaceChatThreadEntry(
     onBack: () -> Unit,
     modifier: Modifier,
 ) {
+    if (owner is SpaceChatThreadViewModelOwner && !owner.isOpen) return
     val model =
         koinViewModel<SpaceChatThreadViewModel>(
             viewModelStoreOwner = owner,
@@ -79,6 +80,7 @@ private fun SpaceChatThreadEntry(
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             // Stop or a newer explicit effect cancels an obsolete clipboard/focus operation.
             model.effects.collectLatest { effect ->
+                if (owner is SpaceChatThreadViewModelOwner && !owner.isOpen) return@collectLatest
                 when (effect) {
                     SpaceChatThreadEffect.Back -> goBack()
                     SpaceChatThreadEffect.ScrollToNewest -> list.requestScrollToItem(0)

@@ -1,7 +1,28 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 12:38 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 13:03 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
+
+## Group root composition and contact UI accepted
+
+Mobile root composition/contact layout is accepted: 17,788 validated cases
+(2039 fresh / 15749 exact unchanged), preserving all17,779 prior
+identities plus9 desktop cases. Focused27/session36242 and full1/session9878 reaped0.
+Source 2de5b53a0c2619e51e9fb7611b276ac14bbecd684909089d21dd4d4e7cf4ad92; reports f6c9d0d3acee23d13172a9e691ebc5a483ff4e023bed2926df19e001c6d294f0.
+Three fresh PNGs match the independent phone/dark200%/landscape inspection. Preparation has graph
+and composition lifetime with joined cleanup; retired entries and effects cannot reopen stores.
+
+Next implement app-facing Group entries with independent browse/search projections and retained
+new-contact draft/initial conversation state. Read product-integration-review.md in
+.work/space-hub-composition-2026-11-14. Eight company display labels are not complete membership.
+Do not fake conversation IDs, add network calls to search, move AppViewModel into a Group route,
+or silently fall back to Company chat on Group denial. Two ScopedNavigationState instances need
+independent owner keys and a later generic Starter port if used under the same parent.
+
+No product activation, phone installation or live change. Phone92/GroupOFF/V117–140 undeployed
+remain. All54 PRD groups OPEN. Continue beyond checkpoints; push every commit; one compiler OR
+emulator; no agents. Preserve blocked SQLite fixture and failed hosted Apple evidence.
+
 
 ## Local contacts and Group root ownership accepted
 

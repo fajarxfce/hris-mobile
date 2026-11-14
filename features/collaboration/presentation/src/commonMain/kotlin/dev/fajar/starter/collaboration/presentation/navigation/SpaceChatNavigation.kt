@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
 /** The caller owns a separate account/Group graph, shared with visible-list preparation. */
 fun NavGraphBuilder.spaceChatThreadRoutes(owner: SpaceChatNavigationOwner, onBack: () -> Unit) {
     composable<SpaceChatThreadRoute> { entry ->
+        if (owner.closed) return@composable
         val conversationId = entry.toRoute<SpaceChatThreadRoute>().conversationId
         val lease =
             viewModel(

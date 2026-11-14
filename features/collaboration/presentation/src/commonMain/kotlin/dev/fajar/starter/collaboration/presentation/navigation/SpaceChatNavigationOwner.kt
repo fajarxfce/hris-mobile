@@ -18,7 +18,8 @@ class SpaceChatNavigationOwner(
 ) : ViewModel() {
     private val idle = linkedMapOf<String, SpaceChatThreadStore>()
     private val active = mutableMapOf<SpaceChatThreadViewModelOwner, String>()
-    private var closed = false
+    internal var closed = false
+        private set
 
     init {
         require(capacity in 1..3)
@@ -106,14 +107,17 @@ internal class SpaceChatThreadViewModelOwner(
 ) : ViewModel(), ViewModelStoreOwner {
     private var released = false
 
+    val isOpen: Boolean
+        get() = !released && !stored.closed
+
     override val viewModelStore: ViewModelStore
         get() {
-            check(!released && !stored.closed)
+            check(isOpen)
             return stored.models
         }
 
     fun bind(model: SpaceChatThreadViewModel) {
-        check(!released && !stored.closed)
+        check(isOpen)
         stored.bind(model)
     }
 

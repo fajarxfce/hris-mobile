@@ -1,0 +1,95 @@
+{
+  "accepted": true,
+  "validatedTests": 17788,
+  "newCases": 9,
+  "freshTests": 2039,
+  "reusedUnchangedTests": 15749,
+  "priorCaseIdsPreserved": true,
+  "sourceManifestSha256": "2de5b53a0c2619e51e9fb7611b276ac14bbecd684909089d21dd4d4e7cf4ad92",
+  "reportManifestSha256": "f6c9d0d3acee23d13172a9e691ebc5a483ff4e023bed2926df19e001c6d294f0",
+  "full": {
+    "startedAt": "2026-11-14T12:53:51.464150+00:00",
+    "elapsedSeconds": 542.698,
+    "exitCode": 0,
+    "sourceFiles": 5604,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true
+  },
+  "screenshots": {
+    "light": {
+      "bytes": 28915,
+      "sha256": "8e7fe051c204ccf2d3d28affae2dd6add127b4958eb69c82011882eba635346a",
+      "dimensions": [
+        375,
+        780
+      ]
+    },
+    "dark-large": {
+      "bytes": 44784,
+      "sha256": "85f0a573e3d26ce9c31385ebc91b2a1ef76d3cb06bf28b4632a67f2c48edecf8",
+      "dimensions": [
+        375,
+        780
+      ]
+    },
+    "landscape": {
+      "bytes": 28996,
+      "sha256": "acdbc1beea0b5b537fa1ec8da371565e188b50cdbcad74393525c16651c2654b",
+      "dimensions": [
+        760,
+        375
+      ]
+    }
+  },
+  "inspected": true,
+  "productActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "focused": {
+    "tests": 27,
+    "session": 36242,
+    "reaped": true,
+    "sourceDirectory": "focused5"
+  },
+  "failedAttempts": [
+    {
+      "folder": "focused1",
+      "session": 75999,
+      "reaped": true,
+      "exitCode": 1,
+      "testsStarted": false,
+      "reason": "New Compose test used positional timeout instead of named timeoutMillis on the current test API. Corrected test calls only."
+    },
+    {
+      "folder": "focused2",
+      "session": 44429,
+      "reaped": true,
+      "exitCode": 1,
+      "tests": 27,
+      "passed": 24,
+      "failed": 3,
+      "reason": "The test-only typed destination was private; serialization reflection could not access it. Make that route internal, matching existing navigation tests. No production change or assertion weakened."
+    },
+    {
+      "folder": "focused3",
+      "session": 70882,
+      "reaped": true,
+      "exitCode": 1,
+      "tests": 27,
+      "passed": 26,
+      "failed": 1,
+      "reason": "One outgoing-host case failed while its fixture destroyed the parent LifecycleRegistry before unmounting NavHost. Unmount composition before parent teardown; preserve the stale-open assertion. Also reviewed joined cancellation and stale effects; those production corrections require a fresh run."
+    },
+    {
+      "folder": "focused4",
+      "session": 17720,
+      "reaped": true,
+      "exitCode": 1,
+      "tests": 27,
+      "passed": 26,
+      "failed": 1,
+      "reason": "Unmounting preserved the primary failure: desktop performClick dispatched NavController.navigate off Main. Invoke the same rendered OnClick semantics via runOnIdle, matching the existing SpaceChatNavigationTest. Do not disable Lifecycle thread checks or weaken stale-open assertions."
+    }
+  ],
+  "remaining": "# Product integration edges after the current component package\n\nThe accepted contact ViewModel has one query/selection. Before wiring a distinct browse hub and\nsearch route, retain an independent unfiltered browse projection/viewport. Do not let a fullscreen\nsearch rewrite the offscreen contacts tab, or clear its query asynchronously during Back and show\na one-frame filtered list. Keep one directory snapshot/subscription while owning the two visible\nprojections explicitly. Retain search text without treating it as another remote acquisition.\n\nThe new SpaceChatRootContent supplies a Group handle around Company composition. Existing public\ninbox/thread APIs still accept raw graph/store arguments. Expose the root-bound entry contract to\nthe application so it cannot accidentally combine one Group graph with another store. Any effect\ncollector must reject a retired root; consumer-side guards are already present for inbox and\nthread effects. Preparation now has both graph and composition ownership, with joined cleanup.\n\nA company filter cannot exclude contacts from the current truncated display labels. The server\nquery intentionally fetches nine memberships and returns eight plus hasMoreCompanies. No complete\nmembership contract or company filter has been implemented. Investigate a bounded complete\nmembership acquisition; do not add per-search network calls, invent missing memberships, or use\nprivate HR profiles for cross-company contact discovery.\n\nSelecting a contact emits peer account ID, not conversation ID. Current preparation can find a\nretained canonical conversation or original locally; first-time Open needs admitted discovery.\nThe entry route must preserve pending/new composer intent separately until canonical identity is\nknown. Never use peer or command ID as a fake canonical SpaceChatThreadRoute ID.\n\nKeep AppViewModel at its current window owner if introducing a Group NavHost above Company routes.\nrememberScopedNavigationState currently uses the default NavigationViewModels class key: two\ncontrollers under one parent need explicit independent owner identity/disposal tests and a\nsubsequent generic Starter port. Null local Group root does not prove server feature OFF; denial\nmust never silently fall back to Company chat. All product routing remains inactive in this package.\n"
+}

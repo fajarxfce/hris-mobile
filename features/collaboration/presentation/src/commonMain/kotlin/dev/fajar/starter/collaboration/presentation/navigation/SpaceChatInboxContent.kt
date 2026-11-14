@@ -31,6 +31,7 @@ fun SpaceChatInboxContent(
     active: Boolean = true,
     bottomPadding: Dp = 8.dp,
 ) {
+    if (graph.closed) return
     key(graph.access, viewModelOwner) {
         val model =
             koinViewModel<SpaceChatInboxViewModel>(
@@ -56,7 +57,8 @@ fun SpaceChatInboxContent(
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     model.effects.collect { effect ->
                         when (effect) {
-                            is SpaceChatInboxEffect.OpenConversation -> onOpen(effect.id)
+                            is SpaceChatInboxEffect.OpenConversation ->
+                                if (!graph.closed) onOpen(effect.id)
                         }
                     }
                 }

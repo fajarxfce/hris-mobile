@@ -1,6 +1,12 @@
 # Architecture
 
 
+[Group root composition and contact UI](collaboration-space-root-composition.md)
+
+Closed roots stop preparation and outgoing effects; the contact list preserves local viewport identity.
+
+
+
 [Retained Group contacts and root ownership](collaboration-contact-root.md)
 
 One admitted account/Group store survives Company selection and closes on replacement or denial.
