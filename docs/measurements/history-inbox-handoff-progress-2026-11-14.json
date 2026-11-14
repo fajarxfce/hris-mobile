@@ -27,8 +27,12 @@
   "bootstrapDraftPaths": 9,
   "bootstrapGatesPrepared": true,
   "lifecycleDraftPaths": 6,
-  "lifecycleGatesPrepared": false,
+  "lifecycleGatesPrepared": true,
   "phoneBuild": 92,
   "phoneChanged": false,
-  "liveChanged": false
+  "liveChanged": false,
+  "pendingDraftPaths": 8,
+  "pendingSharedMethods": 24,
+  "pendingGatesPrepared": true,
+  "pendingApplied": false
 }

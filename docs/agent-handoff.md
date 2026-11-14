@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 03:48 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 03:57 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -25,8 +25,7 @@ live overflow and atomic archival/seeding still create real requests. Formatter6
 Apply only after current admission4 accepted/pushed and compiler idle; REAP before capture.
 
 Then .work/history-inbox-source-lifecycle-2026-11-14 has6 formatted UNAPPLIED drafts: preparation
-policy/use case,15 shared tests, factory and graph assertion. Formatter24290 REAPED; final review
-and gates are still pending. Same pass/index reuses progress without writing; later passes require
+policy/use case,15 shared tests, factory and graph assertion. Formatter24290 REAPED; final review and all gates are now prepared UNRUN. Same pass/index reuses progress without writing; later passes require
 both lanes complete, and destination replacement clears traversal positions while leaving retained
 references untouched. No speculative source acquisition or implicit retry. Plan focused40/full17168
 after bootstrap17138. Pending-reference admission/handoff, explicit raw Restart, retained global
@@ -36,6 +35,15 @@ trigger to avoid racing command publication. No polling scheduler or permanent p
 All54 PRD groups remain open. Phone92 remains installed; no phone/live changes. GroupOFF and
 V117-140 undeployed. Preserve failed hosted Apple evidence and blocked fixture payload. Continue
 beyond checkpoints; push each commit. One compiler OR emulator, no subagents.
+
+Source lifecycle6 is now fully reviewed; focused40/full17168 and record/commit gates are prepared
+UNRUN. Next .work/history-inbox-pending-admission-2026-11-14 has8 reviewed/formatted UNAPPLIED
+paths,24 shared tests (12 policy/12 admission), and focused54/full17216 plus recorder/commit gates
+prepared UNRUN; formatter60933 REAPED. It validates frozen physical insertion windows, retains
+checked outcomes independently from raw history, and handles empty completion using index
+metadata without invented receipts. Its existing DI/graph hashes are based on lifecycle6 drafts;
+re-check if those prerequisite paths change. Explicit raw Restart still needs implementation,
+followed by global progress and fair owner integration. No runtime/phone/source change from drafts.
 
 ## Durable history inbox source progress locally accepted
 
