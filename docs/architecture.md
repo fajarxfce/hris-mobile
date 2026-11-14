@@ -1,5 +1,7 @@
 # Architecture
 
+[Bounded visible inbox labels](collaboration-inbox-labels.md) resolves canonical peers and public names through bounded owned local readers.
+
 [Admitted local inbox pages](collaboration-inbox-product-page.md) reads bounded retained recency pages under current account admission.
 
 [Local inbox product ownership](collaboration-inbox-product-owner.md) ties admitted local repair to application start and joined account replacement.

@@ -35,6 +35,7 @@ class CollaborationWorkerFixture {
     private val workspaceCredentials = MemoryCredentialStore()
     private val commands = MemoryCredentialStore()
     private val lists = MemoryCredentialStore()
+    private val spaceDirectory = MemoryCredentialStore()
     private val receipts = MemoryCredentialStore()
     private val history = MemoryCredentialStore()
     private val notificationInputs = MemoryCredentialStore()
@@ -75,6 +76,7 @@ class CollaborationWorkerFixture {
             workspaceCredentials = workspaceCredentials,
             commandCredentials = commands,
             collaborationListCredentials = lists,
+            collaborationSpaceDirectoryCredentials = spaceDirectory,
             collaborationReceiptCredentials = receipts,
             collaborationHistoryCredentials = history,
             collaborationNotificationInputCredentials = notificationInputs,

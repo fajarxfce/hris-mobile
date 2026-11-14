@@ -1,39 +1,38 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 08:24 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 08:42 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active visible inbox labels verification
+## Bounded visible inbox labels locally accepted
 
-Page7 is accepted/pushed Mobile12b0d9654cfcf45f6a974e6e1e2d7fbb95beecd2 /
-Groupdc387f9f6eea0d2b9bba60d7337b59925ad25516, focused42/full17578.
+Mobile .work/history-inbox-labels-2026-11-14 is accepted:9 paths,18 shared and1 actual SQLite case.
+Focused45/full17615 (15434 fresh /2181 unchanged) preserve all17578
+prior identities plus37 executions. Source5565/adca54094d8a31911e8a53a7274803e12a450e703f8414617d310ab7743f8f76;
+reports30d64e448eb64d344ffd69cefa896ff059da41e6ec4840bac8d317f69a3a7b07. One collected visible-ID request owns bounded metadata/contact
+reads, per-generation immutable pair caching and cancellation. Partial omissions stay distinct from
+explicit removals. Real50-contact initial/reopen timings are diagnostic local samples, not UI proof.
 
-Mobile .work/history-inbox-labels-2026-11-14 is APPLIED9. Focused1/session99672 reaped1 with45
-cases/one failure: the actual fixture supplied directory contacts in conversation order, violating
-strict ascending accountId order. Encrypted append rejected the fixture before label observation.
-Only fixture publication was sorted. Focused2/session38368 reaped1 with45/1: initial label
-resolution passed, but reopening timed out because CollaborationWorkerFixture omitted persistent
-directory credentials. The fixture now retains its own independent MemoryCredentialStore and
-passes it to every container open, matching existing Android/iOS/web/desktop entry points.
-No production behavior, timeout or assertion was relaxed. Both failed source/result records are
-preserved in directory-ordering-correction.json and directory-key-retention-correction.json.
-Focused3/session47136 is reaped0 and accepted45,139.257s; source5565/adca54094d8a31911e8a53a7274803e12a450e703f8414617d310ab7743f8f76.
-Result11f3b032519b9774a5962e77af0cd8745a4b951c7985e53c14897e1ae5a3c816. Actual50-contact
-local samples150ms initial/110ms reopened include collection disposal; not UI/device performance.
-Full17615 is RUNNING15193/full-1. Reap/verify before source changes, record/commit/push.
+Next apply .work/history-inbox-window-2026-11-14 after this commit/push:15 reviewed drafts,34 shared+1 actual application case, focused62/full17684 gates prepared UNRUN. Then connect admitted pages/labels to retained Group inbox presentation and existing warm thread
+navigation. Maintain stable conversation keys, pending/draft preview priority and known exhaustion.
+Keep stored rows visible while another index revision arrives; finite reconciliation must not
+self-loop on unchanged Restart or failed inputs. Current raw recency cursors require exact versions,
+so implement and test loaded-window changes before activating continuous scrolling. Reuse the
+existing combined chat/contact hub, scroll-aware FAB and constrained ChatPersonRow slots. UI skills
+were read; actual small-screen/dark/reduced-motion/emulator measurements remain required.
 
-Window .work/history-inbox-window-2026-11-14 has15 formatted UNAPPLIED drafts,34 shared+1 actual
-SQLite addition, focused62/full17684 run gates prepared UNRUN. It includes finite admitted reads,
-one bounded missing-anchor fallback, reverse/around queries, detached lists/tags and cancellation.
-The shared actual fixture is rebased for the contact-order correction; reformat/review/hash rebase
-completed and all gates/recorder prepared UNRUN. Then retained Group inbox UI/Paging integration and
-actual viewport/render measurements. Row UI workspace .work/history-inbox-row-ui-2026-11-14
-contains5 UNREVIEWED/UNAPPLIED drafts: plain retained row, localized media labels,8 UI cases including
-three screenshot variants. No UI execution or images yet. compose-ui-testing-patterns skill read.
-GroupOFF, phone92/live unchanged; all54 PRD groups OPEN.
-Continue beyond checkpoints; one compiler OR emulator; no agents.
+Combined .work/history-inbox-paging-2026-11-14 holds18 formatted UNREVIEWED/UNAPPLIED drafts,
+24 shared and12 desktop UI cases, including the row drafts copied from history-inbox-row-ui.
+It uses existing admitted destination metadata, finite window UC, Paging3.5.3, explicit source/VM
+lifetimes, an unused Group list entry, and existing warm thread preparation. No dependency applied,
+source/test execution or screenshots. Read review.md; platform variant resolution and strict
+dependency metadata still need verification. Review before preparing gates. The standalone row
+workspace is now supplementary; continue from the combined copy. No app/root route activation.
+
+Phone92/live unchanged; GroupOFF/V117-140 undeployed. No Starter port or new Apple execution.
+All54 PRD groups remain OPEN. Continue beyond checkpoints; push every commit; one compiler OR
+emulator; no agents.
 
 ## Admitted retained inbox pages locally accepted
 

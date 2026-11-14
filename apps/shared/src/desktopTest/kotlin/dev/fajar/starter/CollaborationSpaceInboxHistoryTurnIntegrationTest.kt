@@ -12,12 +12,56 @@ import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import java.util.UUID
 import kotlin.test.*
 import kotlin.time.Instant
+import kotlin.time.TimeSource
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
 /** Actual application DI, admitted operations, independent keys and SQLite; no native transport. */
 class CollaborationSpaceInboxHistoryTurnIntegrationTest {
+    @Test
+    fun fiftyPublishedInboxLabelsUseExactLocalIndexesAndSurviveReopeningWithoutNativeAcquisition() =
+        runBlocking {
+            val f = HistoryTurnStorageFixture()
+            try {
+                f.initialize(withBinding = false)
+                val expected = f.seedContacts(50)
+                val ids = expected.map { it.conversationId }
+                val started = TimeSource.Monotonic.markNow()
+                val before =
+                    withTimeout(15_000) {
+                        f.base.koin.get<ObserveCollaborationSpaceInboxLabels>()(f.access, ids)
+                            .first {
+                                it is AppResult.Success &&
+                                    it.value.size == 50 &&
+                                    it.value.all { label -> label.displayName != null }
+                            }
+                    }
+                val firstMillis = started.elapsedNow().inWholeMilliseconds
+                assertEquals(AppResult.Success(expected), before)
+                f.base.reopen()
+                val reopened = TimeSource.Monotonic.markNow()
+                val after =
+                    withTimeout(15_000) {
+                        f.base.koin.get<ObserveCollaborationSpaceInboxLabels>()(f.access, ids)
+                            .first {
+                                it is AppResult.Success &&
+                                    it.value.size == 50 &&
+                                    it.value.all { label -> label.displayName != null }
+                            }
+                    }
+                val reopenedMillis = reopened.elapsedNow().inWholeMilliseconds
+                assertEquals(before, after)
+                assertEquals(0, f.base.sdk.childOpens)
+                assertEquals(0, f.base.sdk.deliveries)
+                println(
+                    "INBOX_LABEL_LOCAL_SAMPLE count=50 initialMs=$firstMillis reopenedMs=$reopenedMillis"
+                )
+            } finally {
+                f.base.close()
+            }
+        }
+
     @Test
     fun admittedInboxPageReopensPendingMessageAndIndependentDraftWithoutNativeAcquisition() =
         runBlocking {
@@ -336,6 +380,64 @@ private class HistoryTurnStorageFixture {
     lateinit var access: CollaborationSpaceLocalAccess
     lateinit var conversation: CollaborationSpaceConversation
     lateinit var binding: CollaborationSpaceRoomBinding
+
+    suspend fun seedContacts(count: Int): List<CollaborationSpaceInboxLabel> {
+        require(count in 1..50)
+        val conversations =
+            listOf(conversation) +
+                (1 until count).map {
+                    val pair = listOf(access.accountId, UUID.randomUUID().toString()).sorted()
+                    conversation.copy(
+                        id = UUID.randomUUID().toString(),
+                        firstAccountId = pair[0],
+                        secondAccountId = pair[1],
+                        createdBy = access.accountId,
+                    )
+                }
+        val metadata = base.koin.get<CollaborationSpaceConversationMetadataRepository>()
+        val contacts =
+            conversations.mapIndexed { index, value ->
+                assertEquals(AppResult.Success(true), metadata.retain(access, value))
+                val peer =
+                    if (value.firstAccountId == access.accountId) value.secondAccountId
+                    else value.firstAccountId
+                CollaborationSpaceContact(
+                    peer,
+                    "Fictional colleague $index",
+                    listOf(CollaborationSpaceContactCompany(access.spaceId, "Fictional employer")),
+                    false,
+                )
+            }
+        val directory = base.koin.get<CollaborationSpaceDirectoryRepository>()
+        val at = Instant.fromEpochMilliseconds(5000)
+        assertEquals(
+            AppResult.Success(true),
+            directory.begin(access, null, UUID.randomUUID().toString(), at),
+        )
+        val checkpoint =
+            assertNotNull(
+                assertIs<AppResult.Success<CollaborationSpaceDirectoryCheckpoint?>>(
+                        directory.checkpoint(access)
+                    )
+                    .value
+            )
+        assertEquals(
+            AppResult.Success(true),
+            directory.append(
+                access,
+                checkpoint,
+                CollaborationSpaceContactPage(
+                    conversation.owner,
+                    contacts.sortedBy { it.accountId },
+                    null,
+                ),
+                at,
+            ),
+        )
+        return conversations.zip(contacts) { item, contact ->
+            CollaborationSpaceInboxLabel(item.id, contact.accountId, contact.displayName)
+        }
+    }
 
     suspend fun initialize(withBinding: Boolean = true) {
         base.initialize()

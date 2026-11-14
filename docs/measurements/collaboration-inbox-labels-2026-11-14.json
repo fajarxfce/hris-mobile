@@ -1,0 +1,110 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxHistoryTurnIntegrationTest.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/CollaborationWorkerFixture.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxLabel.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxLabelPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceInboxLabels.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceInboxLabelsTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxLabelPolicyTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxLabelsFixture.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 45,
+    "elapsedSeconds": 139.257,
+    "sourceFiles": 5565,
+    "sourceManifestSha256": "adca54094d8a31911e8a53a7274803e12a450e703f8414617d310ab7743f8f76",
+    "resultSha256": "11f3b032519b9774a5962e77af0cd8745a4b951c7985e53c14897e1ae5a3c816",
+    "classes": {
+      "CollaborationSpaceInboxHistoryTurnIntegrationTest": 8,
+      "CollaborationBindingsTest": 2,
+      "ObserveSpaceInboxLabelsTest": 12,
+      "ObserveSpaceInboxPageTest": 9,
+      "SpaceInboxLabelPolicyTest": 6,
+      "SpaceInboxPagePolicyTest": 8
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T08:23:54.620600+00:00",
+    "elapsedSeconds": 1007.53,
+    "sourceFiles": 5565,
+    "freshCounts": {
+      "tests": 15434,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 153995226,
+      "sha256": "fb8d55c27f28025ba088737f904ecc0f1decd47cbc679f2acea56e16409f1b70"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 17615,
+    "newCases": 37,
+    "freshTests": 15434,
+    "reusedUnaffectedTests": 2181,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "adca54094d8a31911e8a53a7274803e12a450e703f8414617d310ab7743f8f76",
+    "reportManifestSha256": "30d64e448eb64d344ffd69cefa896ff059da41e6ec4840bac8d317f69a3a7b07",
+    "nativeClaim": "Eighteen shared bounded-label cases and one actual SQLite fifty-contact first/reopen sample; no measured UI/device claim."
+  },
+  "newSharedMethods": 18,
+  "newDesktopCases": 1,
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "boundedVisibleLabels": true,
+  "groupRoutesActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "localLabelSamples": {
+    "focused": {
+      "count": 50,
+      "initialMs": 150,
+      "reopenedMs": 110,
+      "scope": "Local SQLite resolution plus collection disposal; not UI/device/percentile acceptance"
+    },
+    "full": {
+      "count": 50,
+      "initialMs": 78,
+      "reopenedMs": 70,
+      "scope": "Local SQLite resolution plus collection disposal; not UI/device/percentile acceptance"
+    }
+  },
+  "directoryOrderingCorrection": {
+    "failedAttempt": "focused-1",
+    "session": 99672,
+    "reapedExitCode": 1,
+    "startedAt": "2026-11-14T08:08:17.602401+00:00",
+    "elapsedSeconds": 321.732,
+    "tests": 45,
+    "failures": 1,
+    "failedCase": "fiftyPublishedInboxLabelsUseExactLocalIndexesAndSurviveReopeningWithoutNativeAcquisition",
+    "sourceManifestSha256": "fbaa48c2409d5e3119b1d046ad4c1e1472d7b7c9b0bb687d282597cd4091b7e0",
+    "resultSha256": "8ee4109a2b1fa6f8e74714aa1f04e48e64f0f78d76025657217e42951548aabb",
+    "rootCause": "The new actual SQLite fixture supplied contact pages in conversation order, violating validCollaborationSpaceContactPage strict ascending accountId order. Encrypted directory append rejected it before label observation.",
+    "correction": "Sort only the fixture contact publication by accountId; preserve visible conversation/expected label order and every assertion.",
+    "productionChanged": false
+  },
+  "directoryKeyRetentionCorrection": {
+    "failedAttempt": "focused-2",
+    "session": 38368,
+    "reapedExitCode": 1,
+    "startedAt": "2026-11-14T08:15:27.900345+00:00",
+    "elapsedSeconds": 212.041,
+    "tests": 45,
+    "failures": 1,
+    "sourceManifestSha256": "fb989fdfbbed7646b8aa3186caa038e87dec1479fd025e74d35e0858b561442b",
+    "resultSha256": "3b54c7cd2089b615648a51e60681465e709b2b4784b7959e0559d576d4c80b04",
+    "rootCause": "CollaborationWorkerFixture retained history/list credentials but omitted collaborationSpaceDirectoryCredentials, so createAppContainer default created a new MemoryCredentialStore after reopen. Initial50-label assertion passed; reopened directory decryption could not acquire the old key.",
+    "correction": "Retain the independent directory credential store in the shared fixture and pass it on every open, matching existing Android/iOS/browser/desktop application entry points. No timeout increase or assertion weakening.",
+    "productionChanged": false
+  }
+}
