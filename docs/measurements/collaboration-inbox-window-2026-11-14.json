@@ -1,0 +1,74 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxHistoryTurnIntegrationTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceInboxWindowRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxWindowStorageContract.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/InboxWindowStorageFixture.kt",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceInboxWindowStorageTest.kt",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceInboxWindowStorageTest.kt",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceInboxWindowStorageTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxWindow.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxWindowPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceInboxWindowRepository.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceInboxWindow.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadSpaceInboxWindowTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxWindowFixture.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxWindowPolicyTest.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 62,
+    "elapsedSeconds": 431.014,
+    "sourceFiles": 5578,
+    "sourceManifestSha256": "60860464898fd61f4c9128074f70106d2f762a245ff93c639947beb510fde1d3",
+    "resultSha256": "5c2c6f32f7b62339ae6cf20eafcc0ac460dab1b27d1bd67241f2857bf23310cb",
+    "classes": {
+      "CollaborationSpaceInboxHistoryTurnIntegrationTest": 9,
+      "CollaborationBindingsTest": 2,
+      "CollaborationSpaceInboxWindowStorageTest": 13,
+      "ReadSpaceInboxWindowTest": 13,
+      "SpaceInboxPagePolicyTest": 8,
+      "SpaceInboxWindowPolicyTest": 8,
+      "ObserveSpaceInboxPageTest": 9
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T08:55:07.337517+00:00",
+    "elapsedSeconds": 996.797,
+    "sourceFiles": 5578,
+    "freshCounts": {
+      "tests": 15503,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 154012179,
+      "sha256": "4ea590c39720ab71aa73d3afea087d8c2bac08d55df3c9e4a7343d78b7151343"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 17684,
+    "newCases": 69,
+    "freshTests": 15503,
+    "reusedUnaffectedTests": 2181,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "60860464898fd61f4c9128074f70106d2f762a245ff93c639947beb510fde1d3",
+    "reportManifestSha256": "2649bb5dc9b92b3511005acf4b7b8474347ec4b2508d1f8d36664d7729d10d1a",
+    "nativeClaim": "Thirty-four shared window/admission/storage cases and one actual SQLite application reopen; no UI/device claim."
+  },
+  "newSharedMethods": 34,
+  "newDesktopCases": 1,
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "boundedAnchoredWindows": true,
+  "groupRoutesActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false
+}

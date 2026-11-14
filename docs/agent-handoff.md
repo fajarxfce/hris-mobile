@@ -1,38 +1,31 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 08:55 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 09:11 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active anchored inbox window verification
+## Anchored local inbox windows locally accepted
 
-Window15 is applied and captured in Mobile .work/history-inbox-window-2026-11-14. Focused1/session87799
-REAPED0 and accepted62 in431.014s, started2026-11-14T08:47:20.655879+00:00. Source5578/
-60860464898fd61f4c9128074f70106d2f762a245ff93c639947beb510fde1d3; result
-5c2c6f32f7b62339ae6cf20eafcc0ac460dab1b27d1bd67241f2857bf23310cb. Full1/session68107 is RUNNING;
-expected17684 with69 new executions, NOT ACCEPTED. Do not edit captured sources or start another
-compiler/emulator until reaped. Then accept-full, record, commit Mobile/push/reap, Group/push/reap.
+Mobile .work/history-inbox-window-2026-11-14 is accepted:15 source paths,34 shared additions and1
+actual SQLite application case. Focused62/full17684 (15503 fresh /2181
+unchanged) preserve17615 prior identities plus69 executions. Source5578/
+60860464898fd61f4c9128074f70106d2f762a245ff93c639947beb510fde1d3; reports2649bb5dc9b92b3511005acf4b7b8474347ec4b2508d1f8d36664d7729d10d1a.
+One finite domain read checks current local admission around raw reads, copies rows before suspension,
+and permits only one validated missing-anchor fallback. Raw around reads one anchor then at most104
+candidates in three shared-snapshot queries; moved/generation-changed anchors return Changed once.
+Lists/tags are copied before decryption; all readers are joined at return/cancellation. No raw bounds
+or schema changes. Actual DI middle/reopen/fallback is covered without native acquisition.
 
-Combined .work/history-inbox-paging-2026-11-14 now contains19 REVIEWED/UNAPPLIED source drafts,
-24 shared and13 desktop UI cases plus an extension to existing real DI resolution/disposal.
-Added real Pager insertion/viewport identity+offset coverage and explicit English acknowledgement
-semantics. Finite windows, publication invalidation, visible labels, ownership, cancellation,
-restriction and root modifiers were reviewed. Gated apply/capture/focused39/full17745 and recorder/
-commit scripts are PREPARED UNRUN. Full baseline must come from accepted window17684 first.
-The read-only official Paging3.5.3 metadata for Android/JVM/iOS/Wasm was fetched and hashed; its
-platform variants are published. Actual dependency resolution and strict Gradle verification
-remain UNVERIFIED. resolve-dependencies.gradle is prepared but UNRUN. Before capture, resolve the
-new dependencies, compare any added verification hashes against official artifacts, and include
-that reviewed metadata change in candidate/observation manifests. No new dependency applied yet.
+Next integrate the retained Group inbox/list with the existing combined contact/chat hub and warm
+thread navigation. Read .work/history-inbox-paging-2026-11-14:19 reviewed UNAPPLIED drafts,24 shared+13 desktop UI cases, focused39/full17745 gates prepared UNRUN. Official Paging3.5.3 metadata has all target variants; Gradle dependency resolution and strict checksum verification remain UNRUN. Apply only after this feature/evidence is committed and pushed. getRefreshKey must preserve a viewport identity. Pager/invalidation ownership belongs
+in presentation and calls admitted UCs; do not turn old opaque cursors into refresh keys. Keep old
+rows while the replacement arrives, stable conversation keys, independent label omission/removal,
+pending/draft previews and known exhaustion. UI/emulator rendering/scroll measurement remains open.
 
-UI is still unused by the app root. No draft test or screenshot has executed. Expected artifacts
-are features/collaboration/presentation/build/reports/screenshots/space-inbox-rows-{light,
-dark-large-text,landscape}.png; recording and actual inspection must be checked separately.
-Next complete Group hub/contact ownership and actual measured app navigation after these gates.
-Phone92/live unchanged; GroupOFF/V117-140 undeployed; no new Apple execution or Starter port.
-All54 PRD groups remain OPEN. Continue the long run, push every commit, one compiler OR emulator,
-no agents. Preserve failed Apple evidence and the blocked SQLite fixture payload.
+Phone92/live unchanged, GroupOFF/V117-140 undeployed. No Starter port or actual new Apple execution.
+All54 PRD groups remain OPEN. Continue beyond checkpoints; push every commit; one compiler OR
+emulator; no agents. Preserve the failed hosted Apple evidence and blocked fixture payload.
 
 ## Bounded visible inbox labels locally accepted
 

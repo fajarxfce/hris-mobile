@@ -4263,4 +4263,12 @@ class CollaborationDataModule {
         sessions: SessionRepository,
         server: IdentityServer,
     ) = ObserveCollaborationSpaceInboxLabels(metadata, catalog, directory, sessions, server)
+
+    @Factory
+    fun readSpaceInboxWindow(
+        windows: CollaborationSpaceInboxWindowRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpaceInboxWindow(windows, directory, sessions, server)
 }

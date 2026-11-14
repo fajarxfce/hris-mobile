@@ -1,5 +1,7 @@
 # Architecture
 
+[Anchored local inbox windows](collaboration-inbox-window.md) reads bounded local windows around the visible conversation under current admission.
+
 [Bounded visible inbox labels](collaboration-inbox-labels.md) resolves canonical peers and public names through bounded owned local readers.
 
 [Admitted local inbox pages](collaboration-inbox-product-page.md) reads bounded retained recency pages under current account admission.

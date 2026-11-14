@@ -20,6 +20,82 @@ import kotlinx.coroutines.flow.*
 /** Actual application DI, admitted operations, independent keys and SQLite; no native transport. */
 class CollaborationSpaceInboxHistoryTurnIntegrationTest {
     @Test
+    fun admittedAnchoredInboxWindowUsesActualStorageAndSurvivesReopening() = runBlocking {
+        val f = HistoryTurnStorageFixture()
+        try {
+            f.initialize(withBinding = false)
+            val labels = f.seedContacts(5)
+            for ((ordinal, label) in labels.withIndex()) {
+                val draft =
+                    CollaborationDraft(
+                        label.conversationId,
+                        UUID.randomUUID().toString(),
+                        "Local draft $ordinal",
+                        Instant.fromEpochMilliseconds(10_000L - ordinal),
+                    )
+                assertEquals(
+                    AppResult.Success(draft),
+                    f.base.koin.get<EditCollaborationSpaceDraft>()(f.access, null, draft),
+                )
+            }
+            val anchor = CollaborationSpaceInboxWindowAnchor.Conversation(labels[2].conversationId)
+            val before =
+                assertIs<CollaborationSpaceInboxWindow.Items>(
+                    assertIs<AppResult.Success<CollaborationSpaceInboxWindow>>(
+                            f.base.koin.get<ReadCollaborationSpaceInboxWindow>()(
+                                f.access,
+                                anchor,
+                                3,
+                            )
+                        )
+                        .value
+                )
+            assertEquals(
+                labels.subList(1, 4).map { it.conversationId },
+                before.entries.map { it.conversationId },
+            )
+            assertNotNull(before.previous)
+            assertNotNull(before.next)
+            f.base.reopen()
+            val after =
+                assertIs<CollaborationSpaceInboxWindow.Items>(
+                    assertIs<AppResult.Success<CollaborationSpaceInboxWindow>>(
+                            f.base.koin.get<ReadCollaborationSpaceInboxWindow>()(
+                                f.access,
+                                anchor,
+                                3,
+                            )
+                        )
+                        .value
+                )
+            assertEquals(before.version, after.version)
+            assertEquals(before.entries, after.entries)
+            val missing =
+                CollaborationSpaceInboxWindowAnchor.Conversation(UUID.randomUUID().toString())
+            val fallback =
+                assertIs<CollaborationSpaceInboxWindow.Items>(
+                    assertIs<AppResult.Success<CollaborationSpaceInboxWindow>>(
+                            f.base.koin.get<ReadCollaborationSpaceInboxWindow>()(
+                                f.access,
+                                missing,
+                                3,
+                            )
+                        )
+                        .value
+                )
+            assertEquals(
+                labels.take(3).map { it.conversationId },
+                fallback.entries.map { it.conversationId },
+            )
+            assertNull(fallback.previous)
+            assertEquals(0, f.base.sdk.childOpens)
+            assertEquals(0, f.base.sdk.deliveries)
+        } finally {
+            f.base.close()
+        }
+    }
+
+    @Test
     fun fiftyPublishedInboxLabelsUseExactLocalIndexesAndSurviveReopeningWithoutNativeAcquisition() =
         runBlocking {
             val f = HistoryTurnStorageFixture()
