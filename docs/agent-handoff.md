@@ -1,39 +1,37 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 01:10 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 01:22 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
 ## Active admitted history change verification
 
-Atomic signal19f1c9b5/Group2d1ad20f are accepted and pushed: focused125/full16924. Full1's eight
-fault-injection failures and the precise test-only correction remain recorded in Git evidence.
-The corrected full retained all prior cases (14743 fresh /2181 unchanged), with no failures.
+Atomic signal19f1c9b5/Group2d1ad20f are accepted/pushed with focused125/full16924.
+Mobile .work/history-changes-admission-2026-11-14 has10 APPLIED paths and23 new shared methods.
+Corrected focused53 is accepted (94205 REAPED0,385.432s), including15 admitted read cases,
+8 owned signal cases,28 real-storage cases and2 graph tests. Source5473/a90a344cfa4945b400b150a59d01c5a3bd43796a23ea2ddaefa306b824e93ce6;
+result8718fc1b66e763d8b7ecefc9269adcb44b96d099e8a35c4af4ee6610d66927f8. First focused13297 remains a failed compile (three generic test
+assertions, zero executions); one test-file correction preserved all methods and production bytes.
 
-Mobile .work/history-changes-admission-2026-11-14 now has10 APPLIED paths and23 new shared methods.
-Apply38053 was REAPED before source capture. Source5473/a90a344cfa4945b400b150a59d01c5a3bd43796a23ea2ddaefa306b824e93ce6.
-Focused1 (13297 REAPED1) failed compilation at three generic test assertion sites; zero tests ran.
-One test-file correction made expected types explicit; all15 methods and production code remain.
-Original source/logs are preserved. Corrected focused53 RUNNING94205 in focused-2; reap/audit
-before full16970. Prepared record/commit scripts are unrun. These contracts select actual canonical Company/Group history, acquire one bounded
-local page under current admission, and own one signal subscription without a scan or network.
-Typed windows carry cursor arithmetic; source revision encoding stays opaque in domain.
+Full16970 RUNNING81002 in full-1. Do not change its inputs. Reap/audit, then use the prepared
+record-acceptance.py/commit.py and push every resulting commit. Native/product activation is separate.
 
-Next .work/history-inbox-publication-receipt-2026-11-14 contains NINE unapplied production drafts:
-receipt/proposal and result entities, pure policy, two repository contracts/implementations, raw
-writer and admitted publisher. Tests are NOT adapted or added; formatting, review and gates are
-absent. Do not apply these partial drafts. Their intended receipt reports actual physical source
-and destination versions; a null projection checks the unchanged pair without creating records.
-The current Boolean contract remains active in source. No product consumer is enabled here.
+Next .work/history-inbox-publication-receipt-2026-11-14 contains14 reviewed/formatted UNAPPLIED
+source/test paths,18 new shared methods and all46 previous publisher/storage methods. Its typed
+receipt exposes the actual source and committed destination versions; explicit no-op/absence
+confirmation writes nothing and an entirely absent pair creates no keys. The publisher retains
+source owner and unresolved IDs. Old storage fixtures additionally verify versions on success.
+Apply/capture/focused66/full17006/record/commit gates are prepared but UNRUN. Apply only after this
+reader is accepted/pushed, and REAP apply before capture. Tests include an index removed before
+the successful commit reply, proving no read-back guess. Source/test review is in review.md.
 
-Then durable owner work remains in .work/history-inbox-progress-2026-11-14:one initial unapplied
-state draft plus review. The publisher must expose actual committed source/index evidence before
-atomic cursor/unresolved handoff. Do not infer generation by parsing opaque revision strings or
-mark an interval complete from acquisition. Use the existing Group repair owner, finite fair
-continuation and durable completed demand; no new polling worker/per-room observer.
-Phone92 remains installed; no product graph/UI or live deployment here. All54 PRD groups open.
-Continue and push every commit, one compiler OR emulator, no subagents.
+Then implement durable cursor/unresolved handoff and fair bounded continuation under the existing
+Group repair owner. .work/history-inbox-progress-2026-11-14 remains one initial unapplied state
+draft, not an implementation. Compare typed source and destination generation before progress
+completion. No new polling queue/per-room observer; empty raw pages need no invented event.
+Phone92 remains installed, live GroupOFF/V117-140 undeployed, all54 PRD groups open. Continue,
+push every commit, one compiler OR emulator, no subagents.
 
 ## Atomic history signal locally accepted
 

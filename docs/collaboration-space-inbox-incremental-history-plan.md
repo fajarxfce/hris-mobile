@@ -239,10 +239,10 @@ not invent an event to fit the publisher's existing1..16-ID API.
 ## Checked publication receipt drafts — 14 November
 
 
-Prerequisite: admitted history changes accepted and pushed. Nine production drafts now exist:
-receipt/proposal and result entities, pure proposal/receipt policy, two repository contracts,
-two repository implementations, raw writer and admitted publisher. Tests have NOT been adapted
-or added; source review, formatting and all gates are still absent. Do not apply.
+Prerequisite: admitted history changes accepted and pushed. Fourteen reviewed/formatted source
+and test drafts now exist. The old domain publisher's22 methods, real Group storage16 methods
+and Company storage8 methods remain. Eighteen new shared cases (8 domain +5 Group +5 Company)
+are prepared; focused66/full17006 gates are prepared but NOT RUN. No apply.
 
 Replace the current Boolean history-to-inbox result with a nullable typed receipt: null denotes
 conflict, failure denotes an uncertain/failed operation, and success contains the actual physical
@@ -267,3 +267,17 @@ write, cancellation before/after commit, account replacement, source or index ab
 or owner, unresolved-only no-write/no-key behavior, and unchanged source signal. Existing publisher
 and real-storage contract method identities must remain. Durable progress storage and consumer
 integration follow only after this contract is proven.
+
+
+The retained storage fixtures keep their original success/conflict assertions and additionally
+verify the typed physical source and destination versions on every successful publication.
+Unresolved-only domain work now explicitly reads index metadata; its old no-write assertion remains,
+and the metadata expectation changes accordingly. New isolated database tests delete the index
+inside the commit-response boundary to prove the receipt describes the committed generation rather
+than guessing from a later read. No user database or phone state is touched by these fixtures.
+
+Source and input collections are captured before suspension. The existing repositories perform
+raw scope/acquisition/codec work; the use case enforces admission and bounded contention. The
+shared raw writer returns prepared physical versions after successful commit, checks both retained
+checkpoints on no-op, and never updates the history signal. Missing source plus missing index can
+be confirmed without acquiring content keys. A failed/uncertain write never produces a receipt.

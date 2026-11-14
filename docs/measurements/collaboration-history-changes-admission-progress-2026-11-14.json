@@ -1,6 +1,6 @@
 {
   "accepted": false,
-  "status": "corrected-focused-running",
+  "status": "focused53-accepted-full-running",
   "sourceFiles": 5473,
   "sourceManifestSha256": "a90a344cfa4945b400b150a59d01c5a3bd43796a23ea2ddaefa306b824e93ce6",
   "appliedPaths": [
@@ -36,9 +36,33 @@
     "testMethodsUnchanged": 15
   },
   "nextReceiptDraft": {
-    "paths": 9,
+    "paths": 14,
+    "newSharedMethods": 18,
     "applied": false,
-    "testsPrepared": false,
-    "reviewed": false
-  }
+    "reviewed": true,
+    "formatted": true,
+    "expectedFocused": 66,
+    "expectedFull": 17006,
+    "verificationRun": false
+  },
+  "focused": {
+    "accepted": true,
+    "tests": 53,
+    "elapsedSeconds": 385.432,
+    "sourceFiles": 5473,
+    "sourceManifestSha256": "a90a344cfa4945b400b150a59d01c5a3bd43796a23ea2ddaefa306b824e93ce6",
+    "resultSha256": "8718fc1b66e763d8b7ecefc9269adcb44b96d099e8a35c4af4ee6610d66927f8",
+    "classes": {
+      "CollaborationBindingsTest": 2,
+      "CollaborationHistorySignalStorageTest": 13,
+      "CollaborationHistoryChangesStorageTest": 15,
+      "ObserveSpaceHistoryChangesTest": 8,
+      "ReadSpaceHistoryChangesTest": 15
+    },
+    "priorCaseIdsRetained": true
+  },
+  "focusedReaped": true,
+  "fullSession": 81002,
+  "fullDirectory": "full-1",
+  "fullAccepted": false
 }
