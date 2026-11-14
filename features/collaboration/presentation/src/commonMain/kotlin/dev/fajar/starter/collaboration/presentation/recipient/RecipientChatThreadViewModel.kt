@@ -1,0 +1,315 @@
+package dev.fajar.starter.collaboration.presentation.recipient
+
+import androidx.lifecycle.viewModelScope
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.collaborationSpaceDirectoryResponseClosesRead
+import dev.fajar.starter.collaboration.domain.usecases.*
+import dev.fajar.starter.collaboration.presentation.thread.invalidThreadProjection
+import dev.fajar.starter.common.result.*
+import dev.fajar.starter.presentation.mvi.MviViewModel
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import org.koin.android.annotation.KoinViewModel
+import org.koin.core.annotation.InjectedParam
+
+/**
+ * One route owns editing and local publications; use cases own permission, storage and delivery
+ * policy.
+ */
+@KoinViewModel
+class RecipientChatThreadViewModel(
+    @InjectedParam private val access: CollaborationSpaceLocalAccess,
+    @InjectedParam private val peerAccountId: String,
+    private val observeSource: ObserveCollaborationSpaceRecipientProjection,
+    private val observeDestination: ObserveCollaborationSpaceRecipientDestination,
+    private val observeThread: ObserveCollaborationSpaceThread,
+    private val observeProgress: ObserveCollaborationSpaceComposerProgress,
+    private val edit: EditCollaborationSpaceRecipientDraft,
+    private val submit: SubmitCollaborationSpaceRecipientComposer,
+) :
+    MviViewModel<RecipientChatThreadState, RecipientChatThreadEvent, Nothing>(
+        RecipientChatThreadState()
+    ) {
+    private val requests = MutableStateFlow<Long?>(null)
+    private var sequence = 0L
+    private val originals =
+        MutableStateFlow<List<CollaborationSpaceRecipientSubmission>>(emptyList())
+    private var progress = emptyList<CollaborationSpaceRecipientMessageProgress>()
+    private var editor: RecipientComposerEditingSession? = null
+    private var editorGeneration = 0L
+
+    init {
+        on<RecipientChatThreadEvent.Prepared>(::onPrepared)
+        on<RecipientChatThreadEvent.Entered>(::onEntered)
+        on<RecipientChatThreadEvent.Stopped>(::onStopped)
+        on<RecipientChatThreadEvent.TextChanged>(::onTextChanged)
+        on<RecipientChatThreadEvent.SendRequested>(::onSendRequested)
+        on<RecipientChatThreadEvent.RetryRequested>(::onRetryRequested)
+        observeRequests()
+    }
+
+    private fun onPrepared(event: RecipientChatThreadEvent.Prepared) {
+        if (requests.value == null && state.value.restriction == null) requests.value = ++sequence
+    }
+
+    private fun onEntered(event: RecipientChatThreadEvent.Entered) {
+        updateState { it.copy(visible = true) }
+        if (
+            requests.value == null ||
+                state.value.sourceFailure != null ||
+                state.value.destinationFailure != null ||
+                state.value.historyFailure != null ||
+                state.value.progressFailure != null
+        )
+            requests.value = ++sequence
+    }
+
+    private fun onStopped(event: RecipientChatThreadEvent.Stopped) {
+        updateState { it.copy(visible = false) }
+        // A retained route keeps local readers so account/admission changes can redact it.
+    }
+
+    private fun onTextChanged(event: RecipientChatThreadEvent.TextChanged) {
+        if (state.value.canCompose) editor?.change(event.text)
+    }
+
+    private fun onSendRequested(event: RecipientChatThreadEvent.SendRequested) {
+        if (state.value.canSend) editor?.send()
+    }
+
+    private fun onRetryRequested(event: RecipientChatThreadEvent.RetryRequested) {
+        if (!state.value.visible) return
+        if (state.value.restriction == null) editor?.retry()
+        if (
+            requests.value == null ||
+                state.value.sourceFailure != null ||
+                state.value.destinationFailure != null ||
+                state.value.historyFailure != null ||
+                state.value.progressFailure != null
+        )
+            requests.value = ++sequence
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun observeRequests() {
+        viewModelScope.launch {
+            requests
+                .flatMapLatest { request ->
+                    if (request == null) emptyFlow()
+                    else
+                        merge(
+                                observeSource(access, peerAccountId).map {
+                                    RecipientThreadReadResult.Source(request, it)
+                                },
+                                destinationReads(request),
+                            )
+                            .buffer(32)
+                }
+                .buffer(0)
+                .collect { input ->
+                    ensureActive()
+                    if (input.request != requests.value) return@collect
+                    when (input) {
+                        is RecipientThreadReadResult.Source -> onSource(input.result)
+                        is RecipientThreadReadResult.Destination -> onDestination(input.result)
+                        is RecipientThreadReadResult.History ->
+                            if (input.destination == state.value.destination)
+                                onHistory(input.result)
+                        is RecipientThreadReadResult.Progress ->
+                            if (input.destination == state.value.destination)
+                                onProgress(input.result)
+                    }
+                }
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun destinationReads(request: Long): Flow<RecipientThreadReadResult> =
+        observeDestination(access, peerAccountId)
+            .transformLatest { result ->
+                emit(RecipientThreadReadResult.Destination(request, result))
+                val destination = (result as? AppResult.Success)?.value
+                if (destination != null)
+                    merge(
+                            observeThread(access, destination.id).map {
+                                RecipientThreadReadResult.History(request, destination, it)
+                            },
+                            observeProgress.recipients(access, destination, originals).map {
+                                RecipientThreadReadResult.Progress(request, destination, it)
+                            },
+                        )
+                        .collect { emit(it) }
+            }
+            .buffer(0)
+
+    private fun onSource(result: AppResult<CollaborationSpaceRecipientProjection>) {
+        when (result) {
+            is AppResult.Failed -> {
+                if (collaborationSpaceDirectoryResponseClosesRead(result.failure))
+                    restrict(result.failure)
+                else updateState { it.copy(loading = false, sourceFailure = result.failure) }
+            }
+            is AppResult.Success -> {
+                updateState {
+                    it.copy(
+                        source = result.value,
+                        loading = false,
+                        sourceFailure = null,
+                        restriction = null,
+                    )
+                }
+                val current =
+                    editor
+                        ?: run {
+                            val generation = ++editorGeneration
+                            RecipientComposerEditingSession(
+                                    viewModelScope,
+                                    access,
+                                    peerAccountId,
+                                    save = { edit(it.access, it.expected, it.replacement) },
+                                    submit = { submit(it.access, it.expected, it.original) },
+                                    onState = {
+                                        if (generation == editorGeneration) onEditorChanged(it)
+                                    },
+                                )
+                                .also { editor = it }
+                        }
+                val alreadyBound = current.state.ready
+                current.bind(
+                    result.value.draft,
+                    result.value.submissions.maxOfOrNull { it.submittedAt },
+                )
+                // Initial bind publishes editor state synchronously; a replay only refreshes source
+                // facts.
+                if (alreadyBound) renderMessages()
+            }
+        }
+    }
+
+    private fun onDestination(result: AppResult<CollaborationSpaceConversationMetadata?>) {
+        when (result) {
+            is AppResult.Failed -> {
+                if (collaborationSpaceDirectoryResponseClosesRead(result.failure))
+                    restrict(result.failure)
+                else updateState { it.copy(destinationFailure = result.failure) }
+            }
+            is AppResult.Success -> {
+                if (state.value.destination != null && result.value != state.value.destination) {
+                    // The admitted association is immutable. Another target cannot reinterpret old
+                    // evidence.
+                    restrict(invalidThreadProjection().failure)
+                    return
+                }
+                updateState { it.copy(destination = result.value, destinationFailure = null) }
+                renderMessages()
+            }
+        }
+    }
+
+    private fun onHistory(result: AppResult<CollaborationSpaceThreadSnapshot>) {
+        when (result) {
+            is AppResult.Failed -> {
+                if (collaborationSpaceDirectoryResponseClosesRead(result.failure))
+                    restrict(result.failure)
+                else updateState { it.copy(historyFailure = result.failure) }
+            }
+            is AppResult.Success -> {
+                updateState { it.copy(thread = result.value, historyFailure = null) }
+                renderMessages()
+            }
+        }
+    }
+
+    private fun onProgress(result: AppResult<List<CollaborationSpaceRecipientMessageProgress>>) {
+        when (result) {
+            is AppResult.Failed -> {
+                if (collaborationSpaceDirectoryResponseClosesRead(result.failure))
+                    restrict(result.failure)
+                else updateState { it.copy(progressFailure = result.failure) }
+            }
+            is AppResult.Success -> {
+                progress = result.value
+                updateState { it.copy(progressFailure = null) }
+                renderMessages()
+            }
+        }
+    }
+
+    private fun onEditorChanged(value: RecipientComposerEditingState) {
+        val failure = value.failure
+        if (failure != null && collaborationSpaceDirectoryResponseClosesRead(failure))
+            restrict(failure)
+        else {
+            updateState { it.copy(editor = value) }
+            renderMessages()
+        }
+    }
+
+    private fun renderMessages() {
+        if (state.value.restriction != null) return
+        val current = state.value
+        val presentation =
+            projectRecipientChatPresentation(
+                access,
+                peerAccountId,
+                current.destination,
+                current.messages,
+                current.source?.submissions.orEmpty(),
+                current.editor.submissions,
+                progress,
+                current.thread,
+            )
+        if (presentation is AppResult.Failed) {
+            updateState { it.copy(projectionFailure = presentation.failure) }
+            return
+        }
+        val messages = (presentation as AppResult.Success).value
+        val rendered =
+            recipientChatThreadRows(
+                access,
+                peerAccountId,
+                current.destination,
+                current.thread,
+                messages,
+                current.rows,
+            )
+        if (rendered is AppResult.Failed) {
+            updateState { it.copy(projectionFailure = rendered.failure) }
+            return
+        }
+        updateState {
+            it.copy(
+                messages = messages,
+                rows = (rendered as AppResult.Success).value,
+                projectionFailure = null,
+            )
+        }
+        originals.value = messages.pending.map { it.original }
+        // Only the coherent displayed projection may release durable provisional actor entries.
+        editor?.represented(messages.represented.map { it.original }.toSet())
+    }
+
+    private fun restrict(failure: Failure) {
+        requests.value = null
+        originals.value = emptyList()
+        progress = emptyList()
+        editorGeneration++
+        val old = editor
+        editor = null
+        old?.close()
+        updateState {
+            RecipientChatThreadState(visible = it.visible, loading = false, restriction = failure)
+        }
+    }
+
+    override fun onCleared() {
+        requests.value = null
+        originals.value = emptyList()
+        progress = emptyList()
+        editorGeneration++
+        editor?.close()
+        editor = null
+        updateState { RecipientChatThreadState(loading = false) }
+        super.onCleared()
+    }
+}
