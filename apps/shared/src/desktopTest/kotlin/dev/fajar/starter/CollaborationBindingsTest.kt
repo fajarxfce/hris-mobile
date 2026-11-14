@@ -999,6 +999,22 @@ class CollaborationBindingsTest {
                         },
                     )
                     screens.put(
+                        "recipient-composer",
+                        container.koin.get<
+                            dev.fajar.starter.collaboration.presentation.recipient.RecipientComposerViewModel
+                        > {
+                            parametersOf(
+                                CollaborationSpaceLocalAccess(
+                                    "session",
+                                    "https://example.test/",
+                                    "account",
+                                    "group",
+                                ),
+                                "peer",
+                            )
+                        },
+                    )
+                    screens.put(
                         "space-root",
                         container.koin.get<
                             dev.fajar.starter.collaboration.presentation.navigation.SpaceChatRootOwner

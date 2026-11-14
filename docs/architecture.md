@@ -1,5 +1,7 @@
 # Architecture
 
+[Recipient editing ownership](collaboration-recipient-editor.md) keeps captured UI writes in a route-owned serial editor, admission/readback in use cases, and one cancellable draft observation in the ViewModel. Explicit reacquisition joins the previous reader.
+
 [Local recipient ownership](collaboration-recipient-owner.md) adds finite local transfer beside inbox repair. Raw snapshot codecs own mapping; repositories own storage transactions, domain use cases own admission and pure retry policy, and the app owns cancellation/subscriptions.
 
 [Finite recipient transfer](collaboration-recipient-transfer.md)

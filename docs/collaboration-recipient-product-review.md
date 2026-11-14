@@ -1,5 +1,7 @@
 # Product integration after recipient owner acceptance
 
+The [typed recipient editor and MVI consumer](collaboration-recipient-editor.md) are now implemented and tested. The durable pending/history projection, canonical association, represented-original acknowledgement and active product routes below remain required.
+
 Read-only trace, not an implemented route or schema proposal.
 
 SpaceChatInboxViewModel owns a retained Paging3 Pager (50/page, 150 loaded), a version publication and bounded visible name subscriptions. SpaceChatInboxPage currently renders only CollaborationSpaceInboxEntry, whose identity is a canonical conversationId. Existing pending activity/drafts are already ranked in that canonical index. SpaceChatThreadRoute likewise accepts only conversationId. SpaceContactsContent emits accountId under the retained account/Group root. A peer account ID must never be passed to the canonical thread route as an alias.

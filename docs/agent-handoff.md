@@ -1,27 +1,36 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 19:34 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 20:06 UTC. Continue beyond checkpoints; push every commit.
 All54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 
-## Local recipient transfer owner accepted
+## Recipient editor and read ownership accepted
 
-The account/Group inbox lifetime now owns bounded recipient transfer on all platforms, independently
-of native Matrix readiness. A separate encrypted source version prevents editor typing from waking
-transfer. Finite passes preserve fairness; waiting messages react only to their relevant catalog/index
-change, and own source writes settle without cancelling and restarting the current pass.
+RecipientComposerViewModel now binds the admitted local draft observer and existing recipient
+Edit/Submit use cases to a typed serial editor. Each Send captures independently and clears input
+immediately; later typing survives held/uncertain writes. Failed writes idle until explicit retry.
+The editor is fixed to its recipient/account/Group and never aliases a peer as a conversation ID.
 
-Validation: 18,125 cases (15944 fresh / 2181 exact unchanged), all18,035 prior IDs preserved plus90 executions. Focused127/session96178 and full/session56002 reaped0. Source a374f62d63853d2f187fc30cfcf8d9ed99efca075b92597c365300e821aa6263; reports d3d2f9d8600fec644b04faf7c857a4eb6b0a13f0183335793fcd5312d78cb7fd.
-Read [implementation and validation](collaboration-recipient-owner.md).
+A stale-reader reopening after write denial was reproduced before fixing it. One request-flow
+switch now cancels and joins superseded readers, checks request identity, and keeps at most one
+reader during repeated reacquisition. Hidden denial/account replacement redacts; disposal fences
+late writes. Actual generated application DI resolves the component.
 
-Continue the PRD and delivery.json in `/home/fajar/hris/.worktrees/communication-space/docs/collaboration/`.
-Next: pending-recipient list projection, rapid Send ownership, actual new-contact navigation,
-complete company filters and explicit Group rollout. The [product boundary review](collaboration-recipient-product-review.md)
-records the current canonical-only list/route contracts; do not pass peer IDs as conversation IDs
-or load all employees to merge pending rows. Keep the account/Group root outside Company scope.
+Validation: 18,169 cases (2145 fresh / 16024 exact unchanged), all18,125 prior IDs preserved plus44. Focused24/session30653 and full/session57802 reaped0. Source 6465a40adb649e9a39969ec7531596b2c583966ba8eb0144153e5150cdf2f66c; reports 604e57dedf0caed64d058a097da14d69e01e173c2c699e8c947c1d230146f0ad.
+Read [implementation and reproduced race](collaboration-recipient-editor.md).
 
-Phone93 remains installed from2eb833f4; this later source is not in that APK. Starter resource port
-e9b4ff50 remains independently accepted/pushed with1,052. GroupOFF/V117–140 undeployed/all54 PRD
-groups OPEN. Preserve blocked SQLite preparation, failed Apple evidence and protected stores.
+The local recipient transfer owner from1592cf6a remains integrated; read collaboration-recipient-owner.md.
+This new composer component has no active product route and cannot yet reconstruct pending bubbles
+after process restart. Next follow the raw-query/projection review in collaboration-recipient-projection-review.md,
+add durable recipient pending/history projection, feed retained ordering
+and exact represented-original acknowledgements, then canonical association and draft continuity.
+Continue the bounded list/identity design in collaboration-recipient-product-review.md before
+activating contact navigation, complete company filters and Group rollout. Do not disguise peer IDs
+as conversation IDs, duplicate rows on handoff, or load all5,000 employees to merge pending entries.
+
+The full PRD/delivery.json is in `/home/fajar/hris/.worktrees/communication-space/docs/collaboration/`.
+Keep account/Group root outside Company scope. Phone93 remains installed from2eb833f4 and predates
+this component. Starter e9b4ff50 remains independently accepted with1,052. GroupOFF/V117–140
+undeployed/all54 PRD groups OPEN. Preserve blocked SQLite preparation, failed Apple and protected stores.
 
 ## Delivered build and loop diagnosis
 
