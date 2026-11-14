@@ -1,5 +1,12 @@
 # Template updates
 
+## Independent navigation stacks — 14 November 2026
+
+Two generic files from Mobile21435d2d are independently accepted and pushed as
+[Starterbd13df7](https://github.com/fajarxfce/compose-fluent-starter/commit/bd13df78622b42a237ff5d847ba4a7034dc3dcfe). All1,049 prior tests plus3 desktop cases remain valid; Android variants, Web and Apple compilation pass.
+Starter format1 remains separate from Mobile format3. See
+[exact evidence](measurements/navigation-stack-starter-port-2026-11-14.json). No HRIS policy or Group activation is ported.
+
 ## Atomic replica publication — port complete
 
 [Starter36fa855](https://github.com/fajarxfce/compose-fluent-starter/commit/36fa855c58772d4863d27ba6c4e28123dea9a441)

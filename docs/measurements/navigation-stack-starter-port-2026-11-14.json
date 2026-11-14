@@ -1,0 +1,16 @@
+{
+  "starterCommit": "bd13df78622b42a237ff5d847ba4a7034dc3dcfe",
+  "mobileCommit": "21435d2dccac25528c3d28b30f2605973cd4ff6e",
+  "validatedTests": 1052,
+  "freshTests": 83,
+  "reusedUnchangedTests": 969,
+  "sourceManifestSha256": "e4e702e9c32a43fd1f4b4605962cfa9b7b3af8a3a6648e35240157ddbad21bef",
+  "reportManifestSha256": "a6fec78036cf99f00bec6b72cd7a96b8fd7d95072200c32c3ebc14baeb911d46",
+  "fullSession": 34131,
+  "fullReaped": true,
+  "savedStateFormat": 1,
+  "libraryRevision": "742a2d1c2285c720cef80ea3913195f3ece388cc",
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "actualNewAppleTests": 0
+}

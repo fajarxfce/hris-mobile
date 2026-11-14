@@ -1,7 +1,36 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 13:45 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 13:54 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
+
+## Generic independent navigation port accepted and pushed
+
+Starter bd13df78622b42a237ff5d847ba4a7034dc3dcfe independently accepts the generic navigation owner port:
+1,052 validated cases (83 fresh /969 exact unchanged), preserving all1,049 prior identities and
+adding the same3 desktop cases. Source e4e702e9c32a43fd1f4b4605962cfa9b7b3af8a3a6648e35240157ddbad21bef;
+reports a6fec78036cf99f00bec6b72cd7a96b8fd7d95072200c32c3ebc14baeb911d46. Full1/session34131 reaped0 in380.394s.
+Three Android variants, lint0 errors/48 advisories, production Web, app browser and Apple source/
+test-source compilation pass. Starter format1 is preserved; Mobile format3 stays downstream.
+Pinned Inspector742a2d1c and its pre-existing gradlew.bat difference are unchanged.
+
+Exact port: https://github.com/fajarxfce/compose-fluent-starter/commit/bd13df78622b42a237ff5d847ba4a7034dc3dcfe
+Mobile source21435d2dccac25528c3d28b30f2605973cd4ff6e remains accepted with17,803 validated cases.
+No new Apple runtime, phone installation or live change. Do not rerun these accepted checks.
+
+Continue .work/space-recipient-drafts-2026-11-14 in Mobile:6 UNAPPLIED draft files cover a distinct
+peer-addressed model/repository contract/policy, encrypted codec/repository and9 initial storage
+cases. They are incomplete and untested. Finish tamper/cancellation/contention/isolation coverage,
+platform wrappers, domain admission/edit/observation and actual DI before applying/testing. The
+codec uses a separate authenticated Group partition and shared owned content key; empty revisions
+fence late writers. Neither peer ID nor setup-command ID becomes a fake conversation ID.
+
+This draft package does not implement offline Send. A peer-addressed original queue, canonical
+handoff and product inbox/new-contact entry remain. Complete company filtering and explicit Group/
+legacy rollout selection remain as recorded in the navigation evidence. Keep AppViewModel at the
+window; reuse the swipe hub/FAB. Phone92/GroupOFF/V117–140 undeployed remain. All54 PRD groups OPEN.
+Continue beyond checkpoints, push each commit, one compiler OR emulator, no agents. Preserve the
+blocked SQLite fixture payload and failed hosted Apple proof.
+
 
 ## Independent retained navigation stacks accepted
 
