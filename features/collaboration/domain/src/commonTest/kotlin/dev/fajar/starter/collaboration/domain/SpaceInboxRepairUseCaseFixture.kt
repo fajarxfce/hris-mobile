@@ -174,8 +174,8 @@ internal class SpaceInboxRepairUseCaseFixture {
             base.native.server,
         )
 
-    fun observeDemand() =
-        ObserveCollaborationSpaceInboxRepairDemand(
+    fun observeSignals() =
+        ObserveCollaborationSpaceInboxRepairSignals(
             progress,
             directory,
             sessions,

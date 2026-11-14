@@ -64,7 +64,7 @@ class CollaborationSpaceInboxRepairIntegrationTest {
                 val inbox = f.koin.get<CollaborationSpaceInboxRepository>()
                 val progress = f.koin.get<CollaborationSpaceInboxRepairProgressRepository>()
                 val observeMessages = f.koin.get<ObserveCollaborationSpaceMessages>()
-                val requests = f.koin.get<ObserveCollaborationSpaceInboxRepairDemand>()
+                val requests = f.koin.get<ObserveCollaborationSpaceInboxRepairSignals>()
                 val readProgress = f.koin.get<ReadCollaborationSpaceInboxRepairProgress>()
                 val changeProgress = f.koin.get<ChangeCollaborationSpaceInboxRepairProgress>()
                 val readPage = f.koin.get<ReadCollaborationSpaceInboxRepairs>()
@@ -98,7 +98,7 @@ class CollaborationSpaceInboxRepairIntegrationTest {
                                 }
                                 .distinctUntilChanged()
                         },
-                        requests = { requests(it) },
+                        signals = { requests(it) },
                         readProgress = { readProgress(it) },
                         changeProgress = { local, change -> changeProgress(local, change) },
                         readPage = { local, after, limit -> readPage(local, after, limit) },

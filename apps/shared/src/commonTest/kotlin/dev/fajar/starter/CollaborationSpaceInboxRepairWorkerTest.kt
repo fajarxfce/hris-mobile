@@ -11,6 +11,31 @@ import kotlinx.coroutines.test.*
 
 class CollaborationSpaceInboxRepairWorkerTest {
     @Test
+    fun completionOnlyUpdatesDoNotRestartAFailedCommandPass() = runTest {
+        val f = SpaceInboxRepairWorkerFixture()
+        f.onPage = { _, _ -> AppResult.Failed(f.storageFailure) }
+        val job = backgroundScope.launch { f.worker()(f.access).collect() }
+        runCurrent()
+        val parked = assertNotNull(f.progress)
+        assertEquals(1, f.pages.size)
+        val reads = f.progressReads
+        val changes = f.changes.toList()
+        f.demand.value =
+            AppResult.Success(CollaborationSpaceInboxRepairSignals(parked.latestDemand, f.id(900)))
+        runCurrent()
+        assertEquals(1, f.pages.size)
+        assertEquals(reads, f.progressReads)
+        assertEquals(changes, f.changes)
+        f.request()
+        runCurrent()
+        assertEquals(2, f.pages.size)
+        assertEquals(1, f.requestStarts)
+        job.cancelAndJoin()
+        assertEquals(1, f.commandStops)
+        assertEquals(1, f.requestStops)
+    }
+
+    @Test
     fun unchangedReopenKeepsCompletedDemandAndDoesNotReadAnotherRepairPage() = runTest {
         val f = SpaceInboxRepairWorkerFixture()
         val first = backgroundScope.launch { f.worker()(f.access).collect() }

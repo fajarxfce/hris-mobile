@@ -12,6 +12,72 @@ import kotlinx.coroutines.test.*
 
 class ObserveSpaceInboxRepairDemandTest {
     @Test
+    fun finishingAnOlderCapturedPassDoesNotClaimTheLaterRequestCompleted() = runTest {
+        val f = SpaceInboxRepairUseCaseFixture()
+        val older = f.initial.latestDemand
+        val newer = f.id(20)
+        val active =
+            f.initial.copy(
+                latestDemand = newer,
+                pass = CollaborationSpaceInboxRepairPass(older, null),
+            )
+        val completed = active.copy(generation = f.id(21), completedDemand = older, pass = null)
+        f.progressSource = { flowOf(AppResult.Success(active), AppResult.Success(completed)) }
+        val values = mutableListOf<AppResult<CollaborationSpaceInboxRepairSignals>>()
+        val job =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                f.observeSignals()(f.access).toList(values)
+            }
+        runCurrent()
+        assertEquals<List<AppResult<CollaborationSpaceInboxRepairSignals>>>(
+            listOf(
+                AppResult.Success(CollaborationSpaceInboxRepairSignals(newer, null)),
+                AppResult.Success(CollaborationSpaceInboxRepairSignals(newer, older)),
+            ),
+            values,
+        )
+        assertEquals(1, f.progressObservations)
+        assertEquals(1, f.progressStops)
+        assertTrue(f.replacements.isEmpty())
+        job.cancelAndJoin()
+    }
+
+    @Test
+    fun clearingProgressRemovesBothSignalsAndPhysicalOnlyChangesStayQuiet() = runTest {
+        val f = SpaceInboxRepairUseCaseFixture()
+        val finished = f.initial.copy(completedDemand = f.initial.latestDemand)
+        f.progressSource = {
+            flowOf(
+                AppResult.Success(finished),
+                AppResult.Success(finished.copy(generation = f.id(30))),
+                AppResult.Success(null),
+                AppResult.Success(null),
+            )
+        }
+        val values = mutableListOf<AppResult<CollaborationSpaceInboxRepairSignals>>()
+        val job =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                f.observeSignals()(f.access).toList(values)
+            }
+        runCurrent()
+        assertEquals<List<AppResult<CollaborationSpaceInboxRepairSignals>>>(
+            listOf(
+                AppResult.Success(
+                    CollaborationSpaceInboxRepairSignals(
+                        finished.latestDemand,
+                        finished.latestDemand,
+                    )
+                ),
+                AppResult.Success(CollaborationSpaceInboxRepairSignals(null, null)),
+            ),
+            values,
+        )
+        assertEquals(1, f.progressObservations)
+        assertEquals(0, f.checkpointReads)
+        job.cancelAndJoin()
+    }
+
+    @Test
     fun startingAdvancingRestartingAndAcknowledgingOnePassDoNotEmitAnotherRequest() = runTest {
         val f = SpaceInboxRepairUseCaseFixture()
         val first = f.initial
@@ -37,19 +103,34 @@ class ObserveSpaceInboxRepairDemandTest {
                 AppResult.Success(next),
             )
         }
-        val values = mutableListOf<AppResult<String?>>()
+        val values = mutableListOf<AppResult<CollaborationSpaceInboxRepairSignals>>()
         val job =
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                f.observeDemand()(f.access).toList(values)
+                f.observeSignals()(f.access).toList(values)
             }
         runCurrent()
-        assertEquals<List<AppResult<String?>>>(
+        assertEquals<List<AppResult<CollaborationSpaceInboxRepairSignals>>>(
             listOf(
-                AppResult.Success(null),
-                AppResult.Success(first.latestDemand),
-                AppResult.Success(next.latestDemand),
+                AppResult.Success(CollaborationSpaceInboxRepairSignals(null, null)),
+                AppResult.Success(CollaborationSpaceInboxRepairSignals(first.latestDemand, null)),
+                AppResult.Success(
+                    CollaborationSpaceInboxRepairSignals(first.latestDemand, first.latestDemand)
+                ),
+                AppResult.Success(
+                    CollaborationSpaceInboxRepairSignals(next.latestDemand, first.latestDemand)
+                ),
             ),
             values,
+        )
+        assertEquals(
+            listOf(null, first.latestDemand, next.latestDemand),
+            values
+                .map {
+                    assertIs<AppResult.Success<CollaborationSpaceInboxRepairSignals>>(it)
+                        .value
+                        .latestDemand
+                }
+                .distinct(),
         )
         assertEquals(1, f.progressObservations)
         assertEquals(1, f.progressStops)
@@ -63,10 +144,10 @@ class ObserveSpaceInboxRepairDemandTest {
         val f = SpaceInboxRepairUseCaseFixture()
         f.base.native.setup.now += 365.days
         f.base.native.setup.workspace = null
-        val values = mutableListOf<AppResult<String?>>()
+        val values = mutableListOf<AppResult<CollaborationSpaceInboxRepairSignals>>()
         val job =
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                f.observeDemand()(f.access).toList(values)
+                f.observeSignals()(f.access).toList(values)
             }
         runCurrent()
         f.base.identity.value =
@@ -76,8 +157,12 @@ class ObserveSpaceInboxRepairDemandTest {
                 )
             )
         runCurrent()
-        assertEquals<List<AppResult<String?>>>(
-            listOf(AppResult.Success(f.initial.latestDemand)),
+        assertEquals<List<AppResult<CollaborationSpaceInboxRepairSignals>>>(
+            listOf(
+                AppResult.Success(
+                    CollaborationSpaceInboxRepairSignals(f.initial.latestDemand, null)
+                )
+            ),
             values,
         )
         assertEquals(1, f.progressObservations)
@@ -89,10 +174,10 @@ class ObserveSpaceInboxRepairDemandTest {
     @Test
     fun denialRemainsClosedThroughFailedAdmissionUntilAnAdmittedUpdate() = runTest {
         val f = SpaceInboxRepairUseCaseFixture()
-        val values = mutableListOf<AppResult<String?>>()
+        val values = mutableListOf<AppResult<CollaborationSpaceInboxRepairSignals>>()
         val job =
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                f.observeDemand()(f.access).toList(values)
+                f.observeSignals()(f.access).toList(values)
             }
         runCurrent()
         f.base.deny()
@@ -108,7 +193,10 @@ class ObserveSpaceInboxRepairDemandTest {
         assertEquals(1, f.progressObservations)
         f.base.gate.value = AppResult.Success(f.base.open)
         runCurrent()
-        assertEquals(AppResult.Success(f.id(9)), values.last())
+        assertEquals(
+            AppResult.Success(CollaborationSpaceInboxRepairSignals(f.id(9), null)),
+            values.last(),
+        )
         assertEquals(2, f.progressObservations)
         job.cancelAndJoin()
         assertEquals(2, f.progressStops)
@@ -125,10 +213,10 @@ class ObserveSpaceInboxRepairDemandTest {
                 release.await()
             }
         }
-        val values = mutableListOf<AppResult<String?>>()
+        val values = mutableListOf<AppResult<CollaborationSpaceInboxRepairSignals>>()
         val job =
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                f.observeDemand()(f.access).toList(values)
+                f.observeSignals()(f.access).toList(values)
             }
         entered.await()
         f.base.identity.value = AppResult.Success(null)
@@ -154,16 +242,19 @@ class ObserveSpaceInboxRepairDemandTest {
                 AppResult.Success(f.initial),
             )
         }
-        val values = mutableListOf<AppResult<String?>>()
+        val values = mutableListOf<AppResult<CollaborationSpaceInboxRepairSignals>>()
         val job =
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                f.observeDemand()(f.access).toList(values)
+                f.observeSignals()(f.access).toList(values)
             }
         runCurrent()
         assertEquals(3, values.size)
         assertEquals(FailureKind.Unexpected, assertIs<AppResult.Failed>(values[0]).failure.kind)
         assertEquals(AppResult.Failed(f.base.storageFailure), values[1])
-        assertEquals(AppResult.Success(f.initial.latestDemand), values[2])
+        assertEquals(
+            AppResult.Success(CollaborationSpaceInboxRepairSignals(f.initial.latestDemand, null)),
+            values[2],
+        )
         assertEquals(1, f.progressObservations)
         assertTrue(f.replacements.isEmpty())
         job.cancelAndJoin()
@@ -175,13 +266,13 @@ class ObserveSpaceInboxRepairDemandTest {
         assertEquals(
             FailureKind.Validation,
             assertIs<AppResult.Failed>(
-                    f.observeDemand()(f.access.copy(spaceId = "invalid")).first()
+                    f.observeSignals()(f.access.copy(spaceId = "invalid")).first()
                 )
                 .failure
                 .kind,
         )
         f.base.deny()
-        assertEquals(AppResult.Failed(f.base.denied), f.observeDemand()(f.access).first())
+        assertEquals(AppResult.Failed(f.base.denied), f.observeSignals()(f.access).first())
         assertEquals(0, f.progressObservations)
         assertTrue(f.replacements.isEmpty())
     }

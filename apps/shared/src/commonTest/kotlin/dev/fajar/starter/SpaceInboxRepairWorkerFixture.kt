@@ -39,7 +39,10 @@ internal class SpaceInboxRepairWorkerFixture {
         MutableStateFlow<AppResult<List<CollaborationSpaceMessageRecord>>>(
             AppResult.Success(emptyList())
         )
-    val demand = MutableStateFlow<AppResult<String?>>(AppResult.Success(null))
+    val demand =
+        MutableStateFlow<AppResult<CollaborationSpaceInboxRepairSignals>>(
+            AppResult.Success(CollaborationSpaceInboxRepairSignals(null, null))
+        )
     var progress: CollaborationSpaceInboxRepairProgress? = null
     var generation = 100
     val references = linkedMapOf(reference.intent.id to reference)
@@ -89,7 +92,10 @@ internal class SpaceInboxRepairWorkerFixture {
                 )
                 .value
         progress = next
-        demand.value = AppResult.Success(next.latestDemand)
+        demand.value =
+            AppResult.Success(
+                CollaborationSpaceInboxRepairSignals(next.latestDemand, next.completedDemand)
+            )
         return requestedId
     }
 
@@ -106,7 +112,7 @@ internal class SpaceInboxRepairWorkerFixture {
                     }
                 }
             },
-            requests = { owner ->
+            signals = { owner ->
                 assertEquals(access, owner)
                 flow {
                     requestStarts++
@@ -128,7 +134,13 @@ internal class SpaceInboxRepairWorkerFixture {
                 val next = collaborationSpaceInboxRepairProgress(progress, change, id(generation++))
                 if (next is AppResult.Success) {
                     progress = next.value
-                    demand.value = AppResult.Success(next.value.latestDemand)
+                    demand.value =
+                        AppResult.Success(
+                            CollaborationSpaceInboxRepairSignals(
+                                next.value.latestDemand,
+                                next.value.completedDemand,
+                            )
+                        )
                     afterChange(change)
                 }
                 next

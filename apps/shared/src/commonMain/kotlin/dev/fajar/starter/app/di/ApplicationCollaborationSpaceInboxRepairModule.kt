@@ -10,7 +10,7 @@ import org.koin.dsl.module
 internal fun applicationCollaborationSpaceInboxRepairModule() = module {
     factory {
         val messages = inject<ObserveCollaborationSpaceMessages>()
-        val requests = inject<ObserveCollaborationSpaceInboxRepairDemand>()
+        val requests = inject<ObserveCollaborationSpaceInboxRepairSignals>()
         val progress = inject<ReadCollaborationSpaceInboxRepairProgress>()
         val change = inject<ChangeCollaborationSpaceInboxRepairProgress>()
         val page = inject<ReadCollaborationSpaceInboxRepairs>()
@@ -19,7 +19,7 @@ internal fun applicationCollaborationSpaceInboxRepairModule() = module {
         val seed = inject<SeedCollaborationSpaceInboxOriginal>()
         CollaborationSpaceInboxRepairWorker(
             messages = { messages.value(it) },
-            requests = { requests.value(it) },
+            signals = { requests.value(it) },
             readProgress = { progress.value(it) },
             changeProgress = { access, mutation -> change.value(access, mutation) },
             readPage = { access, after, limit -> page.value(access, after, limit) },

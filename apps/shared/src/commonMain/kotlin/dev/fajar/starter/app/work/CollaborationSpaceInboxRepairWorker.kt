@@ -19,7 +19,8 @@ import kotlinx.coroutines.flow.*
 class CollaborationSpaceInboxRepairWorker(
     private val messages:
         (CollaborationSpaceLocalAccess) -> Flow<AppResult<List<CollaborationSpaceMessageRecord>>>,
-    private val requests: (CollaborationSpaceLocalAccess) -> Flow<AppResult<String?>>,
+    private val signals:
+        (CollaborationSpaceLocalAccess) -> Flow<AppResult<CollaborationSpaceInboxRepairSignals>>,
     private val readProgress:
         suspend (CollaborationSpaceLocalAccess) -> AppResult<
                 CollaborationSpaceInboxRepairProgress?
@@ -53,9 +54,9 @@ class CollaborationSpaceInboxRepairWorker(
                 var previousRequest: String? = null
                 var seedRecoveryPending = false
                 var seedFailure: Failure? = null
-                combine(messages(access), requests(access), ::Input).conflate().collect { input ->
+                combine(messages(access), signals(access), ::Input).conflate().collect { input ->
                     val records = input.messages
-                    val request = input.request
+                    val request = input.signals
                     if (records is AppResult.Failed || request is AppResult.Failed) {
                         emit(
                             if (records is AppResult.Failed) records
@@ -82,7 +83,7 @@ class CollaborationSpaceInboxRepairWorker(
                         return@collect
                     }
                     val originals = (seedSelection as AppResult.Success).value
-                    val signal = (request as AppResult.Success).value
+                    val signal = (request as AppResult.Success).value.latestDemand
                     val initializing = !receivedRequest
                     val requested = initializing || previousRequest != signal
                     receivedRequest = true
@@ -207,6 +208,6 @@ class CollaborationSpaceInboxRepairWorker(
 
     private data class Input(
         val messages: AppResult<List<CollaborationSpaceMessageRecord>>,
-        val request: AppResult<String?>,
+        val signals: AppResult<CollaborationSpaceInboxRepairSignals>,
     )
 }

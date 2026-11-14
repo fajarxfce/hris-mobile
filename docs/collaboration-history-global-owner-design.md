@@ -2,7 +2,7 @@
 
 Current status: 23 reviewed/formatted UNAPPLIED source paths, 57 new shared cases. Focused59 and
 full17372 gates, recording and commit scripts are prepared but UNRUN. Prerequisite owner inputs
-full17258 is still running. Source changes and application/consumer activation are separate gates.
+full17258 is locally accepted; commit/push before applying the global draft. Source changes and application/consumer activation are separate gates.
 
 ## Durable state and finite continuation
 

@@ -9,14 +9,16 @@ import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-/** Only a new durable request emits; advancing or acknowledging a pass cannot schedule itself. */
-class ObserveCollaborationSpaceInboxRepairDemand(
+/** One admitted metadata subscription exposes new demand and completed repair independently. */
+class ObserveCollaborationSpaceInboxRepairSignals(
     private val progress: CollaborationSpaceInboxRepairProgressRepository,
     private val directory: CollaborationSpaceDirectoryRepository,
     private val sessions: SessionRepository,
     private val server: IdentityServer,
 ) {
-    operator fun invoke(access: CollaborationSpaceLocalAccess): Flow<AppResult<String?>> =
+    operator fun invoke(
+        access: CollaborationSpaceLocalAccess
+    ): Flow<AppResult<CollaborationSpaceInboxRepairSignals>> =
         flow {
                 if (!validCollaborationSpaceInboxRepairRequest(access, null, 1)) {
                     emit(
@@ -36,7 +38,7 @@ class ObserveCollaborationSpaceInboxRepairDemand(
         var denial: Failure? = null
 
         @OptIn(ExperimentalCoroutinesApi::class)
-        fun observe(): Flow<AppResult<String?>> =
+        fun observe(): Flow<AppResult<CollaborationSpaceInboxRepairSignals>> =
             sessions
                 .observe()
                 .map { result ->
@@ -75,7 +77,13 @@ class ObserveCollaborationSpaceInboxRepairDemand(
                                                 "client.collaboration_invalid_response",
                                                 FailureKind.Unexpected,
                                             )
-                                        else AppResult.Success(value?.latestDemand)
+                                        else
+                                            AppResult.Success(
+                                                CollaborationSpaceInboxRepairSignals(
+                                                    value?.latestDemand,
+                                                    value?.completedDemand,
+                                                )
+                                            )
                                     }
                                 }
                             }

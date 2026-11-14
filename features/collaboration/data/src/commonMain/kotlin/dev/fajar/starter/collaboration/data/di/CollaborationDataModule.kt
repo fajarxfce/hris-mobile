@@ -808,12 +808,12 @@ class CollaborationDataModule {
     ) = ReadCollaborationSpaceInboxRepairProgress(progress, directory, sessions, server)
 
     @Factory
-    fun observeSpaceInboxRepairDemand(
+    fun observeSpaceInboxRepairSignals(
         progress: CollaborationSpaceInboxRepairProgressRepository,
         directory: CollaborationSpaceDirectoryRepository,
         sessions: SessionRepository,
         server: IdentityServer,
-    ) = ObserveCollaborationSpaceInboxRepairDemand(progress, directory, sessions, server)
+    ) = ObserveCollaborationSpaceInboxRepairSignals(progress, directory, sessions, server)
 
     @Factory
     fun changeSpaceInboxRepairProgress(
@@ -4197,6 +4197,14 @@ class CollaborationDataModule {
         sessions: SessionRepository,
         server: IdentityServer,
     ) = ReadCollaborationSpaceInboxHistorySource(progress, directory, sessions, server)
+
+    @Factory
+    fun readSpaceInboxHistorySources(
+        progress: CollaborationSpaceInboxHistorySourceRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpaceInboxHistorySources(progress, directory, sessions, server)
 
     @Factory
     fun restartSpaceInboxHistorySource(

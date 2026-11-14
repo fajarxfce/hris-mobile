@@ -1,36 +1,36 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 05:27 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 05:34 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
 
-## Active history owner input verification
+## History owner inputs locally accepted
 
-The combined .work/history-inbox-owner-inputs-2026-11-14 package is APPLIED:15 source paths,
-11 shared additions. Focused2/session97204 REAPED0 and ACCEPTED47; source5511/
-60a0e25b8db4c76a3e8b07714747c1fedf44cf21ebb34775751747ad864ee2bf, result
-29246113b85c9caa76f019f2a18fc21cdfd5f0d595878fce9c0ec51aa7e09c3f. Full1/session23657
-is RUNNING, expected17258. Reap and audit before accepting. Focused1/session7359 failed before
-tests due only to three new test collection type assertions; its source/result and correction
-remain recorded. No production behavior was changed for that correction. Standalone signals and
-enumeration gates remain disabled; there is no intermediate17242 acceptance.
+Mobile .work/history-inbox-owner-inputs-2026-11-14 is accepted:15 paths including one rename,
+11 shared additions. Focused47/full17258 (15077 fresh /2181 unchanged)
+preserve all17236 prior identities plus22 executions. Source5511/60a0e25b8db4c76a3e8b07714747c1fedf44cf21ebb34775751747ad864ee2bf;
+reports52fe0d0ecc67b38832b0228910ede03fd91acf9663bf08b322a84ff9a08720d9. One admitted observation carries latest and completed demand;
+old-pass completion stays distinct from later demand, and intermediate cursors stay quiet.
+The existing command worker does not restart an unchanged failed pass on completion alone.
+No global history worker or product consumer was activated.
 
-Latest accepted source baseline is Mobilec97d7d4d/full17236 and Groupbbb67ab0, both pushed.
-Global progress now has23 reviewed/formatted UNAPPLIED paths and57 shared cases in
-.work/history-inbox-global-owner-2026-11-14. Focused59/full17372 plus record/commit gates are
-prepared UNRUN. The draft includes encrypted bounded state, exact two-operation source/destination
-guards, admitted read/change/metadata observation and DI. Review caught and closed two draft bugs:
-unknown prior source state falsely counted as progress, and failed catalog preparation could be
-forgotten after healthy source rounds. Retained catalogDeferred now survives storage/reopening.
-These are draft changes, not accepted behavior. Apply only after owner inputs acceptance/push.
+Next .work/history-inbox-global-owner-2026-11-14 has23 reviewed/formatted UNAPPLIED paths,
+57 shared regressions and focused59/full17372 plus recording/commit gates prepared UNRUN. Apply
+after this source/evidence is committed and pushed. It retains global state, bounded queues,
+source/destination guards and admitted metadata observation. Then integrate fair finite
+continuation under the existing account/Group repair lifetime. Respect the TWO-operation raw transaction bound: review retained bounded page queues,
+one source checkpoint guard per acknowledgement and index guards at capture/final completion.
+Retain completed pass IDs, exact captured triggers, older source windows and unresolved references.
+Use completed repair demand for history timing through this shared observation. Do not add polling,
+per-room observers or UI/VM orchestration. Failed-only rounds must park; Restart alone is not useful
+progress. Cheap destination metadata observation, global storage/policy,
+incoming completion, thread/list/UI and SDK8 Apple app activation still need implementation/evidence.
 
-Global application worker and incoming/thread/list consumers remain inactive. Keep orchestration
-and continuation policy in domain, preserve command service and one typed repair observation, and
-reacquire signals after global contention. No polling or per-room observers. Full current review
-is in docs/collaboration-history-global-owner-design.md (Mobile) and
-collaboration/mobile-history-global-owner-design.md (Group). Phone92 and live remain unchanged.
-GroupOFF/V117-140 undeployed; actual new Apple execution and all54 PRD acceptance groups stay open.
+Phone92 remains installed; no phone/live change. GroupOFF/V117-140 undeployed. Earlier source
+admission17236 and Starter092fbe6f remain accepted. Preserve failed hosted Apple evidence and the
+blocked fixture payload; actual new Apple execution is outstanding. All54 PRD groups remain open.
+Continue beyond checkpoints, push every commit, one compiler OR emulator, no agents.
 
 ## Admitted history source operations locally accepted
 

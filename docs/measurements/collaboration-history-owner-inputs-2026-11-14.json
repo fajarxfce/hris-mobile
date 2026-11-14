@@ -1,0 +1,96 @@
+{
+  "acceptedLocally": true,
+  "changedPaths": [
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationCollaborationSpaceInboxRepairModule.kt",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationSpaceInboxRepairWorker.kt",
+    "apps/shared/src/commonTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxRepairWorkerTest.kt",
+    "apps/shared/src/commonTest/kotlin/dev/fajar/starter/SpaceInboxRepairWorkerFixture.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxRepairIntegrationTest.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceInboxRepairSignals.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInboxHistorySourcesPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceInboxRepairDemand.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceInboxRepairSignals.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceInboxHistorySources.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceInboxRepairDemandTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadSpaceInboxHistorySourcesTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceInboxRepairUseCaseFixture.kt"
+  ],
+  "focused": {
+    "accepted": true,
+    "tests": 47,
+    "elapsedSeconds": 340.726,
+    "sourceFiles": 5511,
+    "sourceManifestSha256": "60a0e25b8db4c76a3e8b07714747c1fedf44cf21ebb34775751747ad864ee2bf",
+    "resultSha256": "29246113b85c9caa76f019f2a18fc21cdfd5f0d595878fce9c0ec51aa7e09c3f",
+    "classes": {
+      "CollaborationSpaceInboxRepairIntegrationTest": 3,
+      "CollaborationSpaceInboxRepairWorkerTest": 13,
+      "CollaborationBindingsTest": 2,
+      "ObserveSpaceInboxRepairDemandTest": 8,
+      "ReadSpaceInboxHistorySourcesTest": 8,
+      "SpaceInboxRepairProgressPolicyTest": 13
+    },
+    "priorCaseIdsRetained": true
+  },
+  "full": {
+    "startedAt": "2026-11-14T05:16:40.024428+00:00",
+    "elapsedSeconds": 1018.251,
+    "sourceFiles": 5511,
+    "freshCounts": {
+      "tests": 15077,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 154741969,
+      "sha256": "d784752c3f256ba5def905b75d9243dc1ed5e1172b4869e01955edf94dcfdda2"
+    },
+    "fullyAccepted": true,
+    "validatedTests": 17258,
+    "newCases": 22,
+    "freshTests": 15077,
+    "reusedUnaffectedTests": 2181,
+    "priorCaseIdsPreserved": true,
+    "excludedHistoricalReports": 108,
+    "excludedHistoricalCases": 633,
+    "sourceManifestSha256": "60a0e25b8db4c76a3e8b07714747c1fedf44cf21ebb34775751747ad864ee2bf",
+    "reportManifestSha256": "52fe0d0ecc67b38832b0228910ede03fd91acf9663bf08b322a84ff9a08720d9",
+    "nativeClaim": "Eleven shared repair signal and admitted source enumeration regressions; no global history owner activation."
+  },
+  "newSharedMethods": 11,
+  "requiresStarterPort": false,
+  "actualNewAppleExecution": false,
+  "ownerActivated": false,
+  "installedPhoneBuild": 92,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "failedFocusedAttempts": [
+    {
+      "startedAt": "2026-11-14T05:04:31.754804+00:00",
+      "elapsedSeconds": 125.821,
+      "exitCode": 1,
+      "sourceFiles": 5511,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "attempt": "focused-1",
+      "session": 7359,
+      "reaped": true,
+      "sourceManifestSha256": "ee338bdf2832fe689d04a0bde5406a89faf0e4578275fb873178e62f37ab829a",
+      "resultSha256": "90879106290f5a1bebca60c23160df72e69b4728623fbf3b296d8a614a5874a2",
+      "cause": "Three new test assertions inferred List<Success<Signals>> vs List<AppResult<Signals>>, and List<Pair<String,Int>> vs List<Pair<String?,Int>>; explicit expected types required.",
+      "productionChanged": false,
+      "paths": [
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveSpaceInboxRepairDemandTest.kt",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadSpaceInboxHistorySourcesTest.kt"
+      ]
+    }
+  ]
+}
