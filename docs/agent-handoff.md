@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 04:06 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 04:12 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -14,10 +14,13 @@ reportse4a1f2a63e431049a668948839885468cac021ee919adc58ed1ce9e579e723a9.
 
 Current .work/inbox-repair-bootstrap-demand-2026-11-14 has9 APPLIED reviewed/formatted paths,
 9 shared additions with37 prior methods retained. Apply42283 REAPED. Source5494/
-1e59c7c77ee44f364137e0d067ba4a84dc4d275f523e2189dee72ca177b2b53c. Focused1/session40704 is RUNNING
-(expected48); full17138 and record/commit gates prepared UNRUN. Reap then audit focused; if accepted
-run full without source changes, reap/audit all17120 prior cases plus18 new executions, record,
-commit/push mobile then Group. No new failed attempt observed. Do not edit source during this run.
+f2912883f10e756f2460032c2973ae6193c8348069ec5d7400ce0dba5ca51ff7. Focused1/session40704 REAPED1:
+34 domain cases passed, then app test compilation failed at WorkerTest:295 because the new saved
+cursor list required explicit String? element type. Production was not changed. Original source,
+result and one-line correction remain in .work and the acceptance recorder preserves this failed
+attempt. Focused2/session58439 is RUNNING (expected48), with full17138 prepared UNRUN. Reap,
+audit then run full, record/commit/push mobile before Group. Do not change source during the run.
+
 
 Next source lifecycle6 and pending admission8 are reviewed/formatted UNAPPLIED drafts with all
 application/focused/full/record/commit gates prepared UNRUN. Lifecycle expects40/17168, pending
@@ -32,6 +35,13 @@ when retrying unresolved history; no polling or permanent per-room observation.
 Phone92 remains installed; no phone/live change. GroupOFF/V117-140 undeployed; all54 PRD groups
 remain open. Preserve hosted Apple failures and blocked fixture payload. Continue beyond
 checkpoints, push each commit, one compiler OR emulator, no subagents.
+
+After pending8, .work/history-inbox-source-recovery-2026-11-14 has5 reviewed/formatted UNAPPLIED
+paths,10 shared cases, focused32/full17236 and record/commit gates prepared UNRUN. It adds admitted
+current-source inspection for older-pass recovery and explicit raw Restart that recaptures pending
+work without removing references. DI/graph baselines refer to pending8 drafts. All these drafts
+remain unvalidated/unactivated. Then implement global captured triggers, admitted source metadata
+enumeration and finite fair continuation under the existing command repair owner.
 
 ## Admitted history inbox handoff locally accepted
 

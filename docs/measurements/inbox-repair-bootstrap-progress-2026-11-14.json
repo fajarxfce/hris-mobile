@@ -1,13 +1,13 @@
 {
-  "status": "focused validation running; not accepted",
+  "status": "focused2 running; first compilation failure preserved",
   "sourcePaths": 9,
   "newSharedMethods": 9,
   "priorMethodsRetained": 37,
   "sourceFiles": 5494,
-  "sourceManifestSha256": "1e59c7c77ee44f364137e0d067ba4a84dc4d275f523e2189dee72ca177b2b53c",
+  "sourceManifestSha256": "f2912883f10e756f2460032c2973ae6193c8348069ec5d7400ce0dba5ca51ff7",
   "applySession": 42283,
   "applyReaped": true,
-  "focusedSession": 40704,
+  "focusedSession": 58439,
   "focusedReaped": false,
   "expectedFocused": 48,
   "expectedFull": 17138,
@@ -16,5 +16,21 @@
   "futureGatesPrepared": true,
   "phoneBuild": 92,
   "phoneChanged": false,
-  "liveChanged": false
+  "liveChanged": false,
+  "sourceRecoveryDraftPaths": 5,
+  "sourceRecoverySharedMethods": 10,
+  "sourceRecoveryGatesPrepared": true,
+  "failedAttempts": [
+    {
+      "cause": "New saved-cursor expectation lacked explicit nullable String list element type",
+      "productionChanged": false,
+      "testPath": "apps/shared/src/commonTest/kotlin/dev/fajar/starter/CollaborationSpaceInboxRepairWorkerTest.kt",
+      "previousSha256": "1b279d1e4f499f518228a718df8a199ab63a908fd9d525922b54d31b3053f477",
+      "correctedSha256": "b90cf43ffd4230658f4e323f1bd9da062f99d5646e937c11b12f084bbc0441c8",
+      "methodIdentitiesRetained": true,
+      "failedSession": 40704,
+      "failedReaped": true,
+      "failedResultSha256": "000577df125934a25649310d446cd93cbfe7e3fe73197b489f9e47c5ff63600e"
+    }
+  ]
 }
