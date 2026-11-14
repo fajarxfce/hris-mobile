@@ -1,0 +1,41 @@
+{
+  "emptyConfirmationMobile": "4cdfd71d127d7ee18ff72ec1567fde79c59de691",
+  "emptyConfirmationGroup": "894bd6fc615f1dec9dcee1fa8488899f2214c801",
+  "appliedPaths": 15,
+  "newSharedMethods": 29,
+  "failedAttempt": {
+    "session": 44592,
+    "reaped": true,
+    "exitCode": 1,
+    "elapsedSeconds": 204.68,
+    "freshCounts": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "1accec19ea30b9bb4a6d0eff7e25f6a8b5a7dff9ba573e6f0fad18d8f4abc676",
+    "resultSha256": "a7568efb208d1ccc2be01c07b32b0e15c55e869b745e0a6c8a627efaf6460aea",
+    "correction": {
+      "failedAttempt": "focused-1",
+      "session": 44592,
+      "reaped": true,
+      "testsPassed": 23,
+      "cause": "Kotlin smart cast cannot use public nullable property from a separate module",
+      "change": "Capture pending after locally before raw query and ordering validation",
+      "changedPaths": [
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceInboxHistorySourceRepository.kt"
+      ],
+      "testMethodsRemoved": 0
+    }
+  },
+  "focusedSession": 11866,
+  "focusedReaped": false,
+  "fullStarted": false,
+  "candidateSourceFiles": 5492,
+  "candidateSourceManifestSha256": "baf98e39d87d111fb111f5281da4ace4561a9fde6151449c72ea604981894187",
+  "nextUnappliedPaths": 4,
+  "nextSharedMethods": 10,
+  "phoneChanged": false,
+  "liveChanged": false
+}

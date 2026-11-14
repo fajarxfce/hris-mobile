@@ -1,9 +1,36 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 02:58 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 03:05 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
+
+## Active history source progress verification
+
+Empty confirmation is accepted/pushed: Mobile4cdfd71d, Group894bd6fc, full17042 (14861 fresh /2181
+unchanged). Source5478/5dca92fd7d075e3c70239c8c8aaee94067068a3ae5388c264a27fc196b72efbc.
+
+.work/history-inbox-progress-2026-11-14 has15 APPLIED paths,29 new shared methods. Apply17271 was
+REAPED before capture. Focused1/session44592 was REAPED FAILED at data compilation after23 passing
+domain tests: Kotlin could not smart-cast a nullable property declared in another module. The
+repository now captures pending `after` locally; every test remains. Original source/manifests and
+failure evidence are retained in focused-1/, pre-pending-after-correction/ and the correction JSON.
+Focused2/session11866 is RUNNING for41 cases. Source5492/
+baf98e39d87d111fb111f5281da4ace4561a9fde6151449c72ea604981894187. Full17100 is not started.
+Reap/audit focused before full, then record/commit/push Mobile and Group. Do not treat this
+per-source persistence implementation as activated global repair or product completion.
+
+Next .work/history-inbox-progress-admission-2026-11-14 has4 reviewed/formatted UNAPPLIED paths:
+one admitted raw-history handoff use case,10 shared tests, data factory and graph assertion.
+Focused35/full17120 capture/run/audit gates are prepared but unrun; recorder/commit preparation
+remains. Apply only after current source/evidence acceptance and push; REAP before capture.
+Then admitted source lifecycle and pending-reference handoff, global captured demand and finite
+source/catalog rounds remain. Preserve fair command service under the existing repair lifetime;
+no new polling/per-room observer. Original global state remains design-only in the current work
+directory. Incoming completion and thread/list/UI activation are still open.
+
+Phone92 stays installed; no phone/live change. Actual new Apple execution remains outstanding.
+Continue beyond checkpoints, push every commit, one compiler OR emulator, no subagents.
 
 ## Admitted empty history-page confirmation locally accepted
 
