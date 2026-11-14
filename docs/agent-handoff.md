@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 07:44 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 08:02 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 Read AGENTS.md and architecture before changing boundaries. Repositories own raw acquisition and
 mapping; use cases own policy/orchestration, never another use case. Keep UI/VMs focused on state.
@@ -15,9 +15,10 @@ The admitted page7 package is APPLIED. Focused1/session95572 was reaped1 after a
 compilation failure at three assertEquals collection types; zero tests ran. Explicit generic
 types now fix those assertions without changing production code or weakening checks. Failed
 source/result evidence is retained in test-inference-correction.json and included by the recorder.
-Focused42 is now RUNNING45474/focused-2 in .work/history-inbox-product-page-2026-11-14.
+Focused2/session45474 is reaped0 and accepted42,341.396s, result
+ebdbd67f23cfe0d1d97dfc42a14effde795f93c61f9a46378f2c60b20aaf62c0.
 Source5559/e657f7b60238182ab111039612c76bf2e419238955da23ba5f192447c1dde4af.
-Full17578 is prepared UNRUN.
+Full17578 is RUNNING73806/full-1 in .work/history-inbox-product-page-2026-11-14.
 Reap/verify before changing captured source. Seventeen shared cases and one actual SQLite
 pending/draft reopen case; no automatic pagination, native acquisition or UI activation.
 
@@ -26,7 +27,13 @@ focus45/full17615 and record/commit gates prepared UNRUN. Apply after page17578 
 Read-only retained-list investigation confirms Paging3.5.3 cross-platform artifacts and its
 current-viewport refresh-key contract. Existing ReplicaQuery supports reverse before; an anchored
 window can be considered without changing raw query bounds. No paging dependency or UI source was
-added. Preserve phone92/live/GroupOFF, failed Apple evidence and all54 OPEN PRD groups. Continue.
+added. .work/history-inbox-window-2026-11-14 now has10 UNREVIEWED/UNAPPLIED drafts: anchor/window
+contract, raw encrypted reader reusing existing codec/keys,8 pure policy cases,9 raw storage
+contract cases and three platform wrappers. No admission UC, execution or gates exist yet. It
+probes one anchor then reads before/anchor/after with at most104 raw candidates; around refresh
+must preserve the final anchor position/generation. Equal opposite-direction boundary cursors can
+be valid for a one-row center. Review snapshots, races, cancellation and bounds before applying.
+ Preserve phone92/live/GroupOFF, failed Apple evidence and all54 OPEN PRD groups. Continue.
 
 ## Local inbox product owner locally accepted
 
