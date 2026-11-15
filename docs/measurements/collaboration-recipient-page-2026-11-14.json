@@ -1,0 +1,165 @@
+{
+  "accepted": true,
+  "validatedTests": 18414,
+  "newCases": 9,
+  "freshTests": 2264,
+  "reusedUnchangedTests": 16150,
+  "priorCaseIdsPreserved": true,
+  "sourceManifestSha256": "e8703913eb08ffd08fc471856200eba88bdd827f6a0ef7586b277c456cbbec05",
+  "reportManifestSha256": "4a70c817cc7d7d96cc2040e97d6987f9c87a7f089d2defc88e3223eefa335ad1",
+  "full": {
+    "startedAt": "2026-11-14T23:49:56.171180+00:00",
+    "elapsedSeconds": 583.131,
+    "exitCode": 0,
+    "sourceFiles": 5713,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "apk": {
+      "path": ".work/space-recipient-page-2026-11-14/full1/accepted-proof.apk",
+      "bytes": 155838441,
+      "sha256": "2c27791fb7a4686e313197ddc58ac283046329729fdd2fa6ff7e04d837c5fd66"
+    }
+  },
+  "recipientPageIntegrated": true,
+  "productActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "baseline": "a0bdc671e7465eaaf73d32cd84047aa123d63370",
+  "sourcePaths": [
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/SpaceChatThreadContent.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/recipient/pages/RecipientChatComposer.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/recipient/pages/RecipientChatThreadPage.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/pages/SpaceChatComposer.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/pages/SpaceChatQuotePreview.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/spacethread/pages/SpaceChatThreadPage.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/ChatMessageEndViewport.kt",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/RecipientChatPageLayoutTest.kt"
+  ],
+  "focused": {
+    "tests": 19,
+    "session": 67865,
+    "directory": "focus3",
+    "reaped": true
+  },
+  "fullSession": 35816,
+  "priorAttempts": [
+    {
+      "directory": "focus1",
+      "session": 94389,
+      "exitCode": 1,
+      "cause": "Architecture check rejected a SideEffect in pages/ChatThreadViewport.kt. No Kotlin/UI tests ran. Restore viewport ownership to navigation composition; do not weaken the architecture rule.",
+      "resolution": "Moved to navigation/ChatMessageEndViewport.kt, removed the effect call from RecipientChatThreadPage, and composed the navigation viewport explicitly in first-layout/older-anchor test hosts. Architecture checker unchanged."
+    }
+  ],
+  "priorSuccessfulFocus": [
+    {
+      "directory": "focus2",
+      "session": 44282,
+      "tests": 17,
+      "reaped": true,
+      "exitCode": 0,
+      "screenshots": [
+        {
+          "path": ".work/space-recipient-page-2026-11-14/focus2/screenshots/recipient-chat-selection-compact.png",
+          "sha256": "b6a9a830a853ec0cf34197cbe5f89d624fdfb410989a7ca7cd1d17d707fc7b2f",
+          "viewed": true
+        },
+        {
+          "path": ".work/space-recipient-page-2026-11-14/focus2/screenshots/recipient-chat-selection-dark-large.png",
+          "sha256": "9f51618da59d7280ba22dc095a45a0e6269c3975fe5a599ab9c9a148b38e304c",
+          "viewed": true
+        },
+        {
+          "path": ".work/space-recipient-page-2026-11-14/focus2/screenshots/recipient-chat-selection-landscape.png",
+          "sha256": "fee187fc916c39928093546eaaf5c183bbbbadd19896da7ae43f4bb8a5b7f8b9",
+          "viewed": true
+        }
+      ],
+      "scope": "Initial compact, dark large text and landscape profiles; all three images opened and visually inspected. Expanded with large phone and tablet after this passing source snapshot."
+    }
+  ],
+  "validationCommand": [
+    "xvfb-run",
+    "-a",
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    ":apps:collaboration-proof:assembleDebug",
+    ":apps:collaboration-proof:testDebugUnitTest",
+    ":check",
+    ":formatCheck",
+    ":architectureCheck",
+    ":detekt",
+    ":apps:android:compileDevReleaseKotlin",
+    ":apps:android:lintDevRelease",
+    ":apps:shared:compileKotlinWasmJs",
+    ":apps:shared:compileKotlinIosArm64",
+    ":features:collaboration:domain:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:data:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:presentation:compileTestKotlinIosSimulatorArm64",
+    ":apps:shared:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:domain:wasmJsBrowserTest",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:presentation:wasmJsBrowserTest",
+    ":apps:shared:wasmJsBrowserTest",
+    "-PcollaborationProofAbi=x86_64",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=93",
+    "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx3072m",
+    "-Pkotlin.compiler.execution.strategy=in-process",
+    "-Pkotlin.incremental=false"
+  ],
+  "phoneVersionCode": 93,
+  "screenshots": [
+    {
+      "variant": "compact",
+      "mobilePath": "docs/screenshots/recipient-page-compact.png",
+      "groupPath": "docs/screenshots/mobile-recipient-page-compact.png",
+      "sha256": "b6a9a830a853ec0cf34197cbe5f89d624fdfb410989a7ca7cd1d17d707fc7b2f",
+      "viewed": true
+    },
+    {
+      "variant": "dark-large",
+      "mobilePath": "docs/screenshots/recipient-page-dark-large.png",
+      "groupPath": "docs/screenshots/mobile-recipient-page-dark-large.png",
+      "sha256": "9f51618da59d7280ba22dc095a45a0e6269c3975fe5a599ab9c9a148b38e304c",
+      "viewed": true
+    },
+    {
+      "variant": "landscape",
+      "mobilePath": "docs/screenshots/recipient-page-landscape.png",
+      "groupPath": "docs/screenshots/mobile-recipient-page-landscape.png",
+      "sha256": "fee187fc916c39928093546eaaf5c183bbbbadd19896da7ae43f4bb8a5b7f8b9",
+      "viewed": true
+    },
+    {
+      "variant": "large-phone",
+      "mobilePath": "docs/screenshots/recipient-page-large-phone.png",
+      "groupPath": "docs/screenshots/mobile-recipient-page-large-phone.png",
+      "sha256": "f3247d34dd27a6e59fae1fc4d722284e257529c561d499970d4b962fc07367be",
+      "viewed": true
+    },
+    {
+      "variant": "tablet",
+      "mobilePath": "docs/screenshots/recipient-page-tablet.png",
+      "groupPath": "docs/screenshots/mobile-recipient-page-tablet.png",
+      "sha256": "c581637c1062624a35f7c601337ff201f3c66839aa3b4b716e33bf09161d5b84",
+      "viewed": true
+    }
+  ],
+  "contrastReview": {
+    "lightBody": 14.26,
+    "lightTimestamp": 4.48,
+    "lightField": 5.03,
+    "darkBody": 11.65,
+    "darkTimestamp": 5.86,
+    "darkField": 7.18,
+    "normalTextTarget": 4.5,
+    "followupRequired": "Correct shared light muted token and port after Mobile validation before next product delivery."
+  }
+}

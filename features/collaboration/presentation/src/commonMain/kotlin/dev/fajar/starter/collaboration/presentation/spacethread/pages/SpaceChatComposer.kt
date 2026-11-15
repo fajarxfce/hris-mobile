@@ -32,7 +32,7 @@ internal fun SpaceChatComposer(
                 Modifier.fillMaxWidth().padding(start = 12.dp, end = 4.dp, top = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                SpaceChatQuotePreview(state, target, Modifier.weight(1f))
+                SpaceChatQuotePreview(state.thread, target, Modifier.weight(1f))
                 AppIconButton(
                     Icons.Regular.Dismiss,
                     appString(AppString.ChatRemoveReply),

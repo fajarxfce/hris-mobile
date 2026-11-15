@@ -1,50 +1,62 @@
 # Agent continuation — communications long run
 
-Updated 14 November 2026, 23:35 UTC. Continue beyond checkpoints; push every commit.
+Updated 14 November 2026, 23:59 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 
-## Recipient selection and copy accepted
+## Recipient page and rendering accepted
 
-Typed recipient selection is bounded to 50 rows; Back clears selection before leaving. Copy uses
-stable conversation order, a 65,536-character bound and one exact transient request. The existing
-ReadCollaborationSpaceThreadContext owns a finite explicit peer lookup with session/admission
-checks around local I/O. No API/setup/renewal/delivery is initiated. Before association, only the
-exact private recipient original can match; canonical rows need the real returned destination.
-Late denial, stop, release, new selection, departure, disposal and redaction reject stale copies.
+The recipient page renders retained bubbles and the existing input/quote components. Long press
+opens multiple selection, Copy is exposed only when available, cached rows remain visible during
+independent reads, and Send preserves input focus during local persistence. The page owns no
+coroutine/state effects. Navigation composition owns ChatMessageEndViewport; canonical room
+composition already uses it, and the recipient layout tests explicitly compose it with the page.
+The future real recipient route must do the same.
 
-Validation: 18,405 cases (16216 fresh / 2189 exact unchanged), preserving all 18,363 prior identities plus 42. Focused 50/session4479 and full/session73909 reaped 0. Source ea8bca4c4b35bbdbb604294f8271b3d1b1a2471685ed6de38df15a90b2087507; reports 2839a0efeb1dc15d53f084f2757b522d27dd66815a8c51db1d45fb1ee7a54748.
-Read [recipient selection](collaboration-recipient-selection.md). Nine domain and twelve presentation
-cases passed, with unchanged canonical context, recipient consumer/departure and actual-DI controls.
-The first focused run failed five new tests: four asserted before posted test events ran; one used
-the real fixture peer as a negative peer. Synchronization/distinct identity were corrected, and
-clipboard-bound selection was strengthened. Production was unchanged by that test correction.
-Keep the failed evidence separate. These are state/lifetime results, not rendered gesture or
-physical-device clipboard acceptance. Apple source compilation is not Apple runtime acceptance.
+Validation: 18,414 cases (2264 fresh / 16150 exact unchanged), preserving all 18,405 prior identities plus 9. Focused 19/session67865 and full/session35816 reaped 0. Source e8703913eb08ffd08fc471856200eba88bdd827f6a0ef7586b277c456cbbec05; reports 4a70c817cc7d7d96cc2040e97d6987f9c87a7f089d2defc88e3223eefa335ad1.
+Read [recipient page](collaboration-recipient-page.md). Nine new desktop cases cover compact,
+dark/2x-font, landscape, large-phone and centered-tablet long press, retained content, newest-row layout, older reading anchor,
+and typing/focus after Send. Five recorded screenshots were actually inspected and retained in
+Git. Canonical layout, focus and quote controls passed. These are controlled desktop rendering
+results, not physical Android chat latency or actual recipient root/route warm-entry acceptance.
+Apple source compilation remains distinct from Apple runtime acceptance.
+Measured light timestamp contrast is 4.48:1 against the existing outgoing bubble token, below
+the 4.5:1 normal-text target. Correct the shared muted token and port the validated foundation
+change to Starter before the next product delivery. Do not claim complete contrast acceptance.
 
-Departure 4b3d1989, consumer a9ee6a7d, rows 3e7c9f5d, display fd041623, progress 4f6676f1,
-destination 2c93bc95 and source d4134a90 remain accepted/pushed. The selection implementation
-preparation is APPLIED and superseded by actual source, especially its corrected new tests.
+The first focused attempt stopped at architectureCheck before compilation/UI tests: the visual
+viewport state/effect was initially under pages. It was moved to navigation composition, removed
+from the recipient page and used explicitly in the layout test host. The architecture checker
+was not weakened. Preserve failed evidence and later attempts exactly as recorded.
 
-Next: `.work/recipient-page-implementation-2026-11-14` contains eight UNAPPLIED Kotlin files and
-review.md/base-sources.json: recipient page/composer, shared visual viewport, seven desktop UI
-cases, and existing quote/viewport call-site adjustments. It is uncompiled/unrun; screenshots
-have not been produced or viewed. Its apply.py is prepared and syntax checked, not run; it requires
-accepted/pushed selection and exact source hashes, then prepares focused17/full18,412 gates with
-three required actual screenshot reviews. Preserve canonical layout/focus/quote controls and validate
-rendered long press, selection, constrained layout, first frame, older anchor and input focus.
-Do not claim this preparation is active product UI.
+Selection a0bdc671, departure 4b3d1989, consumer a9ee6a7d, rows 3e7c9f5d, display fd041623,
+progress 4f6676f1, destination 2c93bc95 and source d4134a90 remain accepted/pushed. The earlier
+page preparation is APPLIED and superseded by actual source; its copies still have the original
+incorrect viewport placement. Never replay that prototype or apply script.
 
-No recipient product route is active. Wire actual root/contact/thread routes into the SAME
-bounded Group navigation owner; confirm Back/Copy effects immediately before platform actions.
-Keep one editor per route, preserve the old hidden-admission control through real root tests,
-and never alias a peer ID to a conversation ID. Independent canonical/recipient drafts, global
-pending/draft inbox identity and finite setup after retained Send remain required. Passive
-opening/typing/renewal cannot initiate setup. Outgoing recipient reply/forward/delete still need
-durable operations. Follow recipient product/projection reviews and remaining rollout gates.
+Next wire the actual recipient route and contact/inbox navigation into the SAME bounded Group
+navigation owner. Use distinct peer/canonical route and cache identities; one raw string cannot
+stand for both. Confirm Back/Copy immediately before navigation/clipboard I/O, compose the
+navigation-owned viewport, and keep one editor per route. Preserve canonical ownership controls
+and add real recipient root readmission, disposal, hidden preparation and warm-entry tests.
+Before-association labels need an owned local contact source: ReadCollaborationSpaceContacts
+calls the server and cannot be used on passive entry. DirectoryRepository.observeContact is the
+existing local source; trace its admission owner without inventing canonical metadata.
 
-Starter c7323ce stays accepted with 1,060 cases; HRIS policy stays Mobile-only. Phone93 is still
-installed from 2eb833f4. Group OFF; V117–140 undeployed; all 54 PRD groups OPEN. Continue beyond
-checkpoints and preserve the blocked SQLite preparation, failed Apple evidence and protected stores.
+Prepared follow-up: `.work/recipient-navigation-implementation-2026-11-14` contains six UNAPPLIED
+formatted Kotlin files: three navigation changes, actual recipient content, eight common ownership
+cases and six desktop route/root cases. Focused27/full18,436 scripts and apply.py are syntax checked,
+not executed. apply.py requires this page accepted/pushed and a clean source tree. The first gate
+script generator stopped on an overbroad dictionary anchor; it was corrected before any gate ran.
+No compiler or test result is claimed for the preparation. Keep canonical ownership/root controls.
+
+No recipient product route is active. Independent canonical/recipient drafts, global pending/draft
+inbox identity, finite app-owned setup after retained Send and company filters remain required.
+Passive opening/typing/ordinary renewal cannot initiate setup. Outgoing recipient reply/forward/
+delete require durable operations. Follow the product/projection reviews and remaining rollout gates.
+
+Starter c7323ce remains accepted with 1,060 cases; HRIS policy stays Mobile-only. Phone93 remains
+installed from 2eb833f4. Group OFF; V117–140 undeployed; 54 PRD groups OPEN. Continue beyond
+checkpoints; preserve blocked SQLite preparation, failed Apple evidence and protected stores.
 
 ## Delivered build and loop diagnosis
 

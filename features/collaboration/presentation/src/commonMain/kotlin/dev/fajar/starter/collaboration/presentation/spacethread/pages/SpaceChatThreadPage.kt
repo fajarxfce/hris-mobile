@@ -102,7 +102,7 @@ fun SpaceChatThreadPage(
                                     !state.leaving,
                             quoteContent =
                                 row.bubble.replyToEventId?.let { target ->
-                                    { SpaceChatQuotePreview(state, target) }
+                                    { SpaceChatQuotePreview(state.thread, target) }
                                 },
                             onSelect = {
                                 onEvent(SpaceChatThreadEvent.MessageSelected(row.identity))

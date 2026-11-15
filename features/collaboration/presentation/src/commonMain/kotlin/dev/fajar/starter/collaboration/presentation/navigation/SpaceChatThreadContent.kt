@@ -113,19 +113,9 @@ private fun SpaceChatThreadEntry(
 /** Runs in the layout-owning composition, so a new bubble is visible in its first layout pass. */
 @Composable
 internal fun SpaceChatThreadViewport(state: SpaceChatThreadState, list: LazyListState) {
-    val newest = state.rows.firstOrNull()?.identity
-    var displayed by remember(list) { mutableStateOf(newest) }
-    SideEffect {
-        if (displayed != newest) {
-            displayed = newest
-            if (
-                !state.leaving &&
-                    state.restriction == null &&
-                    !list.isScrollInProgress &&
-                    list.firstVisibleItemIndex == 0 &&
-                    list.firstVisibleItemScrollOffset == 0
-            )
-                list.requestScrollToItem(0)
-        }
-    }
+    ChatMessageEndViewport(
+        state.rows.firstOrNull()?.identity?.stableKey,
+        !state.leaving && state.restriction == null,
+        list,
+    )
 }

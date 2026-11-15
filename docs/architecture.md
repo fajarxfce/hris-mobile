@@ -1,5 +1,7 @@
 # Architecture
 
+[Recipient page](collaboration-recipient-page.md) renders retained state while navigation composition owns viewport effects; domain retains admission and storage policy.
+
 [Recipient selection](collaboration-recipient-selection.md) matches selected UI rows to explicit local context while domain owns session, admission and storage policy.
 
 [Recipient departure](collaboration-recipient-departure.md) flushes route-owned local editing before exact confirmed navigation; domain retains storage and delivery policy.
