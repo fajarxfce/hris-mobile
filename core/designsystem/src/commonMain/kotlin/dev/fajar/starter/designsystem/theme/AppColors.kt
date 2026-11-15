@@ -18,7 +18,7 @@ object AppColors {
 
     val muted: Color
         @Composable
-        get() = if (FluentTheme.colors.darkMode) Color(0xFFA6B1C1) else Color(0xFF637083)
+        get() = if (FluentTheme.colors.darkMode) Color(0xFFA6B1C1) else Color(0xFF626F82)
 
     val border: Color
         @Composable

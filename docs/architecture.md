@@ -1,5 +1,7 @@
 # Architecture
 
+[Muted text contrast](muted-text-contrast.md) is a shared design-system token correction; application policy is unchanged.
+
 [Recipient navigation](collaboration-recipient-navigation.md) keeps distinct peer/canonical identities within one bounded Group owner; navigation composition owns lifecycle and platform effects.
 
 [Recipient page](collaboration-recipient-page.md) renders retained state while navigation composition owns viewport effects; domain retains admission and storage policy.

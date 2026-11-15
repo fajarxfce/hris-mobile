@@ -1,60 +1,53 @@
 # Agent continuation — communications long run
 
-Updated 15 November 2026, 00:19 UTC. Continue beyond checkpoints; push every commit.
+Updated 15 November 2026, 00:33 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 
-## Recipient feature navigation accepted
+## Shared muted-text correction accepted in Mobile
 
-Canonical conversations and peers now use distinct typed cache targets and route/model keys in
-the SAME three-idle-store Group owner. Active routes stay independent. Each store binds one
-model kind, forwards its typed release event and clears bound references on root retirement.
-Visible recipient preparation shares the existing lifecycle/cancellation loop. The feature
-recipient route resolves its leased model, confirms Back/Copy immediately before platform I/O,
-owns selection focus/keyboard effects and composes ChatMessageEndViewport. Pages remain state-only.
+One generic AppColors token changes light muted text from #637083 to #626F82. Contrast is now
+4.55:1 on tint, 5.10:1 on white and 4.75:1 on canvas. Five fresh screenshots were actually viewed
+and their rendered token pixels checked. Dark colors, typography and spacing stay unchanged.
+Read [muted text contrast](muted-text-contrast.md). This resolves the 4.48:1 timestamp limitation
+recorded in page 59913960; it is not a claim about every UI foreground/background combination.
 
-Validation: 18,436 cases (2286 fresh / 16150 exact unchanged), preserving all 18,414 prior identities plus 22. Focused 27/session86727 and full/session93691 reaped 0. Source 7e100116670cf8ebb55fe11aed3671dde053882be7781aaa4e8e8a9186d0c325; reports 681c1012df0f09bd3353aa1eab89bf8282b7c136e2eb0f7dd82bcfddd56b6c1f.
-Read [recipient navigation](collaboration-recipient-navigation.md). Eight common ownership cases
-and six desktop route/root cases cover namespace collision, shared capacity, warm restoration,
-active isolation, typed binding/disposal, retained bubbles, Send with later typing/local Back
-flush, actual Copy/selection, lifecycle cancellation of late clipboard I/O, root readmission
-and Company-subtree continuity. Nine canonical ownership, three root-composition and one
-canonical clipboard-lifetime controls remain. These are controlled route/state results; no
-physical Android rendering or send-latency measurement is claimed. Apple source compilation
-is not Apple runtime acceptance. Any failed attempts stay distinct in the measurement record.
+Validation: 18,436 preserved identities (2581 fresh / 15855 exact unchanged), zero new tests. Focused15/session1291 and full/session44447 reaped0. Source e4d843e31a0a32a3955ef55ced5d6ef3d89a4b0d1d6311490742fa7f9332af7e; reports 7890692d0d263b470c2d3da440f2864f236eb1ae11393a59f406fd109e6d6338.
+No new phone installation or Apple runtime claim. Push this Mobile change, then port the exact
+generic token to Starter and validate independently before the next product delivery.
 
-Page 59913960/Group a1a58ab8 remains accepted with 18,414 cases and five viewed screenshots.
-Its measured light timestamp contrast is 4.48:1 against the existing outgoing bubble token,
-below the 4.5:1 target. Correct the shared muted token and independently validate its Starter
-port BEFORE next product delivery. The page packet does not claim complete contrast acceptance.
-The UNAPPLIED `.work/muted-contrast-review-2026-11-15` records both repository source hashes
-and proposes #626F82: 4.55:1 on tint, 5.10:1 on white and 4.75:1 on canvas. No color source
-change or validation has run. Its apply.py and focused15/full18,436 scripts are prepared and
-syntax checked only; apply.py requires this navigation packet accepted/pushed and a clean tree.
-Complete Mobile validation and five actual screenshot reviews, then Starter acceptance.
-Selection a0bdc671 and preceding recipient source/editor/transfer packets remain accepted.
-The navigation implementation preparation is now APPLIED and superseded by actual source.
+Starter baseline c7323ce has 1,060 accepted identities/source1099. Its prior recipe is
+`.work/replica-exact-queries-port-2026-11-14/full.py`; preserve one-worker/2GiB and pinned
+Inspector742a2d1c including its existing gradlew.bat line-ending difference. Run relevant root
+quality/check, Android variants/lint, production Web/app browser and Apple app source/test
+compilation. Unchanged database-specific suites may reuse exact accepted reports. No Starter
+source change has been applied yet. The prepared apply.py/full1060/accept.py are in
+`.work/muted-contrast-review-2026-11-15/starter` under Mobile; they are syntax checked only.
+Apply after this Mobile/Group commit is pushed, then run the independent Starter gate.
+No HRIS policy belongs in the port.
 
-Next integrate owned peer labels and actual application contact/inbox routes. The review at
-`.work/recipient-navigation-implementation-2026-11-14/local-contact-review.md` is read-only
-preparation. `.work/recipient-contact-implementation-2026-11-15` adds one UNAPPLIED formatted
-ObserveCollaborationSpaceDirectory prototype with an exact-contact entry and collector-owned
-admission latch/current checks. It preserves the existing whole-snapshot observer. No contact
-ViewModel/state wiring, tests, apply script or gates exist yet; the prototype is uncompiled/unrun.
-ReadCollaborationSpaceContacts is remote and cannot serve passive room entry.
-ObserveCollaborationSpaceDirectory owns local session/admission; DirectoryRepository.observeContact
-is the existing exact local source. Reuse collaborationSpaceThreadContact for copied exact-peer
-validation, without invented canonical metadata or a full directory scan per room. Keep label
-observation in the recipient request lifetime and clear it on denial/disposal. Do not call UC→UC.
+Recipient feature navigation 303929a5/Group e97f130a remains accepted with 18,436 cases. Typed
+peer/canonical destinations share one three-idle-store owner; actual feature route tests cover
+warm restoration, local Send/Back, Copy cancellation and root readmission. Failed test fixtures
+remain separate in that record; production was unchanged by their two corrections.
 
-Feature routes are tested, but the product is NOT activated. Independent canonical/recipient
-drafts, global pending/draft inbox identity, finite app-owned setup after retained Send and company
-filters remain required. Passive opening/typing/ordinary renewal cannot initiate setup. Outgoing
-recipient reply/forward/delete need durable operations. Continue product/projection reviews and
-rollout gates; all 54 PRD acceptance groups remain OPEN.
+After the port reconcile the two stale recipient reviews with the prepared Markdown in
+`.work/recipient-review-refresh-2026-11-15`, mirror Group relative links, verify those links and
+push a separate documentation-only commit. Its base hashes are retained; no rewrite has been
+applied. The new text describes accepted model/page/navigation and the actual remaining work,
+instead of repeatedly appending superseded milestones.
 
-Starter c7323ce remains accepted with 1,060 cases; HRIS-specific ownership stays Mobile-only.
-Phone93 remains installed from 2eb833f4. Group OFF; V117–140 undeployed. Continue beyond checkpoints
-and preserve the blocked SQLite preparation, failed Apple evidence and protected stores.
+Then continue owned peer labels and actual application contact/inbox routing. The
+UNAPPLIED `.work/recipient-contact-implementation-2026-11-15` contains one formatted directory
+use-case prototype with exact-contact admission/current checks. It is uncompiled/unrun and has
+no ViewModel/state wiring, tests or apply/gate scripts. Reuse the local observeContact source
+and collaborationSpaceThreadContact validation; ReadCollaborationSpaceContacts is remote.
+Do not invent canonical metadata, scan the directory per room or call another use case.
+
+Independent canonical/recipient drafts, global pending/draft inbox identity, finite setup after
+retained Send and outgoing reply/forward/delete remain required. Passive opening/typing/renewal
+cannot provision transport. Group OFF; V117–140 undeployed; all 54 PRD groups OPEN. Phone93 stays
+installed from 2eb833f4. Continue beyond checkpoints; preserve blocked SQLite preparation,
+failed hosted Apple evidence and protected stores.
 
 ## Delivered build and loop diagnosis
 

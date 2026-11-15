@@ -1,0 +1,197 @@
+{
+  "accepted": true,
+  "validatedTests": 18436,
+  "newCases": 0,
+  "freshTests": 2581,
+  "reusedUnchangedTests": 15855,
+  "priorCaseIdsPreserved": true,
+  "sourceManifestSha256": "e4d843e31a0a32a3955ef55ced5d6ef3d89a4b0d1d6311490742fa7f9332af7e",
+  "reportManifestSha256": "7890692d0d263b470c2d3da440f2864f236eb1ae11393a59f406fd109e6d6338",
+  "full": {
+    "startedAt": "2026-11-15T00:23:02.813679+00:00",
+    "elapsedSeconds": 626.574,
+    "exitCode": 0,
+    "sourceFiles": 5716,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "apk": {
+      "path": ".work/muted-contrast-mobile-2026-11-15/full1/accepted-proof.apk",
+      "bytes": 155838441,
+      "sha256": "a2e4090bd5dc7f7fb7cb50d4f2b3dd1aeec3b31f7e351df923f7c11dabc0c590"
+    }
+  },
+  "sharedMutedContrastCorrected": true,
+  "productActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "baseline": "303929a54ab8513009f532ab5f41a350432d6220",
+  "sourcePaths": [
+    "core/designsystem/src/commonMain/kotlin/dev/fajar/starter/designsystem/theme/AppColors.kt"
+  ],
+  "focused": {
+    "tests": 15,
+    "session": 1291,
+    "directory": "focus1",
+    "reaped": true
+  },
+  "fullSession": 44447,
+  "priorAttempts": [],
+  "validationCommand": [
+    "xvfb-run",
+    "-a",
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    ":apps:collaboration-proof:assembleDebug",
+    ":apps:collaboration-proof:testDebugUnitTest",
+    ":check",
+    ":formatCheck",
+    ":architectureCheck",
+    ":detekt",
+    ":apps:android:compileDevReleaseKotlin",
+    ":apps:android:lintDevRelease",
+    ":apps:shared:compileKotlinWasmJs",
+    ":apps:shared:compileKotlinIosArm64",
+    ":features:collaboration:domain:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:data:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:presentation:compileTestKotlinIosSimulatorArm64",
+    ":apps:shared:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:domain:wasmJsBrowserTest",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:presentation:wasmJsBrowserTest",
+    ":apps:shared:wasmJsBrowserTest",
+    "-PcollaborationProofAbi=x86_64",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=93",
+    "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx3072m",
+    "-Pkotlin.compiler.execution.strategy=in-process",
+    "-Pkotlin.incremental=false"
+  ],
+  "ratios": {
+    "EAF3FC": 4.549775174405598,
+    "FFFFFF": 5.1027214090309325,
+    "F5F7FA": 4.754576506516329
+  },
+  "renderedColorCounts": {
+    "recipient-chat-selection-compact": {
+      "foregroundRgb": [
+        98,
+        111,
+        130
+      ],
+      "foregroundPixels": 85,
+      "bubbleRgb": [
+        234,
+        243,
+        252
+      ],
+      "bubblePixels": 10453
+    },
+    "recipient-chat-selection-dark-large": {
+      "foregroundRgb": [
+        166,
+        177,
+        193
+      ],
+      "foregroundPixels": 1194,
+      "bubbleRgb": [
+        23,
+        53,
+        77
+      ],
+      "bubblePixels": 26550
+    },
+    "recipient-chat-selection-landscape": {
+      "foregroundRgb": [
+        98,
+        111,
+        130
+      ],
+      "foregroundPixels": 85,
+      "bubbleRgb": [
+        234,
+        243,
+        252
+      ],
+      "bubblePixels": 10453
+    },
+    "recipient-chat-selection-large-phone": {
+      "foregroundRgb": [
+        98,
+        111,
+        130
+      ],
+      "foregroundPixels": 85,
+      "bubbleRgb": [
+        234,
+        243,
+        252
+      ],
+      "bubblePixels": 10453
+    },
+    "recipient-chat-selection-tablet": {
+      "foregroundRgb": [
+        98,
+        111,
+        130
+      ],
+      "foregroundPixels": 85,
+      "bubbleRgb": [
+        234,
+        243,
+        252
+      ],
+      "bubblePixels": 10453
+    }
+  },
+  "phoneVersionCode": 93,
+  "starterPortAccepted": false,
+  "screenshots": [
+    {
+      "variant": "compact",
+      "mobilePath": "docs/screenshots/muted-contrast-compact.png",
+      "groupPath": "docs/screenshots/mobile-muted-contrast-compact.png",
+      "sha256": "8be5715cd69b63695af45925ba45c475c9a548e371b3b7c030a4324b7f8c4673",
+      "viewed": true
+    },
+    {
+      "variant": "dark-large",
+      "mobilePath": "docs/screenshots/muted-contrast-dark-large.png",
+      "groupPath": "docs/screenshots/mobile-muted-contrast-dark-large.png",
+      "sha256": "9f51618da59d7280ba22dc095a45a0e6269c3975fe5a599ab9c9a148b38e304c",
+      "viewed": true
+    },
+    {
+      "variant": "landscape",
+      "mobilePath": "docs/screenshots/muted-contrast-landscape.png",
+      "groupPath": "docs/screenshots/mobile-muted-contrast-landscape.png",
+      "sha256": "b716ddd4fc5a9fec27378100d63fe78f0d71bdc52555381e05f18e8901cd97d0",
+      "viewed": true
+    },
+    {
+      "variant": "large-phone",
+      "mobilePath": "docs/screenshots/muted-contrast-large-phone.png",
+      "groupPath": "docs/screenshots/mobile-muted-contrast-large-phone.png",
+      "sha256": "e5c93cd3bb34e84f406a4f45b85104370169194bd92f1486797df1222010b995",
+      "viewed": true
+    },
+    {
+      "variant": "tablet",
+      "mobilePath": "docs/screenshots/muted-contrast-tablet.png",
+      "groupPath": "docs/screenshots/mobile-muted-contrast-tablet.png",
+      "sha256": "fd60d2893019ac63966afdf5b1f86a890b7a9c5952fcb8aafdac7918ee5d3b0c",
+      "viewed": true
+    }
+  ],
+  "pixelCheck": {
+    "session": 44107,
+    "reaped": true,
+    "exitCode": 0,
+    "preparationIssue": "Initial read-only pixel check failed to import PIL. The shell then started full1. All five images had already been actually viewed; no source or tests changed."
+  }
+}
