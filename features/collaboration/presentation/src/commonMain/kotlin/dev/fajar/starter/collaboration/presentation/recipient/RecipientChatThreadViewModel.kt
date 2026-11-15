@@ -20,6 +20,7 @@ import org.koin.core.annotation.InjectedParam
 class RecipientChatThreadViewModel(
     @InjectedParam private val access: CollaborationSpaceLocalAccess,
     @InjectedParam private val peerAccountId: String,
+    private val observeDirectory: ObserveCollaborationSpaceDirectory,
     private val observeSource: ObserveCollaborationSpaceRecipientProjection,
     private val observeDestination: ObserveCollaborationSpaceRecipientDestination,
     private val observeThread: ObserveCollaborationSpaceThread,
@@ -67,6 +68,7 @@ class RecipientChatThreadViewModel(
         updateState { it.copy(visible = true) }
         if (
             requests.value == null ||
+                state.value.contactFailure != null ||
                 state.value.sourceFailure != null ||
                 state.value.destinationFailure != null ||
                 state.value.historyFailure != null ||
@@ -241,6 +243,7 @@ class RecipientChatThreadViewModel(
         if (state.value.restriction == null) editor?.retry()
         if (
             requests.value == null ||
+                state.value.contactFailure != null ||
                 state.value.sourceFailure != null ||
                 state.value.destinationFailure != null ||
                 state.value.historyFailure != null ||
@@ -257,6 +260,9 @@ class RecipientChatThreadViewModel(
                     if (request == null) emptyFlow()
                     else
                         merge(
+                                observeDirectory.contact(access, peerAccountId).map {
+                                    RecipientThreadReadResult.Contact(request, it)
+                                },
                                 observeSource(access, peerAccountId).map {
                                     RecipientThreadReadResult.Source(request, it)
                                 },
@@ -269,6 +275,7 @@ class RecipientChatThreadViewModel(
                     ensureActive()
                     if (input.request != requests.value) return@collect
                     when (input) {
+                        is RecipientThreadReadResult.Contact -> onContact(input.result)
                         is RecipientThreadReadResult.Source -> onSource(input.result)
                         is RecipientThreadReadResult.Destination -> onDestination(input.result)
                         is RecipientThreadReadResult.History ->
@@ -300,6 +307,18 @@ class RecipientChatThreadViewModel(
                         .collect { emit(it) }
             }
             .buffer(0)
+
+    private fun onContact(result: AppResult<CollaborationSpaceContact?>) {
+        when (result) {
+            is AppResult.Failed -> {
+                if (collaborationSpaceDirectoryResponseClosesRead(result.failure))
+                    restrict(result.failure)
+                else updateState { it.copy(contactFailure = result.failure) }
+            }
+            is AppResult.Success ->
+                updateState { it.copy(contact = result.value, contactFailure = null) }
+        }
+    }
 
     private fun onSource(result: AppResult<CollaborationSpaceRecipientProjection>) {
         when (result) {

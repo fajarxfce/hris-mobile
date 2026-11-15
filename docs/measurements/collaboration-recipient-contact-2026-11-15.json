@@ -1,0 +1,131 @@
+{
+  "accepted": true,
+  "validatedTests": 18468,
+  "newCases": 32,
+  "freshTests": 16279,
+  "reusedUnchangedTests": 2189,
+  "priorCaseIdsPreserved": true,
+  "sourceManifestSha256": "dba7d5100438c8517ad4846a021b564847cbdb22cb163788b57c76cd6cc8ca0d",
+  "reportManifestSha256": "66085995f2a256cee955afbc179e9b59f622b575c5451ecd8f31ccb8168874c5",
+  "full": {
+    "startedAt": "2026-11-15T00:59:21.064756+00:00",
+    "elapsedSeconds": 1087.836,
+    "exitCode": 0,
+    "sourceFiles": 5718,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "apk": {
+      "path": ".work/space-recipient-contact-2026-11-15/full1/accepted-proof.apk",
+      "bytes": 155843107,
+      "sha256": "c2e78afc6e0ed303e9019b7abde42c5b0bb55319c371c39bc94a209fc51a2c35"
+    }
+  },
+  "ownedRecipientContactAccepted": true,
+  "productActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "baseline": "ef563a8e668c6200f35b0fa84c4eb5e1d0aefab4",
+  "sourcePaths": [
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceDirectoryContactObservationTest.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientChatContactTest.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceDirectory.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/RecipientChatThreadContent.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientChatThreadState.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientChatThreadViewModel.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientThreadReadResult.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientChatThreadViewModelFixture.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/recipient/RecipientComposerViewModelFixture.kt",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/RecipientChatNavigationCompositionTest.kt"
+  ],
+  "focused": {
+    "tests": 49,
+    "session": 84560,
+    "directory": "focus3",
+    "reaped": true,
+    "verifiedReports": {
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceDirectoryContactObservationTest.xml": {
+        "tests": 10,
+        "sha256": "7bd7dfd64a02633bc029754b486529c306c711d3d42932fc5483e2eecd357a69"
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceDirectoryObservationTest.xml": {
+        "tests": 6,
+        "sha256": "92bac469e554ab469ef89e65bdb2899e696b4c5c300c40582d94826ba26ad324"
+      },
+      "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.recipient.RecipientChatContactTest.xml": {
+        "tests": 6,
+        "sha256": "18c748d5ee96d4137aa05f286d0a0964c4276736df52d9a3eb8edb39a085daef"
+      },
+      "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.recipient.RecipientChatThreadViewModelTest.xml": {
+        "tests": 10,
+        "sha256": "ad2ac29a327a290100f72b950e979c896cc09d76b83926400eaae23781267c98"
+      },
+      "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.recipient.RecipientComposerViewModelTest.xml": {
+        "tests": 9,
+        "sha256": "669637dd7b5ca2c60a6060cd9939f0572a67b9d3fede0bae8351c5d5793ff147"
+      },
+      "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.RecipientChatNavigationCompositionTest.xml": {
+        "tests": 6,
+        "sha256": "35cddcb4fb1e99e99a3bea82910fc2deb9fff23ae2f9dc3267acbd41cc188afa"
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+        "tests": 2,
+        "sha256": "8289863dedf6ab89bd9060bfc4958ea8e907b5d8f321921d861111c38e295cf8"
+      }
+    }
+  },
+  "fullSession": 21050,
+  "priorAttempts": [
+    {
+      "directory": "focus1",
+      "session": 49491,
+      "reaped": true,
+      "exitCode": 1,
+      "reason": "Two new list assertions required explicit AppResult generic type; no cases ran, production unchanged by fixture correction."
+    },
+    {
+      "directory": "focus2",
+      "session": 41131,
+      "reaped": true,
+      "exitCode": 1,
+      "tests": 47,
+      "failures": 1,
+      "reason": "New label identity test captured editor state before queued TextChanged completed. Drain that explicit input before changing the label; preserve same rows/editor assertions. Production unchanged. App DI tests did not run."
+    }
+  ],
+  "validationCommand": [
+    "xvfb-run",
+    "-a",
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    ":apps:collaboration-proof:assembleDebug",
+    ":apps:collaboration-proof:testDebugUnitTest",
+    ":check",
+    ":formatCheck",
+    ":architectureCheck",
+    ":detekt",
+    ":apps:android:compileDevReleaseKotlin",
+    ":apps:android:lintDevRelease",
+    ":apps:shared:compileKotlinWasmJs",
+    ":apps:shared:compileKotlinIosArm64",
+    ":features:collaboration:domain:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:data:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:presentation:compileTestKotlinIosSimulatorArm64",
+    ":apps:shared:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:domain:wasmJsBrowserTest",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:presentation:wasmJsBrowserTest",
+    ":apps:shared:wasmJsBrowserTest",
+    "-PcollaborationProofAbi=x86_64",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=93",
+    "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx3072m",
+    "-Pkotlin.compiler.execution.strategy=in-process",
+    "-Pkotlin.incremental=false"
+  ]
+}

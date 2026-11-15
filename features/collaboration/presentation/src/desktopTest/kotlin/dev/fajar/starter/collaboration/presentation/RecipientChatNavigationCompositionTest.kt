@@ -47,10 +47,12 @@ class RecipientChatNavigationCompositionTest {
                 assertFalse(before.state.value.canSend)
                 openContact()
                 onNodeWithText("Retained recipient").assertIsDisplayed()
+                onNodeWithText("Bima").assertIsDisplayed()
                 assertSame(before, h.model)
                 onNodeWithContentDescription("Back").performClick()
                 openContact()
                 onNodeWithText("Retained recipient").assertIsDisplayed()
+                onNodeWithText("Bima").assertIsDisplayed()
                 assertSame(before, h.model)
                 assertEquals(1, h.creations)
                 assertEquals(1, h.fixture.sourceStarts)
@@ -110,6 +112,7 @@ class RecipientChatNavigationCompositionTest {
                 onNodeWithText("Retained recipient").performTouchInput { longClick() }
                 onNodeWithContentDescription("Clear selection").performClick()
                 onNodeWithText("Retained recipient").assertIsDisplayed()
+                onNodeWithText("Bima").assertIsDisplayed()
                 onNodeWithContentDescription("Copy").assertDoesNotExist()
                 onNodeWithContentDescription("Back").performClick()
                 onNodeWithText("Open contact").assertIsDisplayed()
@@ -165,6 +168,7 @@ class RecipientChatNavigationCompositionTest {
                 waitUntil(timeoutMillis = 10_000) { h.model?.state?.value?.rows?.size == 1 }
                 openContact()
                 onNodeWithText("Retained recipient").assertIsDisplayed()
+                onNodeWithText("Bima").assertIsDisplayed()
                 val oldRoot = requireNotNull(h.currentRoot)
                 val oldModel = requireNotNull(h.model)
                 runOnIdle { h.admit(false) }
@@ -173,6 +177,9 @@ class RecipientChatNavigationCompositionTest {
                 }
                 assertFalse(oldRoot.isOpen)
                 assertTrue(oldModel.state.value.rows.isEmpty())
+                assertNull(oldModel.state.value.contact)
+                assertEquals(0, h.fixture.editor.contactReaders)
+                onNodeWithText("Bima").assertDoesNotExist()
                 onNodeWithText("Retained recipient").assertDoesNotExist()
                 runOnIdle { h.admit(true) }
                 waitUntil(timeoutMillis = 10_000) {
@@ -186,6 +193,7 @@ class RecipientChatNavigationCompositionTest {
                 assertFalse(requireNotNull(h.model).state.value.canSend)
                 openContact()
                 onNodeWithText("Retained recipient").assertIsDisplayed()
+                onNodeWithText("Bima").assertIsDisplayed()
                 assertEquals(1, h.fixture.sourceReaders)
                 assertEquals(1, h.fixture.maxSourceReaders)
                 assertEquals(0, h.fixture.thread.schedules)
@@ -207,6 +215,7 @@ class RecipientChatNavigationCompositionTest {
                 onNodeWithText("Company two").assertIsDisplayed()
                 openContact()
                 onNodeWithText("Retained recipient").assertIsDisplayed()
+                onNodeWithText("Bima").assertIsDisplayed()
                 assertSame(root, h.currentRoot)
                 assertSame(model, h.model)
                 assertEquals(1, h.fixture.sourceStarts)

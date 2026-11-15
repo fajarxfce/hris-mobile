@@ -21,6 +21,18 @@ internal class RecipientComposerViewModelFixture {
     var starts = 0
     var readers = 0
     var maximumReaders = 0
+    val contact =
+        CollaborationSpaceContact(
+            peer,
+            "Bima",
+            listOf(CollaborationSpaceContactCompany(chatId(992), "Example Company")),
+            false,
+        )
+    val contactFacts =
+        MutableStateFlow<AppResult<CollaborationSpaceContact?>>(AppResult.Success(contact))
+    var contactReaders = 0
+    var maximumContactReaders = 0
+    var beforeContact: suspend () -> Unit = {}
     var contactReads = 0
     var currentAdmission: AppResult<CollaborationSpaceDirectoryAdmission>? = null
     var beforeDraftEmission: suspend (AppResult<CollaborationSpaceRecipientDraft?>) -> Unit = {}
@@ -118,18 +130,16 @@ internal class RecipientComposerViewModelFixture {
             ): Flow<AppResult<CollaborationSpaceContact?>> = flow {
                 assertEquals(peer, accountId)
                 contactReads++
-                emit(
-                    AppResult.Success(
-                        CollaborationSpaceContact(
-                            peer,
-                            "Bima",
-                            listOf(
-                                CollaborationSpaceContactCompany(chatId(992), "Example Company")
-                            ),
-                            false,
-                        )
-                    )
-                )
+                contactReaders++
+                maximumContactReaders = maxOf(maximumContactReaders, contactReaders)
+                try {
+                    contactFacts.collect { captured ->
+                        beforeContact()
+                        emit(captured)
+                    }
+                } finally {
+                    contactReaders--
+                }
             }
         }
 

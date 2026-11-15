@@ -26,11 +26,10 @@ Do not expose reply/forward/delete/attachment controls without their durable ope
 
 ## Remaining product work
 
-1. Own the selected contact's public name locally. `DirectoryRepository.observeContact` is the
-   exact existing source; `ReadCollaborationSpaceContacts` is remote. Reuse exact-peer validation
-   and current session/admission checks. Keep labels in the recipient request lifetime, retain
-   admitted labels through transient failure, and clear them on denial/disposal. The current
-   contact-use-case prototype is uncompiled and unapplied; it has no consumer or tests yet.
+1. [Owned contact labels](collaboration-recipient-contact.md) are accepted. The exact local peer
+   observer joins the recipient request, retains names through transient failure and clears them
+   on denial/disposal. Real route/root tests assert appearance and readmission. Continue with the
+   actual application routing below; feature-route acceptance alone does not activate Group.
 2. Connect the actual application's contact and inbox routes to the same Group root/cache. Keep
    tab/search state and caller-owned Company filters. Preserve the user's four-tab layout and
    contact filter beside search; no repeated API acquisition on passive room entry.

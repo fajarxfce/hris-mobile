@@ -11,6 +11,8 @@ data class RecipientChatThreadState(
     val leaving: Boolean = false,
     val loading: Boolean = true,
     val editor: RecipientComposerEditingState = RecipientComposerEditingState(),
+    val contact: CollaborationSpaceContact? = null,
+    val contactFailure: Failure? = null,
     val source: CollaborationSpaceRecipientProjection? = null,
     val destination: CollaborationSpaceConversationMetadata? = null,
     val thread: CollaborationSpaceThreadSnapshot? = null,

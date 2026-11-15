@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 15 November 2026, 00:35 UTC. Continue beyond checkpoints; push every commit.
+Updated 15 November 2026, 01:18 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 
 ## Shared muted-text correction accepted in Mobile
@@ -31,12 +31,21 @@ feature route. Their old repeated, superseded prototype claims have been removed
 that history. Local links were verified in Mobile and Group. This is documentation only and
 does not close PRD groups or activate the product. Follow the remaining steps in those reviews.
 
-Then continue owned peer labels and actual application contact/inbox routing. The
-UNAPPLIED `.work/recipient-contact-implementation-2026-11-15` contains one formatted directory
-use-case prototype with exact-contact admission/current checks. It is uncompiled/unrun and has
-no ViewModel/state wiring, tests or apply/gate scripts. Reuse the local observeContact source
-and collaborationSpaceThreadContact validation; ReadCollaborationSpaceContacts is remote.
-Do not invent canonical metadata, scan the directory per room or call another use case.
+Owned peer labels are now accepted: 18,468 cases (16279 fresh / 2189 exact unchanged),
+all 18,436 prior identities plus 32. Focused/session84560 and full/session21050 reaped0.
+Read [contact ownership](collaboration-recipient-contact.md). Source dba7d5100438c8517ad4846a021b564847cbdb22cb163788b57c76cd6cc8ca0d; reports 66085995f2a256cee955afbc179e9b59f622b575c5451ecd8f31ccb8168874c5.
+Ten source/test paths add the exact local directory observer, typed recipient result/state and
+actual route name wiring. Domain owns guards; label-only updates preserve rows/editor identity.
+Before association one local contact reader; afterward the existing canonical participant reader
+makes two, both explicitly owned and bounded. Existing navigation/root/DI controls pass.
+The first attempt failed two new generic test assertions before execution. The second failed one
+new editor-identity assertion because prior typing had not settled. Both fixture corrections preserve
+the original assertions; production was unchanged. All failures remain recorded. No new phone or Apple runtime claim.
+
+The old `.work/recipient-contact-implementation-2026-11-15` prototype is APPLIED and stale.
+Current accepted artifacts are in `.work/space-recipient-contact-2026-11-15`; do not replay prep.
+Continue actual application contact/inbox routing and draft/index continuity; no API/setup on passive
+entry, typing or ordinary renewal. Group remains OFF until the separate rollout gates.
 
 Independent canonical/recipient drafts, global pending/draft inbox identity, finite setup after
 retained Send and outgoing reply/forward/delete remain required. Passive opening/typing/renewal

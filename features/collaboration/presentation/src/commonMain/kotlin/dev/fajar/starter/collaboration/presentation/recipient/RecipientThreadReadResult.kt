@@ -7,6 +7,13 @@ import dev.fajar.starter.common.result.AppResult
 internal sealed interface RecipientThreadReadResult {
     val request: Long
 
+    data class Contact(
+        override val request: Long,
+        val result: AppResult<CollaborationSpaceContact?>,
+    ) : RecipientThreadReadResult {
+        override fun toString() = "RecipientThreadContact([redacted])"
+    }
+
     data class Source(
         override val request: Long,
         val result: AppResult<CollaborationSpaceRecipientProjection>,

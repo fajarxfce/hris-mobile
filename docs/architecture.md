@@ -1,5 +1,7 @@
 # Architecture
 
+[Recipient contact labels](collaboration-recipient-contact.md) keep exact local acquisition and admission in the directory use case; the ViewModel owns typed state and the route supplies the page name.
+
 [Muted text contrast](muted-text-contrast.md) is a shared design-system token correction; application policy is unchanged.
 
 [Recipient navigation](collaboration-recipient-navigation.md) keeps distinct peer/canonical identities within one bounded Group owner; navigation composition owns lifecycle and platform effects.

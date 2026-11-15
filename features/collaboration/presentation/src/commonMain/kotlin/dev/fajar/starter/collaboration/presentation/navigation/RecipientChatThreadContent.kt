@@ -90,5 +90,11 @@ private fun RecipientChatThreadEntry(
         !state.leaving && state.restriction == null,
         list,
     )
-    RecipientChatThreadPage(state, list, model::onEvent, modifier)
+    RecipientChatThreadPage(
+        state,
+        list,
+        model::onEvent,
+        modifier,
+        peerName = state.contact?.displayName,
+    )
 }

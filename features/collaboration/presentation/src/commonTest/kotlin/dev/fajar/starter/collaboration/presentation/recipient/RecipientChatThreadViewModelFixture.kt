@@ -202,6 +202,11 @@ internal class RecipientChatThreadViewModelFixture {
         RecipientChatThreadViewModel(
             access,
             peer,
+            ObserveCollaborationSpaceDirectory(
+                editor.directory,
+                thread.base.sessions,
+                thread.base.server,
+            ),
             ObserveCollaborationSpaceRecipientProjection(
                 projection,
                 editor.directory,

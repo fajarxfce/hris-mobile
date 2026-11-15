@@ -1,7 +1,7 @@
 # Recipient projection and canonical handoff
 
 Local recipient projection, destination observation, message composition and the feature route
-are implemented and tested. Remaining work concerns owned labels, application routing, draft
+are implemented and tested. [Owned local contact labels](collaboration-recipient-contact.md) are also accepted. Remaining work concerns application routing, draft
 and inbox continuity, finite setup ownership and rollout. Follow [the product integration
 review](collaboration-recipient-product-review.md) and [current handoff](agent-handoff.md).
 
@@ -54,6 +54,14 @@ migration or unified draft policy is accepted yet.
 an existing Open command or immutable peer mapping; creating a new Open requires current
 discovery and inserts one retained command. The Company delivery worker uses a different use
 case. No Group application owner for this preparation has been integrated.
+`DiscoverCollaborationSpace` is a separate finite 15-second remote operation with current parent
+checks and a monotonic deadline; it also has no application caller yet. The existing local inbox
+owner intentionally has no native dependency and must continue while offline. A separate preparation
+collector should receive the application lifetime's published state through an owned callback,
+following its existing incoming-work pattern, rather than introducing a constructor cycle or
+making local transfer depend on network availability. Define consumption for retained originals,
+new peers, unchanged renewals, connectivity recovery and readiness before wiring it. The read-only
+`.work/recipient-next-runtime-review-2026-11-15` records traced entry points, not implemented behavior.
 
 `SubmitCollaborationSpaceRecipientComposer` intentionally retains the original without setup;
 the recipient transfer owner waits for real metadata. Add an explicitly owned app coordinator
