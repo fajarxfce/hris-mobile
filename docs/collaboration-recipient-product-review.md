@@ -55,6 +55,14 @@ One combined query could read at most `limit+1` canonical and `limit+1` recipien
 those bounded windows, preserving old canonical tags/formats. This is an unaccepted design
 option, not a schema migration or completed implementation.
 
+The current raw `ReplicaMutation` contract accepts at most two partitions, including checks.
+A proposed draft-source write plus inbox write plus an independent metadata check would require
+three partitions and is not supported by that API today. Resolve this transaction boundary before
+implementing the index: either prove an existing two-partition publication protocol or implement
+and independently validate the necessary bounded raw capability. Do not claim metadata absence
+was checked atomically by a separate pre-write read, or silently increase the raw limit without
+consumer and rollback evidence. No such storage change has been applied.
+
 Resolve canonical handoff and independent drafts before choosing that option. The durable
 peer/canonical association already exists; do not create a duplicate table or infer it from
 display names. Require exact cursor semantics and atomic source/index publication coordinated
