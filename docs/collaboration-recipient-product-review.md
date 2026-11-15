@@ -1,63 +1,77 @@
-# Product integration after recipient owner acceptance
+# Recipient product integration
 
-The [recipient feature route](collaboration-recipient-navigation.md) now has typed shared cache ownership and actual route/lifecycle tests. Application routing, owned peer labels, independent drafts, global inbox identity, finite setup and rollout remain required. Group stays OFF.
+The recipient feature route, local editor, message projection and shared navigation ownership
+are implemented and tested. They are not yet activated in the application. Group remains OFF,
+V117–140 remain undeployed and all 54 PRD acceptance groups remain OPEN. Use
+[the current handoff](agent-handoff.md) for the latest accepted commits and active work.
 
-The [recipient page](collaboration-recipient-page.md) now has controlled rendering, long-press selection and composer focus validation. Actual root/navigation integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.
+## Accepted building blocks
 
-The [recipient selection](collaboration-recipient-selection.md) now validates typed selection and confirmed local copying. Real page/root/navigation integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.
+[Recipient navigation](collaboration-recipient-navigation.md) uses distinct peer and canonical
+targets in the same three-idle-store Group owner. Actual route tests cover warm reopening,
+independent active entries, local Send/Back, Copy cancellation and root readmission. A peer ID
+is never used as a canonical conversation ID. The Group root remains outside Company scope.
 
-The [recipient thread consumer](collaboration-recipient-departure.md) now validates local Back flushing and stale navigation cancellation. Selection/actions, real root/page/navigation integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.
+[The thread consumer](collaboration-recipient-thread.md) joins independent local source,
+destination, history and progress streams under one request identity and one serial editor.
+Any closing denial fences older readers; disposal clears private state. Explicit Send retains
+its original independently of later typing. [Stable rows](collaboration-recipient-rows.md) keep
+visual identity and order across canonical association and exact provider acknowledgement.
 
-The [recipient thread consumer](collaboration-recipient-thread.md) is now validated, including joined source/destination/history/progress and one editor. Back/selection/actions, real root/page/navigation integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.
+[The page](collaboration-recipient-page.md) renders retained bubbles, quotes and input. Long
+press opens bounded multiple selection; [Copy](collaboration-recipient-selection.md) confirms
+current local context immediately before clipboard I/O. [Back](collaboration-recipient-departure.md)
+flushes local editing, not network delivery. Navigation owns effects and newest-row placement.
+Do not expose reply/forward/delete/attachment controls without their durable operations.
 
-The [recipient bubble rows](collaboration-recipient-rows.md) is now validated, including stable visual identity through real association and exact command/history evidence. ViewModel/editor/root integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.
+## Remaining product work
 
-The [recipient display continuity](collaboration-recipient-presentation.md) is now validated, including exact command/history evidence and independent source retirement. Actual bubble identity, ViewModel/editor/root integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.
+1. Own the selected contact's public name locally. `DirectoryRepository.observeContact` is the
+   exact existing source; `ReadCollaborationSpaceContacts` is remote. Reuse exact-peer validation
+   and current session/admission checks. Keep labels in the recipient request lifetime, retain
+   admitted labels through transient failure, and clear them on denial/disposal. The current
+   contact-use-case prototype is uncompiled and unapplied; it has no consumer or tests yet.
+2. Connect the actual application's contact and inbox routes to the same Group root/cache. Keep
+   tab/search state and caller-owned Company filters. Preserve the user's four-tab layout and
+   contact filter beside search; no repeated API acquisition on passive room entry.
+3. Resolve canonical versus recipient drafts and global inbox identity. Both drafts can exist
+   independently after an original transfers. Never overwrite later typing, drop a draft on
+   source retirement, append a separate temporary inbox, or show two rows for one DM. Preserve
+   pending previews, recency, paging anchors and stable row keys through handoff/restart.
+4. Own finite conversation preparation in the app after an explicit durable Send and current
+   discovery. The existing preparation use case can reuse Open commands or immutable metadata;
+   it currently has no Group application owner. Bound/deduplicate peers and readiness inputs.
+   Passive opening, typing and ordinary admission renewal must not prepare transport. Existing
+   delivery owns remote setup afterward; offline Send must retain immediately.
+5. Add remaining recipient content operations with durable intent and exact context. Current
+   recipient drafts are plain text and do not support outgoing reply/forward/delete. Keep the
+   composer-only historical ViewModel as a control until equivalent root tests justify retiring
+   it; never bind it as a second editor to the same route.
 
-The [shared exact message progress](collaboration-recipient-progress.md) is now implemented and validated. Command/history composition, editor/index continuity, finite new-recipient setup and active product routes remain required. Canonical and recipient originals share bounded record observation; their public types and provenance remain distinct.
+## Bounded inbox option to evaluate
 
-The [admitted destination observer](collaboration-recipient-destination.md) is now implemented and validated. Command/history composition, editor/index continuity, finite new-recipient setup and active product routes remain required. Earlier requests for a new association store or its missing observer are superseded.
+The raw store supports coherent multi-query pages and multi-replica mutations. A candidate is
+a distinct recipient-row tag in the existing inbox partition, sharing the durable ordinal.
+One combined query could read at most `limit+1` canonical and `limit+1` recipient rows and merge
+those bounded windows, preserving old canonical tags/formats. This is an unaccepted design
+option, not a schema migration or completed implementation.
 
-The [local draft/original projection](collaboration-recipient-projection.md) is now implemented and validated. Canonical association observation/history composition, editor/index continuity, new-recipient setup ownership and product routes below remain required. Earlier raw-projection proposals are superseded by this implementation.
+Resolve canonical handoff and independent drafts before choosing that option. The durable
+peer/canonical association already exists; do not create a duplicate table or infer it from
+display names. Require exact cursor semantics and atomic source/index publication coordinated
+by use cases. Repositories do not call other repositories. Do not load all 5,000 contacts or all
+draft peers to merge inbox pages.
 
-The existing encrypted ConversationMetadata repository already retains the immutable peer-to-canonical mapping. Reuse it; do not add a second association store. The unresolved work is its admitted observation, command/history composition, independent editor/index continuity and finite new-recipient setup after Send. See the updated recipient projection review. Earlier references below to defining an association are superseded by this trace.
+## Acceptance before activation
 
-The [typed recipient editor and MVI consumer](collaboration-recipient-editor.md) are now implemented and tested. The durable pending/history projection, canonical association, represented-original acknowledgement and active product routes below remain required.
+Exercise real application navigation, offline Send/process restart, rapid ordered messages,
+source retirement, independent later typing, account replacement and changed paging anchors.
+Verify that passive entry/typing/readmission does not repeat setup. Keep rendered gesture,
+keyboard, reduced-motion and screenshot checks, browser behavior and Apple source checks
+separate from physical-device latency and native runtime evidence. Reusable foundation fixes
+must also pass independent Starter validation.
 
-Read-only trace, not an implemented route or schema proposal.
-
-SpaceChatInboxViewModel owns a retained Paging3 Pager (50/page, 150 loaded), a version publication and bounded visible name subscriptions. SpaceChatInboxPage currently renders only CollaborationSpaceInboxEntry, whose identity is a canonical conversationId. Existing pending activity/drafts are already ranked in that canonical index. SpaceChatThreadRoute likewise accepts only conversationId. SpaceContactsContent emits accountId under the retained account/Group root. A peer account ID must never be passed to the canonical thread route as an alias.
-
-Recipient drafts/originals are in their own account/Group replica partition. The accepted submit operation preserves a captured peer-addressed gesture before canonical setup; transfer pins and verifies the later canonical destination. The new local owner is the recovery prerequisite, not a complete pending list or navigation flow.
-
-Next define the recipient product identity and retained route/composer ownership. A new-contact page must render local drafts immediately, capture every explicit Send independently of later typing, use typed MVI events, and survive cancellation/uncertain acknowledgement without replacing the original. Route lifetime belongs to the existing Group root, outside Company scope. Contacts label/admission and canonical destination metadata remain separate facts.
-
-For pending list integration, preserve global ordering, source timestamps and stable row keys through canonical handoff. Do not append a separate temporary header/list or disguise peers as conversation IDs. Avoid materializing all 5,000 employees or draft peers to merge pages. Trace the existing bounded replica queries/multi-replica mutation contract and index codec before choosing the durable recipient projection. Test no duplicate/missing row around destination seeding/source retirement, rapid sends, independent later typing, process restart, changed paging anchors and account replacement.
-
-A coherent product update must include actual root/contact/thread navigation, rendered interaction tests and screenshots using the existing Compose/UI skills, plus browser behavior and Apple source compilation. Group rollout/live V117–140 remain separate and OFF until their own gates. Physical phone remains install-only, with a new version above 93 after validated product changes.
-
-## Bounded index option to evaluate
-
-The raw store already has coherent multi-query pages and multi-replica mutations. One candidate is a distinct recipient-row document/tag in the existing inbox partition, sharing its durable lastOrdinal. A new typed combined window could read at most limit+1 canonical rows and limit+1 recipient rows under one checkpoint and merge the bounded pages; old canonical-only queries keep their tag and format. This avoids re-tagging every legacy canonical row solely to make it discoverable. It still requires exact cursor/anchor semantics and atomic recipient source/index publication coordinated by use cases, not repository-to-repository calls.
-
-Do not implement that option without resolving canonical handoff identity: independent later recipient typing can remain after an original transfers. Simply removing the recipient row would lose its draft; retaining both rows would duplicate one DM. A persisted, authenticated canonical association and a clear composer/draft migration policy are required, including legacy canonical conversations without recipient provenance. Visible-label lookups or UI-only deduplication cannot establish that durable association. These are unresolved design decisions, not an accepted storage migration.
-
-Existing ChatComposerEditingSession is access-generic but its draft/submission types and conversationId are canonical. Reusing it by passing peerAccountId as conversationId would violate the current identity boundary. Trace its serial captured-write/rapid-send behavior before defining a recipient editor owner or a narrowly justified typed refactor; do not move persistence policy into the ViewModel.
-
-
-UI reuse review (not implemented): ui-ux-pro-max's verified stable-list-key and loading-feedback guidance plus compose-component-design's slot/modifier references support reusing ChatComposerInput, ChatMessageBubble and ChatDayDivider. The existing composer already has a caller action slot and Send without a loading flag. Preserve per-message pending feedback and long-press selection; add no network subtitle, selection checkbox or inert attachment controls. SpaceChatThreadPage/SpaceChatMessageIdentity are canonical adapters: a recipient route must retain its own stable peer/original identity through association, never alias a peer as conversationId. Extract a common layout only when two actual consumers justify its varying slots. Current docs/experience.md and the user's four-tab requirements supersede the historical five-tab/release26 prose in docs/chat-experience.md. Rendered tests/screenshots and editor/inbox continuity still remain.
-
-
-Thread integration review: evolve the current unused composer-only consumer into one recipient thread/editor owner, preserving its regression cases and actual DI. Observe source drafts/originals independently from destination/history; bind latest retained submittedAt when reopening. One request stream must cancel/join old readers, reject late results and keep confirmed write denial from being reopened by an older read. Publish coherent row state before acknowledging durable actor originals; source absence alone cannot retire a bubble. The current canonical navigation cache is bounded at three idle rooms: add real peer identities under the same Group root rather than a second unbounded cache or peer-as-conversation alias. Canonical/recipient draft selection and bounded global inbox identity still need resolution before activation. No new ViewModel, route, UI or setup owner has been implemented by this review. Further local trace is in `.work/recipient-ui-review-2026-11-14/thread-integration-review.md`.
-
-
-Thread integration review: evolve the current unused composer-only consumer into one recipient thread/editor owner, preserving its regression cases and actual DI. Observe source drafts/originals independently from destination/history; bind latest retained submittedAt when reopening. One request stream must cancel/join old readers, reject late results and keep confirmed write denial from being reopened by an older read. Publish coherent row state before acknowledging durable actor originals; source absence alone cannot retire a bubble. The current canonical navigation cache is bounded at three idle rooms: add real peer identities under the same Group root rather than a second unbounded cache or peer-as-conversation alias. Canonical/recipient draft selection and bounded global inbox identity still need resolution before activation. No new ViewModel, route, UI or setup owner has been implemented by this review. Further local trace is in `.work/recipient-ui-review-2026-11-14/thread-integration-review.md`.
-
-
-Admission integration trace: SpaceChatRootOwner closes its Group store on denied admission and ObserveLocalCollaborationSpace creates a fresh admitted lifetime after recovery. A recipient thread must invalidate every older merged request on any denial; a buffered success from another reader cannot reopen it. Explicit re-entry or the new root lifetime can acquire again. A six-file consumer prototype with ten common tests and an actual application DI assertion is in `.work/recipient-thread-preparation-2026-11-14`, formatted but UNAPPLIED/UNCOMPILED/UNTESTED. Its prepared apply.py waits for this row packet to be accepted/pushed and only then creates focused34/full18,351 gate scripts. It needs adversarial merged-reader tests, actual Koin resolution and root integration before use. Preserve the existing composer-only hidden-admission regression rather than weakening it. No new ViewModel or UI is implemented in the accepted row packet.
-
-
-The real recipient thread consumer is now implemented and validated, including denial fencing across independent readers and clearing private state on disposal. The earlier prototype/no-ViewModel descriptions are superseded. It has no active route. The composer-only ViewModel is retained as a regression control, not a second editor to wire into the page. Keep one editor per route and preserve hidden-admission behavior through real Group root tests before retiring that old control. Back flushing, selection/actions and rendered UI/navigation remain next, alongside independent drafts/global inbox and finite setup. Do not expose outgoing reply or forward controls for the current plain-text recipient draft.
-
-
-Selection/copy review, not implemented: ReadCollaborationSpaceThreadContext already owns the finite local session/admission guard for explicit actions. Consider an explicit recipient entry point using the existing exact peer metadata lookup and the same guard, preserving canonical behavior. Admitted absence before association may only support exact private recipient originals; it cannot authorize provider/history rows. Known canonical action coordinates must match the real returned pair. Retain bounded typed selection and confirm unchanged rows/request generation/visibility immediately before clipboard I/O; stop/release/denial retire queued effects. Do not put this permission policy in a ViewModel helper or fake a conversation ID. Further trace is in `.work/recipient-ui-review-2026-11-14/selection-context-review.md`; no selection/context code is implemented by this review.
+Live Group rollout has its own migration, ownership, recovery and provider gates. Preserve
+records and keys. The development phone is install-only and the next delivered version must
+exceed 93. No test-only APK or source checkpoint is a new product release. See
+[projection and setup boundaries](collaboration-recipient-projection-review.md).

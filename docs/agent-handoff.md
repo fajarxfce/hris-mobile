@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 15 November 2026, 00:33 UTC. Continue beyond checkpoints; push every commit.
+Updated 15 November 2026, 00:35 UTC. Continue beyond checkpoints; push every commit.
 All 54 PRD acceptance groups remain OPEN. No subagents. One local compiler OR emulator.
 
 ## Shared muted-text correction accepted in Mobile
@@ -20,9 +20,10 @@ Starter baseline c7323ce has 1,060 accepted identities/source1099. Its prior rec
 Inspector742a2d1c including its existing gradlew.bat line-ending difference. Run relevant root
 quality/check, Android variants/lint, production Web/app browser and Apple app source/test
 compilation. Unchanged database-specific suites may reuse exact accepted reports. No Starter
-source change has been applied yet. The prepared apply.py/full1060/accept.py are in
-`.work/muted-contrast-review-2026-11-15/starter` under Mobile; they are syntax checked only.
-Apply after this Mobile/Group commit is pushed, then run the independent Starter gate.
+acceptance is claimed yet. The exact token has been applied in Starter and full1/session59413
+is RUNNING in `.work/muted-contrast-port-2026-11-15`. Keep that checkout frozen, reap the session,
+audit all1,060 prior identities, then document/commit/push and link the accepted port here.
+Mobile8dac2917 and Group4c2ff7b4 are already pushed.
 No HRIS policy belongs in the port.
 
 Recipient feature navigation 303929a5/Group e97f130a remains accepted with 18,436 cases. Typed
@@ -30,11 +31,10 @@ peer/canonical destinations share one three-idle-store owner; actual feature rou
 warm restoration, local Send/Back, Copy cancellation and root readmission. Failed test fixtures
 remain separate in that record; production was unchanged by their two corrections.
 
-After the port reconcile the two stale recipient reviews with the prepared Markdown in
-`.work/recipient-review-refresh-2026-11-15`, mirror Group relative links, verify those links and
-push a separate documentation-only commit. Its base hashes are retained; no rewrite has been
-applied. The new text describes accepted model/page/navigation and the actual remaining work,
-instead of repeatedly appending superseded milestones.
+The recipient product/projection reviews are reconciled with the accepted model, page and
+feature route. Their old repeated, superseded prototype claims have been removed; Git retains
+that history. Local links were verified in Mobile and Group. This is documentation only and
+does not close PRD groups or activate the product. Follow the remaining steps in those reviews.
 
 Then continue owned peer labels and actual application contact/inbox routing. The
 UNAPPLIED `.work/recipient-contact-implementation-2026-11-15` contains one formatted directory

@@ -1,44 +1,67 @@
-# Recipient projection after exact-query acceptance
+# Recipient projection and canonical handoff
 
-The [recipient feature route](collaboration-recipient-navigation.md) now has typed shared cache ownership and actual route/lifecycle tests. Application routing, owned peer labels, independent drafts, global inbox identity, finite setup and rollout remain required. Group stays OFF.
+Local recipient projection, destination observation, message composition and the feature route
+are implemented and tested. Remaining work concerns owned labels, application routing, draft
+and inbox continuity, finite setup ownership and rollout. Follow [the product integration
+review](collaboration-recipient-product-review.md) and [current handoff](agent-handoff.md).
 
-The [recipient page](collaboration-recipient-page.md) now has controlled rendering, long-press selection and composer focus validation. Actual root/navigation integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.
+## Reuse the existing sources
 
-The [recipient selection](collaboration-recipient-selection.md) now validates typed selection and confirmed local copying. Real page/root/navigation integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.
+[The recipient projection](collaboration-recipient-projection.md) reads the exact peer draft
+and source marker under one published checkpoint. It detaches raw buffers before suspension,
+authenticates a bounded original inventory only when its source version changes, then selects
+the peer's originals in stable order. Typing under the same source token does not reload the
+inventory. Collector-owned caches are cleared on invalid acquisition, replacement and disposal.
+Checkpoint races wait on the already-owned publication stream; no polling or transport retry
+is introduced. The accepted raw queries and database remain the source of these local facts.
 
-The [recipient thread consumer](collaboration-recipient-departure.md) now validates local Back flushing and stale navigation cancellation. Selection/actions, real root/page/navigation integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.
+`CollaborationSpaceConversationMetadataRepository.findByPeer` already exposes the immutable
+peer-to-canonical association. Its encrypted codec publishes two HMAC-indexed records atomically,
+cross-checks their fact/insertion revision and rejects rebinding. Do not create a second table.
+[The destination observer](collaboration-recipient-destination.md) retains one admitted pair
+within its collector; unrelated catalog insertions do not reacquire it. Absence means waiting
+for meaningful local catalog changes, not inventing a conversation or initiating setup.
 
-The [recipient thread consumer](collaboration-recipient-thread.md) is now validated, including joined source/destination/history/progress and one editor. Back/selection/actions, real root/page/navigation integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.
+[Shared progress](collaboration-recipient-progress.md), [display continuity](collaboration-recipient-presentation.md)
+and [stable rows](collaboration-recipient-rows.md) compose original, canonical and provider facts
+with exact identity/provenance checks. Source absence alone cannot remove a bubble or establish
+delivery. The consumer publishes coherent displayed rows before releasing represented actor
+originals. [Selection](collaboration-recipient-selection.md) uses actual canonical coordinates
+where present; pre-association Copy can match only the exact private recipient original.
 
-The [recipient bubble rows](collaboration-recipient-rows.md) is now validated, including stable visual identity through real association and exact command/history evidence. ViewModel/editor/root integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.
+The domain owns session/admission policy, cancellation and denial fencing. Repositories own
+raw acquisition/mapping; datasources own raw I/O. The page renders state while the route owns
+lifecycle, clipboard and viewport effects. Host query counts and timing remain separate from
+physical Android frame or network-latency acceptance.
 
-The [recipient display continuity](collaboration-recipient-presentation.md) is now validated, including exact command/history evidence and independent source retirement. Actual bubble identity, ViewModel/editor/root integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.
+## Remaining draft and index transition
 
-The [shared exact message progress](collaboration-recipient-progress.md) is now implemented and validated. Command/history composition, editor/index continuity, finite new-recipient setup and active product routes remain required. Canonical and recipient originals share bounded record observation; their public types and provenance remain distinct.
+Canonical and recipient drafts can coexist. A canonical inbox entry must choose the correct
+editor without silently replacing either draft. A transferred original can disappear from its
+recipient source before all history/index consumers publish; preserve exact original proof,
+stable order and later typing throughout that interval.
 
-The [admitted destination observer](collaboration-recipient-destination.md) is now implemented and validated. Command/history composition, editor/index continuity, finite new-recipient setup and active product routes remain required. Earlier requests for a new association store or its missing observer are superseded.
+The existing canonical inbox already ranks pending messages and drafts, but its public row key
+is a canonical conversation ID. A pre-association recipient needs a distinct durable identity
+and bounded global ordering. UI-only deduplication or a separate temporary list cannot solve
+this handoff. Evaluate the bounded index option in the product review only after defining
+source/index atomicity, independent-draft semantics and exact cursor/anchor behavior. No index
+migration or unified draft policy is accepted yet.
 
-The [local draft/original projection](collaboration-recipient-projection.md) is now implemented and validated. Canonical association observation/history composition, editor/index continuity, new-recipient setup ownership and product routes below remain required. Earlier raw-projection proposals are superseded by this implementation.
+## Finite setup after retained Send
 
-The [exact published query capability](replica-exact-queries.md) is accepted. The following repository/domain work remains unapplied; it does not activate a product route.
+`PrepareCollaborationSpaceConversation` performs finite local command preparation. It reuses
+an existing Open command or immutable peer mapping; creating a new Open requires current
+discovery and inserts one retained command. The Company delivery worker uses a different use
+case. No Group application owner for this preparation has been integrated.
 
+`SubmitCollaborationSpaceRecipientComposer` intentionally retains the original without setup;
+the recipient transfer owner waits for real metadata. Add an explicitly owned app coordinator
+after a durable Send, preserving the local recipient owner independently of live discovery.
+Use bounded/deduplicated peers and meaningful source/readiness changes. Do not call one use case
+from another, add a timer, or prepare on passive opening/typing/ordinary renewal: those triggers
+would recreate the earlier wake loop. Existing command delivery owns the later remote setup.
 
-Use the accepted exact query selectors to observe [peer draft, source marker] under one published checkpoint. Validate and detach raw lists/tags before any cipher suspension. An observation-scoped immutable original cache may be keyed by authenticated source version (including generation); it must never escape into singleton UI state. On a changed source token read the bounded original inventory once, require the same published checkpoint, authenticate originals, then emit only the selected peer in stable submittedAt/ID order. A racing checkpoint should skip that partial frame and let the already-owned observer deliver the next one; do not add polling or transport retries. Typing with an unchanged source token must not reload/decrypt the original inventory. Clear cache on invalid acquisition, owner loss, replacement, cancellation and restart; old missing-marker partitions use their existing conservative checkpoint token. Preserve public failure classification and key ownership.
-
-Test initial absence, encrypted process reopen, multi-peer originals, latest retained time, independent later drafts, source mutation during acquisition, generation replacement, legacy marker upgrade, mutable adapter buffers, corruption recovery, hidden denial/account replacement, cancellation, exact bounds, and measured raw query/decrypt counts while typing. Raw count and host timing are not Android frame or network-latency acceptance.
-
-The admitted domain observer owns session/Group denial latching and cancellation; the repository owns raw acquisition/mapping only. Canonical association/history must be composed before the composer retires provisional rows or a new route is exposed, otherwise a transferred original can disappear from the recipient thread. Keep peer IDs distinct from canonical conversation IDs. Follow the product review for list row/draft continuity and bounded global activity; do not load the entire contact directory.
-
-# Reuse the existing canonical association
-
-The earlier product review called canonical association unresolved. A closer trace shows the durable peer/conversation mapping already exists in CollaborationSpaceConversationMetadataRepository.findByPeer and EncryptedCollaborationSpaceConversationMetadataRepository. Its codec writes two HMAC-indexed, encrypted records atomically, validates both against one immutable fact/insertion revision, and rejects rebinding a retained peer to another canonical ID. TransferCollaborationSpaceRecipientSubmission already consumes this mapping and separately pins each original's destination by immutable recipient provenance.
-
-Do not create a duplicate association table. The unresolved work is an admitted observation/retention path for that existing mapping, composition with canonical history and commands, and global row/editor continuity. Metadata lookup is bounded and cross-checks both records; catalog version observation exists without scanning all rows. A selected recipient can wait on meaningful catalog changes until a canonical pair exists. Once admitted immutable association is retained, unrelated catalog insertions must not repeatedly reacquire it. Denial/account replacement and explicit local cleanup still require correct ownership handling; verify this against actual repository invariants before implementation.
-
-The current pre-transfer projection must not retire provisional originals without a canonical destination/history witness. Its source removal can race canonical history publication; join by exact original proof, preserve order and later typing, and do not transiently show an empty thread. Existing canonical drafts remain distinct from recipient drafts. Define how a route chosen from a canonical inbox row uses the correct editor without silently overwriting either local draft. This editor/index transition, rather than a missing peer-to-conversation identity, is still unresolved. No code implementing that transition has been applied.
-
-## New-recipient setup is still a separate integration gap
-
-PrepareCollaborationSpaceConversation already performs finite local command preparation: it first reuses an existing Open command or immutable peer mapping; creating a new Open requires current discovery and inserts one retained command. No application/presentation production caller for that Group use case was found (the existing Company delivery worker calls PrepareCollaborationConversation, a different use case). SubmitCollaborationSpaceRecipientComposer intentionally retains an original without setup, and the new recipient transfer worker waits for metadata.
-
-Therefore the future product integration must also arrange finite conversation preparation after an explicit retained Send when current discovery is available. Do not call preparation from passive room opening or every admission renewal; that would recreate the earlier wake loop. Preserve the local recipient owner independently from live discovery. Reuse the existing preparation use case from an explicitly owned application orchestration component, with bounded/deduplicated peers and source/readiness inputs, rather than calling one use case from another or introducing another timer. Existing command delivery owns the remote setup afterward. Offline Send must retain immediately and wait for readiness. Test no setup from typing/reopen, one retained Open for several messages to the same peer, readiness renewal deduplication, cancellation, denial and source retirement. No such application integration has been implemented yet.
+Verify immediate offline retention, one Open for multiple messages to the same peer, unchanged
+readiness deduplication, cancellation, denial and source retirement. Group remains OFF and
+V117–140 undeployed until their rollout gates; source-level acceptance does not activate it.
