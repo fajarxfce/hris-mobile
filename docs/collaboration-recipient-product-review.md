@@ -1,5 +1,7 @@
 # Product integration after recipient owner acceptance
 
+The [recipient feature route](collaboration-recipient-navigation.md) now has typed shared cache ownership and actual route/lifecycle tests. Application routing, owned peer labels, independent drafts, global inbox identity, finite setup and rollout remain required. Group stays OFF.
+
 The [recipient page](collaboration-recipient-page.md) now has controlled rendering, long-press selection and composer focus validation. Actual root/navigation integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.
 
 The [recipient selection](collaboration-recipient-selection.md) now validates typed selection and confirmed local copying. Real page/root/navigation integration, independent drafts, global inbox continuity, finite setup ownership and product rollout remain required. No recipient product route is active.

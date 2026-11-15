@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import dev.fajar.starter.collaboration.domain.entities.CollaborationSpaceLocalAccess
+import dev.fajar.starter.collaboration.presentation.recipient.RecipientChatThreadEvent
+import dev.fajar.starter.collaboration.presentation.recipient.RecipientChatThreadViewModel
 import dev.fajar.starter.collaboration.presentation.spacethread.SpaceChatThreadEvent
 import dev.fajar.starter.collaboration.presentation.spacethread.SpaceChatThreadViewModel
 
@@ -16,8 +18,8 @@ class SpaceChatNavigationOwner(
     val access: CollaborationSpaceLocalAccess,
     private val capacity: Int = 3,
 ) : ViewModel() {
-    private val idle = linkedMapOf<String, SpaceChatThreadStore>()
-    private val active = mutableMapOf<SpaceChatThreadViewModelOwner, String>()
+    private val idle = linkedMapOf<SpaceChatTarget, SpaceChatThreadStore>()
+    private val active = mutableMapOf<SpaceChatThreadViewModelOwner, SpaceChatTarget>()
     internal var closed = false
         private set
 
@@ -26,9 +28,25 @@ class SpaceChatNavigationOwner(
     }
 
     /** Prepare visible list destinations without displacing a previously opened room. */
-    internal fun prepare(conversationIds: List<String>): Map<String, SpaceChatThreadStore> {
+    internal fun prepare(conversationIds: List<String>): Map<String, SpaceChatThreadStore> =
+        prepareTargets(conversationIds.map { SpaceChatTarget.Conversation(it) }).mapKeys {
+            (target, _) ->
+            target.id
+        }
+
+    internal fun prepareRecipients(
+        peerAccountIds: List<String>
+    ): Map<String, SpaceChatThreadStore> =
+        prepareTargets(peerAccountIds.map { SpaceChatTarget.Recipient(it) }).mapKeys { (target, _)
+            ->
+            target.id
+        }
+
+    internal fun prepareTargets(
+        targets: List<SpaceChatTarget>
+    ): Map<SpaceChatTarget, SpaceChatThreadStore> {
         check(!closed)
-        val requested = conversationIds.distinct().take(capacity)
+        val requested = targets.distinct().take(capacity)
         idle.keys.toList().forEach { id ->
             if (id !in requested && idle[id]?.wasOpened == false) idle.remove(id)?.clear()
         }
@@ -38,7 +56,7 @@ class SpaceChatNavigationOwner(
                     val stored =
                         idle[id]
                             ?: if (idle.size < capacity) {
-                                SpaceChatThreadStore().also { idle[id] = it }
+                                SpaceChatThreadStore(id).also { idle[id] = it }
                             } else null
                     if (stored != null) put(id, stored)
                 }
@@ -46,17 +64,22 @@ class SpaceChatNavigationOwner(
         }
     }
 
-    internal fun open(conversationId: String): SpaceChatThreadViewModelOwner {
+    internal fun open(conversationId: String): SpaceChatThreadViewModelOwner =
+        openTarget(SpaceChatTarget.Conversation(conversationId))
+
+    internal fun openRecipient(peerAccountId: String): SpaceChatThreadViewModelOwner =
+        openTarget(SpaceChatTarget.Recipient(peerAccountId))
+
+    private fun openTarget(target: SpaceChatTarget): SpaceChatThreadViewModelOwner {
         check(!closed)
-        val stored = idle.remove(conversationId) ?: SpaceChatThreadStore()
+        val stored = idle.remove(target) ?: SpaceChatThreadStore(target)
         stored.wasOpened = true
         return SpaceChatThreadViewModelOwner(stored) { owner ->
                 active.remove(owner)
                 if (!closed) {
-                    val model = stored.model
-                    model?.onEvent(SpaceChatThreadEvent.RouteReleased)
-                    idle.remove(conversationId)?.clear()
-                    idle[conversationId] = stored
+                    stored.releaseRoute()
+                    idle.remove(target)?.clear()
+                    idle[target] = stored
                     while (idle.size > capacity) {
                         val oldest =
                             idle.entries.firstOrNull { !it.value.wasOpened }?.key
@@ -65,7 +88,7 @@ class SpaceChatNavigationOwner(
                     }
                 }
             }
-            .also { active[it] = conversationId }
+            .also { active[it] = target }
     }
 
     override fun onCleared() {
@@ -77,9 +100,20 @@ class SpaceChatNavigationOwner(
     }
 }
 
-internal class SpaceChatThreadStore {
+internal sealed interface SpaceChatTarget {
+    val id: String
+
+    data class Conversation(override val id: String) : SpaceChatTarget
+
+    data class Recipient(override val id: String) : SpaceChatTarget
+}
+
+internal class SpaceChatThreadStore(private val target: SpaceChatTarget) {
     val models = ViewModelStore()
     var model: SpaceChatThreadViewModel? = null
+        private set
+
+    var recipientModel: RecipientChatThreadViewModel? = null
         private set
 
     var wasOpened = false
@@ -88,8 +122,25 @@ internal class SpaceChatThreadStore {
 
     fun bind(model: SpaceChatThreadViewModel) {
         check(!closed)
+        check(target is SpaceChatTarget.Conversation)
         check(this.model == null || this.model === model)
         this.model = model
+    }
+
+    fun bind(model: RecipientChatThreadViewModel) {
+        check(!closed)
+        check(target is SpaceChatTarget.Recipient)
+        check(recipientModel == null || recipientModel === model)
+        recipientModel = model
+    }
+
+    fun releaseRoute() {
+        check(!closed)
+        when (target) {
+            is SpaceChatTarget.Conversation -> model?.onEvent(SpaceChatThreadEvent.RouteReleased)
+            is SpaceChatTarget.Recipient ->
+                recipientModel?.onEvent(RecipientChatThreadEvent.RouteReleased)
+        }
     }
 
     fun clear() {
@@ -97,6 +148,7 @@ internal class SpaceChatThreadStore {
         closed = true
         models.clear()
         model = null
+        recipientModel = null
     }
 }
 
@@ -121,6 +173,11 @@ internal class SpaceChatThreadViewModelOwner(
         stored.bind(model)
     }
 
+    fun bind(model: RecipientChatThreadViewModel) {
+        check(isOpen)
+        stored.bind(model)
+    }
+
     fun closeGraph() = stored.clear()
 
     override fun onCleared() {
@@ -137,3 +194,9 @@ internal fun spaceChatThreadModelKey(
 ) =
     listOf(access.audience, access.accountId, access.spaceId, access.sessionId, conversationId)
         .joinToString("") { "${it.length}:$it" }
+
+/** Recipient model identity cannot collide with a canonical conversation or another session. */
+internal fun spaceChatRecipientModelKey(
+    access: CollaborationSpaceLocalAccess,
+    peerAccountId: String,
+) = "recipient:" + spaceChatThreadModelKey(access, peerAccountId)

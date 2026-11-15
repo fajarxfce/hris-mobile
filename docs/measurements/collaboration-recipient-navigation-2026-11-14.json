@@ -1,0 +1,103 @@
+{
+  "accepted": true,
+  "validatedTests": 18436,
+  "newCases": 22,
+  "freshTests": 2286,
+  "reusedUnchangedTests": 16150,
+  "priorCaseIdsPreserved": true,
+  "sourceManifestSha256": "7e100116670cf8ebb55fe11aed3671dde053882be7781aaa4e8e8a9186d0c325",
+  "reportManifestSha256": "681c1012df0f09bd3353aa1eab89bf8282b7c136e2eb0f7dd82bcfddd56b6c1f",
+  "full": {
+    "startedAt": "2026-11-15T00:09:20.784450+00:00",
+    "elapsedSeconds": 586.988,
+    "exitCode": 0,
+    "sourceFiles": 5716,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "apk": {
+      "path": ".work/space-recipient-navigation-2026-11-14/full1/accepted-proof.apk",
+      "bytes": 155838441,
+      "sha256": "921356710429ca208909f082b85b0555c18efc0a5ba821207b87e607c66be286"
+    }
+  },
+  "recipientNavigationIntegrated": true,
+  "productActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "baseline": "5991396099e5aba16eb1438fdc4bdac3e8fc4f83",
+  "sourcePaths": [
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/PrepareVisibleSpaceChatThreads.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/RecipientChatThreadContent.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/SpaceChatNavigation.kt",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/SpaceChatNavigationOwner.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/navigation/RecipientChatNavigationOwnerTest.kt",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/RecipientChatNavigationCompositionTest.kt"
+  ],
+  "focused": {
+    "tests": 27,
+    "session": 86727,
+    "directory": "focus3",
+    "reaped": true
+  },
+  "fullSession": 93691,
+  "priorAttempts": [
+    {
+      "directory": "focus1",
+      "session": 29143,
+      "exitCode": 1,
+      "tests": 27,
+      "failed": 6,
+      "cause": "All six new route tests invoked the harness contact button navigation via Desktop performClick on the test dispatcher; NavController correctly rejected off-main lifecycle transitions. Eight new ownership and thirteen canonical control cases passed.",
+      "resolution": "Invoke the same rendered contact button semantic action on the UI thread. Preserve actual feature NavHost, all assertions, and production source unchanged.",
+      "correctionChangedOnly": [
+        "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/RecipientChatNavigationCompositionTest.kt"
+      ]
+    },
+    {
+      "directory": "focus2",
+      "session": 98996,
+      "exitCode": 1,
+      "tests": 27,
+      "failed": 1,
+      "cause": "The new selection route test expected selection to remain after Copy, contradicting the existing CopySelected handler and its common regression test. Actual clipboard content was correct; 26 cases passed.",
+      "resolution": "Assert Copy closes selection, select the same visible message again, then exercise Clear selection and Back. Production remains unchanged."
+    }
+  ],
+  "validationCommand": [
+    "xvfb-run",
+    "-a",
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    ":apps:collaboration-proof:assembleDebug",
+    ":apps:collaboration-proof:testDebugUnitTest",
+    ":check",
+    ":formatCheck",
+    ":architectureCheck",
+    ":detekt",
+    ":apps:android:compileDevReleaseKotlin",
+    ":apps:android:lintDevRelease",
+    ":apps:shared:compileKotlinWasmJs",
+    ":apps:shared:compileKotlinIosArm64",
+    ":features:collaboration:domain:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:data:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:presentation:compileTestKotlinIosSimulatorArm64",
+    ":apps:shared:compileTestKotlinIosSimulatorArm64",
+    ":features:collaboration:domain:wasmJsBrowserTest",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:presentation:wasmJsBrowserTest",
+    ":apps:shared:wasmJsBrowserTest",
+    "-PcollaborationProofAbi=x86_64",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=93",
+    "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx3072m",
+    "-Pkotlin.compiler.execution.strategy=in-process",
+    "-Pkotlin.incremental=false"
+  ],
+  "phoneVersionCode": 93
+}
