@@ -12,19 +12,14 @@ Read [muted text contrast](muted-text-contrast.md). This resolves the 4.48:1 tim
 recorded in page 59913960; it is not a claim about every UI foreground/background combination.
 
 Validation: 18,436 preserved identities (2581 fresh / 15855 exact unchanged), zero new tests. Focused15/session1291 and full/session44447 reaped0. Source e4d843e31a0a32a3955ef55ced5d6ef3d89a4b0d1d6311490742fa7f9332af7e; reports 7890692d0d263b470c2d3da440f2864f236eb1ae11393a59f406fd109e6d6338.
-No new phone installation or Apple runtime claim. Push this Mobile change, then port the exact
-generic token to Starter and validate independently before the next product delivery.
-
-Starter baseline c7323ce has 1,060 accepted identities/source1099. Its prior recipe is
-`.work/replica-exact-queries-port-2026-11-14/full.py`; preserve one-worker/2GiB and pinned
-Inspector742a2d1c including its existing gradlew.bat line-ending difference. Run relevant root
-quality/check, Android variants/lint, production Web/app browser and Apple app source/test
-compilation. Unchanged database-specific suites may reuse exact accepted reports. No Starter
-acceptance is claimed yet. The exact token has been applied in Starter and full1/session59413
-is RUNNING in `.work/muted-contrast-port-2026-11-15`. Keep that checkout frozen, reap the session,
-audit all1,060 prior identities, then document/commit/push and link the accepted port here.
-Mobile8dac2917 and Group4c2ff7b4 are already pushed.
-No HRIS policy belongs in the port.
+No new phone installation or Apple runtime claim. Mobile8dac2917 and Group4c2ff7b4 are pushed.
+Starter port 5b732ddc934b6cd0c86ba95a27f4eb44e986a7fc is now independently accepted and pushed.
+Full1/session59413 reaped0: all 1,060 identities preserved (96 fresh / 964 exact unchanged),
+zero new cases. Source e26ef85aa84875bf5c20c528f6223f151df52df6c5bd53e316d54e6a24c0c16b; reports 5b6339742216bc3311c359db9e9c6d375fdf93e8068158b5d6f10600f4023d69.
+Three Android variants/lint, production Web/app browser and Apple app source/test compilation
+passed. Pinned Inspector742a2d1c and its existing gradlew.bat line-ending difference are preserved.
+No HRIS policy was copied. Continue the recipient integration below; do not rerun accepted checks
+without a new change, failure or unresolved concern.
 
 Recipient feature navigation 303929a5/Group e97f130a remains accepted with 18,436 cases. Typed
 peer/canonical destinations share one three-idle-store owner; actual feature route tests cover

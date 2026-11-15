@@ -150,7 +150,7 @@
     }
   },
   "phoneVersionCode": 93,
-  "starterPortAccepted": false,
+  "starterPortAccepted": true,
   "screenshots": [
     {
       "variant": "compact",
@@ -193,5 +193,16 @@
     "reaped": true,
     "exitCode": 0,
     "preparationIssue": "Initial read-only pixel check failed to import PIL. The shell then started full1. All five images had already been actually viewed; no source or tests changed."
+  },
+  "starterPort": {
+    "validatedTests": 1060,
+    "freshTests": 96,
+    "reusedUnchangedTests": 964,
+    "sourceManifestSha256": "e26ef85aa84875bf5c20c528f6223f151df52df6c5bd53e316d54e6a24c0c16b",
+    "reportManifestSha256": "5b6339742216bc3311c359db9e9c6d375fdf93e8068158b5d6f10600f4023d69",
+    "commit": "5b732ddc934b6cd0c86ba95a27f4eb44e986a7fc",
+    "session": 59413,
+    "reaped": true,
+    "sourceFiles": 1099
   }
 }

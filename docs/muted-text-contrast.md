@@ -12,7 +12,7 @@ No tests repeating color constants were introduced for this low-impact visual ad
 
 Validation: 18,436 preserved cases (2,581 fresh / 15,855 exact unchanged), with zero new test identities. Focused 15 and full root/Android/browser/Apple-source gates passed. Source e4d843e31a0a32a3955ef55ced5d6ef3d89a4b0d1d6311490742fa7f9332af7e; reports 7890692d0d263b470c2d3da440f2864f236eb1ae11393a59f406fd109e6d6338.
 
-Starter port and independent validation remain required. Phone93 is unchanged and no new APK
+Starter port [5b732ddc](https://github.com/fajarxfce/compose-fluent-starter/commit/5b732ddc934b6cd0c86ba95a27f4eb44e986a7fc) is pushed and independently validated: 1,060 preserved cases (96 fresh / 964 exact unchanged), three Android variants/lint, production Web/browser and Apple source compilation. Phone93 is unchanged and no new APK
 was installed. Group OFF; V117–140 undeployed; all 54 PRD acceptance groups remain OPEN.
 Recipient feature navigation 303929a5 is accepted, but owned contact labels, application routing,
 independent drafts, inbox continuity and finite setup still precede product activation.
